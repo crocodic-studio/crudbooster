@@ -1,0 +1,4 @@
+.DS_store
+*.sw*
+node_modules
+.idea

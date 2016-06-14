@@ -1,0 +1,59 @@
+
+# FORGOT PASSWORD
+public function hook_before(&$postdata) {
+	//optional if you want to make any fantastic code before api execute
+	$rules = ['email'=>'required|email|exists:member'];
+	$this->apiValidator($postdata,$rules);
+}
+public function hook_after($postdata,&$result) {
+	//optional if you want to make any fantastic code after api execute
+
+	#SEND EMAIL PASSWORD NEW
+	if($result['api_status']==1) {
+		$toemail = $postdata['email'];
+		$row = DB::table('member')->where('email',$toemail)->first();
+
+		$password = str_random(5);
+		DB::table('member')->where('email',$row->email)->update(['password'=>Hash::make($password)]);
+
+		$name = $row->nama;
+		@$ip = $_SERVER['REMOTE_ADDR'];
+		$from = $this->setting->email_sender;
+		$subject = "Forgot Password Tanda Mata";
+		$message = $this->setting->email_theme_forgot_password;
+		$message = str_replace(array("%name%","%ip%","%password%"),array($name,$ip,$password),$message);
+		$data = array();
+		$data['email_body'] = nl2br($message);
+		send_email($toemail,$subject,$data,$from);	
+	}
+}
+
+
+
+# REGISTER
+function hook_before(&$postdata) {
+	//optional if you want to make any fantastic code before api execute
+	
+	#CEK VALIDASI		
+	$this->apiValidator($postdata,['email'=>'required|unique:member','password'=>'required']);
+
+	$postdata['nama'] = strtok($postdata['email'],'@');		
+
+}
+public function hook_after($postdata,&$result) {
+	
+	//optional if you want to make any fantastic code after api execute
+
+	#SEND NOTIFICATION TO MEMBER
+	if($result['api_status']==1) {
+		$toemail = $postdata['email'];
+		$name = strtok($toemail,'@');
+		$from = $this->setting->email_sender;
+		$subject = "Pendaftaran Tanda Mata Berhasil";
+		$message = $this->setting->email_theme_register_success;
+		$message = str_replace(array("%name%"),array($name),$message);
+		$data = array();
+		$data['email_body'] = nl2br($message); 
+		send_email($toemail,$subject,$data,$from);	
+	}
+}
