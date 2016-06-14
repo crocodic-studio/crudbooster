@@ -1,2 +1,2 @@
-# crudbooster
+# Laravel CRUDBooster
 Another Best Laravel CRUD Generator
