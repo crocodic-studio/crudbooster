@@ -9,7 +9,8 @@ Please following these instructions :
 3. Create a blank database at your PHPMYADMIN
 4. Go to http://localhost/YourApp/install/index.php
 5. Follow the wizard installation until finish.
-6. Done
+6. After installation is finish, don't forget to rename folder install to other name 
+7. Done
 ```
 
 ### Default Backend URL
