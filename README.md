@@ -43,7 +43,7 @@ password (default) : 123456
 ```
 After you create a new modul, then a new menu of your new modul will be appeare at left (sidebar left). You can view by click that new menu.
 
-## 1). Configure Dashboard :
+## 1). Index Table List Data :
 ```php
 $this->col = array();
 $this->col[] = array('label'=>'LABEL NAME','field'=>'FIELD_NAME');
