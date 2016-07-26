@@ -1,10 +1,11 @@
 # Laravel CRUDBooster
-Another Best Laravel CRUD Generator
+> Another Best Laravel CRUD Generator
 
-1). Configure Dashboard :
-
-- $this->col = array();
-- $this->col[] = array('label'=>'NAMALABEL','field'=>'NAMAKOLOM_FIELD');
+## 1). Configure Dashboard :
+```
+$this->col = array();
+$this->col[] = array('label'=>'NAMALABEL','field'=>'NAMAKOLOM_FIELD');
+```
 
 Array $this->col is use for Dashboard Display
 There are some key :
@@ -16,13 +17,14 @@ There are some key :
 - download (optional) : boolean true or false
 - callback_html (optional) : Write any html code here. Use object $row for current data
 - callback_php (optional) : Write any php code here. Use object $row for current data. Use single quote
-2). Configure Form :
 
-- $this->form = array();
-- $this->form[] = array('label'=>'NAMALABEL','name'=>'NAMAFIELD');
+## 2). Configure Form :
+```
+$this->form = array();
+$this->form[] = array('label'=>'NAMALABEL','name'=>'NAMAFIELD');
+```
 
-Array $this->form is use for Form Display.
-There are some key :
+### Legends : 
 
 - label (required) : label name
 - name (required) : field tabel
@@ -54,14 +56,15 @@ There are some key :
 - jquery (optional) : insert any jquery or javascript
 - style (optional) : insert any stylesheet inline for form-group class
 
-3). Configure Form Tab (Children Module) :
+## 3). Configure Form Tab (Children Module) :
 
-## FORM TAB
-- $this->form_tab = array();
-- $this->form_tab[] = array('label'=>'NAMALABEL','icon'=>'fa fa-bars','route'=>'URL','filter_field'=>'RELATION_FIELD_NAME');
+### FORM TAB
+```
+$this->form_tab = array();
+$this->form_tab[] = array('label'=>'NAMALABEL','icon'=>'fa fa-bars','route'=>'URL','filter_field'=>'RELATION_FIELD_NAME');
+```
 
-Array $this->form_tab is use for children module tab. 
-There are some key :
+#### Legends : 
 
 - label : tab label name
 - icon : set own awesome icon, ex : fa fa-bars
@@ -69,20 +72,21 @@ There are some key :
 - filter_field : field name that use for filter / relation field name. 
 - If use this method / configure, you should add key `value` @ child form array. With example : $_GET['where'][FILTER_FIELD]
 dont forget replace FILTER_FIELD.
-## FORM SUB
-- $this->form_sub[] = array('label'=>'Label Name','controller'=>'Controller Name');
-### Key :
 
+### FORM SUB
+- $this->form_sub[] = array('label'=>'Label Name','controller'=>'Controller Name');
+
+#### Legends : 
 - label : label name table
 - controller : controller name that want to make as sub
-## FORM ADD 
 
-- $this->form_add[] = "INSERT YOUR HTML HERE";
+### FORM ADD 
+```
+$this->form_add[] = "INSERT YOUR HTML HERE";
+```
 
-4). Hook
-
-
-This featured is for modify action after or before default do action. These bellow function name you can use
+## 4). Hook
+This functions is for modify action after or before default do action. 
 
 - hook_before_index(&$result)
 - hook_html_index(&$html_contents)
