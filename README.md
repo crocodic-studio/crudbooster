@@ -65,13 +65,10 @@ $this->form_tab[] = array('label'=>'NAMALABEL','icon'=>'fa fa-bars','route'=>'UR
 ```
 
 #### Legends : 
-
 - label : tab label name
 - icon : set own awesome icon, ex : fa fa-bars
 - route : url for tab, ex : action('NamaTabelController@getIndex')
 - filter_field : field name that use for filter / relation field name. 
-- If use this method / configure, you should add key `value` @ child form array. With example : $_GET['where'][FILTER_FIELD]
-dont forget replace FILTER_FIELD.
 
 ### FORM SUB
 - $this->form_sub[] = array('label'=>'Label Name','controller'=>'Controller Name');
@@ -96,3 +93,20 @@ This functions is for modify action after or before default do action.
 - hook_after_edit($id)
 - hook_before_delete($id)
 - hook_after_delete($id)
+
+### Example hook_html_index 
+```
+public function hook_html_index(&$html_contents) {
+	
+	foreach($html_contents as &$row) {
+		// In this example, we want to coloring of status if Active then Green, Else then Red
+		// First you should know where the status columns row locations (index of array) 
+		$status = $row[5];
+		if($status == 'Active') {
+			$row[5] = "<span class='label label-success'>Active</span>";
+		}else{
+			$row[5] = "<span class='label label-danger'>Pending</span>";
+		}
+	}
+}
+```
