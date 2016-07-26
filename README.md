@@ -1,5 +1,13 @@
 # Laravel CRUDBooster
 > Faster Laravel CRUD Generator, Make a Web Application Just In Minutes, With Less Code and Less Step !
+> Currently Based on Laravel 5.0
+
+## System Requirement
+- PHP >= 5.4, PHP < 7
+- Mcrypt PHP Extension
+- OpenSSL PHP Extension
+- Mbstring PHP Extension
+- Tokenizer PHP Extension
 
 ## Installation
 Please following these instructions : 
@@ -13,16 +21,13 @@ Please following these instructions :
 7. Done
 ```
 
-### Default Backend URL
+## Getting Started
+I think you have made a table database for your new module before do these bellow steps. 
 ```
 http://localhost/YourApp/admin
 username (default) : admin@crocodic.com
 password (default) : 123456
-```
 
-## Getting Started
-I think you have made a table database for your new module before do these bellow steps. 
-```
 1. Login to Admin
 2. Go to Setting -> Modul Group
 3. Click Pencil icon at Publik, to Edit
