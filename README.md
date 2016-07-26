@@ -50,13 +50,15 @@ $this->col[] = array('label'=>'LABEL NAME','field'=>'FIELD_NAME');
 ```
 
 ### Legends : 
-- label (required) : label name
-- field (required) : field tabel
-- join (optional) : relational tabel name. Ex : 'join'=>'table_name,name_field'
-- image (optional) : boolean true or false
-- download (optional) : boolean true or false
-- callback_html (optional) : Write any html code here. Use object $row for current data
-- callback_php (optional) : Write any php code here. Use object $row for current data. Use single quote
+| Name                  | Mandatory | Description                                                             |
+| --------------------- | --------- | ----------------------------------------------------------------------- |
+| label                 | Required  | label name                                                              |
+| field                 | Required  | field tabel                                                             |
+| join                  | Optional  | Relational tabel name. Ex : 'join'=>'table_name,name_field'             |
+| image                 | Optional  | true or false                                                           |
+| download              | Optional  | true or false                                                           |
+| callback_html         | Optional  | Write any html code here. Use object $row for current data              |
+| callback_php          | Optional  | Write any php code here. Use object $row for current data. Use single quote |
 
 ## 2). Configure Form :
 ```php
