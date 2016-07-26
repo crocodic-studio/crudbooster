@@ -40,7 +40,7 @@ After you create a new modul, then a new menu of your new modul will be appeare 
 ## 1). Configure Dashboard :
 ```php
 $this->col = array();
-$this->col[] = array('label'=>'NAMALABEL','field'=>'NAMAKOLOM_FIELD');
+$this->col[] = array('label'=>'LABEL NAME','field'=>'FIELD_NAME');
 ```
 
 ### Legends : 
@@ -55,17 +55,17 @@ $this->col[] = array('label'=>'NAMALABEL','field'=>'NAMAKOLOM_FIELD');
 ## 2). Configure Form :
 ```php
 $this->form = array();
-$this->form[] = array('label'=>'NAMALABEL','name'=>'NAMAFIELD');
+$this->form[] = array('label'=>'LABEL NAME','name'=>'FIELD_NAME');
 ```
 
 ### Legends : 
 - label (required) : label name
 - name (required) : field tabel
-- type (required) : (text,textarea,radio,select,checkbox,wysiwyg,select2,datepicker,datetimepicker,hidden,password,upload,browse,qrcode)
+- type (required) : (text, textarea, radio, select, checkbox, wysiwyg, select2, datepicker, datetimepicker, hidden, password, upload, browse, qrcode)
 - dataenum (optional) : support only for type 'select,radio,checkbox', ex : array('BMW','MERCY','TOYOTA') or array('0|BMW','1|MERCY','2|TOYOTA')
-- datatable (optional) : support only for type 'select', this will load data from tabel, ex : "NAMATABEL, NAMAKOLOM_STRING"
+- datatable (optional) : support only for type 'select', this will load data from tabel, ex : "TABLE_NAME, COLUMN_NAME"
 - datatable_where (optional) : sql where query for datatable, ex : status != 'active' and status != 'available'
-- select2_controller (optional) : name other controller, ex : NamaTabelController
+- select2_controller (optional) : name other controller, ex : NameController
 - sub_select (optional) : name for child select. ex for case province and city.
 - help (optional) : help text
 - placeholder (optional) : placeholder text
@@ -94,13 +94,13 @@ $this->form[] = array('label'=>'NAMALABEL','name'=>'NAMAFIELD');
 ### FORM TAB
 ```php
 $this->form_tab = array();
-$this->form_tab[] = array('label'=>'NAMALABEL','icon'=>'fa fa-bars','route'=>'URL','filter_field'=>'RELATION_FIELD_NAME');
+$this->form_tab[] = array('label'=>'LABEL NAME','icon'=>'fa fa-bars','route'=>'URL','filter_field'=>'RELATION_FIELD_NAME');
 ```
 
 #### Legends : 
 - label : tab label name
 - icon : set own awesome icon, ex : fa fa-bars
-- route : url for tab, ex : action('NamaTabelController@getIndex')
+- route : url for tab, ex : action('NameController@getIndex')
 - filter_field : field name that use for filter / relation field name. 
 
 ### FORM SUB
