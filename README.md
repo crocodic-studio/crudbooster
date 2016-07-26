@@ -110,7 +110,9 @@ $this->form_tab[] = array('label'=>'LABEL NAME','icon'=>'fa fa-bars','route'=>'U
 - filter_field : field name that use for filter / relation field name. 
 
 ### FORM SUB
-- $this->form_sub[] = array('label'=>'Label Name','controller'=>'Controller Name');
+```php
+$this->form_sub[] = array('label'=>'Label Name','controller'=>'Controller Name');
+```
 
 #### Legends : 
 - label : label name table
