@@ -1,8 +1,24 @@
 # Laravel CRUDBooster
-> Another Best Laravel CRUD Generator
+> Faster Laravel CRUD Generator, Make a Web Application Just In Minutes, With Less Code and Less Step !
+
+## How To ?
+Please following these instructions : 
+1. Download from github
+2. Create folder in your htdocs, and extract
+3. Create a blank database at your PHPMYADMIN
+4. Go to http://localhost/YourApp/install/index.php
+5. Follow the wizard installation until finish.
+6. Done
+
+### Default Backend URL
+```
+http://localhost/YourApp/admin
+username (default) : admin@crocodic.com
+password (default) : 123456
+```
 
 ## 1). Configure Dashboard :
-```
+```php
 $this->col = array();
 $this->col[] = array('label'=>'NAMALABEL','field'=>'NAMAKOLOM_FIELD');
 ```
@@ -19,7 +35,7 @@ There are some key :
 - callback_php (optional) : Write any php code here. Use object $row for current data. Use single quote
 
 ## 2). Configure Form :
-```
+```php
 $this->form = array();
 $this->form[] = array('label'=>'NAMALABEL','name'=>'NAMAFIELD');
 ```
@@ -59,7 +75,7 @@ $this->form[] = array('label'=>'NAMALABEL','name'=>'NAMAFIELD');
 ## 3). Configure Form Tab (Children Module) :
 
 ### FORM TAB
-```
+```php
 $this->form_tab = array();
 $this->form_tab[] = array('label'=>'NAMALABEL','icon'=>'fa fa-bars','route'=>'URL','filter_field'=>'RELATION_FIELD_NAME');
 ```
@@ -78,7 +94,7 @@ $this->form_tab[] = array('label'=>'NAMALABEL','icon'=>'fa fa-bars','route'=>'UR
 - controller : controller name that want to make as sub
 
 ### FORM ADD 
-```
+```php
 $this->form_add[] = "INSERT YOUR HTML HERE";
 ```
 
@@ -95,9 +111,9 @@ This functions is for modify action after or before default do action.
 - hook_after_delete($id)
 
 ### Example hook_html_index 
-```
+```php
 public function hook_html_index(&$html_contents) {
-	
+
 	foreach($html_contents as &$row) {
 		// In this example, we want to coloring of status if Active then Green, Else then Red
 		// First you should know where the status columns row locations (index of array) 
