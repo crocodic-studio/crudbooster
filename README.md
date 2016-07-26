@@ -20,6 +20,7 @@ password (default) : 123456
 ```
 
 ## Getting Started
+I think you have made a table database for your new module before do these bellow steps. 
 ```
 1. Login to Admin
 2. Go to Setting -> Modul Group
