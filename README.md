@@ -1,14 +1,16 @@
 # Laravel CRUDBooster
 > Faster Laravel CRUD Generator, Make a Web Application Just In Minutes, With Less Code and Less Step !
 
-## How To ?
+## Installation
 Please following these instructions : 
+```
 1. Download from github
 2. Create folder in your htdocs, and extract
 3. Create a blank database at your PHPMYADMIN
 4. Go to http://localhost/YourApp/install/index.php
 5. Follow the wizard installation until finish.
 6. Done
+```
 
 ### Default Backend URL
 ```
@@ -17,15 +19,30 @@ username (default) : admin@crocodic.com
 password (default) : 123456
 ```
 
+## Getting Started
+```
+1. Login to Admin
+2. Go to Setting -> Modul Group
+3. Click Pencil icon at Publik, to Edit
+4. Click Plus Button at bottom, that has orange color.
+5. Complete the Form : 
+	- Name : Your new modul name
+	- Table Name : Select your existing table that will be use
+	- Route : declare url for this modul
+	- Icon : set icon for this modul
+	- Sorting : insert number of sorting (default 1)
+6. Save
+7. Done
+```
+After you create a new modul, then a new menu of your new modul will be appeare at left (sidebar left). You can view by click that new menu.
+
 ## 1). Configure Dashboard :
 ```php
 $this->col = array();
 $this->col[] = array('label'=>'NAMALABEL','field'=>'NAMAKOLOM_FIELD');
 ```
 
-Array $this->col is use for Dashboard Display
-There are some key :
-
+### Legends : 
 - label (required) : label name
 - field (required) : field tabel
 - join (optional) : relational tabel name. Ex : 'join'=>'table_name,name_field'
@@ -41,7 +58,6 @@ $this->form[] = array('label'=>'NAMALABEL','name'=>'NAMAFIELD');
 ```
 
 ### Legends : 
-
 - label (required) : label name
 - name (required) : field tabel
 - type (required) : (text,textarea,radio,select,checkbox,wysiwyg,select2,datepicker,datetimepicker,hidden,password,upload,browse,qrcode)
