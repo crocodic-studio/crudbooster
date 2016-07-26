@@ -172,8 +172,7 @@
                         <label>Header Token Required</label><br/>
                           SCREETKEY : <span id='screetkey' style='font-weight: bold'><?php echo $screetkey?></span> <a href='javascript:void(0)' onclick="generate_screet_key()">RE-GENERATE</a><br/>                          
                           X-Authorization-Token : md5( SCREETKEY + UNIX CURRENT TIME )<br/>
-                          X-Authorization-Time  : UNIX CURRENT TIME<br/>
-                          For testing reason you can use parameter in url "debug" with value "1"
+                          X-Authorization-Time  : UNIX CURRENT TIME                          
                     </div>
                     <table class='table table-striped table-api table-bordered'>
                         <thead>
@@ -340,7 +339,7 @@
                                                 <a href='javascript:void(0)' title='Api Custom' style='color:#009fe3' class='link_name_api'><?=$ac->nama;?></a> &nbsp; 
                                                 <sup>
                                                   <a title='Hapus Api Custom ini' onclick="if(!confirm('Anda yakin ingin menghapus ?')) return false" href="{{url('admin/api_generator/delete-api/'.$ac->id)}}"><i class='fa fa-trash'></i></a>
-                                                  &nbsp; <a title='Edit API ini' href='{{url("admin/cms_apicustom/edit/$ac->id")}}'><i class='fa fa-pencil'></i></a> 
+                                                  &nbsp; <a title='Edit API ini' href='{{action("ApiCustomController@getEdit")."/$ac->id"}}'><i class='fa fa-pencil'></i></a> 
                                                 </sup>
                                                 <div class='detail_api' style='display:none'>
                                                     <table class='table table-bordered'>

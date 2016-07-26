@@ -25,16 +25,16 @@ class UsersController extends Controller {
 		$this->col = array();
 		$this->col[] = array("label"=>"Name","field"=>"name");
 		$this->col[] = array("label"=>"Email","field"=>"email");
-		$this->col[] = array("label"=>"Privilege","field"=>"name","join"=>"cms_privileges");
+		$this->col[] = array("label"=>"Privilege","field"=>"id_cms_privileges","join"=>"cms_privileges,name");
 		$this->col[] = array("label"=>"Photo","field"=>"photo","image"=>1);
-		$this->col[] = array("label"=>"Company","field"=>"name","join"=>'cms_companies');
+		$this->col[] = array("label"=>"Company","field"=>"id_cms_companies","join"=>'cms_companies,name');
 
 		$this->form = array(); 
+
+		$this->form[] = array("label"=>"Primary Data","type"=>"header");
 		$this->form[] = array("label"=>"Name","name"=>"name");
-		$this->form[] = array("label"=>"Email","name"=>"email");
-		$this->form[] = array("label"=>"Password","name"=>"password","type"=>"password","help"=>"Please leave empty if not change");
-		$this->form[] = array("label"=>"Photo","name"=>"photo","type"=>"upload","help"=>"Resolution recomended is 200x200px");
-		
+		$this->form[] = array("label"=>"Email","name"=>"email");		
+		$this->form[] = array("label"=>"Photo","name"=>"photo","type"=>"upload","help"=>"Resolution recomended is 200x200px");				
 		
 		if(strtolower(Session::get('admin_privileges_name'))=='superadmin') {
 			$this->form[] = array("label"=>"Privilege","name"=>"id_cms_privileges","type"=>"select","datatable"=>"cms_privileges,name");
@@ -44,6 +44,9 @@ class UsersController extends Controller {
 			$this->form[] = array("label"=>"Privilege","name"=>"id_cms_privileges","type"=>"select","datatable"=>"cms_privileges,name",'datatable_exception'=>'Superadmin');
 			$this->form[] = array("label"=>"Company","name"=>"id_cms_companies","type"=>"hide","value"=>Session::get('filter_value'));
 		}
+
+		$this->form[] = array("label"=>"Change the Password","type"=>"header");
+		$this->form[] = array("label"=>"Password","name"=>"password","type"=>"password","help"=>"Please leave empty if not change");
 		
 		
 		$this->constructor();

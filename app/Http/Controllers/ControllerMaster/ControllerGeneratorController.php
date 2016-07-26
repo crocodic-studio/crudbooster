@@ -54,9 +54,7 @@ class ControllerGeneratorController extends Controller {
 	private function get_namefield_table($coloms) {
 
 		$name_col_candidate = array("name","nama","title","judul","content");	
-
 		$name_col = '';
-
 		foreach($coloms as $c) {
 			foreach($name_col_candidate as $cc) {
 				if( strpos($c,$cc) !==FALSE ) {
@@ -66,9 +64,7 @@ class ControllerGeneratorController extends Controller {
 			}
 			if($name_col) break;
 		}
-
 		if($name_col == '') $name_col = 'id';
-
 		return $name_col;
 	}
 

@@ -46,7 +46,7 @@ $(function() {
                 </div><!-- /.box-body -->
                 <div class="box-footer">					
 					<button type='submit' class='btn btn-primary'><i class='fa fa-save'></i> Save</button> 
-					<button type='button' onclick='if(confirm("Are you sure want to cancel before save ?")) location.href="{{url($dashboard)."?".urldecode(http_build_query(@$_GET)) }}"' class='btn btn-warning'><i class='fa fa-arrow-left'></i> Cancel</button> 
+					<button type='button' onclick='if(confirm("Are you sure want to cancel before save ?")) location.href="{{Request::get('referal')}}"' class='btn btn-warning'><i class='fa fa-arrow-left'></i> Cancel</button> 
                 </div><!-- /.box-footer-->
             </div><!-- /.box -->
         </div><!-- /.col -->

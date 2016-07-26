@@ -4,33 +4,35 @@ $build_query = urldecode(http_build_query($parameters));
 $build_query = (Request::all())?"?".$build_query:"";
 $build_query_add = str_replace(array("&detail=1","detail=1"),"",$build_query);
 ?>
-<a href="{{ url($dashboard).$build_query }}" class="btn btn-app">
+<a href="{{ url($dashboard).$build_query }}" id='btn_show_data' class="btn btn-app">
 	<i class="fa fa-bars"></i> Show Data
 </a>
-<a href="{{ Request::url().$build_query }}" title='Reload Data' class="btn btn-app btn-reload-table ajax-button">
+<a href="{{ Request::url().$build_query }}" id='btn_reload_data' title='Reload Data' class="btn btn-app btn-reload-table ajax-button">
 	<i class="fa fa-refresh"></i> Reload Data
 </a>
 @if($priv->is_create)
-<a href="{{ url($mainpath.'/add').$build_query_add }}" class="btn btn-app">
+<a href="{{ url($mainpath.'/add').$build_query_add }}" id='btn_add_new_data' class="btn btn-app">
 	<i class="fa fa-plus"></i> Add New Data
 </a>
 @endif
 
 @if($priv->is_delete)
-	<a href="javascript:void(0)" class="disabled btn btn-app btn-delete-selected"><i class="fa fa-trash"></i> Delete Selected</a>
+	<a href="javascript:void(0)" id='btn_delete_selected' class="disabled btn btn-app btn-delete-selected"><i class="fa fa-trash"></i> Delete Selected</a>
 @endif
 
 @if($columns)
 <div class='pull-right'>
-<a href="javascript:void(0)" data-url-parameter='{{$build_query}}' title='Sort Data' class="btn btn-app btn-sort-data">
+<a href="javascript:void(0)" id='btn_sort_data' data-url-parameter='{{$build_query}}' title='Sort Data' class="btn btn-app btn-sort-data">
+	@if(Request::get('sort_column'))<span class="badge bg-yellow"><em>Sorted</em></span>@endif
 	<i class="fa fa-sort"></i> Sort Data
 </a>
 
-<a href="javascript:void(0)" data-url-parameter='{{$build_query}}' title='Filter By Existing Data' class="btn btn-app btn-filter-data">
+<a href="javascript:void(0)" id='btn_filter_data' data-url-parameter='{{$build_query}}' title='Filter By Existing Data' class="btn btn-app btn-filter-data">
+	@if(Request::get('filter_data_column'))<span class="badge bg-yellow"><em>Filtered</em></span>@endif
 	<i class="fa fa-filter"></i> Filter Data
 </a>
 
-<a href="javascript:void(0)" data-url-parameter='{{$build_query}}' title='Export Data' class="btn btn-app btn-export-data">
+<a href="javascript:void(0)" id='btn_export_data' data-url-parameter='{{$build_query}}' title='Export Data' class="btn btn-app btn-export-data">
 	<i class="fa fa-download"></i> Export Data
 </a>
 </div>
@@ -119,7 +121,8 @@ $(function(){
 								$join_i = 0;
 								foreach($columns as $col) {									
 									if(isset($col['join'])) {
-										$field = $col['join'].$join_i.'.'.$col['field_raw'];
+										$join_table = substr($col['join'], 0, strpos($col['join'], ','));
+										$field = $join_table.$join_i.'.'.$col['field_raw'];
 										$join_i++;
 									}else{
 										$field = $col['field'];
@@ -231,18 +234,35 @@ $(function(){
 
 					<div class='form-group'>
 						<label>Select By Column</label>
-						<select name='filter_data_column' class="form-control">
+						<select name='filter_data_column' required class="form-control">
 							<option value=''>** Select A Column</option>
 							<?php			
 								$join_i = 0;					
-								foreach($columns as $col) {													
+								foreach($columns as $col) {		
+									//Skip if subquery
+									if($col['is_subquery']) continue;
+																				
 									if(isset($col['join'])) {
-										$field = $col['join'].$join_i.'.'.$col['field_raw'];
+										$join_table = substr($col['join'], 0, strpos($col['join'], ','));
+										$field = $join_table.$join_i.'.'.$col['field_raw'];
 										$join_i++;
 									}else{
 										$field = $col['field'];
 									}
 									$is_date = (in_array($col['field'], $date_candidate))?1:0;
+
+									foreach($date_candidate as $date) {
+										if(substr($col['field'], 0, strpos($col['field'], '_')) == $date) {
+											$is_date = 1;
+											break;
+										}
+
+										if(substr($col['field'], strpos($col['field'], '_')+1) == $date) {
+											$is_date = 1;
+											break;
+										}
+									}
+
 									$select = ($field == Request::get('filter_data_column'))?'selected':'';				
 									echo "<option $select data-is-date='$is_date' value='$field'>$col[label]</option>";
 								}
@@ -257,8 +277,8 @@ $(function(){
 						</script>
 					</div>
 					<div class="form-group form-group-filter-exists-data">
-						<label>Filter By Exists Data</label>
-						<select name='filter_data_by' class='form-control'>
+						<label>Filter By</label>
+						<select name='filter_data_by' requireds class='form-control'>
 							<option value=''>** Please select column</option>
 						</select>
 					</div>

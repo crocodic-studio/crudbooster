@@ -47,6 +47,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 	<link rel='stylesheet' href='{{ asset("/assets/fancy//source/jquery.fancybox.css") }}'/>
 	<script src="{{ asset('/assets/fancy/source/jquery.fancybox.pack.js') }}"></script> 	
+
+	<!--SWEET ALERT-->
+	<script src="{{asset('assets/sweetalert/dist/sweetalert.min.js')}}"></script> 
+	<link rel="stylesheet" type="text/css" href="{{asset('assets/sweetalert/dist/sweetalert.css')}}">
 	
 	<script>	
 		Number.prototype.number_format = function(n, x) {

@@ -39,5 +39,6 @@ $router->group(['middleware' => 'csrf'], function($router)
 	Route::controller('/admin/cms_moduls', 'ModulsController'); 
 	Route::controller('/admin','AdminController');
 	Route::controller('upload_virtual','FileHandelController');
+	Route::controller('/apis','CustomApiController');
 	Route::controller('/','FrontController');
 });

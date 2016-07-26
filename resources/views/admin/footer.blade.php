@@ -16,8 +16,8 @@
 <footer class="main-footer">
     <!-- To the right -->
     <div class="pull-right hidden-xs"> 
-        Powered By CRUDBooster
+        Powered By <a target="_blank" href='http://crudbooster.com'>CRUDBooster</a>
     </div>
     <!-- Default to the left -->
-    <strong>Copyright &copy; <?php echo date('Y') ?>. All rights reserved. Version 1.0</strong>
+    <strong>Copyright &copy; <?php echo date('Y') ?>. All rights reserved. Version 2.1.3</strong>
 </footer>

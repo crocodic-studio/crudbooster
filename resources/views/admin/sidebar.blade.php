@@ -12,7 +12,7 @@
             <div class="pull-left info">
                 <p>{{ Session::get('admin_name') }}</p>
                 <!-- Status -->
-                <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                <a href="#"><i class="fa fa-circle text-success"></i> Online</a> • <a target="_blank" href="{{url('/')}}">Visit Website</a>
             </div>
         </div>
 
@@ -250,26 +250,26 @@
 
                     $groups = DB::table("cms_moduls_group")->orderby("sorting_group","asc")->get();
                     foreach($groups as $g):
+                        $current_path = "admin/".Request::segment(2);
+
+                        $moduls = DB::table("cms_moduls")
+                            ->where("is_active",1)     
+                            ->where("id_cms_moduls_group",$g->id)               
+                            ->whereraw("cms_moduls.id in (select b.id_cms_moduls from cms_privileges_roles b where b.id_cms_privileges = '$id_privileges' and is_read = 1)")
+                            ->orderby("sorting","asc")->get();
                 ?>
                     @if($g->is_group==1)
-                        <li class="treeview">
+                        <li class="treeview <?=(count($moduls)==0)?'hide':''?>">
                             <a href="#"><i class='{{$g->icon_group}}'></i> <span>{{$g->nama_group}}</span> <i class="fa fa-angle-left pull-right"></i></a>
                             <ul class="treeview-menu">
                     @endif
 
 
                     <?php  
-                        $moduls = DB::table("cms_moduls")
-                            ->where("is_active",1)     
-                            ->where("id_cms_moduls_group",$g->id)               
-                            ->whereraw("cms_moduls.id in (select b.id_cms_moduls from cms_privileges_roles b where b.id_cms_privileges = '$id_privileges' and is_read = 1)")
-                            ->orderby("sorting","asc")->get();
+                        
                         foreach($moduls as $modul):
-                            $path = url($modul->path);
-                            $page_menu = strtok($page_menu,'@').'@getIndex';
-                            $current_route = action(str_replace("App\Http\Controllers\\","",$page_menu));
                     ?>            
-                        <li class="<?=($path==$current_route)?'active':''?>"><a href="{{ url($path) }}"><i class='<?=$modul->icon?>'></i><span><?=$modul->name?></span></a></li>
+                        <li class="<?=($modul->path==$current_path)?'active':''?>"><a href="{{ url($modul->path) }}"><i class='<?=$modul->icon?>'></i><span><?=$modul->name?></span></a></li>
                     <?php endforeach;?>
 
 
@@ -291,14 +291,3 @@
     </section>
     <!-- /.sidebar -->
 </aside>
-<script>
-    $(function() {
-        $(".sidebar-menu .treeview").each(function() {
-            var subcount = $(this).find(".treeview-menu li").length;
-            var h = $(this);
-            if(subcount==0) {
-                h.hide();
-            }
-        })
-    })
-</script>

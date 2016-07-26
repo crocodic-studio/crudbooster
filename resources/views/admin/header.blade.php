@@ -12,8 +12,7 @@
         </a>
         <!-- Navbar Right Menu -->
         <div class="navbar-custom-menu">
-            <ul class="nav navbar-nav">
-            @if(Session::get('admin_is_superadmin'))<li><a href="{{url('admin/api_generator')}}"><i class='fa fa-book'></i> API Doc</a></li>@endif
+            <ul class="nav navbar-nav">            
                 <!-- User Account Menu -->
                 <li class="dropdown user user-menu">
                     <!-- Menu Toggle Button -->
@@ -37,7 +36,7 @@
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left">
-                                <a href="{{ url('admin/users/edit/'. Session::get('admin_id')) }}" class="btn btn-default btn-flat"><i class='fa fa-user'></i> Profile</a>
+                                <a href="{{ action('UsersController@getEdit').'/'.Session::get('admin_id') }}" class="btn btn-default btn-flat"><i class='fa fa-user'></i> Profile</a>
                             </div>
                             <div class="pull-right">
                                 <a href="{{ url('admin/logout') }}" class="btn btn-default btn-flat"><i class='fa fa-power-off'></i> Sign out</a>

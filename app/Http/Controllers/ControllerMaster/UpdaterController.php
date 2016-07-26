@@ -197,28 +197,6 @@ class UpdaterController extends BaseController {
 		foreach ($filesphp as $filename) {
 			$filename = basename($filename);
 
-			/*
-			echo "- Check controller is not Admin<br/>";
-			ob_flush();
-			flush();
-
-			//jika belum model Admin prefix
-			if(substr($filename,0,5)!='Admin' && substr($filename, 0, 3)!='Api') {
-				
-				$contentphp = file_get_contents("app\Http\Controllers\\".$filename);
-				$contentphp = str_replace("class ","class Admin",$contentphp);
-				@unlink("app\Http\Controllers\\".$filename);			
-				if(!file_exists("app\Http\Controllers\Admin".$filename.".php")) {
-					echo '--- Modify file '.$filename.' to new model<br/>';
-					ob_flush();
-					flush();
-
-					file_put_contents("app\Http\Controllers\Admin".$filename, $contentphp);
-				}					
-				continue;
-			}
-			*/
-
 			echo "- Check controller Admin<br/>";
 			ob_flush();
 			flush();
@@ -251,6 +229,9 @@ class UpdaterController extends BaseController {
 				continue;
 			}						
 		}
+
+		//Clear Logs
+		DB::table('cms_logs')->delete();
 
 		echo "<p><strong>~ Installing finished :) . You Should Rename folder Install to other folder name. ~</strong></p>";
 		ob_flush();

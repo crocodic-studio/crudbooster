@@ -19,6 +19,7 @@ class ModulsGroupController extends Controller {
 		$this->table = 'cms_moduls_group';
 		$this->primkey = 'id';
 		$this->titlefield = "nama_group";
+		$this->index_orderby = array("sorting_group"=>"asc");
 
 		$this->theme = 'admin.default';	
 		$this->prefixroute = 'admin/';	
@@ -58,11 +59,51 @@ class ModulsGroupController extends Controller {
 				"fa fa-line-cart|<i class='fa fa-line-cart'></i>",
 				"fa fa-info-circle|<i class='fa fa-info-circle'></i>",
 				"fa fa-cloud-download|<i class='fa fa-cloud-download'></i>",
-			));
-		$this->form[] = array("label"=>"Sorting","name"=>"sorting_group");
+			),"value"=>"fa fa-bars");
+
+		$url_find_sorting = action('ModulsGroupController@getFindLastSorting');
+
+		if(Request::segment(3)=='add') {
+			$this->form[] = array("label"=>"Sorting","name"=>"sorting_group","jquery"=>"
+				$.get('$url_find_sorting',function(resp) {
+					$('#sorting_group').val(resp);
+				});
+			");
+		}
+		
+
 		$this->form[] = array("label"=>"Is Group","name"=>"is_group","type"=>"radio","dataenum"=>array("0|Tidak","1|Ya"));
 		
+		$this->form_sub[] = array('label'=>'Moduls','controller'=>"ModulsController");
+
+		$this->addaction[] = array('label'=>'Up','route'=>action('ModulsGroupController@getArrSorting').'/%id%/up','icon'=>'fa fa-arrow-up','ajax'=>true);
+		$this->addaction[] = array('label'=>'Down','route'=>action('ModulsGroupController@getArrSorting').'/%id%/down','icon'=>'fa fa-arrow-down','ajax'=>true);
+
 		$this->constructor();
+	}
+
+
+	public function getFindLastSorting() {
+		$ro = DB::table('cms_moduls_group')->count();
+		$ro = $ro + 1;
+		echo $ro;
+	}
+
+	public function getArrSorting($id,$tipe) {
+		$row = DB::table('cms_moduls_group')->where('id',$id)->first();
+
+		if($tipe=='down') {
+			$new_sorting = $row->sorting_group + 1;
+		}else{
+			$new_sorting = $row->sorting_group - 1;
+		}		
+
+		$new_sorting = ($new_sorting<=0)?1:$new_sorting;
+
+		DB::table('cms_moduls_group')->where('sorting_group',$new_sorting)->update(array('sorting_group'=>$row->sorting_group));
+		DB::table('cms_moduls_group')->where('id',$id)->update(array('sorting_group'=>$new_sorting));
+
+		return redirect()->back()->with(['message'=>"Berhasil sorting data !",'message_type'=>'success']);
 	}
 
 }

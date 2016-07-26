@@ -29,7 +29,7 @@ class SettingsController extends Controller {
 		$this->col[] = array("label"=>"Setting","field"=>"content");
 
 		$this->form = array();
-		$this->form[] = array("label"=>"Name","name"=>"name","help"=>"Without space, special char, sparate with _ , lowercase only");
+		
 		
 		$id = Request::segment(4);
 		$id = intval($id);
@@ -37,9 +37,34 @@ class SettingsController extends Controller {
 		if(is_int($id) && $id !=0) {
 			$ro = DB::table('cms_settings')->where('id',$id)->first();
 			$type = $ro->content_input_type;
-			$this->form[] = array("label"=>"Content","name"=>"content","type"=>$type,"help"=>$ro->helper);	
+
+			$this->form[] = array("label"=>"Name","name"=>"name","readonly"=>true,"callback_php"=>'ucwords(str_replace("_"," ",$row->name))');
+
+			if($type=='radio' || $type=='select') {
+				if($ro->dataenum) {
+					$dataenum = explode(",",$ro->dataenum);					
+					$this->form[] = ["label"=>"Content","type"=>$type,"name"=>"content","dataenum"=>$dataenum,"help"=>$ro->helper];
+				}	
+			}else{
+				$this->form[] = array("label"=>"Content","name"=>"content","type"=>$type,"help"=>$ro->helper);	
+			}
+						
 		}else{			
-			$this->form[] = array("label"=>"Type","name"=>"content_input_type","type"=>"select","dataenum"=>array("text","textarea","wysiwyg","upload","datepicker"));		
+			$this->form[] = array("label"=>"Name","name"=>"name","help"=>"Without space, special char, sparate with _ , lowercase only");
+
+			$this->form[] = array("label"=>"Type","name"=>"content_input_type","type"=>"select","dataenum"=>array("text","textarea","wysiwyg","upload","datepicker","radio","select"));		
+			$this->form[] = array("label"=>"Radio / Select Data","name"=>"dataenum","placeholder"=>"Example : abc,def,ghi","jquery"=>"
+				function show_radio_data() {
+					var cit = $('#content_input_type').val();
+					if(cit == 'radio' || cit == 'select') {
+						$('#form-group-dataenum').show();	
+					}else{
+						$('#form-group-dataenum').hide();
+					}					
+				}
+				$('#content_input_type').change(show_radio_data);
+				show_radio_data();
+				");
 			$this->form[] = array("label"=>"Helper Text","name"=>"helper","type"=>"text");	
 		}				
 		

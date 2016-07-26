@@ -356,7 +356,7 @@ class AdminController extends Controller {
 		$html .= "</div>";
 
 		$select = "<select name='id_cms_moduls' class='form-control'>";
-		$modules = DB::table('cms_moduls')->where('is_active',1)->orderby('name','asc')->get();
+		$modules = DB::table('cms_moduls')->orderby('name','asc')->get();
 		foreach($modules as $module) {
 			$selected = ($module->id == $content['id_cms_moduls'])?"selected":"";
 			$select .= "<option $selected value='$module->id'>$module->name</option>";
@@ -411,19 +411,19 @@ class AdminController extends Controller {
 
 				switch($aggregate_type) {
 					case "count":
-						$query = "select count($column) as statistic_total from $table where 1=1 $sql_where";
+						$query = "select count($column) as statistic_total from `$table` where 1=1 $sql_where";
 					break;
 					case "sum":
-						$query = "select sum($column) as statistic_total from $table where 1=1 $sql_where";
+						$query = "select sum($column) as statistic_total from `$table` where 1=1 $sql_where";
 					break;
 					case "avg":
-						$query = "select avg($column) as statistic_total from $table where 1=1 $sql_where";
+						$query = "select avg($column) as statistic_total from `$table` where 1=1 $sql_where";
 					break;
 					case "min":
-						$query = "select min($column) as statistic_total from $table where 1=1 $sql_where";
+						$query = "select min($column) as statistic_total from `$table` where 1=1 $sql_where";
 					break;
 					case "max":
-						$query = "select max($column) as statistic_total from $table where 1=1 $sql_where";
+						$query = "select max($column) as statistic_total from `$table` where 1=1 $sql_where";
 					break;
 				}
 

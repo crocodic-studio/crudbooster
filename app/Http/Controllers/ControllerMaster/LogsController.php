@@ -24,12 +24,16 @@ class LogsController extends Controller {
 
 		$this->col = array();
 		$this->col[] = array("label"=>"Created At","field"=>"created_at");
-		$this->col[] = array("label"=>"IP Address","field"=>"ipaddress");
-		$this->col[] = array("label"=>"UserAgent","field"=>"useragent");
-		$this->col[] = array("label"=>"URL","field"=>"url");
-		$this->col[] = array("label"=>"User","field"=>"name","join"=>"cms_users");
+		$this->col[] = array("label"=>"IP Address","field"=>"ipaddress");	
+		$this->col[] = array("label"=>"User","field"=>"id_cms_users","join"=>"cms_users,name");	
+		$this->col[] = array("label"=>"Description","field"=>"description");		
 		
-		$this->form = array(); 		
+		$this->form = array(); 	
+		$this->form[] = array("label"=>"Created At","name"=>"created_at","readonly"=>true);
+		$this->form[] = array("label"=>"IP Address","name"=>"ipaddress","readonly"=>true);	
+		$this->form[] = array("label"=>"URL","name"=>"url","readonly"=>true);	
+		$this->form[] = array("label"=>"User","name"=>"id_cms_users","type"=>"select","datatable"=>"cms_users,name","readonly"=>true);	
+		$this->form[] = array("label"=>"Description","name"=>"description","readonly"=>true);	
 		
 		$this->constructor();
 	}

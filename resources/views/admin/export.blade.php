@@ -41,8 +41,15 @@
       echo "<td><a class='btn btn-sm btn-primary' href='$url' target='_blank' title='Download File'>Download</a></td>";
     }else{
     
-    $value = strip_tags($value);
-    $value = str_limit($value,50);
+    //limit character             
+    if($col['str_limit']) {
+      $value = trim(strip_tags($value));
+      $value = str_limit($value,$col['str_limit']);
+    }
+
+    if($col['nl2br']) {
+                $value = nl2br($value);
+              }
 
     if(!empty($col['callback_php'])) {
       $col['callback_php'] = str_replace('%field%',$value,$col['callback_php']);

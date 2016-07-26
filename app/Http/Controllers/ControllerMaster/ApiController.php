@@ -25,8 +25,7 @@ abstract class ApiController extends BaseController {
 	var $setting;
 	var $permalink;
 	var $hook_api_status;
-	var $hook_api_message;
-	var $secreet_key       = "CROCODICHEBAT";
+	var $hook_api_message;	
 	var $last_id_tmp       = array();
 	
 
@@ -653,7 +652,7 @@ abstract class ApiController extends BaseController {
 	public function auth() {
 		$screetkey = @unserialize(str_replace("* WARNING !! DO NOT REMOVE THIS BELLOW KEY *\n","",strip_tags(file_get_contents("resources/_token"))))['key'];		
 
-		if(Request::get('debug')!=1) {
+		if($this->setting->api_debug_mode=='false') {
 
 			$result = array();
 			$validator = Validator::make(

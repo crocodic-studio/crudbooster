@@ -150,7 +150,10 @@ use Hash;
 class Api'.$controllername.'Controller extends ApiController {
 
 	function __construct() {	
+		$this->table 	 = "'.$table.'";
+		$this->parameter = "'.$parameter.'";
 		$this->permalink = "'.$permalink.'";
+		$this->response  = "'.$response.'"; 
 	}
 ';
 
