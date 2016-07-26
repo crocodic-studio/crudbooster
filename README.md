@@ -1,8 +1,8 @@
 # Laravel CRUDBooster
 > Faster Laravel CRUD Generator, Make a Web Application Just In Minutes, With Less Code and Less Step !
-> Currently Based on Laravel 5.0
 
 ## System Requirement
+Currently Based on Laravel 5.0
 - PHP >= 5.4, PHP < 7
 - Mcrypt PHP Extension
 - OpenSSL PHP Extension
