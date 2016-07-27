@@ -19,5 +19,5 @@
         Powered By <a target="_blank" href='http://crudbooster.com'>CRUDBooster</a>
     </div>
     <!-- Default to the left -->
-    <strong>Copyright &copy; <?php echo date('Y') ?>. All rights reserved. Version 2.1.3</strong>
+    <strong>Copyright &copy; <?php echo date('Y') ?>. All rights reserved.</strong>
 </footer>
