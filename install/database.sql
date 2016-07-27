@@ -68,6 +68,13 @@ CREATE TABLE `cms_logs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 INSERT INTO `cms_logs` (`id`, `created_at`, `ipaddress`, `useragent`, `url`, `description`, `id_cms_users`) VALUES(1, '2016-07-03 21:02:35', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36', 'http://localhost/web_cms/admin/cms_pages/delete/3', 'Delete data test at Pages', 13);
+INSERT INTO `cms_logs` (`id`, `created_at`, `ipaddress`, `useragent`, `url`, `description`, `id_cms_users`) VALUES(2, '2016-07-27 23:51:06', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36', 'http://localhost/crudbooster/admin/settings/edit-save/20', 'Update data  at Settings', 13);
+INSERT INTO `cms_logs` (`id`, `created_at`, `ipaddress`, `useragent`, `url`, `description`, `id_cms_users`) VALUES(3, '2016-07-27 23:51:14', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36', 'http://localhost/crudbooster/admin/settings/edit-save/22', 'Update data  at Settings', 13);
+INSERT INTO `cms_logs` (`id`, `created_at`, `ipaddress`, `useragent`, `url`, `description`, `id_cms_users`) VALUES(4, '2016-07-27 23:51:24', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36', 'http://localhost/crudbooster/admin/settings/edit-save/30', 'Update data  at Settings', 13);
+INSERT INTO `cms_logs` (`id`, `created_at`, `ipaddress`, `useragent`, `url`, `description`, `id_cms_users`) VALUES(5, '2016-07-27 23:51:56', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36', 'http://localhost/crudbooster/admin/settings/delete-image', 'Delete image for favicon at Settings', 13);
+INSERT INTO `cms_logs` (`id`, `created_at`, `ipaddress`, `useragent`, `url`, `description`, `id_cms_users`) VALUES(6, '2016-07-27 23:52:11', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36', 'http://localhost/crudbooster/admin/settings/edit-save/31', 'Update data  at Settings', 13);
+INSERT INTO `cms_logs` (`id`, `created_at`, `ipaddress`, `useragent`, `url`, `description`, `id_cms_users`) VALUES(7, '2016-07-27 23:52:24', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36', 'http://localhost/crudbooster/admin/settings/delete-image', 'Delete image for logo at Settings', 13);
+INSERT INTO `cms_logs` (`id`, `created_at`, `ipaddress`, `useragent`, `url`, `description`, `id_cms_users`) VALUES(8, '2016-07-27 23:52:37', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36', 'http://localhost/crudbooster/admin/settings/edit-save/2', 'Update data  at Settings', 13);
 
 CREATE TABLE `cms_menus` (
   `id` int(11) NOT NULL,
@@ -228,20 +235,20 @@ CREATE TABLE `cms_settings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 INSERT INTO `cms_settings` (`id`, `created_at`, `updated_at`, `name`, `content`, `content_input_type`, `dataenum`, `helper`) VALUES(1, '2016-06-13 19:34:16', '2016-03-18 18:53:07', 'appname', 'CRUDBooster', 'text', NULL, NULL);
-INSERT INTO `cms_settings` (`id`, `created_at`, `updated_at`, `name`, `content`, `content_input_type`, `dataenum`, `helper`) VALUES(2, '2016-06-13 19:34:20', '2016-02-25 18:34:24', 'email_sender', 'support@crocodic.net', 'text', NULL, NULL);
+INSERT INTO `cms_settings` (`id`, `created_at`, `updated_at`, `name`, `content`, `content_input_type`, `dataenum`, `helper`) VALUES(2, '2016-07-27 16:52:37', '2016-02-25 18:34:24', 'email_sender', 'support@crudbooster.com', 'text', NULL, NULL);
 INSERT INTO `cms_settings` (`id`, `created_at`, `updated_at`, `name`, `content`, `content_input_type`, `dataenum`, `helper`) VALUES(13, '2016-06-13 19:34:25', '0000-00-00 00:00:00', 'upload_path', 'uploads/', 'text', NULL, NULL);
 INSERT INTO `cms_settings` (`id`, `created_at`, `updated_at`, `name`, `content`, `content_input_type`, `dataenum`, `helper`) VALUES(14, '2016-06-13 19:34:35', '0000-00-00 00:00:00', 'upload_mode', 'file', 'text', NULL, 'file or database');
 INSERT INTO `cms_settings` (`id`, `created_at`, `updated_at`, `name`, `content`, `content_input_type`, `dataenum`, `helper`) VALUES(18, '2016-06-13 19:34:51', '0000-00-00 00:00:00', 'app_lockscreen_timeout', '60', 'text', NULL, 'in number of seconds');
 INSERT INTO `cms_settings` (`id`, `created_at`, `updated_at`, `name`, `content`, `content_input_type`, `dataenum`, `helper`) VALUES(19, '2016-06-13 19:35:12', '0000-00-00 00:00:00', 'default_paper_size', 'Legal', 'text', NULL, 'Paper Size ex : A4, Legal, Letter');
-INSERT INTO `cms_settings` (`id`, `created_at`, `updated_at`, `name`, `content`, `content_input_type`, `dataenum`, `helper`) VALUES(20, '2016-06-13 19:35:25', '0000-00-00 00:00:00', 'smtp_host', 'crocodic.net', 'text', NULL, 'host of smtp');
+INSERT INTO `cms_settings` (`id`, `created_at`, `updated_at`, `name`, `content`, `content_input_type`, `dataenum`, `helper`) VALUES(20, '2016-07-27 16:51:06', '0000-00-00 00:00:00', 'smtp_host', '', 'text', NULL, 'host of smtp');
 INSERT INTO `cms_settings` (`id`, `created_at`, `updated_at`, `name`, `content`, `content_input_type`, `dataenum`, `helper`) VALUES(21, '2016-06-13 19:35:34', '0000-00-00 00:00:00', 'smtp_port', '25', 'text', NULL, 'default 25');
-INSERT INTO `cms_settings` (`id`, `created_at`, `updated_at`, `name`, `content`, `content_input_type`, `dataenum`, `helper`) VALUES(22, '2016-04-17 04:12:00', '0000-00-00 00:00:00', 'smtp_username', 'admin@crocodic.net', 'textarea', NULL, NULL);
+INSERT INTO `cms_settings` (`id`, `created_at`, `updated_at`, `name`, `content`, `content_input_type`, `dataenum`, `helper`) VALUES(22, '2016-07-27 16:51:14', '0000-00-00 00:00:00', 'smtp_username', '', 'textarea', NULL, NULL);
 INSERT INTO `cms_settings` (`id`, `created_at`, `updated_at`, `name`, `content`, `content_input_type`, `dataenum`, `helper`) VALUES(23, '2016-04-17 04:12:12', '0000-00-00 00:00:00', 'smtp_password', '123456', 'textarea', NULL, NULL);
-INSERT INTO `cms_settings` (`id`, `created_at`, `updated_at`, `name`, `content`, `content_input_type`, `dataenum`, `helper`) VALUES(24, '2016-06-13 19:37:41', '0000-00-00 00:00:00', 'logo', 'uploads/2016-06/6746aa24adfb19aa32e0f66486ee5510.png', 'upload', NULL, 'Upload Image jpg,png,gif , Max Size 500 KB');
-INSERT INTO `cms_settings` (`id`, `created_at`, `updated_at`, `name`, `content`, `content_input_type`, `dataenum`, `helper`) VALUES(25, '2016-06-13 19:37:30', '0000-00-00 00:00:00', 'favicon', 'uploads/2016-06/8fa360b5bf1d234f01f90fce2da6c5e1.png', 'upload', NULL, 'File support jpg,png,gif . Max size 300 KB. Resolution 120x120');
+INSERT INTO `cms_settings` (`id`, `created_at`, `updated_at`, `name`, `content`, `content_input_type`, `dataenum`, `helper`) VALUES(24, '2016-07-27 16:52:24', '0000-00-00 00:00:00', 'logo', '', 'upload', NULL, 'Upload Image jpg,png,gif , Max Size 500 KB');
+INSERT INTO `cms_settings` (`id`, `created_at`, `updated_at`, `name`, `content`, `content_input_type`, `dataenum`, `helper`) VALUES(25, '2016-07-27 16:51:56', '0000-00-00 00:00:00', 'favicon', '', 'upload', NULL, 'File support jpg,png,gif . Max size 300 KB. Resolution 120x120');
 INSERT INTO `cms_settings` (`id`, `created_at`, `updated_at`, `name`, `content`, `content_input_type`, `dataenum`, `helper`) VALUES(29, '2016-06-24 16:48:47', '0000-00-00 00:00:00', 'api_debug_mode', 'true', 'radio', 'true,false', NULL);
-INSERT INTO `cms_settings` (`id`, `created_at`, `updated_at`, `name`, `content`, `content_input_type`, `dataenum`, `helper`) VALUES(30, '2016-06-26 05:35:27', '0000-00-00 00:00:00', 'smtp_driver', 'smtp', 'select', 'smtp,mail,sendmail', '');
-INSERT INTO `cms_settings` (`id`, `created_at`, `updated_at`, `name`, `content`, `content_input_type`, `dataenum`, `helper`) VALUES(31, '2016-06-26 14:49:04', '0000-00-00 00:00:00', 'google_api_key', 'AIzaSyAZwIa1wAjWtq_ziyRTeYPRdBmkVLznxT0', 'text', '', 'Enter google api key for maps');
+INSERT INTO `cms_settings` (`id`, `created_at`, `updated_at`, `name`, `content`, `content_input_type`, `dataenum`, `helper`) VALUES(30, '2016-07-27 16:51:23', '0000-00-00 00:00:00', 'smtp_driver', 'mail', 'select', 'smtp,mail,sendmail', '');
+INSERT INTO `cms_settings` (`id`, `created_at`, `updated_at`, `name`, `content`, `content_input_type`, `dataenum`, `helper`) VALUES(31, '2016-07-27 16:52:11', '0000-00-00 00:00:00', 'google_api_key', '', 'text', '', 'Enter google api key for maps');
 
 CREATE TABLE `cms_users` (
   `id` int(11) NOT NULL,
@@ -332,7 +339,7 @@ ALTER TABLE `cms_dashboard`
 ALTER TABLE `cms_filemanager`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `cms_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 ALTER TABLE `cms_menus`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 ALTER TABLE `cms_menus_groups`
