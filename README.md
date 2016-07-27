@@ -133,16 +133,16 @@ $this->form_add[] = "INSERT YOUR HTML HERE";
 
 ## 4). Hook
 This functions is for modify action after or before default do action. 
-| Name | Description |
-| ---- | ---- |
-| hook_before_index(&$result) | Modify query mysql for index table |
-| hook_html_index(&$html_contents) | Modify row's html of table | 
-| hook_before_add(&$postdata) | Modify POST input data of user |
-| hook_after_add($id) | Create some action after Add data function is done |
-| hook_before_edit(&$postdata,$id) | Modify POST input data of user | 
-| hook_after_edit($id) | Create some action after Edit/Update data function is done | 
-| hook_before_delete($id) | Create some action before delete function run | 
-| hook_after_delete($id) | Create some action after delete function run |
+| Name                             | Description                                    |
+| -------------------------------- | ---------------------------------------------- |
+| hook_before_index(&$result)      | Modify query mysql for index table             |
+| hook_html_index(&$html_contents) | Modify row's html of table                     | 
+| hook_before_add(&$postdata)      | Modify POST input data of user                 |
+| hook_after_add($id)              | Create some action after Add data function is done |
+| hook_before_edit(&$postdata,$id) | Modify POST input data of user                 | 
+| hook_after_edit($id)             | Create some action after Edit/Update data function is done | 
+| hook_before_delete($id)          | Create some action before delete function run  | 
+| hook_after_delete($id)           | Create some action after delete function run   |
 
 ### Example : hook_before_index
 ```php
