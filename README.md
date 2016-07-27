@@ -10,6 +10,7 @@ Currently Based on Laravel 5.0
 - OpenSSL PHP Extension
 - Mbstring PHP Extension
 - Tokenizer PHP Extension
+- MySQL Database Server
 
 ## Installation
 Please following these instructions : 
