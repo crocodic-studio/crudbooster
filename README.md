@@ -176,8 +176,10 @@ public function hook_before_index(&$result) {
 ### Example : hook_html_index 
 ```php
 public function hook_html_index(&$html_contents) {
-
-	foreach($html_contents as &$row) {
+	
+	// If you want get data from each row, $html_contents['data']
+	
+	foreach($html_contents['html'] as &$row) {
 		// In this example, we want to coloring of status if Active then Green, Else then Red
 		// First you should know where the status columns row locations (index of array) 
 		$status = $row[5];
