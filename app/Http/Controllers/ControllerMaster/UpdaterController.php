@@ -15,7 +15,7 @@ use Schema;
 
 class UpdaterController extends BaseController {
 
-	var $sqlpath = "install/crocodic_cms.sql";
+	var $sqlpath = "install/database.sql";
 	var $sql;
 
 

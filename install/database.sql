@@ -1,12 +1,6 @@
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
-
 CREATE TABLE `cms_apicustom` (
   `id` int(11) NOT NULL,
   `permalink` varchar(100) NOT NULL,
@@ -50,8 +44,8 @@ INSERT INTO `cms_dashboard` (`id`, `name`, `id_cms_privileges`, `content`) VALUE
 INSERT INTO `cms_dashboard` (`id`, `name`, `id_cms_privileges`, `content`) VALUES(4, 'Total Company', 3, 'a:8:{s:4:"type";s:16:"statistic_number";s:2:"id";s:1:"4";s:5:"label";s:13:"Total Company";s:5:"color";s:6:"yellow";s:10:"table_name";s:13:"cms_companies";s:14:"aggregate_type";s:5:"count";s:6:"column";s:2:"id";s:9:"sql_where";s:0:"";}');
 INSERT INTO `cms_dashboard` (`id`, `name`, `id_cms_privileges`, `content`) VALUES(5, 'Total Articles', 3, 'a:9:{s:4:"type";s:16:"statistic_number";s:2:"id";s:1:"5";s:5:"label";s:14:"Total Articles";s:4:"icon";s:23:"ion-arrow-graph-up-left";s:5:"color";s:4:"aqua";s:10:"table_name";s:9:"cms_posts";s:14:"aggregate_type";s:5:"count";s:6:"column";s:2:"id";s:9:"sql_where";s:0:"";}');
 INSERT INTO `cms_dashboard` (`id`, `name`, `id_cms_privileges`, `content`) VALUES(6, 'Total Pages', 3, 'a:9:{s:4:"type";s:16:"statistic_number";s:2:"id";s:1:"6";s:5:"label";s:11:"Total Pages";s:4:"icon";s:23:"ion-arrow-graph-up-left";s:5:"color";s:5:"green";s:10:"table_name";s:9:"cms_pages";s:14:"aggregate_type";s:5:"count";s:6:"column";s:2:"id";s:9:"sql_where";s:0:"";}');
-INSERT INTO `cms_dashboard` (`id`, `name`, `id_cms_privileges`, `content`) VALUES(11, 'Logs in Line', 3, 'a:10:{s:4:"type";s:10:"chart_line";s:2:"id";s:2:"11";s:5:"label";s:12:"Logs in Line";s:5:"color";s:6:"yellow";s:5:"width";s:4:"half";s:10:"table_name";s:8:"cms_logs";s:14:"aggregate_type";s:5:"count";s:6:"column";s:2:"id";s:9:"sql_where";s:0:"";s:12:"sql_group_by";s:59:"CONCAT(MONTHNAME(created_at),''-'',YEAR(created_at)) as bulan";}');
-INSERT INTO `cms_dashboard` (`id`, `name`, `id_cms_privileges`, `content`) VALUES(14, 'Log in bar', 3, 'a:10:{s:4:"type";s:9:"chart_bar";s:2:"id";s:2:"14";s:5:"label";s:10:"Log in bar";s:5:"color";s:5:"green";s:5:"width";s:4:"half";s:10:"table_name";s:8:"cms_logs";s:14:"aggregate_type";s:5:"count";s:6:"column";s:2:"id";s:9:"sql_where";s:0:"";s:12:"sql_group_by";s:27:"date(created_at) as tanggal";}');
+INSERT INTO `cms_dashboard` (`id`, `name`, `id_cms_privileges`, `content`) VALUES(11, 'Articles By Date', 3, 'a:10:{s:4:"type";s:10:"chart_line";s:2:"id";s:2:"11";s:5:"label";s:16:"Articles By Date";s:5:"color";s:6:"yellow";s:5:"width";s:4:"half";s:10:"table_name";s:9:"cms_posts";s:14:"aggregate_type";s:5:"count";s:6:"column";s:2:"id";s:9:"sql_where";s:0:"";s:12:"sql_group_by";s:27:"DATE(created_at) as tanggal";}');
+INSERT INTO `cms_dashboard` (`id`, `name`, `id_cms_privileges`, `content`) VALUES(14, 'Articles Bar', 3, 'a:10:{s:4:"type";s:9:"chart_bar";s:2:"id";s:2:"14";s:5:"label";s:12:"Articles Bar";s:5:"color";s:5:"green";s:5:"width";s:4:"half";s:10:"table_name";s:9:"cms_posts";s:14:"aggregate_type";s:5:"count";s:6:"column";s:2:"id";s:9:"sql_where";s:0:"";s:12:"sql_group_by";s:27:"date(created_at) as tanggal";}');
 
 CREATE TABLE `cms_filemanager` (
   `id` int(11) NOT NULL,
@@ -72,6 +66,8 @@ CREATE TABLE `cms_logs` (
   `description` varchar(255) DEFAULT NULL,
   `id_cms_users` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO `cms_logs` (`id`, `created_at`, `ipaddress`, `useragent`, `url`, `description`, `id_cms_users`) VALUES(1, '2016-07-03 21:02:35', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36', 'http://localhost/web_cms/admin/cms_pages/delete/3', 'Delete data test at Pages', 13);
 
 CREATE TABLE `cms_menus` (
   `id` int(11) NOT NULL,
@@ -155,7 +151,6 @@ CREATE TABLE `cms_pages` (
 
 INSERT INTO `cms_pages` (`id`, `title`, `slug`, `created_at`, `content`) VALUES(1, 'Curabitur suscipit suscipit tellus', 'curabitur-suscipit-suscipit-tellus', '2016-06-26 06:56:21', '<p>Curabitur suscipit suscipit tellus</p>');
 INSERT INTO `cms_pages` (`id`, `title`, `slug`, `created_at`, `content`) VALUES(2, 'Suspendisse nisl elit rhoncus', 'suspendisse-nisl-elit-rhoncus', '2016-06-26 06:56:35', '<p>Suspendisse nisl elit rhoncus</p>');
-INSERT INTO `cms_pages` (`id`, `title`, `slug`, `created_at`, `content`) VALUES(3, 'test', 'test', '2016-06-30 15:28:29', '<p>test</p>');
 
 CREATE TABLE `cms_posts` (
   `id` int(11) NOT NULL,
@@ -260,7 +255,7 @@ CREATE TABLE `cms_users` (
   `id_cms_companies` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-INSERT INTO `cms_users` (`id`, `created_at`, `updated_at`, `name`, `photo`, `email`, `password`, `id_cms_privileges`, `id_cms_companies`) VALUES(13, '2016-05-17 11:46:41', '0000-00-00 00:00:00', 'Administrator', 'uploads/2016-05/f7429d6d2c9ca2fd97c4b9e834cec49e.jpg', 'admin@crocodic.com', '$2y$10$pSvsrFjckNvWvvY0PRewvujejhFLED1hYlPJGRYmhGmGs6ZNx/Voy', 3, 1);
+INSERT INTO `cms_users` (`id`, `created_at`, `updated_at`, `name`, `photo`, `email`, `password`, `id_cms_privileges`, `id_cms_companies`) VALUES(13, '2016-07-27 15:31:29', '0000-00-00 00:00:00', 'Administrator', 'uploads/2016-05/f7429d6d2c9ca2fd97c4b9e834cec49e.jpg', 'admin@crudbooster.com', '$2y$10$pSvsrFjckNvWvvY0PRewvujejhFLED1hYlPJGRYmhGmGs6ZNx/Voy', 3, 1);
 
 
 ALTER TABLE `cms_apicustom`
@@ -337,9 +332,9 @@ ALTER TABLE `cms_dashboard`
 ALTER TABLE `cms_filemanager`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `cms_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 ALTER TABLE `cms_menus`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 ALTER TABLE `cms_menus_groups`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 ALTER TABLE `cms_moduls`
@@ -347,7 +342,7 @@ ALTER TABLE `cms_moduls`
 ALTER TABLE `cms_moduls_group`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 ALTER TABLE `cms_pages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 ALTER TABLE `cms_posts`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 ALTER TABLE `cms_posts_categories`
@@ -360,6 +355,3 @@ ALTER TABLE `cms_settings`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 ALTER TABLE `cms_users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
