@@ -132,7 +132,6 @@ $this->form_add[] = "INSERT YOUR HTML HERE";
 ```
 
 ## 4). Hook
-This functions is for modify action after or before default do action. 
 | Name                             | Description                                    |
 | -------------------------------- | ---------------------------------------------- |
 | hook_before_index(&$result)      | Modify query mysql for index table             |
