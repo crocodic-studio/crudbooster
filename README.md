@@ -28,7 +28,7 @@ Please following these instructions :
 - Get used to write a column name **clearly**. Avoid short name. Ex Correct : full_name, Ex Incorrect : fname
 
 ## Getting Started
-I think you have made a table of database for your new module before do these steps. 
+I think you have made a table of database for your new module before do these steps. Now we want to generate CRUD modul Automatically, follow these steps :
 ```
 http://localhost/YourApp/admin
 username (default) : admin@crocodic.com
@@ -47,12 +47,18 @@ password (default) : 123456
 6. Save
 7. Done
 ```
-After you've created new modul, then a new menu will be appeared at left (sidebar left). You can view by click it.
+After you've created new modul, then a new menu will be appeared at left (sidebar left). You can view by click it. Done.
+
+## Custom Controller and Form
+Unfortunately in many case that very complicated problem, you can still custom the Controller and Form as you want. **CRUDBooster**  designed to be smart tool and can adapt in many cases and conditions. Every modul will be create a new file controller in /App/Http/Controllers/ .
 
 ## 1). Index Table List Data :
 ```php
 $this->col = array();
-$this->col[] = array('label'=>'LABEL NAME','field'=>'FIELD_NAME');
+$this->col[] = array('label'=>'Title','field'=>'title');
+$this->col[] = array('label'=>'Short Description','field'=>'short_description');
+$this->col[] = array('label'=>'Total Hit','field'=>'total_hit');
+$this->col[] = array('label'=>'Category','field'=>'id_category','join'=>'category,name');
 ```
 
 ### Legends : 
@@ -69,7 +75,8 @@ $this->col[] = array('label'=>'LABEL NAME','field'=>'FIELD_NAME');
 ## 2). Configure Form :
 ```php
 $this->form = array();
-$this->form[] = array('label'=>'LABEL NAME','name'=>'FIELD_NAME');
+$this->form[] = array('label'=>'Title','name'=>'title');
+$this->form[] = array('label'=>'
 ```
 
 ### Legends : 
@@ -191,3 +198,7 @@ public function hook_after_add($id) {
 	DB::table("somelogs")->insert($data);
 }
 ```
+
+## FAQ Problem Frequently 
+1. Sometimes you've created a module correctly, but when you click the menu, you found that page is not found. So please make sure both file controller in /App/Http/Controllers and your Module is match. Also check your **route** in Edit Module at Backend.
+2. The module wich you've made is not visible ? So please check at menu settings -> privileges, select correct privilege, then edit, please make sure the module wich you've made is checked. Also check at Edit Module, please make sure Active Status is Active.
