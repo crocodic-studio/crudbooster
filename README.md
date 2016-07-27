@@ -1,4 +1,6 @@
 # Laravel CRUDBooster
+[![AUR](https://img.shields.io/aur/license/yaourt.svg?maxAge=2592000?style=flat-square)]()
+
 > Faster Laravel CRUD Generator, Make a Web Application Just In Minutes, With Less Code and Less Step !
 
 ## System Requirement
