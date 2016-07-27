@@ -72,7 +72,7 @@ $this->form[] = array('label'=>'LABEL NAME','name'=>'FIELD_NAME');
 | label                 | Required | label name |
 | name | Required | field tabel |
 | type | Required | (text, textarea, radio, select, checkbox, wysiwyg, select2, datepicker, datetimepicker, hidden, password, upload, browse, qrcode) |
-| dataenum | Optional | support only for type 'select,radio,checkbox', ex : array('BMW','MERCY','TOYOTA') or array('0|BMW','1|MERCY','2|TOYOTA') |
+| dataenum | Optional | support only for type 'select,radio,checkbox', ex : array('BMW','MERCY','TOYOTA') |
 | datatable | Optional | support only for type 'select', this will load data from tabel, ex : "TABLE_NAME, COLUMN_NAME" |
 | datatable_where | Optional | sql where query for datatable, ex : status != 'active' and status != 'available' |
 | select2_controller | Optional | name other controller, ex : NameController | 
