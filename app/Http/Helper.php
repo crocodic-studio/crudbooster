@@ -441,6 +441,23 @@ function show_value($id,$tabel,$show='value',$empty=''){
     return $the_value;          
 }
 
+function showValue_byField($string,$id,$table,$show='value',$empty=''){
+
+    $queries = DB::table($table)
+        ->where($string,'=',$id)
+        ->orderBy('id','DESC')
+        ->first();
+
+    if(empty($queries))
+    {
+        $the_value =  $empty;
+    } else {
+        $the_value =  $queries->$show;
+    }
+
+    return $the_value;          
+}
+
 function get_setting($name){
     $query = DB::table('cms_settings')->where('name',$name)->first();
     return $query->content;
