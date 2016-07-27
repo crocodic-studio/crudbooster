@@ -33,7 +33,7 @@ Please following these instructions :
 I think you have made a table of database for your new module before do these steps. Now we want to generate CRUD modul Automatically, follow these steps :
 ```
 http://localhost/YourApp/admin
-username (default) : admin@crocodic.com
+username (default) : admin@crudbooster.com
 password (default) : 123456
 
 1. Login to Admin
