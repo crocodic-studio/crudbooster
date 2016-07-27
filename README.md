@@ -60,6 +60,9 @@ After you've created new modul, then a new menu will be appeared at left (sideba
 ## Custom Controller and Form
 Unfortunately in many case that very complicated problem, you can still custom the Controller and Form as you want. **CRUDBooster**  designed to be smart tool and can adapt in many cases and conditions. Every modul will be create a new file controller in /App/Http/Controllers/ .
 
+## Dont Hack The Core (WARNING)
+We recommend you do not hack or modification files Controller in Folder ControllerMaster, or View in folder Admin. Because that files is used by CRUDBooster. If you hack that files, so your modification will be replace if you update your CRUDBooster.
+
 ## 1). Index Table List Data :
 ```php
 $this->col = array();
