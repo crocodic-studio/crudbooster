@@ -76,7 +76,9 @@ $this->col[] = array('label'=>'Category','field'=>'id_category','join'=>'categor
 ```php
 $this->form = array();
 $this->form[] = array('label'=>'Title','name'=>'title');
-$this->form[] = array('label'=>'
+$this->form[] = array('label'=>'Short Description','name'=>'short_description','type'=>'textarea');
+$this->form[] = array('label'=>'Total Hit','readonly'=>true);
+$this->form[] = array('label'=>'Category','name'='id_category','type'=>'select','datatable'=>'category,name');
 ```
 
 ### Legends : 
@@ -117,7 +119,7 @@ $this->form[] = array('label'=>'
 ### FORM TAB
 ```php
 $this->form_tab = array();
-$this->form_tab[] = array('label'=>'LABEL NAME','icon'=>'fa fa-bars','route'=>'URL','filter_field'=>'RELATION_FIELD_NAME');
+$this->form_tab[] = array('label'=>'Photos','icon'=>'fa fa-bars','route'=>action("AdminPhotosController@getIndex"),'filter_field'=>'id_news');
 ```
 
 #### Legends : 
@@ -130,7 +132,7 @@ $this->form_tab[] = array('label'=>'LABEL NAME','icon'=>'fa fa-bars','route'=>'U
 
 ### FORM SUB
 ```php
-$this->form_sub[] = array('label'=>'Label Name','controller'=>'Controller Name');
+$this->form_sub[] = array('label'=>'Photos','controller'=>'AdminPhotosController');
 ```
 
 #### Legends : 
@@ -141,8 +143,13 @@ $this->form_sub[] = array('label'=>'Label Name','controller'=>'Controller Name')
 
 ### FORM ADD 
 ```php
-$this->form_add[] = "INSERT YOUR HTML HERE";
+$this->form_add[] = "
+<div id='form_other_element'>
+	<div class='alert alert-warning'>You can manage modul News in this area.</div>
+</div>
+";
 ```
+You can use form_add for add new element / html after all form elements 
 
 ## 4). Hook
 | Name                             | Description                                    |
