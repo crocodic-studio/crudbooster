@@ -31,7 +31,7 @@ CREATE TABLE `cms_companies` (
   `is_primary` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-INSERT INTO `cms_companies` (`id`, `created_at`, `name`, `address`, `phone`, `email`, `photo`, `description`, `latitude`, `longitude`, `is_primary`) VALUES(1, '2016-04-11 11:38:49', 'Crocodic', 'Jalan Duta Mas No. 22', '122324234', 'support@crocodic.com', 'uploads/2016-06/45a0c8e203bbbdf4730fefdf25124c58.png', 'Quisque ut nisi. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Phasellus magna. Suspendisse potenti. Curabitur ullamcorper ultricies nisi.', '-7.005145300000001', '110.43812539999999', 1);
+INSERT INTO `cms_companies` (`id`, `created_at`, `name`, `address`, `phone`, `email`, `photo`, `description`, `latitude`, `longitude`, `is_primary`) VALUES(1, '2016-04-11 11:38:49', 'CRUDBooster', 'Lorem ipsum dolor sit amet', '122324234', 'support@crudbooster.com', '', 'Quisque ut nisi. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Phasellus magna. Suspendisse potenti. Curabitur ullamcorper ultricies nisi.', '-7.005145300000001', '110.43812539999999', 1);
 
 CREATE TABLE `cms_dashboard` (
   `id` int(11) NOT NULL,
@@ -75,6 +75,8 @@ INSERT INTO `cms_logs` (`id`, `created_at`, `ipaddress`, `useragent`, `url`, `de
 INSERT INTO `cms_logs` (`id`, `created_at`, `ipaddress`, `useragent`, `url`, `description`, `id_cms_users`) VALUES(6, '2016-07-27 23:52:11', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36', 'http://localhost/crudbooster/admin/settings/edit-save/31', 'Update data  at Settings', 13);
 INSERT INTO `cms_logs` (`id`, `created_at`, `ipaddress`, `useragent`, `url`, `description`, `id_cms_users`) VALUES(7, '2016-07-27 23:52:24', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36', 'http://localhost/crudbooster/admin/settings/delete-image', 'Delete image for logo at Settings', 13);
 INSERT INTO `cms_logs` (`id`, `created_at`, `ipaddress`, `useragent`, `url`, `description`, `id_cms_users`) VALUES(8, '2016-07-27 23:52:37', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36', 'http://localhost/crudbooster/admin/settings/edit-save/2', 'Update data  at Settings', 13);
+INSERT INTO `cms_logs` (`id`, `created_at`, `ipaddress`, `useragent`, `url`, `description`, `id_cms_users`) VALUES(9, '2016-07-28 00:08:02', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36', 'http://localhost/crudbooster/admin/companies/delete-image', 'Delete image for Crocodic at Companies', 13);
+INSERT INTO `cms_logs` (`id`, `created_at`, `ipaddress`, `useragent`, `url`, `description`, `id_cms_users`) VALUES(10, '2016-07-28 00:08:25', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36', 'http://localhost/crudbooster/admin/companies/edit-save/1', 'Update data CRUDBooster at Companies', 13);
 
 CREATE TABLE `cms_menus` (
   `id` int(11) NOT NULL,
@@ -339,7 +341,7 @@ ALTER TABLE `cms_dashboard`
 ALTER TABLE `cms_filemanager`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `cms_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 ALTER TABLE `cms_menus`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 ALTER TABLE `cms_menus_groups`
