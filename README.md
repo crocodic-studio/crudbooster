@@ -21,6 +21,12 @@ Please following these instructions :
 7. Done
 ```
 
+## Table Structure Rule (IMPORTANT)
+- **id** should as primary key 
+- **id_other_table_name** this is format for secondary key (field for relation)
+- **photo_[name]** this is not mandatory but i recommend you to use this format if you want the field as image field, replace [name] with your own suffix.
+- Get used to write a column name **clearly**. Avoid short name. Ex Correct : full_name, Ex Incorrect : fname
+
 ## Getting Started
 I think you have made a table of database for your new module before do these steps. 
 ```
