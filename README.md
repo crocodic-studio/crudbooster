@@ -22,7 +22,7 @@ Please following these instructions :
 ```
 
 ## Getting Started
-I think you have made a table database for your new module before do these bellow steps. 
+I think you have made a table of database for your new module before do these steps. 
 ```
 http://localhost/YourApp/admin
 username (default) : admin@crocodic.com
@@ -41,7 +41,7 @@ password (default) : 123456
 6. Save
 7. Done
 ```
-After you create a new modul, then a new menu of your new modul will be appeare at left (sidebar left). You can view by click that new menu.
+After you've created new modul, then a new menu will be appeared at left (sidebar left). You can view by click it.
 
 ## 1). Index Table List Data :
 ```php
@@ -54,11 +54,11 @@ $this->col[] = array('label'=>'LABEL NAME','field'=>'FIELD_NAME');
 | --------------------- | --------- | ----------------------------------------------------------------------- |
 | label                 | Required  | label name                                                              |
 | field                 | Required  | field tabel                                                             |
-| join                  | Optional  | Relational tabel name. Ex : 'join'=>'table_name,name_field'             |
+| join                  | Optional  | Relation tabel name. Ex : 'join'=>'table_name,name_field'             |
 | image                 | Optional  | true or false                                                           |
 | download              | Optional  | true or false                                                           |
-| callback_html         | Optional  | Write any html code here. Use object $row for current data              |
-| callback_php          | Optional  | Write any php code here. Use object $row for current data. Use single quote |
+| callback_html         | Optional  | Write html code here. Use object $row for current data. Use Single Quote |
+| callback_php          | Optional  | Write php code here. Use object $row for current data. Use single quote |
 
 ## 2). Configure Form :
 ```php
@@ -83,8 +83,8 @@ $this->form[] = array('label'=>'LABEL NAME','name'=>'FIELD_NAME');
 | min | (optional) | value minimal |
 | max | (optional) | value maximal |
 | required | (optional) | boolean |
-| mimes | (optional) | good for specify the file type upload, sparate by comma, ex : jpg,png,gif |
-| value | (optional) | Any default value. |
+| mimes | (optional) | ex : jpg,png,gif |
+| value | (optional) | Default value. |
 | default_value | (optional) | force value. |
 | browse_source | (optional) | Controller Name, ex : NameController |
 | browse_columns | (optional) | Only if type is 'browse', ex : (new CompaniesController)->get_cols() |
@@ -108,10 +108,12 @@ $this->form_tab[] = array('label'=>'LABEL NAME','icon'=>'fa fa-bars','route'=>'U
 ```
 
 #### Legends : 
-- label : tab label name
-- icon : set own awesome icon, ex : fa fa-bars
-- route : url for tab, ex : action('NameController@getIndex')
-- filter_field : field name that use for filter / relation field name. 
+| Name | Mandatory | Description |
+| ---- | ---- | ---- |
+| label | required | tab label name |
+| icon | optional | set own awesome icon, ex : fa fa-bars |
+| route | required | url for tab, ex : action('NameController@getIndex') |
+| filter_field | required | field name that use for filter / relation field name. |
 
 ### FORM SUB
 ```php
@@ -119,8 +121,10 @@ $this->form_sub[] = array('label'=>'Label Name','controller'=>'Controller Name')
 ```
 
 #### Legends : 
-- label : label name table
-- controller : controller name that want to make as sub
+| Name | Mandatory | Description |
+| ---- | ---- | ---- |
+| label | required | label name table |
+| controller | required | controller name that want to make as sub |
 
 ### FORM ADD 
 ```php
@@ -129,17 +133,25 @@ $this->form_add[] = "INSERT YOUR HTML HERE";
 
 ## 4). Hook
 This functions is for modify action after or before default do action. 
+| Name | Description |
+| ---- | ---- |
+| hook_before_index(&$result) | Modify query mysql for index table |
+| hook_html_index(&$html_contents) | Modify row's html of table | 
+| hook_before_add(&$postdata) | Modify POST input data of user |
+| hook_after_add($id) | Create some action after Add data function is done |
+| hook_before_edit(&$postdata,$id) | Modify POST input data of user | 
+| hook_after_edit($id) | Create some action after Edit/Update data function is done | 
+| hook_before_delete($id) | Create some action before delete function run | 
+| hook_after_delete($id) | Create some action after delete function run |
 
-- hook_before_index(&$result)
-- hook_html_index(&$html_contents)
-- hook_before_add($add)
-- hook_after_add($id)
-- hook_before_edit($arr,$id)
-- hook_after_edit($id)
-- hook_before_delete($id)
-- hook_after_delete($id)
-
-### Example hook_html_index 
+### Example : hook_before_index
+```php
+//In this case i will show you if there is a case that you want to show the status of data is active
+public function hook_before_index(&$result) {
+	$result->where('status','Active');
+}
+```
+### Example : hook_html_index 
 ```php
 public function hook_html_index(&$html_contents) {
 
@@ -153,5 +165,24 @@ public function hook_html_index(&$html_contents) {
 			$row[5] = "<span class='label label-danger'>Pending</span>";
 		}
 	}
+}
+```
+### Example : hook_before_add
+```php
+public function hook_before_add(&$postdata) {
+	//In this example, i want to add "date_order" so it can create time automatically 
+	$postdata['date_order'] = date('Y-m-d H:i:s');
+}
+```
+### Example : hook_after_add
+```php
+public function hook_after_add($id) {
+	//in this example, i want insert data to other table after data inserted 
+	
+	$news = DB::table('news')->where('id',$id)->first();
+	
+	$data = array();
+	$data['description'] = "I just insert new data for modul news with title '$title'";
+	DB::table("somelogs")->insert($data);
 }
 ```
