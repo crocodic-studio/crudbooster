@@ -113,6 +113,7 @@ $this->form[] = array('label'=>'Category','name'='id_category','type'=>'select',
 | html | (optional) | insert html code |
 | jquery | (optional) | insert any jquery or javascript | 
 | style | (optional) | insert any stylesheet inline for form-group class |
+| join | (optional) | You can show join table field, **ex : members,name**, please make sure you've set **readonly** to be true otherwise make save data error |
 
 ## 3). Configure Form Tab (Children Module) :
 
