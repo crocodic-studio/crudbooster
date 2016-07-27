@@ -67,35 +67,37 @@ $this->form[] = array('label'=>'LABEL NAME','name'=>'FIELD_NAME');
 ```
 
 ### Legends : 
-- label (required) : label name
-- name (required) : field tabel
-- type (required) : (text, textarea, radio, select, checkbox, wysiwyg, select2, datepicker, datetimepicker, hidden, password, upload, browse, qrcode)
-- dataenum (optional) : support only for type 'select,radio,checkbox', ex : array('BMW','MERCY','TOYOTA') or array('0|BMW','1|MERCY','2|TOYOTA')
-- datatable (optional) : support only for type 'select', this will load data from tabel, ex : "TABLE_NAME, COLUMN_NAME"
-- datatable_where (optional) : sql where query for datatable, ex : status != 'active' and status != 'available'
-- select2_controller (optional) : name other controller, ex : NameController
-- sub_select (optional) : name for child select. ex for case province and city.
-- help (optional) : help text
-- placeholder (optional) : placeholder text
-- image (optional) : boolean
-- min (optional) : value minimal
-- max (optional) : value maximal
-- required (optional) : boolean
-- mimes (optional) : good for specify the file type upload, sparate by comma, ex : jpg,png,gif
-- value (optional) : Any default value.
-- default_value (optional) : force value.
-- browse_source (optional) : Controller Name, ex : NameController
-- browse_columns (optional) : Only if type is 'browse', ex : (new CompaniesController)->get_cols()
-- browse_where (optional) : sql where query for browse , ex : status != 'active' and status != 'available'
-- type[qrcode][size] (required) : size of qr code
-- type[qrcode][color] (required) : color hex of qr code
-- type[qrcode][text] (required) : DOM id/name qr code
-- callback_php (optional) : run php script
-- googlemaps (optional) : false or true (Required field latitude and longitude)
-- googlemaps_address (optional) : googlemaps required. Enter field location address.
-- html (optional) : insert html code
-- jquery (optional) : insert any jquery or javascript
-- style (optional) : insert any stylesheet inline for form-group class
+| Name                  | Mandatory | Description                                                             |
+| --------------------- | --------- | ----------------------------------------------------------------------- |
+| label                 | Required | label name |
+| name | Required | field tabel |
+| type | Required | (text, textarea, radio, select, checkbox, wysiwyg, select2, datepicker, datetimepicker, hidden, password, upload, browse, qrcode) |
+| dataenum | Optional | support only for type 'select,radio,checkbox', ex : array('BMW','MERCY','TOYOTA') or array('0|BMW','1|MERCY','2|TOYOTA') |
+| datatable | Optional | support only for type 'select', this will load data from tabel, ex : "TABLE_NAME, COLUMN_NAME" |
+| datatable_where | Optional | sql where query for datatable, ex : status != 'active' and status != 'available' |
+| select2_controller | Optional | name other controller, ex : NameController | 
+| sub_select | (optional) | name for child select. ex for case province and city. |
+| help | (optional) | help text |
+| placeholder | (optional) | placeholder text |
+| image | (optional) | boolean |
+| min | (optional) | value minimal |
+| max | (optional) | value maximal |
+| required | (optional) | boolean |
+| mimes | (optional) | good for specify the file type upload, sparate by comma, ex : jpg,png,gif |
+| value | (optional) | Any default value. |
+| default_value | (optional) | force value. |
+| browse_source | (optional) | Controller Name, ex : NameController |
+| browse_columns | (optional) | Only if type is 'browse', ex : (new CompaniesController)->get_cols() |
+| browse_where | (optional) | sql where query for browse , ex : status != 'active' and status != 'available' |
+| type[qrcode][size ] | (required) | size of qr code |
+| type[qrcode][color ] | (required) | color hex of qr code |
+| type[qrcode][text ] | (required) | DOM id/name qr code |
+| callback_php | (optional) | run php script |
+| googlemaps | (optional) | false or true (Required field latitude and longitude) |
+| googlemaps_address | (optional) | googlemaps required. Enter field location address. |
+| html | (optional) | insert html code |
+| jquery | (optional) | insert any jquery or javascript | 
+| style | (optional) | insert any stylesheet inline for form-group class |
 
 ## 3). Configure Form Tab (Children Module) :
 
