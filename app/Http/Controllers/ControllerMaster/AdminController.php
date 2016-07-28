@@ -24,7 +24,7 @@ class AdminController extends Controller {
 	}
 
 	function getIndex() {
-		if(!Session::get('admin_id')) return redirect('admin/login')->with("message","Silahkan Login Terlebih Dahulu !");
+		if(!Session::get('admin_id')) return redirect('admin/login')->with("message","Please login first !");
 		if(Session::get('admin_lock')) return redirect('admin/lockscreen');
 
 		$data = array();
@@ -816,7 +816,7 @@ class AdminController extends Controller {
 
 			return redirect('admin'); 
 		}else{
-			return redirect('admin/login')->with('message', 'Maaf password yang anda masukan salah !');			
+			return redirect('admin/login')->with('message', 'Sorry the password is wrong !');			
 		}		
 	}
 
@@ -849,7 +849,7 @@ class AdminController extends Controller {
 
 		send_email($user->email,"Forgot Password",$data,$this->setting->email_sender,"emails.forgot");
 
-		return redirect('admin/login')->with('message', 'Berhasil mengirimkan password baru ke email anda !');
+		return redirect('admin/login')->with('message', 'We have sent new password to your email, check inbox or spambox !');
 
 	}
 	
