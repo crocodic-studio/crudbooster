@@ -243,14 +243,14 @@
                     url:$(this).attr('action'),
                     data:$(this).serialize(),
                     success:function(r) {
-                      if(r==1) {
+                      if(r=='success') {
                         next_step(3);
                       }else{
-                        alert("Database Can`t Created !");
+                        alert(r);
                       }
                     },
                     error:function() {
-                      alert('Request faield !');
+                      alert('Request failed ! something went wrong !');
                     }
                   })
                   return false;
