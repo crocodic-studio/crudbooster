@@ -30,6 +30,7 @@ Please following these instructions :
 - **photo_[name]** this is not mandatory but i recommend you to use this format if you want the field as image field, replace [name] with your own suffix.
 - **password** use this field name if you want add password, so Crudbooster can auto hashing
 - **date_[name]** use this format of field if you want add column about 'date', so crudbooster know that this field is 'date'
+- **slug** use slug for naming your field if you want make a permalink function on your table, and crudbooster will be automaticaly set value for slug field become permalink function by title field
 - Get used to write a column name **clearly**. Avoid short name. Ex Correct : full_name, Ex Incorrect : fname
 
 ## Getting Started
