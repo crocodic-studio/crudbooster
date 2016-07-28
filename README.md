@@ -221,3 +221,5 @@ public function hook_after_add($id) {
 ## FAQ Problem Frequently 
 1. Sometimes you've created a module correctly, but when you click the menu, you found that page is not found. So please make sure both file controller in /App/Http/Controllers and your Module is match. Also check your **route** in Edit Module at Backend.
 2. The module wich you've made is not visible ? So please check at menu settings -> privileges, select correct privilege, then edit, please make sure the module wich you've made is checked. Also check at Edit Module, please make sure Active Status is Active.
+3. After login admin showing 'TokenMismatchException' , please check your Free Disk Space 
+4. Showing error '...possibly out of free disk space' please check your Free Disk Space 
