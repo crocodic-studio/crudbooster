@@ -268,7 +268,7 @@
               <thead><th>Table Name</th><th>Exists</th></thead>
               <tbody>
                   <?php                       
-                      $queries = SplitSQL("./crocodic_cms.sql");          
+                      $queries = SplitSQL("./database.sql");          
                       foreach($queries['tables'] as $row):                      
                   ?>
                   <tr>
