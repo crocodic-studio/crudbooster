@@ -65,7 +65,7 @@
       </div><!-- /.login-box-body -->
 
       <br/>
-        <p style='font-size:11px' align="center">Powered By <a href='http://crocodic.com'>Crocodic.com</a></p>
+        <p style='font-size:11px' align="center">Powered By <a href='http://crudbooster.com'>CRUDBooster.com</a></p>
 
     </div><!-- /.login-box -->
 
