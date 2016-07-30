@@ -3,7 +3,7 @@
 
 > Laravel + CRUD Generator Package, Make a Web Application Just In Minutes, With Less Code and Less Step !
 
-[<img src="http://crudbooster.com/CrudBooster_Banner.png"/>](http://crudbooster.com/page/documentation)
+[<img src="http://crudbooster.com/CrudBooster_Banner.png"/>](http://crudbooster.com)
 
 CRUDBooster is Laravel Framework that modified to bring a lot of features to develope a web application so simply. One of main feature is Smart CRUD Generator, so CRUDBooster will be create a module automatically included Create, Read, Update, Delete standard function. And CRUDBooster is not usual CRUD Generator,you will get a lot of new experience with a new concept.
 
