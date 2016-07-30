@@ -148,6 +148,7 @@
     //FORM SUB 
     if($form_sub) {
     	foreach($form_sub as $fs) {
+      $table = str_replace("_view", "", $table);
 			$c = new $fs['classname'];
 			$c->parent_id 		 = $row->id;
 			$c->parent_field	 = 'id_'.$table;
