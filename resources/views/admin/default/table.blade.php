@@ -24,6 +24,8 @@
                             @foreach(@$_GET as $a=>$b)
                                 <?php 
                                   if(is_array($b)) {
+                                    if($a=='q') continue;
+                                    
                                     $a = $a.'['.key($b).']';
                                     $b = $b[key($b)];
                                   }
