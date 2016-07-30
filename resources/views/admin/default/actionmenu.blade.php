@@ -119,10 +119,10 @@ $(function(){
 							<option value=''>** Select A Column</option>
 							<?php
 								$join_i = 0;
-								foreach($columns as $col) {									
+								foreach($columns as $key=>$col) {									
 									if(isset($col['join'])) {
 										$join_table = substr($col['join'], 0, strpos($col['join'], ','));
-										$field = $join_table.$join_i.'.'.$col['field_raw'];
+										$field = $join_table.$key.'.'.$col['field_raw'];
 										$join_i++;
 									}else{
 										$field = $col['field'];
@@ -238,13 +238,13 @@ $(function(){
 							<option value=''>** Select A Column</option>
 							<?php			
 								$join_i = 0;					
-								foreach($columns as $col) {		
+								foreach($columns as $key => $col) {		
 									//Skip if subquery
 									if($col['is_subquery']) continue;
 																				
 									if(isset($col['join'])) {
 										$join_table = substr($col['join'], 0, strpos($col['join'], ','));
-										$field = $join_table.$join_i.'.'.$col['field_raw'];
+										$field = $join_table.$key.'.'.$col['field_raw'];
 										$join_i++;
 									}else{
 										$field = $col['field'];
