@@ -151,7 +151,7 @@
       $table = str_replace("_view", "", $table);
 			$c = new $fs['classname'];
 			$c->parent_id 		 = $row->id;
-			$c->parent_field	 = 'id_'.$table;
+			$c->parent_field = !empty($fs['foreign_key']) ? $fs['foreign_key'] : 'id_'.$table;
 			$c->controller_name  = str_replace("App\Http\Controllers\\","",strtok($fs['classname'],'@') );
 			$c->index_table_only = true;
 			$c->table_name       = $fs['label'];
