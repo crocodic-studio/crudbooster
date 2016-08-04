@@ -26,11 +26,11 @@ class ModulsGroupController extends Controller {
 
 		$this->col = array();				
 		$this->col[] = array("label"=>"Sorting","field"=>"sorting_group");
-		$this->col[] = array("label"=>"Nama","field"=>"nama_group");
+		$this->col[] = array("label"=>"Name","field"=>"nama_group");
 		$this->col[] = array("label"=>"Is Group","field"=>"is_group");
 
 		$this->form = array();		
-		$this->form[] = array("label"=>"Nama","name"=>"nama_group");
+		$this->form[] = array("label"=>"Name","name"=>"nama_group");
 		$this->form[] = array("label"=>"Icon","name"=>"icon_group","type"=>"radio","dataenum"=>array(
 				"fa fa-cog|<i class='fa fa-cog'></i>",
 				"fa fa-comment|<i class='fa fa-comment'></i>",
@@ -103,7 +103,7 @@ class ModulsGroupController extends Controller {
 		DB::table('cms_moduls_group')->where('sorting_group',$new_sorting)->update(array('sorting_group'=>$row->sorting_group));
 		DB::table('cms_moduls_group')->where('id',$id)->update(array('sorting_group'=>$new_sorting));
 
-		return redirect()->back()->with(['message'=>"Berhasil sorting data !",'message_type'=>'success']);
+		return redirect()->back()->with(['message'=>"Sort data success !",'message_type'=>'success']);
 	}
 
 }

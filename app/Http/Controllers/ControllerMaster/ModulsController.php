@@ -24,7 +24,7 @@ class ModulsController extends Controller {
 		
 		$this->col = array();
 		$this->col[] = array('label'=>'Sorting','field'=>'sorting');
-		$this->col[] = array("label"=>"Nama","field"=>"name");
+		$this->col[] = array("label"=>"Name","field"=>"name");
 		$this->col[] = array("label"=>"Path","field"=>"path"); 
 		$this->col[] = array("label"=>"Table","field"=>"table_name");
 		$this->col[] = array("label"=>"Controller","field"=>"controller");
@@ -32,7 +32,7 @@ class ModulsController extends Controller {
 		$this->col[] = array("label"=>"Active","field"=>"is_active","callback_php"=>"(%field%)?'<span class=\"label label-success\">Active</span>':'<span class=\"label label-default\">Not Active</span>'");		
 
 		$this->form = array();		
-		$this->form[] = array("label"=>"Nama","name"=>"name");
+		$this->form[] = array("label"=>"Name","name"=>"name");
 
 		$exception_table = array('cms_dashboard','cms_logs','cms_moduls','cms_moduls_group','cms_privileges','cms_privileges_roles','cms_users','cms_apicustom','cms_settings','cms_companies','cms_filemanager');
 		$tables = DB::select('SHOW TABLES');
@@ -49,7 +49,7 @@ class ModulsController extends Controller {
 
 
 
-		$this->form[] = array("label"=>"Table Name","name"=>"table_name","type"=>"select","dataenum"=>$tables_list);
+		$this->form[] = array("label"=>"Table Name","name"=>"table_name","type"=>"select","dataenum"=>$tables_list);		
 
 		$this->form[] = array("label"=>"Route","name"=>"path","value"=>"admin/","jquery"=>"
 			$('#table_name').change(function() {
@@ -57,6 +57,8 @@ class ModulsController extends Controller {
 				$('#path').val('admin/'+v);
 			})
 			");
+
+		$this->form[] = array("label"=>"Controller","name"=>"controller","type"=>"text","placeholder"=>"Auto Generated");
 		
 		$this->form[] = array("label"=>"SQL Where Query","name"=>"sql_where","type"=>"text","placeholder"=>"Example : columnname = value AND columnname2 = value2","help"=>"You can use alias [admin_id],[admin_id_companies]");
 
@@ -175,7 +177,7 @@ class ModulsController extends Controller {
 		DB::table('cms_moduls')->where('id_cms_moduls_group',$row->id_cms_moduls_group)->where('sorting',$new_sorting)->update(array('sorting'=>$row->sorting));
 		DB::table('cms_moduls')->where('id',$id)->update(array('sorting'=>$new_sorting));
 
-		return redirect()->back()->with(['message'=>"Berhasil sorting data !",'message_type'=>'success']);
+		return redirect()->back()->with(['message'=>"Sort the data success !",'message_type'=>'success']);
 	}
 	
 	
@@ -186,7 +188,7 @@ class ModulsController extends Controller {
 
 		//Generate Controller 
 		$route_basename = basename(Request::get('path'));
-		$this->arr['controller'] = generate_controller(Request::get('table_name'),$route_basename);
+		if($this->arr['controller']=='') $this->arr['controller'] = generate_controller(Request::get('table_name'),$route_basename);
 
 		DB::table($this->table)->insert($this->arr);
 
@@ -211,9 +213,9 @@ class ModulsController extends Controller {
 
 		$ref_parameter = Request::input('ref_parameter');		
 		if(Request::get('referal')) {
-			return redirect(Request::get('referal'))->with(['message'=>'Berhasil Tambah Data !','message_type'=>'success']);
+			return redirect(Request::get('referal'))->with(['message'=>'Add new data success !','message_type'=>'success']);
 		}else{
-			return redirect($this->mainpath().'/edit/'.$lastid.'?'.$ref_parameter)->with(['message'=>"Berhasil tambah data !",'message_type'=>'success']);	
+			return redirect($this->mainpath().'/edit/'.$lastid.'?'.$ref_parameter)->with(['message'=>"Add new data success !",'message_type'=>'success']);	
 		}
 		
 	}
@@ -227,7 +229,7 @@ class ModulsController extends Controller {
 
 		//Generate Controller 
 		$route_basename = basename(Request::get('path'));
-		$this->arr['controller'] = generate_controller(Request::get('table_name'),$route_basename);
+		if($this->arr['controller']=='') $this->arr['controller'] = generate_controller(Request::get('table_name'),$route_basename);
 
 		DB::table($this->table)->where($this->primkey,$id)->update($this->arr);
 
@@ -238,7 +240,7 @@ class ModulsController extends Controller {
 			DB::table("cms_moduls")->where("id",$l->id)->update(array("sorting"=>$s));
 			$s++;
 		}		
-		return redirect()->back()->with(['message'=>"Berhasil update data !",'message_type'=>'success']);
+		return redirect()->back()->with(['message'=>"Update data success !",'message_type'=>'success']);
 	}
 	
 
