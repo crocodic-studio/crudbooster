@@ -21,7 +21,7 @@
                 			$name 		= $form['name'];
                 			@$join 		= $form['join'];
                 			@$value		= (isset($form['value']))?$form['value']:'';
-                			@$value		= (isset($row->{$name}) && $row->{$name} !='')?$row->{$name}:$value;
+                			@$value		= (isset($row->{$name}))?$row->{$name}:$value;
 
                 			if($parent_field && $name == $parent_field) continue;
 
