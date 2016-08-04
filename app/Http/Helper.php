@@ -1,4 +1,5 @@
 <?php 
+
 function send_gcm($regid,$data,$google_key){
     $url = 'https://android.googleapis.com/gcm/send';
     $fields = array(
@@ -525,4 +526,23 @@ function slug($title,$table,$where="title",$id=NULL){
     }
     return $the_value;
 
+}
+
+function get_my_id() {
+    return Session::get('admin_id');
+}
+function get_my_id_company() {
+    return Session::get('admin_id_companies');
+}
+function get_is_superadmin() {
+    return Session::get('admin_is_superadmin');
+}
+function get_my_name() {
+    return Session::get('admin_name');
+}
+function get_my_photo() {
+    return Session::get('admin_photo');
+}
+function get_my_id_privilege() {
+    return Session::get('admin_privileges');
 }
