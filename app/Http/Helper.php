@@ -389,7 +389,7 @@ function get_size($url) {
     return $head['content-length'];
 }
 
-function send_email($to,$subject,$data,$from='',$template='') {
+function send_email($to,$subject,$html,$from='',$template='') {
      $setting = DB::table('cms_settings')->where('name','like','smtp%')->get();
      $set = array();
      foreach($setting as $s) {
@@ -404,6 +404,7 @@ function send_email($to,$subject,$data,$from='',$template='') {
 
     $template = ($template)?:"emails.blank";
     $from = ($from)?:$set['smtp_username'];
+    $data['content'] = $html;
     \Mail::send($template,$data,function($message) use ($to,$subject,$from) {
         $message->to($to);
         $message->from($from);

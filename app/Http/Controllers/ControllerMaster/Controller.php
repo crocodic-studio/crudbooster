@@ -463,6 +463,9 @@ abstract class Controller extends BaseController {
 			    }else{
 			    	$param = @$_GET;
       				unset($param['detail']);
+      				unset($param['page']);
+      				unset($param['limit']);
+      				unset($param['q']);
 			    	$url = url("$mainpath/edit/$row->id?".urldecode(http_build_query(@$param)) );
 			    }
       			
