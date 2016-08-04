@@ -15,9 +15,10 @@ class CustomApiController extends BaseController {
 	YOU CAN CUSTOM ALL API METHOD WITH YOUR WISHES
 	USE $this->valid( array ) for validation
 	USE $this->resp($status,$messaage,$data) for response
+	YOUR API WOULD BE http://localhost/YourApp/apis/[method]
 	*/
 
-	/* START YOUR OWN METHOD AFTER THIS LINE */
+	/* START YOUR OWN METHODS AFTER THIS LINE */
 
 
 
@@ -26,9 +27,9 @@ class CustomApiController extends BaseController {
 
 
 
-	/* END YOU OWN METHOD */
+	/* END YOU OWN METHODS */
 
-	/* NO NEED MODIFY THESE BELLOW METHOD */
+	/* NO NEED MODIFY THESE BELLOW METHODS UNLESS YOU KNOW WHAT YOU ARE DOING */
 	private function valid($arr=array(),$input_arr='') {
 		$input_arr = (!$input_arr)?Request::all():$input_arr;
 
