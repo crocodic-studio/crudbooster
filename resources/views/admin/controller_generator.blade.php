@@ -33,7 +33,7 @@
 
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title">TABEL LIST</h3>
+                    <h3 class="box-title">TABLE LIST</h3>
                     <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                   </div><!-- /.box-tools -->
@@ -41,7 +41,7 @@
                 <div class="box-body">
                     <table class='table table-striped table-api table-bordered'>
                         <thead>
-                            <tr class='info'><th width='2%'>No</th><th>Nama Tabel</th><th width='15%'>Generator</th></tr>
+                            <tr class='info'><th width='2%'>No</th><th>Table Name</th><th width='15%'>Generator</th></tr>
                         </thead> 
                         <tbody>
                               <?php 

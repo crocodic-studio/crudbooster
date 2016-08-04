@@ -67,6 +67,12 @@
 						<label>Privileges</label>
 						<script>
 							$(function() {
+								$("#is_visible").click(function() {
+									var is_ch = $(this).prop('checked');
+									console.log('is checked create '+is_ch);
+									$(".is_visible").prop("checked",is_ch);
+									console.log('Create all');
+								})
 								$("#is_create").click(function() {
 									var is_ch = $(this).prop('checked');
 									console.log('is checked create '+is_ch);
@@ -92,15 +98,16 @@
 								})
 							})
 						</script>
-						<table class='table table-striped'>
+						<table class='table table-striped table-hover'>
 							<thead>
 								<tr class='active'>
-									<th width='3%'>No.</th><th width='60%'>Nama Modul</th><th>&nbsp;</th><th>Create</th><th>Read</th><th>Update</th><th>Delete</th>
+									<th width='3%'>No.</th><th width='60%'>Nama Modul</th><th>&nbsp;</th><th>Visible</th><th>Create</th><th>Read</th><th>Update</th><th>Delete</th>
 								</tr>
 								<tr class='active'>
 									<th>&nbsp;</th>
 									<th>&nbsp;</th>
 									<th>&nbsp;</th>
+									<th><input title='Check all vertical' type='checkbox' id='is_visible'/></th>
 									<th><input title='Check all vertical' type='checkbox' id='is_create'/></th>
 									<th><input title='Check all vertical' type='checkbox' id='is_read'/></th>
 									<th><input title='Check all vertical' type='checkbox' id='is_edit'/></th>
@@ -114,6 +121,7 @@
 									<td><?php echo $no++;?></td>
 									<td>{{$modul->name}}</td>
 									<td><input type='checkbox' title='Check All Horizontal' <?=($modul->is_create && $modul->is_read && $modul->is_edit && $modul->is_delete)?"checked":""?> class='select_horizontal'/></td>
+									<td><input type='checkbox' class='is_visible' name='privileges[<?=$modul->id?>][is_visible]' <?=@$modul->is_visible?"checked":""?> value='1'/></td>
 									<td><input type='checkbox' class='is_create' name='privileges[<?=$modul->id?>][is_create]' <?=@$modul->is_create?"checked":""?> value='1'/></td>
 									<td><input type='checkbox' class='is_read' name='privileges[<?=$modul->id?>][is_read]' <?=@$modul->is_read?"checked":""?> value='1'/></td>									
 									<td><input type='checkbox' class='is_edit' name='privileges[<?=$modul->id?>][is_edit]' <?=@$modul->is_edit?"checked":""?> value='1'/></td>

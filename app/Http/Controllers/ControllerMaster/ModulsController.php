@@ -49,7 +49,7 @@ class ModulsController extends Controller {
 
 
 
-		$this->form[] = array("label"=>"Table Name","name"=>"table_name","type"=>"select","dataenum"=>$tables_list);		
+		$this->form[] = array("label"=>"Table Name","name"=>"table_name","type"=>"select","dataenum"=>$tables_list);				
 
 		$this->form[] = array("label"=>"Route","name"=>"path","value"=>"admin/","jquery"=>"
 			$('#table_name').change(function() {
@@ -64,6 +64,8 @@ class ModulsController extends Controller {
 
 		$this->form[] = array("label"=>"SQL Order By","name"=>"sql_orderby","type"=>"text","placeholder"=>"Enter query here","help"=>"Example : column_name ASC, column2_name DESC");
 		$this->form[] = ['label'=>"Limit Data","name"=>"limit_data","type"=>"text","placeholder"=>"Example : 10"];
+
+		$this->form[] = array("label"=>"Delete Data Mode","name"=>"is_softdelete","type"=>"radio","dataenum"=>['1|Soft Delete','0|Permanent Delete'],"help"=>"Soft Delete Note : Please make sure you have column 'deleted_at' with data type TIMESTAMP","value"=>0);
 
 		$this->form[] = array("label"=>"Icon","name"=>"icon","type"=>"radio","dataenum"=>array(
 				"fa fa-cog|<i class='fa fa-cog'></i>",
@@ -82,21 +84,17 @@ class ModulsController extends Controller {
 				"fa fa-truck|<i class='fa fa-truck'></i>",
 				"fa fa-trash|<i class='fa fa-trash'></i>",
 				"fa fa-tasks|<i class='fa fa-tasks'></i>",
-				"fa fa-cube|<i class='fa fa-cube'></i>",
-				"fa fa-hourglass|<i class='fa fa-hourglass'></i>",
-				"fa fa-dashboard|<i class='fa fa-dashboard'></i>",
-				"fa fa-flag-o|<i class='fa fa-flag-o'></i>",
+				"fa fa-cube|<i class='fa fa-cube'></i>",				
+				"fa fa-dashboard|<i class='fa fa-dashboard'></i>",				
 				"fa fa-folder-open|<i class='fa fa-folder-open'></i>",
 				"fa fa-credit-card|<i class='fa fa-credit-card'></i>",
-				"fa fa-inbox|<i class='fa fa-inbox'></i>",
-				"fa fa-spinner|<i class='fa fa-spinner'></i>",
-				"fa fa-line-cart|<i class='fa fa-line-cart'></i>",
+				"fa fa-inbox|<i class='fa fa-inbox'></i>",								
 				"fa fa-info-circle|<i class='fa fa-info-circle'></i>",
 				"fa fa-cloud-download|<i class='fa fa-cloud-download'></i>",
 			),"value"=>"fa fa-bars");
 		
 		$this->form[] = array("label"=>"Group","name"=>"id_cms_moduls_group","required"=>"required","type"=>"select","datatable"=>"cms_moduls_group,nama_group");		
-		$this->form[] = array("label"=>"Active ?","name"=>"is_active","type"=>"select","dataenum"=>array("1|Aktif","0|Tidak Aktif"),"value"=>1);
+		$this->form[] = array("label"=>"Active ?","name"=>"is_active","type"=>"select","dataenum"=>array("1|Active","0|Not Active"),"value"=>1);
 		
 		$url_find_sorting = action('ModulsController@getFindLastSorting');
 		$this->form[] = array("label"=>"Sorting","name"=>"sorting","jquery"=>"
@@ -106,7 +104,7 @@ class ModulsController extends Controller {
 						$('#sorting').val(resp);
 					});
 				})
-			");				
+			","help"=>"Integer/Number");				
 		
 
 		$this->addaction = array();
@@ -197,6 +195,7 @@ class ModulsController extends Controller {
 		DB::table('cms_privileges_roles')->insert(array(
 				'id_cms_moduls'=>$id_modul,
 				'id_cms_privileges'=>$user_id_privileges,
+				'is_visible'=>1,
 				'is_create'=>1,
 				'is_read'=>1,
 				'is_edit'=>1,

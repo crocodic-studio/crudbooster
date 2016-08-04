@@ -219,6 +219,18 @@ abstract class Controller extends BaseController {
 			$this->limit = $this->data['priv']->limit_data;
 		}
 
+		if($this->data['priv']->is_visible==0) {
+			$a                 = array();
+			$a['created_at']   = date('Y-m-d H:i:s');
+			$a['ipaddress']    = $_SERVER['REMOTE_ADDR'];
+			$a['useragent']    = $_SERVER['HTTP_USER_AGENT'];
+			$a['url']          = Request::url();
+			$a['description']  = "Trying view data at ".$this->data['modulname'];
+			$a['id_cms_users'] = Session::get('admin_id');
+			DB::table('cms_logs')->insert($a);
+			return redirect('admin')->with(['message'=>'You can not access that area !','message_type'=>'warning']);
+		}
+
 		$data['table_name'] 	  = $this->table_name;
 		$data['page_title']       = $this->data['modulname'];
 		$data['page_description'] = "Data List";
@@ -237,6 +249,10 @@ abstract class Controller extends BaseController {
 					$result->where($this->table.'.'.$k,$v);
 				}
 			}
+		}
+
+		if($this->data['priv']->is_softdelete==1) {
+			$result->where($this->table.'.deleted_at',NULL);
 		}
 
 		if(@$this->data['priv']->sql_where) {
@@ -914,7 +930,7 @@ abstract class Controller extends BaseController {
 			$a['description'] = "Trying add data ".Request::get($this->titlefield)." at ".$this->data['modulname'];
 			$a['id_cms_users'] = Session::get('admin_id');
 			DB::table('cms_logs')->insert($a);
-			return redirect('admin')->with(['message'=>'You can not access that area !','message_type'=>'danger']);
+			return redirect('admin')->with(['message'=>'You can not access that area !','message_type'=>'warning']);
 		}
 
 		$this->validation();	
@@ -983,7 +999,7 @@ abstract class Controller extends BaseController {
 			$a['description'] = "Trying add data ".$row->{$this->titlefield}." at ".$this->data['modulname'];
 			$a['id_cms_users'] = Session::get('admin_id');
 			DB::table('cms_logs')->insert($a);
-			return redirect('admin')->with(['message'=>'You can not access that area !','message_type'=>'danger']);
+			return redirect('admin')->with(['message'=>'You can not access that area !','message_type'=>'warning']);
 		}
 		
 		$this->validation();
@@ -1029,7 +1045,7 @@ abstract class Controller extends BaseController {
 			$a['description'] = "Trying delete data ".$row->{$this->titlefield}." at ".$this->data['modulname'];
 			$a['id_cms_users'] = Session::get('admin_id');
 			DB::table('cms_logs')->insert($a);
-			return redirect('admin')->with(['message'=>'You can not access that area !','message_type'=>'danger']);
+			return redirect('admin')->with(['message'=>'You can not access that area !','message_type'=>'warning']);
 		}
 
 			
@@ -1044,9 +1060,16 @@ abstract class Controller extends BaseController {
 		DB::table('cms_logs')->insert($a);
 
 		$this->hook_before_delete($id);
-		DB::table($this->table)->where($this->primkey,$id)->delete();
+
+		if($this->data['priv']->is_softdelete==1) {
+			DB::table($this->table)->where($this->primkey,$id)->update(['deleted_at'=>date('Y-m-d H:i:s')]);
+		}else{
+			DB::table($this->table)->where($this->primkey,$id)->delete();
+		}
+		
 		$this->hook_after_delete($id);
-		return redirect()->back()->with(['message'=>"The data has been deleted !",'message_type'=>"success"]);
+
+		return redirect()->back()->with(['message'=>"Data has been deleted !",'message_type'=>"success"]);
 	}
 
 	public function postDeleteSelected() {
@@ -1060,7 +1083,7 @@ abstract class Controller extends BaseController {
 			$a['description'] = "Trying delete data at ".$this->data['modulname'];
 			$a['id_cms_users'] = Session::get('admin_id');
 			DB::table('cms_logs')->insert($a);
-			return redirect('admin')->with(['message'=>'You can not access that area !','message_type'=>'danger']);
+			return redirect('admin')->with(['message'=>'You can not access that area !','message_type'=>'warning']);
 		}
 
 		$id = Request::input('id');
@@ -1079,7 +1102,13 @@ abstract class Controller extends BaseController {
 				DB::table('cms_logs')->insert($a);
 			}
 
-			DB::table($this->table)->whereIn("id",$id)->delete();
+			
+			if($this->data['priv']->is_softdelete==1) {
+				DB::table($this->table)->whereIn($this->primkey,$id)->update(['deleted_at'=>date('Y-m-d H:i:s')]);
+			}else{
+				DB::table($this->table)->whereIn($this->primkey,$id)->delete();
+			}
+
 		}
 	}
 
@@ -1137,7 +1166,7 @@ abstract class Controller extends BaseController {
 			$a['description'] = "Trying delete image ".$row->{$this->titlefield}." at ".$this->data['modulname'];
 			$a['id_cms_users'] = Session::get('admin_id');
 			DB::table('cms_logs')->insert($a);
-			return redirect('admin')->with(['message'=>'You can not access that area !','message_type'=>'danger']);
+			return redirect('admin')->with(['message'=>'You can not access that area !','message_type'=>'warning']);
 		}
 			
 		$upload_mode = @$this->setting->upload_mode?:'file';

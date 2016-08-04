@@ -12,7 +12,7 @@
             <div class="pull-left info">
                 <p>{{ Session::get('admin_name') }}</p>
                 <!-- Status -->
-                <a href="#"><i class="fa fa-circle text-success"></i> Online</a> • <a target="_blank" href="{{url('/')}}">Visit Website</a>
+                <a href="#"><i class="fa fa-circle text-success"></i> Online</a> • <a target="_blank" href="{{url('/')}}">Visit FrontEnd</a>
             </div>
         </div>
 
@@ -238,13 +238,9 @@
             <ul class="sidebar-menu">
                 <li class="header">Menu Navigasi</li>
                 <!-- Optionally, you can add icons to the links -->
-
-
+            
+                <li ><a href="{{ url('/admin') }}"><i class='fa fa-dashboard'></i><span>Dashboard</span></a></li>
                 
-
-                <li ><a href="{{ url('/admin') }}"><i class='fa fa-dashboard'></i><span>Main Dashboard</span></a></li>
-                
-
                 <?php        
                     $id_privileges = Session::get('admin_privileges');
 
@@ -255,7 +251,7 @@
                         $moduls = DB::table("cms_moduls")
                             ->where("is_active",1)     
                             ->where("id_cms_moduls_group",$g->id)               
-                            ->whereraw("cms_moduls.id in (select b.id_cms_moduls from cms_privileges_roles b where b.id_cms_privileges = '$id_privileges' and is_read = 1)")
+                            ->whereraw("cms_moduls.id in (select b.id_cms_moduls from cms_privileges_roles b where b.id_cms_privileges = '$id_privileges' and is_visible = 1)")
                             ->orderby("sorting","asc")->get();
                 ?>
                     @if($g->is_group==1)

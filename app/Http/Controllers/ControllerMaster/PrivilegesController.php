@@ -26,9 +26,9 @@ class PrivilegesController extends Controller {
 		$this->col[] = array("label"=>"Name","field"=>"name");
 
 		$this->form = array();
-		$this->form[] = array("label"=>"Nama","name"=>"name");
+		$this->form[] = array("label"=>"Name","name"=>"name");
 		$this->form[] = array("label"=>"Is Superadmin","name"=>"is_superadmin");
-		$this->form[] = array("label"=>"Filter Field","name"=>"filter_field");
+		//$this->form[] = array("label"=>"Filter Field","name"=>"filter_field");
 		$this->form[] = array("label"=>"Theme Color","name"=>"theme_color");
 
 		$this->addaction[] = array('label'=>'Configuration Dashboard','route'=>url("admin/set-dashboard-config-mode?id_cms_privileges=%id%"),'icon'=>'fa fa-tachometer');
@@ -42,6 +42,7 @@ class PrivilegesController extends Controller {
 		$data['page_title'] = "Add Data";	
 		$data['moduls'] = DB::table("cms_moduls")
 		->select("cms_moduls.*",
+			DB::raw("(select is_visible from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id' limit 1) as is_visible"),
 			DB::raw("(select is_create from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id' limit 1) as is_create"),
 			DB::raw("(select is_read from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id' limit 1) as is_read"),
 			DB::raw("(select is_edit from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id' limit 1) as is_edit"),
@@ -66,6 +67,7 @@ class PrivilegesController extends Controller {
 		if($priv) {
 			foreach($priv as $id_modul => $data) {
 				$arrs = array();
+				$arrs['is_visible'] = @$data['is_visible']?:0;
 				$arrs['is_create'] = @$data['is_create']?:0;
 				$arrs['is_read'] = @$data['is_read']?:0;
 				$arrs['is_edit'] = @$data['is_edit']?:0;
@@ -76,7 +78,7 @@ class PrivilegesController extends Controller {
 			}	
 		}
 				
-		return redirect($this->dashboard)->with(['message'=>"Berhasil tambah data !",'message_type'=>'success']);
+		return redirect($this->dashboard)->with(['message'=>"Data has been added !",'message_type'=>'success']);
 	}
 	
 	public function getEdit($id)
@@ -86,6 +88,7 @@ class PrivilegesController extends Controller {
 
 		$data['moduls'] = DB::table("cms_moduls")
 		->select("cms_moduls.*",
+			DB::raw("(select is_visible from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id' limit 1) as is_visible"),
 			DB::raw("(select is_create from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id' limit 1) as is_create"),
 			DB::raw("(select is_read from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id' limit 1) as is_read"),
 			DB::raw("(select is_edit from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id' limit 1) as is_edit"),
@@ -111,6 +114,7 @@ class PrivilegesController extends Controller {
 			DB::table("cms_privileges_roles")->where("id_cms_privileges",$id)->delete();
 			foreach($priv as $id_modul => $data) {
 				$arrs = array();
+				$arrs['is_visible'] = @$data['is_visible']?:0;
 				$arrs['is_create'] = @$data['is_create']?:0;
 				$arrs['is_read'] = @$data['is_read']?:0;
 				$arrs['is_edit'] = @$data['is_edit']?:0;
@@ -120,14 +124,14 @@ class PrivilegesController extends Controller {
 				DB::table("cms_privileges_roles")->insert($arrs);
 			}
 		}
-		return redirect($this->dashboard)->with(['message'=>"Berhasil update data !",'message_type'=>'success']);
+		return redirect($this->dashboard)->with(['message'=>"Data has been updated !",'message_type'=>'success']);
 	}
 	
 	public function getDelete($id) {
 		$row = DB::table($this->table)->where($this->primkey,$id)->first();
 		DB::table($this->table)->where($this->primkey,$id)->delete();
 		DB::table("cms_privileges_roles")->where("id_cms_privileges",$row->id)->delete();
-		return redirect()->back()->with(['message'=>"Berhasil menghapus data !",'message_type'=>"success"]);
+		return redirect()->back()->with(['message'=>"Data has been deleted !",'message_type'=>"success"]);
 	}
 
 	

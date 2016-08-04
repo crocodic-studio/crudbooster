@@ -658,7 +658,7 @@ abstract class ApiController extends BaseController {
 			$validator = Validator::make(
 				[	
 				'screetkey'=>$screetkey,
-				'X-Authorization-Token'=> Request::header('X-Authorization-Token'),
+				'X-Authorization-Token'=>Request::header('X-Authorization-Token'),
 				'X-Authorization-Time'=>Request::header('X-Authorization-Time')	
 				],			
 				[
@@ -679,7 +679,9 @@ abstract class ApiController extends BaseController {
 			}
 
 			//verifikasi trust token
-			if(md5($screetkey.Request::header('X-Authorization-Time')) != Request::header('X-Authorization-Token')) {			
+			$useragent = $_SERVER['HTTP_USER_AGENT'];
+
+			if(md5($screetkey.Request::header('X-Authorization-Time').$useragent) != Request::header('X-Authorization-Token')) {			
 				$result['api_status']	= 0;
 				$result['api_message'] 	= "INVALID TOKEN";
 				$res = response()->json($result,401);
