@@ -115,8 +115,8 @@ abstract class Controller extends BaseController {
 						foreach(Request::get('where') as $a=>$b) { 
 							$w[] = "&where[".$a."]=".$b;
 						}						
-						$w[] = "&where[".$ft['foreign_key']."]=%id%";						
-						$ft['route'] = $ft['route'].'?is_sub='.Request::get('is_sub').implode('',$w);						
+						$w[] = "&where[".$ft['foreign_key']."]=%id%";												
+						$ft['route'] = action($ft['controller'].'@getIndex').'?is_sub='.Request::get('is_sub').implode('',$w);					
 						$last_form_tab[] = $ft;
 					}
 					Session::put('form_tab',$last_form_tab);												
@@ -131,7 +131,7 @@ abstract class Controller extends BaseController {
 			if($this->form_tab) {
 
 				foreach($this->form_tab as &$ft) {
-					$ft['route'] = $ft['route'].'?is_sub=1&where['.$ft['foreign_key'].']=%id%';
+					$ft['route'] = action($ft['controller'].'@getIndex').'?is_sub=1&where['.$ft['foreign_key'].']=%id%';
 				}
 
 				$first_form_tab   = array();
@@ -162,7 +162,6 @@ abstract class Controller extends BaseController {
 			$className = __NAMESPACE__ . '\\' . $fs['controller'];
 			$fs['classname'] = $className;
 		}
-
 
 		$this->columns_table     = $this->col; 		
 		$this->data_inputan      = $this->form;
@@ -202,13 +201,10 @@ abstract class Controller extends BaseController {
 		$current_modul_url = str_replace("App\Http\Controllers\\","",strtok(Route::currentRouteAction(),'@') );		
 		$current_modul_url = action($current_modul_url.'@getIndex');
 		$url = trim(str_replace(url(),'',$current_modul_url),'/');
-
 		if(strpos($url, '/add')) {
 			return substr($url, 0, strpos($url,'/add')).$path;
-
 		}elseif (strpos($url, '/edit')) {
 			return substr($url, 0, strpos($url,'/edit')).$path;
-
 		}else{
 			return $url.$path;
 		}
