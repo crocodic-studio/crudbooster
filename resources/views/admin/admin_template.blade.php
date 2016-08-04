@@ -284,9 +284,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <!-- Main content -->
         <section id='content_section' class="content">
 
-        	@if($alert)
+        	@if($alerts)
         		@foreach($alerts as $alert)
         			<div class='alert alert-{{$alert[type]}}'>
+        				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         					{!! $alert['message'] !!}
         			</div>
         		@endforeach

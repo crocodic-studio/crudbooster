@@ -24,6 +24,8 @@ class ModulsGroupController extends Controller {
 		$this->theme = 'admin.default';	
 		$this->prefixroute = 'admin/';	
 
+		$this->alert[] = ['message'=>"<p>Please make sure you have created a table before create a module</p>",'type'=>'info']; 
+
 		$this->col = array();				
 		$this->col[] = array("label"=>"Sorting","field"=>"sorting_group");
 		$this->col[] = array("label"=>"Name","field"=>"nama_group");

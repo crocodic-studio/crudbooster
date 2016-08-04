@@ -21,8 +21,6 @@ class ModulsController extends Controller {
 		$this->theme = 'admin.default';	
 		$this->prefixroute = 'admin/';
 
-		$this->alert[] = ['message'=>"<h3>Note</h3><p>Please make sure you have created your new table before creating a module</p>",'type'=>'info'];
-
 		
 		$this->col = array();
 		$this->col[] = array('label'=>'Sorting','field'=>'sorting');
