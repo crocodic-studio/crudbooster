@@ -283,6 +283,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         <!-- Main content -->
         <section id='content_section' class="content">
+
+        	@if($alert)
+        		@foreach($alerts as $alert)
+        			<div class='alert alert-{{$alert[type]}}'>
+        					{!! $alert['message'] !!}
+        			</div>
+        		@endforeach
+        	@endif
+
+
 			@if (Session::get('message')!='')
 			<div class='alert alert-{{ Session::get("message_type") }}'>
 				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>

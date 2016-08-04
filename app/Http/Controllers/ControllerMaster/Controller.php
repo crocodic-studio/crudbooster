@@ -48,6 +48,7 @@ abstract class Controller extends BaseController {
 	var $parent_field		= '';
 	var $referal			= '';
 	var $controller_name 	= '';
+	var $alert				= array();
 	var $setting;	
 
 	public function init_setting() {
@@ -192,6 +193,7 @@ abstract class Controller extends BaseController {
 		$this->data['appname']    = $this->setting->appname;
 		$this->data['setting'] 	  = $this->setting;	
 		$this->data['table_name'] = $this->table_name;	
+		$this->data['alerts'] 	  = $this->alert;
         view()->share($this->data);
 	} 
 
