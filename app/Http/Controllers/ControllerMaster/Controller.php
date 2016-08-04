@@ -114,7 +114,7 @@ abstract class Controller extends BaseController {
 						foreach(Request::get('where') as $a=>$b) { 
 							$w[] = "&where[".$a."]=".$b;
 						}						
-						$w[] = "&where[".$ft['filter_field']."]=%id%";						
+						$w[] = "&where[".$ft['foreign_key']."]=%id%";						
 						$ft['route'] = $ft['route'].'?is_sub='.Request::get('is_sub').implode('',$w);						
 						$last_form_tab[] = $ft;
 					}
@@ -130,7 +130,7 @@ abstract class Controller extends BaseController {
 			if($this->form_tab) {
 
 				foreach($this->form_tab as &$ft) {
-					$ft['route'] = $ft['route'].'?is_sub=1&where['.$ft['filter_field'].']=%id%';
+					$ft['route'] = $ft['route'].'?is_sub=1&where['.$ft['foreign_key'].']=%id%';
 				}
 
 				$first_form_tab   = array();
@@ -141,9 +141,9 @@ abstract class Controller extends BaseController {
 			}
 		}
 
-		if(Session::get('filter_field')) {
+		if(Session::get('foreign_key')) {
 			foreach($this->form as &$f) {
-				foreach(Session::get('filter_field') as $k=>$v) {
+				foreach(Session::get('foreign_key') as $k=>$v) {
 					if($f['name']==$k) {
 						$f['label'] = $k;
 						$f['name'] = $k;
@@ -231,8 +231,8 @@ abstract class Controller extends BaseController {
 		
 		$this->hook_before_index($result);
 
-		if(Session::get('filter_field')) {
-			foreach(Session::get('filter_field') as $k=>$v) {
+		if(Session::get('foreign_key')) {
+			foreach(Session::get('foreign_key') as $k=>$v) {
 				if(in_array($k, $columns)){
 					$result->where($this->table.'.'.$k,$v);
 				}
@@ -729,9 +729,9 @@ abstract class Controller extends BaseController {
 				$rows->where($parfield,$parid);
 			}
 
-			if(Session::get('filter_field')) {
+			if(Session::get('foreign_key')) {
 				$columns = \Schema::getColumnListing($this->table);	
-				foreach(Session::get('filter_field') as $k=>$v) {
+				foreach(Session::get('foreign_key') as $k=>$v) {
 					if(in_array($k, $columns)){
 						$rows->where($this->table.'.'.$k,$v);
 					}

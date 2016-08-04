@@ -33,12 +33,12 @@
 						<div class="text-danger">{{ $errors->first('is_superadmin') }}</div>
 					</div>
 
-					<div class='form-group'>
+					<!--div class='form-group'>
 						<label>Filter Field</label>
 						<input type='text' class='form-control' name='filter_field' value='{{ @$row->filter_field }}'/>
 						<div class="text-danger">{{ $errors->first('filter_field') }}</div>
 						<div class='help-block'>Isi dengan nama kolom user yang ingin di filter untuk tampil data</div>
-					</div>
+					</div-->
 
 
 					<div class='form-group'>

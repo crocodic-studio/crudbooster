@@ -37,9 +37,9 @@
             $url_tab = $ft['route'];
             @$id = $row->id;           
             
-            if($ft['filter_field'] && @$_GET['where']) {
+            if($ft['foreign_key'] && @$_GET['where']) {
               $where = $_GET['where'];
-              $field = $ft['filter_field'];
+              $field = $ft['foreign_key'];
               $id = $where[$field];
             }
 
