@@ -32,7 +32,7 @@
       <div class='col-sm-12'>
             <div class="box box-primary collapsed-box">
                 <div class="box-header with-border">
-                    <h3 class="box-title">API GENERATOR METHOD POST</h3>
+                    <h3 class="box-title">API GENERATOR</h3>
                     <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
                   </div><!-- /.box-tools -->
@@ -41,14 +41,14 @@
                 <form method='post' action='{{url("admin/api_generator/save-api-custom")}}'>
                   <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                         <div class='form-group'>
-                            <label>NAMA API</label>
+                            <label>API Name</label>
                             <input type='text' class='form-control' placeholder='Opsional' name='nama'/>
                         </div>
 
                         <div class='form-group'>
-                            <label>TIPE ACTION</label>
+                            <label>Action Type</label>
                             <select id='tipe_action' name='aksi' class='form-control'>
-                                <option value=''>** Pilih Tipe</option>
+                                <option value=''>** Choose Action</option>
                                 <optgroup label="GENERAL">
                                   <option value='list'>LISTING</option>
                                   <option value='detail'>DETAIL</option>
@@ -56,15 +56,15 @@
                                   <option value='save_edit'>UPDATE</option>                                
                                   <option value='delete'>DELETE</option>
                                 </optgroup>
-                                <optgroup label="SPECIAL CASE">
+<!--                                 <optgroup label="SPECIAL CASE">
                                   <option value='html'>HTML (WEBVIEW)</option>
-                                </optgroup>
+                                </optgroup> -->
                             </select>
                         </div>
                         <div class='form-group'>
-                            <label>TABEL</label>
+                            <label>Table</label>
                             <select id='combo_tabel' name='tabel' class='form-control'>
-                                  <option value=''>** Pilih Tabel</option>
+                                  <option value=''>** Choose a Table</option>
                                   @foreach($tables as $tab)
                                   <option value='{{$tab}}'>{{$tab}}</option>
                                   @endforeach
@@ -96,23 +96,23 @@
                            
                         </script>
                         <div class='form-group'>
-                            <label>KOLOM <input type='checkbox' class='uncheck_all_kolom' value='1'/></label>
-                            <div id='koloms'><em>Silahkan pilih tabel dulu</em></div>
+                            <label>Column <input type='checkbox' class='uncheck_all_kolom' value='1'/></label>
+                            <div id='koloms'><em>Please select a table for first</em></div>
                         </div>
 
                         <div class='form-group'>
-                            <label>PARAMETER</label>
-                            <input type='text' class='form-control' placeholder='Opsional, ex : name_column1,name_column2,name_column3' name='parameter'/>
+                            <label>Parameters</label>
+                            <input type='text' class='form-control' placeholder='Optional, ex : name_column1,name_column2,name_column3' name='parameter'/>
                         </div>
 
                         <div class='form-group'>
-                            <label>SUB QUERY</label>                            
-                            <textarea name='sub_query_1' rows='6' class='form-control sub_query_input' readonly placeholder='Optional, only for list & detail'></textarea>
+                            <label>Sub Query</label>                            
+                            <textarea name='sub_query_1' rows='6' class='form-control sub_query_input' readonly placeholder='Optional, only for Listing & Detail'></textarea>
                             <div class='help-block'>Use %%name_parameter%% to call parameter value in sub query</div>
                         </div>
 
                         <div class='form-group'>
-                            <label>SQL WHERE</label>
+                            <label>SQL Where Query</label>
                             <textarea name='sql_where' rows='6' class='form-control' placeholder='Optional'></textarea>
                             <div class='help-block'>name_column = '1' <span class='text-danger'>or</span> name_column = '1' and name_column_b != '0' . Use %%name_parameter%% to call parameter value</div>
                         </div>                     
@@ -120,19 +120,13 @@
                         
 
                         <div class='form-group'>
-                            <label>KETERANGAN API</label>
+                            <label>API Description</label>
                             <textarea name='keterangan' rows='6' class='form-control' placeholder='Opsional'></textarea>
                         </div>
-
-                        
-
+                      
                         <div class='form-group'>
-                            <input type='submit' class='btn btn-success' value='SIMPAN API'/>
+                            <input type='submit' class='btn btn-success' value='SAVE & GENERATE API'/>
                         </div> 
-
-                        <div >
-                            <em>Remove debug parameter if mode production or live.</em>
-                        </div>
 
 
                 </div><!-- /.box-body -->
@@ -169,9 +163,10 @@
                         <input type='text' readonly class='form-control' title='Hanya klik dan otomatis copy to clipboard (kecuali Safari)' onClick="this.setSelectionRange(0, this.value.length); document.execCommand('copy');" value='{{url('api')}}'/>
                     </div>
                     <div class='form-group'>
-                        <label>Header Token Required</label><br/>
-                          SCREETKEY : <span id='screetkey' style='font-weight: bold'><?php echo $screetkey?></span> <a href='javascript:void(0)' onclick="generate_screet_key()">RE-GENERATE</a><br/>                          
-                          X-Authorization-Token : md5( SCREETKEY + UNIX CURRENT TIME )<br/>
+                        <label>API Key</label><br/>
+                        SCREETKEY : <span id='screetkey' style='font-weight: bold'><?php echo $screetkey?></span> <a href='javascript:void(0)' onclick="generate_screet_key()">RE-GENERATE</a><br/>                          
+                        <label>Header :</label><br/>                          
+                          X-Authorization-Token : md5( SCREETKEY + UNIX CURRENT TIME + USER_AGENT )<br/>
                           X-Authorization-Time  : UNIX CURRENT TIME                          
                     </div>
                     <table class='table table-striped table-api table-bordered'>

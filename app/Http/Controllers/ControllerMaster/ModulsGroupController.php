@@ -24,13 +24,15 @@ class ModulsGroupController extends Controller {
 		$this->theme = 'admin.default';	
 		$this->prefixroute = 'admin/';	
 
+		$this->alert[] = ['message'=>"<p>Please make sure you have created a table before create a module</p>",'type'=>'info']; 
+
 		$this->col = array();				
 		$this->col[] = array("label"=>"Sorting","field"=>"sorting_group");
-		$this->col[] = array("label"=>"Nama","field"=>"nama_group");
+		$this->col[] = array("label"=>"Name","field"=>"nama_group");
 		$this->col[] = array("label"=>"Is Group","field"=>"is_group");
 
 		$this->form = array();		
-		$this->form[] = array("label"=>"Nama","name"=>"nama_group");
+		$this->form[] = array("label"=>"Name","name"=>"nama_group");
 		$this->form[] = array("label"=>"Icon","name"=>"icon_group","type"=>"radio","dataenum"=>array(
 				"fa fa-cog|<i class='fa fa-cog'></i>",
 				"fa fa-comment|<i class='fa fa-comment'></i>",
@@ -48,15 +50,11 @@ class ModulsGroupController extends Controller {
 				"fa fa-truck|<i class='fa fa-truck'></i>",
 				"fa fa-trash|<i class='fa fa-trash'></i>",
 				"fa fa-tasks|<i class='fa fa-tasks'></i>",
-				"fa fa-cube|<i class='fa fa-cube'></i>",
-				"fa fa-hourglass|<i class='fa fa-hourglass'></i>",
-				"fa fa-dashboard|<i class='fa fa-dashboard'></i>",
-				"fa fa-flag-o|<i class='fa fa-flag-o'></i>",
+				"fa fa-cube|<i class='fa fa-cube'></i>",				
+				"fa fa-dashboard|<i class='fa fa-dashboard'></i>",				
 				"fa fa-folder-open|<i class='fa fa-folder-open'></i>",
 				"fa fa-credit-card|<i class='fa fa-credit-card'></i>",
-				"fa fa-inbox|<i class='fa fa-inbox'></i>",
-				"fa fa-spinner|<i class='fa fa-spinner'></i>",
-				"fa fa-line-cart|<i class='fa fa-line-cart'></i>",
+				"fa fa-inbox|<i class='fa fa-inbox'></i>",								
 				"fa fa-info-circle|<i class='fa fa-info-circle'></i>",
 				"fa fa-cloud-download|<i class='fa fa-cloud-download'></i>",
 			),"value"=>"fa fa-bars");
@@ -103,7 +101,7 @@ class ModulsGroupController extends Controller {
 		DB::table('cms_moduls_group')->where('sorting_group',$new_sorting)->update(array('sorting_group'=>$row->sorting_group));
 		DB::table('cms_moduls_group')->where('id',$id)->update(array('sorting_group'=>$new_sorting));
 
-		return redirect()->back()->with(['message'=>"Berhasil sorting data !",'message_type'=>'success']);
+		return redirect()->back()->with(['message'=>"Sort data success !",'message_type'=>'success']);
 	}
 
 }

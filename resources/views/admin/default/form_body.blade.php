@@ -21,7 +21,7 @@
                 			$name 		= $form['name'];
                 			@$join 		= $form['join'];
                 			@$value		= (isset($form['value']))?$form['value']:'';
-                			@$value		= (isset($row->{$name}) && $row->{$name} !='')?$row->{$name}:$value;
+                			@$value		= (isset($row->{$name}))?$row->{$name}:$value;
 
                 			if($parent_field && $name == $parent_field) continue;
 
@@ -330,9 +330,9 @@
 
 										$selects_data->addselect($datatable_field);
 
-										if(Session::get('filter_field')) {
+										if(Session::get('foreign_key')) {
 											$columns = \Schema::getColumnListing($datatable_tab);	
-											foreach(Session::get('filter_field') as $k=>$v) {
+											foreach(Session::get('foreign_key') as $k=>$v) {
 												if(in_array($k, $columns)){
 													$selects_data->where($datatable_tab.'.'.$k,$v);
 												}
@@ -661,9 +661,9 @@
 											$selects_data->addselect($datatable_field2);
 										}
 
-										if(Session::get('filter_field')) {
+										if(Session::get('foreign_key')) {
 											$columns = \Schema::getColumnListing($datatable_tab);	
-											foreach(Session::get('filter_field') as $k=>$v) {
+											foreach(Session::get('foreign_key') as $k=>$v) {
 												if(in_array($k, $columns)){
 													$selects_data->where($datatable_tab.'.'.$k,$v);
 												}

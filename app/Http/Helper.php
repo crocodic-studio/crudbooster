@@ -1,5 +1,28 @@
 <?php 
 
+function send_gcm($regid,$data,$google_key){
+    $url = 'https://android.googleapis.com/gcm/send';
+    $fields = array(
+      'registration_ids' => $regid,
+      'data' => $data,
+    );
+    $headers = array(
+      'Authorization:key=' . $google_key,
+      'Content-Type:application/json'
+    );
+
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0 );
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0 );
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode( $fields));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $chresult = json_decode(curl_exec($ch));
+    curl_close($ch);
+    return $chresult;
+}
+
 function generate_menu($slug,$parent_id=0) {
     $menus = DB::table('cms_menus')
     ->join('cms_menus_groups','cms_menus_groups.id','=','id_cms_menus_groups')
@@ -389,7 +412,7 @@ function get_size($url) {
     return $head['content-length'];
 }
 
-function send_email($to,$subject,$data,$from='',$template='') {
+function send_email($to,$subject,$html,$from='',$template='') {
      $setting = DB::table('cms_settings')->where('name','like','smtp%')->get();
      $set = array();
      foreach($setting as $s) {
@@ -404,6 +427,7 @@ function send_email($to,$subject,$data,$from='',$template='') {
 
     $template = ($template)?:"emails.blank";
     $from = ($from)?:$set['smtp_username'];
+    $data['content'] = $html;
     \Mail::send($template,$data,function($message) use ($to,$subject,$from) {
         $message->to($to);
         $message->from($from);
@@ -502,4 +526,23 @@ function slug($title,$table,$where="title",$id=NULL){
     }
     return $the_value;
 
+}
+
+function get_my_id() {
+    return Session::get('admin_id');
+}
+function get_my_id_company() {
+    return Session::get('admin_id_companies');
+}
+function get_is_superadmin() {
+    return Session::get('admin_is_superadmin');
+}
+function get_my_name() {
+    return Session::get('admin_name');
+}
+function get_my_photo() {
+    return Session::get('admin_photo');
+}
+function get_my_id_privilege() {
+    return Session::get('admin_privileges');
 }

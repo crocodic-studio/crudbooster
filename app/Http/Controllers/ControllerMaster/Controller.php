@@ -48,6 +48,7 @@ abstract class Controller extends BaseController {
 	var $parent_field		= '';
 	var $referal			= '';
 	var $controller_name 	= '';
+	var $alert				= array();
 	var $setting;	
 
 	public function init_setting() {
@@ -114,8 +115,8 @@ abstract class Controller extends BaseController {
 						foreach(Request::get('where') as $a=>$b) { 
 							$w[] = "&where[".$a."]=".$b;
 						}						
-						$w[] = "&where[".$ft['filter_field']."]=%id%";						
-						$ft['route'] = $ft['route'].'?is_sub='.Request::get('is_sub').implode('',$w);						
+						$w[] = "&where[".$ft['foreign_key']."]=%id%";												
+						$ft['route'] = action($ft['controller'].'@getIndex').'?is_sub='.Request::get('is_sub').implode('',$w);					
 						$last_form_tab[] = $ft;
 					}
 					Session::put('form_tab',$last_form_tab);												
@@ -130,7 +131,7 @@ abstract class Controller extends BaseController {
 			if($this->form_tab) {
 
 				foreach($this->form_tab as &$ft) {
-					$ft['route'] = $ft['route'].'?is_sub=1&where['.$ft['filter_field'].']=%id%';
+					$ft['route'] = action($ft['controller'].'@getIndex').'?is_sub=1&where['.$ft['foreign_key'].']=%id%';
 				}
 
 				$first_form_tab   = array();
@@ -141,9 +142,9 @@ abstract class Controller extends BaseController {
 			}
 		}
 
-		if(Session::get('filter_field')) {
+		if(Session::get('foreign_key')) {
 			foreach($this->form as &$f) {
-				foreach(Session::get('filter_field') as $k=>$v) {
+				foreach(Session::get('foreign_key') as $k=>$v) {
 					if($f['name']==$k) {
 						$f['label'] = $k;
 						$f['name'] = $k;
@@ -161,7 +162,6 @@ abstract class Controller extends BaseController {
 			$className = __NAMESPACE__ . '\\' . $fs['controller'];
 			$fs['classname'] = $className;
 		}
-
 
 		$this->columns_table     = $this->col; 		
 		$this->data_inputan      = $this->form;
@@ -192,6 +192,7 @@ abstract class Controller extends BaseController {
 		$this->data['appname']    = $this->setting->appname;
 		$this->data['setting'] 	  = $this->setting;	
 		$this->data['table_name'] = $this->table_name;	
+		$this->data['alerts'] 	  = $this->alert;
         view()->share($this->data);
 	} 
 
@@ -200,13 +201,10 @@ abstract class Controller extends BaseController {
 		$current_modul_url = str_replace("App\Http\Controllers\\","",strtok(Route::currentRouteAction(),'@') );		
 		$current_modul_url = action($current_modul_url.'@getIndex');
 		$url = trim(str_replace(url(),'',$current_modul_url),'/');
-
 		if(strpos($url, '/add')) {
 			return substr($url, 0, strpos($url,'/add')).$path;
-
 		}elseif (strpos($url, '/edit')) {
 			return substr($url, 0, strpos($url,'/edit')).$path;
-
 		}else{
 			return $url.$path;
 		}
@@ -217,6 +215,18 @@ abstract class Controller extends BaseController {
 		DB::connection()->enableQueryLog();		
 		if($this->data['priv']->limit_data) {
 			$this->limit = $this->data['priv']->limit_data;
+		}
+
+		if($this->data['priv']->is_visible==0) {
+			$a                 = array();
+			$a['created_at']   = date('Y-m-d H:i:s');
+			$a['ipaddress']    = $_SERVER['REMOTE_ADDR'];
+			$a['useragent']    = $_SERVER['HTTP_USER_AGENT'];
+			$a['url']          = Request::url();
+			$a['description']  = "Trying view data at ".$this->data['modulname'];
+			$a['id_cms_users'] = Session::get('admin_id');
+			DB::table('cms_logs')->insert($a);
+			return redirect('admin')->with(['message'=>'You can not access that area !','message_type'=>'warning']);
 		}
 
 		$data['table_name'] 	  = $this->table_name;
@@ -231,12 +241,16 @@ abstract class Controller extends BaseController {
 		
 		$this->hook_before_index($result);
 
-		if(Session::get('filter_field')) {
-			foreach(Session::get('filter_field') as $k=>$v) {
+		if(Session::get('foreign_key')) {
+			foreach(Session::get('foreign_key') as $k=>$v) {
 				if(in_array($k, $columns)){
 					$result->where($this->table.'.'.$k,$v);
 				}
 			}
+		}
+
+		if($this->data['priv']->is_softdelete==1) {
+			$result->where($this->table.'.deleted_at',NULL);
 		}
 
 		if(@$this->data['priv']->sql_where) {
@@ -463,6 +477,9 @@ abstract class Controller extends BaseController {
 			    }else{
 			    	$param = @$_GET;
       				unset($param['detail']);
+      				unset($param['page']);
+      				unset($param['limit']);
+      				unset($param['q']);
 			    	$url = url("$mainpath/edit/$row->id?".urldecode(http_build_query(@$param)) );
 			    }
       			
@@ -543,47 +560,37 @@ abstract class Controller extends BaseController {
 		$jointmp = array();
 		$e = 0;
 		foreach($columns_table as $index => $coltab) {
+			
 			$join = @$coltab['join'];
-			$join_id = @$coltab['join_id'];
+			if($join) {
+				$join_exp = explode(',', $join);
+				$join_table = $join_exp[0];
+				$join_name = $join_exp[1];
+			}
 			$field = $coltab['field'];
-			if($join) {				
-				$expjoin = explode(".",$join);
-				
-				foreach($expjoin as $ej) {	
-					if(in_array($ej,$jointmp)) {
-						$e++;
-						continue;							
-					}
 
-					$id = ($join_id)?:"id_".$ej;
+			//Jika ada subquery
+			if(strpos($field, ' as ')!==FALSE) {
+				$field = substr($field, strpos($field, ' as ')+4);
+				$rows->addselect(DB::raw($coltab['field']));
+				$columns_table[$index]['field'] = $field;
+				$columns_table[$index]['field_raw'] = $field;
+				$columns_table[$index]['field_with'] = $field;
+				$columns_table[$index]['is_subquery'] = true;
+				continue;
+			}
 
-					if($e==0) {
-						$field2 = $this->table.".".$id;
-					}else{
-						$table_join = $expjoin[$e-1].($e-1);
-						if(in_array($table_join, $alias)) {
-							$field2 = $table_join.'.'.$id;
-						}else{
-							$field2 = $this->table.'.'.$id;
-						}
-					}
-				
-					$rows->leftjoin($ej." as ".$ej.$e,$ej.$e.".id","=", $field2);
-					array_push($jointmp,$ej);
-
-					$table_name = $ej.$e;
-					$table_columns = \Schema::getColumnListing($ej);
-					if(in_array($field, $table_columns)) {
-						$rows->addselect($table_name.'.'.$field.' as '.$field.'_'.$table_name);
-						$columns_table[$index]['field'] = $field.'_'.$table_name;
-						$columns_table[$index]['field_with'] = $table_name.'.'.$field;
-						$columns_table[$index]['field_raw'] = $field;	
-						$cols[] = $columns_table[$index]['field'];
-					}
-					
-					$e++;									
-				} 
-				
+			if($join) {		
+				//field = id relasi nya
+				$join_alias = $join_table.$index;
+				$rows->leftjoin($join_table.' as '.$join_alias,$join_alias.'.id','=',$this->table.'.'.$field);
+				$rows->addselect($join_alias.'.'.$join_name.' as '.$join_name.'_'.$join_alias);
+				$rows->addselect($this->table.'.'.$field); #field asli tetap di masukkan
+				$alias[] = $join_alias;
+				$columns_table[$index]['field'] = $join_name.'_'.$join_alias;
+				$columns_table[$index]['field_with'] = $join_alias.'.'.$join_name;
+				$columns_table[$index]['field_raw'] = $join_name;
+				$cols[] = $columns_table[$index]['field'];
 			}else{
 				$rows->addselect($this->table.'.'.$field);
 				$columns_table[$index]['field_raw'] = $field;
@@ -726,9 +733,9 @@ abstract class Controller extends BaseController {
 				$rows->where($parfield,$parid);
 			}
 
-			if(Session::get('filter_field')) {
+			if(Session::get('foreign_key')) {
 				$columns = \Schema::getColumnListing($this->table);	
-				foreach(Session::get('filter_field') as $k=>$v) {
+				foreach(Session::get('foreign_key') as $k=>$v) {
 					if(in_array($k, $columns)){
 						$rows->where($this->table.'.'.$k,$v);
 					}
@@ -911,7 +918,7 @@ abstract class Controller extends BaseController {
 			$a['description'] = "Trying add data ".Request::get($this->titlefield)." at ".$this->data['modulname'];
 			$a['id_cms_users'] = Session::get('admin_id');
 			DB::table('cms_logs')->insert($a);
-			return redirect('admin')->with(['message'=>'You can not access that area !','message_type'=>'danger']);
+			return redirect('admin')->with(['message'=>'You can not access that area !','message_type'=>'warning']);
 		}
 
 		$this->validation();	
@@ -980,7 +987,7 @@ abstract class Controller extends BaseController {
 			$a['description'] = "Trying add data ".$row->{$this->titlefield}." at ".$this->data['modulname'];
 			$a['id_cms_users'] = Session::get('admin_id');
 			DB::table('cms_logs')->insert($a);
-			return redirect('admin')->with(['message'=>'You can not access that area !','message_type'=>'danger']);
+			return redirect('admin')->with(['message'=>'You can not access that area !','message_type'=>'warning']);
 		}
 		
 		$this->validation();
@@ -1026,7 +1033,7 @@ abstract class Controller extends BaseController {
 			$a['description'] = "Trying delete data ".$row->{$this->titlefield}." at ".$this->data['modulname'];
 			$a['id_cms_users'] = Session::get('admin_id');
 			DB::table('cms_logs')->insert($a);
-			return redirect('admin')->with(['message'=>'You can not access that area !','message_type'=>'danger']);
+			return redirect('admin')->with(['message'=>'You can not access that area !','message_type'=>'warning']);
 		}
 
 			
@@ -1041,9 +1048,16 @@ abstract class Controller extends BaseController {
 		DB::table('cms_logs')->insert($a);
 
 		$this->hook_before_delete($id);
-		DB::table($this->table)->where($this->primkey,$id)->delete();
+
+		if($this->data['priv']->is_softdelete==1) {
+			DB::table($this->table)->where($this->primkey,$id)->update(['deleted_at'=>date('Y-m-d H:i:s')]);
+		}else{
+			DB::table($this->table)->where($this->primkey,$id)->delete();
+		}
+		
 		$this->hook_after_delete($id);
-		return redirect()->back()->with(['message'=>"The data has been deleted !",'message_type'=>"success"]);
+
+		return redirect()->back()->with(['message'=>"Data has been deleted !",'message_type'=>"success"]);
 	}
 
 	public function postDeleteSelected() {
@@ -1057,7 +1071,7 @@ abstract class Controller extends BaseController {
 			$a['description'] = "Trying delete data at ".$this->data['modulname'];
 			$a['id_cms_users'] = Session::get('admin_id');
 			DB::table('cms_logs')->insert($a);
-			return redirect('admin')->with(['message'=>'You can not access that area !','message_type'=>'danger']);
+			return redirect('admin')->with(['message'=>'You can not access that area !','message_type'=>'warning']);
 		}
 
 		$id = Request::input('id');
@@ -1076,7 +1090,13 @@ abstract class Controller extends BaseController {
 				DB::table('cms_logs')->insert($a);
 			}
 
-			DB::table($this->table)->whereIn("id",$id)->delete();
+			
+			if($this->data['priv']->is_softdelete==1) {
+				DB::table($this->table)->whereIn($this->primkey,$id)->update(['deleted_at'=>date('Y-m-d H:i:s')]);
+			}else{
+				DB::table($this->table)->whereIn($this->primkey,$id)->delete();
+			}
+
 		}
 	}
 
@@ -1134,7 +1154,7 @@ abstract class Controller extends BaseController {
 			$a['description'] = "Trying delete image ".$row->{$this->titlefield}." at ".$this->data['modulname'];
 			$a['id_cms_users'] = Session::get('admin_id');
 			DB::table('cms_logs')->insert($a);
-			return redirect('admin')->with(['message'=>'You can not access that area !','message_type'=>'danger']);
+			return redirect('admin')->with(['message'=>'You can not access that area !','message_type'=>'warning']);
 		}
 			
 		$upload_mode = @$this->setting->upload_mode?:'file';
