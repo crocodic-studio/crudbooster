@@ -36,3 +36,9 @@ All of issues and new feature request, please create an issue at GitHub, please 
 
 ## UPDATE
 Please stay to check, if you have fork CRUDBooster, please don't forget to pull request so you can keep the latest version.
+
+## CREDIT
+1. Laravel Export HTML to Excel by [Maatwebsite](https://github.com/Maatwebsite/Laravel-Excel)
+2. Laravel DOM PDF by [Barryvdh](https://github.com/barryvdh/laravel-dompdf)
+3. Admin Theme by [AdminLTE Almsaeed Studio](https://almsaeedstudio.com/preview)
+4. Laravel Framework by [Taylor Otwell](https://github.com/laravel/laravel)
