@@ -809,11 +809,6 @@ class AdminController extends Controller {
 				Session::put('filter_field',$filter_value_r);					
 			}
 
-			$filename = md5($users->id.time());
-			file_put_contents(base_path("cookies")."/".$filename, $users->id);
-			$hour = 3600 * 12;
-			setcookie("admin_id", $filename, time()+$hour, '/'); 
-
 			return redirect('admin'); 
 		}else{
 			return redirect('admin/login')->with('message', 'Sorry the password is wrong !');			
@@ -842,9 +837,9 @@ class AdminController extends Controller {
 
 		DB::table('cms_users')->where('email',Request::input('email'))->update(array('password'=>$password));
  
-		$user = Users::where("email",Request::input('email'))->first();
-		$data = array();
-		$data['email'] = $user->email;
+		$user             = Users::where("email",Request::input('email'))->first();
+		$data             = array();
+		$data['email']    = $user->email;
 		$data['password'] = $rand_string;
 
 		send_email($user->email,"Forgot Password",$data,$this->setting->email_sender,"emails.forgot");
@@ -855,12 +850,6 @@ class AdminController extends Controller {
 	
 	public function getLogout() {
 		Session::flush();
-
-		@unlink(base_path("cookies")."/".$_COOKIE['admin_id']);
-
-		unset($_COOKIE['admin_id']);
-		setcookie('admin_id', '', time() - 3600, '/'); // empty value and old timestamp
-
 
 		return redirect('admin/login');
 	}

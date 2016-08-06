@@ -1,7 +1,7 @@
 @include("emails/header")
 
-<p>Halo,</p>
-<p>Seseorang dengan IP Address {{$_SERVER['REMOTE_ADDR']}} pada pukul {{date('Y-m-d H:i:s')}} telah melakukan permintaan password, berikut ini password baru anda : </p>
+<p>Hello,</p>
+<p>Someone with IP Address {{$_SERVER['REMOTE_ADDR']}} at {{date('Y-m-d H:i:s')}} has been requested password, the following is your new password : </p>
 <p>Password : {{$password}}</p>
 
 @include("emails/footer")
