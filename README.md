@@ -22,7 +22,7 @@ Please following these instructions :
 1. Download from github
 2. Create folder in your htdocs, and extract
 3. Create a blank database at your PHPMYADMIN
-4. Go to http://localhost/YourApp/install/index.php
+4. Go to http://localhost/YourApp/public/install/index.php ,or if you used "php artisan serve", then url should be "http://localhost:8000/install/index.php"
 5. Follow the wizard installation until finish.
 6. After installation is finish, don't forget to rename folder install to other name 
 7. Done
