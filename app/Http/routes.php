@@ -16,12 +16,43 @@ foreach($controllers as $v) {
 	
 	}
 }
+
+/* IF YOU WANT ADD NEW ROUTER, ADD AFTER THIS LINE */
  
 
- 
-/* SETTING ROUTER DEFAULT CMS */
+
+
+
+
+/* END OF YOUR OWN ROUTER */
+
+/* SETTING ROUTER WITH CSRF */
 $router->group(['middleware' => 'csrf'], function($router)
-{
+{	
+	//Image Reader 
+	Route::get('uploads/{folder}/{filename}', function ($folder,$filename)
+	{
+	    $path = storage_path() . DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $filename;
+
+	    if(!File::exists($path)) abort(404);
+
+	    $file = File::get($path);
+	    $type = File::mimeType($path);
+	    $response = Response::make($file, 200);
+	    $response->header("Content-Type", $type);
+
+	    $seconds_to_cache = 3600 * (24*30);
+	    $gmt_mtime = gmdate('D, d M Y H:i:s', time() ) . ' GMT';
+
+		$ts = gmdate("D, d M Y H:i:s", time() + $seconds_to_cache) . " GMT";		
+		$response->header("Expires",$ts);
+		$response->header("Last-Modified",$gmt_mtime);
+		$response->header("Pragma","cache");
+		$response->header("Cache-Control","max-age=$seconds_to_cache, must-revalidate");
+	    return $response;
+	});
+
+	/* DO NOT EDIT THESE BELLOW LINES */
 	if(Schema::hasTable('cms_moduls')) {
 		$moduls = DB::table('cms_moduls')->get();
 		foreach($moduls as $v) {
@@ -32,13 +63,21 @@ $router->group(['middleware' => 'csrf'], function($router)
 			}						
 		}	
 	}
-	
+	/* END */	
 
-    // Protected routes
-	Route::controller('/updater', 'UpdaterController'); 
-	Route::controller('/admin/cms_moduls', 'ModulsController'); 
-	Route::controller('/admin','AdminController');
-	Route::controller('upload_virtual','FileHandelController');
+	//No Need Edit Bellow Router
+    //Router for updater/installer
+	Route::controller('/updater', 'UpdaterController');  
+
+	//Router for admin dashboard,login,logout,etc
+	Route::controller('/admin','AdminController');	
+
+	//Router for custom api defeault
 	Route::controller('/apis','CustomApiController');
+
+	//Router for front end
 	Route::controller('/','FrontController');
+
+
+
 });

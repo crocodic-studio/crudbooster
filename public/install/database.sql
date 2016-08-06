@@ -37,7 +37,7 @@ CREATE TABLE `cms_companies` (
   `is_primary` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-INSERT INTO `cms_companies` (`id`, `created_at`, `name`, `address`, `phone`, `email`, `photo`, `description`, `latitude`, `longitude`, `is_primary`) VALUES(1, '2016-04-11 04:38:49', 'CRUDBooster', 'Lorem ipsum dolor sit amet', '122324234', 'support@crudbooster.com', '', 'Quisque ut nisi. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Phasellus magna. Suspendisse potenti. Curabitur ullamcorper ultricies nisi.', '-7.005145300000001', '110.43812539999999', 1);
+INSERT INTO `cms_companies` (`id`, `created_at`, `name`, `address`, `phone`, `email`, `photo`, `description`, `latitude`, `longitude`, `is_primary`) VALUES(1, '2016-04-11 04:38:49', 'CRUDBooster', 'Lorem ipsum dolor sit amet', '122324234', 'support@crudbooster.com', '2016-08/49ddc420a7565204990e53d7fe072a50.jpg', 'Quisque ut nisi. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Phasellus magna. Suspendisse potenti. Curabitur ullamcorper ultricies nisi.', '-7.005145300000001', '110.43812539999999', 1);
 
 CREATE TABLE `cms_dashboard` (
   `id` int(11) NOT NULL,
@@ -73,8 +73,13 @@ CREATE TABLE `cms_logs` (
   `id_cms_users` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-INSERT INTO `cms_logs` (`id`, `created_at`, `ipaddress`, `useragent`, `url`, `description`, `id_cms_users`) VALUES(16, '2016-08-05 00:27:38', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36', 'http://localhost/crudbooster/admin/logs/delete-selected', 'Delete data ::1 at Logs', 13);
-INSERT INTO `cms_logs` (`id`, `created_at`, `ipaddress`, `useragent`, `url`, `description`, `id_cms_users`) VALUES(18, '2016-08-05 00:51:34', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36', 'http://localhost/crudbooster/admin/logs/delete/17', 'Delete data ::1 at Logs', 13);
+INSERT INTO `cms_logs` (`id`, `created_at`, `ipaddress`, `useragent`, `url`, `description`, `id_cms_users`) VALUES(19, '2016-08-06 17:30:18', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36', 'http://localhost:8000/admin/users/delete-image', 'Delete image for Administrator at Users', 13);
+INSERT INTO `cms_logs` (`id`, `created_at`, `ipaddress`, `useragent`, `url`, `description`, `id_cms_users`) VALUES(20, '2016-08-06 17:31:19', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36', 'http://localhost:8000/admin/users/edit-save/13', 'Update data Administrator at Users', 13);
+INSERT INTO `cms_logs` (`id`, `created_at`, `ipaddress`, `useragent`, `url`, `description`, `id_cms_users`) VALUES(21, '2016-08-06 17:34:49', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36', 'http://localhost:8000/admin/users/delete-image', 'Delete image for Administrator at Users', 13);
+INSERT INTO `cms_logs` (`id`, `created_at`, `ipaddress`, `useragent`, `url`, `description`, `id_cms_users`) VALUES(22, '2016-08-06 17:35:04', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36', 'http://localhost:8000/admin/users/edit-save/13', 'Update data Administrator at Users', 13);
+INSERT INTO `cms_logs` (`id`, `created_at`, `ipaddress`, `useragent`, `url`, `description`, `id_cms_users`) VALUES(23, '2016-08-06 22:10:19', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36', 'http://localhost:8000/admin/users/delete-image', 'Delete image for Administrator at Users', 13);
+INSERT INTO `cms_logs` (`id`, `created_at`, `ipaddress`, `useragent`, `url`, `description`, `id_cms_users`) VALUES(24, '2016-08-06 22:11:36', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36', 'http://localhost:8000/admin/users/edit-save/13', 'Update data Administrator at Users', 13);
+INSERT INTO `cms_logs` (`id`, `created_at`, `ipaddress`, `useragent`, `url`, `description`, `id_cms_users`) VALUES(25, '2016-08-06 22:25:37', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36', 'http://localhost:8000/admin/companies/edit-save/1', 'Update data CRUDBooster at Companies', 13);
 
 CREATE TABLE `cms_menus` (
   `id` int(11) NOT NULL,
@@ -266,7 +271,7 @@ CREATE TABLE `cms_users` (
   `id_cms_companies` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-INSERT INTO `cms_users` (`id`, `created_at`, `updated_at`, `name`, `photo`, `email`, `password`, `id_cms_privileges`, `id_cms_companies`) VALUES(13, '2016-07-27 08:31:29', '0000-00-00 00:00:00', 'Administrator', 'uploads/2016-05/f7429d6d2c9ca2fd97c4b9e834cec49e.jpg', 'admin@crudbooster.com', '$2y$10$pSvsrFjckNvWvvY0PRewvujejhFLED1hYlPJGRYmhGmGs6ZNx/Voy', 3, 1);
+INSERT INTO `cms_users` (`id`, `created_at`, `updated_at`, `name`, `photo`, `email`, `password`, `id_cms_privileges`, `id_cms_companies`) VALUES(13, '2016-08-06 15:11:36', '0000-00-00 00:00:00', 'Administrator', '2016-08/159643077b72aadfeb8a6eaa69c347b6.jpg', 'admin@crudbooster.com', '$2y$10$pSvsrFjckNvWvvY0PRewvujejhFLED1hYlPJGRYmhGmGs6ZNx/Voy', 3, 1);
 
 
 ALTER TABLE `cms_apicustom`
@@ -343,7 +348,7 @@ ALTER TABLE `cms_dashboard`
 ALTER TABLE `cms_filemanager`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `cms_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 ALTER TABLE `cms_menus`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 ALTER TABLE `cms_menus_groups`

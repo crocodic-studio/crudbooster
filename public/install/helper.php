@@ -1,7 +1,8 @@
 <?php 
 
 function load_env() {
-	$env = array_filter(file("../.env"));
+	$env = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'.env';
+    $env = array_filter(file($env));
     $conf = array();
     foreach($env as $e) {
         $e = explode('=',$e);

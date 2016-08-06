@@ -21,16 +21,16 @@ class AdminCmsPostsController extends Controller {
         $this->col = array();
         $this->col[] = array("label"=>"Title","field"=>"title" );
 		$this->col[] = array("label"=>"Created","field"=>"created_at" );
-		$this->col[] = array("label"=>"Content","field"=>"content");
-		$this->col[] = array("label"=>"Cms Users","field"=>"id_cms_users","join"=>"cms_users,name");		
-		$this->col[] = array("label"=>"Cms Posts Categories","field"=>"id_cms_posts_categories","join"=>"cms_posts_categories,name");
+		$this->col[] = array("label"=>"Content","field"=>"content","str_limit"=>155);
+		$this->col[] = array("label"=>"Author","field"=>"id_cms_users","join"=>"cms_users,name");		
+		$this->col[] = array("label"=>"Category","field"=>"id_cms_posts_categories","join"=>"cms_posts_categories,name");
 
 		$this->form = array();
         $this->form[] = array("name"=>"slug","type"=>"hidden");
 		$this->form[] = array("label"=>"Title","name"=>"title","type"=>"text"  );
 		$this->form[] = array("label"=>"Content","name"=>"content","type"=>"wysiwyg"  );
-		$this->form[] = array("label"=>"Cms Users","name"=>"id_cms_users","type"=>"select" ,"datatable"=>"cms_users,name" );		
-		$this->form[] = array("label"=>"Cms Posts Categories","name"=>"id_cms_posts_categories","type"=>"select" ,"datatable"=>"cms_posts_categories,name" );
+		$this->form[] = array("label"=>"Author","name"=>"id_cms_users","type"=>"select" ,"datatable"=>"cms_users,name" );		
+		$this->form[] = array("label"=>"Category","name"=>"id_cms_posts_categories","type"=>"select" ,"datatable"=>"cms_posts_categories,name" );
                  
         
         //You may use this bellow array to add relational data to next tab 

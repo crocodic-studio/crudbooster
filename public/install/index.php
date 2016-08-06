@@ -29,6 +29,10 @@
         .container {
           font-size: 12px
         }
+        #footer {
+          font-size: 11px;
+          text-align: center;
+        }
     </style>
     <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     
@@ -127,83 +131,19 @@
                       }
                     ?>
                   </td>
-              </tr>
-
-
-              <tr>
-                  <td>Storage Views Writable</td>
-                  <td>
-                    <?php 
-                      if(is_writable("../storage/framework/views")) {
-                          echo "<span class='label label-success'>GOOD</span>";
-                      } else {
-                          $failed += 1;
-                          echo "<span class='label label-danger'>BAD</span>";
-                      }
-                    ?>
-                  </td>
-              </tr>
-
-              <tr>
-                  <td>Storage Sessions Writable</td>
-                  <td>
-                    <?php 
-                      if(is_writable("../storage/framework/sessions")) {
-                          echo "<span class='label label-success'>GOOD</span>";
-                      } else {
-                          $failed += 1;
-                          echo "<span class='label label-danger'>BAD</span>";
-                      }
-                    ?>
-                  </td>
-              </tr>
-
-              <tr>
-                  <td>Storage Cache Writable</td>
-                  <td>
-                    <?php 
-                      if(is_writable("../storage/framework/sessions")) {
-                          echo "<span class='label label-success'>GOOD</span>";
-                      } else {
-                          $failed += 1;
-                          echo "<span class='label label-danger'>BAD</span>";
-                      }
-                    ?>
-                  </td>
-              </tr>
-
-              <tr>
-                  <td>Storage Logs Writable</td>
-                  <td>
-                    <?php 
-                      if(is_writable("../storage/logs")) {
-                          echo "<span class='label label-success'>GOOD</span>";
-                      } else {
-                          $failed += 1;
-                          echo "<span class='label label-danger'>BAD</span>";
-                      }
-                    ?>
-                  </td>
-              </tr>
-
-              <!--tr>
-                  <td>Mod_Rewrite Enable</td>
-                  <td>
-                    <?php 
-                      //if(in_array('mod_rewrite', apache_get_modules())) {
-                          //echo "<span class='label label-success'>GOOD</span>";
-                      //} else {
-                          //$failed += 1;
-                          //echo "<span class='label label-danger'>BAD</span>";
-                      //}
-                    ?>
-                  </td>
-              </tr-->
+              </tr>          
 
 
           </tbody>
       </table>
+      <div class='alert alert-info'>
+        <strong>WARNING: </strong> Please Make sure all the requirements become passed
+      </div>
 
+      <div class='alert alert-info'>
+         <strong>Attention</strong><br/>
+         Please make sure you have made an empty database. If you have not created database, please create one before going to the next step
+      </div>
       <a class='btn btn-block btn-default <?php echo ($failed>0)?"disabled":""?>' href='javascript:void(0)' onclick="next_step(2)">Continue Next Step &raquo;</a>
 
       </div><!--END STEP1-->
@@ -212,24 +152,17 @@
           <h4>Step 2: Configuration Database</h4>
           <p class='text-muted'>We make sure your server are compatible with CRUDBooster</p>
 
-          <?php 
-            $env = array_filter(file("../.env"));
-            $conf = array();
-            foreach($env as $e) {
-                $e = explode('=',$e);
-                $k = $e[0];
-                @$v = $e[1];
-                $conf[$k] = $v;
-            }
+          <?php             
+            $conf = load_env();
           ?>
 
           <form method='post' id='form-db' action='execute.php?type=save_db'>
             <table class='table table-striped table-bordered'>
             <tbody>
-              <tr><td><strong>Hostname</strong></td><td><input type='text' class='form-control' value='<?php echo $conf['DB_HOST']?>' name='DB_HOST'/></td></tr>              
-              <tr><td><strong>Username</strong></td><td><input type='text' class='form-control' value='<?php echo $conf['DB_USERNAME']?>' name='DB_USERNAME'/></td></tr>
-              <tr><td><strong>Password</strong></td><td><input type='text' class='form-control' value='<?php echo $conf['DB_PASSWORD']?>' name='DB_PASSWORD'/></td></tr>
-              <tr><td><strong>Database</strong></td><td><input type='text' class='form-control' value='<?php echo $conf['DB_DATABASE']?>' name='DB_DATABASE'/><br/><small>You may rename database to create new one but make sure your username have full privileges to create database</small></td></tr>
+              <tr><td><strong>Hostname</strong></td><td><input required type='text' class='form-control' value='<?php echo @$conf['DB_HOST']?>' name='DB_HOST'/></td></tr>              
+              <tr><td><strong>Username</strong></td><td><input required type='text' class='form-control' value='<?php echo @$conf['DB_USERNAME']?>' name='DB_USERNAME'/></td></tr>
+              <tr><td><strong>Password</strong></td><td><input type='text' class='form-control' value='<?php echo @$conf['DB_PASSWORD']?>' name='DB_PASSWORD'/></td></tr>
+              <tr><td><strong>Database</strong></td><td><input required type='text' class='form-control' value='<?php echo @$conf['DB_DATABASE']?>' name='DB_DATABASE'/></td></tr>
             </tbody>
             </table>
             <input type='submit' class='btn btn-block btn-default' value='Save & Continue'/>
@@ -243,14 +176,14 @@
                     url:$(this).attr('action'),
                     data:$(this).serialize(),
                     success:function(r) {
-                      if(r=='success') {
+                      if(r==1) {
                         next_step(3);
                       }else{
-                        alert(r);
+                        alert("Database Can`t Created !");
                       }
                     },
                     error:function() {
-                      alert('Request failed ! something went wrong !');
+                      alert('Request faield !');
                     }
                   })
                   return false;
@@ -315,13 +248,11 @@
 
       <div class='step' style="display: none" id='step4'>
           <h4>Step 4: Installing...</h4>
-          <p class='text-muted'>We make sure your server are compatible with CRUDBooster</p>
-
+          <p class='text-muted'>Please wait until instalation is finished...</p>
           <iframe style='width:100%;border:1px solid #dddddd;height: 500px' id='iframe_install' name='iframe_install'></iframe>
       </div>
 
     </div> <!-- /container -->
-
 
       <script>
       function next_step(n) {
@@ -329,5 +260,7 @@
         $("#step"+n).slideDown();
       }
       </script>
+
+      <div align="center" id='footer'>Powered by <a href='http://crudbooster.com'>CRUDBooster</a></div>
   </body>
 </html>

@@ -792,7 +792,7 @@ class AdminController extends Controller {
 			Session::put('admin_id_companies',$users->id_cms_companies);
 			Session::put('admin_is_superadmin',$priv->is_superadmin);
 			Session::put('admin_name',$users->name);	
-			Session::put('admin_photo',asset($users->photo));
+			Session::put('admin_photo',asset('uploads/'.$users->photo));
 			Session::put("admin_privileges",$users->id_cms_privileges);
 			Session::put('admin_privileges_name',$priv->name);	
 			Session::put('admin_lock',0);

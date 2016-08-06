@@ -78,7 +78,7 @@ return [
 	|
 	*/
 
-	'key' => env('APP_KEY', 'CROCODICHEBAT'),
+	'key' => env('APP_KEY', 'CRUDBOOSTER.COM'),
 
 	'cipher' => MCRYPT_RIJNDAEL_128,
 
