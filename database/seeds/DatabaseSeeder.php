@@ -223,7 +223,7 @@ class Cms_modulsSeeder extends Seeder {
         	'icon'=>'fa fa-bars',
         	'path'=>'admin/api_management',
         	'table_name'=>'cms_apicustom',
-        	'controller'=>'ApiGeneratorController',
+        	'controller'=>'ApiCustomController',
         	'sql_where'=>'','sql_orderby'=>'',
         	'sorting'=>1,
         	'limit_data'=>NULL,

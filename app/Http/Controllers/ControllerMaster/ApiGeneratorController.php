@@ -98,21 +98,12 @@ class ApiGeneratorController extends Controller {
 			$s = explode(' as ',Request::input('sub_query_1'));
 			$kolom[] = $s[1];
 		}
-		if(Request::input('sub_query_2')) {
-			$s = explode(' as ',Request::input('sub_query_2'));
-			$kolom[] = $s[1];
-		}
-		if(Request::input('sub_query_3')) {
-			$s = explode(' as ',Request::input('sub_query_3'));
-			$kolom[] = $s[1];
-		}
+
 
 		$a['tabel'] = Request::input('tabel');
 		$a['aksi'] = Request::input('aksi');
 		$a['kolom'] = implode(',',Request::input('kolom'));
 		$a['sub_query_1'] = Request::input('sub_query_1');
-		$a['sub_query_2'] = Request::input('sub_query_2');
-		$a['sub_query_3'] = Request::input('sub_query_3');
 		$a['sql_where'] = Request::input('sql_where');
 		$a['nama'] = Request::input('nama');
 		$a['keterangan'] = Request::input('keterangan');
