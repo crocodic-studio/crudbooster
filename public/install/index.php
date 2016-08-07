@@ -156,7 +156,7 @@
             $conf = load_env();
           ?>
 
-          <form method='post' id='form-db' action='execute.php?type=save_db'>
+          <form method='post' id='form-db' action='./execute.php?type=save_db'>
             <table class='table table-striped table-bordered'>
             <tbody>
               <tr><td><strong>Hostname</strong></td><td><input required type='text' class='form-control' value='<?php echo @$conf['DB_HOST']?>' name='DB_HOST'/></td></tr>              
@@ -217,7 +217,7 @@
               $(".status_table").each(function() {
                 var table = $(this).attr('data-table');
                 var h = $(this);
-                $.post("execute.php?type=check_table",{table:table},function(resp) {
+                $.post("./execute.php?type=check_table",{table:table},function(resp) {
                     if(resp==1) {
                       h.html("<span class='label label-success'>ALREADY</span>");
                     }else{
