@@ -193,8 +193,19 @@ class Admin'.$controllername.' extends Controller {
             continue;
         }
 
-            $typedata = DB::connection()->getDoctrineColumn($table, $field)->getType()->getName();
+            try{
+                 $typedata = DB::connection()->getDoctrineColumn($table, $field)->getType()->getName();
+            }
+            catch(\Exception $e){
+                $the_field = DB::select( DB::raw('SHOW COLUMNS FROM '.$table.' WHERE Field = \''.$field.'\''))[0];
+                $col_type = $the_field->Type;
+                preg_match( '/([a-z]+)\((.+)\)/', $col_type, $match );
+                $col_type = $typedata =  $match[1];
+                $col_type_legth = str_replace("'", "\"", $match[2]);
+            }
+
             $typedata = strtolower($typedata);
+
             switch($typedata) {
                 default:
                 case 'varchar':
@@ -212,6 +223,10 @@ class Admin'.$controllername.' extends Controller {
                 case 'timestamp':
                 $type = 'datetime';
                 break;
+                case 'enum':
+                $add_attr = ',"dataenum"=>array('.$col_type_legth.')';
+                $type = "select";
+                break;
             }
 
         $datatable = '';
@@ -222,7 +237,6 @@ class Admin'.$controllername.' extends Controller {
             $datatable = ',"datatable"=>"'.$jointable.','.$joinname.'"';
             $type = 'select';
         }
-
         
         if(in_array($field, $image_candidate)) {
             $type = 'upload';
