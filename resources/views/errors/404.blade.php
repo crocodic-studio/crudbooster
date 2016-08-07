@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>404 NOT FOUND</title>
+    <title>404 PAGE NOT FOUND</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <!-- Bootstrap 3.3.2 -->
     <link href="{{asset('/assets/adminlte/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
@@ -35,17 +35,16 @@
           <div class="error-page">
             <h2 class="headline text-yellow"> 404</h2>
             <div class="error-content">
-              <h3><i class="fa fa-warning text-yellow"></i> Oops! Halaman Tidak Ditemukan</h3>
-              <p>
-                Kita tidak dapat mencari halaman yang kamu cari.
-                Namun, kamu tetap bisa kembali <a href='{{url("/")}}'>klik disini</a> untuk kembali ke halaman utama.
+              <h3><i class="fa fa-warning text-yellow"></i> Oops! Page Not Found</h3>
+              <p>                
+                We are unable search the page that you are looking for.<br/>
+                But, you are stiil able to go back just <a href='{{url("/")}}'>click here</a> to go homepage.                
               </p>
-              <p>Tips : <br/>
-                * Perhatikan URL yang kamu tuju sudah benar tidak typo<br/>
-                * Perhatikan huruf besar dan kecil karena sangat berpengaruh<br/>
-                * Kemungkinan bisa saja halaman ini sudah dihapus oleh Admin<br/>
-                * Silahkan kembali ke halaman sebelum ini, klik back pada browser<br/>
-
+              <p>Tips : <br/>                
+                * Please make sure the URL is correct<br/>
+                * Please make sure the font capitalizing is correct because case sensitive<br/>
+                * Maybe the page that you are looking for has been deleted by Admin<br/>
+                * You can go back by click Back Button at browser<br/>
               </p>
             </div><!-- /.error-content -->
           </div><!-- /.error-page -->

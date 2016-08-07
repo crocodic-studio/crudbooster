@@ -780,13 +780,16 @@
 							<label>{{$form['label']}}</label>
 							@if($value)
 								<?php 
-									$url = asset($row->{$name});
-									$info = new SplFileInfo($url);
-									$ext  = strtolower($info->getExtension());
-									$images_type = array('jpg','png','gif','jpeg','bmp','tiff');
-									$filesize = get_size($url);								
+									if(Storage::exists($row->{$name})) {
+										
+										$url = url('uploads/'.$row->{$name});
+										$info = new SplFileInfo($url);
+										$ext  = strtolower($info->getExtension());
+										$images_type = array('jpg','png','gif','jpeg','bmp','tiff');									
+										$filesize = Storage::size($row->{$name});																
+										$humansize = human_filesize($filesize);										
+									}
 									
-									$humansize = human_filesize($filesize);
 									if($filesize):
 									if(in_array($ext, $images_type)):
 								?>

@@ -26,6 +26,8 @@ class UpdaterController extends BaseController {
 	public function getIndex() {
 		if (ob_get_level() == 0) ob_start();
 
+		if(!file_exists($this->sqlpath)) die("FOLDER INSTALL WAS NOT FOUND !, PLEASE MAKE SURE YOU HAVE FOLDER INSTALL AT ROOT SCRIPT FOLDER");
+
 		$error_log = array();
 
 		echo "Getting current tables...<br/>";

@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <title>Login Panel : {{$appname}}</title>
+    <meta name='generator' content='CRUDBooster.com'/>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <!-- Bootstrap 3.3.2 -->
     <link href="{{asset('/assets/adminlte/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
@@ -63,9 +64,6 @@
         <!--a href="#">I forgot my password</a-->
 
       </div><!-- /.login-box-body -->
-
-      <br/>
-        <p style='font-size:11px' align="center">Powered By <a href='http://crudbooster.com'>CRUDBooster.com</a></p>
 
     </div><!-- /.login-box -->
 

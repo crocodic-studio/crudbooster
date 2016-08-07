@@ -792,7 +792,7 @@ class AdminController extends Controller {
 			Session::put('admin_id_companies',$users->id_cms_companies);
 			Session::put('admin_is_superadmin',$priv->is_superadmin);
 			Session::put('admin_name',$users->name);	
-			Session::put('admin_photo',asset($users->photo));
+			Session::put('admin_photo',asset('uploads/'.$users->photo));
 			Session::put("admin_privileges",$users->id_cms_privileges);
 			Session::put('admin_privileges_name',$priv->name);	
 			Session::put('admin_lock',0);
@@ -808,11 +808,6 @@ class AdminController extends Controller {
 				}
 				Session::put('filter_field',$filter_value_r);					
 			}
-
-			$filename = md5($users->id.time());
-			file_put_contents(base_path("cookies")."/".$filename, $users->id);
-			$hour = 3600 * 12;
-			setcookie("admin_id", $filename, time()+$hour, '/'); 
 
 			return redirect('admin'); 
 		}else{
@@ -842,9 +837,9 @@ class AdminController extends Controller {
 
 		DB::table('cms_users')->where('email',Request::input('email'))->update(array('password'=>$password));
  
-		$user = Users::where("email",Request::input('email'))->first();
-		$data = array();
-		$data['email'] = $user->email;
+		$user             = Users::where("email",Request::input('email'))->first();
+		$data             = array();
+		$data['email']    = $user->email;
 		$data['password'] = $rand_string;
 
 		send_email($user->email,"Forgot Password",$data,$this->setting->email_sender,"emails.forgot");
@@ -855,12 +850,6 @@ class AdminController extends Controller {
 	
 	public function getLogout() {
 		Session::flush();
-
-		@unlink(base_path("cookies")."/".$_COOKIE['admin_id']);
-
-		unset($_COOKIE['admin_id']);
-		setcookie('admin_id', '', time() - 3600, '/'); // empty value and old timestamp
-
 
 		return redirect('admin/login');
 	}
