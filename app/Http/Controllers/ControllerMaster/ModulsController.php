@@ -119,7 +119,7 @@ class ModulsController extends Controller {
 
 	function hook_after_delete($id) {
 		$modul = DB::table('cms_moduls')->where('id',$id)->first();
-		@unlink('app/Http/Controllers/'.$modul->controller.'.php');		
+		@unlink(base_path('app/Http/Controllers/'.$modul->controller.'.php'));		
 	}
 
 	public function getEditPhp($id_cms_moduls) {
@@ -128,10 +128,10 @@ class ModulsController extends Controller {
 		$data['page_title'] = "Edit PHP Controller : $moduls->controller";
 		$data['page_menu']  = Route::getCurrentRoute()->getActionName();
 
-		if(file_exists("app/Http/Controllers/".$moduls->controller.".php")) {
-			$data['content_php'] = file_get_contents("app/Http/Controllers/".$moduls->controller.".php");	
-		}elseif (file_exists("app/Http/Controllers/ControllerMaster/".$moduls->controller.".php")) {
-			$data['content_php'] = file_get_contents("app/Http/Controllers/ControllerMaster/".$moduls->controller.".php");
+		if(file_exists(base_path("app/Http/Controllers/".$moduls->controller.".php"))) {
+			$data['content_php'] = file_get_contents(base_path("app/Http/Controllers/".$moduls->controller.".php"));	
+		}elseif (file_exists(base_path("app/Http/Controllers/ControllerMaster/".$moduls->controller.".php"))) {
+			$data['content_php'] = file_get_contents(base_path("app/Http/Controllers/ControllerMaster/".$moduls->controller.".php"));
 		}else{
 			$data['content_php'] = '';
 		}
@@ -143,14 +143,14 @@ class ModulsController extends Controller {
 		$content = Request::input("content_php");
 		$moduls = DB::table('cms_moduls')->where('id',$id_cms_moduls)->first();
 
-		if(file_exists("app/Http/Controllers/".$moduls->controller.".php")) {
-			if(file_put_contents("app/Http/Controllers/".$moduls->controller.".php",$content)) echo 1;
+		if(file_exists(base_path("app/Http/Controllers/".$moduls->controller.".php"))) {
+			if(file_put_contents(base_path("app/Http/Controllers/".$moduls->controller.".php"),$content)) echo 1;
 			else echo 0;
-		}elseif (file_exists("app/Http/Controllers/ControllerMaster/".$moduls->controller.".php")) {
-			if(file_put_contents("app/Http/Controllers/ControllerMaster/".$moduls->controller.".php",$content)) echo 1;
+		}elseif (file_exists(base_path("app/Http/Controllers/ControllerMaster/".$moduls->controller.".php"))) {
+			if(file_put_contents(base_path("app/Http/Controllers/ControllerMaster/".$moduls->controller.".php"),$content)) echo 1;
 			else echo 0;
 		}else{
-			if(file_put_contents("app/Http/Controllers/".$moduls->controller.".php",$content)) echo 1;
+			if(file_put_contents(base_path("app/Http/Controllers/".$moduls->controller.".php"),$content)) echo 1;
 			else echo 0;
 		}
 	}
