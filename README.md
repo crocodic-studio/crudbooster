@@ -37,7 +37,7 @@ All of issues and new feature request, please create an issue or pull request at
 ## UPDATE
 Please stay to check, if you have fork CRUDBooster, please always update.
 
-## CREDIT
+## CREDITS
 1. Laravel Export HTML to Excel by [Maatwebsite](https://github.com/Maatwebsite/Laravel-Excel)
 2. Laravel DOM PDF by [Barryvdh](https://github.com/barryvdh/laravel-dompdf)
 3. Admin Theme by [AdminLTE Almsaeed Studio](https://almsaeedstudio.com/preview)
