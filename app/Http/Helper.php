@@ -100,8 +100,8 @@ function get_namefield_table($coloms) {
 function is_exists_controller($table) {
     $controllername = ucwords(str_replace('_',' ',$table));
     $controllername = str_replace(' ','',$controllername).'Controller';
-    $path = "app/Http/Controllers/";
-    $path2 = "app/Http/Controllers/ControllerMaster/";
+    $path = base_path("app/Http/Controllers/");
+    $path2 = base_path("app/Http/Controllers/ControllerMaster/");
     if(file_exists($path.'Admin'.$controllername.'.php') || file_exists($path2.'Admin'.$controllername.'.php') || file_exists($path2.$controllername.'.php')) {
         return true;
     }else{
@@ -120,7 +120,7 @@ function generate_controller($table,$name='') {
             $controllername = str_replace(' ','',$controllername).'Controller';
         }
 
-        $path = "app/Http/Controllers/";
+        $path = base_path("app/Http/Controllers/");
         $image_candidate = array("image","picture","file","foto","gambar","photo","thumb","thumbnail");
 
         if(file_exists($path.'Admin'.$controllername.'.php') || file_exists($path.'ControllerMaster/Admin'.$controllername.'.php')) {
