@@ -21,7 +21,7 @@ Please following these instructions for fresh installation :
 1. Download from github
 2. Create folder in your htdocs, and extract
 3. Create an empty database at your PHPMYADMIN
-4. Setting database configuration at file __.env__
+4. Setting database configuration at file **.env**
 5. Open Command Prompt at your project, Run "php artisan migrate --seed"
 6. Run "php artisan serve"
 7. Try go to "http://localhost:8000/admin"
