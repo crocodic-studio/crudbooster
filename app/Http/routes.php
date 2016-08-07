@@ -29,6 +29,18 @@ foreach($controllers as $v) {
 /* SETTING ROUTER WITH CSRF */
 $router->group(['middleware' => 'csrf'], function($router)
 {	
+
+	/* YOUR OWN ROUTER IF ANY */
+
+
+
+
+
+	
+
+
+	/* END YOUR OWN ROUTER */
+
 	//Image Reader 
 	Route::get('uploads/{folder}/{filename}', function ($folder,$filename)
 	{
@@ -66,9 +78,6 @@ $router->group(['middleware' => 'csrf'], function($router)
 	/* END */	
 
 	//No Need Edit Bellow Router
-    //Router for updater/installer
-	Route::controller('/updater', 'UpdaterController');  
-
 	//Router for admin dashboard,login,logout,etc
 	Route::controller('/admin','AdminController');	
 
@@ -77,7 +86,4 @@ $router->group(['middleware' => 'csrf'], function($router)
 
 	//Router for front end
 	Route::controller('/','FrontController');
-
-
-
 });
