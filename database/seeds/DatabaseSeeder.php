@@ -46,7 +46,7 @@ class Cms_settingsSeeder extends Seeder {
         ['created_at'=>date('Y-m-d H:i:s'),'name'=>'smtp_password','content'=>'','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
         ['created_at'=>date('Y-m-d H:i:s'),'name'=>'logo','content'=>'','content_input_type'=>'upload','dataenum'=>NULL,'helper'=>NULL],
         ['created_at'=>date('Y-m-d H:i:s'),'name'=>'favicon','content'=>'','content_input_type'=>'upload','dataenum'=>NULL,'helper'=>NULL],
-        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'api_debug_mode','content'=>'','content_input_type'=>'upload','dataenum'=>NULL,'helper'=>NULL],        
+        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'api_debug_mode','content'=>'true','content_input_type'=>'select','dataenum'=>'true,false','helper'=>NULL],        
         ['created_at'=>date('Y-m-d H:i:s'),'name'=>'google_api_key','content'=>'','content_input_type'=>'upload','dataenum'=>NULL,'helper'=>NULL]
         ]);
     }

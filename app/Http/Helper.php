@@ -317,64 +317,6 @@ function get_string_between($string, $start, $end){
     return substr($string, $ini, $len);
 }
 
-function SplitSQL($file, $delimiter = ';')
-{
-    set_time_limit(0);
-
-    $result = array();
-
-    $response = array();
-
-    $file = fopen($file, 'r');
-
-    $query = array();
-
-    while (feof($file) === false)
-    {
-        $query[] = fgets($file);
-
-        if (preg_match('~' . preg_quote($delimiter, '~') . '\s*$~iS', end($query)) === 1)
-        {
-            $query = trim(implode('', $query));
-
-            if(substr($query, 0, 2)!="/*") {
-
-                $data = array(); 
-
-                if(substr($query, 0,12)=='CREATE TABLE') {
-                    $data['type'] = 'CREATE_TABLE';             
-                    $data['table'] = $table = get_string_between($query,"CREATE TABLE `","` (");
-                    $response['tables'][] = $data['table'];
-                    $response['tables_create'][$table] = $query;
-                }elseif (substr($query, 0,11)=='INSERT INTO') {
-                    $data['type'] = 'INSERT_INTO';
-                    $data['table'] = $table = get_string_between($query,"INSERT INTO `","` (");
-                    $response['tables_insert'][$table][] = $query;
-                }elseif (substr($query, 0, 11)=='ALTER TABLE') {
-                    $data['type'] = 'ALTER_TABLE';
-                    $data['table'] = $table = get_string_between($query,"ALTER TABLE `","`");
-                    $response['tables_alter'][$table][] = $query;
-                }
-
-                $data['query'] = $query;
-
-                $result[] = $data;
-            }
-
-        }
-
-        if (is_string($query) === true)
-        {
-            $query = array();
-        }
-    }
-    fclose($file);
-
-    $response['result'] = $result;
-
-    return $response;
-}
-
 function super_unique($array,$key)
 {
    $temp_array = array();
