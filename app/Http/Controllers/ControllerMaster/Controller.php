@@ -874,7 +874,12 @@ abstract class Controller extends BaseController {
 		}
 
 		$this->validation();	
-		$this->input_assignment();	
+		$this->input_assignment();
+
+		if (\Schema::hasColumn($this->table, 'created_at')) 
+		{
+		    $this->arr['created_at'] = date('Y-m-d H:i:s');
+		}	
 
 		$this->hook_before_add($this->arr);		
 
@@ -944,6 +949,11 @@ abstract class Controller extends BaseController {
 		
 		$this->validation();
 		$this->input_assignment($id);
+
+		if (\Schema::hasColumn($this->table, 'updated_at')) 
+		{
+		    $this->arr['updated_at'] = date('Y-m-d H:i:s');
+		}
 
 		$this->hook_before_edit($this->arr,$id);
 		
