@@ -1,7 +1,7 @@
 # CRUDBOOSTER - Laravel CRUD Generator
 [![AUR](https://img.shields.io/aur/license/yaourt.svg?maxAge=2592000?style=flat-square)]()
 
-> Laravel + CRUD Generator Package, Make a Web Application Just In Minutes, With Less Code and Less Step !
+> Laravel CRUD Generator, Make a Web Application Just In Minutes, Even With Less Code and fewer Steps !
 
 [<img src="http://crudbooster.com/CrudBooster_Banner.png"/>](http://crudbooster.com)
 
@@ -14,28 +14,28 @@ Currently Based on Laravel 5.0
 - OpenSSL PHP Extension
 - Mbstring PHP Extension
 - Tokenizer PHP Extension
-- MySQL Database Server
 
 ## Installation
-Please following these instructions : 
+Please following these instructions for fresh installation : 
 ```
 1. Download from github
 2. Create folder in your htdocs, and extract
-3. Create a blank database at your PHPMYADMIN
-4. Go to http://localhost/YourApp/public/install/index.php ,or if you used "php artisan serve", then url should be "http://localhost:8000/install/index.php"
-5. Follow the wizard installation until finish.
-6. After installation is finish, don't forget to rename folder install to other name 
-7. Done
+3. Create an empty database at your PHPMYADMIN
+4. Setting database configuration at file __.env__
+5. Open Command Prompt at your project, Run "php artisan migrate --seed"
+6. Run "php artisan serve"
+7. Try go to "http://localhost:8000/admin"
+8. Login with default login "u : admin@crudbooster.com, p : 123456"
 ```
 
 ## DOCUMENTATION
 The complete documentation can be found at : [http://crudbooster.com/page/documentation](http://crudbooster.com/page/documentation)
 
-## SUPPORT 
-All of issues and new feature request, please create an issue at GitHub, please do not send an email or Private Message to us.
+## SUPPORT AND CONTRIBUTION
+All of issues and new feature request, please create an issue or pull request at GitHub, please do not send an email or Private Message to us.
 
 ## UPDATE
-Please stay to check, if you have fork CRUDBooster, please don't forget to pull request so you can keep the latest version.
+Please stay to check, if you have fork CRUDBooster, please always update.
 
 ## CREDIT
 1. Laravel Export HTML to Excel by [Maatwebsite](https://github.com/Maatwebsite/Laravel-Excel)
