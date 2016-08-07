@@ -11,12 +11,19 @@ use Validator;
 class AdminCmsPostsController extends Controller {
 
     public function __construct() {
-        $this->table         = "cms_posts";
-        $this->primkey       = "id";
-        $this->titlefield    = "title";
-        $this->theme         = "admin.default"; 
-        $this->prefixroute   = "admin/";
-        $this->index_orderby = ["id"=>"desc"];
+		$this->table              = "cms_posts";
+		$this->primkey            = "id";
+		$this->titlefield         = "title";
+		$this->theme              = "admin.default"; 
+		$this->prefixroute        = "admin/";
+		$this->index_orderby      = ["id"=>"desc"];
+		$this->button_show_data   = true;
+		$this->button_reload_data = true;
+		$this->button_new_data    = true;
+		$this->button_delete_data = true;
+		$this->button_sort_data   = true;
+		$this->button_filter_data = true;
+		$this->button_export_data = true;
 
         $this->col = array();
         $this->col[] = array("label"=>"Title","field"=>"title" );
@@ -31,16 +38,21 @@ class AdminCmsPostsController extends Controller {
 		$this->form[] = array("label"=>"Content","name"=>"content","type"=>"wysiwyg"  );
 		$this->form[] = array("label"=>"Author","name"=>"id_cms_users","type"=>"select" ,"datatable"=>"cms_users,name" );		
 		$this->form[] = array("label"=>"Category","name"=>"id_cms_posts_categories","type"=>"select" ,"datatable"=>"cms_posts_categories,name" );
-                 
-        
-        //You may use this bellow array to add relational data to next tab 
-        $this->form_tab = array();
 
-        //You may use this bellow array to add relational data to next area or element, i mean under the existing form 
-        $this->form_sub = array();
-
-        //You may use this bellow array to add some or more html that you want under the existing form 
-        $this->form_add = array();                                                                                      
+		//You may use this bellow array to add alert message to this module at overheader
+		$this->alert        = array();
+		
+		//You may use this bellow array to add more your own header button 
+		$this->index_button = array();		                 
+		
+		//You may use this bellow array to add relational data to next tab 
+		$this->form_tab     = array();
+		
+		//You may use this bellow array to add relational data to next area or element, i mean under the existing form 
+		$this->form_sub     = array();
+		
+		//You may use this bellow array to add some or more html that you want under the existing form 
+		$this->form_add     = array();                                                                                      
         
 
 

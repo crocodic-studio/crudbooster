@@ -144,12 +144,19 @@ use Validator;
 class Admin'.$controllername.' extends Controller {
 
     public function __construct() {
-        $this->table         = "'.$table.'";
-        $this->primkey       = "id";
-        $this->titlefield    = "'.$name_col.'";
-        $this->theme         = "admin.default"; 
-        $this->prefixroute   = "admin/";
-        $this->index_orderby = ["id"=>"desc"];
+        $this->table              = "'.$table.'";
+        $this->primkey            = "id";
+        $this->titlefield         = "'.$name_col.'";
+        $this->theme              = "admin.default"; 
+        $this->prefixroute        = "admin/";
+        $this->index_orderby      = ["id"=>"desc"];
+        $this->button_show_data   = true;
+        $this->button_reload_data = true;
+        $this->button_new_data    = true;
+        $this->button_delete_data = true;
+        $this->button_sort_data   = true;
+        $this->button_filter_data = true;
+        $this->button_export_data = true;
 
         $this->col = array();
 ';
@@ -232,16 +239,22 @@ class Admin'.$controllername.' extends Controller {
         $php .= "\t\t".'$this->form[] = array("label"=>"'.$label.'","name"=>"'.$field.'","type"=>"'.$type.'" '.$datatable.' '.$add_attr.' );'."\n";   
         }
 
-$php .= '                 
+$php .= '     
+        
+        //You may use this bellow array to add alert message to this module at overheader
+        $this->alert        = array();
+        
+        //You may use this bellow array to add more your own header button 
+        $this->index_button = array();            
         
         //You may use this bellow array to add relational data to next tab 
-        $this->form_tab = array();
-
+        $this->form_tab     = array();
+        
         //You may use this bellow array to add relational data to next area or element, i mean under the existing form 
-        $this->form_sub = array();
-
+        $this->form_sub     = array();
+        
         //You may use this bellow array to add some or more html that you want under the existing form 
-        $this->form_add = array();                                                                                      
+        $this->form_add     = array();                                                                                      
         
 
 
@@ -256,6 +269,8 @@ $php .= '
     }
     public function hook_html_index(&$html_contents) {
         //Use this hook for manipulate result of html in index 
+        //To get html, $html_contents["html"] 
+        //To get data, $html_contents["data"]
 
     }
     public function hook_before_add(&$arr) {
