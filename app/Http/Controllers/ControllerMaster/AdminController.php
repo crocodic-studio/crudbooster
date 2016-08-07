@@ -2,7 +2,6 @@
 error_reporting(E_ALL ^ E_NOTICE);
 use Request;
 use Session;
-use App\Users;
 use Validator;
 use DB;
 use Schema;
@@ -746,8 +745,8 @@ class AdminController extends Controller {
 
 	public function postUnlockScreen() {
 		$id = Session::get('admin_id');
-		$password = Request::input('password');
-		$users 		= Users::find($id); 		
+		$password = Request::input('password');		
+		$users 		= DB::table('cms_users')->where('id',$id)->first();		
 
 		if(\Hash::check($password,$users->password)) {
 			Session::put('admin_lock',0);	
@@ -762,7 +761,7 @@ class AdminController extends Controller {
 		if(Session::get('admin_id')) return redirect('admin');
 		if(Session::get('admin_lock')) return redirect('admin/lockscreen');
 
-		$data['page_title'] = "<b>Halaman</b> Login";
+		$data['page_title'] = "<b>Login</b> Page";
 		return view('admin.login',$data);
 	}
 
@@ -837,7 +836,7 @@ class AdminController extends Controller {
 
 		DB::table('cms_users')->where('email',Request::input('email'))->update(array('password'=>$password));
  
-		$user             = Users::where("email",Request::input('email'))->first();
+		$user             = DB::table('cms_users')->where("email",Request::input('email'))->first();
 		$data             = array();
 		$data['email']    = $user->email;
 		$data['password'] = $rand_string;
