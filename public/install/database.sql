@@ -80,6 +80,8 @@ INSERT INTO `cms_logs` (`id`, `created_at`, `ipaddress`, `useragent`, `url`, `de
 INSERT INTO `cms_logs` (`id`, `created_at`, `ipaddress`, `useragent`, `url`, `description`, `id_cms_users`) VALUES(23, '2016-08-06 22:10:19', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36', 'http://localhost:8000/admin/users/delete-image', 'Delete image for Administrator at Users', 13);
 INSERT INTO `cms_logs` (`id`, `created_at`, `ipaddress`, `useragent`, `url`, `description`, `id_cms_users`) VALUES(24, '2016-08-06 22:11:36', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36', 'http://localhost:8000/admin/users/edit-save/13', 'Update data Administrator at Users', 13);
 INSERT INTO `cms_logs` (`id`, `created_at`, `ipaddress`, `useragent`, `url`, `description`, `id_cms_users`) VALUES(25, '2016-08-06 22:25:37', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36', 'http://localhost:8000/admin/companies/edit-save/1', 'Update data CRUDBooster at Companies', 13);
+INSERT INTO `cms_logs` (`id`, `created_at`, `ipaddress`, `useragent`, `url`, `description`, `id_cms_users`) VALUES(26, '2016-08-07 10:57:27', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36', 'http://localhost:8000/admin/settings/delete/14', 'Delete data upload_mode at Settings', 13);
+INSERT INTO `cms_logs` (`id`, `created_at`, `ipaddress`, `useragent`, `url`, `description`, `id_cms_users`) VALUES(27, '2016-08-07 10:57:32', '::1', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36', 'http://localhost:8000/admin/settings/delete/13', 'Delete data upload_path at Settings', 13);
 
 CREATE TABLE `cms_menus` (
   `id` int(11) NOT NULL,
@@ -245,8 +247,6 @@ CREATE TABLE `cms_settings` (
 
 INSERT INTO `cms_settings` (`id`, `created_at`, `updated_at`, `name`, `content`, `content_input_type`, `dataenum`, `helper`) VALUES(1, '2016-06-13 12:34:16', '2016-03-18 11:53:07', 'appname', 'CRUDBooster', 'text', NULL, NULL);
 INSERT INTO `cms_settings` (`id`, `created_at`, `updated_at`, `name`, `content`, `content_input_type`, `dataenum`, `helper`) VALUES(2, '2016-07-27 09:52:37', '2016-02-25 11:34:24', 'email_sender', 'support@crudbooster.com', 'text', NULL, NULL);
-INSERT INTO `cms_settings` (`id`, `created_at`, `updated_at`, `name`, `content`, `content_input_type`, `dataenum`, `helper`) VALUES(13, '2016-06-13 12:34:25', '0000-00-00 00:00:00', 'upload_path', 'uploads/', 'text', NULL, NULL);
-INSERT INTO `cms_settings` (`id`, `created_at`, `updated_at`, `name`, `content`, `content_input_type`, `dataenum`, `helper`) VALUES(14, '2016-06-13 12:34:35', '0000-00-00 00:00:00', 'upload_mode', 'file', 'text', NULL, 'file or database');
 INSERT INTO `cms_settings` (`id`, `created_at`, `updated_at`, `name`, `content`, `content_input_type`, `dataenum`, `helper`) VALUES(18, '2016-06-13 12:34:51', '0000-00-00 00:00:00', 'app_lockscreen_timeout', '60', 'text', NULL, 'in number of seconds');
 INSERT INTO `cms_settings` (`id`, `created_at`, `updated_at`, `name`, `content`, `content_input_type`, `dataenum`, `helper`) VALUES(19, '2016-06-13 12:35:12', '0000-00-00 00:00:00', 'default_paper_size', 'Legal', 'text', NULL, 'Paper Size ex : A4, Legal, Letter');
 INSERT INTO `cms_settings` (`id`, `created_at`, `updated_at`, `name`, `content`, `content_input_type`, `dataenum`, `helper`) VALUES(20, '2016-07-27 09:51:06', '0000-00-00 00:00:00', 'smtp_host', '', 'text', NULL, 'host of smtp');
@@ -348,7 +348,7 @@ ALTER TABLE `cms_dashboard`
 ALTER TABLE `cms_filemanager`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `cms_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 ALTER TABLE `cms_menus`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 ALTER TABLE `cms_menus_groups`
