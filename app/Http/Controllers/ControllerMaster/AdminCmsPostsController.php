@@ -39,19 +39,22 @@ class AdminCmsPostsController extends Controller {
 		$this->form[] = array("label"=>"Author","name"=>"id_cms_users","type"=>"select" ,"datatable"=>"cms_users,name" );		
 		$this->form[] = array("label"=>"Category","name"=>"id_cms_posts_categories","type"=>"select" ,"datatable"=>"cms_posts_categories,name" );
 
-		//You may use this bellow array to add alert message to this module at overheader
+		// You may use this bellow array to add alert message to this module at overheader		
 		$this->alert        = array();
 		
-		//You may use this bellow array to add more your own header button 
-		$this->index_button = array();		                 
+		// You may use this bellow array to add more your own header button 		
+		$this->index_button = array();		 		             
 		
-		//You may use this bellow array to add relational data to next tab 
+		// You may use this bellow array to add more your own row button in addition to View,Edit,Delete		
+		$this->addaction    = array();
+
+		// You may use this bellow array to add relational data to next tab 
 		$this->form_tab     = array();
 		
-		//You may use this bellow array to add relational data to next area or element, i mean under the existing form 
+		// You may use this bellow array to add relational data to next area or element, i mean under the existing form 
 		$this->form_sub     = array();
 		
-		//You may use this bellow array to add some or more html that you want under the existing form 
+		// You may use this bellow array to add some or more html that you want under the existing form 
 		$this->form_add     = array();                                                                                      
         
 

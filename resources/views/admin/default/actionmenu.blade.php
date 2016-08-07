@@ -1,41 +1,66 @@
 <?php 
-$parameters = Request::all();
-$build_query = urldecode(http_build_query($parameters));
-$build_query = (Request::all())?"?".$build_query:"";
-$build_query_add = str_replace(array("&detail=1","detail=1"),"",$build_query);
+	$parameters = Request::all();
+	$build_query = urldecode(http_build_query($parameters));
+	$build_query = (Request::all())?"?".$build_query:"";
+	$build_query_add = str_replace(array("&detail=1","detail=1"),"",$build_query);
 ?>
+
+@if($button_show_data)
 <a href="{{ url($dashboard).$build_query }}" id='btn_show_data' class="btn btn-app">
 	<i class="fa fa-bars"></i> Show Data
 </a>
+@endif
+
+@if($button_reload_data)
 <a href="{{ Request::url().$build_query }}" id='btn_reload_data' title='Reload Data' class="btn btn-app btn-reload-table ajax-button">
 	<i class="fa fa-refresh"></i> Reload Data
 </a>
-@if($priv->is_create)
+@endif
+
+@if($button_new_data && $priv->is_create)
 <a href="{{ url($mainpath.'/add').$build_query_add }}" id='btn_add_new_data' class="btn btn-app">
 	<i class="fa fa-plus"></i> Add New Data
 </a>
 @endif
 
-@if($priv->is_delete)
+@if($button_delete_data && $priv->is_delete)
 	<a href="javascript:void(0)" id='btn_delete_selected' class="disabled btn btn-app btn-delete-selected"><i class="fa fa-trash"></i> Delete Selected</a>
 @endif
 
+<!--YOUR OWN HEADER BUTTON-->
+@if(count($index_button))
+	@foreach($index_button as $ib)
+	<a href='{{$ib["url"]}}' id='{{str_slug($ib["label"])}}' class='btn btn-app'>
+		<i class='{{$ib["icon"]}}'></i> {{$ib["label"]}}
+	</a>
+	@endforeach
+@endif
+<!--END OWN HEADER BUTTON-->
+
 @if($columns)
 <div class='pull-right'>
-<a href="javascript:void(0)" id='btn_sort_data' data-url-parameter='{{$build_query}}' title='Sort Data' class="btn btn-app btn-sort-data">
-	@if(Request::get('sort_column'))<span class="badge bg-yellow"><em>Sorted</em></span>@endif
-	<i class="fa fa-sort"></i> Sort Data
-</a>
 
-<a href="javascript:void(0)" id='btn_filter_data' data-url-parameter='{{$build_query}}' title='Filter By Existing Data' class="btn btn-app btn-filter-data">
-	@if(Request::get('filter_data_column'))<span class="badge bg-yellow"><em>Filtered</em></span>@endif
-	<i class="fa fa-filter"></i> Filter Data
-</a>
+	@if($button_sort_data)
+	<a href="javascript:void(0)" id='btn_sort_data' data-url-parameter='{{$build_query}}' title='Sort Data' class="btn btn-app btn-sort-data">
+		@if(Request::get('sort_column'))<span class="badge bg-yellow"><em>Sorted</em></span>@endif
+		<i class="fa fa-sort"></i> Sort Data
+	</a>
+	@endif
 
-<a href="javascript:void(0)" id='btn_export_data' data-url-parameter='{{$build_query}}' title='Export Data' class="btn btn-app btn-export-data">
-	<i class="fa fa-download"></i> Export Data
-</a>
-</div>
+	@if($button_filter_data)
+	<a href="javascript:void(0)" id='btn_filter_data' data-url-parameter='{{$build_query}}' title='Filter By Existing Data' class="btn btn-app btn-filter-data">
+		@if(Request::get('filter_data_column'))<span class="badge bg-yellow"><em>Filtered</em></span>@endif
+		<i class="fa fa-filter"></i> Filter Data
+	</a>
+	@endif
+
+	@if($button_export_data)
+	<a href="javascript:void(0)" id='btn_export_data' data-url-parameter='{{$build_query}}' title='Export Data' class="btn btn-app btn-export-data">
+		<i class="fa fa-download"></i> Export Data
+	</a>
+	@endif
+
+</div><!--END PULL RIGHT-->
 
 <script>
 $(function(){

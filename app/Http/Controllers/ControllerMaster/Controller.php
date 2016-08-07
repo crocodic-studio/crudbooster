@@ -22,6 +22,7 @@ abstract class Controller extends BaseController {
 	use DispatchesCommands, ValidatesRequests;
 	var $data_inputan;
 	var $dashboard;
+	var $setting;
 	var $columns_table;
 	var $prefixroute;
 	var $modulname;
@@ -29,68 +30,35 @@ abstract class Controller extends BaseController {
 	var $primkey;
 	var $titlefield;
 	var $theme;
-	var $arr           = array();
-	var $col           = array();
-	var $form          = array();
-	var $form_tab      = array();
-	var $form_sub      = array();
-	var $form_add	   = array();
-	var $data          = array();
-	var $addaction     = array();
+	var $arr                = array();
+	var $col                = array();
+	var $form               = array();
+	var $form_tab           = array();
+	var $form_sub           = array();
+	var $form_add           = array();
+	var $data               = array();
+	var $addaction          = array();
 	var $index_orderby      = array();
 	var $password_candidate = array('pass','password','pin','pwd','passwd');
 	var $date_candidate     = array('date','tanggal','tgl','created_at','waktu','time');
 	var $limit              = 20;
 	var $index_return       = false;
-	var $index_table_only	= false;
-	var $table_name			= '';
+	var $index_table_only   = false;
+	var $table_name         = '';
 	var $is_sub				= false;
 	var $parent_id			= 0;
 	var $parent_field		= '';
 	var $referal			= '';
 	var $controller_name 	= '';
 	var $alert				= array();
-	var $setting;	
-
-	public function init_setting() {
-		$setting = DB::table('cms_settings')->get();
-		$setting_array = array();
-		foreach($setting as $set) {
-			$setting_array[$set->name] = $set->content;
-		}
-		$this->setting = json_decode(json_encode($setting_array));		
-	}
-
-	public function hook_before_index(&$result) {
-
-	}
-
-	public function hook_html_index(&$html_contents) {
-
-	}
-
-	public function hook_before_add(&$arr) {
-
-	}
-	public function hook_after_add($id) {
-
-	}
-	public function hook_before_edit(&$arr,$id) {
-
-	}
-	public function hook_after_edit($id) {
-
-	}
-	public function hook_before_delete($id) {
-
-	}
-	public function hook_after_delete($id) {
-
-	}
-
-	public function get_cols() {
-		return $this->col;
-	}
+	var $index_button		= array();
+	var $button_show_data   = true;
+	var $button_reload_data = true;
+	var $button_new_data    = true;
+	var $button_delete_data = true;
+	var $button_sort_data   = true;
+	var $button_filter_data = true;
+	var $button_export_data = true;			
 
 	public function constructor() {
 		
@@ -194,22 +162,19 @@ abstract class Controller extends BaseController {
 		$this->data['setting'] 	  = $this->setting;	
 		$this->data['table_name'] = $this->table_name;	
 		$this->data['alerts'] 	  = $this->alert;
+		$this->data['index_button'] 	  = $this->index_button;
+		$this->data['button_show_data']   = true;
+		$this->data['button_reload_data'] = true;
+		$this->data['button_new_data']    = true;
+		$this->data['button_delete_data'] = true;
+		$this->data['button_sort_data']   = true;
+		$this->data['button_filter_data'] = true;
+		$this->data['button_export_data'] = true;
+
         view()->share($this->data);
 	} 
 
-	public function mainpath($path='') {
-		$path = ($path)?"/$path":"";
-		$current_modul_url = str_replace("App\Http\Controllers\\","",strtok(Route::currentRouteAction(),'@') );		
-		$current_modul_url = action($current_modul_url.'@getIndex');
-		$url = trim(str_replace(url(),'',$current_modul_url),'/');
-		if(strpos($url, '/add')) {
-			return substr($url, 0, strpos($url,'/add')).$path;
-		}elseif (strpos($url, '/edit')) {
-			return substr($url, 0, strpos($url,'/edit')).$path;
-		}else{
-			return $url.$path;
-		}
-	}
+
 
 	public function getIndex()
 	{
@@ -624,9 +589,9 @@ abstract class Controller extends BaseController {
 		}
 
 		$images = ['jpg','jpeg','png','gif','bmp'];
-		$files = ['pdf','doc','docx','xls','xlsx','txt'];
-
-		$data = array();
+		$files  = ['pdf','doc','docx','xls','xlsx','txt'];
+		
+		$data   = array();
 		foreach($rows->get() as $row) {
 			$data2 = array();
 			foreach($row as $v) {
@@ -690,7 +655,7 @@ abstract class Controller extends BaseController {
 			case 'xls':
 				Excel::create($filename, function($excel) use ($response) {
 					$excel->setTitle($filename)
-					->setCreator("crocodic.com")
+					->setCreator("crudbooster.com")
 					->setCompany($this->setting->appname);					
 				    $excel->sheet($filename, function($sheet) use ($response) {
 				    	$sheet->setOrientation($paperorientation);
@@ -701,7 +666,7 @@ abstract class Controller extends BaseController {
 			case 'csv':
 				Excel::create($filename, function($excel) use ($response) {
 					$excel->setTitle($filename)
-					->setCreator("crocodic.com")
+					->setCreator("crudbooster.com")
 					->setCompany($this->setting->appname);					
 				    $excel->sheet($filename, function($sheet) use ($response) {
 				    	$sheet->setOrientation($paperorientation);
@@ -1149,6 +1114,61 @@ abstract class Controller extends BaseController {
 	public function get_primary_company($field) {
 		$row = DB::table('cms_companies')->where('is_primary',1)->first();
 		return $row->{$field};
+	}
+
+
+	public function init_setting() {
+		$setting = DB::table('cms_settings')->get();
+		$setting_array = array();
+		foreach($setting as $set) {
+			$setting_array[$set->name] = $set->content;
+		}
+		$this->setting = json_decode(json_encode($setting_array));		
+	}
+
+	public function mainpath($path='') {
+		$path = ($path)?"/$path":"";
+		$current_modul_url = str_replace("App\Http\Controllers\\","",strtok(Route::currentRouteAction(),'@') );		
+		$current_modul_url = action($current_modul_url.'@getIndex');
+		$url = trim(str_replace(url(),'',$current_modul_url),'/');
+		if(strpos($url, '/add')) {
+			return substr($url, 0, strpos($url,'/add')).$path;
+		}elseif (strpos($url, '/edit')) {
+			return substr($url, 0, strpos($url,'/edit')).$path;
+		}else{
+			return $url.$path;
+		}
+	}
+
+	public function get_cols() {
+		return $this->col;
+	}
+
+	public function hook_before_index(&$result) {
+
+	}
+
+	public function hook_html_index(&$html_contents) {
+
+	}
+
+	public function hook_before_add(&$arr) {
+
+	}
+	public function hook_after_add($id) {
+
+	}
+	public function hook_before_edit(&$arr,$id) {
+
+	}
+	public function hook_after_edit($id) {
+
+	}
+	public function hook_before_delete($id) {
+
+	}
+	public function hook_after_delete($id) {
+
 	}
  
 }
