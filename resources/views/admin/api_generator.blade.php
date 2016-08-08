@@ -56,9 +56,6 @@
                                   <option value='save_edit'>UPDATE</option>                                
                                   <option value='delete'>DELETE</option>
                                 </optgroup>
-<!--                                 <optgroup label="SPECIAL CASE">
-                                  <option value='html'>HTML (WEBVIEW)</option>
-                                </optgroup> -->
                             </select>
                         </div>
                         <div class='form-group'>
@@ -272,13 +269,12 @@
                                                 $response[] = array("field"=>"data","child"=>$columns);                                              
 
                                                 if($ac->keterangan) $keterangan = '* '.nl2br($ac->keterangan).'<br/>';
-                                                $keterangan .= "* Untuk paginasi, tambah Param URL `limit` dan `offset`.<br/>                                                        
-                                                        * Param berawalan  `search_` adalah untuk pencarian.";
+                                                $keterangan .= "* For pagination, add URL Params `limit` and `offset`.<br/>                                                        
+                                                        * The Param prefix  `search_` is for searching.";
                                               break;
                                               default:
                                               case "detail":
-                                                $param = $ac->parameter;
-                                                //$response = "api_status(int), api_message(string), ".$ac->kolom;
+                                                $param = $ac->parameter;                                                
                                                 $response = array();
                                                 $response[] = array("field"=>"api_status","type"=>"int");
                                                 $response[] = array("field"=>"api_message","type"=>"string");
@@ -290,8 +286,6 @@
                                               break;
                                               case "save_add":
                                                 $param = ($ac->parameter)?:$ac->kolom;
-                                                #$response = "api_status(int), api_message(string), id(int)";
-
                                                 $response = array();
                                                 $response[] = array("field"=>"api_status","type"=>"int");
                                                 $response[] = array("field"=>"api_message","type"=>"string");
@@ -299,13 +293,10 @@
       
 
                                                 $keterangan = ($ac->keterangan)?"* $ac->keterangan<br/>":"";
-                                                $keterangan .= "* Anda bisa menggunakan parameter `bulk` untuk add banyak dan isikan json array dengan param yang sama.";
                                               break;
                                               case "save_edit":
                                                 $param = ($ac->parameter)?:$ac->kolom;
                                                 $keterangan = ($ac->keterangan)?"* $ac->keterangan<br/>":"";
-                                                #$response = "api_status(int), api_message(string)";
-
                                                 $response = array();
                                                 $response[] = array("field"=>"api_status","type"=>"int");
                                                 $response[] = array("field"=>"api_message","type"=>"string");
@@ -314,16 +305,14 @@
                                               case "delete":
                                                 $param = ($ac->parameter)?:'id';
                                                 $keterangan = ($ac->keterangan)?"* $ac->keterangan<br/>":"";
-                                                #$response = "api_status(int), api_message(string)";
                                                 $response = array();
                                                 $response[] = array("field"=>"api_status","type"=>"int");
                                                 $response[] = array("field"=>"api_message","type"=>"string");
                                               break;
                                             }
-                                            #$param = "<span class='selected_text'>".implode("</span>, <span class='selected_text'>",explode(',',$param))."</span>";
-                                            #$response = "<span class='selected_text'>".implode("</span>, <span class='selected_text'>",explode(',',$response))."</span>";
-                                            $keterangan = ($keterangan)?:"<em class='text-muted'>Tidak ada keterangan tambahan</em>";
-                                            #$param = (trim($param))?:"<em class='text-muted'>Tidak ada parameter khusus</em>";
+
+                                            $keterangan = ($keterangan)?:"<em class='text-muted'>There is no description</em>";
+                                            
                                             $param = str_replace(",","<br/>",$param);
 
                                             $url = '/'.$ac->permalink;
@@ -333,12 +322,12 @@
                                               <td> 
                                                 <a href='javascript:void(0)' title='Api Custom' style='color:#009fe3' class='link_name_api'><?=$ac->nama;?></a> &nbsp; 
                                                 <sup>
-                                                  <a title='Hapus Api Custom ini' onclick="if(!confirm('Anda yakin ingin menghapus ?')) return false" href="{{url('admin/api_generator/delete-api/'.$ac->id)}}"><i class='fa fa-trash'></i></a>
-                                                  &nbsp; <a title='Edit API ini' href='{{action("ApiCustomController@getEdit")."/$ac->id"}}'><i class='fa fa-pencil'></i></a> 
+                                                  <a title='Delete this API' onclick="if(!confirm('Are you sure want to delete ?')) return false" href="{{url('admin/api_generator/delete-api/'.$ac->id)}}"><i class='fa fa-trash'></i></a>
+                                                  &nbsp; <a title='Edit This API' href='{{action("ApiCustomController@getEdit")."/$ac->id"}}'><i class='fa fa-pencil'></i></a> 
                                                 </sup>
                                                 <div class='detail_api' style='display:none'>
                                                     <table class='table table-bordered'>
-                                                    <tr><td width='12%'><strong>URL (POST)</strong></td><td><input title='Hanya klik dan otomatis copy to clipboard (kecuali Safari)' type='text' class='form-control' readonly onClick="this.setSelectionRange(0, this.value.length); document.execCommand('copy');" value="{{$url}}"/></td></tr>
+                                                    <tr><td width='12%'><strong>URL (POST)</strong></td><td><input title='Click and copied !' type='text' class='form-control' readonly onClick="this.setSelectionRange(0, this.value.length); document.execCommand('copy');" value="{{$url}}"/></td></tr>
                                                     <tr><td><strong>PARAMETER</strong></td><td>{!!$param!!}</td></tr>
                                                     <tr><td><strong>RESPONSE</strong></td><td>
                                                     <div class='row'>
