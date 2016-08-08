@@ -31,7 +31,8 @@ class ModulsController extends Controller {
 		$this->col[] = array("label"=>"Group","field"=>"id_cms_moduls_group","join"=>"cms_moduls_group,nama_group");		
 		$this->col[] = array("label"=>"Active","field"=>"is_active","callback_php"=>"(%field%)?'<span class=\"label label-success\">Active</span>':'<span class=\"label label-default\">Not Active</span>'");		
 
-		$this->form = array();		
+		$this->form = array();	
+		$this->form[] = ['label'=>'Basic Configuration','type'=>'header'];	
 		$this->form[] = array("label"=>"Name","name"=>"name","placeholder"=>"Enter a module name",);
 
 		$tables = DB::select('SHOW TABLES');
@@ -57,16 +58,18 @@ class ModulsController extends Controller {
 
 
 
-		$this->form[] = array("label"=>"Table Name","name"=>"table_name","type"=>"select","dataenum"=>$tables_list);	
+		$this->form[] = array("label"=>"Table Name","name"=>"table_name","type"=>"select","dataenum"=>$tables_list);
 
+
+		$this->form[] = ['label'=>'Advanced Configuration','type'=>'header',"collapsed"=>false];
 		$this->form[] = array("label"=>"Icon","name"=>"icon","type"=>"radio","dataenum"=>array(
+				"fa fa-bars|<i class='fa fa-bars'></i>",
 				"fa fa-cog|<i class='fa fa-cog'></i>",
 				"fa fa-comment|<i class='fa fa-comment'></i>",
 				"fa fa-users|<i class='fa fa-users'></i>",
 				"fa fa-file|<i class='fa fa-file'></i>",
 				"fa fa-database|<i class='fa fa-database'></i>",
-				"fa fa-bank|<i class='fa fa-bank'></i>",
-				"fa fa-bars|<i class='fa fa-bars'></i>",
+				"fa fa-bank|<i class='fa fa-bank'></i>",				
 				"fa fa-check-square|<i class='fa fa-check-square'></i>",
 				"fa fa-car|<i class='fa fa-car'></i>",
 				"fa fa-eye|<i class='fa fa-eye'></i>",
@@ -98,16 +101,15 @@ class ModulsController extends Controller {
 		$this->form[] = ['label'=>"Limit Data","name"=>"limit_data","type"=>"text","placeholder"=>"Example : 10"];
 		$this->form[] = array("label"=>"Delete Data Mode","name"=>"is_softdelete","type"=>"radio","dataenum"=>['1|Soft Delete','0|Permanent Delete'],"help"=>"Soft Delete Note : Please make sure you have column 'deleted_at' with data type TIMESTAMP","value"=>0);				
 		$this->form[] = array("label"=>"Group","name"=>"id_cms_moduls_group","required"=>"required","type"=>"select","datatable"=>"cms_moduls_group,nama_group");		
-		$this->form[] = array("label"=>"Active ?","name"=>"is_active","type"=>"select","dataenum"=>array("1|Active","0|Not Active"),"value"=>1);
+		$this->form[] = array("label"=>"Active ?","help"=>"Active to visible at sidebar menu, Not Active to unvisible","name"=>"is_active","type"=>"select","dataenum"=>array("1|Active","0|Not Active"),"value"=>1);
 		
 		$url_find_sorting = action('ModulsController@getFindLastSorting');
 		$this->form[] = array("label"=>"Sorting","name"=>"sorting","jquery"=>"
-				$('#id_cms_moduls_group').change(function() {
-					var id = $(this).val();
-					$.get('$url_find_sorting/'+id,function(resp) {
-						$('#sorting').val(resp);
-					});
-				})
+				var id = '{{Request::segment(4)}}';
+				$.get('$url_find_sorting/'+id,function(resp) {
+					resp = parseInt(resp) + 1;
+					$('#sorting').val(resp);
+				});
 			","help"=>"Integer/Number");				
 		
 
