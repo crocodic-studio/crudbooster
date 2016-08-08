@@ -109,19 +109,21 @@ function is_exists_controller($table) {
     }
 }
 
-function generate_controller($table,$name='') {
-        $exception = ['slug'];
+function generate_controller($table,$name='') { 
+        
+        $exception          = ['slug'];
+        $image_candidate    = array("image","picture","foto","gambar","photo","thumb","thumbnail");
+        $password_candidate = array("password","pass","pwd","passwrd","sandi","pin");
+
 
         $controllername = ucwords(str_replace('_',' ',$table));        
         $controllername = str_replace(' ','',$controllername).'Controller';
-
         if($name) {
             $controllername = ucwords(str_replace(array('_','-'),' ',$name));            
             $controllername = str_replace(' ','',$controllername).'Controller';
         }
 
-        $path = base_path("app/Http/Controllers/");
-        $image_candidate = array("image","picture","file","foto","gambar","photo","thumb","thumbnail");
+        $path = base_path("app/Http/Controllers/");        
 
         if(file_exists($path.'Admin'.$controllername.'.php') || file_exists($path.'ControllerMaster/Admin'.$controllername.'.php')) {
             return 'Admin'.$controllername;
@@ -183,18 +185,29 @@ class Admin'.$controllername.' extends Controller {
         $php .= "\n\t\t".'$this->form = array();'."\n";
 
         foreach($coloms as $c) {
-        $add_attr = '';
-        $label = str_replace("id_","",$c);
-        $label = ucwords(str_replace("_"," ",$label));      
-        $field = $c;
+            $add_attr = '';
+            $label = str_replace("id_","",$c);
+            $label = ucwords(str_replace("_"," ",$label));      
+            $field = $c;
 
-        if(in_array($field, $exception)) {
-            $php .= "\t\t".'$this->form[] = array("name"=>"'.$field.'","type"=>"hidden");'."\n";
-            continue;
-        }
+            if(in_array($field, $exception)) {
+                $php .= "\t\t".'$this->form[] = array("name"=>"'.$field.'","type"=>"hidden");'."\n";
+                continue;
+            }
+            
 
-            $typedata = DB::connection()->getDoctrineColumn($table, $field)->getType()->getName();
-            $typedata = strtolower($typedata);
+            try{
+                 $typedata = DB::connection()->getDoctrineColumn($table, $field)->getType()->getName();
+            }
+            catch(\Exception $e){
+                //MySQL
+                $the_field       = DB::select( DB::raw('SHOW COLUMNS FROM '.$table.' WHERE Field = \''.$field.'\''))[0];
+                $col_type        = $the_field->Type;
+                preg_match( '/([a-z]+)\((.+)\)/', $col_type, $match );
+                $typedata        = $match[1];
+                $typedata_length = $match[2];
+            }
+
             switch($typedata) {
                 default:
                 case 'varchar':
@@ -212,31 +225,41 @@ class Admin'.$controllername.' extends Controller {
                 case 'timestamp':
                 $type = 'datetime';
                 break;
+                case 'enum':
+                $type = 'radio';                
+                $add_attr = ', "dataenum"=>['.$typedata_length.']';                
+                break;
+            }
+           
+            $datatable = '';
+            if(substr($field,0,3)=='id_') {
+                $jointable = str_replace('id_','',$field);
+                $joincols = get_columns_table($jointable);
+                $joinname = get_namefield_table($joincols);
+                $datatable = ',"datatable"=>"'.$jointable.','.$joinname.'"';
+                $type = 'select';
             }
 
-        $datatable = '';
-        if(substr($field,0,3)=='id_') {
-            $jointable = str_replace('id_','',$field);
-            $joincols = get_columns_table($jointable);
-            $joinname = get_namefield_table($joincols);
-            $datatable = ',"datatable"=>"'.$jointable.','.$joinname.'"';
-            $type = 'select';
-        }
+            if(in_array($field, $password_candidate)) {
+                $type = 'password';
+                $add_attr = ', "help"=>"Please keep empty if you did not change the password"';
+            }
 
         
-        if(in_array($field, $image_candidate)) {
-            $type = 'upload';
-        }
+            if(in_array($field, $image_candidate)) {
+                $type = 'upload';
+                $add_attr = ', "help"=>"Please upload Image only, Max file size is 2 MB, File types support only : JPG, JPEG, PNG, GIF, BMP"';
+            }           
 
-        if($field == 'latitude' || $field == 'longitude') {
-            $type = 'hidden';            
-        }
+            if($field == 'latitude' || $field == 'longitude') {
+                $type = 'hidden';            
+            }
 
-        if($field == 'latitude') {
-            $add_attr .= ',"googlemaps"=>true';
-        }
+            if($field == 'latitude') {
+                $add_attr .= ',"googlemaps"=>true';
+            }
 
-        $php .= "\t\t".'$this->form[] = array("label"=>"'.$label.'","name"=>"'.$field.'","type"=>"'.$type.'" '.$datatable.' '.$add_attr.' );'."\n";   
+            $php .= "\t\t".'$this->form[] = array("label"=>"'.$label.'","name"=>"'.$field.'","type"=>"'.$type.'" '.$datatable.' '.$add_attr.' );'."\n";   
         }
 
 $php .= '     
