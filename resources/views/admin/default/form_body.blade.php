@@ -4,19 +4,54 @@
 						margin-bottom: 10px;
 						border-bottom:1px solid #dddddd;
 					}
-
+					.header-title {
+						cursor: pointer;
+					}
 					</style>
+					<script type="text/javascript">
+						$(function() {
+							if (typeof event_header_click === 'undefined') {	
+								event_header_click = true;						    						
+								$(document).on("click",".header-title",function() {
+									console.log("header title click");
+									var index = $(this).attr('id').replace("header","");
+									var handel = $(this);
+									var parent = $(this).parent('.box-body');
+									var first_group = parent.find(".header-group-"+index+":first").is(":hidden");
+									if(first_group) {
+										parent.find(".header-group-"+index).slideDown(function() {
+											handel.find(".icon i").attr('class','fa fa-minus-square-o');
+											handel.attr("title","Click here to slide up");
+										});										
+									}else{
+										parent.find(".header-group-"+index).slideUp(function() {
+											handel.find(".icon i").attr('class','fa fa-plus-square-o');
+											handel.attr("title","Click here to expand");
+										});										
+									}								
+								})
+								$(".header-title").each(function() {
+									var data_collapsed = $(this).attr('data-collapsed');
+									console.log("header title "+data_collapsed);
+									if(data_collapsed == 'false') {
+										console.log("collapsed false");
+										$(this).click();
+									}
+								})
+							}
+						})						
+					</script>
 
 					<?php if(count($forms)==0):?>
                 			<div class='callout callout-danger'>
                 					<h4>Oops Sorry !</h4>
                 					<p>Sorry this modul there is no feature for add new data</p>
                 			</div>
-
                 	<?php endif;?>
-                	<?php 
 
-                		foreach($forms as $form):
+                	<?php 
+                		$header_group_class = "";
+                		foreach($forms as $index=>$form):
                 			
                 			$name 		= $form['name'];
                 			@$join 		= $form['join'];
@@ -67,11 +102,21 @@
                 			if(Request::segment(3)=='edit' && $priv->is_edit==0) {
                 				$disabled = 'disabled';
                 			}
+
+                			if($type=='header') {
+                				$header_group_class = "header-group-$index";
+                			}else{
+                				$header_group_class = ($header_group_class)?:"header-group-$index";	
+                			}
+                			
                 	?>          
 
                 		@if($type=='header' || $type=='heading')
-                			<div class='form-divider'>
-            					<h4><strong><i class='{{$form['icon']?:"fa fa-check-square-o"}}'></i> {{$form['label']}}</strong></h4>
+                			<div id='header{{$index}}' data-collapsed="{{ ($form['collapsed']===false)?'false':'true' }}" class='header-title form-divider'>                				
+	            					<h4>
+	            						<strong><i class='{{$form['icon']?:"fa fa-check-square-o"}}'></i> {{$form['label']}}</strong>
+	            						<span class='pull-right icon'><i class='fa fa-minus-square-o'></i></span>
+	            					</h4>            					
             				</div>
                 		@endif	
 
@@ -124,7 +169,7 @@
 					        font-weight: 300;
 					      }
 					    </style>
-                		<div class='form-group peta'>
+                		<div class='form-group peta {{$header_group_class}}'>
 							<input id="pac-input" class="controls" autofocus type="text"
 						        placeholder="Enter a location">
 						    <div id="type-selector" class="controls">
@@ -252,7 +297,7 @@
                 		@endif
 
                 		@if(@$type=='html')
-                		<div class='form-group'>
+                		<div class='form-group {{$header_group_class}}'>
                 			{!!$form['html']!!}
                 		</div>
                 		@endif
@@ -276,14 +321,14 @@
                 				
                 			})
                 		</script>
-                		<div class='form-group'>
+                		<div class='form-group {{$header_group_class}}'>
                 			<label>{{$form['label']}}</label>
                 			<div id='qrcode_{{$name}}'></div>
                 		</div>                		
                 		@endif
 
                 		@if(@$type=='checkbox')
-						<div class='form-group' id='form-group-{{$name}}' style="{{@$form['style']}}">
+						<div class='form-group {{$header_group_class}}' id='form-group-{{$name}}' style="{{@$form['style']}}">
 							<label>{{$form['label']}}</label>							
 							<?php 
 								$value = explode(";",$value);
@@ -362,7 +407,7 @@
 
 
                 		@if(@$type=='text' || @!$type)
-						<div class='form-group' id='form-group-{{$name}}' style="{{@$form['style']}}">
+						<div class='form-group {{$header_group_class}}' id='form-group-{{$name}}' style="{{@$form['style']}}">
 							<label>{{$form['label']}}</label>
 							<input type='text' title="{{$form['label']}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control' @if($readonly=='') name="{{$name}}" @endif id="{{$name}}" value='{{$value}}'/>
 							<div class="text-danger">{{ $errors->first($name) }}</div>
@@ -371,7 +416,7 @@
 						@endif
 
 						@if(@$type=='browse')
-						<div class='form-group' id='form-group-{{$name}}' style="{{@$form['style']}}">
+						<div class='form-group {{$header_group_class}}' id='form-group-{{$name}}' style="{{@$form['style']}}">
 							<label>{{$form['label']}}</label>
 							<div class="input-group">
 						      <input type="text" class="form-control" id="{{$name.'_label'}}" {{$required}} readonly placeholder="Please browse data...">
@@ -469,7 +514,7 @@
 						@endif
 
 						@if(@$type=='date' || @$type=='datepicker')
-						<div class='form-group' id='form-group-{{$name}}' style="{{@$form['style']}}">
+						<div class='form-group {{$header_group_class}}' id='form-group-{{$name}}' style="{{@$form['style']}}">
 							<label>{{$form['label']}}</label>
 							<div class="input-group">
   								<span class="input-group-addon"><i class='fa fa-calendar'></i></span>
@@ -498,7 +543,7 @@
 
 						})							
 						</script>
-						<div class='form-group' id='form-group-{{$name}}' style="{{@$form['style']}}">
+						<div class='form-group {{$header_group_class}}' id='form-group-{{$name}}' style="{{@$form['style']}}">
 							<label>{{$form['label']}}</label>
 							<div class='row'>
 							<div class='col-sm-3'>
@@ -531,7 +576,7 @@
 						@endif
  
 						@if(@$type=='textarea')
-						<div class='form-group' id='form-group-{{$name}}' style="{{@$form['style']}}">
+						<div class='form-group {{$header_group_class}}' id='form-group-{{$name}}' style="{{@$form['style']}}">
 							<label>{{$form['label']}}</label>							
 							<textarea name="{{$form['name']}}" id="{{$name}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control' rows='5'>{{ $value}}</textarea>
 							<div class="text-danger">{{ $errors->first($name) }}</div>
@@ -541,7 +586,7 @@
 
 
 						@if(@$type=='wysiwyg')
-						<div class='form-group' id='form-group-{{$name}}' style="{{@$form['style']}}">
+						<div class='form-group {{$header_group_class}}' id='form-group-{{$name}}' style="{{@$form['style']}}">
 							<label>{{$form['label']}}</label>	
 							<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 	  						<script>
@@ -567,7 +612,7 @@
 						@endif
 
 						@if(@$type=='password')
-						<div class='form-group' id='form-group-{{$name}}' style="{{@$form['style']}}">
+						<div class='form-group {{$header_group_class}}' id='form-group-{{$name}}' style="{{@$form['style']}}">
 							<label>{{$form['label']}}</label>
 							<input type='password' title="{{$form['label']}}" id="{{$name}}" {{$required}} {!!$placeholder!!} {{$readonly}} {{$disabled}} class='form-control' name="{{$name}}"/>							
 							<div class="text-danger">{{ $errors->first($name) }}</div>
@@ -608,7 +653,7 @@
 						<?php 
 							endif;
 						?>
-						<div class='form-group' id='form-group-{{$name}}' style="{{@$form['style']}}">
+						<div class='form-group {{$header_group_class}}' id='form-group-{{$name}}' style="{{@$form['style']}}">
 							<label>{{$form['label']}}</label>												
 							<select class='form-control' id="{{$name}}" data-value='{{$value}}' {{$required}} {!!$placeholder!!} {{$readonly}} {{$disabled}} name="{{$name}}">
 								<option value=''>** Please Select a {{$form['label']}}</option>
@@ -739,7 +784,7 @@
 
 							})
 						</script>
-						<div class='form-group' id='form-group-{{$name}}' style="{{@$form['style']}}">
+						<div class='form-group {{$header_group_class}}' id='form-group-{{$name}}' style="{{@$form['style']}}">
 							<label>{{$form['label']}}</label>												
 							<select class='form-control' id="{{$name}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} name="{{$name}}">	
 								
@@ -751,7 +796,7 @@
 
 
 						@if(@$type=='radio')
-						<div class='form-group' style="{{@$form['style']}}">
+						<div class='form-group {{$header_group_class}}' style="{{@$form['style']}}">
 							<label>{{$form['label']}}</label><br/>
 							<?php foreach($form['dataenum'] as $d):
 								$val = $lab = '';
@@ -776,7 +821,7 @@
 
 
 						@if(@$type=='upload')
-						<div class='form-group' id='form-group-{{$name}}' style="{{@$form['style']}}">
+						<div class='form-group {{$header_group_class}}' id='form-group-{{$name}}' style="{{@$form['style']}}">
 							<label>{{$form['label']}}</label>
 							@if($value)
 								<?php 
