@@ -1,5 +1,5 @@
 @include("emails/header")
 
-{!!$email_body!!}
+{!!$content!!}
 
 @include("emails/footer")
