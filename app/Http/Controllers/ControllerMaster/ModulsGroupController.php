@@ -15,7 +15,7 @@ class ModulsGroupController extends Controller {
 		
 
 	public function __construct() {
-		$this->modulname = "Modul Group";
+		$this->modulname = "Modules Group";
 		$this->table = 'cms_moduls_group';
 		$this->primkey = 'id';
 		$this->titlefield = "nama_group";
@@ -70,9 +70,9 @@ class ModulsGroupController extends Controller {
 		}
 		
 
-		$this->form[] = array("label"=>"Is Group","name"=>"is_group","type"=>"radio","dataenum"=>array("0|Tidak","1|Ya"));
+		$this->form[] = array("label"=>"Is Group","name"=>"is_group","type"=>"radio","dataenum"=>array("1|Yes","0|No"));
 		
-		$this->form_sub[] = array('label'=>'Moduls','controller'=>"ModulsController");
+		$this->form_sub[] = array('label'=>'Modules','controller'=>"ModulsController");
 
 		$this->addaction[] = array('label'=>'Up','route'=>action('ModulsGroupController@getArrSorting').'/%id%/up','icon'=>'fa fa-arrow-up','ajax'=>true);
 		$this->addaction[] = array('label'=>'Down','route'=>action('ModulsGroupController@getArrSorting').'/%id%/down','icon'=>'fa fa-arrow-down','ajax'=>true);
