@@ -244,8 +244,6 @@ class Admin'.$controllername.' extends Controller {
                 $type = 'password';
                 $add_attr = ', "help"=>"Please keep empty if you did not change the password"';
             }
-            
-            
             if(in_array($field, $image_candidate)) {
                 $type = 'upload';
                 $add_attr = ', "help"=>"Please upload Image only, Max file size is 2 MB, File types support only : JPG, JPEG, PNG, GIF, BMP", "mimes"=>"jpg,jpeg,png,gif,bmp"';
