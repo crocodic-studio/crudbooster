@@ -21,11 +21,14 @@ Please following these instructions for fresh installation :
 1. Download from github
 2. Create folder in your htdocs, and extract
 3. Create an empty database at your PHPMYADMIN
-4. Setting database configuration at file .env
-5. Open Command Prompt at your project, Run "php artisan migrate --seed"
-6. Run "php artisan serve"
-7. Try go to "http://localhost:8000/admin"
-8. Login with default login "u : admin@crudbooster.com, p : 123456"
+4. Setting database configuration at file .env.example and save as .env
+   - ADMIN_PATH=admin << you can set custom admin path here just leave it to default /admin 
+5. Open Command Prompt at your project, run "php artisan key:generate"
+6. Run "composer install"
+7. Run "php artisan migrate --seed"
+8. Run "php artisan serve"
+9. Try go to "http://localhost:8000/admin/" or  "http://localhost:8000/your_admin_path/"
+10. Login with default login "u : admin@crudbooster.com, p : 123456"
 ```
 
 ## DOCUMENTATION
