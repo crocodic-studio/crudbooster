@@ -4,7 +4,7 @@
 | Package Name 	: crudbooster
 | Description 	: CRUDBooster is integrated backend & crud generator for Laravel
 | Package Path 	: crocodicstudio/crudbooster
-| Author 	: Ferry Ariawan <ferry@crocodic.com>
+| Homepage      : http://crudbooster.com
 |
 | --------------------------------------------------------------------------------------------
 | 1. Install via Composer
