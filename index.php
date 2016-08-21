@@ -1,1 +1,0 @@
-<?php header("location: ./public",301);
