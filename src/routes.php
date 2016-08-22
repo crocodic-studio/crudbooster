@@ -4,7 +4,7 @@
 /* ROUTER FOR API GENERATOR */
 $namespace = '\crocodicstudio\crudbooster\controllers';
 
-Route::group(['middleware'=>['api','\crocodicstudio\crudbooster\middlewares\CBAuthAPI'],'namespace'=>$namespace], function () {
+Route::group(['middleware'=>['api','\crocodicstudio\crudbooster\middlewares\CBAuthAPI']], function () {
 	//Router for custom api defeault	
 
 	$dir       = scandir(base_path("app/Http/Controllers"));		
@@ -64,6 +64,38 @@ Route::group(['middleware'=>['web'],'prefix'=>config('crudbooster.ADMIN_PATH'),'
 
 });
 
+Route::group(['middleware'=>['web','\crocodicstudio\crudbooster\middlewares\CBBackend'],'prefix'=>config('crudbooster.ADMIN_PATH'),'namespace'=>$namespace], function () {
+
+	try{
+		$master_controller = glob(__DIR__.'/controllers/*.php');
+		foreach($master_controller as &$m) $m = str_replace('.php','',basename($m));		
+		$moduls = DB::table('cms_moduls')->whereNotIn('controller',$master_controller)->get();
+		foreach($moduls as $v) {
+			if(@$v->path && @$v->controller) {
+				Route::get($v->path,['uses'=>$v->controller.'@getIndex','as'=>$v->controller.'GetIndex']);
+				Route::get($v->path.'/data-tables',['uses'=>$v->controller.'@getDataTables','as'=>$v->controller.'GetDataTables']);
+				Route::get($v->path.'/current-data-tables',['uses'=>$v->controller.'@getAdd','as'=>$v->controller.'GetAdd']);
+				Route::get($v->path.'/export-data',['uses'=>$v->controller.'@getExoirtData','as'=>$v->controller.'GetExportData']);
+				Route::post($v->path.'/export-data',['uses'=>$v->controller.'@postExportData','as'=>$v->controller.'PostExportData']);
+				Route::get($v->path.'/find-data',['uses'=>$v->controller.'@getFindData','as'=>$v->controller.'GetFindData']);
+				Route::get($v->path.'/find-group-data',['uses'=>$v->controller.'@getFindGroupData','as'=>$v->controller.'GetFindGroupData']);
+				Route::get($v->path.'/add',['uses'=>$v->controller.'@getAdd','as'=>$v->controller.'GetAdd']);
+				Route::post($v->path.'/add-save',['uses'=>$v->controller.'@postAddSave','as'=>$v->controller.'PostAddSave']);				
+				Route::get($v->path.'/edit/{id}',['uses'=>$v->controller.'@getEdit','as'=>$v->controller.'GetEdit']);
+				Route::get($v->path.'/detail/{id}',['uses'=>$v->controller.'@getDetail','as'=>$v->controller.'GetDetail']);				
+				Route::post($v->path.'/edit-save/{id}',['uses'=>$v->controller.'@postEditSave','as'=>$v->controller.'PostEditSave']);
+				Route::get($v->path.'/delete/{id}',['uses'=>$v->controller.'@getDelete','as'=>$v->controller.'GetDelete']);
+				Route::post($v->path.'/delete-selected',['uses'=>$v->controller.'@postDeleteSelected','as'=>$v->controller.'PostDeleteSelected']);
+				Route::get($v->path.'/delete-image',['uses'=>$v->controller.'@getDeleteImage','as'=>$v->controller.'GetDeleteImage']);
+				Route::get($v->path.'/delete-filemanager',['uses'=>$v->controller.'@getDeleteFilemanager','as'=>$v->controller.'GetDeleteFilemanager']);
+			}						
+		}
+	}catch(Exception $e) {
+
+	}
+
+});
+
 
 /* ROUTER FOR BACKEND CRUDBOOSTER */
 Route::group(['middleware'=>['web','\crocodicstudio\crudbooster\middlewares\CBBackend'],'prefix'=>config('crudbooster.ADMIN_PATH'),'namespace'=>$namespace], function () {
@@ -96,7 +128,9 @@ Route::group(['middleware'=>['web','\crocodicstudio\crudbooster\middlewares\CBBa
 	Route::get('module_generator/arr-sorting/{id}/{tipe}',['uses'=>'ModulsGroupControllerr@getArrSorting','as'=>'ModulsGroupControllerrGetArrSorting']);
 	
 	try{
-		$moduls = DB::table('cms_moduls')->get();
+		$master_controller = glob(__DIR__.'/controllers/*.php');
+		foreach($master_controller as &$m) $m = str_replace('.php','',basename($m));		
+		$moduls = DB::table('cms_moduls')->whereIn('controller',$master_controller)->get();
 		foreach($moduls as $v) {
 			if(@$v->path && @$v->controller) {
 				Route::get($v->path,['uses'=>$v->controller.'@getIndex','as'=>$v->controller.'GetIndex']);
