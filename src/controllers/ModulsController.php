@@ -90,10 +90,10 @@ class ModulsController extends CBController {
 			),"value"=>"fa fa-bars");			
  
 
-		$this->form[] = array("label"=>"Route","name"=>"path","value"=>"admin/","jquery"=>"
+		$this->form[] = array("label"=>"Route","name"=>"path","jquery"=>"
 			$('#table_name').change(function() {
 				var v = $(this).val();
-				$('#path').val('admin/'+v);
+				$('#path').val(v);
 			})
 			");
 		$this->form[] = array("label"=>"Controller","name"=>"controller","type"=>"text","placeholder"=>"Auto Generated");
@@ -125,7 +125,7 @@ class ModulsController extends CBController {
 
 	function hook_after_delete($id) {
 		$modul = DB::table('cms_moduls')->where('id',$id)->first();
-		@unlink(base_path('app/Http/Controllers/'.$modul->controller.'.php'));		
+		@unlink(base_path('app/Http/Controllers/Admin'.$modul->controller.'.php'));		
 	}
 
 	public function getFindLastSorting($id_moduls_group) {

@@ -800,7 +800,12 @@ class CBController extends Controller {
 			}
 			$name = $di['name'];
 			if(!$name) continue;
-			$array_input[$name] = implode('|',$ai);
+
+			if(@$di['validation']) {
+				$array_input[$name] = $di['validation'];
+			}else{
+				$array_input[$name] = implode('|',$ai);	
+			}			
 		}
 
 		$validator = Validator::make(Request::all(),$array_input);
@@ -808,7 +813,7 @@ class CBController extends Controller {
 		if ($validator->fails()) 
 		{
 			$message = $validator->messages();			
-			$res = redirect()->back()->with("errors",$message);
+			$res = redirect()->back()->with("errors",$message)->withInput();
 			\Session::driver()->save();
 			$res->send();
         	exit();
@@ -1142,16 +1147,9 @@ class CBController extends Controller {
 
 	public function mainpath($path='') {
 		$path = ($path)?"/$path":"";
-		$current_modul_url = str_replace("\crocodicstudio\crudbooster\controllers\\","",strtok(Route::currentRouteAction(),'@') );		
-		$current_modul_url = route($current_modul_url.'GetIndex');
-		$url = trim(str_replace(url('/'),'',$current_modul_url),'/');
-		if(strpos($url, '/add')) {
-			return substr($url, 0, strpos($url,'/add')).$path;
-		}elseif (strpos($url, '/edit')) {
-			return substr($url, 0, strpos($url,'/edit')).$path;
-		}else{
-			return $url.$path;
-		}
+		$controllername = str_replace(["\crocodicstudio\crudbooster\controllers\\","App\Http\Controllers\\"],"",strtok(Route::currentRouteAction(),'@') );		
+		$route_url = route($controllername.'GetIndex');		
+		return $route_url.$path;		
 	}
 
 	public function get_cols() {

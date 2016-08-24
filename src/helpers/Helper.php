@@ -287,7 +287,7 @@ function generate_controller($table,$name='') {
 
         $path = base_path("app/Http/Controllers/");        
 
-        if(file_exists($path.'Admin'.$controllername.'.php') || file_exists($path.'ControllerMaster/Admin'.$controllername.'.php')) {
+        if(file_exists($path.'Admin'.$controllername.'.php')) {
             return 'Admin'.$controllername;
             exit;
         }
@@ -306,7 +306,7 @@ use Hash;
 use Cache;
 use Validator;
 
-class Admin'.$controllername.' extends Controller {
+class Admin'.$controllername.' extends \crocodicstudio\crudbooster\controllers\CBController {
 
     public function __construct() {
         $this->table              = "'.$table.'";
@@ -403,7 +403,7 @@ class Admin'.$controllername.' extends Controller {
 
             if(in_array($field, $password_candidate)) {
                 $type = 'password';
-                $add_attr = ', "help"=>"Please keep empty if you did not change the password"';
+                $add_attr = ', "help"=>"Please leave empty if you did not change the password"';
             }
 
         
@@ -420,7 +420,7 @@ class Admin'.$controllername.' extends Controller {
                 $add_attr .= ',"googlemaps"=>true';
             }
 
-            $php .= "\t\t".'$this->form[] = array("label"=>"'.$label.'","name"=>"'.$field.'","type"=>"'.$type.'" '.$datatable.' '.$add_attr.' );'."\n";   
+            $php .= "\t\t".'$this->form[] = array("label"=>"'.$label.'","name"=>"'.$field.'","type"=>"'.$type.'","required"=>true '.$datatable.' '.$add_attr.' );'."\n";   
         }
 
 $php .= '     
@@ -999,6 +999,20 @@ function get_method() {
     $atloc = strpos($action, '@')+1;
     $method = substr($action, $atloc);
     return $method;
+}
+
+/* 
+| --------------------------------------------------------------------------------------------------------------
+| To get main path url
+| --------------------------------------------------------------------------------------------------------------
+| will be return url get index of current
+|
+*/
+function mainpath($path=NULL) {
+    $path = ($path)?"/$path":"";
+    $controllername = str_replace(["\crocodicstudio\crudbooster\controllers\\","App\Http\Controllers\\"],"",strtok(Route::currentRouteAction(),'@') );      
+    $route_url = route($controllername.'GetIndex');     
+    return $route_url.$path;        
 }
 
 /* 

@@ -64,7 +64,8 @@ Route::group(['middleware'=>['web'],'prefix'=>config('crudbooster.ADMIN_PATH'),'
 
 });
 
-Route::group(['middleware'=>['web','\crocodicstudio\crudbooster\middlewares\CBBackend'],'prefix'=>config('crudbooster.ADMIN_PATH')], function () {
+// ROUTER FOR OWN CONTROLLER FROM CB
+Route::group(['middleware'=>['web','\crocodicstudio\crudbooster\middlewares\CBBackend'],'prefix'=>config('crudbooster.ADMIN_PATH'),'namespace'=>'App\Http\Controllers'], function () {
 
 	try{
 		$master_controller = glob(__DIR__.'/controllers/*.php');

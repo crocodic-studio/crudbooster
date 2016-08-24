@@ -99,10 +99,7 @@
                     <h3 class="box-title">{{ (Request::get('detail'))?str_replace(array("Add Data","Edit Data"),"Detail Data",$page_title):$page_title }}</h3>
                     <div class="box-tools">
                     	@if($button_cancel)<a href='{{url($dashboard)."?".urldecode(http_build_query(@$_GET)) }}' class='btn btn-default'>Cancel</a>@endif
-                    	@if( ($priv->is_create || $priv->is_edit) && count($forms)!=0)
-                    	   @if($priv->is_create && $button_addmore == TRUE) <button title='Save Data' class='btn btn-success addmore' type='button'><i class='fa fa-save'></i> Save & Add More</button>@endif
-                    	   @if($button_save)<button title='Save Data' class='btn btn-success btn-form-save' onclick="$('#form').submit()" type='button'><i class='fa fa-save'></i> Save</button>@endif
-                    	@endif
+                    	
                     </div>
                 </div>
 
