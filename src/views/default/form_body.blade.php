@@ -59,6 +59,9 @@
                 			@$value		= (isset($form['value']))?$form['value']:'';
                 			@$value		= (isset($row->{$name}))?$row->{$name}:$value;
 
+                			$old 		= old($name);
+                			$value 		= ($old)?:$value;
+
                 			if( ($parent_field && $name == $parent_field) && !isset($form['visible']) ) continue;
 
                 			if(isset($form['onlyfor'])) {
@@ -656,11 +659,11 @@
 									
 									$('#{{$name}}').change(function() {
 										console.log('{{$name}} changed');
-										$('#{{$form['sub_select']}}').html('<option value="">Tunggu sebentar...</option>');
+										$('#{{$form['sub_select']}}').html('<option value="">Please wait...</option>');
 										var parid = $(this).val();
 										$.get('{{url("admin/$tab/find-data")}}?parid='+parid+'&parfield={{$name}}&limit=500',function(resp) {
 											$('#{{$form['sub_select']}}').empty();
-											$('#{{$form['sub_select']}}').html("<option value=''>** Pilih Salah Satu</option>");
+											$('#{{$form['sub_select']}}').html("<option value=''>** Please Select Data</option>");
 											$.each(resp.items,function(i,obj) {
 												var selected = (val && val == obj.id)?'selected':'';
 												$('#{{$form['sub_select']}}').append('<option '+selected+' value=\"'+obj.id+'\">'+obj.text+'</option>');

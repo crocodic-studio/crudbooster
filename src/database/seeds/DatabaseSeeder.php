@@ -44,8 +44,8 @@ class Cms_settingsSeeder extends Seeder {
         ['id'=>11,'created_at'=>date('Y-m-d H:i:s'),'name'=>'favicon','content'=>'','content_input_type'=>'upload','dataenum'=>NULL,'helper'=>NULL],
         ['id'=>12,'created_at'=>date('Y-m-d H:i:s'),'name'=>'api_debug_mode','content'=>'true','content_input_type'=>'select','dataenum'=>'true,false','helper'=>NULL],        
         ['id'=>13,'created_at'=>date('Y-m-d H:i:s'),'name'=>'google_api_key','content'=>'','content_input_type'=>'upload','dataenum'=>NULL,'helper'=>NULL],
-        ['id'=>14,'created_at'=>date('Y-m-d H:i:s'),'name'=>'register_email_confirmation','content'=>'','content_input_type'=>'upload','dataenum'=>NULL,'helper'=>'Input message about email confirmation here, use alias [link_confirmation] to include the link.'],
-        ['id'=>15,'created_at'=>date('Y-m-d H:i:s'),'name'=>'register_email_welcome','content'=>'','content_input_type'=>'upload','dataenum'=>NULL,'helper'=>"You can input message after registration is success. Then the message will be send to registrant. use [name] as user 's name, use [email] as user's email"]
+        ['id'=>14,'created_at'=>date('Y-m-d H:i:s'),'name'=>'register_email_confirmation','content'=>'','content_input_type'=>'wysiwyg','dataenum'=>NULL,'helper'=>'Input message about email confirmation here, use alias [link_confirmation] to include the link.'],
+        ['id'=>15,'created_at'=>date('Y-m-d H:i:s'),'name'=>'register_email_welcome','content'=>'','content_input_type'=>'wysiwyg','dataenum'=>NULL,'helper'=>"You can input message after registration is success. Then the message will be send to registrant. use [name] as user 's name, use [email] as user's email"]
         ]);
     }
 }
