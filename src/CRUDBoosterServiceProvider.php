@@ -47,6 +47,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
 
         require __DIR__.'/routes.php';
         require __DIR__.'/helpers/Helper.php';
+        
     }
 
     /**
