@@ -144,7 +144,7 @@ class CBController extends Controller {
 	
 		$tablename = ucfirst($this->table);		
 
-		$this->data['mainpath'] = $this->dashboard = url(config('crudbooster.ADMIN_PATH').'/'.Request::segment(2));		 
+		$this->data['mainpath'] = $this->dashboard = mainpath();		 
 
 		Session::put('current_mainpath',$this->data['mainpath']);
 
@@ -412,7 +412,7 @@ class CBController extends Controller {
 		//LISTING INDEX HTML
 		$priv          = $this->data['priv'];
 		$addaction     = $this->data['addaction'];
-		$mainpath      = $this->mainpath();		
+		$mainpath      = mainpath();		
 		$title_field   = $this->title_field;
 		$html_contents = array();
 		foreach($data['result'] as $row) {
@@ -662,7 +662,7 @@ class CBController extends Controller {
 	}
 
 	public function getExportData() {
-		return redirect($this->mainpath());
+		return redirect(mainpath());
 	}
 
 	public function postExportData() {
@@ -936,13 +936,13 @@ class CBController extends Controller {
 		insert_log("Add new data ".$this->arr[$this->title_field]." at ".$this->data['module_name']);
 
 		if(Request::get('addmore')) {
-			return redirect($this->mainpath().'/add?'.$ref_parameter)->with(['message'=>'The data has been added !, please add more...','message_type'=>'success']);
+			return redirect(mainpath().'/add?'.$ref_parameter)->with(['message'=>'The data has been added !, please add more...','message_type'=>'success']);
 		}
 
 		if(Request::get('referal')) {
 			return redirect(Request::get('referal'))->with(['message'=>'The data has been added !','message_type'=>'success']);
 		}else{
-			return redirect($this->mainpath().'/edit/'.$lastid.'?'.$ref_parameter)->with(['message'=>"The data has been added !",'message_type'=>'success']);	
+			return redirect(mainpath().'/edit/'.$lastid.'?'.$ref_parameter)->with(['message'=>"The data has been added !",'message_type'=>'success']);	
 		}
 		
 	}
@@ -1014,7 +1014,7 @@ class CBController extends Controller {
 		insert_log("Update data ".$this->arr[$this->title_field]." at ".$this->data['module_name']);
 
 		if(Request::get('addmore')) {
-			return redirect($this->mainpath().'/add?'.$ref_parameter)->with(['message'=>'The data has been added !, please add more...','message_type'=>'success']);
+			return redirect(mainpath().'/add?'.$ref_parameter)->with(['message'=>'The data has been added !, please add more...','message_type'=>'success']);
 		}
 
 		if(Request::get('referal')) {

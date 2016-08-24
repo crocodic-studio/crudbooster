@@ -21,37 +21,40 @@
 | ['type'=>'link','value'=>'URL'] or ['type'=>'module,'value'=>['permalink'=>'logs','action'=>'create,read,update,delete','id'=>1]]
 | $id_cms_users = id current users for default or id user destination (optional)
 |
-*/
-function push_notification($content,$icon='fa fa-warning',$type='warning',$command=array(),$id_cms_users=NULL) {
-    $id_cms_users = ($id_cms_users)?:get_my_id();
-    switch ($type) {
-        case 'warning':
-            $icon .= ' text-warning';
+*/ 
+if(!function_exists('push_notification')) {
+    function push_notification($content,$icon='fa fa-warning',$type='warning',$command=array(),$id_cms_users=NULL) {
+        $id_cms_users = ($id_cms_users)?:get_my_id();
+        switch ($type) {
+            case 'warning':
+                $icon .= ' text-warning';
+                break;
+            case 'danger':
+                $icon .= ' text-danger';
             break;
-        case 'danger':
-            $icon .= ' text-danger';
-        break;
-        case 'success':
-            $icon .= ' text-success';
-        break;
-        case 'info':
-            $icon .= ' text-info';
-        break;
-        default:
-            $icon .= ' text-warning';
+            case 'success':
+                $icon .= ' text-success';
             break;
-    }
+            case 'info':
+                $icon .= ' text-info';
+            break;
+            default:
+                $icon .= ' text-warning';
+                break;
+        }
 
-    $a                         = array();
-    $a['created_at']           = date('Y-m-d H:i:s');
-    $a['id_cms_users']         = $id_cms_users;
-    $a['content']              = $content;
-    $a['icon']                 = $icon;
-    $a['notification_command'] = json_encode($command);
-    $a['is_read']              = 0;
-    if(DB::table('cms_notifications')->insert($a)) return true;
-    else return false;
+        $a                         = array();
+        $a['created_at']           = date('Y-m-d H:i:s');
+        $a['id_cms_users']         = $id_cms_users;
+        $a['content']              = $content;
+        $a['icon']                 = $icon;
+        $a['notification_command'] = json_encode($command);
+        $a['is_read']              = 0;
+        if(DB::table('cms_notifications')->insert($a)) return true;
+        else return false;
+    }
 }
+
 
 /* 
 | --------------------------------------------------------------------------------------------------------------
@@ -61,6 +64,7 @@ function push_notification($content,$icon='fa fa-warning',$type='warning',$comma
 | $datae     = data array
 | $googlekey = google api key
 */
+if(!function_exists('send_gcm')) {
 function send_gcm($regid,$data,$google_key=NULL){
     $google_api_key = ($googlekey)?:config('crudbooster.GOOGLE_API_KEY');
     $url = 'https://android.googleapis.com/gcm/send';
@@ -84,6 +88,7 @@ function send_gcm($regid,$data,$google_key=NULL){
     curl_close($ch);
     return $chresult;
 }
+}
 
 /* 
 | --------------------------------------------------------------------------------------------------------------
@@ -91,6 +96,7 @@ function send_gcm($regid,$data,$google_key=NULL){
 | --------------------------------------------------------------------------------------------------------------
 | $slug = slug menu 
 */
+if(!function_exists('generate_menu')) {
 function generate_menu($slug,$parent_id=0) {
     $menus = DB::table('cms_menus')
     ->join('cms_menus_groups','cms_menus_groups.id','=','id_cms_menus_groups')
@@ -133,6 +139,7 @@ function generate_menu($slug,$parent_id=0) {
 
     echo "</ul>";
 }
+}
 
 /*
 | -------------------------------------------------------------------------------------------------------------- 
@@ -140,9 +147,11 @@ function generate_menu($slug,$parent_id=0) {
 | --------------------------------------------------------------------------------------------------------------
 | $name = field name
 */ 
+if(!function_exists('get_where_value')) {
 function get_where_value($name) {
     $input = array("label"=>"cms menus groups","name"=>"id_cms_menus_groups","type"=>"hidden","value"=>\Request::get('where')[$name]);
     return $input;
+}
 }
 
 /* 
@@ -151,6 +160,7 @@ function get_where_value($name) {
 | --------------------------------------------------------------------------------------------------------------
 | $table = table name 
 */
+if(!function_exists('get_columns_table')) {
 function get_columns_table($table) {
     $cols = DB::getSchemaBuilder()->getColumnListing($table);
     $result = array();
@@ -163,6 +173,7 @@ function get_columns_table($table) {
     }
     return $new_result;
 }
+}
 
 /*
 | -------------------------------------------------------------------------------------------------------------- 
@@ -170,6 +181,7 @@ function get_columns_table($table) {
 | --------------------------------------------------------------------------------------------------------------
 | $columns = array of columns
 */
+if(!function_exists('get_namefield_table')) {
 function get_namefield_table($columns) {
     $name_col_candidate = array("name","nama","title","judul","content");   
     $name_col = '';
@@ -185,6 +197,7 @@ function get_namefield_table($columns) {
     if($name_col == '') $name_col = 'id';
     return $name_col;
 }
+}
 
 /*
 | --------------------------------------------------------------------------------------------------------------
@@ -192,6 +205,7 @@ function get_namefield_table($columns) {
 | --------------------------------------------------------------------------------------------------------------
 | $table = table name
 */
+if(!function_exists('is_exists_controller')) {
 function is_exists_controller($table) {
     $controllername = ucwords(str_replace('_',' ',$table));
     $controllername = str_replace(' ','',$controllername).'Controller';
@@ -203,6 +217,7 @@ function is_exists_controller($table) {
         return false;
     }
 }
+}
 
 /* 
 | --------------------------------------------------------------------------------------------------------------
@@ -212,6 +227,7 @@ function is_exists_controller($table) {
 | $name  = custom controller 
 |
 */
+if(!function_exists('generate_api')) {
 function generate_api($controller_name,$table_name,$permalink,$type) {
     $php = '
 <?php namespace App\Http\Controllers;
@@ -261,6 +277,7 @@ $php .= "\n".'
         $path = base_path("app/Http/Controllers/");
         file_put_contents($path.'Api'.$controller_name.'Controller.php', $php);
 }
+}
 
 
 /* 
@@ -271,6 +288,7 @@ $php .= "\n".'
 | $name  = custom controller 
 |
 */
+if(!function_exists('generate_controller')) {
 function generate_controller($table,$name='') { 
         
         $exception          = ['slug'];
@@ -490,6 +508,7 @@ $php .= '
         file_put_contents($path.'Admin'.$controllername.'.php', $php);
         return 'Admin'.$controllername;
     }
+}
 
 /* 
 | --------------------------------------------------------------------------------------------------------------
@@ -499,6 +518,7 @@ $php .= '
 | $field    = field name
 |
 */
+if(!function_exists('get_field_type')) {
 function get_field_type($table,$field) {
     if(Cache::has('field_type_'.$table.'_'.$field)) {
         return Cache::get('field_type_'.$table.'_'.$field);
@@ -521,6 +541,7 @@ function get_field_type($table,$field) {
 
     return $typedata;
 }
+}
 
 /* 
 | ----------------------------------------------------
@@ -529,11 +550,13 @@ function get_field_type($table,$field) {
 | $field = field name
 |
 */
+if(!function_exists('get_value_filter')) {
 function get_value_filter($field) {
     $filter = Request::get('filter_column');
     if($filter[$field]) {
         return $filter[$field]['value'];
     }
+}
 }
 
 /* 
@@ -543,11 +566,13 @@ function get_value_filter($field) {
 | $field = field name
 |
 */
+if(!function_exists('get_type_filter')) {
 function get_type_filter($field) {
     $filter = Request::get('filter_column');
     if($filter[$field]) {
         return $filter[$field]['type'];
     }
+}
 }
 
 /* 
@@ -559,6 +584,7 @@ function get_type_filter($field) {
 | #end    = end string
 |
 */
+if(!function_exists('get_string_between')) {
 function get_string_between($string, $start, $end){
     $string = ' ' . $string;
     $ini = strpos($string, $start);
@@ -566,6 +592,7 @@ function get_string_between($string, $start, $end){
     $ini += strlen($start);
     $len = strpos($string, $end, $ini) - $ini;
     return substr($string, $ini, $len);
+}
 }
 
 /* 
@@ -576,6 +603,7 @@ function get_string_between($string, $start, $end){
 | $key   = what key for unique
 |
 */
+if(!function_exists('super_unique')) {
 function super_unique($array,$key)
 {
    $temp_array = array();
@@ -585,6 +613,7 @@ function super_unique($array,$key)
    }
    $array = array_values($temp_array);
    return $array;
+}
 }
 
 /* 
@@ -596,6 +625,7 @@ function super_unique($array,$key)
 | $full = true / false
 |
 */
+if(!function_exists('time_elapsed_string')) {
 function time_elapsed_string($datetime_to,$datetime_from=NULL, $full = false) {
     $datetime_from = ($datetime_from)?:date('Y-m-d H:i:s');
     $now = new DateTime;
@@ -628,6 +658,7 @@ function time_elapsed_string($datetime_to,$datetime_from=NULL, $full = false) {
     if (!$full) $string = array_slice($string, 0, 1);
     return $string ? implode(', ', $string) . ' ' : 'just now';
 }
+}
 
 /* 
 | --------------------------------------------------------------------------------------------------------------
@@ -638,10 +669,12 @@ function time_elapsed_string($datetime_to,$datetime_from=NULL, $full = false) {
 | $full = true / false
 |
 */
+if(!function_exists('human_filesize')) {
 function human_filesize($bytes, $decimals = 2) {
   $sz = 'BKMGTP';
   $factor = floor((strlen($bytes) - 1) / 3);
   return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$sz[$factor];
+}
 }
 
 /* 
@@ -651,9 +684,11 @@ function human_filesize($bytes, $decimals = 2) {
 | $url = url of file
 |
 */
+if(!function_exists('get_size')) {
 function get_size($url) {
     $head = array_change_key_case(get_headers($url, TRUE));
     return $head['content-length'];
+}
 }
 
 /* 
@@ -667,6 +702,7 @@ function get_size($url) {
 | $template = default 'emails.blank'
 |
 */ 
+if(!function_exists('send_email')) {
 function send_email($to,$subject,$html,$from='',$template='') {
      $setting = DB::table('cms_settings')->where('name','like','smtp%')->get();
      $set = array();
@@ -690,6 +726,7 @@ function send_email($to,$subject,$html,$from='',$template='') {
         $message->subject($subject);
     });
 }
+}
 
 /* 
 | --------------------------------------------------------------------------------------------------------------
@@ -698,6 +735,7 @@ function send_email($to,$subject,$html,$from='',$template='') {
 | $parsed_url = parsed url
 |
 */ 
+if(!function_exists('unparse_url')) {
 function unparse_url($parsed_url) { 
   $scheme   = isset($parsed_url['scheme']) ? $parsed_url['scheme'] . '://' : ''; 
   $host     = isset($parsed_url['host']) ? $parsed_url['host'] : ''; 
@@ -710,7 +748,9 @@ function unparse_url($parsed_url) {
   $fragment = isset($parsed_url['fragment']) ? '#' . $parsed_url['fragment'] : ''; 
   return urldecode("$scheme$user$pass$host$port$path$query$fragment"); 
 }
+}
 
+if(!function_exists('show_value')) {
 function show_value($id,$tabel,$show='value',$empty=''){
 
     $queries = DB::table($tabel)
@@ -727,7 +767,9 @@ function show_value($id,$tabel,$show='value',$empty=''){
 
     return $the_value;          
 }
+}
 
+if(!function_exists('showValue_byField')) {
 function showValue_byField($string,$id,$table,$show='value',$empty=''){
 
     $queries = DB::table($table)
@@ -744,6 +786,7 @@ function showValue_byField($string,$id,$table,$show='value',$empty=''){
 
     return $the_value;          
 }
+}
 
 /* 
 | --------------------------------------------------------------------------------------------------------------
@@ -752,6 +795,7 @@ function showValue_byField($string,$id,$table,$show='value',$empty=''){
 | $name = name of setting
 |
 */ 
+if(!function_exists('get_setting')) {
 function get_setting($name){
     if(Schema::hasTable('cms_settings')) {
         if(Cache::has('setting_'.$name)) {
@@ -765,7 +809,9 @@ function get_setting($name){
         }
     }        
 }
+}
 
+if(!function_exists('array_table')) {
 function array_table($table,$orderby='id',$empty=''){
     $query = DB::table($table)
         ->orderby($orderby,'ASC')
@@ -779,6 +825,7 @@ function array_table($table,$orderby='id',$empty=''){
 
     return $result;
 }
+}
 
 /* 
 | --------------------------------------------------------------------------------------------------------------
@@ -790,6 +837,7 @@ function array_table($table,$orderby='id',$empty=''){
 | $id    = for id of table
 |
 */
+if(!function_exists('slug')) {
 function slug($title,$table,$where="title",$id=NULL){
     $slug_title = str_slug($title, "-");
 
@@ -816,6 +864,7 @@ function slug($title,$table,$where="title",$id=NULL){
     return $the_value;
 
 }
+}
 
 /* 
 | --------------------------------------------------------------------------------------------------------------
@@ -824,8 +873,10 @@ function slug($title,$table,$where="title",$id=NULL){
 | $name = name of input
 |
 */
+if(!function_exists('g')) {
 function g($name) {
     return Request::get($name);
+}
 }
 
 /* 
@@ -836,6 +887,7 @@ function g($name) {
 | $type = type of response json or use in view
 |
 */
+if(!function_exists('valid')) {
 function valid($arr=array(),$type='json') {
     $input_arr = Request::all();
 
@@ -865,6 +917,7 @@ function valid($arr=array(),$type='json') {
         }        
     }
 }
+}
 
 /* 
 | --------------------------------------------------------------------------------------------------------------
@@ -875,6 +928,7 @@ function valid($arr=array(),$type='json') {
 | $data = data of api 
 |
 */
+if(!function_exists('response_json')) {
 function response_json($status,$message=NULL,$data=array()) {
     if(!$status && !is_array($status)) {
         $r = array();
@@ -924,6 +978,7 @@ function response_json($status,$message=NULL,$data=array()) {
         exit;
     }
 }
+}
 
 /* 
 | --------------------------------------------------------------------------------------------------------------
@@ -931,6 +986,7 @@ function response_json($status,$message=NULL,$data=array()) {
 | --------------------------------------------------------------------------------------------------------------
 | 
 */
+if(!function_exists('get_input_url_parameters')) {
 function get_input_url_parameters($exception=NULL) {
     @$get = $_GET;    
     $inputhtml = '';
@@ -954,6 +1010,7 @@ function get_input_url_parameters($exception=NULL) {
 
     return $inputhtml;                        
 }
+}
 
 /* 
 | --------------------------------------------------------------------------------------------------------------
@@ -962,29 +1019,52 @@ function get_input_url_parameters($exception=NULL) {
 | 
 |
 */
-function get_my_id() {
-    return Session::get('admin_id');
+if(!function_exists('get_my_id')) {
+    function get_my_id() {
+        return Session::get('admin_id');
+    }
 }
-function get_my_id_company() {
-    return Session::get('admin_id_companies');
+
+if(!function_exists('get_my_id_company')) {
+    function get_my_id_company() {
+        return Session::get('admin_id_companies');
+    }
 }
-function get_is_superadmin() {
-    return Session::get('admin_is_superadmin');
+
+if(!function_exists('get_is_superadmin')) {
+    function get_is_superadmin() {
+        return Session::get('admin_is_superadmin');
+    }
 }
-function get_my_name() {
-    return Session::get('admin_name');
+
+if(!function_exists('get_my_name')) {
+    function get_my_name() {
+        return Session::get('admin_name');
+    }
 }
-function get_my_photo() {
-    return Session::get('admin_photo');
+
+if(!function_exists('get_my_photo')) {
+    function get_my_photo() {
+        return Session::get('admin_photo');
+    }
 }
-function get_my_id_privilege() {
-    return Session::get('admin_privileges');
+
+if(!function_exists('get_my_id_privilege')) {
+    function get_my_id_privilege() {
+        return Session::get('admin_privileges');
+    }
 }
-function get_my_privilege_name() {
-    return Session::get('admin_privileges_name');
+
+if(!function_exists('get_my_privilege_name')) {
+    function get_my_privilege_name() {
+        return Session::get('admin_privileges_name');
+    }
 }
-function get_is_locked() {
-    return Session::get('admin_lock');
+
+if(!function_exists('get_is_locked')) {
+    function get_is_locked() {
+        return Session::get('admin_lock');
+    }
 }
 
 /* 
@@ -994,11 +1074,13 @@ function get_is_locked() {
 | will be return method name . e.g : getIndex
 |
 */
-function get_method() {
-    $action = str_replace("App\Http\Controllers","",Route::currentRouteAction());
-    $atloc = strpos($action, '@')+1;
-    $method = substr($action, $atloc);
-    return $method;
+if(!function_exists('get_method')) {
+    function get_method() {
+        $action = str_replace("App\Http\Controllers","",Route::currentRouteAction());
+        $atloc = strpos($action, '@')+1;
+        $method = substr($action, $atloc);
+        return $method;
+    }
 }
 
 /* 
@@ -1008,11 +1090,13 @@ function get_method() {
 | will be return url get index of current
 |
 */
-function mainpath($path=NULL) {
-    $path = ($path)?"/$path":"";
-    $controllername = str_replace(["\crocodicstudio\crudbooster\controllers\\","App\Http\Controllers\\"],"",strtok(Route::currentRouteAction(),'@') );      
-    $route_url = route($controllername.'GetIndex');     
-    return $route_url.$path;        
+if(!function_exists('mainpath')) {
+    function mainpath($path=NULL) {
+        $path = ($path)?"/$path":"";
+        $controllername = str_replace(["\crocodicstudio\crudbooster\controllers\\","App\Http\Controllers\\"],"",strtok(Route::currentRouteAction(),'@') );      
+        $route_url = route($controllername.'GetIndex');     
+        return $route_url.$path;        
+    }
 }
 
 /* 
@@ -1022,13 +1106,15 @@ function mainpath($path=NULL) {
 | $description = describe of activity
 |
 */
-function insert_log($description) {
-    $a                 = array();
-    $a['created_at']   = date('Y-m-d H:i:s');
-    $a['ipaddress']    = $_SERVER['REMOTE_ADDR'];
-    $a['useragent']    = $_SERVER['HTTP_USER_AGENT'];
-    $a['url']          = Request::url();
-    $a['description']  = $description;
-    $a['id_cms_users'] = get_my_id();
-    DB::table('cms_logs')->insert($a);    
+if(!function_exists('insert_log')) {
+    function insert_log($description) {
+        $a                 = array();
+        $a['created_at']   = date('Y-m-d H:i:s');
+        $a['ipaddress']    = $_SERVER['REMOTE_ADDR'];
+        $a['useragent']    = $_SERVER['HTTP_USER_AGENT'];
+        $a['url']          = Request::url();
+        $a['description']  = $description;
+        $a['id_cms_users'] = get_my_id();
+        DB::table('cms_logs')->insert($a);    
+    }
 }
