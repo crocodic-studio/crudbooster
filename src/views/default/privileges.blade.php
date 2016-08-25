@@ -36,7 +36,7 @@
 						<label>Available To Register</label><br/>
 						<div class='radio inline'>
 							<label><input {{ (@$row->is_register==1)?'checked':'' }} type='radio' name='is_register' value='1'/> Yes, Show the Registration Form</label> &nbsp;&nbsp;
-							<label><input {{ (@$row->is_register==0)?'checked':'checked' }} type='radio' name='is_register' value='0'/> No</label>
+							<label><input {{ (!@$row)?'checked':'' }} {{ (@$row->is_register==0)?'checked':'' }} type='radio' name='is_register' value='0'/> No</label>
 						</div>
 						<div class="text-danger">{{ $errors->first('is_register') }}</div>
 					</div>

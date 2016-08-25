@@ -33,16 +33,16 @@ class AdminController extends CBController {
 		$id_cms_privileges = (Session::get('dashboard_config_id_privileges'))?:$id_cms_privileges;
 		$data['list_id_dashboard'] = DB::table('cms_dashboard')->where("id_cms_privileges",$id_cms_privileges)->orderby("id","asc")->lists('id');
 
-		$data['page_title'] = '<strong>Dashboard</strong> ';
+		$data['page_title']       = '<strong>Dashboard</strong> ';
 		$data['page_description'] = get_setting('appname');
-		$data['page_menu'] = Route::getCurrentRoute()->getActionName();
-		$data['setting'] = $this->setting;
+		$data['page_menu']        = Route::getCurrentRoute()->getActionName();
+		$data['setting']          = $this->setting;
 		return view('crudbooster::home',$data);
 	}
 
 	public function getSetDashboardConfigMode() {
 
-		if(!get_my_is_superadmin()) {
+		if(!get_is_superadmin()) {
 			return redirect('admin')->with('message','Sorry this dashboard configuration is not available');
 		}
 
@@ -685,14 +685,14 @@ class AdminController extends CBController {
 				$id_cms_moduls = $content['id_cms_moduls'];
 				$limit         = $content['limit'];
 				$moduls        = DB::table('cms_moduls')->where('id',$id_cms_moduls)->first();
-				$path          = url($moduls->path);
-				$path          = ($limit)?$path.'?limit='.$limit:$path;
+				$main_path     = url(config('crudbooster.ADMIN_PATH').'/'.$moduls->path);
+				$path          = ($limit)?$main_path.'?limit='.$limit:$main_path;
 
 				$html = " 
 				<div class='col-sm-12 dashboard_widget' id='dashboard_$id'>
 			            <div class='box box-primary'>
 			                <div class='box-header with-border'>
-			                    <h3 class='box-title'><a href='".url($moduls->path)."' title='Click for more'><i class='fa fa-bars'></i> $label</a></h3>
+			                    <h3 class='box-title'><a href='".url($main_path)."' title='Click for more'><i class='fa fa-bars'></i> $label</a></h3>
 			                    <div class='box-tools'>  
 			                    	<button type='button' title='Edit' class='btn btn-box-tool btn-edit-datatable' data-id='$id'><i class='fa fa-cog'></i></button>
 			            	     <button type='button' title='Delete' class='btn btn-box-tool btn-delete-stat' data-id='$id'><i class='fa fa-times'></i></button>          

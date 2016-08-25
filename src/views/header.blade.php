@@ -1,8 +1,7 @@
 <script type="text/javascript">
     var total_notification = 0;
     function loader_notification() {
-      console.log("loader notifications");
-      $('#icon_notification').attr('class','fa fa-spin fa-spinner');
+      console.log("loader notifications");      
 
       $.get("{{route('NotificationsControllerGetLatestJson')}}",function(resp) {
           if(resp.total > total_notification) {
@@ -24,7 +23,7 @@
           })  
           $('.notifications-menu #list_notifications .menu').html(htm);
 
-          $('#icon_notification').attr('class','fa fa-bell-o');
+          
 
           total_notification = resp.total;
       })
