@@ -1,5 +1,5 @@
 # CRUDBOOSTER - Laravel CRUD Generator
-[![AUR](https://img.shields.io/aur/license/yaourt.svg?maxAge=2592000?style=flat-square)]()
+[![AUR](https://img.shields.io/badge/license-MIT-green.svg)]()
 
 > Laravel CRUD Generator, Make a Web Application Just In Minutes, Even With Less Code and fewer Steps !
 
