@@ -10,9 +10,9 @@
 
     <!-- Morris.js charts -->
     <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-    <script src="<?=asset("assets/adminlte/plugins/morris/morris.min.js")?>" type="text/javascript"></script>
+    <script src="<?=asset("vendor/crudbooster/assets/adminlte/plugins/morris/morris.min.js")?>" type="text/javascript"></script>
     <!-- Morris chart -->
-    <link href="<?=asset("assets/adminlte/plugins/morris/morris.css")?>" rel="stylesheet" type="text/css" />
+    <link href="<?=asset("vendor/crudbooster/assets/adminlte/plugins/morris/morris.css")?>" rel="stylesheet" type="text/css" />
 
     <script type="text/javascript">
       $(function() {

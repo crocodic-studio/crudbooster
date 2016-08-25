@@ -11,6 +11,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->command->info('Please wait importing data...');
+
         $this->call('Cms_usersSeeder');
         $this->call('Cms_companiesSeeder');
         $this->call('Cms_dashboardSeeder');
@@ -19,8 +21,42 @@ class DatabaseSeeder extends Seeder
         $this->call('Cms_privilegesSeeder');
         $this->call('Cms_privileges_rolesSeeder');
         $this->call('Cms_settingsSeeder');      
+        $this->call('Cms_postscategoriesSeeder');      
+        $this->call('Cms_postsSeeder');      
         
-        $this->command->info('Seed Data Success !');
+        $this->command->info('Import Data Success !');
+    }
+}
+
+class Cms_postsSeeder extends Seeder {
+    public function run() {
+        $faker = Faker\Factory::create();
+        $id_cms_users = DB::table('cms_users')->lists('id');
+        $id_cms_posts_categories = DB::table('cms_posts_categories')->lists('id');
+
+        for($i=1;$i<=30;$i++) {
+            $a = array();
+            $a['created_at'] = $faker->dateTimeBetween('-1 months','now');
+            $a['title'] = $faker->sentence;
+            $a['content'] = $faker->paragraph;
+            $a['id_cms_users'] = $faker->randomElement($id_cms_users);
+            $a['id_cms_posts_categories'] = $faker->randomElement($id_cms_posts_categories);
+            DB::table('cms_posts')->insert($a);
+        }
+    }
+}
+
+class Cms_postscategoriesSeeder extends Seeder {
+    public function run() {
+        $faker = Faker\Factory::create();
+        $id_cms_users = DB::table('cms_users')->lists('id');
+        $id_cms_posts_categories = DB::table('cms_posts_categories')->lists('id');
+        for($i=1;$i<=5;$i++) {
+            $a = array();
+            $a['created_at'] = $faker->dateTimeBetween('-1 months','now');
+            $a['name'] = $faker->words(3,true);
+            DB::table('cms_posts_categories')->insert($a);
+        }
     }
 }
 
@@ -43,7 +79,7 @@ class Cms_settingsSeeder extends Seeder {
         ['id'=>10,'created_at'=>date('Y-m-d H:i:s'),'name'=>'logo','content'=>'','content_input_type'=>'upload','dataenum'=>NULL,'helper'=>NULL],
         ['id'=>11,'created_at'=>date('Y-m-d H:i:s'),'name'=>'favicon','content'=>'','content_input_type'=>'upload','dataenum'=>NULL,'helper'=>NULL],
         ['id'=>12,'created_at'=>date('Y-m-d H:i:s'),'name'=>'api_debug_mode','content'=>'true','content_input_type'=>'select','dataenum'=>'true,false','helper'=>NULL],        
-        ['id'=>13,'created_at'=>date('Y-m-d H:i:s'),'name'=>'google_api_key','content'=>'','content_input_type'=>'upload','dataenum'=>NULL,'helper'=>NULL],
+        ['id'=>13,'created_at'=>date('Y-m-d H:i:s'),'name'=>'google_api_key','content'=>'','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
         ['id'=>14,'created_at'=>date('Y-m-d H:i:s'),'name'=>'register_email_confirmation','content'=>'','content_input_type'=>'wysiwyg','dataenum'=>NULL,'helper'=>'Input message about email confirmation here, use alias [link_confirmation] to include the link.'],
         ['id'=>15,'created_at'=>date('Y-m-d H:i:s'),'name'=>'register_email_welcome','content'=>'','content_input_type'=>'wysiwyg','dataenum'=>NULL,'helper'=>"You can input message after registration is success. Then the message will be send to registrant. use [name] as user 's name, use [email] as user's email"]
         ]);

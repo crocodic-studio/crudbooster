@@ -413,7 +413,7 @@
                 		@if(@$type=='text' || @!$type)
 						<div class='form-group {{$header_group_class}}' id='form-group-{{$name}}' style="{{@$form['style']}}">
 							<label>{{$form['label']}}</label>
-							<input type='text' title="{{$form['label']}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control' @if($readonly=='') name="{{$name}}" @endif id="{{$name}}" value='{{$value}}'/>
+							<input type='text' title="{{$form['label']}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control' name="{{$name}}" id="{{$name}}" value='{{$value}}'/>
 							<div class="text-danger">{{ $errors->first($name) }}</div>
 							<p class='help-block'>{{ @$form['help'] }}</p>
 						</div>
