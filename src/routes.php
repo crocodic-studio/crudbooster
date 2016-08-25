@@ -45,32 +45,37 @@ Route::group(['middleware'=>['web','\crocodicstudio\crudbooster\middlewares\CBBa
 		$master_controller = glob(base_path('App/Http/Controllers/*.php'));
 		foreach($master_controller as &$m) $m = str_replace('.php','',basename($m));	
 
-		$moduls = DB::table('cms_moduls')->whereIn('controller',$master_controller)->get();
-		foreach($moduls as $v) {
-			if(@$v->path && @$v->controller) {
-				
-				$controller_class = new ReflectionClass('App\Http\Controllers\\'.$v->controller);							
-				$controller_methods = $controller_class->getMethods(ReflectionMethod::IS_PUBLIC);
-				$wildcards = '/{one?}/{two?}/{three?}/{four?}/{five?}';
-				Route::get($v->path,['uses'=>$v->controller.'@getIndex','as'=>$v->controller.'GetIndex']);
-				foreach($controller_methods as $method) {
-					if ($method->class != 'Illuminate\Routing\Controller' && $method->name != 'getIndex') {												
-						if(substr($method->name, 0, 3) == 'get') {
-							$method_name = substr($method->name, 3);
-							$slug = array_filter(preg_split('/(?=[A-Z])/',$method_name));	
-							$slug = strtolower(implode('-',$slug));
-							$slug = ($slug == 'index')?'':$slug;
-							Route::get($v->path.'/'.$slug.$wildcards,['uses'=>$v->controller.'@'.$method->name,'as'=>$v->controller.'Get'.$method_name] );
-						}elseif(substr($method->name, 0, 4) == 'post') {
-							$method_name = substr($method->name, 4);
-							$slug = array_filter(preg_split('/(?=[A-Z])/',$method_name));									
-							Route::post($v->path.'/'.strtolower(implode('-',$slug)).$wildcards,['uses'=>$v->controller.'@'.$method->name,'as'=>$v->controller.'Post'.$method_name] );
-						}
-					}					
-				}				
-				
-			}						
+		try {
+			$moduls = DB::table('cms_moduls')->whereIn('controller',$master_controller)->get();
+			foreach($moduls as $v) {
+				if(@$v->path && @$v->controller) {
+					
+					$controller_class = new ReflectionClass('App\Http\Controllers\\'.$v->controller);							
+					$controller_methods = $controller_class->getMethods(ReflectionMethod::IS_PUBLIC);
+					$wildcards = '/{one?}/{two?}/{three?}/{four?}/{five?}';
+					Route::get($v->path,['uses'=>$v->controller.'@getIndex','as'=>$v->controller.'GetIndex']);
+					foreach($controller_methods as $method) {
+						if ($method->class != 'Illuminate\Routing\Controller' && $method->name != 'getIndex') {												
+							if(substr($method->name, 0, 3) == 'get') {
+								$method_name = substr($method->name, 3);
+								$slug = array_filter(preg_split('/(?=[A-Z])/',$method_name));	
+								$slug = strtolower(implode('-',$slug));
+								$slug = ($slug == 'index')?'':$slug;
+								Route::get($v->path.'/'.$slug.$wildcards,['uses'=>$v->controller.'@'.$method->name,'as'=>$v->controller.'Get'.$method_name] );
+							}elseif(substr($method->name, 0, 4) == 'post') {
+								$method_name = substr($method->name, 4);
+								$slug = array_filter(preg_split('/(?=[A-Z])/',$method_name));									
+								Route::post($v->path.'/'.strtolower(implode('-',$slug)).$wildcards,['uses'=>$v->controller.'@'.$method->name,'as'=>$v->controller.'Post'.$method_name] );
+							}
+						}					
+					}				
+					
+				}						
+			}
+		} catch (Exception $e) {
+			
 		}
+		
 	
 
 });
