@@ -1,6 +1,10 @@
 # CRUDBOOSTER - Laravel CRUD Generator
-[![GitHub version](https://badge.fury.io/gh/crocodic-studio%2Fcrudbooster.svg)](https://badge.fury.io/gh/crocodic-studio%2Fcrudbooster)
-[![AUR](https://img.shields.io/badge/license-MIT-green.svg)]()
+[![Latest Stable Version](https://poser.pugx.org/crocodicstudio/crudbooster/v/stable)](https://packagist.org/packages/crocodicstudio/crudbooster)
+[![Total Downloads](https://poser.pugx.org/crocodicstudio/crudbooster/downloads)](https://packagist.org/packages/crocodicstudio/crudbooster)
+[![Latest Unstable Version](https://poser.pugx.org/crocodicstudio/crudbooster/v/unstable)](https://packagist.org/packages/crocodicstudio/crudbooster)
+[![License](https://poser.pugx.org/crocodicstudio/crudbooster/license)](https://packagist.org/packages/crocodicstudio/crudbooster)
+[![Monthly Downloads](https://poser.pugx.org/crocodicstudio/crudbooster/d/monthly)](https://packagist.org/packages/crocodicstudio/crudbooster)
+[![Daily Downloads](https://poser.pugx.org/crocodicstudio/crudbooster/d/daily)](https://packagist.org/packages/crocodicstudio/crudbooster)
 [![GitHub forks](https://img.shields.io/github/forks/crocodic-studio/crudbooster.svg)](https://github.com/crocodic-studio/crudbooster/network)
 [![GitHub stars](https://img.shields.io/github/stars/crocodic-studio/crudbooster.svg)](https://github.com/crocodic-studio/crudbooster/stargazers)
 [![Twitter](https://img.shields.io/twitter/url/https/github.com/crocodic-studio/crudbooster.svg?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=%5Bobject%20Object%5D)
