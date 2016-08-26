@@ -20,7 +20,7 @@ CRUDBooster is Laravel Framework that modified to bring a lot of features to dev
 - Mbstring PHP Extension
 - Tokenizer PHP Extension
 
-## Installation Laravel 5.x
+## Installation For Laravel 5.x
 ### 1. Install via composer
 ```
 composer require crocodicstudio/crudbooster
