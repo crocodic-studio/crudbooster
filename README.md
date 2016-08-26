@@ -25,7 +25,7 @@ CRUDBooster is Laravel Framework that modified to bring a lot of features to dev
 ```
 composer require crocodicstudio/crudbooster
 ```
-### 2. Add Dependeny Packages to Service Provider (config/app.php)
+### 2. Add Dependencies Package to Service Provider (config/app.php)
 ```
 Barryvdh\DomPDF\ServiceProvider::class,
 Collective\Bus\BusServiceProvider::class,
