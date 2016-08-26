@@ -48,6 +48,10 @@ php artisan vendor:publish --force
 ```
 php artisan migrate --seed --force
 ```
+### 6. Testing
+Try to login at /admin 
+default username : admin@crudbooster.com
+default password : 123456
 
 ## Update Guide
 To update CRUDBooster, you can update your composer **composer update**
