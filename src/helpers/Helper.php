@@ -279,7 +279,7 @@ use Hash;
 use Cache;
 use Validator;
 
-class Api'.$controller_name.'Controller extends ApiController {
+class Api'.$controller_name.'Controller extends \crocodicstudio\crudbooster\controllers\ApiController {
 
     function __construct() {    
         $this->table     = "'.$table_name.'";        
