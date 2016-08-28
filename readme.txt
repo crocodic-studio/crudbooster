@@ -4,7 +4,7 @@
 | Package Name 	: crudbooster
 | Description 	: CRUDBooster is integrated backend & crud generator for Laravel
 | Package Path 	: crocodicstudio/crudbooster
-| Author 	: Ferry Ariawan <ferry@crocodic.com>
+| Homepage      : http://crudbooster.com
 |
 | --------------------------------------------------------------------------------------------
 | 1. Install via Composer
@@ -12,7 +12,7 @@
 | composer require crocodicstudio/crudbooster
 | 
 | --------------------------------------------------------------------------------------------
-| 2. Add Dependeny Packages to Service Provider (App/Config.php)
+| 2. Add Dependeny Packages to Service Provider (config/app.php)
 | --------------------------------------------------------------------------------------------
 | * Laravel DOMPDF
 | Barryvdh\DomPDF\ServiceProvider::class,
@@ -32,7 +32,7 @@
 | 'Image' => Intervention\Image\Facades\Image::class,
 |
 | --------------------------------------------------------------------------------------------
-| 3. Add CRUDBooster Package to Service Provider (App/Config.php)
+| 3. Add CRUDBooster Package to Service Provider (config/app.php)
 | --------------------------------------------------------------------------------------------
 | crocodicstudio\crudbooster\CRUDBoosterServiceProvider::class,
 |
