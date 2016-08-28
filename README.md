@@ -49,7 +49,7 @@ php artisan vendor:publish
 php artisan migrate --seed
 ```
 ### 6. Testing
-Try to login at /admin 
+Try to login at /admin  
 default username : admin@crudbooster.com  
 default password : 123456  
 
