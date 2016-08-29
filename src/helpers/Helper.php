@@ -1132,7 +1132,9 @@ if(!function_exists('get_method')) {
 */
 if(!function_exists('get_row_id')) {
     function get_row_id() {
-        return Request::segment(4);
+        $id = Request::segment(4);
+        $id = intval($id);
+        return $id;
     }
 }
 
