@@ -44,6 +44,10 @@ crocodicstudio\crudbooster\CRUDBoosterServiceProvider::class,
 ```
 php artisan vendor:publish
 ```
+Then  
+```
+php artisan vendor:publish --force --provider="crocodicstudio\crudbooster\CRUDBoosterServiceProvider"
+```
 ### 5. Migrating and Seeding the Core Database of CRUDBooster
 ```
 php artisan migrate --seed
