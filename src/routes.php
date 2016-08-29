@@ -42,7 +42,7 @@ Route::group(['middleware'=>['web'],'prefix'=>config('crudbooster.ADMIN_PATH'),'
 // ROUTER FOR OWN CONTROLLER FROM CB
 Route::group(['middleware'=>['web','\crocodicstudio\crudbooster\middlewares\CBBackend'],'prefix'=>config('crudbooster.ADMIN_PATH'),'namespace'=>'App\Http\Controllers'], function () {
 	
-		$master_controller = glob(base_path('App/Http/Controllers/*.php'));
+		$master_controller = glob(app_path('Http/Controllers/*.php'));
 		foreach($master_controller as &$m) $m = str_replace('.php','',basename($m));	
 
 		try {
