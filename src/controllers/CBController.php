@@ -104,7 +104,7 @@ class CBController extends Controller {
 				}
 
 				$first_form_tab   = array();
-				$first_form_tab[] = array("label"=>"Edit Data","route"=>url(mainpath("edit/".Request::segment(4)) ) );
+				$first_form_tab[] = array("label"=>"Edit Data","route"=>url(mainpath("edit/".get_row_id())));
 				$this->form_tab   = array_merge($first_form_tab,$this->form_tab);
 				if(Request::segment(3)=='edit' || Request::segment(3)=='add') Session::put('form_tab',$this->form_tab);		
 
@@ -151,7 +151,7 @@ class CBController extends Controller {
 		$privileges = DB::table("cms_privileges_roles")
 		            ->join("cms_moduls","cms_moduls.id","=","cms_privileges_roles.id_cms_moduls")
 		            ->where("cms_privileges_roles.id_cms_privileges",get_my_id_privilege())
-		            ->where("cms_moduls.path",Request::segment(2))->first();
+		            ->where("cms_moduls.path",get_module_path())->first();
 
 
 		if(get_method() == 'getDetail') {
