@@ -279,7 +279,7 @@ use Hash;
 use Cache;
 use Validator;
 
-class Api'.$controller_name.'Controller extends ApiController {
+class Api'.$controller_name.'Controller extends \crocodicstudio\crudbooster\controllers\ApiController {
 
     function __construct() {    
         $this->table     = "'.$table_name.'";        
@@ -790,41 +790,41 @@ function unparse_url($parsed_url) {
 }
 
 if(!function_exists('show_value')) {
-function show_value($id,$tabel,$show='value',$empty=''){
+    function show_value($id,$tabel,$show='value',$empty=''){
 
-    $queries = DB::table($tabel)
-        ->where('id','=',$id)
-        ->orderBy('id','DESC')
-        ->first();
+        $queries = DB::table($tabel)
+            ->where('id','=',$id)
+            ->orderBy('id','DESC')
+            ->first();
 
-    if(empty($queries))
-    {
-        $the_value =  $empty;
-    } else {
-        $the_value =  $queries->$show;
+        if(empty($queries))
+        {
+            $the_value =  $empty;
+        } else {
+            $the_value =  $queries->$show;
+        }
+
+        return $the_value;          
     }
-
-    return $the_value;          
-}
 }
 
 if(!function_exists('showValue_byField')) {
-function showValue_byField($string,$id,$table,$show='value',$empty=''){
+    function showValue_byField($field,$value,$table,$show='value',$empty=''){
 
-    $queries = DB::table($table)
-        ->where($string,'=',$id)
-        ->orderBy('id','DESC')
-        ->first();
+        $queries = DB::table($table)
+            ->where($field,'=',$value)
+            ->orderBy('id','DESC')
+            ->first();
 
-    if(empty($queries))
-    {
-        $the_value =  $empty;
-    } else {
-        $the_value =  $queries->$show;
+        if(empty($queries))
+        {
+            $the_value =  $empty;
+        } else {
+            $the_value =  $queries->$show;
+        }
+
+        return $the_value;          
     }
-
-    return $the_value;          
-}
 }
 
 /* 
@@ -1119,6 +1119,100 @@ if(!function_exists('get_method')) {
         $atloc = strpos($action, '@')+1;
         $method = substr($action, $atloc);
         return $method;
+    }
+}
+
+
+/* 
+| --------------------------------------------------------------------------------------------------------------
+| To get row id
+| --------------------------------------------------------------------------------------------------------------
+| will be return current row id of edit
+|
+*/
+if(!function_exists('get_row_id')) {
+    function get_row_id() {
+        $id = Request::segment(4);
+        $id = intval($id);
+        return $id;
+    }
+}
+
+
+/* 
+| --------------------------------------------------------------------------------------------------------------
+| To get module path
+| --------------------------------------------------------------------------------------------------------------
+| will be return module path
+|
+*/
+if(!function_exists('get_module_path')) {
+    function get_module_path() {
+        $path = Request::segment(2);        
+        return $path;
+    }
+}
+
+
+/* 
+| --------------------------------------------------------------------------------------------------------------
+| To get privilege
+| --------------------------------------------------------------------------------------------------------------
+| will be return privilege
+|
+*/
+if(!function_exists('privilege_is_visible')) {
+    function privilege_is_visible() {
+        $privileges = DB::table("cms_privileges_roles")
+                    ->join("cms_moduls","cms_moduls.id","=","cms_privileges_roles.id_cms_moduls")
+                    ->where("cms_privileges_roles.id_cms_privileges",get_my_id_privilege())
+                    ->where("cms_moduls.path",get_module_path())->first();
+        return ($privileges && $privileges->is_visible)?true:false;
+
+    }
+}
+
+if(!function_exists('privilege_is_read')) {
+    function privilege_is_read() {
+        $privileges = DB::table("cms_privileges_roles")
+                    ->join("cms_moduls","cms_moduls.id","=","cms_privileges_roles.id_cms_moduls")
+                    ->where("cms_privileges_roles.id_cms_privileges",get_my_id_privilege())
+                    ->where("cms_moduls.path",get_module_path())->first();
+        return ($privileges && $privileges->is_read)?true:false;
+
+    }
+}
+
+if(!function_exists('privilege_is_create')) {
+    function privilege_is_create() {
+        $privileges = DB::table("cms_privileges_roles")
+                    ->join("cms_moduls","cms_moduls.id","=","cms_privileges_roles.id_cms_moduls")
+                    ->where("cms_privileges_roles.id_cms_privileges",get_my_id_privilege())
+                    ->where("cms_moduls.path",get_module_path())->first();
+        return ($privileges && $privileges->is_create)?true:false;
+
+    }
+}
+
+if(!function_exists('privilege_is_update')) {
+    function privilege_is_update() {
+        $privileges = DB::table("cms_privileges_roles")
+                    ->join("cms_moduls","cms_moduls.id","=","cms_privileges_roles.id_cms_moduls")
+                    ->where("cms_privileges_roles.id_cms_privileges",get_my_id_privilege())
+                    ->where("cms_moduls.path",get_module_path())->first();
+        return ($privileges && $privileges->is_update)?true:false;
+
+    }
+}
+
+if(!function_exists('privilege_is_delete')) {
+    function privilege_is_delete() {
+        $privileges = DB::table("cms_privileges_roles")
+                    ->join("cms_moduls","cms_moduls.id","=","cms_privileges_roles.id_cms_moduls")
+                    ->where("cms_privileges_roles.id_cms_privileges",get_my_id_privilege())
+                    ->where("cms_moduls.path",get_module_path())->first();
+        return ($privileges && $privileges->is_delete)?true:false;
+
     }
 }
 

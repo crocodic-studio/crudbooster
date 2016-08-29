@@ -24,7 +24,7 @@ class PagesController extends CBController {
 
         $this->col = array();
 		$this->col[] = array("label"=>"Title","name"=>"title" );
-		$this->col[] = array("label"=>"Content","name"=>"content" );
+		$this->col[] = array("label"=>"Content","name"=>"content","str_limit"=>155 );
 
 		$this->form = array();
         $this->form[] = array("name"=>"slug","type"=>"hidden");

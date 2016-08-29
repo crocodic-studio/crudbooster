@@ -34,7 +34,7 @@ Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider::class,
 Intervention\Image\ImageServiceProvider::class,
 crocodicstudio\crudbooster\CRUDBoosterServiceProvider::class,
 ```
-### 3. Add Bellow Facade to (config/app.php)
+### 3. Add Bellow Facades to (config/app.php)
 ```
 'PDF' => Barryvdh\DomPDF\Facade::class,
 'Excel' => Maatwebsite\Excel\Facades\Excel::class,
@@ -42,20 +42,25 @@ crocodicstudio\crudbooster\CRUDBoosterServiceProvider::class,
 ```
 ### 4. Publish Configuration and Databases
 ```
-php artisan vendor:publish --force
+php artisan vendor:publish
+```
+Then  
+```
+php artisan vendor:publish --force --provider="crocodicstudio\crudbooster\CRUDBoosterServiceProvider"
 ```
 ### 5. Migrating and Seeding the Core Database of CRUDBooster
 ```
-php artisan migrate --seed --force
+php artisan migrate --seed
 ```
 ### 6. Testing
-Try to login at /admin 
-default username : admin@crudbooster.com
-default password : 123456
+Try to login at /admin  
+default username : admin@crudbooster.com  
+default password : 123456  
 
 ## Update Guide
-To update CRUDBooster, you can update your composer **composer update**
-After update the CRUDBooster don't forget to re-publish configuration (Step 4) and re-migration & seeding (Step 5) to make sure any update work properly.
+To update CRUDBooster, "composer require crocodicstudio/crudbooster"  
+After update the CRUDBooster don't forget to re-publish configuration (Step 4)  
+and re-migration & seeding (Step 5) to make sure any update work properly.
 
 
 ## DOCUMENTATION
