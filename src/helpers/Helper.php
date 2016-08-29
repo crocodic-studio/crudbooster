@@ -790,41 +790,41 @@ function unparse_url($parsed_url) {
 }
 
 if(!function_exists('show_value')) {
-function show_value($id,$tabel,$show='value',$empty=''){
+    function show_value($id,$tabel,$show='value',$empty=''){
 
-    $queries = DB::table($tabel)
-        ->where('id','=',$id)
-        ->orderBy('id','DESC')
-        ->first();
+        $queries = DB::table($tabel)
+            ->where('id','=',$id)
+            ->orderBy('id','DESC')
+            ->first();
 
-    if(empty($queries))
-    {
-        $the_value =  $empty;
-    } else {
-        $the_value =  $queries->$show;
+        if(empty($queries))
+        {
+            $the_value =  $empty;
+        } else {
+            $the_value =  $queries->$show;
+        }
+
+        return $the_value;          
     }
-
-    return $the_value;          
-}
 }
 
 if(!function_exists('showValue_byField')) {
-function showValue_byField($string,$id,$table,$show='value',$empty=''){
+    function showValue_byField($field,$value,$table,$show='value',$empty=''){
 
-    $queries = DB::table($table)
-        ->where($string,'=',$id)
-        ->orderBy('id','DESC')
-        ->first();
+        $queries = DB::table($table)
+            ->where($field,'=',$value)
+            ->orderBy('id','DESC')
+            ->first();
 
-    if(empty($queries))
-    {
-        $the_value =  $empty;
-    } else {
-        $the_value =  $queries->$show;
+        if(empty($queries))
+        {
+            $the_value =  $empty;
+        } else {
+            $the_value =  $queries->$show;
+        }
+
+        return $the_value;          
     }
-
-    return $the_value;          
-}
 }
 
 /* 
