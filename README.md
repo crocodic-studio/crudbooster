@@ -58,8 +58,9 @@ default username : admin@crudbooster.com
 default password : 123456  
 
 ## Update Guide
-To update CRUDBooster, you can update your composer **composer update**
-After update the CRUDBooster don't forget to re-publish configuration (Step 4) and re-migration & seeding (Step 5) to make sure any update work properly.
+To update CRUDBooster, "composer require crocodicstudio/crudbooster"  
+After update the CRUDBooster don't forget to re-publish configuration (Step 4)  
+and re-migration & seeding (Step 5) to make sure any update work properly.
 
 
 ## DOCUMENTATION
