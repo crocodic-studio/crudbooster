@@ -104,7 +104,7 @@ class CBController extends Controller {
 				}
 
 				$first_form_tab   = array();
-				$first_form_tab[] = array("label"=>"Edit Data","route"=>url(config("crudbooster.ADMIN_PATH").$this->table."/edit/".Request::segment(4)));
+				$first_form_tab[] = array("label"=>"Edit Data","route"=>url(mainpath("edit/".Request::segment(4)) ) );
 				$this->form_tab   = array_merge($first_form_tab,$this->form_tab);
 				if(Request::segment(3)=='edit' || Request::segment(3)=='add') Session::put('form_tab',$this->form_tab);		
 
