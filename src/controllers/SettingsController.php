@@ -39,7 +39,7 @@ class SettingsController extends CBController {
 			$ro = DB::table('cms_settings')->where('id',$id)->first();
 			$type = $ro->content_input_type;
 
-			$this->form[] = array("label"=>"Name","name"=>"name","readonly"=>true,"callback_php"=>'ucwords(str_replace("_"," ",$row->name))');
+			$this->form[] = array("label"=>"Name","name"=>"name","readonly"=>true,"callback_php"=>'str_replace("_"," ",$row->name)');
 
 			if($type=='radio' || $type=='select') {
 				if($ro->dataenum) {
