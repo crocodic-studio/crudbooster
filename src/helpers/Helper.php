@@ -331,8 +331,12 @@ if(!function_exists('generate_controller')) {
 function generate_controller($table,$name='') { 
         
         $exception          = ['slug'];
-        $image_candidate    = explode(',',env('IMAGE_FIELDS_CANDIDATE'));
-        $password_candidate = explode(',',env('PASSWORD_FIELDS_CANDIDATE'));
+        $image_candidate    = explode(',',env('IMAGE_FIELDS_CANDIDATE','image,picture,photo,photos,foto,gambar,thumbnail'));
+        $password_candidate = explode(',',env('PASSWORD_FIELDS_CANDIDATE','password,pass,pwd,passwrd,sandi,pin'));
+        $phone_candidate    = explode(',',env('PHONE_FIELDS_CANDIDATE','phone,telp,hp,notelp,no_telp,no_phone,phone_number'));
+        $email_candidate    = explode(',',env('EMAIL_FIELDS_CANDIDATE','email,mail,email_address,mail_address'));
+        $name_candidate     = explode(',',env('NAME_FIELDS_CANDIDATE','name,nama,person_name,person,fullname,full_name,nickname,nick,nick_name'));
+        $url_candidate      = explode(',',env("URL_FIELDS_CANDIDATE",'url,link'));
 
 
         $controllername = ucwords(str_replace('_',' ',$table));        
@@ -403,7 +407,12 @@ class Admin'.$controllername.' extends \crocodicstudio\crudbooster\controllers\C
         $php .= "\n\t\t".'$this->form = array();'."\n";
 
         foreach($coloms as $c) {
-            $add_attr = '';
+            $attribute    = array();
+            $validation   = array();
+            $validation[] = 'required';            
+            $placeholder  = '';
+            $help         = '';
+
             $label = str_replace("id_","",$c);
             $label = ucwords(str_replace("_"," ",$label));      
             $field = $c;
@@ -431,53 +440,103 @@ class Admin'.$controllername.' extends \crocodicstudio\crudbooster\controllers\C
                 case 'varchar':
                 case 'char':
                 $type = "text";
+                $validation[] = "min:3|max:255";                
                 break;
                 case 'text':
                 case 'longtext':
                 $type = 'textarea';
+                $validation[] = "string|min:5|max:5000";                
                 break;
                 case 'date':
                 $type = 'date';
+                $validation[] = "date";
                 break;
                 case 'datetime':
                 case 'timestamp':
                 $type = 'datetime';
+                $validation[] = "date";
+                break;
+                case 'double':
+                $type = 'money';
+                $validation[] = "numeric";
                 break;
                 case 'enum':
-                $type = 'radio';                
-                $add_attr = ', "dataenum"=>['.$typedata_length.']';                
+                $type = 'radio';                                    
+                $attribute['dataenum'] = "array(".$typedata_length.")";         
                 break;
             }
-           
-            $datatable = '';
+                       
             if(substr($field,0,3)=='id_') {
                 $jointable = str_replace('id_','',$field);
                 $joincols = get_columns_table($jointable);
                 $joinname = get_namefield_table($joincols);
-                $datatable = ',"datatable"=>"'.$jointable.','.$joinname.'"';
+                $attribute['datatable'] = $jointable.','.$joinname;
                 $type = 'select';
             }
 
             if(in_array($field, $password_candidate)) {
                 $type = 'password';
-                $add_attr = ', "help"=>"Please leave empty if you did not change the password"';
+                $validation[] = 'min:5';
+                $attribute['help'] = "Minimum 5 characters. Please leave empty if you did not change the password.";                
             }
 
         
             if(in_array($field, $image_candidate)) {
-                $type = 'upload';
-                $add_attr = ', "help"=>"Please upload Image only, Do not upload with file size more than 5 MB, File types support only : JPG, JPEG, PNG, GIF, BMP", "upload_file"=>false';
+                $type = 'upload';                
+                $attribute['help'] = "File types support : JPG, JPEG, PNG, GIF, BMP";
+                $attribute['upload_file'] = FALSE;
             }           
 
             if($field == 'latitude' || $field == 'longitude') {
-                $type = 'hidden';            
+                $type = 'hidden';      
+                $attribute['googlemaps'] = TRUE;      
             }
 
-            if($field == 'latitude') {
-                $add_attr .= ',"googlemaps"=>true';
+            if(in_array($field, $phone_candidate)) {
+                $type = 'number';
+                $validation[] = 'integer';
+                $attribute['help'] = "You can only enter the number only";
             }
 
-            $php .= "\t\t".'$this->form[] = array("label"=>"'.$label.'","name"=>"'.$field.'","type"=>"'.$type.'","required"=>true '.$datatable.' '.$add_attr.' );'."\n";   
+            if(in_array($field, $email_candidate)) {
+                $type = 'text';
+                $validation[] = 'email|unique:'.$table;
+                $attribute['help'] = "Please enter a valid email address";
+            }
+
+            if($type=='text' && in_array($field, $name_candidate)) {
+                $validation[] = 'alpha_spaces';    
+                $attribute['help'] = "You can only enter the letter only";            
+            }
+
+            if($type=='text' && in_array($field, $url_candidate)) {
+                $validation[] = 'url';
+                $attribute['help'] = "Please enter a valid URL";
+            }
+
+            $validation = implode('|',$validation);
+
+            $php .= "\t\t";
+            $php .= '$this->form[] = array("label"=>"'.$label.'","name"=>"'.$field.'","type"=>"'.$type.'","required"=>TRUE';
+            
+            if($validation) $php .= ',"validation"=>"'.$validation.'"';            
+
+            if($attribute) {
+                foreach($attribute as $key=>$val) {
+                    if(is_bool($val)) {
+                        $val = ($val)?"TRUE":"FALSE";
+                    }else{
+                        if(strpos($val, "array(")!==FALSE) {
+                            $val = $val;
+                        }else{
+                            $val = '"'.$val.'"';
+                        }                        
+                    }
+                    $php .= ',"'.$key.'"=>'.$val;
+                }
+            }
+
+            $php .= ");\n";            
         }
 
 $php .= '     
@@ -537,6 +596,8 @@ $php .= '
         //Use this hook if you want execute other command after delete command called 
 
     }
+
+    //By the way, you can still create your own method in here... :)
     
 }
         ';

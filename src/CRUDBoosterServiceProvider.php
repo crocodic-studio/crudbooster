@@ -44,6 +44,8 @@ class CRUDBoosterServiceProvider extends ServiceProvider
             __DIR__.'/laravel-filemanager/src/views/script.blade.php' => resource_path('views/vendor/laravel-filemanager/script.blade.php'),
         ],'cb_lfm_config');
         
+        
+        require __DIR__.'/validations/validation.php';
         require __DIR__.'/helpers/Helper.php';
         require __DIR__.'/routes.php';        
         

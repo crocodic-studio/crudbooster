@@ -235,11 +235,10 @@ class CBController extends Controller {
 		if(@$this->data['priv']->sql_where) {
 			$sqlwhere = $this->data['priv']->sql_where;
 			$sqlwhere = str_ireplace("where ","",$sqlwhere);
-			$sqlwhere = str_replace(array("[admin_id]","[admin_id_companies]"),array(get_my_id(),Session::get('admin_id_companies')),$sqlwhere);
+			$sqlwhere = str_replace(array("[admin_id]","[admin_id_companies]"),array(get_my_id(),get_my_id_company()),$sqlwhere);
 			$result->whereraw($sqlwhere);
 		}
-
-		$jointmp = array();
+		
 		$alias = array();
 		$e = 0;		
 		foreach($columns_table as $index => $coltab) {
@@ -251,7 +250,7 @@ class CBController extends Controller {
 			}
 			$field = $coltab['name'];
 
-			if(!$field) die('Please make sure there is key name in each row of col');
+			if(!$field) die('Please make sure there is key `name` in each row of col');
 
 			//Jika ada subquery
 			if(strpos($field, ' as ')!==FALSE) {
@@ -360,8 +359,6 @@ class CBController extends Controller {
 				$value = @$fc['value'];
 				$type  = @$fc['type'];
 
-				if($value=='' || $type=='') continue;
-
 				if($type == 'asc' || $type == 'desc') {
 					if($key && $type) $result->orderby($key,$type);
 					$filter_is_orderby = true;
@@ -370,7 +367,7 @@ class CBController extends Controller {
 				}else{
 					continue;
 				}
-			}			
+			}					
 		}
 
 
@@ -553,8 +550,7 @@ class CBController extends Controller {
 		$rows          = DB::table($this->table)->select(DB::raw("SQL_CALC_FOUND_ROWS ".$this->table.".".$this->primary_key))
 		->take($limit)
 		->skip($posts['start']);
-
-		$jointmp = array();
+		
 		$e = 0;
 		foreach($columns_table as $index => $coltab) {
 			
@@ -780,6 +776,7 @@ class CBController extends Controller {
 
 	public function validation() {
 
+		$request_all = Request::all();
 		$array_input = array();
 		foreach($this->data_inputan as $di) {
 			$ai = array();			
@@ -800,6 +797,11 @@ class CBController extends Controller {
 			}
 			$name = $di['name'];
 			if(!$name) continue;
+			
+			if($di['type']=='money') {
+				$request_all[$name] = preg_replace('/[^\d-]+/', '', $request_all[$name]); 
+			}
+
 
 			if(@$di['validation']) {
 				$id = get_row_id();
@@ -817,6 +819,12 @@ class CBController extends Controller {
 
 						$e = 'unique:'.$e_table.','.$e_column.','.$e_id_ignore;	
 					}
+
+					if($e == 'image'){
+						if($id) {
+							$e = NULL;
+						}
+					}
 					
 				}
 
@@ -828,7 +836,7 @@ class CBController extends Controller {
 			}			
 		}
 
-		$validator = Validator::make(Request::all(),$array_input);
+		$validator = Validator::make($request_all,$array_input);
 		
 		if ($validator->fails()) 
 		{
@@ -847,6 +855,10 @@ class CBController extends Controller {
 			if(!$name) continue;
 
 			$inputdata = Request::get($name);
+
+			if($ro['type']=='money') {
+				$inputdata = preg_replace('/[^\d-]+/', '', $inputdata); 
+			}
 
 			if(isset($ro['onlyfor'])) {
 				if(is_array($ro['onlyfor'])) {

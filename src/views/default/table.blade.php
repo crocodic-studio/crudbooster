@@ -82,7 +82,26 @@
                       @foreach($html_contents as $hc)
                           {!! '<tr><td>'.implode('</td><td>',$hc).'</td></tr>' !!}
                       @endforeach
-                    </tbody>                 
+                    </tbody>  
+
+
+                    <tfoot>
+                    <tr>                      
+                      <th> - </th>
+                      <?php                       
+                        foreach($columns as $col) {
+                            if($col['visible']===0) continue;
+                            $colname = $col['label'];
+                            $width = ($col['width'])?:"auto";
+                            echo "<th width='$width'>$colname</th>";
+                        }
+                      ?>   
+
+                      @if($priv->is_edit!=0 || $priv->is_delete!=0 || $priv->is_read!=0)
+                      <th> - </th>
+                      @endif                                                               
+                    </tr>
+                    </tfoot>               
                   </table>                                   
                 </div><!-- /.box-body -->                
 
