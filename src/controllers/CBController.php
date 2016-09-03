@@ -802,7 +802,27 @@ class CBController extends Controller {
 			if(!$name) continue;
 
 			if(@$di['validation']) {
-				$array_input[$name] = $di['validation'];
+				$id = get_row_id();
+				$id = intval($id);
+				$exp = explode('|',$di['validation']);
+				foreach($exp as &$e) {
+
+					if(strpos($e, 'unique:') !== FALSE) {
+						$e = str_replace('unique:','',$e);
+						$e_raw = explode(',',$e);
+
+						@$e_table = $e_raw[0];
+						@$e_column = $e_raw[1]?:$di['name'];
+						@$e_id_ignore = $e_raw[2]?:$id;
+
+						$e = 'unique:'.$e_table.','.$e_column.','.$e_id_ignore;	
+					}
+					
+				}
+
+				$validation = implode('|',$exp);
+
+				$array_input[$name] = $validation;
 			}else{
 				$array_input[$name] = implode('|',$ai);	
 			}			
