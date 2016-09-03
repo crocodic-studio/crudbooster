@@ -46,8 +46,11 @@
 	<!--SWEET ALERT-->
 	<script src="{{asset('vendor/crudbooster/assets/sweetalert/dist/sweetalert.min.js')}}"></script> 
 	<link rel="stylesheet" type="text/css" href="{{asset('vendor/crudbooster/assets/sweetalert/dist/sweetalert.css')}}">
+
+	<!--MONEY FORMAT-->
+	<script src="{{asset('vendor/crudbooster/assets/jquery.price_format.2.0.min.js')}}"></script>
 	
-	<script>	
+	<script>			
 		// request permission on page load
 		document.addEventListener('DOMContentLoaded', function () {
 		  if (!Notification) {
@@ -174,7 +177,12 @@
 		function hide_alert_floating() {			
 			$(".alert_floating").slideUp();
 		}
-		$(function() {			
+		$(function() {		
+
+			$('.inputMoney').priceFormat({
+				prefix: '',
+			    clearPrefix: true
+			});	
 
 			jQuery.fn.outerHTML = function(s) {
 			    return s
