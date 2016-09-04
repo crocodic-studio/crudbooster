@@ -518,7 +518,7 @@ class Admin'.$controllername.' extends \crocodicstudio\crudbooster\controllers\C
 
             if(in_array($field, $phone_candidate)) {
                 $type = 'number';
-                $validation[] = 'numeric';
+                $validation = ['required','min:3','numeric'];
                 $attribute['placeholder'] = "You can only enter the number only";
             }
 
