@@ -55,7 +55,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
 
 
         $this->app->booted(function () {
-            $schedule = $this->app->make(Schedule::class);
+            $schedule = $this->app->make(\Illuminate\Console\Scheduling\Schedule::class);
             $schedule->command('mailqueues')->cron("* * * * * *");
         });    
         
