@@ -12,6 +12,26 @@
 
 /* 
 | --------------------------------------------------------------------------------------------------------------
+| To get diffrence minute between date
+| --------------------------------------------------------------------------------------------------------------
+| $dateFrom = path of route
+| $dateTo   = controller name
+|
+*/
+
+if(!function_exists('diff_minute')) {
+    function diff_minute($dateFrom,$dateTo='NOW') {
+
+        $dateTo = ($dateTo == 'NOW')?date('Y-m-d H:i:s'):$dateTo;
+
+        $to_time = strtotime($dateTo);
+        $from_time = strtotime($dateFrom);
+        return round(abs($to_time - $from_time) / 60,2);
+    }
+}
+
+/* 
+| --------------------------------------------------------------------------------------------------------------
 | Alternate route for Laravel Route::controller
 | --------------------------------------------------------------------------------------------------------------
 | $prefix       = path of route
@@ -826,6 +846,30 @@ function send_email($to,$subject,$html,$from='',$template='') {
         $message->subject($subject);
     });
 }
+}
+
+/* 
+| --------------------------------------------------------------------------------------------------------------
+| To send email with queues
+| --------------------------------------------------------------------------------------------------------------
+| $to       = email destination
+| $subject  = subject of email
+| $content  = content of email 
+| $send_at  = DateTime to send the email
+| $cc       = cc email
+|
+*/
+if(!function_exists('send_email_queue')) {
+    function send_email_queue($to,$subject,$content,$send_at=NULL,$cc=NULL) {
+         $a = array();
+         $a['send_at'] = isset($send_at)?date('Y-m-d H:i:s',strtotime($send_at)):date('Y-m-d H:i:s');
+         $a['email_recipient'] = $to;
+         if(isset($cc)) $a['email_cc'] = $cc;
+         $a['email_subject'] = $subject;
+         $a['email_content'] = $content;
+         $a['is_sent'] = 0;
+         DB::table('cms_email_queues')->insert($a);
+    }
 }
 
 /* 

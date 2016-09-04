@@ -21,5 +21,7 @@ return [
 	
 	'UPLOAD_TYPES'              =>'jpg,png,jpeg,gif,bmp,pdf,xls,xlsx,doc,docx,txt,zip,rar,7z',
 
+	'LIMIT_EMAIL_PER_HOUR'		=> 200,
+
 	'GOOGLE_API_KEY'			=> NULL
 ];
