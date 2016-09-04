@@ -484,6 +484,10 @@ class Admin'.$controllername.' extends \crocodicstudio\crudbooster\controllers\C
                 $type = 'radio';                                    
                 $attribute['dataenum'] = "array(".$typedata_length.")";         
                 break;
+                case 'int':
+                case 'integer':
+                $validation[] = 'integer';
+                break;
             }
                        
             if(substr($field,0,3)=='id_') {
@@ -496,7 +500,7 @@ class Admin'.$controllername.' extends \crocodicstudio\crudbooster\controllers\C
 
             if(in_array($field, $password_candidate)) {
                 $type = 'password';
-                $validation[] = 'min:5';
+                $validation = ['min:5','max:32'];
                 $attribute['help'] = "Minimum 5 characters. Please leave empty if you did not change the password.";                
             }
 
@@ -514,24 +518,24 @@ class Admin'.$controllername.' extends \crocodicstudio\crudbooster\controllers\C
 
             if(in_array($field, $phone_candidate)) {
                 $type = 'number';
-                $validation[] = 'integer';
-                $attribute['help'] = "You can only enter the number only";
+                $validation[] = 'numeric';
+                $attribute['placeholder'] = "You can only enter the number only";
             }
 
             if(in_array($field, $email_candidate)) {
-                $type = 'text';
+                $type = 'email';
                 $validation[] = 'email|unique:'.$table;
-                $attribute['help'] = "Please enter a valid email address";
+                $attribute['placeholder'] = "Please enter a valid email address";
             }
 
             if($type=='text' && in_array($field, $name_candidate)) {
                 $validation[] = 'alpha_spaces';    
-                $attribute['help'] = "You can only enter the letter only";            
+                $attribute['placeholder'] = "You can only enter the letter only";            
             }
 
             if($type=='text' && in_array($field, $url_candidate)) {
                 $validation[] = 'url';
-                $attribute['help'] = "Please enter a valid URL";
+                $attribute['placeholder'] = "Please enter a valid URL";
             }
 
             $validation = implode('|',$validation);

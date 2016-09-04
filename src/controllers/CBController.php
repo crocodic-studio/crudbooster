@@ -841,7 +841,7 @@ class CBController extends Controller {
 		if ($validator->fails()) 
 		{
 			$message = $validator->messages();			
-			$res = redirect()->back()->with("errors",$message)->withInput();
+			$res = redirect()->back()->with("errors",$message)->with(['message'=>'Ups please complete the form','message_type'=>'warning'])->withInput();
 			\Session::driver()->save();
 			$res->send();
         	exit();
