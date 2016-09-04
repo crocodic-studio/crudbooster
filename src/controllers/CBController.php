@@ -967,7 +967,7 @@ class CBController extends Controller {
 		//insert log
 		insert_log("Add new data ".$this->arr[$this->title_field]." at ".$this->data['module_name']);
 
-		if(Request::get('addmore')) {
+		if(Request::get('submit') == 'Save & Add More') {
 			return redirect(mainpath().'/add?'.$ref_parameter)->with(['message'=>'The data has been added !, please add more...','message_type'=>'success']);
 		}
 
@@ -1045,7 +1045,7 @@ class CBController extends Controller {
 
 		insert_log("Update data ".$this->arr[$this->title_field]." at ".$this->data['module_name']);
 
-		if(Request::get('addmore')) {
+		if(Request::get('submit') == 'Save & Add More') {
 			return redirect(mainpath().'/add?'.$ref_parameter)->with(['message'=>'The data has been added !, please add more...','message_type'=>'success']);
 		}
 

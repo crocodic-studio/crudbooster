@@ -48,7 +48,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         
         
         require __DIR__.'/validations/validation.php';
-        require __DIR__.'/helpers/Helper.php';
+        
         require __DIR__.'/routes.php';    
         require __DIR__.'/commands/Mailqueues.php';    
 
@@ -67,7 +67,8 @@ class CRUDBoosterServiceProvider extends ServiceProvider
      * @return void
      */
     public function register()
-    {                                 
+    {                           
+        require __DIR__.'/helpers/Helper.php';      
 
         $this->app['crudbooster'] = $this->app->share(function ()
         {

@@ -116,8 +116,12 @@
                 	<div class='pull-right'>														
             					@if($button_cancel)<a href='{{url($dashboard)."?".urldecode(http_build_query(@$_GET)) }}' class='btn btn-default'>Cancel</a>@endif
                       @if( ($priv->is_create || $priv->is_edit) && count($forms)!=0)
-                         @if($priv->is_create && $button_addmore==TRUE) <button title='Save Data' class='btn btn-success addmore' type='button'><i class='fa fa-save'></i> Save & Add More</button>@endif
-                         @if($button_save)<button title='Save Data' class='btn btn-success btn-form-save' onclick="$('#form').submit()" type='button'><i class='fa fa-save'></i> Save</button>@endif
+                         @if($priv->is_create && $button_addmore==TRUE)                             
+                            <input type='submit' name='submit' value='Save & Add More' class='btn btn-success'/>
+                         @endif
+                         @if($button_save)
+                            <input type='submit' name='submit' value='Save' class='btn btn-success'/>
+                         @endif
                       @endif
         					</div>
                 </div><!-- /.box-footer-->
@@ -129,13 +133,6 @@
 
 
     </div><!-- /.row -->
-
-    <script type="text/javascript">
-    	$('.addmore').click(function() {
-    		$("#form input[name=addmore]").val(1);
-        	$("#form").submit();
-    	})
-    </script>
 
     <?php 
     //FORM SUB 
