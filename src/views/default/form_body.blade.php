@@ -326,14 +326,14 @@
                 			})
                 		</script>
                 		<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}'>
-                			<label>{{$form['label']}}</label>
+                			<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
                 			<div id='qrcode_{{$name}}'></div>
                 		</div>                		
                 		@endif
 
                 		@if(@$type=='checkbox')
 						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-							<label>{{$form['label']}}</label>							
+							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>							
 							<?php 
 								$value = explode(";",$value);
 								array_walk($value, 'trim');
@@ -412,7 +412,7 @@
 
                 		@if(@$type=='text' || @!$type)
 						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-							<label>{{$form['label']}}</label>
+							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
 							<input type='text' title="{{$form['label']}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control' name="{{$name}}" id="{{$name}}" value='{{$value}}'/>
 							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
 							<p class='help-block'>{{ @$form['help'] }}</p>
@@ -421,7 +421,7 @@
 
 						@if(@$type=='number')
 						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-							<label>{{$form['label']}}</label>
+							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
 							<input type='number' title="{{$form['label']}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control' name="{{$name}}" id="{{$name}}" value='{{$value}}'/>
 							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
 							<p class='help-block'>{{ @$form['help'] }}</p>
@@ -430,7 +430,7 @@
 
 						@if(@$type=='email')
 						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-							<label>{{$form['label']}}</label>
+							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
 							<div class="input-group">
 			                	<span class="input-group-addon"><i class="fa fa-envelope"></i></span>
 			                	<input type='email' title="{{$form['label']}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control' name="{{$name}}" id="{{$name}}" value='{{$value}}'/>
@@ -442,7 +442,7 @@
 
 						@if(@$type=='money')
 						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-							<label>{{$form['label']}}</label>
+							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
 							<input type='text' title="{{$form['label']}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control inputMoney' name="{{$name}}" id="{{$name}}" value='{{$value}}'/>
 							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
 							<p class='help-block'>{{ @$form['help'] }}</p>
@@ -451,7 +451,7 @@
 
 						@if(@$type=='browse')
 						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-							<label>{{$form['label']}}</label>
+							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
 							<div class="input-group">
 						      <input type="text" class="form-control" id="{{$name.'_label'}}" {{$required}} readonly placeholder="Please browse data...">
 						      <span class="input-group-btn">
@@ -549,9 +549,21 @@
 
 						@if(@$type=='date' || @$type=='datepicker')
 						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-							<label>{{$form['label']}}</label>
+							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
 							<div class="input-group">  								
 								<input type='text' title="{{$form['label']}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control notfocus datepicker' name="{{$name}}" id="{{$name}}" value='{{$value}}'/>
+								<span class="input-group-addon"><i class='fa fa-calendar'></i></span>
+							</div>
+							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
+							<p class='help-block'>{{ @$form['help'] }}</p>
+						</div>
+						@endif
+
+						@if(@$type=='datetime' || @$type=='datetimepicker')
+						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
+							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
+							<div class="input-group">  								
+								<input type='text' title="{{$form['label']}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control notfocus datetimepicker' name="{{$name}}" id="{{$name}}" value='{{$value}}'/>
 								<span class="input-group-addon"><i class='fa fa-calendar'></i></span>
 							</div>
 							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
@@ -562,7 +574,7 @@
 						@if(@$type=='time' || @$type=='timepicker')
 						<div class='bootstrap-timepicker'>
 							<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-								<label>{{$form['label']}}</label>
+								<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
 								<div class="input-group">	  								
 									<input type='text' title="{{$form['label']}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control notfocus timepicker' name="{{$name}}" id="{{$name}}" value='{{$value}}'/>
 									<span class="input-group-addon"><i class='fa fa-clock-o'></i></span>
@@ -573,17 +585,6 @@
 						</div>
 						@endif
 
-						@if(@$type=='datetime' || @$type=='datetimepicker')
-						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-							<label>{{$form['label']}}</label>
-							<div class="input-group">  								
-								<input type='text' title="{{$form['label']}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control notfocus datetimepicker' name="{{$name}}" id="{{$name}}" value='{{$value}}'/>
-								<span class="input-group-addon"><i class='fa fa-calendar'></i></span>
-							</div>
-							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
-							<p class='help-block'>{{ @$form['help'] }}</p>
-						</div>
-						@endif
 
 						@if(@$type=='hide' || @$type=='hidden')
 						<input type='hidden' name="{{$name}}" value='{{$value}}'/>
@@ -591,7 +592,7 @@
  
 						@if(@$type=='textarea')
 						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-							<label>{{$form['label']}}</label>							
+							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>							
 							<textarea name="{{$form['name']}}" id="{{$name}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control' rows='5'>{{ $value}}</textarea>
 							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
 							<p class='help-block'>{{ @$form['help'] }}</p>
@@ -601,7 +602,7 @@
 
 						@if(@$type=='wysiwyg')
 						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-							<label>{{$form['label']}}</label>	
+							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>	
 							<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 							<textarea id='textarea_{{$name}}' name="{{$name}}" class="form-control my-editor">{!! old($name, $value) !!}</textarea>
 							<script>
@@ -650,7 +651,7 @@
 
 						@if(@$type=='password')
 						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-							<label>{{$form['label']}}</label>
+							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
 							<input type='password' title="{{$form['label']}}" id="{{$name}}" {{$required}} {!!$placeholder!!} {{$readonly}} {{$disabled}} class='form-control' name="{{$name}}"/>							
 							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
 							<p class='help-block'>{{ @$form['help'] }}</p>
@@ -691,7 +692,7 @@
 							endif;
 						?>
 						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-							<label>{{$form['label']}}</label>												
+							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>												
 							<select class='form-control' id="{{$name}}" data-value='{{$value}}' {{$required}} {!!$placeholder!!} {{$readonly}} {{$disabled}} name="{{$name}}">
 								<option value=''>** Please Select a {{$form['label']}}</option>
 								<?php 
@@ -795,7 +796,7 @@
 							$(function() {
 								$('#<?php echo $name?>').select2({
 								  ajax: {								  	
-								    url: '{{$url}}',
+								    url: '{!! $url !!}',								    
 								    delay: 250,								   
 								    placeholder: {
 									    id: '-1', 
@@ -836,7 +837,7 @@
 							})
 						</script>
 						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-							<label>{{$form['label']}}</label>												
+							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>												
 							<select class='form-control' id="{{$name}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} name="{{$name}}">	
 								
 							</select>
@@ -848,7 +849,7 @@
 
 						@if(@$type=='radio')
 						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' style="{{@$form['style']}}">
-							<label>{{$form['label']}}</label><br/>
+							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label><br/>
 							<?php foreach($form['dataenum'] as $k=>$d):
 								$val = $lab = '';
 								if(strpos($d,'|')!==FALSE) {
@@ -872,7 +873,7 @@
 
 						@if(@$type=='upload')							
 							<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style='{{@$form["style"]}}'>
-								<label>{{$form['label']}}</label>
+								<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
 
 								<div class="input-group">
 							      <span class="input-group-btn">
@@ -908,7 +909,7 @@
 
 						@if(@$type=='upload_standard')
 						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-							<label>{{$form['label']}}</label>
+							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
 							@if($value)
 								<?php 
 									$file = str_replace('uploads/','',$row->{$name});
