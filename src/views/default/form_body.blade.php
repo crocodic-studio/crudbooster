@@ -797,13 +797,21 @@
 
 						@if(@$type=='select2')
 						<?php 
-							$select2_source = ($form["select2_source"])?:$form["select2_controller"];
+							$select2_source = @$form["select2_controller"];
+							$datatable = @$form['datatable'];
+
+							if($datatable) {
+								$raw = explode(',',$datatable);
+								$url = mainpath("find-data")."?table=".$raw[0]."&column=".$raw[1];
+							}else{
+								$url = route($select2_source."GetFindData");
+							}
 						?>
 						<script>
 							$(function() {
 								$('#<?php echo $name?>').select2({
 								  ajax: {								  	
-								    url: '{{route($select2_source."GetFindData")}}',
+								    url: '{{$url}}',
 								    delay: 250,								   
 								    placeholder: {
 									    id: '-1', 
@@ -827,7 +835,7 @@
 								  initSelection: function(element, callback) {
 							            var id = $(element).val()?$(element).val():"{{$value}}";
 							            if(id!=='') {
-							                $.ajax('{{route($select2_source."GetFindData")}}', {
+							                $.ajax('{{$url}}', {
 							                    data: {id: id},
 							                    dataType: "json"
 							                }).done(function(data) {							                	
@@ -917,25 +925,25 @@
 							<label>{{$form['label']}}</label>
 							@if($value)
 								<?php 
-									if(Storage::exists($row->{$name})) {
-										
-										$url = asset($row->{$name});
-										$info = new SplFileInfo($url);
-										$ext  = strtolower($info->getExtension());
+									$file = str_replace('uploads/','',$row->{$name});
+									if(Storage::exists($file)) {										
+										$url         = asset($row->{$name});
+										$ext 	     = explode('.',$url);
+										$ext 		 = end($ext);
+										$ext 		 = strtolower($ext);
 										$images_type = array('jpg','png','gif','jpeg','bmp','tiff');									
-										$filesize = Storage::size($row->{$name});																
-										$humansize = human_filesize($filesize);										
+										$filesize    = Storage::size($file);																						
 									}
 									
 									if($filesize):
-									if(in_array($ext, $images_type)):
-								?>
-									<p><img style='max-width:100%' title="Image For {{$form['label']}}, File Size : {{$humansize}}, File Type : {{$ext}}" src='{{$url}}'/></p>
-								<?php else:?>
-									<p><a href='{{$url}}' title='Download File (Size ({{$humansize}}), Type : {{$ext}})'>Download File</a></p>
-								<?php endif;
+										if(in_array($ext, $images_type)):
+										?>
+											<p><img style='max-width:100%' title="Image For {{$form['label']}}, File Type : {{$ext}}" src='{{$url}}'/></p>
+										<?php else:?>
+											<p><a href='{{$url}}'>Download File ({{$ext}})</a></p>
+										<?php endif;
 									else:
-										echo "<p class='text-danger'><i class='fa fa-exclamation-triangle'></i> Oops looks like File was Broken !. Click Delete and Re-Upload.</p>";
+										echo "<p class='text-danger'><i class='fa fa-exclamation-triangle'></i> Oops looks like File ".$row->{$name}." was Broken !. Click Delete and Re-Upload.</p>";
 									endif; 
 								?>
 								<p><a class='btn btn-danger btn-delete btn-sm' onclick="if(!confirm('Are you sure want to delete ? after delete you can upload other file.')) return false" href='{{url($mainpath."/delete-image?image=".$row->{$name}."&id=".$row->id."&column=".$name)}}'><i class='fa fa-ban'></i> Delete </a></p>

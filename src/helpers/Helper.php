@@ -1241,7 +1241,7 @@ if(!function_exists('get_method')) {
 */
 if(!function_exists('get_row_id')) {
     function get_row_id() {
-        $id = Request::segment(4);
+        $id = Session::get('current_row_id');
         $id = intval($id);
         return $id;
     }

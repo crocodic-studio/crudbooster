@@ -190,6 +190,8 @@ class CBController extends Controller {
 	{
 		// DB::connection()->enableQueryLog();		
 
+		Session::forget('current_row_id');
+
 		if($this->data['priv']->limit_data) {
 			$this->limit = $this->data['priv']->limit_data;
 		}
@@ -715,18 +717,24 @@ class CBController extends Controller {
 		$parfield = Request::get('parfield');
 		$limit 	  = Request::get('limit')?:10;
 
-		if(Cache::has('columns_'.$this->table)) {
-			$columns = Cache::get('columns_'.$this->table);	
+		$table 	  = $this->table;
+		$table 	  = (Request::get('table'))?:$table;
+
+		$title_field = $this->title_field;
+		$title_field = (Request::get('column'))?:$title_field;
+
+		if(Cache::has('columns_'.$table)) {
+			$columns = Cache::get('columns_'.$table);	
 		}else{
-			$columns = Cache::rememberForever('columns_'.$this->table, function() {
-			    return \Schema::getColumnListing($this->table);
+			$columns = Cache::rememberForever('columns_'.$table, function() {
+			    return \Schema::getColumnListing($table);
 			});
 		}
 
 		if($q || $id || $parid || $parfield) {
-			$rows = DB::table($this->table);
-			$rows->select('id',$this->title_field.' as text');
-			$rows->where($this->title_field,'like','%'.$q.'%');
+			$rows = DB::table($table);
+			$rows->select('id',$title_field.' as text');
+			$rows->where($title_field,'like','%'.$q.'%');
 			$rows->take($limit);
 
 			if($id) {
@@ -740,7 +748,7 @@ class CBController extends Controller {
 			if(Session::get('foreign_key')) {				
 				foreach(Session::get('foreign_key') as $k=>$v) {
 					if(in_array($k, $columns)){
-						$rows->where($this->table.'.'.$k,$v);
+						$rows->where($table.'.'.$k,$v);
 					}
 				}
 			}
@@ -991,6 +999,8 @@ class CBController extends Controller {
 		$data['parent_field']    = $this->parent_field;
 		$data['parent_id']       = $this->parent_id;
 
+		Session::put('current_row_id',$id);
+
 		if($this->is_sub) {
 			return view('crudbooster::default.form_simple',$data)->render();
 		}else{
@@ -1009,6 +1019,8 @@ class CBController extends Controller {
 		$data['controller_name'] = $this->controller_name;
 		$data['parent_field']    = $this->parent_field;
 		$data['parent_id']       = $this->parent_id;
+
+		Session::put('current_row_id',$id);
 
 		if($this->is_sub) {
 			return view('crudbooster::default.form_simple',$data)->render();			
