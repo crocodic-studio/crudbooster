@@ -339,7 +339,7 @@
 								array_walk($value, 'trim');
 							?>
 							@if(isset($form['dataenum']))
-								@foreach($form['dataenum'] as $d)
+								@foreach($form['dataenum'] as $k=>$d)
 									<?php 
 										if(strpos($d, '|')) {
 											$val = substr($d, 0, strpos($d, '|'));
@@ -351,7 +351,7 @@
 									?>
 									<div class="checkbox {{$disabled}}">
 									  <label>
-									    <input type="checkbox" {{$disabled}} {{$checked}} name="{{$name}}[]" value="{{$val}}"> {{$label}}								    
+									    <input type="checkbox" {{ ($k==0)?$required:'' }} {{$disabled}} {{$checked}} name="{{$name}}[]" value="{{$val}}"> {{$label}}								    
 									  </label>
 									</div>
 								@endforeach
@@ -855,7 +855,7 @@
 						@if(@$type=='radio')
 						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' style="{{@$form['style']}}">
 							<label>{{$form['label']}}</label><br/>
-							<?php foreach($form['dataenum'] as $d):
+							<?php foreach($form['dataenum'] as $k=>$d):
 								$val = $lab = '';
 								if(strpos($d,'|')!==FALSE) {
 									$draw = explode("|",$d);
@@ -867,7 +867,7 @@
 								$select = ($value == $val)?"checked":"";
 							?>	
 							<label class='radio-inline'>
-								<input type='radio' {{$select}} name='{{$name}}' {{$readonly}} {{$disabled}} value='{{$val}}'/> {!!$lab!!} 
+								<input type='radio' {{$select}} name='{{$name}}' {{ ($k==0)?$required:'' }} {{$readonly}} {{$disabled}} value='{{$val}}'/> {!!$lab!!} 
 							</label>						
 
 							<?php endforeach;?>																
