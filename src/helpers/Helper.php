@@ -474,7 +474,11 @@ class Admin'.$controllername.' extends \crocodicstudio\crudbooster\controllers\C
                 case 'datetime':
                 case 'timestamp':
                 $type = 'datetime';
-                $validation[] = "date";
+                $validation[] = "date_format:Y-m-d H:i:s";
+                break;
+                case 'time':
+                $type = 'time';
+                $validation[] = 'date_format:H:i:s';
                 break;
                 case 'double':
                 $type = 'money';

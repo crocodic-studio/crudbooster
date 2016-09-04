@@ -129,6 +129,9 @@ class CBController extends Controller {
 		//FORM SUB 
 		foreach($this->form_sub as &$fs) {
 			$className = __NAMESPACE__ . '\\' . $fs['controller'];
+			if(!class_exists($className)) {
+				$className = '\App\Http\Controllers\\'.$fs['controller'];
+			}			
 			$fs['classname'] = $className;
 		}
 
@@ -980,7 +983,7 @@ class CBController extends Controller {
 		}
 
 		if(Request::get('referal')) {
-			return redirect(Request::get('referal'))->with(['message'=>'The data has been added !','message_type'=>'success']);
+			return redirect(Request::get('referal').'?'.$ref_parameter)->with(['message'=>'The data has been added !','message_type'=>'success']);
 		}else{
 			return redirect(mainpath().'/edit/'.$lastid.'?'.$ref_parameter)->with(['message'=>"The data has been added !",'message_type'=>'success']);	
 		}

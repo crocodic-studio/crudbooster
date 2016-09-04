@@ -550,56 +550,36 @@
 						@if(@$type=='date' || @$type=='datepicker')
 						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
 							<label>{{$form['label']}}</label>
-							<div class="input-group">
-  								<span class="input-group-addon"><i class='fa fa-calendar'></i></span>
+							<div class="input-group">  								
 								<input type='text' title="{{$form['label']}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control notfocus datepicker' name="{{$name}}" id="{{$name}}" value='{{$value}}'/>
+								<span class="input-group-addon"><i class='fa fa-calendar'></i></span>
 							</div>
 							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
 							<p class='help-block'>{{ @$form['help'] }}</p>
 						</div>
 						@endif
 
-						@if(@$type=='datetime' || @type=='datetimepicker')
-						<script>
-						$(function() {
-							$('.date_{{$name}}').on('changeDate', function (ev) {
-							    $('.date_{{$name}}').trigger("change");
-							});
-							$(".date_{{$name}}, .hour_{{$name}}, minute_{{$name}}").change(function() {
-								var d = $(".date_{{$name}}").val();
-								var h = $(".hour_{{$name}}").val();
-								var m = $(".minute_{{$name}}").val();
-								var s = "00";
-								var datetime = d+' '+h+':'+m+':'+s;
-								$("input[name={{$name}}]").val(datetime);
-								console.log("DateTime : "+datetime);
-							})
+						@if(@$type=='time' || @$type=='timepicker')
+						<div class='bootstrap-timepicker'>
+							<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
+								<label>{{$form['label']}}</label>
+								<div class="input-group">	  								
+									<input type='text' title="{{$form['label']}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control notfocus timepicker' name="{{$name}}" id="{{$name}}" value='{{$value}}'/>
+									<span class="input-group-addon"><i class='fa fa-clock-o'></i></span>
+								</div>
+								<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
+								<p class='help-block'>{{ @$form['help'] }}</p>
+							</div>
+						</div>
+						@endif
 
-						})							
-						</script>
+						@if(@$type=='datetime' || @$type=='datetimepicker')
 						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
 							<label>{{$form['label']}}</label>
-							<div class='row'>
-							<div class='col-sm-3'>
-								<div class="input-group">
-  									<span class="input-group-addon"><i class='fa fa-calendar'></i></span>
-									<input type='text' title="{{$form['label']}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control notfocus datepicker date_{{$name}}' id="{{$name}}" value='{{($value)?date("Y-m-d",strtotime($value)):''}}'/>
-								</div>
+							<div class="input-group">  								
+								<input type='text' title="{{$form['label']}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control notfocus datetimepicker' name="{{$name}}" id="{{$name}}" value='{{$value}}'/>
+								<span class="input-group-addon"><i class='fa fa-calendar'></i></span>
 							</div>
-							<div class='col-sm-1'><select class='form-control hour_{{$name}}'><?php 
-								for($i=0;$i<=24;$i++) {
-									$select = (date("H",strtotime($value)) == str_pad($i,2,0,STR_PAD_LEFT))?"selected":"";
-									echo "<option $select value='".str_pad($i,2,0,STR_PAD_LEFT)."'>".str_pad($i,2,0,STR_PAD_LEFT)."</option>";
-								}
-								?></select></div>
-							<div class='col-sm-1'><select class='form-control minute_{{$name}}'><?php 
-								for($i=0;$i<=60;$i = $i+5) {
-									$select = (date("i",strtotime($value)) == str_pad($i,2,0,STR_PAD_LEFT))?"selected":"";
-									echo "<option $select value='".str_pad($i,2,0,STR_PAD_LEFT)."'>".str_pad($i,2,0,STR_PAD_LEFT)."</option>";
-								}
-								?></select></div>
-							</div>
-							<input type='hidden' name='{{$name}}' value='{{$value}}'/>
 							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
 							<p class='help-block'>{{ @$form['help'] }}</p>
 						</div>
@@ -799,10 +779,14 @@
 						<?php 
 							$select2_source = @$form["select2_controller"];
 							$datatable = @$form['datatable'];
+							$table_name = "";
+							$column_name = "";
 
 							if($datatable) {
 								$raw = explode(',',$datatable);
-								$url = mainpath("find-data")."?table=".$raw[0]."&column=".$raw[1];
+								$url = mainpath("find-data");
+								$table_name = $raw[0];
+								$column_name = $raw[1];
 							}else{
 								$url = route($select2_source."GetFindData");
 							}
@@ -820,6 +804,8 @@
 								    data: function (params) {
 								      var query = {
 								        q: params.term,
+								        table: "{{$table_name}}",
+								        column: "{{$column_name}}"
 								      }
 								      return query;
 								    },
@@ -836,7 +822,7 @@
 							            var id = $(element).val()?$(element).val():"{{$value}}";
 							            if(id!=='') {
 							                $.ajax('{{$url}}', {
-							                    data: {id: id},
+							                    data: {id: id, table: "{{$table_name}}", column: "{{$column_name}}"},
 							                    dataType: "json"
 							                }).done(function(data) {							                	
 							                    callback(data.items[0]);	

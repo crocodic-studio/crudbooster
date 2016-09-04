@@ -14,8 +14,7 @@
     <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css" />
     <!-- Theme style -->
     <link href="{{ asset("vendor/crudbooster/assets/adminlte/dist/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css" />    
-    <link href="{{ asset("vendor/crudbooster/assets/adminlte/dist/css/skins/_all-skins.min.css")}}" rel="stylesheet" type="text/css" />    	
-    <link href="{{ asset("vendor/crudbooster/assets/datepicker/css/datepicker.css") }}" rel="stylesheet" type="text/css" />	
+    <link href="{{ asset("vendor/crudbooster/assets/adminlte/dist/css/skins/_all-skins.min.css")}}" rel="stylesheet" type="text/css" />    	    
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
@@ -36,9 +35,20 @@
     <script src="{{ asset("vendor/crudbooster/assets/adminlte/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
     <script src="{{ asset("vendor/crudbooster/assets/js/dateformat.js")}}" type="text/javascript"></script>
 	<!-- ChartJS 1.0.1 -->
-    <script src="{{ asset('vendor/crudbooster/assets/adminlte/plugins/chartjs/Chart.min.js') }}"></script>
-	
-	<script src="{{ asset ('vendor/crudbooster/assets/datepicker/js/bootstrap-datepicker.js') }}"></script>
+    <script src="{{ asset('vendor/crudbooster/assets/adminlte/plugins/chartjs/Chart.min.js') }}"></script>		
+
+	<!--BOOTSTRAP DATEPICKER-->	
+	<script src="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/datepicker/bootstrap-datepicker.js') }}"></script>
+	<link rel="stylesheet" href="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/datepicker/datepicker3.css') }}">
+
+	<!--BOOTSTRAP DATERANGEPICKER-->
+	<script src="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/daterangepicker/moment.min.js') }}"></script>
+	<script src="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/daterangepicker/daterangepicker.js') }}"></script>
+	<link rel="stylesheet" href="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/daterangepicker/daterangepicker-bs3.css') }}">
+
+	<!-- Bootstrap time Picker -->
+  	<link rel="stylesheet" href="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/timepicker/bootstrap-timepicker.min.css') }}">  	  	
+	<script src="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/timepicker/bootstrap-timepicker.min.js') }}"></script>
 
 	<link rel='stylesheet' href='{{ asset("vendor/crudbooster/assets/fancy//source/jquery.fancybox.css") }}'/>
 	<script src="{{ asset('vendor/crudbooster/assets/fancy/source/jquery.fancybox.pack.js') }}"></script> 	
@@ -181,6 +191,7 @@
 
 			$('.inputMoney').priceFormat({
 				prefix: '',
+				centsLimit:0,
 			    clearPrefix: true
 			});	
 
@@ -212,16 +223,50 @@
 			});
 			
 			$('input[type=text]').first().not(".notfocus").focus();
+
+			@if(Request::get('submodul'))
+				var first_form_simple = $('div[id^=form_simple]').find('input[type=text]').first();
+				setTimeout(function() {
+					first_form_simple.not(".notfocus").focus();
+				},0);	
+				var first_form_simple_id = $('div[id^=form_simple]').attr('id');
+				location.href = '#'+first_form_simple_id;			
+			@endif
 			
 			if($("#tanggal").length > 0) {
 				date_time("tanggal");
 			}
 			
 			if($(".datepicker").length > 0) {
-				$('.datepicker').datepicker({
-					format: 'yyyy-mm-dd'			
+				//$('#reservationtime').daterangepicker({timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A'});
+				$('.datepicker').daterangepicker({					
+					singleDatePicker: true,
+        			showDropdowns: true,
+					format:'YYYY-MM-DD'
 				})
 			}
+
+			if($(".datetimepicker").length > 0) {
+				$(".datetimepicker").daterangepicker({
+					singleDatePicker: true,
+				    showDropdowns: true,
+				    timePicker:true,
+				    timePicker12Hour: false,
+				    timePickerIncrement: 5,
+				    timePickerSeconds: true,
+				    autoApply: true,
+					format:'YYYY-MM-DD HH:mm:ss'
+				})
+			}
+
+			//Timepicker
+		    if($(".timepicker").length > 0) {
+		    	$(".timepicker").timepicker({
+			      showInputs: true,
+			      showSeconds: true,
+			      showMeridian:false
+			    });	
+		    }
 
 			$(document).on('click',".ajax-button",function() {
 				$("body").css("cursor", "progress");
@@ -244,6 +289,10 @@
 	</script>
 
 	<style>
+
+	.bootstrap-timepicker-minute,.bootstrap-timepicker-hour,.bootstrap-timepicker-meridian,.bootstrap-timepicker-second {
+		width:50px !important;
+	}
 
 	::-webkit-scrollbar {
 	    width: 7px;
