@@ -85,7 +85,7 @@ $(function(){
 			})
 
 			show_alert_floating('Please wait whilte delete selected...');
-			$.post("{{ mainpath('deleted-selected') }}",{id:checks},function(resp) {				
+			$.post("{{ mainpath('delete-selected') }}",{id:checks},function(resp) {				
 				show_alert_floating('Delete selected successfully !');
 				hide_alert_floating();
 				$(".btn-reload-table").click();
