@@ -60,7 +60,7 @@
                 			@$value		= (isset($row->{$name}))?$row->{$name}:$value;
 
                 			$old 		= old($name);
-                			$value 		= ($old!='')?:$value;
+                			$value 		= (!empty($old))?$old:$value;
 
                 			if( ($parent_field && $name == $parent_field) && !isset($form['visible']) ) continue;
 
