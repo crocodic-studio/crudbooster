@@ -48,7 +48,7 @@
 	<link rel="stylesheet" type="text/css" href="{{asset('vendor/crudbooster/assets/sweetalert/dist/sweetalert.css')}}">
 
 	<!--MONEY FORMAT-->
-	<script src="{{asset('vendor/crudbooster/assets/jquery.price_format.2.0.min.js')}}"></script>
+	<script src="{{asset('vendor/crudbooster/jquery.price_format.2.0.min.js')}}"></script>
 	
 	<script>			
 		// request permission on page load
