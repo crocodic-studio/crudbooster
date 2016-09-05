@@ -19,7 +19,7 @@
           $('.notifications-menu .header').text('You have '+resp.total+' notifications');
           var htm = '';
           $.each(resp.items,function(i,obj) {
-              htm += '<li><a href="{{url(config("crudbooster.ADMIN_PATH")."/read")}}/'+obj.id+'"><i class="'+obj.icon+'"></i> '+obj.content+'</a></li>';
+              htm += '<li><a href="{{url(config("crudbooster.ADMIN_PATH")."/notifications/read")}}/'+obj.id+'"><i class="'+obj.icon+'"></i> '+obj.content+'</a></li>';
           })  
           $('.notifications-menu #list_notifications .menu').html(htm);
 
