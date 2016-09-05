@@ -104,7 +104,7 @@ if(!function_exists('push_notification')) {
 
         $a                         = array();
         $a['created_at']           = date('Y-m-d H:i:s');
-        $a['id_cms_users']         = $id_cms_users;
+        $a['id_cms_users']         = $id_cms_users?:get_my_id();
         $a['content']              = $content;
         $a['icon']                 = $icon;
         $a['notification_command'] = json_encode($command);
