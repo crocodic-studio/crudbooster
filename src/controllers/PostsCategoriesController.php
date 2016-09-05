@@ -27,7 +27,7 @@ class PostsCategoriesController extends CBController {
 
 		$this->form   = array();
         $this->form[] = array("name"=>"slug","type"=>"hidden");
-		$this->form[] = array("label"=>"Name","name"=>"name","type"=>"text"  );		
+		$this->form[] = array("label"=>"Name","name"=>"name","type"=>"text","required"=>true  );		
                  
         
         //You may use this bellow array to add relational data to next tab 

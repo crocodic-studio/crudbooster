@@ -28,8 +28,8 @@ class PagesController extends CBController {
 
 		$this->form = array();
         $this->form[] = array("name"=>"slug","type"=>"hidden");
-		$this->form[] = array("label"=>"Title","name"=>"title","type"=>"text"  );
-		$this->form[] = array("label"=>"Content","name"=>"content","type"=>"wysiwyg"  );
+		$this->form[] = array("label"=>"Title","name"=>"title","type"=>"text","required"=>true  );
+		$this->form[] = array("label"=>"Content","name"=>"content","type"=>"wysiwyg","required"=>true  );
                  
         
         //You may use this bellow array to add relational data to next tab 
