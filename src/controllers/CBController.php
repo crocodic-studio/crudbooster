@@ -248,6 +248,8 @@ class CBController extends Controller {
 		$e = 0;		
 		foreach($columns_table as $index => $coltab) {
 			$join = @$coltab['join'];
+			$table = $this->table;
+
 			if($join) {
 				$join_exp   = explode(',', $join);
 				$join_table = $join_exp[0];
@@ -271,22 +273,28 @@ class CBController extends Controller {
 
 			if($join) {		
 				//field = id relasi nya
-				$join_alias = $join_table.$index;
-				$result->leftjoin($join_table.' as '.$join_alias,$join_alias.'.id','=',$this->table.'.'.$field);
-				$result->addselect($join_alias.'.'.$join_name.' as '.$join_name.'_'.$join_alias);
-				$result->addselect($this->table.'.'.$field); #field asli tetap di masukkan
-				$alias[] = $join_alias;
+				$field_array = explode('.', $field);				
+				if(isset($field_array[1])) {
+					$field = $field_array[1];
+					$table = $field_array[0];
+				}
+
+				$join_alias = $join_table;
+				$result->leftjoin($join_table,$join_table.'.id','=',$table.'.'.$field);
+				$result->addselect($join_table.'.'.$join_name.' as '.$join_name.'_'.$join_table);
+				$result->addselect($table.'.'.$field); #field asli tetap di masukkan
+				$alias[] = $join_table;
 				$columns_table[$index]['type_data']	 = get_field_type($join_table,$join_name);
-				$columns_table[$index]['field']      = $join_name.'_'.$join_alias;
-				$columns_table[$index]['field_with'] = $join_alias.'.'.$join_name;
+				$columns_table[$index]['field']      = $join_name.'_'.$join_table;
+				$columns_table[$index]['field_with'] = $join_table.'.'.$join_name;
 				$columns_table[$index]['field_raw']  = $join_name;
 				 	
 			}else{
-				$result->addselect($this->table.'.'.$field);
-				$columns_table[$index]['type_data']	 = get_field_type($this->table,$field);
+				$result->addselect($table.'.'.$field);
+				$columns_table[$index]['type_data']	 = get_field_type($table,$field);
 				$columns_table[$index]['field']      = $field;
 				$columns_table[$index]['field_raw']  = $field;
-				$columns_table[$index]['field_with'] = $this->table.'.'.$field;
+				$columns_table[$index]['field_with'] = $table.'.'.$field;
 			}			
 		}
  		
@@ -304,7 +312,7 @@ class CBController extends Controller {
  		}
 
  		if($this->is_sub==true) {
- 			$result->where($this->table.'.'.$this->parent_field,$this->parent_id);
+ 			$result->where($table.'.'.$this->parent_field,$this->parent_id);
  		}
 
 		if(Request::get('q')) {
@@ -320,7 +328,7 @@ class CBController extends Controller {
 
 		if(Request::get('where')) {			
 			foreach(Request::get('where') as $k=>$v) {
-				$result->where($this->table.'.'.$k,$v); 
+				$result->where($table.'.'.$k,$v); 
 			}			
 		}
 		
@@ -387,7 +395,7 @@ class CBController extends Controller {
 						if(strpos($k, '.')!==FALSE) {
 							$orderby_table = explode(".",$k)[0];
 						}else{
-							$orderby_table = $this->table;
+							$orderby_table = $table;
 						}
 						$result->orderby($orderby_table.'.'.$k,$v);
 					}
@@ -438,7 +446,11 @@ class CBController extends Controller {
 	            $html_content[] = "<a class='fancybox' rel='group_{{$table}}' title='$col[label]: $title' href='".$pic."'><img class='img-circle' width='40px' height='40px' src='".$pic_small."'/></a>";
 	          }else if(@$col['download']) {
 	            $url = (strpos($value,'http://')!==FALSE)?$value:asset($value);
-	            $html_content[] = "<a class='btn btn-sm btn-primary' href='$url' target='_blank' title='Download File'>Download</a>";
+	            if($value) {
+	            	$html_content[] = "<a class='btn btn-sm btn-primary' href='$url' target='_blank' title='Download File'>Download</a>";
+	            }else{
+	            	$html_content[] = " - ";
+	            }
 	          }else{
 
 	            //limit character
@@ -530,7 +542,7 @@ class CBController extends Controller {
 		} //end foreach data[result]
  		
  		$html_contents = ['html'=>$html_contents,'data'=>$data['result']];
-		$this->hook_html_index($html,$data);
+		$this->hook_html_index($html_contents['html'],$html_contents['data']);
 
 
 		$data['html_contents'] = $html_contents['html'];
@@ -558,7 +570,7 @@ class CBController extends Controller {
 		
 		$e = 0;
 		foreach($columns_table as $index => $coltab) {
-			
+			$table = $this->table;
 			$join = @$coltab['join'];
 			if($join) {
 				$join_exp   = explode(',', $join);
@@ -580,20 +592,28 @@ class CBController extends Controller {
 
 			if($join) {		
 				//field = id relasi nya
-				$join_alias = $join_table.$index;
-				$rows->leftjoin($join_table.' as '.$join_alias,$join_alias.'.id','=',$this->table.'.'.$field);
-				$rows->addselect($join_alias.'.'.$join_name.' as '.$join_name.'_'.$join_alias);
-				$rows->addselect($this->table.'.'.$field); #field asli tetap di masukkan
-				$alias[]                             = $join_alias;
-				$columns_table[$index]['field']      = $join_name.'_'.$join_alias;
-				$columns_table[$index]['field_with'] = $join_alias.'.'.$join_name;
+				$field_array = explode('.', $field);				
+				if(isset($field_array[1])) {
+					$field = $field_array[1];
+					$table = $field_array[0];
+				}
+
+				$join_alias = $join_table;
+				$result->leftjoin($join_table,$join_table.'.id','=',$table.'.'.$field);
+				$result->addselect($join_table.'.'.$join_name.' as '.$join_name.'_'.$join_table);
+				$result->addselect($table.'.'.$field); #field asli tetap di masukkan
+				$alias[] = $join_table;
+				$columns_table[$index]['type_data']	 = get_field_type($join_table,$join_name);
+				$columns_table[$index]['field']      = $join_name.'_'.$join_table;
+				$columns_table[$index]['field_with'] = $join_table.'.'.$join_name;
 				$columns_table[$index]['field_raw']  = $join_name;
-				$cols[] = $columns_table[$index]['field'];
+				 	
 			}else{
-				$rows->addselect($this->table.'.'.$field);
-				$columns_table[$index]['field_raw'] = $field;
-				$columns_table[$index]['field_with'] = $this->table.'.'.$field;
-				$cols[] = $field;
+				$result->addselect($table.'.'.$field);
+				$columns_table[$index]['type_data']	 = get_field_type($table,$field);
+				$columns_table[$index]['field']      = $field;
+				$columns_table[$index]['field_raw']  = $field;
+				$columns_table[$index]['field_with'] = $table.'.'.$field;
 			}			
 		}
  
@@ -726,6 +746,8 @@ class CBController extends Controller {
 		$title_field = $this->title_field;
 		$title_field = (Request::get('column'))?:$title_field;
 
+		$where = Request::get('where');
+
 		if(Cache::has('columns_'.$table)) {
 			$columns = Cache::get('columns_'.$table);	
 		}else{
@@ -754,6 +776,10 @@ class CBController extends Controller {
 						$rows->where($table.'.'.$k,$v);
 					}
 				}
+			}
+
+			if($where) {
+				$rows->whereraw($where);
 			}
 
 			$result          = array();

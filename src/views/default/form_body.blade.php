@@ -783,6 +783,8 @@
 							$table_name = "";
 							$column_name = "";
 
+							$where = @$form['datatable_where'];
+
 							if($datatable) {
 								$raw = explode(',',$datatable);
 								$url = mainpath("find-data");
@@ -806,7 +808,8 @@
 								      var query = {
 								        q: params.term,
 								        table: "{{$table_name}}",
-								        column: "{{$column_name}}"
+								        column: "{{$column_name}}",
+								        where:"{{$where}}"
 								      }
 								      return query;
 								    },
