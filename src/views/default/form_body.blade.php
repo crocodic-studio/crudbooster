@@ -365,7 +365,7 @@
 									?>
 									<div class="checkbox {{$disabled}}">
 									  <label>
-									    <input type="checkbox" {{ ($k==0)?$required:'' }} {{$disabled}} {{$checked}} name="{{$name}}[]" value="{{$val}}"> {{$label}}								    
+									    <input type="checkbox" {{$disabled}} {{$checked}} name="{{$name}}[]" value="{{$val}}"> {{$label}}								    
 									  </label>
 									</div>
 								@endforeach

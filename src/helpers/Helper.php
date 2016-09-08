@@ -569,7 +569,7 @@ class Admin'.$controllername.' extends \crocodicstudio\crudbooster\controllers\C
                 break;
                 case 'double':
                 $type = 'money';
-                $validation[] = "numeric";
+                $validation[] = "integer|min:0";
                 break;
                 case 'enum':
                 $type = 'radio';                                    
@@ -577,7 +577,8 @@ class Admin'.$controllername.' extends \crocodicstudio\crudbooster\controllers\C
                 break;
                 case 'int':
                 case 'integer':
-                $validation[] = 'integer';
+                $type = 'number';
+                $validation[] = 'integer|min:0';
                 break;
             }
                        
