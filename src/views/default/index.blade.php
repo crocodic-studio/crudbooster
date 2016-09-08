@@ -101,7 +101,6 @@
         </div><!-- /.col -->
 
 
-<<<<<<< HEAD
     </div><!-- /.row -->  
 
 
@@ -110,7 +109,3 @@
     @endif
 
 @endsection
-=======
-    </div><!-- /.row -->    
-@endsection
->>>>>>> origin/master
