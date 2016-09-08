@@ -597,7 +597,7 @@ class Admin'.$controllername.' extends \crocodicstudio\crudbooster\controllers\C
 
         
             if(in_array($field, $image_candidate)) {
-                $type = 'upload';                
+                $type = 'upload_standard';                
                 $attribute['help'] = "File types support : JPG, JPEG, PNG, GIF, BMP";
                 $attribute['upload_file'] = FALSE;
             }           
@@ -655,65 +655,207 @@ class Admin'.$controllername.' extends \crocodicstudio\crudbooster\controllers\C
         }
 
 $php .= '     
-        
-        //You may use this bellow array to add alert message to this module at overheader
+                
+        /* 
+        | ---------------------------------------------------------------------- 
+        | Add alert message to this module at overheader
+        | ----------------------------------------------------------------------     
+        | @message = Text of message 
+        | @type    = warning,success,danger,info        
+        | 
+        */
         $this->alert        = array();
+                
+
+
         
-        //You may use this bellow array to add more your own header button 
-        $this->index_button = array();            
+        /* 
+        | ---------------------------------------------------------------------- 
+        | Add more button to header button 
+        | ----------------------------------------------------------------------     
+        | @label = Name of button 
+        | @url   = URL Target
+        | @icon  = Icon from Awesome.
+        | 
+        */
+        $this->index_button = array();       
+
+
+
         
-        //You may use this bellow array to add relational data to next tab 
+        /* 
+        | ---------------------------------------------------------------------- 
+        | Add relational data to next tab
+        | ----------------------------------------------------------------------     
+        | @label       = Name of element
+        | @controller  = Controller name of other module 
+        | @foreign_key = Optional.  
+        | 
+        */
         $this->form_tab     = array();
         
-        //You may use this bellow array to add relational data to next area or element, i mean under the existing form 
+
+
+        
+        /* 
+        | ---------------------------------------------------------------------- 
+        | Add relational data to next area or element, i mean under the existing form 
+        | ----------------------------------------------------------------------     
+        | @label       = Name of form sub 
+        | @controller  = Controller name of other module 
+        | @foreign_key = Optional.  
+        | 
+        */
         $this->form_sub     = array();
+
+
         
-        //You may use this bellow array to add some or more html that you want under the existing form 
-        $this->form_add     = array();                                                                                      
         
-        //You may use this bellow array to add statistic at dashboard 
+        /* 
+        | ---------------------------------------------------------------------- 
+        | Add element to form at bottom 
+        | ----------------------------------------------------------------------     
+        | push your html / code in object array         
+        | 
+        */
+        $this->form_add     = array();       
+
+
+
+        
+        /*
+        | ---------------------------------------------------------------------- 
+        | You may use this bellow array to add statistic at dashboard 
+        | ---------------------------------------------------------------------- 
+        | @label, @count, @icon, @color 
+        |
+        */
         $this->index_statistic = array();
+
+
+
+
+        /*
+        | ---------------------------------------------------------------------- 
+        | Add additional view at top or bottom of index 
+        | ---------------------------------------------------------------------- 
+        | @view = view location 
+        | @data = data array for view 
+        |
+        */
+        $this->index_additional_view = array();
+
+
 
         //No need chanage this constructor
         $this->constructor();
     }
 
 
-    public function hook_before_index(&$result) {
-        //Use this hook for manipulate query of index result 
-        
+    /*
+    | ---------------------------------------------------------------------- 
+    | Hook for manipulate query of index result 
+    | ---------------------------------------------------------------------- 
+    | @query = current database query 
+    |
+    */
+    public function hook_query_index(&$query) {
+        //Your code here
+            
     }
-    public function hook_html_index(&$html,$data) {
-        //Use this hook for manipulate result of html in index 
+
+    /*
+    | ---------------------------------------------------------------------- 
+    | Hook for manipulate row of index table html 
+    | ---------------------------------------------------------------------- 
+    | @html for row html 
+    | @data for get data row
+    | You should using foreach
+    |
+    */    
+    public function hook_row_index(&$html,$data) {
+        //Your code here
 
     }
-    public function hook_before_add(&$arr) {
-        //Use this hook for manipulate data input before add data is execute 
+
+    /*
+    | ---------------------------------------------------------------------- 
+    | Hook for manipulate data input before add data is execute
+    | ---------------------------------------------------------------------- 
+    | @arr
+    |
+    */
+    public function hook_before_add(&$arr) {        
+        //Your code here
 
     }
-    public function hook_after_add($id) {
-        //Use this hook if you want execute other command after add function called 
+
+    /* 
+    | ---------------------------------------------------------------------- 
+    | Hook for execute command after add function called 
+    | ---------------------------------------------------------------------- 
+    | @id = last insert id
+    | 
+    */
+    public function hook_after_add($id) {        
+        //Your code here
 
     }
-    public function hook_before_edit(&$arr,$id) {
-        //Use this hook for manipulate data input before update data is execute 
+
+    /* 
+    | ---------------------------------------------------------------------- 
+    | Hook for manipulate data input before update data is execute
+    | ---------------------------------------------------------------------- 
+    | @postdata = input post data 
+    | @id       = current id 
+    | 
+    */
+    public function hook_before_edit(&$postdata,$id) {        
+        //Your code here
 
     }
+
+    /* 
+    | ---------------------------------------------------------------------- 
+    | Hook for execute command after edit function called
+    | ----------------------------------------------------------------------     
+    | @id       = current id 
+    | 
+    */
     public function hook_after_edit($id) {
-        //Use this hook if you want execute other command after update data called 
+        //Your code here 
 
     }
+
+    /* 
+    | ---------------------------------------------------------------------- 
+    | Hook for execute command before delete function called
+    | ----------------------------------------------------------------------     
+    | @id       = current id 
+    | 
+    */
     public function hook_before_delete($id) {
-        //Use this hook if you want execute other command before delete command called 
+        //Your code here
 
     }
+
+    /* 
+    | ---------------------------------------------------------------------- 
+    | Hook for execute command after delete function called
+    | ----------------------------------------------------------------------     
+    | @id       = current id 
+    | 
+    */
     public function hook_after_delete($id) {
-        //Use this hook if you want execute other command after delete command called 
+        //Your code here
 
     }
 
-    //By the way, you can still create your own method in here... :)
-    
+
+
+    //By the way, you can still create your own method in here... :) 
+
+
 }
         ';
 

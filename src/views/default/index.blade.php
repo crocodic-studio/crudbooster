@@ -1,6 +1,10 @@
 @extends('crudbooster::admin_template')
 
 @section('content')
+
+    @if($index_additional_view && ($index_additional_view['position']=='top' || !$index_additional_view['position']))
+        @include($index_additional_view['view'],$index_additional_view['data']);
+    @endif
     
     <div class='row'>
         <div class='col-md-12'> 
@@ -97,5 +101,11 @@
         </div><!-- /.col -->
 
 
-    </div><!-- /.row -->    
+    </div><!-- /.row -->  
+
+
+    @if($index_additional_view && $index_additional_view['position']=='bottom')
+        @include($index_additional_view['view'],$index_additional_view['data']);
+    @endif
+
 @endsection

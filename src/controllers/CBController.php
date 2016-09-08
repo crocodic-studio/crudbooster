@@ -59,7 +59,8 @@ class CBController extends Controller {
 	var $button_cancel		= TRUE;
 	var $button_addmore		= TRUE;
 	var $button_save		= TRUE;
-	var $index_statistic	= array(); // key: label, icon, color, count
+	var $index_statistic	= array(); 
+	var $index_additional_view = array();
 
 	public function constructor() {			
 
@@ -183,6 +184,7 @@ class CBController extends Controller {
 		$this->data['button_cancel'] 	  = $this->button_cancel;
 		$this->data['button_save'] 		  = $this->button_save;
 		$this->data['index_statistic']	  = $this->index_statistic;
+		$this->data['index_additional_view'] = $this->index_additional_view;
 
         view()->share($this->data);
 	} 
