@@ -226,6 +226,7 @@ class CBController extends Controller {
 		$result                   = DB::table($this->table)->select(DB::raw("SQL_CALC_FOUND_ROWS ".$this->table.".".$this->primary_key));
 		
 		$this->hook_before_index($result);
+		$this->hook_query_index($result);
 
 		if(Session::get('foreign_key')) {
 			foreach(Session::get('foreign_key') as $k=>$v) {
@@ -552,6 +553,7 @@ class CBController extends Controller {
  		
  		$html_contents = ['html'=>$html_contents,'data'=>$data['result']];
 		$this->hook_html_index($html_contents['html'],$html_contents['data']);
+		$this->hook_row_index($html_contents['html'],$html_contents['data']);
 
 
 		$data['html_contents'] = $html_contents['html'];
@@ -1237,6 +1239,14 @@ class CBController extends Controller {
 	public function get_cols() {
 		return $this->col;
 	}
+
+	public function hook_query_index(&$query) {
+
+	}
+
+	public function hook_row_index(&$html,$data) {        
+
+    }
 
 	public function hook_before_index(&$result) {
 
