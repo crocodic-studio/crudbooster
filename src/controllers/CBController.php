@@ -59,7 +59,7 @@ class CBController extends Controller {
 	var $button_cancel		= TRUE;
 	var $button_addmore		= TRUE;
 	var $button_save		= TRUE;
-	var $index_statistic	= array(); // key: label, icon, color, count
+	var $index_statistic	= array(); // key: label, icon, color, count, width
 
 	public function constructor() {			
 
