@@ -66,7 +66,7 @@
                         }
                         @$width += count($addaction)*33;
                       ?>
-                      <th width='<?=$width?>px'>Aksi</th>
+                      <th width='<?=$width?>px'>Action</th>
                       @endif                                                               
                     </tr>
                     </thead>
