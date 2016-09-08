@@ -950,7 +950,9 @@
 										echo "<p class='text-danger'><i class='fa fa-exclamation-triangle'></i> Oops looks like File ".$row->{$name}." was Broken !. Click Delete and Re-Upload.</p>";
 									endif; 
 								?>
+								@if(!$readonly || !$disabled)
 								<p><a class='btn btn-danger btn-delete btn-sm' onclick="if(!confirm('Are you sure want to delete ? after delete you can upload other file.')) return false" href='{{url($mainpath."/delete-image?image=".$row->{$name}."&id=".$row->id."&column=".$name)}}'><i class='fa fa-ban'></i> Delete </a></p>
+								@endif
 							@endif	
 							@if(!$value)
 							<input type='file' id="{{$name}}" title="{{$form['label']}}" {{$required}} {{$readonly}} {{$disabled}} class='form-control' name="{{$name}}"/>							

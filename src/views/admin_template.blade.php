@@ -290,6 +290,8 @@
 
 	<style>
 
+	.select2-dropdown {z-index: 9999 !important}
+
 	.bootstrap-timepicker-minute,.bootstrap-timepicker-hour,.bootstrap-timepicker-meridian,.bootstrap-timepicker-second {
 		width:50px !important;
 	}

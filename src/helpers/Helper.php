@@ -12,6 +12,90 @@
 
 /* 
 | --------------------------------------------------------------------------------------------------------------
+| To get list id of cms users
+| --------------------------------------------------------------------------------------------------------------
+| @id_cms_privilege
+|
+*/
+if(!function_exists('list_cms_users')) {
+    function list_cms_users($id_cms_privilege) {
+        return DB::table('cms_users')->where('id_cms_privileges',$id_cms_privilege)->lists('id');
+    }
+}
+
+/* 
+| --------------------------------------------------------------------------------------------------------------
+| Authentification API by CRUDBooster
+| --------------------------------------------------------------------------------------------------------------
+|
+*/
+if(!function_exists('auth_api')) {
+    function auth_api() {
+        if(get_setting('api_debug_mode')=='false') {
+            $screetkey = Cache::get('screetkey');   
+            $result = array();
+            $validator = Validator::make(
+                [   
+                'screetkey'             =>$screetkey,
+                'X-Authorization-Token' =>Request::header('X-Authorization-Token'),
+                'X-Authorization-Time'  =>Request::header('X-Authorization-Time'),
+                'useragent'             =>Request::header('User-Agent')
+                ],          
+                [
+                'screetkey'             =>'required',
+                'X-Authorization-Token' =>'required',
+                'X-Authorization-Time'  =>'required',   
+                'useragent'             =>'required'              
+                ]
+            );      
+            
+            if ($validator->fails()) 
+            {
+                $message = $validator->errors()->all();         
+                $result['api_status'] = 0;
+                $result['api_message'] = implode(', ',$message);            
+                $res = response()->json($result,200);
+                $res->send();
+                exit;
+            }
+
+            $user_agent = Request::header('User-Agent');
+            $time       = Request::header('X-Authorization-Time');            
+
+            $server_token = md5( $screetkey . $time . $useragent );
+            $sender_token = Request::header('X-Authorization-Token');
+
+            if(!Cache::has($sender_token)) {
+                if($sender_token != $server_token) {           
+                    $result['api_status']   = false;
+                    $result['api_message']  = "THE TOKEN IS NOT MATCH WITH SERVER TOKEN";
+                    $result['sender_token'] = $sender_token;
+                    $result['server_token'] = $server_token;
+                    $res = response()->json($result,200);
+                    $res->send();
+                    exit;
+                }
+            }else{
+                if(Cache::get($sender_token) != $user_agent) {
+                    $result['api_status']   = false;
+                    $result['api_message']  = "THE TOKEN IS ALREADY BUT NOT MATCH WITH YOUR DEVICE";
+                    $result['sender_token'] = $sender_token;
+                    $result['server_token'] = $server_token;
+                    $res = response()->json($result,200);
+                    $res->send();
+                    exit;
+                }
+            }                        
+
+            $expired_token = date('Y-m-d H:i:s',strtotime('+5 seconds'));
+            Cache::put($sender_token,$user_agent,$expired_token);
+
+        }
+    }
+}
+
+/* 
+| --------------------------------------------------------------------------------------------------------------
 | To get diffrence minute between date
 | --------------------------------------------------------------------------------------------------------------
 | $dateFrom = path of route
@@ -82,8 +166,8 @@ if(!function_exists('RouteController')) {
 */ 
 
 if(!function_exists('push_notification')) {
-    function push_notification($content,$icon='fa fa-warning',$type='warning',$command=array(),$id_cms_users=NULL) {
-        $id_cms_users = ($id_cms_users)?:get_my_id();
+    function push_notification($content,$icon='fa fa-warning',$type='warning',$command=array(),$id_cms_users=array()) {
+        $id_cms_users = ($id_cms_users)?:array(get_my_id());
         switch ($type) {
             case 'warning':
                 $icon .= ' text-warning';
@@ -102,15 +186,18 @@ if(!function_exists('push_notification')) {
                 break;
         }
 
-        $a                         = array();
-        $a['created_at']           = date('Y-m-d H:i:s');
-        $a['id_cms_users']         = $id_cms_users?:get_my_id();
-        $a['content']              = $content;
-        $a['icon']                 = $icon;
-        $a['notification_command'] = json_encode($command);
-        $a['is_read']              = 0;
-        if(DB::table('cms_notifications')->insert($a)) return true;
-        else return false;
+        foreach($id_cms_users as $id) {
+            $a                         = array();
+            $a['created_at']           = date('Y-m-d H:i:s');
+            $a['id_cms_users']         = $id;
+            $a['content']              = $content;
+            $a['icon']                 = $icon;
+            $a['notification_command'] = json_encode($command);
+            $a['is_read']              = 0;
+            DB::table('cms_notifications')->insert($a);
+        }
+        
+        return true;
     }
 }
 

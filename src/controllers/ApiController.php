@@ -48,7 +48,8 @@ class ApiController extends Controller {
 	}
 
 	public function execute_api() {
-			
+		auth_api();
+		
 		$this->init_setting();
 
 		$posts = Request::all();
@@ -412,7 +413,7 @@ class ApiController extends Controller {
 								//Move file to storage
 								$filename = md5(str_random(5)).'.'.$ext;
 								if($file->move(storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m')),$filename)) {						
-									$v = date('Y-m').'/'.$filename;
+									$v = 'uploads/'.date('Y-m').'/'.$filename;
 								}					  
 							}
 						}
@@ -453,7 +454,7 @@ class ApiController extends Controller {
 								//Move file to storage
 								$filename = md5(str_random(5)).'.'.$ext;
 								if($file->move(storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m')),$filename)) {						
-									$v = date('Y-m').'/'.$filename;
+									$v = 'uploads/'.date('Y-m').'/'.$filename;
 								}					  
 							}
 					}
