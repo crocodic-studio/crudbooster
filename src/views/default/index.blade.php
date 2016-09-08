@@ -68,7 +68,7 @@
               <div id='box-statistic' class='row'>
               @foreach($index_statistic as $stat)
 
-                  <div  class='col-sm-3'>
+                  <div  class="col-md-{{ $stat['width'] }}">
                       <div class="small-box bg-{{ $stat['color'] }}">
                         <div class="inner">
                           <h3>{{ $stat['count'] }}</h3>
@@ -101,6 +101,7 @@
         </div><!-- /.col -->
 
 
+<<<<<<< HEAD
     </div><!-- /.row -->  
 
 
@@ -109,3 +110,7 @@
     @endif
 
 @endsection
+=======
+    </div><!-- /.row -->    
+@endsection
+>>>>>>> origin/master
