@@ -245,16 +245,11 @@ class CBController extends Controller {
 		}
 		
 		$alias = array();
-		$e = 0;		
+		$join_alias_count = 0;
+		$join_table_temp = array();
 		foreach($columns_table as $index => $coltab) {
 			$join = @$coltab['join'];
 			$table = $this->table;
-
-			if($join) {
-				$join_exp   = explode(',', $join);
-				$join_table = $join_exp[0];
-				$join_name  = $join_exp[1];
-			}
 			$field = $coltab['name'];
 
 			if(!$field) die('Please make sure there is key `name` in each row of col');
@@ -272,21 +267,33 @@ class CBController extends Controller {
 			}
 
 			if($join) {		
-				//field = id relasi nya
-				$field_array = explode('.', $field);				
+				
+				$join_exp   = explode(',', $join);
+				$join_table = $join_exp[0];
+				$join_name  = $join_exp[1];
+				$join_alias = $join_table;
+
+				if(isset($join_table_temp[$join_table])) {
+					$join_alias_count += 1;
+					$join_alias = $join_table.$join_alias_count;
+				}
+
+				array_push($join_table_temp, $join_table);
+
+				$field_array = explode('.', $field);
+
 				if(isset($field_array[1])) {
 					$field = $field_array[1];
 					$table = $field_array[0];
-				}
-
-				$join_alias = $join_table;
-				$result->leftjoin($join_table,$join_table.'.id','=',$table.'.'.$field);
-				$result->addselect($join_table.'.'.$join_name.' as '.$join_name.'_'.$join_table);
-				$result->addselect($table.'.'.$field); #field asli tetap di masukkan
-				$alias[] = $join_table;
+				} 
+				
+				$result->leftjoin($join_table.' as '.$join_alias,$join_alias.'.id','=',$table.'.'.$field);
+				$result->addselect($join_alias.'.'.$join_name.' as '.$join_name.'_'.$join_alias);
+				$result->addselect($table.'.'.$field);
+				$alias[] = $join_alias;
 				$columns_table[$index]['type_data']	 = get_field_type($join_table,$join_name);
-				$columns_table[$index]['field']      = $join_name.'_'.$join_table;
-				$columns_table[$index]['field_with'] = $join_table.'.'.$join_name;
+				$columns_table[$index]['field']      = $join_name.'_'.$join_alias;
+				$columns_table[$index]['field_with'] = $join_alias.'.'.$join_name;
 				$columns_table[$index]['field_raw']  = $join_name;
 				 	
 			}else{
@@ -295,7 +302,7 @@ class CBController extends Controller {
 				$columns_table[$index]['field']      = $field;
 				$columns_table[$index]['field_raw']  = $field;
 				$columns_table[$index]['field_with'] = $table.'.'.$field;
-			}			
+			}					
 		}
  		
  		if($this->is_sub==true) {
