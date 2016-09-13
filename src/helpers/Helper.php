@@ -1076,7 +1076,7 @@ function send_email($to,$subject,$html,$from='',$template='') {
 
     $template = ($template)?:"crudbooster::emails.blank";
     $from = ($from)?:$set['smtp_username'];
-    $from = ($from)?:"no-reply@".$_SERVER['SERVER_NAME'];
+    $from = ($from)?:get_setting('email_sender');
     $data['content'] = $html;
     \Mail::send($template,$data,function($message) use ($to,$subject,$from) {
         $message->to($to);
