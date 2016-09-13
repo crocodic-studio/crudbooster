@@ -856,7 +856,7 @@ class CBController extends Controller {
 				$id = intval($id);
 				$exp = explode('|',$di['validation']);
 				foreach($exp as &$e) {
-
+					
 					if(strpos($e, 'unique:') !== FALSE) {
 						$e = str_replace('unique:','',$e);
 						$e_raw = explode(',',$e);
@@ -866,6 +866,7 @@ class CBController extends Controller {
 						@$e_id_ignore = $e_raw[2]?:$id;
 
 						$e = 'unique:'.$e_table.','.$e_column.','.$e_id_ignore;	
+						$e = ($id)?NULL:$e;
 					}
 
 					if($e == 'image'){
