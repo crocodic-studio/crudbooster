@@ -1477,6 +1477,8 @@ if(!function_exists('get_row_id')) {
     function get_row_id() {
         $id = Session::get('current_row_id');
         $id = intval($id);
+        $id = (!$id)?Request::segment(4):$id;
+        $id = intval($id);
         return $id;
     }
 }
