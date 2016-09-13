@@ -866,7 +866,7 @@ class CBController extends Controller {
 						@$e_id_ignore = $e_raw[2]?:$id;
 
 						$e = 'unique:'.$e_table.','.$e_column.','.$e_id_ignore;	
-						$e = ($id)?NULL:$e;
+					
 					}
 
 					if($e == 'image'){
