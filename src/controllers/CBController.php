@@ -61,7 +61,7 @@ class CBController extends Controller {
 	var $button_save		= TRUE;
 	var $index_statistic	= array(); 
 	var $index_additional_view = array();
-	var $load_js            = TRUE;
+	var $load_js            = array();
 
 	public function constructor() {			
 
