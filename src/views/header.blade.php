@@ -35,6 +35,17 @@
       },10000);
     })
 </script>
+
+<!-- load js -->
+    <script type="text/javascript">
+      var site_url = "{{url('/')}}" ;
+    </script>
+    @if($load_js)
+      @foreach($load_js as $js)
+        <script src="{{$js}}"></script>
+      @endforeach
+    @endif
+
 <!-- Main Header -->
 <header class="main-header">
 
