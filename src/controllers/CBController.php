@@ -61,6 +61,7 @@ class CBController extends Controller {
 	var $button_save		= TRUE;
 	var $index_statistic	= array(); 
 	var $index_additional_view = array();
+	var $load_js            = TRUE;
 
 	public function constructor() {			
 
@@ -185,6 +186,7 @@ class CBController extends Controller {
 		$this->data['button_save'] 		  = $this->button_save;
 		$this->data['index_statistic']	  = $this->index_statistic;
 		$this->data['index_additional_view'] = $this->index_additional_view;
+		$this->data['load_js']            = $this->load_js;
 
         view()->share($this->data);
 	} 
