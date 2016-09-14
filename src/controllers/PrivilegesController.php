@@ -30,10 +30,10 @@ class PrivilegesController extends CBController {
 		$this->col[] = array("label"=>"Avail. Register","name"=>"is_register",'callback_php'=>'($row->is_register)?"<span class=\"label label-success\">Available</span>":"<span class=\"label label-default\">Not Available</span>"');
 
 		$this->form   = array();
-		$this->form[] = array("label"=>"Name","name"=>"name");
-		$this->form[] = array("label"=>"Is Superadmin","name"=>"is_superadmin");		
-		$this->form[] = array("label"=>"Is Register","name"=>"is_register");		
-		$this->form[] = array("label"=>"Theme Color","name"=>"theme_color");
+		$this->form[] = array("label"=>"Name","name"=>"name",'required'=>true);
+		$this->form[] = array("label"=>"Is Superadmin","name"=>"is_superadmin",'required'=>true);		
+		$this->form[] = array("label"=>"Is Register","name"=>"is_register",'required'=>true);		
+		$this->form[] = array("label"=>"Theme Color","name"=>"theme_color",'required'=>true);
 
 		$this->addaction[] = array('label'=>'Configuration Dashboard',
 			'route'=>url("admin/set-dashboard-config-mode?id_cms_privileges=%id%"),
@@ -45,14 +45,15 @@ class PrivilegesController extends CBController {
 
 	public function getAdd()
 	{
+		$id = 0; 
 		$data['page_title'] = "Add Data";	
 		$data['moduls'] = DB::table("cms_moduls")
 		->select("cms_moduls.*",
-			DB::raw("(select is_visible from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id' limit 1) as is_visible"),
-			DB::raw("(select is_create from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id' limit 1) as is_create"),
-			DB::raw("(select is_read from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id' limit 1) as is_read"),
-			DB::raw("(select is_edit from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id' limit 1) as is_edit"),
-			DB::raw("(select is_delete from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id' limit 1) as is_delete")
+			DB::raw("(select is_visible from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id') as is_visible"),
+			DB::raw("(select is_create from cms_privileges_roles where id_cms_moduls  = cms_moduls.id and id_cms_privileges = '$id') as is_create"),
+			DB::raw("(select is_read from cms_privileges_roles where id_cms_moduls    = cms_moduls.id and id_cms_privileges = '$id') as is_read"),
+			DB::raw("(select is_edit from cms_privileges_roles where id_cms_moduls    = cms_moduls.id and id_cms_privileges = '$id') as is_edit"),
+			DB::raw("(select is_delete from cms_privileges_roles where id_cms_moduls  = cms_moduls.id and id_cms_privileges = '$id') as is_delete")
 			)
 		->orderby("name","asc")->get();		
 		$data['page_menu'] = Route::getCurrentRoute()->getActionName();
@@ -94,11 +95,11 @@ class PrivilegesController extends CBController {
 
 		$data['moduls'] = DB::table("cms_moduls")
 		->select("cms_moduls.*",
-			DB::raw("(select is_visible from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id' limit 1) as is_visible"),
-			DB::raw("(select is_create from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id' limit 1) as is_create"),
-			DB::raw("(select is_read from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id' limit 1) as is_read"),
-			DB::raw("(select is_edit from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id' limit 1) as is_edit"),
-			DB::raw("(select is_delete from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id' limit 1) as is_delete")
+			DB::raw("(select is_visible from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id') as is_visible"),
+			DB::raw("(select is_create from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id') as is_create"),
+			DB::raw("(select is_read from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id') as is_read"),
+			DB::raw("(select is_edit from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id') as is_edit"),
+			DB::raw("(select is_delete from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id') as is_delete")
 			)
 		->orderby("name","asc")->get();
 		$data['page_menu'] = Route::getCurrentRoute()->getActionName();
