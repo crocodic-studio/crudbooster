@@ -228,7 +228,8 @@ $(function(){
 			<form method='get' action=''>
 				<div class="modal-body">
 					
-					@foreach($columns as $key => $col)					
+					@foreach($columns as $key => $col)	
+						<?php if( isset($col['image']) || isset($col['download'])) continue;?>					
 					<div class='form-group'>
 						<label>{{ $col['label'] }}</label>
 						<div class='row-filter-combo row'>

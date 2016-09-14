@@ -832,6 +832,9 @@ class CBController extends Controller {
 		$id = intval($id);
 		foreach($this->data_inputan as $di) {
 			$ai = array();			
+			$name = $di['name'];
+			
+			if( !isset($request_all[$name]) ) continue; 
 			
 			if($di['type'] != 'upload_standard') {
 				if(@$di['required']) {
