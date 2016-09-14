@@ -16,12 +16,12 @@ class AddTableCmsUsers extends Migration {
 		{
 			$table->increments('id');
 			$table->timestamps();
-			$table->string('name');
-			$table->string('photo');
-			$table->string('email');
-			$table->string('password');
-			$table->integer('id_cms_privileges');
-			$table->integer('id_cms_companies');
+			$table->string('name')->nullable();
+			$table->string('photo')->nullable();
+			$table->string('email')->nullable();
+			$table->string('password')->nullable();
+			$table->integer('id_cms_privileges')->nullable();
+			$table->integer('id_cms_companies')->nullable();
 		});
 	}
 

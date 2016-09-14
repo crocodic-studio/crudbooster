@@ -61,7 +61,6 @@ class CBController extends Controller {
 	var $button_save		= TRUE;
 	var $index_statistic	= array(); 
 	var $index_additional_view = array();
-	var $load_js            = array();
 
 	public function constructor() {			
 
@@ -186,7 +185,6 @@ class CBController extends Controller {
 		$this->data['button_save'] 		  = $this->button_save;
 		$this->data['index_statistic']	  = $this->index_statistic;
 		$this->data['index_additional_view'] = $this->index_additional_view;
-		$this->data['load_js']            = $this->load_js;
 
         view()->share($this->data);
 	} 
@@ -225,7 +223,7 @@ class CBController extends Controller {
 		}		
 		
 		$columns_table            = $this->columns_table;		
-		$result                   = DB::table($this->table)->select(DB::raw("SQL_CALC_FOUND_ROWS ".$this->table.".".$this->primary_key));
+		$result                   = DB::table($this->table)->select(DB::raw($this->table.".".$this->primary_key));
 		
 		$this->hook_before_index($result);
 		$this->hook_query_index($result);
@@ -413,7 +411,7 @@ class CBController extends Controller {
 					}
 					$data['result'] = $result->paginate($limit);
 				}else{
-					$data['result'] = $result->orderby($this->primary_key,'desc')->paginate($limit);	
+					$data['result'] = $result->orderby($this->table.'.'.$this->primary_key,'desc')->paginate($limit);	
 				}
 			}
 		}
@@ -427,7 +425,7 @@ class CBController extends Controller {
 		$queries = DB::getQueryLog();				
 
 		if(Request::get('format')=='total') {
-			return DB::select(DB::raw("SELECT FOUND_ROWS() as total"))[0]->total;
+			return $this->calc_eloquent_found($result);
 		}
 
 
@@ -541,7 +539,7 @@ class CBController extends Controller {
                 	$class = "btn btn-xs $color ".$ajax;
                 	$class = (isset($fb['class']))?$fb['class']:$class;
                 	$url   = str_replace(array("%id%","%name%"),array($row->id,$row->{$title_field}),$fb["route"]);
-                	$url   .= '?referal='.urlencode(Request::url());
+                	// $url   .= '?referal='.urlencode(Request::url());
                 	$td    .= "<a title='".$fb["label"]."' href='".$url."' 
                 	class='$class'><i class='".$fb["icon"]."'></i></a>&nbsp;";
                 endforeach;
@@ -577,7 +575,7 @@ class CBController extends Controller {
 		$limit = ($posts['length'])?:10;
 
 		$columns_table = $this->columns_table;		
-		$rows          = DB::table($this->table)->select(DB::raw("SQL_CALC_FOUND_ROWS ".$this->table.".".$this->primary_key))
+		$rows          = DB::table($this->table)->select(DB::raw($this->table.".".$this->primary_key))
 		->take($limit)
 		->skip($posts['start']);
 		
@@ -685,7 +683,7 @@ class CBController extends Controller {
 
 		$result['draw'] = $posts['draw'];
 		$result['recordsTotal'] = DB::table($this->table)->count();
-		$result['recordsFiltered'] = DB::select(DB::raw("select found_rows() as total"))[0]->total;
+		$result['recordsFiltered'] = $this->calc_eloquent_found($rows);
 		$result['data'] = $data;
 		return response()->json($result);
 	}
@@ -1241,6 +1239,39 @@ class CBController extends Controller {
 
 	public function get_cols() {
 		return $this->col;
+	}
+
+	public function calc_eloquent_found( $query_builder ){
+	    $query = clone $query_builder->getQuery();
+
+	    $query->selectRaw('COUNT( DISTINCT '. $query_builder->getModel()->getKeyName() .' ) as total');
+	    $query->limit = null;
+	    $query->offset = null;
+
+	    //TODO: this needs more testing.
+	    if( $query->groups ){
+	        $subquery = $query->toSql();
+	        $chunks = explode( '?', $subquery );
+	        $bindings = $query->getBindings();      // do I need to strip out potential select bindings?
+
+	        $arr = [];
+	        foreach( $chunks as $i => $chunk ){
+	            $arr[] = $chunk;
+	            if( $bindings[ $i ] ){
+	                if( is_string( $bindings[ $i ] ) && !is_numeric( $bindings[ $i ] ) ){
+	                    $bindings[ $i ] = '"'. $bindings[ $i ] . '"';
+	                }
+	                $arr[] = $bindings[ $i ];
+	            }
+	        }
+	        $subquery = implode( '', $arr );
+
+	        $result = DB::select( DB::raw("SELECT SUM( sub.total) AS total FROM ($subquery) AS sub") )[0]['total'];
+
+	        return $result;
+	    }
+
+	    return $query->pluck('total');
 	}
 
 	public function hook_query_index(&$query) {

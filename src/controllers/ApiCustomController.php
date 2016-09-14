@@ -53,7 +53,7 @@ class ApiCustomController extends CBController {
 
 		$data = array();
 
-		$tables = DB::select('SHOW TABLES');
+		$tables = DB::select(DB::raw("SELECT TABLE_NAME FROM ".env('DB_DATABASE').".INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE'"));
 		$tables_list = array();
 		foreach($tables as $tab) {
 			foreach ($tab as $key => $value) {

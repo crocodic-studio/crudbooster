@@ -14,7 +14,7 @@ class AddHashConfirmationCmsUsers extends Migration
     {
         Schema::table('cms_users', function (Blueprint $table) {
             //
-            $table->string('hash_confirmation');
+            $table->string('hash_confirmation')->nullable();
         });
     }
 

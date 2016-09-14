@@ -11,17 +11,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->command->info('Please wait importing data...');
-
-        $this->call('Cms_usersSeeder');
-        $this->call('Cms_companiesSeeder');
-        $this->call('Cms_dashboardSeeder');
-        $this->call('Cms_modulsSeeder');
-        $this->call('Cms_moduls_groupSeeder');      
-        $this->call('Cms_privilegesSeeder');
-        $this->call('Cms_privileges_rolesSeeder');
-        $this->call('Cms_settingsSeeder');      
-        $this->call('Cms_postscategoriesSeeder');      
+        $this->command->info('Please wait importing data...');        
+        $this->call('Cms_usersSeeder');        
+        $this->call('Cms_companiesSeeder');        
+        $this->call('Cms_dashboardSeeder');        
+        $this->call('Cms_modulsSeeder');        
+        $this->call('Cms_moduls_groupSeeder');              
+        $this->call('Cms_privilegesSeeder');        
+        $this->call('Cms_privileges_rolesSeeder');       
+        $this->call('Cms_settingsSeeder');              
+        $this->call('Cms_postscategoriesSeeder');              
         $this->call('Cms_postsSeeder');      
         
         $this->command->info('Import Data Success !');
@@ -67,21 +66,21 @@ class Cms_settingsSeeder extends Seeder {
     {        
 
         DB::table('cms_settings')->insert([
-        ['id'=>1,'created_at'=>date('Y-m-d H:i:s'),'name'=>'appname','content'=>'CRUDBooster','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
-        ['id'=>2,'created_at'=>date('Y-m-d H:i:s'),'name'=>'email_sender','content'=>'support@crudbooster.com','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
-        ['id'=>3,'created_at'=>date('Y-m-d H:i:s'),'name'=>'app_lockscreen_timeout','content'=>'60','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
-        ['id'=>4,'created_at'=>date('Y-m-d H:i:s'),'name'=>'default_paper_size','content'=>'Legal','content_input_type'=>'text','dataenum'=>NULL,'helper'=>'Paper size, ex : A4, Legal, etc'],
-        ['id'=>5,'created_at'=>date('Y-m-d H:i:s'),'name'=>'smtp_driver','content'=>'mail','content_input_type'=>'select','dataenum'=>'smtp,mail,sendmail','helper'=>NULL],
-        ['id'=>6,'created_at'=>date('Y-m-d H:i:s'),'name'=>'smtp_host','content'=>'','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
-        ['id'=>7,'created_at'=>date('Y-m-d H:i:s'),'name'=>'smtp_port','content'=>'','content_input_type'=>'text','dataenum'=>NULL,'helper'=>'default 25'],
-        ['id'=>8,'created_at'=>date('Y-m-d H:i:s'),'name'=>'smtp_username','content'=>'','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
-        ['id'=>9,'created_at'=>date('Y-m-d H:i:s'),'name'=>'smtp_password','content'=>'','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
-        ['id'=>10,'created_at'=>date('Y-m-d H:i:s'),'name'=>'logo','content'=>'','content_input_type'=>'upload','dataenum'=>NULL,'helper'=>NULL],
-        ['id'=>11,'created_at'=>date('Y-m-d H:i:s'),'name'=>'favicon','content'=>'','content_input_type'=>'upload','dataenum'=>NULL,'helper'=>NULL],
-        ['id'=>12,'created_at'=>date('Y-m-d H:i:s'),'name'=>'api_debug_mode','content'=>'true','content_input_type'=>'select','dataenum'=>'true,false','helper'=>NULL],        
-        ['id'=>13,'created_at'=>date('Y-m-d H:i:s'),'name'=>'google_api_key','content'=>'','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
-        ['id'=>14,'created_at'=>date('Y-m-d H:i:s'),'name'=>'register_email_confirmation','content'=>'','content_input_type'=>'wysiwyg','dataenum'=>NULL,'helper'=>'Input message about email confirmation here, use alias [link_confirmation] to include the link.'],
-        ['id'=>15,'created_at'=>date('Y-m-d H:i:s'),'name'=>'register_email_welcome','content'=>'','content_input_type'=>'wysiwyg','dataenum'=>NULL,'helper'=>"You can input message after registration is success. Then the message will be send to registrant. use [name] as user 's name, use [email] as user's email"]
+        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'appname','content'=>'CRUDBooster','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
+        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'email_sender','content'=>'support@crudbooster.com','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
+        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'app_lockscreen_timeout','content'=>'60','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
+        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'default_paper_size','content'=>'Legal','content_input_type'=>'text','dataenum'=>NULL,'helper'=>'Paper size, ex : A4, Legal, etc'],
+        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'smtp_driver','content'=>'mail','content_input_type'=>'select','dataenum'=>'smtp,mail,sendmail','helper'=>NULL],
+        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'smtp_host','content'=>'','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
+        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'smtp_port','content'=>'','content_input_type'=>'text','dataenum'=>NULL,'helper'=>'default 25'],
+        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'smtp_username','content'=>'','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
+        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'smtp_password','content'=>'','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
+        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'logo','content'=>'','content_input_type'=>'upload','dataenum'=>NULL,'helper'=>NULL],
+        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'favicon','content'=>'','content_input_type'=>'upload','dataenum'=>NULL,'helper'=>NULL],
+        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'api_debug_mode','content'=>'true','content_input_type'=>'select','dataenum'=>'true,false','helper'=>NULL],        
+        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'google_api_key','content'=>'','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
+        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'register_email_confirmation','content'=>'','content_input_type'=>'wysiwyg','dataenum'=>NULL,'helper'=>'Input message about email confirmation here, use alias [link_confirmation] to include the link.'],
+        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'register_email_welcome','content'=>'','content_input_type'=>'wysiwyg','dataenum'=>NULL,'helper'=>"You can input message after registration is success. Then the message will be send to registrant. use [name] as user 's name, use [email] as user's email"]
         ]);
     }
 }
@@ -120,7 +119,7 @@ class Cms_privileges_rolesSeeder extends Seeder {
             }
 
             DB::table('cms_privileges_roles')->insert([
-                'id'=>$i,
+                // 'id'=>$i,
                 'created_at'=>date('Y-m-d H:i:s'),
                 'is_visible'=>$is_visible,
                 'is_create'=>$is_create,
@@ -134,7 +133,7 @@ class Cms_privileges_rolesSeeder extends Seeder {
             if($module->table_name == 'cms_posts') {
                 $i++;
                 DB::table('cms_privileges_roles')->insert([
-                'id'=>$i,
+                // 'id'=>$i,
                 'created_at'=>date('Y-m-d H:i:s'),
                 'is_visible'=>$is_visible,
                 'is_create'=>$is_create,
@@ -156,7 +155,7 @@ class Cms_privilegesSeeder extends Seeder {
     {        
         
         DB::table('cms_privileges')->insert([
-            'id'=>1,
+            // 'id'=>1,
             'created_at'=>date('Y-m-d H:i:s'),
             'name'=>'Super Administrator',
             'is_superadmin'=>1,
@@ -164,7 +163,7 @@ class Cms_privilegesSeeder extends Seeder {
             ]);
 
         DB::table('cms_privileges')->insert([
-            'id'=>2,
+            // 'id'=>2,
             'created_at'=>date('Y-m-d H:i:s'),
             'name'=>'Member',
             'is_superadmin'=>0,
@@ -189,7 +188,7 @@ class Cms_modulsSeeder extends Seeder {
 
         DB::table('cms_moduls')->insert([
         [
-            'id'=>$i++,
+            
             'created_at'=>date('Y-m-d H:i:s'),
             'name'=>'Notifications',
             'icon'=>'fa fa-cog',
@@ -205,7 +204,7 @@ class Cms_modulsSeeder extends Seeder {
             'is_active'=>1
         ],
         [
-            'id'=>$i++,
+            
             'created_at'=>date('Y-m-d H:i:s'),
             'name'=>'Privileges',
             'icon'=>'fa fa-cog',
@@ -220,7 +219,7 @@ class Cms_modulsSeeder extends Seeder {
             'is_active'=>1
         ],
         [
-            'id'=>$i++,
+            
             'created_at'=>date('Y-m-d H:i:s'),
             'name'=>'Privileges Roles',
             'icon'=>'fa fa-cog',
@@ -235,7 +234,7 @@ class Cms_modulsSeeder extends Seeder {
             'is_active'=>0
         ],
         [
-            'id'=>$i++,
+            
             'created_at'=>date('Y-m-d H:i:s'),
             'name'=>'Moduls',
             'icon'=>'fa fa-cog',
@@ -250,7 +249,7 @@ class Cms_modulsSeeder extends Seeder {
             'is_active'=>0
         ],
         [   
-            'id'=>$i++,
+            
             'created_at'=>date('Y-m-d H:i:s'),
             'name'=>'Users',
             'icon'=>'fa fa-users',
@@ -265,7 +264,7 @@ class Cms_modulsSeeder extends Seeder {
             'is_active'=>1
         ],
         [   
-            'id'=>$i++,
+            
             'created_at'=>date('Y-m-d H:i:s'),
             'name'=>'Settings',
             'icon'=>'fa fa-cog',
@@ -279,7 +278,7 @@ class Cms_modulsSeeder extends Seeder {
             'is_softdelete'=>0,
             'is_active'=>1
         ],[ 
-            'id'=>$i++,
+            
             'created_at'=>date('Y-m-d H:i:s'),
             'name'=>'Module Generator',
             'icon'=>'fa fa-database',
@@ -293,7 +292,7 @@ class Cms_modulsSeeder extends Seeder {
             'is_softdelete'=>0,
             'is_active'=>1
         ],[ 
-            'id'=>$i++,
+            
             'created_at'=>date('Y-m-d H:i:s'),
             'name'=>'API Generator',
             'icon'=>'fa fa-cloud-download',
@@ -307,7 +306,7 @@ class Cms_modulsSeeder extends Seeder {
             'is_softdelete'=>0,
             'is_active'=>1
         ],[ 
-            'id'=>$i++,
+            
             'created_at'=>date('Y-m-d H:i:s'),
             'name'=>'Companies',
             'icon'=>'fa fa-bank',
@@ -321,7 +320,7 @@ class Cms_modulsSeeder extends Seeder {
             'is_softdelete'=>0,
             'is_active'=>1
         ],[ 
-            'id'=>$i++,
+            
             'created_at'=>date('Y-m-d H:i:s'),
             'name'=>'Logs',
             'icon'=>'fa fa-flag-o',
@@ -335,7 +334,7 @@ class Cms_modulsSeeder extends Seeder {
             'is_softdelete'=>0,
             'is_active'=>1
         ],[ 
-            'id'=>$i++,
+            
             'created_at'=>date('Y-m-d H:i:s'),
             'name'=>'Menu Group',
             'icon'=>'fa fa-flag-o',
@@ -349,7 +348,7 @@ class Cms_modulsSeeder extends Seeder {
             'is_softdelete'=>0,
             'is_active'=>1
         ],[ 
-            'id'=>$i++,
+            
             'created_at'=>date('Y-m-d H:i:s'),
             'name'=>'Menu',
             'icon'=>'fa fa-bars',
@@ -363,7 +362,7 @@ class Cms_modulsSeeder extends Seeder {
             'is_softdelete'=>0,
             'is_active'=>0
         ],[ 
-            'id'=>$i++,
+            
             'created_at'=>date('Y-m-d H:i:s'),
             'name'=>'Articles',
             'icon'=>'fa fa-bars',
@@ -377,7 +376,7 @@ class Cms_modulsSeeder extends Seeder {
             'is_softdelete'=>0,
             'is_active'=>1
         ],[ 
-            'id'=>$i++,
+            
             'created_at'=>date('Y-m-d H:i:s'),
             'name'=>'Categories',
             'icon'=>'fa fa-bars',
@@ -391,7 +390,7 @@ class Cms_modulsSeeder extends Seeder {
             'is_softdelete'=>0,
             'is_active'=>1
         ],[ 
-            'id'=>$i++,
+            
             'created_at'=>date('Y-m-d H:i:s'),
             'name'=>'Pages',
             'icon'=>'fa fa-bars',
@@ -418,10 +417,10 @@ class Cms_moduls_groupSeeder extends Seeder {
     {        
 
         DB::table('cms_moduls_group')->insert([
-            ['id'=>1,'created_at'=>date('Y-m-d H:i:s'),'nama_group'=>'Public','sorting_group'=>1,'is_group'=>0,'icon_group'=>'fa fa-bars'],
-            ['id'=>2,'created_at'=>date('Y-m-d H:i:s'),'nama_group'=>'Articles','sorting_group'=>2,'is_group'=>1,'icon_group'=>'fa fa-bars'],           
-            ['id'=>3,'created_at'=>date('Y-m-d H:i:s'),'nama_group'=>'Users','sorting_group'=>3,'is_group'=>1,'icon_group'=>'fa fa-users'],         
-            ['id'=>4,'created_at'=>date('Y-m-d H:i:s'),'nama_group'=>'Setting','sorting_group'=>4,'is_group'=>1,'icon_group'=>'fa fa-cog']
+            ['created_at'=>date('Y-m-d H:i:s'),'nama_group'=>'Public','sorting_group'=>1,'is_group'=>0,'icon_group'=>'fa fa-bars'],
+            ['created_at'=>date('Y-m-d H:i:s'),'nama_group'=>'Articles','sorting_group'=>2,'is_group'=>1,'icon_group'=>'fa fa-bars'],           
+            ['created_at'=>date('Y-m-d H:i:s'),'nama_group'=>'Users','sorting_group'=>3,'is_group'=>1,'icon_group'=>'fa fa-users'],         
+            ['created_at'=>date('Y-m-d H:i:s'),'nama_group'=>'Setting','sorting_group'=>4,'is_group'=>1,'icon_group'=>'fa fa-cog']
             ]);
 
     }
@@ -433,9 +432,11 @@ class Cms_usersSeeder extends Seeder {
     public function run()
     {        
 
+        DB::statement('SET IDENTITY_INSERT cms_users ON');
+
         $password = \Hash::make('123456');
         $cms_users = DB::table('cms_users')->insert(array(
-            'id'=>1,
+            // 'id'=>1,
             'created_at'=>date('Y-m-d H:i:s'),
             'name' => 'Super Admin',
             'photo' => 'vendor/crudbooster/avatar.jpg',
@@ -446,7 +447,7 @@ class Cms_usersSeeder extends Seeder {
             'status'=>'Active'
         ));
         $cms_users = DB::table('cms_users')->insert(array(
-            'id'=>2,
+            // 'id'=>2,
             'created_at'=>date('Y-m-d H:i:s'),
             'name' => 'Member',
             'photo' => 'vendor/crudbooster/avatar.jpg',
@@ -470,6 +471,8 @@ class Cms_usersSeeder extends Seeder {
         //   ));
         // }
 
+        DB::statement('SET IDENTITY_INSERT cms_users OFF');
+
     }
 
 }
@@ -481,7 +484,7 @@ class Cms_companiesSeeder extends Seeder {
 
         DB::table('cms_companies')->insert(
             [
-            'id'=>1,
+            // 'id'=>1,
             'created_at'=>date('Y-m-d H:i:s'),
             'name'=>'CRUDBooster',
             'address'=>'Lorem ipsum Commodo consequat anim et proident cillum.',
@@ -504,42 +507,42 @@ class Cms_dashboardSeeder extends Seeder {
 
         DB::table('cms_dashboard')->insert([
             [
-            'id'=>1,
+            // 'id'=>1,
             'created_at'=>date('Y-m-d H:i:s'),
             'name'=>'Total Users',
             'id_cms_privileges'=>1,
             'content'=>'a:9:{s:4:"type";s:16:"statistic_number";s:2:"id";s:1:"3";s:5:"label";s:11:"Total Users";s:4:"icon";s:18:"ion-person-stalker";s:5:"color";s:3:"red";s:10:"table_name";s:9:"cms_users";s:14:"aggregate_type";s:5:"count";s:6:"column";s:2:"id";s:9:"sql_where";s:0:"";}'
             ],
             [
-            'id'=>2,
+            // 'id'=>2,
             'created_at'=>date('Y-m-d H:i:s'),
             'name'=>'Total Companies',
             'id_cms_privileges'=>1,
             'content'=>'a:8:{s:4:"type";s:16:"statistic_number";s:2:"id";s:1:"4";s:5:"label";s:13:"Total Company";s:5:"color";s:6:"yellow";s:10:"table_name";s:13:"cms_companies";s:14:"aggregate_type";s:5:"count";s:6:"column";s:2:"id";s:9:"sql_where";s:0:"";}'
             ],
             [
-            'id'=>3,
+            // 'id'=>3,
             'created_at'=>date('Y-m-d H:i:s'),
             'name'=>'Total Articles',
             'id_cms_privileges'=>1,
             'content'=>'a:9:{s:4:"type";s:16:"statistic_number";s:2:"id";s:1:"5";s:5:"label";s:14:"Total Articles";s:4:"icon";s:23:"ion-arrow-graph-up-left";s:5:"color";s:4:"aqua";s:10:"table_name";s:9:"cms_posts";s:14:"aggregate_type";s:5:"count";s:6:"column";s:2:"id";s:9:"sql_where";s:0:"";}'
             ],
             [
-            'id'=>4,
+            // 'id'=>4,
             'created_at'=>date('Y-m-d H:i:s'),
             'name'=>'Total Pages',
             'id_cms_privileges'=>1,
             'content'=>'a:9:{s:4:"type";s:16:"statistic_number";s:2:"id";s:1:"6";s:5:"label";s:11:"Total Pages";s:4:"icon";s:23:"ion-arrow-graph-up-left";s:5:"color";s:5:"green";s:10:"table_name";s:9:"cms_pages";s:14:"aggregate_type";s:5:"count";s:6:"column";s:2:"id";s:9:"sql_where";s:0:"";}'
             ],
             [
-            'id'=>5,
+            // 'id'=>5,
             'created_at'=>date('Y-m-d H:i:s'),
             'name'=>'Articles By Date',
             'id_cms_privileges'=>1,
             'content'=>'a:10:{s:4:"type";s:10:"chart_line";s:2:"id";s:2:"11";s:5:"label";s:16:"Articles By Date";s:5:"color";s:6:"yellow";s:5:"width";s:4:"half";s:10:"table_name";s:9:"cms_posts";s:14:"aggregate_type";s:5:"count";s:6:"column";s:2:"id";s:9:"sql_where";s:0:"";s:12:"sql_group_by";s:27:"DATE(created_at) as tanggal";}'
             ],
             [
-            'id'=>6,
+            // 'id'=>6,
             'created_at'=>date('Y-m-d H:i:s'),
             'name'=>'Articles Bar',
             'id_cms_privileges'=>1,

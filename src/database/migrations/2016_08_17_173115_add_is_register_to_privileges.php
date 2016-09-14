@@ -14,7 +14,7 @@ class AddIsRegisterToPrivileges extends Migration
     {
         Schema::table('cms_privileges', function (Blueprint $table) {
             //
-            $table->boolean('is_register');
+            $table->boolean('is_register')->nullable();
         });
     }
 

@@ -16,13 +16,13 @@ class AddTableCmsPrivilegesRoles extends Migration {
 		{
 			$table->increments('id');
 			$table->timestamps();
-			$table->boolean('is_visible');
-			$table->boolean('is_create');
-			$table->boolean('is_read');
-			$table->boolean('is_edit');
-			$table->boolean('is_delete');
-			$table->integer('id_cms_privileges');
-			$table->integer('id_cms_moduls');
+			$table->boolean('is_visible')->nullable();
+			$table->boolean('is_create')->nullable();
+			$table->boolean('is_read')->nullable();
+			$table->boolean('is_edit')->nullable();
+			$table->boolean('is_delete')->nullable();
+			$table->integer('id_cms_privileges')->nullable();
+			$table->integer('id_cms_moduls')->nullable();
 		});
 	}
 

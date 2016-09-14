@@ -16,18 +16,18 @@ class AddTableCmsModuls extends Migration {
 		{
 			$table->increments('id');
 			$table->timestamps();
-			$table->string('name');
-			$table->string('icon');
-			$table->string('path');
+			$table->string('name')->nullable();
+			$table->string('icon')->nullable();
+			$table->string('path')->nullable();
 			$table->string('table_name')->nullable();
-			$table->string('controller');
+			$table->string('controller')->nullable();
 			$table->string('sql_where')->nullable();
 			$table->string('sql_orderby')->nullable();
 			$table->integer('sorting')->nullable();
 			$table->integer('limit_data')->nullable();
-			$table->integer('id_cms_moduls_group');
+			$table->integer('id_cms_moduls_group')->nullable();
 			$table->boolean('is_softdelete')->nullable();
-			$table->boolean('is_active');
+			$table->boolean('is_active')->nullable();
 		});
 	}
 

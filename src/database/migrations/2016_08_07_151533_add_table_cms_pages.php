@@ -16,10 +16,10 @@ class AddTableCmsPages extends Migration {
 		{
 			$table->increments('id');
 			$table->timestamps();
-			$table->string('slug');
-			$table->string('title');
-			$table->text('content');
-			$table->softDeletes();
+			$table->string('slug')->nullable();
+			$table->string('title')->nullable();
+			$table->text('content')->nullable();
+			$table->softDeletes()->nullable();
 		});
 	}
 

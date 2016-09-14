@@ -14,7 +14,7 @@ class AddStatusCmsUsers extends Migration
     {
         Schema::table('cms_users', function (Blueprint $table) {
             //
-            $table->string('status',50);
+            $table->string('status',50)->nullable();
         });
     }
 

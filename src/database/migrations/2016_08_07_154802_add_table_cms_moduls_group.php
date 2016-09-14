@@ -16,10 +16,10 @@ class AddTableCmsModulsGroup extends Migration {
 		{
 			$table->increments('id');
 			$table->timestamps();
-			$table->string('nama_group');
-			$table->string('sorting_group');
-			$table->boolean('is_group');
-			$table->string('icon_group');
+			$table->string('nama_group')->nullable();
+			$table->string('sorting_group')->nullable();
+			$table->boolean('is_group')->nullable();
+			$table->string('icon_group')->nullable();
 		});
 	}
 

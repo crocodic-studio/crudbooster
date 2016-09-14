@@ -16,9 +16,9 @@ class AddTableCmsPrivileges extends Migration {
 		{
 			$table->increments('id');
 			$table->timestamps();
-			$table->string('name');
-			$table->boolean('is_superadmin');
-			$table->string('theme_color');
+			$table->string('name')->nullable();
+			$table->boolean('is_superadmin')->nullable();
+			$table->string('theme_color')->nullable();
 		});
 	}
 

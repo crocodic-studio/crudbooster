@@ -16,7 +16,7 @@ class AddTableCmsSettings extends Migration {
 		{
 			$table->increments('id');
 			$table->timestamps();
-			$table->string('name');
+			$table->string('name')->nullable();
 			$table->text('content')->nullable();
 			$table->string('content_input_type')->nullable();
 			$table->string('dataenum')->nullable();

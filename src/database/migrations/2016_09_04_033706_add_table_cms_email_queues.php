@@ -15,12 +15,12 @@ class AddTableCmsEmailQueues extends Migration
         Schema::create('cms_email_queues', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->dateTime('send_at');
-            $table->string('email_recipient');
-            $table->string('email_cc');
-            $table->string('email_subject');
-            $table->text('email_content');
-            $table->boolean('is_sent');            
+            $table->dateTime('send_at')->nullable();
+            $table->string('email_recipient')->nullable();
+            $table->string('email_cc')->nullable();
+            $table->string('email_subject')->nullable();
+            $table->text('email_content')->nullable();
+            $table->boolean('is_sent')->nullable();            
         });
     }
 

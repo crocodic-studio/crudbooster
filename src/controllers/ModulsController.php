@@ -36,7 +36,7 @@ class ModulsController extends CBController {
 		$this->form[] = ['label'=>'Basic Configuration','type'=>'header'];	
 		$this->form[] = array("label"=>"Name","name"=>"name","placeholder"=>"Enter a module name",);
 
-		$tables = DB::select('SHOW TABLES');
+		$tables = list_tables();
 		$tables_list = array();		
 		foreach($tables as $tab) {
 			foreach ($tab as $key => $value) {	

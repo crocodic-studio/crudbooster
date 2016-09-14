@@ -31,6 +31,7 @@ class AdminController extends CBController {
 			
 		$id_cms_privileges = Session::get('admin_privileges');
 		$id_cms_privileges = (Session::get('dashboard_config_id_privileges'))?:$id_cms_privileges;
+		$id_cms_privileges = intval($id_cms_privileges);
 		$data['list_id_dashboard'] = DB::table('cms_dashboard')->where("id_cms_privileges",$id_cms_privileges)->orderby("id","asc")->lists('id');
 
 		$data['page_title']       = '<strong>Dashboard</strong> ';
@@ -47,7 +48,7 @@ class AdminController extends CBController {
 		}
 
 		Session::put('dashboard_config_mode',1);
-		Session::put('dashboard_config_id_privileges',Request::get('id_cms_privileges'));
+		Session::put('dashboard_config_id_privileges',intval(Request::get('id_cms_privileges')));
 		return redirect('admin');
 	}
 	public function getUnsetDashboardConfigMode() {
@@ -94,7 +95,7 @@ class AdminController extends CBController {
 
 		$list_table = "<select required class='form-control' name='table_name'><option value=''>** Select a Table</option>";
 
-		$tables = DB::select('SHOW TABLES');		
+		$tables = list_tables();		
 		foreach($tables as $tab) {
 			foreach ($tab as $key => $value) {				
 				@$selected = ($value == $content['table_name'])?"selected":"";
@@ -174,7 +175,7 @@ class AdminController extends CBController {
 
 		$list_table = "<select required class='form-control' name='table_name'><option value=''>** Select a Table</option>";
 
-		$tables = DB::select('SHOW TABLES');		
+		$tables = list_tables();		
 		foreach($tables as $tab) {
 			foreach ($tab as $key => $value) {				
 				@$selected = ($value == $content['table_name'])?"selected":"";
@@ -259,7 +260,7 @@ class AdminController extends CBController {
 
 		$list_table = "<select required class='form-control' name='table_name'><option value=''>** Select a Table</option>";
 
-		$tables = DB::select('SHOW TABLES');		
+		$tables = list_tables();		
 		foreach($tables as $tab) {
 			foreach ($tab as $key => $value) {				
 				@$selected = ($value == $content['table_name'])?"selected":"";
@@ -411,19 +412,19 @@ class AdminController extends CBController {
 
 				switch($aggregate_type) {
 					case "count":
-						$query = "select count($column) as statistic_total from `$table` where 1=1 $sql_where";
+						$query = "select count($column) as statistic_total from $table where 1=1 $sql_where";
 					break;
 					case "sum":
-						$query = "select sum($column) as statistic_total from `$table` where 1=1 $sql_where";
+						$query = "select sum($column) as statistic_total from $table where 1=1 $sql_where";
 					break;
 					case "avg":
-						$query = "select avg($column) as statistic_total from `$table` where 1=1 $sql_where";
+						$query = "select avg($column) as statistic_total from $table where 1=1 $sql_where";
 					break;
 					case "min":
-						$query = "select min($column) as statistic_total from `$table` where 1=1 $sql_where";
+						$query = "select min($column) as statistic_total from $table where 1=1 $sql_where";
 					break;
 					case "max":
-						$query = "select max($column) as statistic_total from `$table` where 1=1 $sql_where";
+						$query = "select max($column) as statistic_total from $table where 1=1 $sql_where";
 					break;
 				}
 
@@ -718,10 +719,11 @@ class AdminController extends CBController {
 
 	public function postSaveCmsDashboard() {
 		$post                   = Request::all();
+		$post['id'] 			= intval($post['id']);
 		$a                      = array();
 		$a['name']              = $post['label'];
 		$a['content']           = serialize($post);
-		$a['id_cms_privileges'] = Session::get('dashboard_config_id_privileges');
+		$a['id_cms_privileges'] = intval(Session::get('dashboard_config_id_privileges'));
 		if($post['id']) {
 			DB::table('cms_dashboard')->where('id',$post['id'])->update($a);
 			$lastId = $post['id'];

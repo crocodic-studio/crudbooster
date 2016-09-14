@@ -3,12 +3,24 @@
 | ---------------------------------------------------------------------------------------------------------------
 | Main Helper of CRUDBooster
 | Do not edit or modify this helper unless your modification will be replace if any update from CRUDBooster.
-| If you want add new helper please refer to CustomHelper.php next this file.
 | 
 | Homepage : http://crudbooster.com
 | ---------------------------------------------------------------------------------------------------------------
 |
 */
+
+/* 
+| --------------------------------------------------------------------------------------------------------------
+| To get list table of database
+| --------------------------------------------------------------------------------------------------------------
+|
+*/
+if(!function_exists('list_tables')) {
+    function list_tables() {
+        $tables = DB::select(DB::raw("SELECT TABLE_NAME FROM ".env('DB_DATABASE').".INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE'"));
+        return $tables;
+    }
+}
 
 /* 
 | --------------------------------------------------------------------------------------------------------------
@@ -745,18 +757,6 @@ $php .= '
         |
         */
         $this->index_additional_view = array();
-
-
-
-
-        /*
-        | ---------------------------------------------------------------------- 
-        | Add include js file
-        | ---------------------------------------------------------------------- 
-        | @view = url js file
-        |
-        */
-        $this->load_js = array();
 
 
 
