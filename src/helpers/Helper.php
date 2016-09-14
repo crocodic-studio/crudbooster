@@ -748,6 +748,18 @@ $php .= '
 
 
 
+
+        /*
+        | ---------------------------------------------------------------------- 
+        | Add include js file
+        | ---------------------------------------------------------------------- 
+        | @view = url js file
+        |
+        */
+        $this->load_js = array();
+
+
+
         //No need chanage this constructor
         $this->constructor();
     }
