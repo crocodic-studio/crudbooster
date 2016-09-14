@@ -74,6 +74,16 @@
 	<script src="{{asset('vendor/crudbooster/assets/js/main.js')}}"></script>
 	<link rel='stylesheet' href='{{asset("vendor/crudbooster/assets/css/main.css")}}'/>
 
+    <!-- load js -->
+    <script type="text/javascript">
+      var site_url = "{{url('/')}}" ;
+    </script>
+    @if($load_js)
+      @foreach($load_js as $js)
+        <script src="{{$js}}"></script>
+      @endforeach
+    @endif
+
 </head>
 <body class="<?php echo (Session::get('theme_color'))?:'skin-blue'?>">
 <div class='alert_floating' style='display:none'>
