@@ -828,11 +828,26 @@ class CBController extends Controller {
 
 		$request_all = Request::all();
 		$array_input = array();
+		$id = get_row_id();
+		$id = intval($id);
 		foreach($this->data_inputan as $di) {
 			$ai = array();			
-			if(@$di['required']) {
-				$ai[] = 'required';
+			
+			if($di['type'] != 'upload_standard') {
+				if(@$di['required']) {
+					$ai[] = 'required';
+				}	
 			}
+
+			if($di['type'] == 'upload_standard') {
+				if($id) {
+					$row = DB::table($this->table)->where($this->primary_key,$id)->first();
+					if(!$row->{$di['name']}) {
+						$ai[] = 'required';
+					}					
+				}
+			}
+
 			if(@$di['min']) {
 				$ai[] = 'min:'.$di['min'];
 			}
@@ -853,9 +868,7 @@ class CBController extends Controller {
 			}
 
 
-			if(@$di['validation']) {
-				$id = get_row_id();
-				$id = intval($id);
+			if(@$di['validation']) {				
 				$exp = explode('|',$di['validation']);
 				foreach($exp as &$e) {
 					
