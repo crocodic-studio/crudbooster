@@ -31,7 +31,7 @@
 <!--YOUR OWN HEADER BUTTON-->
 @if(count($index_button))
 	@foreach($index_button as $ib)
-	<a href='{{$ib["url"]}}' id='{{str_slug($ib["label"])}}' class='btn btn-app'>
+	<a href='{{$ib["url"]}}' id='{{str_slug($ib["label"])}}' class='btn btn-app' onClick='return {{$ib["onClick"]}}' onmouseover='return {{$ib["onmouseover"]}}' onmouseout='return {{$ib["onmouseout"]}}' onkeydown='return {{$ib["onkeydown"]}}' onload='return {{$ib["onload"]}}'>
 		<i class='{{$ib["icon"]}}'></i> {{$ib["label"]}}
 	</a>
 	@endforeach
