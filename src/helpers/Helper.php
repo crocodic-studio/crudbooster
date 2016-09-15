@@ -899,13 +899,22 @@ function get_field_type($table,$field) {
              $typedata = DB::connection()->getDoctrineColumn($table, $field)->getType()->getName();
         }
         catch(\Exception $e){
+            
+        }
+
+        try{
             //MySQL
             $the_field       = DB::select( DB::raw('SHOW COLUMNS FROM '.$table.' WHERE Field = \''.$field.'\''))[0];
             $col_type        = $the_field->Type;
             preg_match( '/([a-z]+)\((.+)\)/', $col_type, $match );
             $typedata        = $match[1];
             $typedata_length = $match[2];
+        }catch(\Exception $e) {
+
         }
+
+        if(!$typedata) $typedata = 'varchar';
+
         return $typedata;
     });
 
