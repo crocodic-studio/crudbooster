@@ -766,11 +766,11 @@ $php .= '
         | ---------------------------------------------------------------------- 
         | Add javascript at body 
         | ---------------------------------------------------------------------- 
-        | javascript code each array 
-        | $this->script_js[] = "function() { ... }";
+        | javascript code in the variable 
+        | $this->script_js = "function() { ... }";
         |
         */
-        $this->script_js = array();
+        $this->script_js = NULL;
 
 
 
