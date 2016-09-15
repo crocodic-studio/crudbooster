@@ -865,7 +865,7 @@
 
 
 						@if(@$type=='radio')
-						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' style="{{@$form['style']}}">
+						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' style="{{@$form['style']}}" id='form-group-{{$name}}'>
 							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label><br/>
 							<?php foreach($form['dataenum'] as $k=>$d):
 								$val = $lab = '';
