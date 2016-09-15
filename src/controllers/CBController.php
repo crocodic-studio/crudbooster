@@ -269,6 +269,13 @@ class CBController extends Controller {
 				continue;
 			}
 
+			$field_array = explode('.', $field);
+
+			if(isset($field_array[1])) {
+				$field = $field_array[1];
+				$table = $field_array[0];		
+			}
+
 			if($join) {		
 				
 				$join_exp   = explode(',', $join);
@@ -281,14 +288,7 @@ class CBController extends Controller {
 					$join_alias = $join_table.$join_alias_count;
 				}
 
-				array_push($join_table_temp, $join_table);
-
-				$field_array = explode('.', $field);
-
-				if(isset($field_array[1])) {
-					$field = $field_array[1];
-					$table = $field_array[0];
-				} 
+				array_push($join_table_temp, $join_table);				
 				
 				$result->leftjoin($join_table.' as '.$join_alias,$join_alias.'.id','=',$table.'.'.$field);
 				$result->addselect($join_alias.'.'.$join_name.' as '.$join_name.'_'.$join_alias);
