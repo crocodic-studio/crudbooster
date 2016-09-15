@@ -154,7 +154,7 @@ class CBController extends Controller {
 		            ->where("cms_privileges_roles.id_cms_privileges",get_my_id_privilege())
 		            ->where("cms_moduls.path",get_module_path())->first();
 
-		$this->data['mainpath'] = $this->dashboard = config('crudbooster.ADMIN_PATH').'/'.get_module_path();	 
+		$this->data['mainpath'] = $this->dashboard = url(config('crudbooster.ADMIN_PATH').'/'.get_module_path()); 
 		Session::put('current_mainpath',$this->data['mainpath']);
 
 		if(get_method() == 'getDetail') {
