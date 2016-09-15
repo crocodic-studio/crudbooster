@@ -145,13 +145,13 @@
 					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				}
 			});
-			var cururl = window.location.href;						
-			$(".sidebar-menu a[href='"+cururl+"']").parents(".treeview").addClass("active");			
-			$(".sidebar-menu a[href='"+cururl+"']").parent("li").addClass("active");	
-
-			if(CURRENT_MODULE_PATH) {
-				$(".sidebar-menu a[href*='"+CURRENT_MODULE_PATH+"']").parents(".treeview").addClass("active");
-			}			
+			
+			$('.treeview').each(function() {
+				var active = $(this).find('.active').length;
+				if(active) {
+					$(this).addClass('active');
+				}
+			})			
 			
 			//iCheck for checkbox and radio inputs
 			$('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
