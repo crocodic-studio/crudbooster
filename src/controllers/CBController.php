@@ -149,15 +149,13 @@ class CBController extends Controller {
 	
 		$tablename = ucfirst($this->table);		
 
-		$this->data['mainpath'] = $this->dashboard = mainpath();		 
-
-		Session::put('current_mainpath',$this->data['mainpath']);
-
 		$privileges = DB::table("cms_privileges_roles")
 		            ->join("cms_moduls","cms_moduls.id","=","cms_privileges_roles.id_cms_moduls")
 		            ->where("cms_privileges_roles.id_cms_privileges",get_my_id_privilege())
 		            ->where("cms_moduls.path",get_module_path())->first();
 
+		$this->data['mainpath'] = $this->dashboard = config('crudbooster.ADMIN_PATH').'/'.get_module_path();	 
+		Session::put('current_mainpath',$this->data['mainpath']);
 
 		if(get_method() == 'getDetail') {
 			$this->button_addmore = false;
