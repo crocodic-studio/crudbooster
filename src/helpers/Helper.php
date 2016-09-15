@@ -728,7 +728,8 @@ $php .= '
         | ---------------------------------------------------------------------- 
         | Add element to form at bottom 
         | ----------------------------------------------------------------------     
-        | push your html / code in object array         
+        | push your html / code in object array   
+        | $this->form_add[] = "<p>My HTML Code</p>";      
         | 
         */
         $this->form_add     = array();       
@@ -754,9 +755,34 @@ $php .= '
         | ---------------------------------------------------------------------- 
         | @view = view location 
         | @data = data array for view 
+        | @position = top or bottom. default top
         |
         */
         $this->index_additional_view = array();
+
+
+
+        /*
+        | ---------------------------------------------------------------------- 
+        | Add javascript at body 
+        | ---------------------------------------------------------------------- 
+        | javascript code each array 
+        | $this->script_js[] = "function() { ... }";
+        |
+        */
+        $this->script_js = array();
+
+
+
+        /*
+        | ---------------------------------------------------------------------- 
+        | Include Javascript File 
+        | ---------------------------------------------------------------------- 
+        | URL of your javascript each array 
+        | $this->load_js[] = asset("myfile.js");
+        |
+        */
+        $this->load_js = array();
 
 
 
