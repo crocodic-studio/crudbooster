@@ -445,51 +445,56 @@ class CBController extends Controller {
 			if($this->is_sub==false) $html_content[] = "<input type='checkbox' class='checkbox' name='checkbox' value='$row->id'/>";
 
 			foreach($columns_table as $col) {     
-	          if($col['visible']===0) continue;
+		          if($col['visible']===FALSE) continue;
 
-	          $value = @$row->{$col['field']}; 
+		          $value = @$row->{$col['field']}; 
 
-	          $title = @$row->{$this->title_field};
+		          $title = @$row->{$this->title_field};
 
-	          if(@$col['image']) {
-	            if($value=='') {
-	              $value = "http://placehold.it/50x50&text=NO+IMAGE";
-	            }
-	            $pic = (strpos($value,'http://')!==FALSE)?$value:asset($value);
-	            $pic_small = $pic;
-	            $html_content[] = "<a class='fancybox' rel='group_{{$table}}' title='$col[label]: $title' href='".$pic."'><img class='img-circle' width='40px' height='40px' src='".$pic_small."'/></a>";
-	          }else if(@$col['download']) {
-	            $url = (strpos($value,'http://')!==FALSE)?$value:asset($value);
-	            if($value) {
-	            	$html_content[] = "<a class='btn btn-sm btn-primary' href='$url' target='_blank' title='Download File'>Download</a>";
-	            }else{
-	            	$html_content[] = " - ";
-	            }
-	          }else{
+		          if(isset($col['image'])) {
+			            if($value=='') {
+			              $value = "http://placehold.it/50x50&text=NO+IMAGE";
+			            }
+			            $pic = (strpos($value,'http://')!==FALSE)?$value:asset($value);
+			            $pic_small = $pic;
+			            $value = "<a class='fancybox' rel='group_{{$table}}' title='$col[label]: $title' href='".$pic."?w=350'><img width='40px' height='40px' src='".$pic_small."?w=40'/></a>";
+		          }else if(@$col['download']) {
+			            $url = (strpos($value,'http://')!==FALSE)?$value:asset($value);
+			            if($value) {
+			            	$value = "<a class='btn btn-sm btn-primary' href='$url' target='_blank' title='Download File'>Download</a>";
+			            }else{
+			            	$value = " - ";
+			            }
+		          }else{
 
-	            //limit character
-	            if($col['str_limit']) {
-	            	$value = trim(strip_tags($value));
-	            	$value = str_limit($value,$col['str_limit']);
-	            }
+			            //limit character
+			            if($col['str_limit']) {
+			            	$value = trim(strip_tags($value));
+			            	$value = str_limit($value,$col['str_limit']);
+			            }
 
-	            if($col['nl2br']) {
-	            	$value = nl2br($value);
-	            }
-	            
+			            if($col['nl2br']) {
+			            	$value = nl2br($value);
+			            }
+			            
+			            if(isset($col['callback_php'])) {
+			              $col['callback_php'] = str_replace('%field%',$value,$col['callback_php']);  
+			              foreach($row as $k=>$v) {
+			              		$col['callback_php'] = str_replace("[".$k."]",$v,$col['callback_php']);			              		
+			              }
+			              @eval("\$value = ".$col['callback_php'].";");			              
+			            }
 
-	            if(isset($col['callback_php'])) {
-	              $col['callback_php'] = str_replace('%field%',$value,$col['callback_php']);                                  
-	              @eval("\$value = ".$col['callback_php'].";");
-	            }
+			            if(isset($col['callback_html'])) {
+			              $callback = str_replace('%field%',$value,$col['callback_html']);
+			              foreach($row as $k=>$v) {
+			              		$col['callback_html'] = str_replace("[".$k."]",$v,$col['callback_html']);			              		
+			              }
+			              $value = $callback;                                  
+			            }		                                            		           
+		          }                
 
-	            if(isset($col['callback_html'])) {
-	              $callback = str_replace('%field%',$value,$col['callback_html']);
-	              $value = $callback;                                  
-	            }
-	                                            
-	            $html_content[] = $value;
-	          }                                                         
+		          $html_content[] = $value;
 	      } //end foreach columns_table
 
 
