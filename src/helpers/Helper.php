@@ -17,7 +17,20 @@
 */
 if(!function_exists('list_tables')) {
     function list_tables() {
-        $tables = DB::select(DB::raw("SELECT TABLE_NAME FROM ".env('DB_DATABASE').".INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE'"));
+        $tables = array();
+
+        try {
+            $tables = DB::select(DB::raw("SELECT TABLE_NAME FROM ".env('DB_DATABASE').".INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE'"));
+        }catch(\Exception $e) {
+
+        }
+
+        try {
+            $tables = DB::select("SHOW TABLES");
+        }catch(\Exception $e) {
+
+        }
+        
         return $tables;
     }
 }
@@ -1311,6 +1324,27 @@ function g($name) {
 
 /* 
 | --------------------------------------------------------------------------------------------------------------
+| Get first row data simply
+| --------------------------------------------------------------------------------------------------------------
+| $id = id of row
+|
+*/
+if(!function_exists('first_row')) {
+function first_row($table,$id) {
+    $row = DB::table($table);
+    if(is_array($id)) {
+        foreach($id as $k=>$v) {
+            $row->where($k,$v);
+        }
+    }else{
+        $row->where('id',$id);
+    }
+    return $row;
+}
+}
+
+/* 
+| --------------------------------------------------------------------------------------------------------------
 | To validation input data more easy . 
 | --------------------------------------------------------------------------------------------------------------
 | $arr = array like laravel validation array definition
@@ -1342,8 +1376,13 @@ function valid($arr=array(),$type='json') {
             $res = response()->json($result,400);
             $res->send();
             exit;
-        }else{            
-            return redirect()->back()->with(['message'=>implode(', ',$message),'message_type'=>"warning"]);
+        }else{                        
+            $res = redirect()->back()            
+            ->with(['message'=>implode('<br/>',$message),'message_type'=>'warning'])
+            ->withInput();
+            \Session::driver()->save();
+            $res->send();
+            exit;
         }        
     }
 }
