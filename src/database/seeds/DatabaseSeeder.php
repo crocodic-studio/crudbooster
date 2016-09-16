@@ -66,21 +66,21 @@ class Cms_settingsSeeder extends Seeder {
     {        
 
         DB::table('cms_settings')->insert([
-        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'appname','content'=>'CRUDBooster','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
-        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'email_sender','content'=>'support@crudbooster.com','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
-        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'app_lockscreen_timeout','content'=>'60','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
-        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'default_paper_size','content'=>'Legal','content_input_type'=>'text','dataenum'=>NULL,'helper'=>'Paper size, ex : A4, Legal, etc'],
-        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'smtp_driver','content'=>'mail','content_input_type'=>'select','dataenum'=>'smtp,mail,sendmail','helper'=>NULL],
-        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'smtp_host','content'=>'','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
-        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'smtp_port','content'=>'','content_input_type'=>'text','dataenum'=>NULL,'helper'=>'default 25'],
-        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'smtp_username','content'=>'','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
-        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'smtp_password','content'=>'','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
-        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'logo','content'=>'','content_input_type'=>'upload','dataenum'=>NULL,'helper'=>NULL],
-        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'favicon','content'=>'','content_input_type'=>'upload','dataenum'=>NULL,'helper'=>NULL],
-        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'api_debug_mode','content'=>'true','content_input_type'=>'select','dataenum'=>'true,false','helper'=>NULL],        
-        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'google_api_key','content'=>'','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
-        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'register_email_confirmation','content'=>'','content_input_type'=>'wysiwyg','dataenum'=>NULL,'helper'=>'Input message about email confirmation here, use alias [link_confirmation] to include the link.'],
-        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'register_email_welcome','content'=>'','content_input_type'=>'wysiwyg','dataenum'=>NULL,'helper'=>"You can input message after registration is success. Then the message will be send to registrant. use [name] as user 's name, use [email] as user's email"]
+        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'appname','label'=>'Application Name','group_setting'=>'General Setting','content'=>'CRUDBooster','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
+        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'email_sender','label'=>'Email Sender','group_setting'=>'Email Configuration','content'=>'support@crudbooster.com','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
+        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'app_lockscreen_timeout','label'=>'App Lockscreen Timeout','group_setting'=>'Application Setting','content'=>'60','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
+        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'default_paper_size','label'=>'Default Paper Size','group_setting'=>'Application Setting','content'=>'Legal','content_input_type'=>'text','dataenum'=>NULL,'helper'=>'Paper size, ex : A4, Legal, etc'],
+        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'smtp_driver','label'=>'SMTP Driver','group_setting'=>'Email Configuration','content'=>'mail','content_input_type'=>'select','dataenum'=>'smtp,mail,sendmail','helper'=>NULL],
+        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'smtp_host','label'=>'SMTP Host','group_setting'=>'Email Configuration','content'=>'','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
+        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'smtp_port','label'=>'SMTP Port','group_setting'=>'Email Configuration','content'=>'','content_input_type'=>'text','dataenum'=>NULL,'helper'=>'default 25'],
+        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'smtp_username','label'=>'SMTP Username','group_setting'=>'Email Configuration','content'=>'','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
+        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'smtp_password','label'=>'SMTP Password','group_setting'=>'Email Configuration','content'=>'','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
+        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'logo','label'=>'Logo','group_setting'=>'General Setting','content'=>'','content_input_type'=>'upload','dataenum'=>NULL,'helper'=>NULL],
+        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'favicon','label'=>'Favicon','group_setting'=>'General Setting','content'=>'','content_input_type'=>'upload','dataenum'=>NULL,'helper'=>NULL],
+        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'api_debug_mode','label'=>'API Debug Mode','group_setting'=>'Application Setting','content'=>'true','content_input_type'=>'select','dataenum'=>'true,false','helper'=>NULL],        
+        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'google_api_key','label'=>'GOOGLE API Key','group_setting'=>'Application Setting','content'=>'','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
+        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'register_email_confirmation','label'=>'Registration Email Confirmation','group_setting'=>'Email Template','content'=>'','content_input_type'=>'wysiwyg','dataenum'=>NULL,'helper'=>'Input message about email confirmation here, use alias [link_confirmation] to include the link.'],
+        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'register_email_welcome','label'=>'Registration Email Welcome','group_setting'=>'Email Template','content'=>'','content_input_type'=>'wysiwyg','dataenum'=>NULL,'helper'=>"You can input message after registration is success. Then the message will be send to registrant. use [name] as user 's name, use [email] as user's email"]
         ]);
     }
 }
