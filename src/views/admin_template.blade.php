@@ -77,6 +77,9 @@
     <!-- load js -->
     <script type="text/javascript">
       var site_url = "{{url('/')}}" ;
+      @if($script_js)
+        {!! $script_js !!}
+      @endif 
     </script>
     @if($load_js)
       @foreach($load_js as $js)
@@ -100,7 +103,6 @@
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
 		
-
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
@@ -117,9 +119,7 @@
                 <small>{!! $page_description or null !!}</small>
             </h1>            
         </section>
-		
-		
-
+			
         <!-- Main content -->
         <section id='content_section' class="content">
 
@@ -137,7 +137,7 @@
 			<div class='alert alert-{{ Session::get("message_type") }}'>
 				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 				<h4><i class="icon fa fa-info"></i> {{ ucfirst(Session::get("message_type")) }}</h4>
-				{{Session::get('message')}}
+				{!!Session::get('message')!!}
 			</div>
 			@endif
             <!-- Your Page Content Here -->
@@ -149,11 +149,5 @@
     @include('crudbooster::footer')
 
 </div><!-- ./wrapper -->
-
-
-
-<!-- Optionally, you can add Slimscroll and FastClick plugins.
-      Both of these plugins are recommended to enhance the
-      user experience -->
 </body>
 </html>
