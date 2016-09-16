@@ -13,6 +13,31 @@
 | --------------------------------------------------------------------------------------------------------------
 | To get list table of database
 | --------------------------------------------------------------------------------------------------------------
+| @key = field for filter
+| @type = asc,desc,like,etc
+| @value = value of type
+|
+*/
+if(!function_exists('url_filter_column')) {
+    function url_filter_column($key,$type,$value='') {
+        $params = Request::all();
+        $mainpath = trim(mainpath(),'/');
+        if(isset($params)) {        
+            $params['filter_column'][$key]['type'] = $type;
+            if($value) {
+                $params['filter_column'][$key]['value'] = $value;
+            }
+            return $mainpath.'?'.urldecode(http_build_query($params));
+        }else{
+            return $mainpath.'?filter_column['.$key.'][type]='.$value;
+        }     
+    }
+}
+
+/* 
+| --------------------------------------------------------------------------------------------------------------
+| To get list table of database
+| --------------------------------------------------------------------------------------------------------------
 |
 */
 if(!function_exists('list_tables')) {
