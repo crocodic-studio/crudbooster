@@ -53,7 +53,8 @@
                             echo "<th width='$width'>$colname</th>";
                         }
                       ?>   
-
+                        
+                        @if($button_table_action)            
                       @if($priv->is_edit!=0 || $priv->is_delete!=0 || $priv->is_read!=0)
                       <?php 
                         $width = 0;
@@ -69,7 +70,8 @@
                         @$width += count($addaction)*33;
                       ?>
                       <th width='<?=$width?>px'>Action</th>
-                      @endif                                                               
+                      @endif   
+                      @endif                                                              
                     </tr>
                     </thead>
                     <tbody>
@@ -96,10 +98,11 @@
                             echo "<th width='$width'>$colname</th>";
                         }
                       ?>   
-
-                      @if($priv->is_edit!=0 || $priv->is_delete!=0 || $priv->is_read!=0)
-                      <th> - </th>
-                      @endif                                                               
+                        @if($button_table_action) 
+                           @if($priv->is_edit!=0 || $priv->is_delete!=0 || $priv->is_read!=0)
+                               <th> - </th>
+                           @endif 
+                        @endif                                                               
                     </tr>
                     </tfoot>               
                   </table>                                   
