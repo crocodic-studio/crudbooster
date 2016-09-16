@@ -39,7 +39,7 @@ class SettingsController extends CBController {
 		$this->form[] = array('label'=>'Group','name'=>'group_setting','value'=>$value);
 		$this->form[] = array('label'=>'Label','name'=>'label');
 		// $this->form[] = array("label"=>"Name","name"=>"name","help"=>"Without space, special char, sparate with _ , lowercase only");
-		$this->form[] = array("label"=>"Type","name"=>"content_input_type","type"=>"select","dataenum"=>array("text","number","email","textarea","wysiwyg","upload","datepicker","radio","select"));		
+		$this->form[] = array("label"=>"Type","name"=>"content_input_type","type"=>"select","dataenum"=>array("text","number","email","textarea","wysiwyg","upload_image","upload_document","datepicker","radio","select"));		
 		$this->form[] = array("label"=>"Radio / Select Data","name"=>"dataenum","placeholder"=>"Example : abc,def,ghi","jquery"=>"
 			function show_radio_data() {
 				var cit = $('#content_input_type').val();
@@ -66,16 +66,52 @@ class SettingsController extends CBController {
 		return view('crudbooster::default.setting',$data);
 	} 
 
+	function getDeleteFileSetting() {
+		$id = g('id');
+		$row = first_row('cms_settings',$id);
+		if(Storage::exists($row->content)) Storage::delete($row->content);
+		DB::table('cms_settings')->where('id',$id)->update(['content'=>NULL]);
+		return redirect()->back()->with(['message'=>'Delete file successfully !','message_type'=>'success']);
+	}	
+
 
 	function postSaveSetting() {
 		$group = Request::get('group_setting');
 		$setting = DB::table('cms_settings')->where('group_setting',$group)->get();
 		foreach($setting as $set) {
+			
+			$name = $set->name;
+
 			if($set->content_input_type == 'radio' || $set->content_input_type == 'select') {
 				$content = implode(';',Request::get($set->name));
 			}else{
 				$content = Request::get($set->name);
 			}
+
+			if (Request::hasFile($name))
+			{			
+
+				if($set->content_input_type == 'upload_image') {
+					valid([ $name => 'image|max:10000' ],'view');
+				}else{
+					valid([ $name => 'mimes:doc,docx,xls,xlsx,ppt,pptx,pdf,zip,rar|max:20000' ], 'view');
+				}
+
+
+				$file = Request::file($name);					
+				$ext  = $file->getClientOriginalExtension();
+
+				//Create Directory Monthly 
+				Storage::makeDirectory(date('Y-m'));
+
+				//Move file to storage
+				$filename = md5(str_random(5)).'.'.$ext;
+				if($file->move(storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m')),$filename)) {						
+					$content = 'uploads/'.date('Y-m').'/'.$filename;
+				}					  
+			}
+
+
 			DB::table('cms_settings')->where('name',$set->name)->update(['content'=>$content]);
 		}
 		return redirect()->back()->with(['message'=>'Your setting has been saved !','message_type'=>'success']);
