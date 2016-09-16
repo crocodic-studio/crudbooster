@@ -59,6 +59,7 @@ class CBController extends Controller {
 	var $button_cancel		= TRUE;
 	var $button_addmore		= TRUE;
 	var $button_save		= TRUE;
+	var $button_table_action = TRUE;
 	var $index_statistic	= array(); 
 	var $index_additional_view = array();
 	var $load_js 			= array();
@@ -182,6 +183,7 @@ class CBController extends Controller {
 		$this->data['button_addmore'] 	  = $this->button_addmore;
 		$this->data['button_cancel'] 	  = $this->button_cancel;
 		$this->data['button_save'] 		  = $this->button_save;
+		$this->data['button_table_action'] = $this->button_table_action;
 		$this->data['index_statistic']	  = $this->index_statistic;
 		$this->data['index_additional_view'] = $this->index_additional_view;
 		$this->data['load_js'] 			  = $this->load_js;
@@ -489,64 +491,65 @@ class CBController extends Controller {
 	      } //end foreach columns_table
 
 
-
-	      if($priv->is_edit!=0 || $priv->is_delete!=0 || $priv->is_read!=0):
-         	$td = "";
-         	
-         	if($priv->is_read) {
-         		if($this->is_sub==true) {         			
-         			$data_modul = ['modul'=>$this->table_name,'action'=>"detail","id"=>$row->id];
-         			$current_url = Request::url();
-         			$current_url .= "?submodul=".json_encode($data_modul).'#form_simple_'.str_slug($this->table_name);
-			      	$url = $current_url;
-			    }else{
-			    	$url = url("$mainpath/detail/$row->id");
-			    }	
-            	$td .= "<a title='Detail Data' href='$url' class='btn btn-xs btn-info'><i class='fa fa-eye'></i></a>&nbsp;";
-            }
-      		
-      		if($priv->is_edit):
-
-      			if($this->is_sub==true) {         			
-         			$data_modul = ['modul'=>$this->table_name,'action'=>"edit","id"=>$row->id];
-         			$current_url = Request::url();
-         			$current_url .= "?submodul=".json_encode($data_modul).'#form_simple_'.str_slug($this->table_name);
-			      	$url = $current_url;
-			    }else{			    	
-			    	$url = url("$mainpath/edit/$row->id");
-			    }
-      			
-      			$td .= "<a title='Edit Data'  href='$url' class='btn btn-row-edit btn-xs btn-warning'><i class='fa fa-pencil'></i></a>&nbsp;";
-            endif;
-
-            if($priv->is_delete):
-            	if($this->is_sub==true) {         			
-         			$data_modul = ['modul'=>$this->table_name,'action'=>"detail","id"=>$row->id];
-         			$current_url = route($this->controller_name.'GetDelete',['id'=>$row->id]);         			
-			      	$url = $current_url;
-			    }else{
-			    	$url = url("$mainpath/delete/$row->id");
-			    }
-            	$td .= "<a title='Delete Data' href='javascript:;' onclick='swal({   title: \"Are you sure?\",   text: \"You will not be able to recover this record data!\",   type: \"warning\",   showCancelButton: true,   confirmButtonColor: \"#DD6B55\",   confirmButtonText: \"Yes, delete it!\",   closeOnConfirm: false }, function(){  location.href=\"$url\" });'  class='btn btn-xs btn-danger' ><i class='fa fa-trash'></i></a>&nbsp;";
-            endif;  
-
-                     
-            
-            if(count(@$addaction)):				
-                foreach($addaction as $fb):
-                	$ajax  = (isset($fb["ajax"]))?"ajax-button":"";
-                	$color = (isset($fb['color']))?"btn-".$fb['color']:"btn-info";
-                	$class = "btn btn-xs $color ".$ajax;
-                	$class = (isset($fb['class']))?$fb['class']:$class;
-                	$url   = str_replace(array("%id%","%name%"),array($row->id,$row->{$title_field}),$fb["route"]);
-                	// $url   .= '?referal='.urlencode(Request::url());
-                	$td    .= "<a title='".$fb["label"]."' href='".$url."' 
-                	class='$class'><i class='".$fb["icon"]."'></i></a>&nbsp;";
-                endforeach;
-            endif;
-
-          	$html_content[] = $td;
-          endif;
+		if ($this->button_table_action):
+		      if($priv->is_edit!=0 || $priv->is_delete!=0 || $priv->is_read!=0):
+	         	$td = "";
+	         	
+	         	if($priv->is_read) {
+	         		if($this->is_sub==true) {         			
+	         			$data_modul = ['modul'=>$this->table_name,'action'=>"detail","id"=>$row->id];
+	         			$current_url = Request::url();
+	         			$current_url .= "?submodul=".json_encode($data_modul).'#form_simple_'.str_slug($this->table_name);
+				      	$url = $current_url;
+				    }else{
+				    	$url = url("$mainpath/detail/$row->id");
+				    }	
+	            	$td .= "<a title='Detail Data' href='$url' class='btn btn-xs btn-info'><i class='fa fa-eye'></i></a>&nbsp;";
+	            }
+	      		
+	      		if($priv->is_edit):
+	
+	      			if($this->is_sub==true) {         			
+	         			$data_modul = ['modul'=>$this->table_name,'action'=>"edit","id"=>$row->id];
+	         			$current_url = Request::url();
+	         			$current_url .= "?submodul=".json_encode($data_modul).'#form_simple_'.str_slug($this->table_name);
+				      	$url = $current_url;
+				    }else{			    	
+				    	$url = url("$mainpath/edit/$row->id");
+				    }
+	      			
+	      			$td .= "<a title='Edit Data'  href='$url' class='btn btn-row-edit btn-xs btn-warning'><i class='fa fa-pencil'></i></a>&nbsp;";
+	            endif;
+	
+	            if($priv->is_delete):
+	            	if($this->is_sub==true) {         			
+	         			$data_modul = ['modul'=>$this->table_name,'action'=>"detail","id"=>$row->id];
+	         			$current_url = route($this->controller_name.'GetDelete',['id'=>$row->id]);         			
+				      	$url = $current_url;
+				    }else{
+				    	$url = url("$mainpath/delete/$row->id");
+				    }
+	            	$td .= "<a title='Delete Data' href='javascript:;' onclick='swal({   title: \"Are you sure?\",   text: \"You will not be able to recover this record data!\",   type: \"warning\",   showCancelButton: true,   confirmButtonColor: \"#DD6B55\",   confirmButtonText: \"Yes, delete it!\",   closeOnConfirm: false }, function(){  location.href=\"$url\" });'  class='btn btn-xs btn-danger' ><i class='fa fa-trash'></i></a>&nbsp;";
+	            endif;  
+	
+	                     
+	            
+	            if(count(@$addaction)):				
+	                foreach($addaction as $fb):
+	                	$ajax  = (isset($fb["ajax"]))?"ajax-button":"";
+	                	$color = (isset($fb['color']))?"btn-".$fb['color']:"btn-info";
+	                	$class = "btn btn-xs $color ".$ajax;
+	                	$class = (isset($fb['class']))?$fb['class']:$class;
+	                	$url   = str_replace(array("%id%","%name%"),array($row->id,$row->{$title_field}),$fb["route"]);
+	                	// $url   .= '?referal='.urlencode(Request::url());
+	                	$td    .= "<a title='".$fb["label"]."' href='".$url."' 
+	                	class='$class'><i class='".$fb["icon"]."'></i></a>&nbsp;";
+	                endforeach;
+	            endif;
+	
+	          	$html_content[] = $td;
+	          endif;
+		endif;
 
 	      $html_contents[] = $html_content;
 		} //end foreach data[result]
