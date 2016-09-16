@@ -499,7 +499,8 @@ class Admin'.$controllername.' extends \crocodicstudio\crudbooster\controllers\C
         $this->button_new_data    = true;
         $this->button_delete_data = true;
         $this->button_sort_filter = true;        
-        $this->button_export_data = true;
+        $this->button_export_data = true;   
+		$this->button_table_action = true;
 
         $this->col = array();
 ';
