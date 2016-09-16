@@ -67,7 +67,7 @@ class SettingsController extends CBController {
 	} 
 
 
-	function getSaveSetting() {
+	function postSaveSetting() {
 		$group = Request::get('group_setting');
 		$setting = DB::table('cms_settings')->where('group_setting',$group)->get();
 		foreach($setting as $set) {
@@ -78,6 +78,7 @@ class SettingsController extends CBController {
 			}
 			DB::table('cms_settings')->where('name',$set->name)->update(['content'=>$content]);
 		}
+		return redirect()->back()->with(['message'=>'Your setting has been saved !','message_type'=>'success']);
 	}
 
 	function hook_before_add(&$arr) {
