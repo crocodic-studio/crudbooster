@@ -16,8 +16,6 @@ use Illuminate\Support\Facades\Excel;
 
 class SettingsController extends CBController {
 
-	
-
 	public function __construct() {
 		$this->module_name   = "Settings";
 		$this->table         = 'cms_settings';
@@ -32,44 +30,58 @@ class SettingsController extends CBController {
 		$this->form = array();
 		
 		
-		$id = Request::segment(4);
-		$id = intval($id);
-		
-		if(is_int($id) && $id !=0) {
-			$ro = DB::table('cms_settings')->where('id',$id)->first();
-			$type = $ro->content_input_type;
+		if(Request::get('group_setting')) {
+			$value = Request::get('group_setting');
+		}else{
+			$value = 'General Setting';
+		}
 
-			$this->form[] = array("label"=>"Name","name"=>"name","readonly"=>true,"callback_php"=>'$row->name');
-
-			if($type=='radio' || $type=='select') {
-				if($ro->dataenum) {
-					$dataenum = explode(",",$ro->dataenum);					
-					$this->form[] = ["label"=>"Content","type"=>$type,"name"=>"content","dataenum"=>$dataenum,"help"=>$ro->helper];
-				}	
-			}else{
-				$this->form[] = array("label"=>"Content","name"=>"content","type"=>$type,"help"=>$ro->helper);	
+		$this->form[] = array('label'=>'Group','name'=>'group_setting','value'=>$value);
+		$this->form[] = array('label'=>'Label','name'=>'label');
+		// $this->form[] = array("label"=>"Name","name"=>"name","help"=>"Without space, special char, sparate with _ , lowercase only");
+		$this->form[] = array("label"=>"Type","name"=>"content_input_type","type"=>"select","dataenum"=>array("text","number","email","textarea","wysiwyg","upload","datepicker","radio","select"));		
+		$this->form[] = array("label"=>"Radio / Select Data","name"=>"dataenum","placeholder"=>"Example : abc,def,ghi","jquery"=>"
+			function show_radio_data() {
+				var cit = $('#content_input_type').val();
+				if(cit == 'radio' || cit == 'select') {
+					$('#form-group-dataenum').show();	
+				}else{
+					$('#form-group-dataenum').hide();
+				}					
 			}
-						
-		}else{			
-			$this->form[] = array("label"=>"Name","name"=>"name","help"=>"Without space, special char, sparate with _ , lowercase only");
-
-			$this->form[] = array("label"=>"Type","name"=>"content_input_type","type"=>"select","dataenum"=>array("text","textarea","wysiwyg","upload","datepicker","radio","select"));		
-			$this->form[] = array("label"=>"Radio / Select Data","name"=>"dataenum","placeholder"=>"Example : abc,def,ghi","jquery"=>"
-				function show_radio_data() {
-					var cit = $('#content_input_type').val();
-					if(cit == 'radio' || cit == 'select') {
-						$('#form-group-dataenum').show();	
-					}else{
-						$('#form-group-dataenum').hide();
-					}					
-				}
-				$('#content_input_type').change(show_radio_data);
-				show_radio_data();
-				");
-			$this->form[] = array("label"=>"Helper Text","name"=>"helper","type"=>"text");	
-		}				
+			$('#content_input_type').change(show_radio_data);
+			show_radio_data();
+			");
+		$this->form[] = array("label"=>"Helper Text","name"=>"helper","type"=>"text");				
 		
 		$this->constructor();
+	}
+
+	function getIndex() {
+		$data['page_title']      = $this->data['module_name'];
+		$data['page_menu']       = Route::getCurrentRoute()->getActionName();	
+		$data['table_name']      = $this->table;		
+		$data['controller_name'] = $this->controller_name;
+		$data['group_setting']   = DB::table('cms_settings')->groupby('group_setting')->lists('group_setting');
+		return view('crudbooster::default.setting',$data);
+	} 
+
+
+	function getSaveSetting() {
+		$group = Request::get('group_setting');
+		$setting = DB::table('cms_settings')->where('group_setting',$group)->get();
+		foreach($setting as $set) {
+			if($set->content_input_type == 'radio' || $set->content_input_type == 'select') {
+				$content = implode(';',Request::get($set->name));
+			}else{
+				$content = Request::get($set->name);
+			}
+			DB::table('cms_settings')->where('name',$set->name)->update(['content'=>$content]);
+		}
+	}
+
+	function hook_before_add(&$arr) {
+		$arr['name'] = str_slug($arr['label']);
 	}
 
 	function hook_after_edit($id) {
