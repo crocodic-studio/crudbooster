@@ -118,10 +118,25 @@
                                                 echo "<textarea name='$s->name' class='form-control wysiwyg'>$value</textarea>";
                                                 break;
                                             case 'upload':
+                                            case 'upload_image':
                                                 if($value) {
-                                                  echo "<p><a href='".asset($value)."' title='Download the file'>Download the File</a></p>";
-                                                }
-                                                echo "<input type='file' name='$s->name' class='form-control'/>";
+                                                  echo "<p><a href='".asset($value)."' target='_blank' title='Download the file of $s->label'><i class='fa fa-download'></i> Download the File  of $s->label</a></p>";
+                                                  echo "<input type='hidden' name='$s->name' value='$value'/>";
+                                                  echo "<div class='pull-right'><a class='btn btn-danger btn-xs' onclick='if(confirm(\"Are you sure want to delete ?\")) location.href=\"".mainpath("delete-file-setting?id=$s->id")."\"' title='Click here to delete'><i class='fa fa-trash'></i></a></div>";
+                                                }else{
+                                                  echo "<input type='file' name='$s->name' class='form-control'/>";
+                                                }                                                
+                                                echo "<div class='help-block'>File support only jpg,png,gif, Max 10 MB</div>";
+                                                break;
+                                            case 'upload_file':
+                                                if($value) {
+                                                  echo "<p><a href='".asset($value)."' target='_blank' title='Download the file of $s->label'><i class='fa fa-download'></i> Download the File  of $s->label</a></p>";
+                                                  echo "<input type='hidden' name='$s->name' value='$value'/>";
+                                                  echo "<div class='pull-right'><a class='btn btn-danger btn-xs' onclick='if(confirm(\"Are you sure want to delete ?\")) location.href=\"".mainpath("delete-file-setting?id=$s->id")."\"' title='Click here to delete'><i class='fa fa-trash'></i></a></div>";
+                                                }else{
+                                                  echo "<input type='file' name='$s->name' class='form-control'/>";
+                                                }                                                
+                                                echo "<div class='help-block'>File support only doc,docx,xls,xlsx,ppt,pptx,pdf,zip,rar, Max 20 MB</div>";
                                                 break;
                                             case 'datepicker':
                                                 echo "<input type='text' class='datepicker form-control' name='$s->name'/>";
