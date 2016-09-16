@@ -836,13 +836,21 @@ class AdminController extends CBController {
 		$password = \Hash::make($rand_string);
 
 		DB::table('cms_users')->where('email',Request::input('email'))->update(array('password'=>$password));
- 
+ 	
+ 		$appname = get_setting('appname');
 		$user             = DB::table('cms_users')->where("email",Request::input('email'))->first();
 		$data             = array();
 		$data['email']    = $user->email;
 		$data['password'] = $rand_string;
 
-		send_email($user->email,"Forgot Password",$data,$this->setting->email_sender,"emails.forgot");
+		$html = "
+			Hi $user->name, <br/>
+			We're heard that you requested password, this bellow is your new password :<br/>
+			<h3>$rand_string</h3><br/>
+			You can use this password to login at $appname					
+		";
+
+		send_email($user->email,"Forgot Password $appname",$html);
 
 		return redirect()->route('getLogin')->with('message', 'We have sent new password to your email, check inbox or spambox !');
 
