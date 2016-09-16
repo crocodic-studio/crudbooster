@@ -47,14 +47,40 @@
                       <th width='3%'><input type='checkbox' id='checkall'/></th>
                       <?php                       
                         foreach($columns as $col) {
-                            if($col['visible']===0) continue;
+                            if($col['visible']===FALSE) continue;
+                            
+                            $sort_column = Request::get('filter_column');
                             $colname = $col['label'];
+                            $name = $col['name'];
+                            $field = $col['field_with'];
                             $width = ($col['width'])?:"auto";
-                            echo "<th width='$width'>$colname</th>";
+                            $mainpath = trim(mainpath(),'/').$build_query;
+                            echo "<th width='$width'>";
+                            if(isset($sort_column[$field])) {
+                              switch($sort_column[$field]['type']) {                                
+                                case 'asc': 
+                                  $url = url_filter_column($field,'desc');
+                                  echo "<a href='$url' title='Click to sort descending'>$colname &nbsp; <i class='fa fa-sort-desc'></i></a>";
+                                  break;
+                                case 'desc':
+                                  $url = url_filter_column($field,'asc');
+                                  echo "<a href='$url' title='Click to sort ascending'>$colname &nbsp; <i class='fa fa-sort-asc'></i></a>";
+                                  break;
+                                default:
+                                  $url = url_filter_column($field,'asc');
+                                  echo "<a href='$url' title='Click to sort ascending'>$colname &nbsp; <i class='fa fa-sort'></i></a>";
+                                  break;      
+                              }
+                            }else{     
+                                  $url = url_filter_column($field,'asc');                         
+                                  echo "<a href='$url' title='Click to sort ascending'>$colname &nbsp; <i class='fa fa-sort'></i></a>";                                  
+                            }
+                            
+                            
+                            echo "</th>";
                         }
                       ?>   
-                        
-                        @if($button_table_action)            
+
                       @if($priv->is_edit!=0 || $priv->is_delete!=0 || $priv->is_read!=0)
                       <?php 
                         $width = 0;
@@ -70,8 +96,7 @@
                         @$width += count($addaction)*33;
                       ?>
                       <th width='<?=$width?>px'>Action</th>
-                      @endif   
-                      @endif                                                              
+                      @endif                                                               
                     </tr>
                     </thead>
                     <tbody>
@@ -98,11 +123,10 @@
                             echo "<th width='$width'>$colname</th>";
                         }
                       ?>   
-                        @if($button_table_action) 
-                           @if($priv->is_edit!=0 || $priv->is_delete!=0 || $priv->is_read!=0)
-                               <th> - </th>
-                           @endif 
-                        @endif                                                               
+
+                      @if($priv->is_edit!=0 || $priv->is_delete!=0 || $priv->is_read!=0)
+                      <th> - </th>
+                      @endif                                                               
                     </tr>
                     </tfoot>               
                   </table>                                   
