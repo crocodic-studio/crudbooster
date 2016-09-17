@@ -263,7 +263,7 @@
 
                     <?php                          
                         foreach($moduls as $modul):
-                    ?>      
+                    ?>            
                         <li class="<?=($modul->path==$current_path)?'active':''?>"><a href="{{ url(config('crudbooster.ADMIN_PATH').'/'.$modul->path) }}"><i class='<?=$modul->icon?>'></i><span><?=$modul->name?></span></a></li>
                     <?php endforeach;?>
 

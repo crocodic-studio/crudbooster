@@ -64,6 +64,9 @@ class CBController extends Controller {
 	var $index_additional_view = array();
 	var $load_js 			= array();
 	var $script_js 			= NULL;
+	var $sub_module			= array();	
+	var $index_array 		= FALSE;
+	var $index_only_id 		= NULL;
 
 	public function constructor() {			
 
@@ -150,20 +153,34 @@ class CBController extends Controller {
 		$this->data['current_controller'] = stripslashes(strtok(str_replace("\crocodicstudio\crudbooster\controllers","",Route::currentRouteAction()),"@"));		
 	
 		$tablename = ucfirst($this->table);		
-
+		
 		$privileges = DB::table("cms_privileges_roles")
 		            ->join("cms_moduls","cms_moduls.id","=","cms_privileges_roles.id_cms_moduls")
 		            ->where("cms_privileges_roles.id_cms_privileges",get_my_id_privilege())
 		            ->where("cms_moduls.path",get_module_path())->first();
 
-		$this->data['mainpath'] = $this->dashboard = url(config('crudbooster.ADMIN_PATH').'/'.get_module_path()); 
+		$this->data['mainpath'] = $this->dashboard = url(config('crudbooster.ADMIN_PATH').'/'.get_module_path());	 
 		Session::put('current_mainpath',$this->data['mainpath']);
+
+		  if(Request::segment(3) == 'sub-module') {
+	        $module = DB::table('cms_moduls')->where('path',Request::segment(5))->first();
+	        $this->data['data_sub_module'] = $module;
+	        $mainpath = Route($module->controller."GetIndex");
+	      }else{
+	        $mainpath = mainpath();
+	      }
 
 		if(get_method() == 'getDetail') {
 			$this->button_addmore = false;
 			$this->button_save    = false;			
 		}
 
+		if(Request::segment(3) == 'sub-module') {
+			if(Request::segment(6) == 'detail') {
+				$this->button_addmore = FALSE;
+				$this->button_save = FALSE;
+			}
+		}
 		
 		$this->data['priv']               = $privileges;
 		$this->data['dashboard']          = $this->dashboard;		
@@ -189,17 +206,30 @@ class CBController extends Controller {
 		$this->data['index_additional_view'] = $this->index_additional_view;
 		$this->data['load_js'] 			  = $this->load_js;
 		$this->data['script_js'] 		  = $this->script_js;
+		$this->data['sub_module']		  = $this->sub_module;
 
         view()->share($this->data);
 	} 
 
+	public function columns_table() {
+		return $this->columns_table;
+	}
 
+	public function sub_module() {
+		return $this->sub_module;
+	}	
+
+	public function mainpath() {
+		return $this->data['mainpath'];
+	}
 
 	public function getIndex()
 	{
 		// DB::connection()->enableQueryLog();		
 
 		Session::forget('current_row_id');
+
+		$is_sub_module = (Request::segment(3) == 'sub-module')?TRUE:FALSE;
 
 		if($this->data['priv']->limit_data) {
 			$this->limit = $this->data['priv']->limit_data;
@@ -278,7 +308,7 @@ class CBController extends Controller {
 			if(isset($field_array[1])) {
 				$field = $field_array[1];
 				$table = $field_array[0];		
-			}
+			} 
 
 			if($join) {		
 				
@@ -292,7 +322,7 @@ class CBController extends Controller {
 					$join_alias = $join_table.$join_alias_count;
 				}
 
-				array_push($join_table_temp, $join_table);				
+				array_push($join_table_temp, $join_table); 		
 				
 				$result->leftjoin($join_table.' as '.$join_alias,$join_alias.'.id','=',$table.'.'.$field);
 				$result->addselect($join_alias.'.'.$join_name.' as '.$join_name.'_'.$join_alias);
@@ -303,7 +333,8 @@ class CBController extends Controller {
 				$columns_table[$index]['field_with'] = $join_alias.'.'.$join_name;
 				$columns_table[$index]['field_raw']  = $join_name;
 				 	
-			}else{
+			}else{ 
+
 				$result->addselect($table.'.'.$field);
 				$columns_table[$index]['type_data']	 = get_field_type($table,$field);
 				$columns_table[$index]['field']      = $field;
@@ -311,25 +342,12 @@ class CBController extends Controller {
 				$columns_table[$index]['field_with'] = $table.'.'.$field;
 			}					
 		}
- 		
- 		if($this->is_sub==true) {
- 			$q = 'q_'.str_slug($this->table_name);
- 			if(Request::get($q)) {
- 				$result->where(function($w) use ($columns_table,$q) {
-					foreach($columns_table as $col) {		
-							if(!$col['field_with']) continue;		
-							if($col['is_subquery']) continue;			
-							$w->orwhere($col['field_with'],"like","%".Request::get($q)."%");				
-					}
-				});
- 			}
- 		}
 
- 		if($this->is_sub==true) {
+ 		if($this->parent_field && $this->parent_id) {
  			$result->where($table.'.'.$this->parent_field,$this->parent_id);
  		}
 
-		if(Request::get('q')) {
+		if(Request::get('q') && !$this->index_array) {
 			
 			$result->where(function($w) use ($columns_table) {
 				foreach($columns_table as $col) {		
@@ -340,14 +358,14 @@ class CBController extends Controller {
 			});		
 		}			
 
-		if(Request::get('where')) {			
+		if(Request::get('where') && !$this->index_array) {			
 			foreach(Request::get('where') as $k=>$v) {
 				$result->where($table.'.'.$k,$v); 
 			}			
 		}
 		
 		$filter_is_orderby = false;
-		if(Request::get('filter_column')) {
+		if(Request::get('filter_column') && !$this->index_array) {
 
 			$filter_column = Request::get('filter_column');
 			$result->where(function($w) use ($filter_column,$fc) {				
@@ -397,6 +415,10 @@ class CBController extends Controller {
 			}					
 		}
 
+		if($this->index_only_id) {
+			$result->where($this->table.'.'.$this->primary_key,$this->index_only_id);
+		}
+
 
 		if($filter_is_orderby == true) {
 			$data['result']  = $result->paginate($limit);
@@ -426,7 +448,7 @@ class CBController extends Controller {
 			return $data;			
 		}
 
-		$queries = DB::getQueryLog();				
+		// $queries = DB::getQueryLog();				
 
 		if(Request::get('format')=='total') {
 			return $this->calc_eloquent_found($result);
@@ -437,6 +459,7 @@ class CBController extends Controller {
 		$priv          = $this->data['priv'];
 		$addaction     = $this->data['addaction'];
 		$mainpath      = mainpath();		
+		$orig_mainpath = $this->data['mainpath'];
 		$title_field   = $this->title_field;
 		$html_contents = array();
 		foreach($data['result'] as $row) {
@@ -498,65 +521,83 @@ class CBController extends Controller {
 	      } //end foreach columns_table
 
 
-		if ($this->button_table_action):
+	      if($this->button_table_action):
 		      if($priv->is_edit!=0 || $priv->is_delete!=0 || $priv->is_read!=0):
-	         	$td = "";
+	         	$td = "<div class='btn-group btn-group-action'>
+	                  <button type='button' class='btn btn-xs btn-primary btn-action'>Action</button>
+	                  <button type='button' class='btn btn-xs btn-primary dropdown-toggle' title='Click to see menu' data-toggle='dropdown'>
+	                    <span class='caret'></span>
+	                    <span class='sr-only'>Toggle Dropdown</span>
+	                  </button>
+	                  <ul class='dropdown-menu' role='menu'>";
+	            if(!$this->index_array) {
+		            if(count(@$addaction)):				
+		                foreach($addaction as $fb):
+		                	$ajax  = (isset($fb["ajax"]))?"class='ajax-button'":"";                     	
+		                	$url   = str_replace(array("%id%","%name%"),array($row->id,$row->{$title_field}),$fb["route"]); 
+		                	$icon  = $fb['icon'];
+		                	$label = ($icon)?"<i class='$icon'></i> ".$fb['label']:$fb['label'];               	
+		                	$td    .= "<li><a title='".$fb["label"]."' href='".$url."' $ajax >$label</a></li>";
+		                endforeach;
+		                $td .= "<li class='divider'></li>";
+		            endif;
+	        	}
+
+	            if($this->sub_module) {
+	            	$sub_module_i = 0;
+	            	foreach($this->sub_module as $sm) {     
+	            		if(Request::segment(5) == $sm['path']) continue;       		
+	            		$icon = ($sm['icon'])?:"fa fa-bars";
+	            		$url = mainpath("sub-module/$row->id/$sm[path]");
+	            		$td .= "<li><a title='$sm[label]' href='$url'><i class='$icon'></i> $sm[label]</a></li>";
+	            		$sub_module_i++;
+	            	}
+	            	if($sub_module_i) {
+	            		$td .= "<li class='divider'></li>";
+	            	}            	
+	            }
+
 	         	
 	         	if($priv->is_read) {
-	         		if($this->is_sub==true) {         			
-	         			$data_modul = ['modul'=>$this->table_name,'action'=>"detail","id"=>$row->id];
-	         			$current_url = Request::url();
-	         			$current_url .= "?submodul=".json_encode($data_modul).'#form_simple_'.str_slug($this->table_name);
-				      	$url = $current_url;
-				    }else{
-				    	$url = url("$mainpath/detail/$row->id");
-				    }	
-	            	$td .= "<a title='Detail Data' href='$url' class='btn btn-xs btn-info'><i class='fa fa-eye'></i></a>&nbsp;";
+
+	         		if($this->index_array) {
+	         			$url = url("$orig_mainpath/detail/$row->id");
+	         		}else{
+	         			$url = url("$mainpath/detail/$row->id");
+	         		}
+
+	            	$td .= "<li><a title='Detail Data' href='$url'><i class='fa fa-search'></i> Detail Data</a></li>";
 	            }
 	      		
-	      		if($priv->is_edit):
-	
-	      			if($this->is_sub==true) {         			
-	         			$data_modul = ['modul'=>$this->table_name,'action'=>"edit","id"=>$row->id];
-	         			$current_url = Request::url();
-	         			$current_url .= "?submodul=".json_encode($data_modul).'#form_simple_'.str_slug($this->table_name);
-				      	$url = $current_url;
-				    }else{			    	
-				    	$url = url("$mainpath/edit/$row->id");
-				    }
+	      		if($priv->is_edit):      	
+
+				    if($this->index_array) {
+	         			$url = url("$orig_mainpath/edit/$row->id");
+	         		}else{
+	         			$url = url("$mainpath/edit/$row->id");
+	         		}
 	      			
-	      			$td .= "<a title='Edit Data'  href='$url' class='btn btn-row-edit btn-xs btn-warning'><i class='fa fa-pencil'></i></a>&nbsp;";
+	      			$td .= "<li><a title='Edit Data' href='$url'><i class='fa fa-pencil'></i> Edit Data</a></li>";
 	            endif;
-	
+
 	            if($priv->is_delete):
-	            	if($this->is_sub==true) {         			
-	         			$data_modul = ['modul'=>$this->table_name,'action'=>"detail","id"=>$row->id];
-	         			$current_url = route($this->controller_name.'GetDelete',['id'=>$row->id]);         			
-				      	$url = $current_url;
+	            	if($this->index_array) {    			
+	         			$url = url("$orig_mainpath/delete/$row->id");
 				    }else{
 				    	$url = url("$mainpath/delete/$row->id");
-				    }
-	            	$td .= "<a title='Delete Data' href='javascript:;' onclick='swal({   title: \"Are you sure?\",   text: \"You will not be able to recover this record data!\",   type: \"warning\",   showCancelButton: true,   confirmButtonColor: \"#DD6B55\",   confirmButtonText: \"Yes, delete it!\",   closeOnConfirm: false }, function(){  location.href=\"$url\" });'  class='btn btn-xs btn-danger' ><i class='fa fa-trash'></i></a>&nbsp;";
+				    }			    
+	            	$td .= "<li><a title='Delete Data' href='javascript:;' onclick='swal({   title: \"Are you sure?\",   text: \"You will not be able to recover this record data!\",   type: \"warning\",   showCancelButton: true,   confirmButtonColor: \"#DD6B55\",   confirmButtonText: \"Yes, delete it!\",   closeOnConfirm: false }, function(){  location.href=\"$url\" });'><i class='fa fa-trash'></i> Delete</a></li>";
 	            endif;  
-	
-	                     
+
 	            
-	            if(count(@$addaction)):				
-	                foreach($addaction as $fb):
-	                	$ajax  = (isset($fb["ajax"]))?"ajax-button":"";
-	                	$color = (isset($fb['color']))?"btn-".$fb['color']:"btn-info";
-	                	$class = "btn btn-xs $color ".$ajax;
-	                	$class = (isset($fb['class']))?$fb['class']:$class;
-	                	$url   = str_replace(array("%id%","%name%"),array($row->id,$row->{$title_field}),$fb["route"]);
-	                	// $url   .= '?referal='.urlencode(Request::url());
-	                	$td    .= "<a title='".$fb["label"]."' href='".$url."' 
-	                	class='$class'><i class='".$fb["icon"]."'></i></a>&nbsp;";
-	                endforeach;
-	            endif;
-	
+
+	            $td .= "
+	                  </ul>
+	                </div>";
+
 	          	$html_content[] = $td;
 	          endif;
-		endif;
+          endif;//button_table_action
 
 	      $html_contents[] = $html_content;
 		} //end foreach data[result]
@@ -565,6 +606,9 @@ class CBController extends Controller {
 		$this->hook_html_index($html_contents['html'],$html_contents['data']);
 		$this->hook_row_index($html_contents['html'],$html_contents['data']);
 
+		if($this->index_array == TRUE) {
+			return $html_contents['html'];
+		}
 
 		$data['html_contents'] = $html_contents['html'];
 
@@ -576,132 +620,70 @@ class CBController extends Controller {
 		
 	}
 
-	public function getDataTables() {
-		$posts = Request::all();
-		$result = array();
+	public function getSubModule($parent_id,$module_path,$action='index',$id=NULL) {
+		$parent_module_path = Request::segment(2);
+		$parent_module = DB::table('cms_moduls')->where('path',$parent_module_path)->first();
+		$sub_module = DB::table('cms_moduls')->where('path',$module_path)->first();
+		if(!$parent_module || !$sub_module) return redirect()->back()->with(['message'=>'Sorry the module is does not exists !','message_type'=>'warning']);
 
-		$cols = array();
 
-		$limit = ($posts['length'])?:10;
-
-		$columns_table = $this->columns_table;		
-		$rows          = DB::table($this->table)->select(DB::raw($this->table.".".$this->primary_key))
-		->take($limit)
-		->skip($posts['start']);
-		
-		$e = 0;
-		foreach($columns_table as $index => $coltab) {
-			$table = $this->table;
-			$join = @$coltab['join'];
-			if($join) {
-				$join_exp   = explode(',', $join);
-				$join_table = $join_exp[0];
-				$join_name  = $join_exp[1];
-			}
-			$field = $coltab['name'];
-
-			//Jika ada subquery
-			if(strpos($field, ' as ')!==FALSE) {
-				$field = substr($field, strpos($field, ' as ')+4);
-				$rows->addselect(DB::raw($coltab['name']));
-				$columns_table[$index]['field']       = $field;
-				$columns_table[$index]['field_raw']   = $field;
-				$columns_table[$index]['field_with']  = $field;
-				$columns_table[$index]['is_subquery'] = true;
-				continue;
-			}
-
-			if($join) {		
-				//field = id relasi nya
-				$field_array = explode('.', $field);				
-				if(isset($field_array[1])) {
-					$field = $field_array[1];
-					$table = $field_array[0];
-				}
-
-				$join_alias = $join_table;
-				$result->leftjoin($join_table,$join_table.'.id','=',$table.'.'.$field);
-				$result->addselect($join_table.'.'.$join_name.' as '.$join_name.'_'.$join_table);
-				$result->addselect($table.'.'.$field); #field asli tetap di masukkan
-				$alias[] = $join_table;
-				$columns_table[$index]['type_data']	 = get_field_type($join_table,$join_name);
-				$columns_table[$index]['field']      = $join_name.'_'.$join_table;
-				$columns_table[$index]['field_with'] = $join_table.'.'.$join_name;
-				$columns_table[$index]['field_raw']  = $join_name;
-				 	
-			}else{
-				$result->addselect($table.'.'.$field);
-				$columns_table[$index]['type_data']	 = get_field_type($table,$field);
-				$columns_table[$index]['field']      = $field;
-				$columns_table[$index]['field_raw']  = $field;
-				$columns_table[$index]['field_with'] = $table.'.'.$field;
-			}			
-		}
- 
-
-		if($posts['search']['value']) {
-			$search = $posts['search']['value'];
-			$rows->where(function($w) use ($columns_table,$search) {
-				foreach($columns_table as $col) {		
-						if(!$col['field_with']) continue;					
-						$w->orwhere($col['field_with'],"like","%".$search."%");				
-				}
-			});		
-		}
-
-		if($posts['browse_where']) {
-			$rows->whereraw($posts['browse_where']);
-		}
-
-		if($posts['order']) {
-			foreach($posts['order'] as $order) {
-				$column = $cols[$order['column']];
-				$column_sort = $order['dir'];
-				$rows->orderby($column,$column_sort);
+		$sub_module_config = $this->sub_module();
+		$parent_field = '';
+		foreach($sub_module_config as $s) {
+			if($s['path'] == $module_path) {
+				$parent_field = $s['foreign_key'];
+				break;
 			}
 		}
 
-		$images = ['jpg','jpeg','png','gif','bmp'];
-		$files  = ['pdf','doc','docx','xls','xlsx','txt'];
-		
-		$data   = array();
-		foreach($rows->get() as $row) {
-			$data2 = array();
-			foreach($row as $v) {
-				$ext = pathinfo($v, PATHINFO_EXTENSION);
+		if(!$parent_field) die('You did not set the foreign key at $this->sub_module ');
 
-				if(strpos('http://', $v)!==FALSE) {					
-					if(in_array($ext, $images)) {
-						$v = "<img src='".$v."' class='img-circle' width='60px' height='60px'/>";
-					}
-					if(in_array($ext, $files)) {
-						$v = "<a href='".$v."' title='Download File'>Download File</a>";
-					}
-				}else{
-					if(in_array($ext, $images)) {
-						$v = "<img src='".asset($v)."' class='img-thumbnail' style='width:90px;height:60px'/>";
-					}
-					if(in_array($ext, $files)) {
-						$v = "<a href='".asset($v)."' title='Download File'>Download File</a>";
-					}
-				}
-
-				$data2[] = $v;
-			}
-			$data[] = $data2;
+		$sub_module_class = __NAMESPACE__ . '\\' . $sub_module->controller;
+		if(!class_exists($sub_module_class)) {
+			$sub_module_class = '\App\Http\Controllers\\'.$sub_module->controller;
 		}
 
-		$result['draw'] = $posts['draw'];
-		$result['recordsTotal'] = DB::table($this->table)->count();
-		$result['recordsFiltered'] = $this->calc_eloquent_found($rows);
-		$result['data'] = $data;
-		return response()->json($result);
-	}
+		$sub_module_class = new $sub_module_class;		
+		$sub_module_class->parent_id = $parent_id;	
+		$sub_module_class->parent_field = $parent_field;	
+		$method_need_id = array('getDetail','getEdit','postEditSave','getDelete');
 
-	public function getCurrentDataTables($id) {
-		$row = DB::table($this->table)->where($this->table.".id",$id)->select("id",$this->title_field.' as label')->first();
-		return response()->json($row);
-	}
+		$controller_class = new \ReflectionClass($sub_module_class);                          
+        $controller_methods = $controller_class->getMethods(\ReflectionMethod::IS_PUBLIC);
+        foreach($controller_methods as $method) {
+        	if ($method->class != 'Illuminate\Routing\Controller') {                                             
+                // return $sub_module_class->{$method->name};
+                $method_name = $method->name;
+                if(substr($method_name, 0, 3) == 'get') {
+                    $slug = substr($method_name, 3);
+                    $slug = array_filter(preg_split('/(?=[A-Z])/',$slug));   
+                    $slug = strtolower(implode('-',$slug));
+                    
+                    if($action == $slug) {
+                    	if(in_array($method_name, $method_need_id)) {
+                    		return $sub_module_class->$method_name($id);                    	
+                    	}else{
+                    		return $sub_module_class->$method_name();                    	
+                    	}                     	
+                    }
+
+                }elseif(substr($method_name, 0, 4) == 'post') {
+                    $slug = substr($method_name, 4);
+                    $slug = array_filter(preg_split('/(?=[A-Z])/',$slug));   
+                    $slug = strtolower(implode('-',$slug));                                
+
+                    if($action == $slug) {
+                    	if(in_array($method_name, $method_need_id)) {
+                    		return $sub_module_class->$method_name($id);                    	
+                    	}else{
+                    		return $sub_module_class->$method_name();                    	
+                    	}                     	
+                    }
+                }
+               
+            }
+        }	        
+	}	
 
 	public function getExportData() {
 		return redirect(mainpath());
@@ -839,11 +821,11 @@ class CBController extends Controller {
 		$id = get_row_id();
 		$id = intval($id);
 		foreach($this->data_inputan as $di) {
-			$ai = array();			
+			$ai = array();		
 			$name = $di['name'];
-			
+
 			if( !isset($request_all[$name]) ) continue; 
-			
+
 			if($di['type'] != 'upload_standard') {
 				if(@$di['required']) {
 					$ai[] = 'required';
@@ -853,12 +835,12 @@ class CBController extends Controller {
 			if($di['type'] == 'upload_standard') {
 				if($id) {
 					$row = DB::table($this->table)->where($this->primary_key,$id)->first();
-					if(!$row->{$di['name']}) {
+					if($row->{$di['name']}=='') {
 						$ai[] = 'required';
 					}					
 				}
-			}
-
+			}	
+			
 			if(@$di['min']) {
 				$ai[] = 'min:'.$di['min'];
 			}
@@ -1049,7 +1031,11 @@ class CBController extends Controller {
 		if(Request::get('referal')) {
 			return redirect(Request::get('referal').'?'.$ref_parameter)->with(['message'=>'The data has been added !','message_type'=>'success']);
 		}else{
-			return redirect(mainpath().'/edit/'.$lastid.'?'.$ref_parameter)->with(['message'=>"The data has been added !",'message_type'=>'success']);	
+			if(Request::get('ref_mainpath')) {
+				return redirect(Request::get('ref_mainpath'))->with(['message'=>"The data has been added !",'message_type'=>'success']);	
+			}else{
+				return redirect(mainpath())->with(['message'=>"The data has been added !",'message_type'=>'success']);
+			}				
 		}
 		
 	}
@@ -1131,7 +1117,11 @@ class CBController extends Controller {
 		if(Request::get('referal')) {
 			return redirect(Request::get('referal'))->with(['message'=>'The data has been added !','message_type'=>'success']);
 		}else{
-			return redirect()->back()->with(['message'=>"The data has been updated !",'message_type'=>'success']);
+			if(Request::get('ref_mainpath')) {
+				return redirect(Request::get('ref_mainpath').'/edit/'.$id)->with(['message'=>"The data has been updated !",'message_type'=>'success']);
+			}else{
+				return redirect(mainpath().'/edit/'.$id)->with(['message'=>"The data has been updated !",'message_type'=>'success']);
+			}			
 		}
 	}
 	
@@ -1234,11 +1224,6 @@ class CBController extends Controller {
 		return redirect()->back()->with(['message'=>"The file has been deleted !",'message_type'=>"success"]);
 	}
 
-	public function get_primary_company($field) {
-		$row = DB::table('cms_companies')->where('is_primary',1)->first();
-		return $row->{$field};
-	}
-
 
 	public function init_setting() {
 
@@ -1254,17 +1239,6 @@ class CBController extends Controller {
 			$this->setting = json_decode(json_encode($setting_array));
 		}
 				
-	}
-
-	public function mainpath($path='') {
-		$path = ($path)?"/$path":"";
-		$controllername = str_replace(["\crocodicstudio\crudbooster\controllers\\","App\Http\Controllers\\"],"",strtok(Route::currentRouteAction(),'@') );		
-		$route_url = route($controllername.'GetIndex');		
-		return $route_url.$path;		
-	}
-
-	public function get_cols() {
-		return $this->col;
 	}
 
 	public function calc_eloquent_found( $query_builder ){

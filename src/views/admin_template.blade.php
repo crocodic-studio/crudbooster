@@ -86,7 +86,15 @@
         <script src="{{$js}}"></script>
       @endforeach
     @endif
-
+    <style type="text/css">
+        .dropdown-menu {left:-130%;}
+        .btn-group-action .btn-action {cursor: default}
+        #box-header-module {box-shadow:10px 10px 10px #dddddd;}
+        .sub-module-tab li {background: #F9F9F9;cursor:pointer;}
+        .sub-module-tab li.active {background: #ffffff;box-shadow: 0px -5px 10px #cccccc}
+        .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {border:none;}
+        .nav-tabs>li>a {border:none;}
+    </style>
 </head>
 <body class="<?php echo (Session::get('theme_color'))?:'skin-blue'?>">
 <div class='alert_floating' style='display:none'>
@@ -103,6 +111,7 @@
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
 		
+
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
@@ -117,9 +126,19 @@
             	?>
                 {!! $page_title or "Page Title" !!}
                 <small>{!! $page_description or null !!}</small>
-            </h1>            
+            </h1>     
+            <ol class="breadcrumb">
+                <li><a title='Main Dashboard' href="{{ url(config('crudbooster.ADMIN_PATH')) }}"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li><a title='{{ $module_name }}' href="{{ $dashboard }}"><i class='<?php echo @($priv)?$priv->icon:"fa fa-bars"?>'></i> {{ $module_name?:'Dashboard' }}</a></li>
+                @if(Request::segment(3) == 'sub-module')                    
+                    <li><a title='{{ $data_sub_module->name }}' href='{{ mainpath() }}'><i class='{{ $data_sub_module->icon }}'></i> {{ $data_sub_module->name }} </a></li>
+                @endif
+                <li class="active">You Are Here</li>
+            </ol>       
         </section>
-			
+		
+		
+
         <!-- Main content -->
         <section id='content_section' class="content">
 
@@ -149,5 +168,11 @@
     @include('crudbooster::footer')
 
 </div><!-- ./wrapper -->
+
+
+
+<!-- Optionally, you can add Slimscroll and FastClick plugins.
+      Both of these plugins are recommended to enhance the
+      user experience -->
 </body>
 </html>

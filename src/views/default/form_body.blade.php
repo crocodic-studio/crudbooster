@@ -76,7 +76,11 @@
                 				}
                 			}
 
-                			if( ($parent_field && $name == $parent_field) && !isset($form['visible']) ) continue;
+                			// if( ($parent_field && $name == $parent_field) && !isset($form['visible']) ) continue;
+                			if($parent_field && $parent_field == $name) {
+                				echo "<input type='hidden' name='$name' value='$parent_id'/>";
+                				continue;
+                			}
 
                 			if(isset($form['onlyfor'])) {
 								if(is_array($form['onlyfor'])) {
@@ -114,7 +118,13 @@
                 			$placeholder = (@$form['placeholder'])?"placeholder='".$form['placeholder']."'":"";
 
                 			if(get_method() == 'getDetail') {
-                				$disabled = 'disabled';
+                				$disabled = 'disabled';                				
+                			}
+
+                			if(Request::segment(3) == 'sub-module') {
+                				if(Request::segment(6) == 'detail') {
+                					$disabled = 'disabled';
+                				}
                 			}
 
                 			if(Request::segment(3)=='edit' && $priv->is_edit==0) {
@@ -865,7 +875,7 @@
 
 
 						@if(@$type=='radio')
-						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' style="{{@$form['style']}}" id='form-group-{{$name}}'>
+						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}'  style="{{@$form['style']}}">
 							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label><br/>
 							<?php foreach($form['dataenum'] as $k=>$d):
 								$val = $lab = '';

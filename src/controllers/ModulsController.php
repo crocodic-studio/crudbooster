@@ -185,9 +185,13 @@ class ModulsController extends CBController {
 
 		$ref_parameter = Request::input('ref_parameter');		
 		if(Request::get('referal')) {
-			return redirect(Request::get('referal'))->with(['message'=>'Add new data success !','message_type'=>'success']);
+			return redirect(Request::get('referal').'?'.$ref_parameter)->with(['message'=>'The data has been added !','message_type'=>'success']);
 		}else{
-			return redirect($this->mainpath().'/edit/'.$lastid.'?'.$ref_parameter)->with(['message'=>"Add new data success !",'message_type'=>'success']);	
+			if(Request::get('ref_mainpath')) {
+				return redirect(Request::get('ref_mainpath'))->with(['message'=>"The data has been added !",'message_type'=>'success']);	
+			}else{
+				return redirect(mainpath())->with(['message'=>"The data has been added !",'message_type'=>'success']);
+			}				
 		}
 		
 	}

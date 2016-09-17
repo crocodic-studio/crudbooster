@@ -98,15 +98,27 @@
                 <div class="box-header with-border">
                     <h3 class="box-title">{{ (Request::get('detail'))?str_replace(array("Add Data","Edit Data"),"Detail Data",$page_title):$page_title }}</h3>
                     <div class="box-tools">
-                    	@if($button_cancel)<a href='{{url($dashboard)."?".urldecode(http_build_query(@$_GET)) }}' class='btn btn-default'>Cancel</a>@endif
+                    	@if($button_cancel)<a href='{{ mainpath("?".urldecode(http_build_query(@$_GET))) }}' class='btn btn-default'>Cancel</a>@endif
                     	
                     </div>
                 </div>
+        
+        <?php           
+          if($data_sub_module) {
+            $action_path = Route($data_sub_module->controller."GetIndex");
+          }else{
+            $action_path = mainpath();
+          }            
 
-
-				<form method='post' id="form" enctype="multipart/form-data" action='@if (@!$row->id) {{url($mainpath."/add-save")}} @else {{url($mainpath."/edit-save")."/$row->id" }}@endif'>
-				<input type="hidden" name="_token" value="{{ csrf_token() }}">
-				<input type="hidden" name="addmore" value="0"/>
+          if(@!$row) {
+              $action = $action_path."/add-save";
+          }else{
+              $action = $action_path."/edit-save/$row->id";
+          }
+        ?>
+				<form method='post' id="form" enctype="multipart/form-data" action='{{$action}}'>
+				<input type="hidden" name="_token" value="{{ csrf_token() }}">	  
+        <input type='hidden' name='ref_mainpath' value='{{ mainpath() }}'/>      
 				<input type='hidden' name='ref_parameter' value='{{urldecode(http_build_query(@$_GET))}}'/>
                 <div class="box-body">
                 	@include("crudbooster::default.form_body")					
@@ -114,14 +126,16 @@
 				
                 <div class="box-footer">	
                 	<div class='pull-right'>														
-            					@if($button_cancel)<a href='{{url($dashboard)."?".urldecode(http_build_query(@$_GET)) }}' class='btn btn-default'>Cancel</a>@endif
+            					@if($button_cancel)<a href='{{mainpath("?".urldecode(http_build_query(@$_GET))) }}' class='btn btn-default'>Cancel</a>@endif
                       @if( ($priv->is_create || $priv->is_edit) && count($forms)!=0)
+
                          @if($priv->is_create && $button_addmore==TRUE)                             
                             <input type='submit' name='submit' value='Save & Add More' class='btn btn-success'/>
                          @endif
                          @if($button_save)
                             <input type='submit' name='submit' value='Save' class='btn btn-success'/>
                          @endif
+                         
                       @endif
         					</div>
                 </div><!-- /.box-footer-->
@@ -135,44 +149,6 @@
     </div><!-- /.row -->
 
     <?php 
-    //FORM SUB 
-    if($form_sub) {
-    	foreach($form_sub as $fs) {
-      $table               = str_replace("_view", "", $table);
-			$c                   = new $fs['classname'];
-			$c->parent_id        = $row->id;
-			$c->parent_field     = !empty($fs['foreign_key']) ? $fs['foreign_key'] : 'id_'.$table;
-			$c->controller_name  = $fs['controller'];
-			$c->index_table_only = true;
-			$c->table_name       = $fs['label'];
-			$c->is_sub           = true;	
-			$c->referal			     = Request::url();		
-				
-			if(Request::get('submodul')) {
-				$submodul = Request::get('submodul');
-				$submodul = urldecode($submodul);
-				$submodul = json_decode($submodul);
-				
-
-				if($submodul->modul == $fs['label']) {
-					switch($submodul->action) {
-						case 'detail':
-              echo $c->getDetail($submodul->id);
-            break;
-						case 'edit':
-							echo $c->getEdit($submodul->id);
-						break;
-						case 'add':
-							echo $c->getAdd();
-						break;
-					}
-				}
-			}
-
-			echo $c->getIndex();			
-		}
-    }
-
     if($form_add) {
     	echo implode("\n",$form_add);
     }

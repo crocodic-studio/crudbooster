@@ -74,7 +74,7 @@ class ModulsGroupController extends CBController {
 
 		$this->form[] = array("label"=>"Is Group","name"=>"is_group","type"=>"radio","dataenum"=>array("1|Yes","0|No"),'value'=>1);
 		
-		$this->form_sub[] = array('label'=>'Modules','controller'=>"ModulsController");
+		$this->sub_module[] = array('label'=>'Modules','path'=>"cms_moduls","icon"=>"fa fa-cog","foreign_key"=>"id_cms_moduls_group"); 
 
 		$this->addaction[] = array('label'=>'Up','route'=>url(config('crudbooster.ADMIN_PATH')).'/module_generator/arr-sorting/%id%/up','icon'=>'fa fa-arrow-up','ajax'=>true);
 		$this->addaction[] = array('label'=>'Down','route'=>url(config('crudbooster.ADMIN_PATH')).'/module_generator/arr-sorting/%id%/down','icon'=>'fa fa-arrow-down','ajax'=>true);

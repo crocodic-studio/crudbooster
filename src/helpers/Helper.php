@@ -532,13 +532,12 @@ class Admin'.$controllername.' extends \crocodicstudio\crudbooster\controllers\C
         $this->title_field        = "'.$name_col.'";
         $this->limit              = 20;
         $this->index_orderby      = ["id"=>"desc"];
-        $this->button_show_data   = true;
-        $this->button_reload_data = true;
+        $this->button_show_data   = true;        
         $this->button_new_data    = true;
         $this->button_delete_data = true;
         $this->button_sort_filter = true;        
-        $this->button_export_data = true;   
-		$this->button_table_action = true;
+        $this->button_export_data = true;
+        $this->button_table_action = true;
 
         $this->col = array();
 ';
@@ -719,7 +718,6 @@ $php .= '
         $this->alert        = array();
                 
 
-
         
         /* 
         | ---------------------------------------------------------------------- 
@@ -734,31 +732,16 @@ $php .= '
 
 
 
-        
         /* 
         | ---------------------------------------------------------------------- 
-        | Add relational data to next tab
+        | Add relational module
         | ----------------------------------------------------------------------     
-        | @label       = Name of element
+        | @label       = Name of sub module 
         | @controller  = Controller name of other module 
-        | @foreign_key = Optional.  
+        | @foreign_key = required.  
         | 
         */
-        $this->form_tab     = array();
-        
-
-
-        
-        /* 
-        | ---------------------------------------------------------------------- 
-        | Add relational data to next area or element, i mean under the existing form 
-        | ----------------------------------------------------------------------     
-        | @label       = Name of form sub 
-        | @controller  = Controller name of other module 
-        | @foreign_key = Optional.  
-        | 
-        */
-        $this->form_sub     = array();
+        $this->sub_module     = array();
 
 
         
@@ -767,8 +750,7 @@ $php .= '
         | ---------------------------------------------------------------------- 
         | Add element to form at bottom 
         | ----------------------------------------------------------------------     
-        | push your html / code in object array   
-        | $this->form_add[] = "<p>My HTML Code</p>";      
+        | push your html / code in object array         
         | 
         */
         $this->form_add     = array();       
@@ -794,7 +776,6 @@ $php .= '
         | ---------------------------------------------------------------------- 
         | @view = view location 
         | @data = data array for view 
-        | @position = top or bottom. default top
         |
         */
         $this->index_additional_view = array();
@@ -1682,10 +1663,24 @@ if(!function_exists('privilege_is_delete')) {
 */
 if(!function_exists('mainpath')) {
     function mainpath($path=NULL) {
-        $path = ($path)?"/$path":"";
-        $controllername = str_replace(["\crocodicstudio\crudbooster\controllers\\","App\Http\Controllers\\"],"",strtok(Route::currentRouteAction(),'@') );      
-        $route_url = route($controllername.'GetIndex');     
-        return $route_url.$path;        
+        
+        if(Request::segment(3) == 'sub-module') {
+            $route_url = url(config('crudbooster.ADMIN_PATH').'/'.Request::segment(2).'/sub-module/'.Request::segment(4).'/'.Request::segment(5));
+        }else{
+            $controllername = str_replace(["\crocodicstudio\crudbooster\controllers\\","App\Http\Controllers\\"],"",strtok(Route::currentRouteAction(),'@') );      
+            $route_url = route($controllername.'GetIndex');
+        }
+        
+        if($path) {
+            if(substr($path,0,1) == '?') {
+                return trim($route_url,'/').$path;    
+            }else{
+                return $route_url.'/'.$path;
+            }            
+        }else{
+            return trim($route_url,'/');
+        }
+              
     }
 }
 
