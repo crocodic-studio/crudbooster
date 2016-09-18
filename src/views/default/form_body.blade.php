@@ -7,6 +7,7 @@
 					.header-title {
 						cursor: pointer;
 					}
+					i.fa-calendar {cursor:pointer;}
 					</style>
 					<script src="{{asset('vendor/laravel-filemanager/js/lfm.js')}}"></script>
 					<script type="text/javascript">
@@ -40,6 +41,11 @@
 									}
 								})
 							}
+
+							$('.form-datepicker i').click(function() {
+								console.log('i datepicker');
+								$(this).parent().parent().find('input').click();
+							})
 						})						
 					</script>
 
@@ -571,12 +577,12 @@
 						</script>
 						@endif
 
-						@if(@$type=='date' || @$type=='datepicker')
-						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
+						@if(@$type=='date' || @$type=='datepicker')						
+						<div class='form-group form-datepicker {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
 							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
 							<div class="input-group">  								
-								<input type='text' title="{{$form['label']}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control notfocus datepicker' name="{{$name}}" id="{{$name}}" value='{{$value}}'/>
 								<span class="input-group-addon"><i class='fa fa-calendar'></i></span>
+								<input type='text' title="{{$form['label']}}" readonly {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control notfocus datepicker' name="{{$name}}" id="{{$name}}" value='{{$value}}'/>						
 							</div>
 							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
 							<p class='help-block'>{{ @$form['help'] }}</p>
@@ -584,11 +590,11 @@
 						@endif
 
 						@if(@$type=='datetime' || @$type=='datetimepicker')
-						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
+						<div class='form-group form-datepicker {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
 							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
 							<div class="input-group">  								
-								<input type='text' title="{{$form['label']}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control notfocus datetimepicker' name="{{$name}}" id="{{$name}}" value='{{$value}}'/>
 								<span class="input-group-addon"><i class='fa fa-calendar'></i></span>
+								<input type='text' title="{{$form['label']}}" readonly {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control notfocus datetimepicker' name="{{$name}}" id="{{$name}}" value='{{$value}}'/>					
 							</div>
 							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
 							<p class='help-block'>{{ @$form['help'] }}</p>
