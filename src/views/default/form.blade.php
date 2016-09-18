@@ -2,7 +2,7 @@
 @section('content')
 
 	<style type="text/css">
-	@if(Request::get('detail'))
+	@if(get_method() == 'getDetail')
 		input[readonly],textarea[readonly],select[readonly],input[disabled],textarea[disabled],select[disabled] {
 			background: #ffffff !important;
 			border-top: 0px !important;
@@ -16,10 +16,6 @@
 		}
 	@endif 
 	</style>
-
-	<!-- DataTables -->
-	<script src="{{ asset("vendor/crudbooster/assets/adminlte/plugins/datatables/jquery.dataTables.min.js")}}"></script>
-	<script src="{{ asset("vendor/crudbooster/assets/adminlte/plugins/datatables/dataTables.bootstrap.min.js")}}"></script>
 
 	<!-- JQUERY QRCODE-->
 	<script src="{{asset("vendor/crudbooster/assets/jquery-qrcode/jquery.qrcode-0.12.0.min.js")}}"></script>	
@@ -118,6 +114,7 @@
         ?>
 				<form method='post' id="form" enctype="multipart/form-data" action='{{$action}}'>
 				<input type="hidden" name="_token" value="{{ csrf_token() }}">	  
+        <input type='hidden' name='return_url' value='{{ @$return_url }}'/>      
         <input type='hidden' name='ref_mainpath' value='{{ mainpath() }}'/>      
 				<input type='hidden' name='ref_parameter' value='{{urldecode(http_build_query(@$_GET))}}'/>
                 <div class="box-body">

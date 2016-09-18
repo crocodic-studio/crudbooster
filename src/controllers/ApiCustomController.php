@@ -129,11 +129,11 @@ class ApiCustomController extends CBController {
 		$a['tabel']       = Request::input('tabel');
 		$a['aksi']        = Request::input('aksi');
 		$a['kolom']       = implode(',',Request::input('kolom'));
-		$a['sub_query_1'] = Request::input('sub_query_1');
-		$a['sql_where']   = Request::input('sql_where');
+		if(g('sub_query_1')) $a['sub_query_1'] = Request::input('sub_query_1');
+		if(g('sql_where')) $a['sql_where']   = Request::input('sql_where');
 		$a['nama']        = Request::input('nama');
-		$a['keterangan']  = Request::input('keterangan');
-		$a['parameter']   = Request::input('parameter');
+		if(g('keterangan')) $a['keterangan']  = Request::input('keterangan');
+		if(g('parameter')) $a['parameter']   = Request::input('parameter');
 		$a['permalink']   = str_replace(' ','_',strtolower($a['nama']));
 		DB::table('cms_apicustom')->insert($a);
 

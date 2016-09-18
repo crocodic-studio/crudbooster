@@ -222,7 +222,9 @@
 						    <div id="map"></div>
 						</div>
                 		<script type="text/javascript">
+                		  var geocoder;
 					      function initMap() {
+					      	geocoder = new google.maps.Geocoder();
 					        var map = new google.maps.Map(document.getElementById('map'), {
 					          @if($row->latitude && $row->longitude)
 					          center: {lat: {{$row->latitude}}, lng: {{$row->longitude}} },
@@ -236,6 +238,7 @@
 					        var marker = new google.maps.Marker({
 					          position: {lat: {{$row->latitude}}, lng: {{$row->longitude}} },
 					          map: map,
+					          draggable:true,
 					          title: 'Location Here !'
 					        });
 					        @endif
@@ -253,8 +256,39 @@
 					        var infowindow = new google.maps.InfoWindow();
 					        var marker = new google.maps.Marker({
 					          map: map,
+					          draggable:true,
 					          anchorPoint: new google.maps.Point(0, -29)
 					        });
+
+					        google.maps.event.addListener(marker, 'dragend', function(marker){
+					        	
+
+					        	  geocoder.geocode({
+								    latLng: marker.latLng
+								  }, function(responses) {
+								    if (responses && responses.length > 0) {
+								      address = responses[0].formatted_address;
+								    } else {
+								      address = 'Cannot determine address at this location.';
+								    }
+
+								    @if($form['googlemaps_address'])
+								  		$("input[name={{$form['googlemaps_address']}}]").val(address);
+									@endif
+
+									console.log(address);
+
+								    infowindow.setContent(address);
+								    // infowindow.open(map, marker);
+								  });
+
+						        var latLng = marker.latLng; 
+						        latitude = latLng.lat();
+						        longitude = latLng.lng();
+						        						          
+						        $("input[name=latitude]").val(latitude);
+						        $("input[name=longitude]").val(longitude);								          						          	
+						     });
 
 					        autocomplete.addListener('place_changed', function() {
 					          infowindow.close();
@@ -272,13 +306,13 @@
 					            map.setCenter(place.geometry.location);
 					            map.setZoom(17);  // Why 17? Because it looks good.
 					          }
-					          marker.setIcon(/** @type  {google.maps.Icon} */({
-					            url: 'http://maps.google.com/mapfiles/ms/icons/red.png',
-					            size: new google.maps.Size(71, 71),
-					            origin: new google.maps.Point(0, 0),
-					            anchor: new google.maps.Point(17, 34),
-					            scaledSize: new google.maps.Size(35, 35)
-					          }));
+					          // marker.setIcon(/** @type  {google.maps.Icon} */({
+					          //   url: 'http://maps.google.com/mapfiles/ms/icons/red.png',
+					          //   size: new google.maps.Size(71, 71),
+					          //   origin: new google.maps.Point(0, 0),
+					          //   anchor: new google.maps.Point(17, 34),
+					          //   scaledSize: new google.maps.Size(35, 35)
+					          // }));
 					          marker.setPosition(place.geometry.location);
 					          marker.setVisible(true);
 
@@ -477,104 +511,6 @@
 							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
 							<p class='help-block'>{{ @$form['help'] }}</p>
 						</div>						
-						@endif
-
-						@if(@$type=='browse')
-						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
-							<div class="input-group">
-						      <input type="text" class="form-control" id="{{$name.'_label'}}" {{$required}} readonly placeholder="Please browse data...">
-						      <span class="input-group-btn">
-						      	<button class="btn btn-danger btn-delete" id="btn_clear_{{$name}}" type="button" title='Clear' onclick='if(!confirm("Are you sure want to clear ?")) return false'><i class='fa fa-times'></i></button>
-						        <button class="btn btn-primary btn-browse" type="button" data-toggle="modal" title='Browse data' data-target="#modal_{{$name}}"><i class='fa fa-search'></i> Browse</button>						        
-						      </span>
-						    </div><!-- /input-group -->
-						    <input type='hidden' name="{{$name}}" id="{{$name}}" value="{{$value}}"/>
-							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
-							<p class='help-block'>{{ @$form['help'] }}</p>
-						</div>
-
-						<div id='modal_{{$name}}' class="modal fade" tabindex="-1" role="dialog">
-						  <div class="modal-dialog modal-lg">
-						    <div class="modal-content">
-						      <div class="modal-header">
-						        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						        <h4 class="modal-title"><i class='fa fa-search'></i> Browse Data : {{$form['label']}} <small>Select one of these rows</small></h4>
-						      </div>
-						      <div class="modal-body">
-						        <table id="table_{{$name}}" class="table table-bordered table-striped">
-						        	<thead>	
-						        		<tr class='info'>	
-						        			@if($form['browse_columns'])		
-						        			<th width='3%'>ID</th>		        		
-							        		@foreach($form['browse_columns'] as $bc)
-							        			<th>{{$bc['label']}}</th>
-							        		@endforeach
-							        		@else
-							        		<th width='3%'>ID</th>
-							        		<th>Name</th>
-							        		@endif
-						        		</tr>
-						        	</thead>
-						        	<tbody>
-
-						        	</tbody>
-						        	<tfoot>
-						        		<tr class='info'>	
-						        			@if($form['browse_columns'])		
-						        			<th width='3%'>ID</th>		        		
-							        		@foreach($form['browse_columns'] as $bc)
-							        			<th>{{$bc['label']}}</th>
-							        		@endforeach
-							        		@else
-							        		<th width='3%'>ID</th>
-							        		<th>Name</th>
-							        		@endif
-						        		</tr>
-						        	</tfoot>
-						        </table>
-						      </div>
-						    </div><!-- /.modal-content -->
-						  </div><!-- /.modal-dialog -->
-						</div><!-- /.modal -->
-
-						
-						<script type="text/javascript">
-							$(function() {
-								$('#table_{{$name}}').DataTable( {
-							        "processing": true,
-							        "serverSide": true,
-							        "ajax": "{{route($form['browse_source'].'GetDataTables')}}?browse_where={{$form['browse_where']}}",
-							        "createdRow": function ( row, data, index ) {
-							             $(row).attr('style','cursor:pointer');
-							             $(row).attr('data-id',data[0]);
-							             $(row).attr('data-label',data[1]);
-							             $(row).addClass('dt_row_browse');
-							        }
-							    });
-
-							    $(document).on("click",".dt_row_browse",function() {
-							    	var id = $(this).attr('data-id');
-							    	var label = $(this).attr('data-label');
-							    	$("#{{$name}}").val(id);
-							    	$("#{{$name.'_label'}}").val(label);
-							    	$("#modal_{{$name}}").modal("hide");
-							    });
-
-							    //current data
-							    @if($value)
-							    $("#{{$name.'_label'}}").val("Please wait load data...");
-							    $.get("{{route($form['browse_source'].'GetCurrentDataTables')}}/{{$value}}",function(resp) {
-							    	$("#{{$name.'_label'}}").val(resp.label);
-							    })
-							    @endif
-
-							    $("#btn_clear_{{$name}}").click(function() {
-							    	$("#{{$name.'_label'}}").val('');
-							    	$("#{{$name}}").val('');
-							    })
-							})
-						</script>
 						@endif
 
 						@if(@$type=='date' || @$type=='datepicker')						

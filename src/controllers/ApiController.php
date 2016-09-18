@@ -156,7 +156,7 @@ class ApiController extends Controller {
 				$data = DB::table($table);	 				
 				$data->skip($offset);
 				$data->take($limit);
-				$data->addSelect(DB::raw("SQL_CALC_FOUND_ROWS $table.id"));
+				$data->addSelect(DB::raw("$table.id"));
 				foreach($cols as $col) {	
 					$data->addSelect($table.'.'.$col);									
 					if(substr($col,0,3)=='id_') {
@@ -235,12 +235,10 @@ class ApiController extends Controller {
 					$orderby_col = $table.'.id';
 					$orderby_val = 'desc';
 				}
+				$total = calc_eloquent_found($rows);
 				$rows = $data->orderby($orderby_col,$orderby_val)->get();		
 				$rows = json_decode(json_encode($rows),true);	
-
-				#echo '<pre>';
-				#print_r(DB::getQueryLog());
-				#exit;
+		
 								
 				foreach($rows as $r) {					
 					foreach($r as $k=>$v) {												
@@ -259,11 +257,9 @@ class ApiController extends Controller {
 				}
 
 
-				$total_all_data = DB::select(DB::raw("SELECT FOUND_ROWS() AS Totalcount;"));
-				$total_all_data = $total_all_data[0]->Totalcount;
 				$result['api_status'] = 1;
 				$result['api_message'] = 'success';
-				$result['api_total_data'] = $total_all_data;
+				$result['api_total_data'] = $total;
 				$result['api_offset'] = $offset;
 				$result['api_limit'] = $limit;
 				$result['data'] = $datar;

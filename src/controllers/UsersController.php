@@ -59,6 +59,7 @@ class UsersController extends CBController {
 		$id = get_my_id();
 		$data['page_title'] = "My Profile";
 		$data['row'] = DB::table($this->table)->where($this->primary_key,$id)->first();
+		$data['return_url'] = Request::url();
 		return view('crudbooster::default.form',$data);
 	}
 }

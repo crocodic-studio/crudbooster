@@ -50,7 +50,13 @@
 
 	@if($button_export_data)
 	<a href="javascript:void(0)" id='btn_export_data' data-url-parameter='{{$build_query}}' title='Export Data' class="btn btn-app btn-export-data">
-		<i class="fa fa-download"></i> Export Data
+		<i class="fa fa-upload"></i> Export Data
+	</a>
+	@endif
+
+	@if($button_import_data)
+	<a href="{{ mainpath('import-data') }}" id='btn_import_data' data-url-parameter='{{$build_query}}' title='Import Data' class="btn btn-app btn-import-data">
+		<i class="fa fa-download"></i> Import Data
 	</a>
 	@endif
 
@@ -337,7 +343,7 @@ $(function(){
 				<div class="modal-body">										
 					<div class="form-group">
 						<label>File Name</label>
-						<input type='text' name='filename' class='form-control' required value='Report {{$modulname}} - {{date("d M Y")}}'/>
+						<input type='text' name='filename' class='form-control' required value='Report {{ ($data_sub_module)?$data_sub_module->name:$module_name }} - {{date("d M Y")}}'/>
 						<div class='help-block'>You can rename the filename according to your whises</div>
 					</div>
 

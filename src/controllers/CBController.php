@@ -67,6 +67,7 @@ class CBController extends Controller {
 	var $sub_module			= array();	
 	var $index_array 		= FALSE;
 	var $index_only_id 		= NULL;
+	var $button_import_data = TRUE;
 
 	public function constructor() {			
 
@@ -75,48 +76,6 @@ class CBController extends Controller {
 		$this->init_setting();
  		
 		$current_url = Request::url();		
-
-		if(Request::get('is_sub') && Session::get('form_tab')) {
-			if(!$this->form_tab) {
-				$this->form_tab = Session::get('form_tab');
-				$this->form_tab = super_unique($this->form_tab,'route');
-			}else{
-				$last_form_tab = Session::get('form_tab');						
-
-				if(Request::segment(3)=='edit' || Request::segment(3)=='add') {
-					
-
-					foreach($this->form_tab as &$ft) {		
-						$w = array();
-						foreach(Request::get('where') as $a=>$b) { 
-							$w[] = "&where[".$a."]=".$b;
-						}						
-						$w[] = "&where[".$ft['foreign_key']."]=%id%";												
-						$ft['route'] = route($ft['controller'].'GetIndex').'?is_sub='.Request::get('is_sub').implode('',$w);					
-						$last_form_tab[] = $ft;
-					}
-					Session::put('form_tab',$last_form_tab);												
-				}
-
-				$last_form_tab = super_unique($last_form_tab,'route');	
-				$this->form_tab = $last_form_tab;				
-			}
-		}else{
-
-			//Add Parent Editor
-			if($this->form_tab) {
-
-				foreach($this->form_tab as &$ft) {
-					$ft['route'] = route($ft['controller'].'GetIndex').'?is_sub=1&where['.$ft['foreign_key'].']=%id%';
-				}
-
-				$first_form_tab   = array();
-				$first_form_tab[] = array("label"=>"Edit Data","route"=>url(mainpath("edit/".get_row_id())));
-				$this->form_tab   = array_merge($first_form_tab,$this->form_tab);
-				if(Request::segment(3)=='edit' || Request::segment(3)=='add') Session::put('form_tab',$this->form_tab);		
-
-			}
-		}
 
 		if(Session::get('foreign_key')) {
 			foreach($this->form as &$f) {
@@ -133,20 +92,10 @@ class CBController extends Controller {
 			}
 		}
 
-		//FORM SUB 
-		foreach($this->form_sub as &$fs) {
-			$className = __NAMESPACE__ . '\\' . $fs['controller'];
-			if(!class_exists($className)) {
-				$className = '\App\Http\Controllers\\'.$fs['controller'];
-			}			
-			$fs['classname'] = $className;
-		}
 
 		$this->columns_table     = $this->col; 		
 		$this->data_inputan      = $this->form;
-		$this->data['forms']     = $this->data_inputan;
-		$this->data['form_tab']  = $this->form_tab; 	
-		$this->data['form_sub']  = $this->form_sub; 
+		$this->data['forms']     = $this->data_inputan; 
 		$this->data['form_add']  = $this->form_add;	
 		$this->data['addaction'] = $this->addaction;	
  
@@ -207,6 +156,7 @@ class CBController extends Controller {
 		$this->data['load_js'] 			  = $this->load_js;
 		$this->data['script_js'] 		  = $this->script_js;
 		$this->data['sub_module']		  = $this->sub_module;
+		$this->data['button_import_data'] = $this->button_import_data;
 
         view()->share($this->data);
 	} 
@@ -221,6 +171,13 @@ class CBController extends Controller {
 
 	public function mainpath() {
 		return $this->data['mainpath'];
+	}
+
+	public function title_field() {
+		return $this->title_field;
+	}
+	public function primary_key() {
+		return $this->primary_key;
 	}
 
 	public function getIndex()
@@ -451,7 +408,7 @@ class CBController extends Controller {
 		// $queries = DB::getQueryLog();				
 
 		if(Request::get('format')=='total') {
-			return $this->calc_eloquent_found($result);
+			return calc_eloquent_found($result);
 		}
 
 
@@ -465,7 +422,7 @@ class CBController extends Controller {
 		foreach($data['result'] as $row) {
 			$html_content = array();
 
-			if($this->is_sub==false) $html_content[] = "<input type='checkbox' class='checkbox' name='checkbox' value='$row->id'/>";
+			$html_content[] = "<input type='checkbox' class='checkbox' name='checkbox' value='$row->id'/>";
 
 			foreach($columns_table as $col) {     
 		          if($col['visible']===FALSE) continue;
@@ -612,11 +569,7 @@ class CBController extends Controller {
 
 		$data['html_contents'] = $html_contents['html'];
 
-		if($this->index_table_only == true) {
-			return view("crudbooster::default.table_simple",$data);	
-		}else{
-			return view("crudbooster::default.index",$data);
-		}
+		return view("crudbooster::default.index",$data);
 		
 	}
 
@@ -989,11 +942,7 @@ class CBController extends Controller {
 		$data['parent_field']    = $this->parent_field;
 		$data['parent_id']       = $this->parent_id;
 
-		if($this->is_sub) {
-			return view('crudbooster::default.form_simple',$data)->render();
-		}else{
-			return view('crudbooster::default.form',$data);
-		}
+		return view('crudbooster::default.form',$data);
 		
 	}
 	
@@ -1028,6 +977,10 @@ class CBController extends Controller {
 			return redirect(mainpath().'/add?'.$ref_parameter)->with(['message'=>'The data has been added !, please add more...','message_type'=>'success']);
 		}
 
+		if(Request::get('return_url')) {
+			return redirect(Request::get('return_url'))->with(['message'=>'The data has been added !','message_type'=>'success']);
+		}
+
 		if(Request::get('referal')) {
 			return redirect(Request::get('referal').'?'.$ref_parameter)->with(['message'=>'The data has been added !','message_type'=>'success']);
 		}else{
@@ -1054,10 +1007,205 @@ class CBController extends Controller {
 
 		Session::put('current_row_id',$id);
 
-		if($this->is_sub) {
-			return view('crudbooster::default.form_simple',$data)->render();
+		return view('crudbooster::default.form',$data);
+	}
+
+	public function getImportData() {
+		$path = $this->data['priv']->path;
+		$module = DB::table('cms_moduls')->where('path',$path)->first();
+		$data['module'] 		 = $module;
+		$data['page_menu']       = Route::getCurrentRoute()->getActionName();
+		$title_field             = $this->title_field;
+		$data['page_title']      = 'Import Data '.$module->name;
+		$data['table']      	 = $this->table;
+		$data['referal']         = $this->referal;
+		$data['controller_name'] = $this->controller_name;
+
+
+		if(Request::get('file') && !Request::get('import')) {
+			$file = base64_decode(Request::get('file'));
+			$file = trim(str_replace('uploads','app',$file),'/');
+			$file = storage_path($file);
+			$rows = Excel::load($file,function($reader) {				
+			})->get();
+
+			Session::put('total_data_import',count($rows));
+			
+			$data_import_column = array();
+			foreach($rows as $value) {				
+				$a = array();
+				foreach($value as $k=>$v) {
+					$a[] = $k;					
+				}			
+				if(count($a)) {
+					$data_import_column = $a;				
+				}
+				break;					
+			}	
+
+			$table_columns = DB::getSchemaBuilder()->getColumnListing($this->table);
+
+			$data['table_columns'] = $table_columns;
+			$data['data_import_column'] = $data_import_column;
+		}
+
+
+		return view('crudbooster::import',$data);
+	}
+
+	public function postDoneImport() {
+		$path = $this->data['priv']->path;
+		$module = DB::table('cms_moduls')->where('path',$path)->first();
+		$data['module'] 		 = $module;
+		$data['page_menu']       = Route::getCurrentRoute()->getActionName();
+		$title_field             = $this->title_field;
+		$data['page_title']      = 'Import Data '.$module->name;
+		$data['table']      	 = $this->table;
+		$data['referal']         = $this->referal;
+		$data['controller_name'] = $this->controller_name;		
+
+		Session::put('select_column',Request::get('select_column'));
+
+		return view('crudbooster::import',$data);
+	}
+
+	public function postDoImportChunk() {
+		$file_md5 = md5(Request::get('file'));
+
+		if(Request::get('file') && Request::get('resume')==1) {
+			$total = Session::get('total_data_import');
+			$prog = intval(Cache::get('success_'.$file_md5)) / $total * 100;
+			$prog = round($prog,2);
+			if($prog >= 100) {
+				Cache::forget('success_'.$file_md5);
+			}
+			return response()->json(['progress'=> $prog, 'last_error'=>Cache::get('error_'.$file_md5) ]);
+		}
+
+		$select_column = Session::get('select_column');
+		$select_column = array_filter($select_column);
+		$table_columns = DB::getSchemaBuilder()->getColumnListing($this->table);
+
+		
+		$file = base64_decode(Request::get('file'));
+		$file = trim(str_replace('uploads','app',$file),'/');
+		$file = storage_path($file);		
+
+		$rows = Excel::load($file,function($reader) {			
+		})->get();		
+
+		$has_created_at = false;
+		if(\Schema::hasColumn($this->table,'created_at')) {
+			$has_created_at = true;
+		}
+		
+		$data_import_column = array();
+		foreach($rows as $value) {				
+			$a = array();
+			foreach($select_column as $sk => $s) {
+				$colname = $table_columns[$sk];
+
+				if(substr($colname,0,3) == 'id_') {
+
+					//Skip if value is empty
+					if($value->$s == '') continue;
+
+					$relation_table = substr($colname,3);
+					$relation_moduls = DB::table('cms_moduls')->where('table_name',$relation_table)->first();
+
+					$relation_class = __NAMESPACE__ . '\\' . $relation_moduls->controller;
+					if(!class_exists($relation_class)) {
+						$relation_class = '\App\Http\Controllers\\'.$relation_moduls->controller;
+					}
+					$relation_class = new $relation_class;
+
+					$title_field = $relation_class->title_field();
+
+					$relation_insert_data = array();
+					$relation_insert_data[$title_field] = $value->$s;
+
+					if(\Schema::hasColumn($relation_table,'created_at')) {
+						$relation_insert_data['created_at'] = date('Y-m-d H:i:s');
+					}
+
+					try{
+						$relation_exists = DB::table($relation_table)->where($title_field,$value->$s)->first();
+						if($relation_exists) {
+							$relation_primary_key = $relation_class->primary_key();
+							$relation_id = $relation_exists->$relation_primary_key;
+						}else{
+							$relation_id = DB::table($relation_table)->insertGetId($relation_insert_data);
+						}						
+
+						$a[$colname] = $relation_id;
+					}catch(\Exception $e) {
+
+					}				
+				}else{
+					$a[$colname] = $value->$s;
+				}				
+			}	
+
+			$has_title_field = true;
+			foreach($a as $k=>$v) {
+				if($k == $this->title_field() && $v == '') {
+					$has_title_field = false;
+					break;
+				}
+			}
+
+			if($has_title_field==false) continue;
+
+			try{
+
+				if($has_created_at) {
+					$a['created_at'] = date('Y-m-d H:i:s');
+				}				
+
+				DB::table($this->table)->insert($a);
+				Cache::increment('success_'.$file_md5);
+			}catch(\Exception $e) {
+				$e = (string) $e;
+				Cache::put('error_'.$file_md5,$e,500);
+			}
+		}
+		return response()->json(['status'=>true]);
+	}
+
+	public function postDoUploadImportData() {
+	
+		if (Request::hasFile('userfile'))
+		{			
+			$file = Request::file('userfile');					
+			$ext  = $file->getClientOriginalExtension();
+
+
+			$validator = Validator::make([
+				'extension'=>$ext,
+				],[
+				'extension'=>'in:xls,xlsx,csv'
+				]);
+	    
+		    if ($validator->fails()) 
+		    {
+		        $message = $validator->errors()->all(); 
+		        return redirect()->back()->with(['message'=>implode('<br/>',$message),'message_type'=>'warning']);    
+		    }
+
+			//Create Directory Monthly 
+			Storage::makeDirectory(date('Y-m'));
+
+			//Move file to storage
+			$filename = md5(str_random(5)).'.'.$ext;
+			$url_filename = '';
+			if($file->move(storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m')),$filename)) {						
+				$url_filename = 'uploads/'.date('Y-m').'/'.$filename;
+			}			
+			$url = mainpath('import-data').'?file='.base64_encode($url_filename);
+			// $url = action($this->data['priv']->controller.'@getImportData').'?file='.base64_encode($url_filename);			
+			return redirect($url);		  
 		}else{
-			return view('crudbooster::default.form',$data);
+			return redirect()->back();
 		}
 	}
 
@@ -1075,11 +1223,7 @@ class CBController extends Controller {
 
 		Session::put('current_row_id',$id);
 
-		if($this->is_sub) {
-			return view('crudbooster::default.form_simple',$data)->render();			
-		}else{
-			return view('crudbooster::default.form',$data);
-		}
+		return view('crudbooster::default.form',$data);
 	}
 	 
 	public function postEditSave($id) {
@@ -1111,11 +1255,15 @@ class CBController extends Controller {
 		insert_log("Update data ".$this->arr[$this->title_field]." at ".$this->data['module_name']);
 
 		if(Request::get('submit') == 'Save & Add More') {
-			return redirect(mainpath().'/add?'.$ref_parameter)->with(['message'=>'The data has been added !, please add more...','message_type'=>'success']);
+			return redirect(mainpath().'/add?'.$ref_parameter)->with(['message'=>'The data has been updated !, please add more...','message_type'=>'success']);
+		}
+
+		if(Request::get('return_url')) {
+			return redirect(Request::get('return_url'))->with(['message'=>'The data has been updated !','message_type'=>'success']);
 		}
 
 		if(Request::get('referal')) {
-			return redirect(Request::get('referal'))->with(['message'=>'The data has been added !','message_type'=>'success']);
+			return redirect(Request::get('referal'))->with(['message'=>'The data has been updated !','message_type'=>'success']);
 		}else{
 			if(Request::get('ref_mainpath')) {
 				return redirect(Request::get('ref_mainpath').'/edit/'.$id)->with(['message'=>"The data has been updated !",'message_type'=>'success']);
@@ -1225,6 +1373,8 @@ class CBController extends Controller {
 	}
 
 
+
+
 	public function init_setting() {
 
 		$this->password_candidate = explode(',',config('crudbooster.PASSWORD_FIELDS_CANDIDATE'));
@@ -1239,39 +1389,6 @@ class CBController extends Controller {
 			$this->setting = json_decode(json_encode($setting_array));
 		}
 				
-	}
-
-	public function calc_eloquent_found( $query_builder ){
-	    $query = clone $query_builder->getQuery();
-
-	    $query->selectRaw('COUNT( DISTINCT '. $query_builder->getModel()->getKeyName() .' ) as total');
-	    $query->limit = null;
-	    $query->offset = null;
-
-	    //TODO: this needs more testing.
-	    if( $query->groups ){
-	        $subquery = $query->toSql();
-	        $chunks = explode( '?', $subquery );
-	        $bindings = $query->getBindings();      // do I need to strip out potential select bindings?
-
-	        $arr = [];
-	        foreach( $chunks as $i => $chunk ){
-	            $arr[] = $chunk;
-	            if( $bindings[ $i ] ){
-	                if( is_string( $bindings[ $i ] ) && !is_numeric( $bindings[ $i ] ) ){
-	                    $bindings[ $i ] = '"'. $bindings[ $i ] . '"';
-	                }
-	                $arr[] = $bindings[ $i ];
-	            }
-	        }
-	        $subquery = implode( '', $arr );
-
-	        $result = DB::select( DB::raw("SELECT SUM( sub.total) AS total FROM ($subquery) AS sub") )[0]['total'];
-
-	        return $result;
-	    }
-
-	    return $query->pluck('total');
 	}
 
 	public function hook_query_index(&$query) {

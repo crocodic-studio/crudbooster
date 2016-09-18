@@ -11,6 +11,46 @@
 
 /* 
 | --------------------------------------------------------------------------------------------------------------
+| Alternate Native Mysql SQL_CALC_FOUND_ROWS
+| --------------------------------------------------------------------------------------------------------------
+| @query_builder = query laravel
+|
+*/
+function calc_eloquent_found( $query_builder ){
+    $query = clone $query_builder->getQuery();
+
+    $query->selectRaw('COUNT( DISTINCT '. $query_builder->getModel()->getKeyName() .' ) as total');
+    $query->limit = null;
+    $query->offset = null;
+
+    //TODO: this needs more testing.
+    if( $query->groups ){
+        $subquery = $query->toSql();
+        $chunks = explode( '?', $subquery );
+        $bindings = $query->getBindings();      // do I need to strip out potential select bindings?
+
+        $arr = [];
+        foreach( $chunks as $i => $chunk ){
+            $arr[] = $chunk;
+            if( $bindings[ $i ] ){
+                if( is_string( $bindings[ $i ] ) && !is_numeric( $bindings[ $i ] ) ){
+                    $bindings[ $i ] = '"'. $bindings[ $i ] . '"';
+                }
+                $arr[] = $bindings[ $i ];
+            }
+        }
+        $subquery = implode( '', $arr );
+
+        $result = DB::select( DB::raw("SELECT SUM( sub.total) AS total FROM ($subquery) AS sub") )[0]['total'];
+
+        return $result;
+    }
+
+    return $query->pluck('total');
+}
+
+/* 
+| --------------------------------------------------------------------------------------------------------------
 | To get list table of database
 | --------------------------------------------------------------------------------------------------------------
 | @key = field for filter
@@ -538,6 +578,7 @@ class Admin'.$controllername.' extends \crocodicstudio\crudbooster\controllers\C
         $this->button_sort_filter = true;        
         $this->button_export_data = true;
         $this->button_table_action = true;
+        $this->button_import_data = true;
 
         $this->col = array();
 ';
@@ -653,14 +694,17 @@ class Admin'.$controllername.' extends \crocodicstudio\crudbooster\controllers\C
                 $attribute['upload_file'] = FALSE;
             }           
 
-            if($field == 'latitude' || $field == 'longitude') {
+            if($field == 'latitude') {
                 $type = 'hidden';      
                 $attribute['googlemaps'] = TRUE;      
+            }
+            if($field == 'longitude') {
+                $type = 'hidden';
             }
 
             if(in_array($field, $phone_candidate)) {
                 $type = 'number';
-                $validation = ['required','min:3','numeric'];
+                $validation = ['required','numeric'];
                 $attribute['placeholder'] = "You can only enter the number only";
             }
 
