@@ -62,6 +62,20 @@ if(!function_exists('url_filter_column')) {
     function url_filter_column($key,$type,$value='') {
         $params = Request::all();
         $mainpath = trim(mainpath(),'/');
+        
+        foreach($params as $a=>&$par) {            
+            if($a == 'filter_column') {
+                foreach($par as $b=>$v) {                    
+                    if($v['type'] == 'asc' || $v['type'] == 'desc') {
+                        unset($params[$a][$b]);
+                        break;
+                    }
+                }
+            }
+        }
+
+        if(count($params['filter_column']) == 0) unset($params['filter_column']);        
+      
         if(isset($params)) {        
             $params['filter_column'][$key]['type'] = $type;
             if($value) {
