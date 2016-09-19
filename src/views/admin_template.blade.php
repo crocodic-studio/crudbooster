@@ -87,7 +87,7 @@
       @endforeach
     @endif
     <style type="text/css">
-        .dropdown-menu {left:-130%;}
+        .dropdown-menu-action {left:-130%;}
         .btn-group-action .btn-action {cursor: default}
         #box-header-module {box-shadow:10px 10px 10px #dddddd;}
         .sub-module-tab li {background: #F9F9F9;cursor:pointer;}

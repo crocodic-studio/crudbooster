@@ -486,7 +486,7 @@ class CBController extends Controller {
 	                    <span class='caret'></span>
 	                    <span class='sr-only'>Toggle Dropdown</span>
 	                  </button>
-	                  <ul class='dropdown-menu' role='menu'>";
+	                  <ul class='dropdown-menu dropdown-menu-action' role='menu'>";
 	            if(!$this->index_array) {
 		            if(count(@$addaction)):				
 		                foreach($addaction as $fb):
