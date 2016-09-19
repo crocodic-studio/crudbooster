@@ -74,9 +74,16 @@
 	<script src="{{asset('vendor/crudbooster/assets/js/main.js')}}"></script>
 	<link rel='stylesheet' href='{{asset("vendor/crudbooster/assets/css/main.css")}}'/>
 
+    <!-- Pace style -->
+    <link rel="stylesheet" href="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/pace/pace.min.css') }}">    
+    <script src="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/pace/pace.min.js') }}"></script>
+
     <!-- load js -->
     <script type="text/javascript">
       var site_url = "{{url('/')}}" ;
+      $(function() {
+        $(document).ajaxStart(function() { Pace.restart(); });
+      })
       @if($script_js)
         {!! $script_js !!}
       @endif 
