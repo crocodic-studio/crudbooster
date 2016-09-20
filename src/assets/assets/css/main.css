@@ -45,3 +45,9 @@
 	#table_dashboard {
 		font-size: 12px;
 	}
+
+	
+
+	.login-box-body {
+      box-shadow: 0px 0px 25px #999999;
+    }

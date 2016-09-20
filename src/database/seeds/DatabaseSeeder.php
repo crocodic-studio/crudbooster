@@ -11,7 +11,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->command->info('Please wait importing data...');        
+        $this->command->info('Please wait updating the data...');        
+        
         $this->call('Cms_usersSeeder');        
         $this->call('Cms_companiesSeeder');        
         $this->call('Cms_dashboardSeeder');        
@@ -23,39 +24,48 @@ class DatabaseSeeder extends Seeder
         $this->call('Cms_postscategoriesSeeder');              
         $this->call('Cms_postsSeeder');      
         
-        $this->command->info('Import Data Success !');
+        $this->command->info('Updating the data completed !');
     }
 }
 
 class Cms_postsSeeder extends Seeder {
     public function run() {
-        $faker = Faker\Factory::create();
-        $id_cms_users = DB::table('cms_users')->lists('id');
-        $id_cms_posts_categories = DB::table('cms_posts_categories')->lists('id');
 
-        for($i=1;$i<=30;$i++) {
-            $a = array();
-            $a['created_at'] = $faker->dateTimeBetween('-1 months','now');
-            $a['title'] = $faker->sentence;
-            $a['content'] = $faker->paragraph;
-            $a['id_cms_users'] = $faker->randomElement($id_cms_users);
-            $a['id_cms_posts_categories'] = $faker->randomElement($id_cms_posts_categories);
-            DB::table('cms_posts')->insert($a);
+        if(DB::table('cms_posts')->count() == 0) {
+            $faker = Faker\Factory::create();
+            $id_cms_users = DB::table('cms_users')->lists('id');
+            $id_cms_posts_categories = DB::table('cms_posts_categories')->lists('id');
+
+            for($i=1;$i<=30;$i++) {
+                $a = array();
+                $a['created_at'] = $faker->dateTimeBetween('-1 months','now');
+                $a['title'] = $faker->sentence;
+                $a['content'] = $faker->paragraph;
+                $a['id_cms_users'] = $faker->randomElement($id_cms_users);
+                $a['id_cms_posts_categories'] = $faker->randomElement($id_cms_posts_categories);
+                DB::table('cms_posts')->insert($a);
+            }
         }
+
+        
     }
 }
 
 class Cms_postscategoriesSeeder extends Seeder {
     public function run() {
-        $faker = Faker\Factory::create();
-        $id_cms_users = DB::table('cms_users')->lists('id');
-        $id_cms_posts_categories = DB::table('cms_posts_categories')->lists('id');
-        for($i=1;$i<=5;$i++) {
-            $a = array();
-            $a['created_at'] = $faker->dateTimeBetween('-1 months','now');
-            $a['name'] = $faker->words(3,true);
-            DB::table('cms_posts_categories')->insert($a);
+
+        if(DB::table('cms_users')->count() == 0) {
+            $faker = Faker\Factory::create();
+            $id_cms_users = DB::table('cms_users')->lists('id');
+            $id_cms_posts_categories = DB::table('cms_posts_categories')->lists('id');
+            for($i=1;$i<=5;$i++) {
+                $a = array();
+                $a['created_at'] = $faker->dateTimeBetween('-1 months','now');
+                $a['name'] = $faker->words(3,true);
+                DB::table('cms_posts_categories')->insert($a);
+            }
         }
+        
     }
 }
 
@@ -65,23 +75,167 @@ class Cms_settingsSeeder extends Seeder {
     public function run()
     {        
 
-        DB::table('cms_settings')->insert([
-        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'appname','content'=>'CRUDBooster','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
-        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'email_sender','content'=>'support@crudbooster.com','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
-        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'app_lockscreen_timeout','content'=>'60','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
-        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'default_paper_size','content'=>'Legal','content_input_type'=>'text','dataenum'=>NULL,'helper'=>'Paper size, ex : A4, Legal, etc'],
-        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'smtp_driver','content'=>'mail','content_input_type'=>'select','dataenum'=>'smtp,mail,sendmail','helper'=>NULL],
-        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'smtp_host','content'=>'','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
-        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'smtp_port','content'=>'','content_input_type'=>'text','dataenum'=>NULL,'helper'=>'default 25'],
-        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'smtp_username','content'=>'','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
-        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'smtp_password','content'=>'','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
-        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'logo','content'=>'','content_input_type'=>'upload','dataenum'=>NULL,'helper'=>NULL],
-        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'favicon','content'=>'','content_input_type'=>'upload','dataenum'=>NULL,'helper'=>NULL],
-        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'api_debug_mode','content'=>'true','content_input_type'=>'select','dataenum'=>'true,false','helper'=>NULL],        
-        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'google_api_key','content'=>'','content_input_type'=>'text','dataenum'=>NULL,'helper'=>NULL],
-        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'register_email_confirmation','content'=>'','content_input_type'=>'wysiwyg','dataenum'=>NULL,'helper'=>'Input message about email confirmation here, use alias [link_confirmation] to include the link.'],
-        ['created_at'=>date('Y-m-d H:i:s'),'name'=>'register_email_welcome','content'=>'','content_input_type'=>'wysiwyg','dataenum'=>NULL,'helper'=>"You can input message after registration is success. Then the message will be send to registrant. use [name] as user 's name, use [email] as user's email"]
-        ]);
+       $data = [
+
+        //LOGIN REGISTER STYLE
+        [   
+            'created_at'=>date('Y-m-d H:i:s'),
+            'name'=>'logo_background_color',
+            'label'=>'Logo Background Color',
+            'content'=>NULL,
+            'content_input_type'=>'text',
+            'group_setting'=>'Login Register Style',
+            'helper'=>'Input hexacode'],
+        [
+            'created_at'=>date('Y-m-d H:i:s'),
+            'name'=>'logo_font_color',
+            'label'=>'Logo Font Color',
+            'content'=>NULL,
+            'content_input_type'=>'text',
+            'group_setting'=>'Login Register Style',
+            'helper'=>'Input hexacode'],
+        [
+            'created_at'=>date('Y-m-d H:i:s'),
+            'name'=>'logo_background_image',
+            'label'=>'Logo Background Image',
+            'content'=>NULL,
+            'content_input_type'=>'upload',
+            'group_setting'=>'Login Register Style',
+            'helper'=>NULL],
+
+
+        //EMAIL SETTING
+        [
+            'created_at'=>date('Y-m-d H:i:s'),
+            'name'=>'email_sender',
+            'label'=>'Email Sender',
+            'group_setting'=>'Email Setting',
+            'content'=>'support@crudbooster.com',
+            'content_input_type'=>'text',
+            'dataenum'=>NULL,
+            'helper'=>NULL],
+        [
+            'created_at'=>date('Y-m-d H:i:s'),
+            'name'=>'smtp_driver',
+            'content'=>'mail',
+            'content_input_type'=>'select',
+            'dataenum'=>'smtp,mail,sendmail',
+            'helper'=>NULL],
+        [
+            'created_at'=>date('Y-m-d H:i:s'),
+            'name'=>'smtp_host',
+            'content'=>'',
+            'content_input_type'=>'text',
+            'dataenum'=>NULL,
+            'helper'=>NULL],
+        [
+            'created_at'=>date('Y-m-d H:i:s'),
+            'name'=>'smtp_port',
+            'content'=>'',
+            'content_input_type'=>'text',
+            'dataenum'=>NULL,
+            'helper'=>'default 25'],
+        [
+            'created_at'=>date('Y-m-d H:i:s'),
+            'name'=>'smtp_username',
+            'content'=>'',
+            'content_input_type'=>'text',
+            'dataenum'=>NULL,
+            'helper'=>NULL],
+        [
+            'created_at'=>date('Y-m-d H:i:s'),
+            'name'=>'smtp_password',
+            'content'=>'',
+            'content_input_type'=>'text',
+            'dataenum'=>NULL,
+            'helper'=>NULL],
+
+
+        //APPLICATION SETTING
+        [
+            'created_at'=>date('Y-m-d H:i:s'),
+            'name'=>'appname',
+            'label'=>'Application Name',
+            'group_setting'=>'General Setting',
+            'content'=>'CRUDBooster',
+            'content_input_type'=>'text',
+            'dataenum'=>NULL,
+            'helper'=>NULL],
+        [
+            'created_at'=>date('Y-m-d H:i:s'),
+            'name'=>'app_lockscreen_timeout',
+            'label'=>'Lockscreen Timeout',
+            'group_setting'=>'Application Setting',
+            'content'=>'60',
+            'content_input_type'=>'text',
+            'dataenum'=>NULL,
+            'helper'=>'in minutes'],
+        [
+            'created_at'=>date('Y-m-d H:i:s'),
+            'name'=>'default_paper_size',
+            'label'=>'Default Paper Print Size',
+            'group_setting'=>'Application Setting',
+            'content'=>'Legal',
+            'content_input_type'=>'text',
+            'dataenum'=>NULL,
+            'helper'=>'Paper size, ex : A4, Legal, etc'],        
+        [
+            'created_at'=>date('Y-m-d H:i:s'),
+            'name'=>'logo',
+            'content'=>'',
+            'content_input_type'=>'upload',
+            'dataenum'=>NULL,
+            'helper'=>NULL],
+        [
+            'created_at'=>date('Y-m-d H:i:s'),
+            'name'=>
+            'favicon','content'=>'',
+            'content_input_type'=>'upload',
+            'dataenum'=>NULL,
+            'helper'=>NULL],
+        [
+            'created_at'=>date('Y-m-d H:i:s'),
+            'name'=>'api_debug_mode',
+            'content'=>'true',
+            'content_input_type'=>'select',
+            'dataenum'=>'true,false',
+            'helper'=>NULL],        
+        [
+            'created_at'=>date('Y-m-d H:i:s'),
+            'name'=>'google_api_key',
+            'content'=>'',
+            'content_input_type'=>'text',
+            'dataenum'=>NULL,
+            'helper'=>NULL],
+
+        //EMAIL TEMPLATE
+        [
+            'created_at'=>date('Y-m-d H:i:s'),
+            'name'=>'register_email_confirmation',
+            'label'=>'Registration Email Confirmation',
+            'group_setting'=>'email_template',
+            'content'=>'',
+            'content_input_type'=>'wysiwyg',
+            'dataenum'=>NULL,
+            'helper'=>'Input message about email confirmation here, use alias [link_confirmation] to include the link.'],
+        [
+            'created_at'=>date('Y-m-d H:i:s'),
+            'name'=>'register_email_welcome',
+            'group_setting'=>'email_template',
+            'label'=>'Registration Email Welcome',
+            'content'=>'',
+            'content_input_type'=>'wysiwyg',
+            'dataenum'=>NULL,
+            'helper'=>"You can input message after registration is success. Then the message will be send to registrant. use [name] as user 's name, use [email] as user's email"]
+        ];
+
+        foreach($data as $k=>$d) {
+            if(DB::table('cms_settings')->where('name',$d['name'])->count()) {
+                unset($data[$k]);
+            }
+        }
+
+        DB::table('cms_settings')->insert($data);
     }
 }
 
@@ -92,60 +246,63 @@ class Cms_privileges_rolesSeeder extends Seeder {
     public function run()
     {                
 
-        $modules = DB::table('cms_moduls')->get();
-        $i = 1;
-        foreach($modules as $module) {
+        if(DB::table('cms_privileges_roles')->count() == 0) {
+            $modules = DB::table('cms_moduls')->get();
+            $i = 1;
+            foreach($modules as $module) {
 
-            $is_visible = 1;
-            $is_create  = 1;
-            $is_read    = 1;
-            $is_edit    = 1;
-            $is_delete  = 1;
+                $is_visible = 1;
+                $is_create  = 1;
+                $is_read    = 1;
+                $is_edit    = 1;
+                $is_delete  = 1;
 
-            switch($module->table_name) {
-                case 'cms_logs':
-                    $is_create = 0;
-                    $is_edit   = 0;
-                break;
-                case 'cms_privileges_roles':
-                    $is_visible = 0;
-                break;
-                case 'cms_apicustom':
-                    $is_visible = 0;
-                break;
-                case 'cms_notifications':
-                    $is_create = $is_read = $is_edit = $is_delete = 0;
-                break;
-            }
+                switch($module->table_name) {
+                    case 'cms_logs':
+                        $is_create = 0;
+                        $is_edit   = 0;
+                    break;
+                    case 'cms_privileges_roles':
+                        $is_visible = 0;
+                    break;
+                    case 'cms_apicustom':
+                        $is_visible = 0;
+                    break;
+                    case 'cms_notifications':
+                        $is_create = $is_read = $is_edit = $is_delete = 0;
+                    break;
+                }
 
-            DB::table('cms_privileges_roles')->insert([
-                // 'id'=>$i,
-                'created_at'=>date('Y-m-d H:i:s'),
-                'is_visible'=>$is_visible,
-                'is_create'=>$is_create,
-                'is_edit'=>$is_edit,
-                'is_delete'=>$is_delete,
-                'is_read'=>$is_read,
-                'id_cms_privileges'=>1,
-                'id_cms_moduls'=>$module->id
-                ]);
-
-            if($module->table_name == 'cms_posts') {
-                $i++;
                 DB::table('cms_privileges_roles')->insert([
-                // 'id'=>$i,
-                'created_at'=>date('Y-m-d H:i:s'),
-                'is_visible'=>$is_visible,
-                'is_create'=>$is_create,
-                'is_edit'=>$is_edit,
-                'is_delete'=>$is_delete,
-                'is_read'=>$is_read,
-                'id_cms_privileges'=>2,
-                'id_cms_moduls'=>$module->id
-                ]);
+                    // 'id'=>$i,
+                    'created_at'=>date('Y-m-d H:i:s'),
+                    'is_visible'=>$is_visible,
+                    'is_create'=>$is_create,
+                    'is_edit'=>$is_edit,
+                    'is_delete'=>$is_delete,
+                    'is_read'=>$is_read,
+                    'id_cms_privileges'=>1,
+                    'id_cms_moduls'=>$module->id
+                    ]);
+
+                if($module->table_name == 'cms_posts') {
+                    $i++;
+                    DB::table('cms_privileges_roles')->insert([
+                    // 'id'=>$i,
+                    'created_at'=>date('Y-m-d H:i:s'),
+                    'is_visible'=>$is_visible,
+                    'is_create'=>$is_create,
+                    'is_edit'=>$is_edit,
+                    'is_delete'=>$is_delete,
+                    'is_read'=>$is_read,
+                    'id_cms_privileges'=>2,
+                    'id_cms_moduls'=>$module->id
+                    ]);
+                }
+                $i++;
             }
-            $i++;
         }
+        
     }
 }
 
@@ -154,22 +311,24 @@ class Cms_privilegesSeeder extends Seeder {
     public function run()
     {        
         
-        DB::table('cms_privileges')->insert([
-            // 'id'=>1,
+        if(DB::table('cms_privileges')->where('name','Super Administrator')->count() == 0) {
+            DB::table('cms_privileges')->insert([            
             'created_at'=>date('Y-m-d H:i:s'),
             'name'=>'Super Administrator',
             'is_superadmin'=>1,
-            'theme_color'=>'skin-blue-light'
-            ]);
-
-        DB::table('cms_privileges')->insert([
-            // 'id'=>2,
-            'created_at'=>date('Y-m-d H:i:s'),
-            'name'=>'Member',
-            'is_superadmin'=>0,
-            'is_register'=>1,
-            'theme_color'=>'skin-green-light'
-            ]);
+            'theme_color'=>'skin-red'
+            ]);    
+        }
+        
+        if(DB::table('cms_privileges')->where('name','Member')->count() == 0) {
+            DB::table('cms_privileges')->insert([            
+                'created_at'=>date('Y-m-d H:i:s'),
+                'name'=>'Member',
+                'is_superadmin'=>0,
+                'is_register'=>1,
+                'theme_color'=>'skin-green-light'
+                ]);
+        }
     }
 }
 
@@ -184,9 +343,8 @@ class Cms_modulsSeeder extends Seeder {
             3 = Users
             4 = Setting         
         */
-        $i = 1;
 
-        DB::table('cms_moduls')->insert([
+        $data = [
         [
             
             'created_at'=>date('Y-m-d H:i:s'),
@@ -406,7 +564,16 @@ class Cms_modulsSeeder extends Seeder {
         ]
         
 
-            ]);
+            ];
+
+
+        foreach($data as $k=>$d) {
+            if(DB::table('cms_moduls')->where('name',$d['name'])->count()) {
+                unset($data[$k]);
+            }
+        }
+
+        DB::table('cms_moduls')->insert($data);
     }
 
 }
@@ -416,12 +583,20 @@ class Cms_moduls_groupSeeder extends Seeder {
     public function run()
     {        
 
-        DB::table('cms_moduls_group')->insert([
+        $data = [
             ['created_at'=>date('Y-m-d H:i:s'),'nama_group'=>'Public','sorting_group'=>1,'is_group'=>0,'icon_group'=>'fa fa-bars'],
             ['created_at'=>date('Y-m-d H:i:s'),'nama_group'=>'Articles','sorting_group'=>2,'is_group'=>1,'icon_group'=>'fa fa-bars'],           
             ['created_at'=>date('Y-m-d H:i:s'),'nama_group'=>'Users','sorting_group'=>3,'is_group'=>1,'icon_group'=>'fa fa-users'],         
             ['created_at'=>date('Y-m-d H:i:s'),'nama_group'=>'Setting','sorting_group'=>4,'is_group'=>1,'icon_group'=>'fa fa-cog']
-            ]);
+            ];
+
+        foreach($data as $k=>$d) {
+            if(DB::table('cms_moduls_group')->where('name',$d['name'])->count()) {
+                unset($data[$k]);
+            }
+        }
+
+        DB::table('cms_moduls_group')->insert($data);
 
     }
 
@@ -432,44 +607,31 @@ class Cms_usersSeeder extends Seeder {
     public function run()
     {        
         
-
-        $password = \Hash::make('123456');
-        $cms_users = DB::table('cms_users')->insert(array(
-            // 'id'=>1,
-            'created_at'=>date('Y-m-d H:i:s'),
-            'name' => 'Super Admin',
-            'photo' => 'vendor/crudbooster/avatar.jpg',
-            'email' => 'admin@crudbooster.com',
-            'password' => $password,
-            'id_cms_privileges' => 1,
-            'id_cms_companies' => 1,
-            'status'=>'Active'
-        ));
-        $cms_users = DB::table('cms_users')->insert(array(
-            // 'id'=>2,
-            'created_at'=>date('Y-m-d H:i:s'),
-            'name' => 'Member',
-            'photo' => 'vendor/crudbooster/avatar.jpg',
-            'email' => 'member@crudbooster.com',
-            'password' => $password,
-            'id_cms_privileges' => 2,
-            'id_cms_companies' => 1,
-            'status'=>'Active'
-        ));
-
-  //       $faker = Faker\Factory::create();
-        // for ($i = 1; $i < 5; $i++)
-        // {
-        //   $password = \Hash::make($faker->password);
-        //   $cms_users = DB::table('cms_users')->insert(array(
-        //      'id'=>,
-        //      'created_at'=>date('Y-m-d H:i:s'),
-        //     'name' => $faker->name,
-        //     'email' => $faker->email,
-        //     'password' => $password
-        //   ));
-        // }
-        
+        if(DB::table('cms_users')->count() == 0) {
+            $password = \Hash::make('123456');
+            $cms_users = DB::table('cms_users')->insert(array(
+                // 'id'=>1,
+                'created_at'=>date('Y-m-d H:i:s'),
+                'name' => 'Super Admin',
+                'photo' => 'vendor/crudbooster/avatar.jpg',
+                'email' => 'admin@crudbooster.com',
+                'password' => $password,
+                'id_cms_privileges' => 1,
+                'id_cms_companies' => 1,
+                'status'=>'Active'
+            ));
+            $cms_users = DB::table('cms_users')->insert(array(
+                // 'id'=>2,
+                'created_at'=>date('Y-m-d H:i:s'),
+                'name' => 'Member',
+                'photo' => 'vendor/crudbooster/avatar.jpg',
+                'email' => 'member@crudbooster.com',
+                'password' => $password,
+                'id_cms_privileges' => 2,
+                'id_cms_companies' => 1,
+                'status'=>'Active'
+            ));
+        }            
 
     }
 
@@ -480,7 +642,8 @@ class Cms_companiesSeeder extends Seeder {
     public function run()
     {        
 
-        DB::table('cms_companies')->insert(
+        if(DB::table('cms_companies')->count() == 0) {
+            DB::table('cms_companies')->insert(
             [
             // 'id'=>1,
             'created_at'=>date('Y-m-d H:i:s'),
@@ -493,6 +656,7 @@ class Cms_companiesSeeder extends Seeder {
             'is_primary'=>1
             ]
             );
+        }        
 
     }
 
@@ -503,7 +667,8 @@ class Cms_dashboardSeeder extends Seeder {
     public function run()
     {        
 
-        DB::table('cms_dashboard')->insert([
+        if(DB::table('cms_dashboard')->count() == 0) {
+            DB::table('cms_dashboard')->insert([
             [
             // 'id'=>1,
             'created_at'=>date('Y-m-d H:i:s'),
@@ -547,7 +712,9 @@ class Cms_dashboardSeeder extends Seeder {
             'content'=>'a:10:{s:4:"type";s:9:"chart_bar";s:2:"id";s:2:"14";s:5:"label";s:12:"Articles Bar";s:5:"color";s:5:"green";s:5:"width";s:4:"half";s:10:"table_name";s:9:"cms_posts";s:14:"aggregate_type";s:5:"count";s:6:"column";s:2:"id";s:9:"sql_where";s:0:"";s:12:"sql_group_by";s:27:"date(created_at) as tanggal";}'
             ]
             ]);
+        }
 
+    
     }
 
 }

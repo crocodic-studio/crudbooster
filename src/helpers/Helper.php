@@ -1437,7 +1437,7 @@ function valid($arr=array(),$type='json') {
             $result = array();      
             $result['api_status'] = 0;
             $result['api_message'] = implode(', ',$message);
-            $res = response()->json($result,400);
+            $res = response()->json($result,200);
             $res->send();
             exit;
         }else{                        

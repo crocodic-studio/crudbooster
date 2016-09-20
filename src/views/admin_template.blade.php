@@ -5,6 +5,8 @@
     <title>{{ ($page_title)?$appname.': '.strip_tags($page_title):"Admin Area" }}</title>
 	<meta name="csrf-token" content="{{ csrf_token() }}" />
 	<meta name='generator' content='CRUDBooster.com'/>
+    <meta name='robots' content='noindex,nofollow'/>
+    <link rel="shortcut icon" href="{{ get_setting('favicon')?asset(get_setting('favicon')):asset('vendor/crudbooster/assets/logo_crudbooster.png') }}">
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <!-- Bootstrap 3.3.2 -->
     <link href="{{ asset("vendor/crudbooster/assets/adminlte/bootstrap/css/bootstrap.min.css") }}" rel="stylesheet" type="text/css" />
@@ -16,7 +18,7 @@
     <link href="{{ asset("vendor/crudbooster/assets/adminlte/dist/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css" />    
     <link href="{{ asset("vendor/crudbooster/assets/adminlte/dist/css/skins/_all-skins.min.css")}}" rel="stylesheet" type="text/css" />    	    
     <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script> 
     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
 	
@@ -100,7 +102,7 @@
         .sub-module-tab li {background: #F9F9F9;cursor:pointer;}
         .sub-module-tab li.active {background: #ffffff;box-shadow: 0px -5px 10px #cccccc}
         .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {border:none;}
-        .nav-tabs>li>a {border:none;}
+        .nav-tabs>li>a {border:none;}        
     </style>
 </head>
 <body class="<?php echo (Session::get('theme_color'))?:'skin-blue'?>">
