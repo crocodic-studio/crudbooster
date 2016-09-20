@@ -106,12 +106,15 @@ class ModulsController extends CBController {
 		
 		$url_find_sorting = url(config('crudbooster.ADMIN_PATH').'/cms_moduls/find-last-sorting').'/'.Request::segment(4);
 		
-		$this->form[] = array("label"=>"Sorting","name"=>"sorting","jquery"=>"				
+		$jquery = "				
 				$.get('$url_find_sorting',function(resp) {
 					resp = parseInt(resp) + 1;
 					$('#sorting').val(resp);
-				});
-			","help"=>"Integer/Number");				
+				});";
+
+		if(get_method() == 'getEdit' || Request::segment(6) == 'edit') $jquery = '';
+
+		$this->form[] = array("label"=>"Sorting","name"=>"sorting","jquery"=>"$jquery","help"=>"Integer/Number");				
 		
 
 		$this->addaction = array();				
