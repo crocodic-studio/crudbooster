@@ -22,7 +22,7 @@ class CBBackend
             return redirect($url)->with('message','You are not logged in !');
         }
         if(get_is_locked()){
-            $url = url($admin_path.'/lockscreen');
+            $url = url($admin_path.'/lock-screen');
             return redirect($url);
         }
 

@@ -47,9 +47,7 @@ class ApiController extends Controller {
 		$this->hook_api_message = $message;
 	}
 
-	public function execute_api() {
-		auth_api();
-		
+	public function execute_api() {				
 		$this->init_setting();
 
 		$posts = Request::all();
