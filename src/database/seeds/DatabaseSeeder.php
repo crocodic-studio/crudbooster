@@ -591,7 +591,7 @@ class Cms_moduls_groupSeeder extends Seeder {
             ];
 
         foreach($data as $k=>$d) {
-            if(DB::table('cms_moduls_group')->where('name',$d['name'])->count()) {
+            if(DB::table('cms_moduls_group')->where('nama_group',$d['nama_group'])->count()) {
                 unset($data[$k]);
             }
         }
