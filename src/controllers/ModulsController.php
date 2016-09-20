@@ -101,7 +101,7 @@ class ModulsController extends CBController {
 		$this->form[] = array("label"=>"SQL Order By","name"=>"sql_orderby","type"=>"text","placeholder"=>"Enter query here","help"=>"Example : column_name ASC, column2_name DESC");
 		$this->form[] = ['label'=>"Limit Data","name"=>"limit_data","type"=>"text","placeholder"=>"Example : 10"];
 		$this->form[] = array("label"=>"Delete Data Mode","name"=>"is_softdelete","type"=>"radio","dataenum"=>['1|Soft Delete','0|Permanent Delete'],"help"=>"Soft Delete Note : Please make sure you have column 'deleted_at' with data type TIMESTAMP","value"=>0);				
-		$this->form[] = array("label"=>"Group","name"=>"id_cms_moduls_group","required"=>"required","type"=>"select","datatable"=>"cms_moduls_group,nama_group","visible"=>true,'value'=>Request::segment(4));		
+		$this->form[] = array("label"=>"Group","name"=>"id_cms_moduls_group","required"=>"required","type"=>"select","datatable"=>"cms_moduls_group,nama_group","visible"=>true,'value'=>Request::segment(4),'noparent'=>true);		
 		$this->form[] = array("label"=>"Active ?","help"=>"Active to visible at sidebar menu, Not Active to unvisible","name"=>"is_active","type"=>"select","dataenum"=>array("1|Active","0|Not Active"),"value"=>1);
 		
 		$url_find_sorting = url(config('crudbooster.ADMIN_PATH').'/cms_moduls/find-last-sorting').'/'.Request::segment(4);

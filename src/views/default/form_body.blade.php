@@ -83,7 +83,7 @@
                 			}
 
                 			// if( ($parent_field && $name == $parent_field) && !isset($form['visible']) ) continue;
-                			if($parent_field && $parent_field == $name) {
+                			if($parent_field && $parent_field == $name && !$form['noparent']) {
                 				echo "<input type='hidden' name='$name' value='$parent_id'/>";
                 				continue;
                 			}
