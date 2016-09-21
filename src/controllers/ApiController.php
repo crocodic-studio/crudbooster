@@ -169,6 +169,10 @@ class ApiController extends Controller {
 					}
 				}
 
+				if($col == 'deleted_at') {
+					$data->where('deleted_at',NULL);
+				}
+
 				if($ac && $ac->sub_query_1) {
 					$subquery = $ac->sub_query_1;
 					foreach($posts as $key=>$val) {
@@ -233,7 +237,7 @@ class ApiController extends Controller {
 					$orderby_col = $table.'.id';
 					$orderby_val = 'desc';
 				}
-				$total = calc_eloquent_found($rows);
+				
 				$rows = $data->orderby($orderby_col,$orderby_val)->get();		
 				$rows = json_decode(json_encode($rows),true);	
 		
@@ -256,8 +260,7 @@ class ApiController extends Controller {
 
 
 				$result['api_status'] = 1;
-				$result['api_message'] = 'success';
-				$result['api_total_data'] = $total;
+				$result['api_message'] = 'success';				
 				$result['api_offset'] = $offset;
 				$result['api_limit'] = $limit;
 				$result['data'] = $datar;
@@ -279,6 +282,10 @@ class ApiController extends Controller {
 							$jf_alias = $jointable.'_'.$jf_alias;
 							$data->addselect($jointable.'.'.$jf.' as '.$jf_alias);							
 						}
+					}
+
+					if($col == 'deleted_at') {
+						$data->where('deleted_at',NULL);
 					}
 				}
 
@@ -476,7 +483,13 @@ class ApiController extends Controller {
 				//IF SQL WHERE IS NOT NULL
 				if($ac->sql_where) $delete->whereraw($ac->sql_where);
 
-				$delete = $delete->delete();
+				if(in_array('deleted_at', $cols)) {
+					$delete = $delete->update(['deleted_at'=>date('Y-m-d H:i:s')]);
+				}else{
+					$delete = $delete->delete();
+				}				
+
+
 				$result['api_status'] = ($delete)?1:0;
 				$result['api_message'] = ($delete)?'Delete data successfully':'failed, maybe id is not found at our database!';				
 			break;
