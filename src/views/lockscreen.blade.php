@@ -26,6 +26,9 @@
       .lockscreen {
           background: {{ get_setting("login_background_color")?:'#dddddd'}} url('{{ get_setting("login_background_image")?asset(get_setting("login_background_image")):asset('vendor/crudbooster/assets/bg_blur5.jpg') }}');
           color: {{ get_setting("login_font_color")?:'#ffffff' }} !important;
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: cover;
       }      
     </style>
 
