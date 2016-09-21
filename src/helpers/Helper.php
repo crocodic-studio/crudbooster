@@ -418,7 +418,7 @@ function get_columns_table($table) {
 
     $new_result = array(); 
     foreach($result as $ro) {
-        if($ro=='created_at' || $ro=='updated_at' || $ro=='id') continue;
+        if($ro=='created_at' || $ro=='updated_at' || $ro=='id' || $ro=='deleted_at') continue;        
         $new_result[] = $ro;
     }
     return $new_result;
@@ -596,10 +596,11 @@ class Admin'.$controllername.' extends \crocodicstudio\crudbooster\controllers\C
 
         $this->col = array();
 ';
-
-        foreach($coloms as $c) {
+        
+        foreach(array_slice($coloms,8) as $c) {
             $label = str_replace("id_","",$c);
             $label = ucwords(str_replace("_"," ",$label));
+            $label = str_replace('Cms ','',$label);
             $field = $c;
 
             if(in_array($field, $exception)) continue;
@@ -695,6 +696,13 @@ class Admin'.$controllername.' extends \crocodicstudio\crudbooster\controllers\C
                 $type = 'select';
             }
 
+            if(substr($field,0,3)=='is_') {
+                $type = 'radio';
+                $label_field = substr($field, 3);
+                $validation[] = 'integer';
+                $attribute['dataenum'] = "array('1|$label_field','0|Non $label_field')";
+            }
+
             if(in_array($field, $password_candidate)) {
                 $type = 'password';
                 $validation = ['min:5','max:32'];
@@ -764,6 +772,36 @@ class Admin'.$controllername.' extends \crocodicstudio\crudbooster\controllers\C
         }
 
 $php .= '     
+
+        /* 
+        | ---------------------------------------------------------------------- 
+        | Add relational module
+        | ----------------------------------------------------------------------     
+        | @label       = Name of sub module 
+        | @controller  = Controller name of other module 
+        | @foreign_key = required.  
+        | 
+        */
+        $this->sub_module     = array();
+
+
+
+
+        /* 
+        | ---------------------------------------------------------------------- 
+        | Add More Action Button / Menu
+        | ----------------------------------------------------------------------     
+        | @label       = Label of action 
+        | @route       = URL , you can use alias to get field, prefix [, suffix ], 
+        |                e.g : [id], [name], [title], etc ...
+        | @icon        = font awesome class icon         
+        | 
+        */
+        $this->addaction = array();
+
+
+
+
                 
         /* 
         | ---------------------------------------------------------------------- 
@@ -789,20 +827,6 @@ $php .= '
         $this->index_button = array();       
 
 
-
-        /* 
-        | ---------------------------------------------------------------------- 
-        | Add relational module
-        | ----------------------------------------------------------------------     
-        | @label       = Name of sub module 
-        | @controller  = Controller name of other module 
-        | @foreign_key = required.  
-        | 
-        */
-        $this->sub_module     = array();
-
-
-        
         
         /* 
         | ---------------------------------------------------------------------- 

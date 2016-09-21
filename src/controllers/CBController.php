@@ -490,8 +490,13 @@ class CBController extends Controller {
 	            if(!$this->index_array) {
 		            if(count(@$addaction)):				
 		                foreach($addaction as $fb):
-		                	$ajax  = (isset($fb["ajax"]))?"class='ajax-button'":"";                     	
-		                	$url   = str_replace(array("%id%","%name%"),array($row->id,$row->{$title_field}),$fb["route"]); 
+		                	$ajax  = (isset($fb["ajax"]))?"class='ajax-button'":"";                     			                	
+
+		                	$url = $fb['route'];
+		                	foreach($row as $k=>$v) {
+				            	$url = str_replace("[".$k."]",$v,$url);			              		
+				            }
+
 		                	$icon  = $fb['icon'];
 		                	$label = ($icon)?"<i class='$icon'></i> ".$fb['label']:$fb['label'];               	
 		                	$td    .= "<li><a title='".$fb["label"]."' href='".$url."' $ajax >$label</a></li>";
