@@ -82,11 +82,7 @@ class SettingsController extends CBController {
 			
 			$name = $set->name;
 
-			if($set->content_input_type == 'radio' || $set->content_input_type == 'select') {
-				$content = implode(';',Request::get($set->name));
-			}else{
-				$content = Request::get($set->name);
-			}
+			$content = Request::get($set->name);
 
 			if (Request::hasFile($name))
 			{			
