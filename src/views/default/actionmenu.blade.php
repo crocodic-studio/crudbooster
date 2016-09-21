@@ -229,7 +229,7 @@ $(function(){
 				<div class="modal-body">
 					
 					<?php foreach($columns as $key => $col):?>
-						<?php if( isset($col['image']) || isset($col['download'])) continue;?>			
+						<?php if( isset($col['image']) || isset($col['download']) || $col['visible']===FALSE) continue;?>		
 					<div class='form-group'>
 						<label>{{ $col['label'] }}</label>
 						<div class='row-filter-combo row'>
