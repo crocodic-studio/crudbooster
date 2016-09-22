@@ -3,7 +3,7 @@
 @section('content')
 
     @if($index_additional_view && ($index_additional_view['position']=='top' || !$index_additional_view['position']))
-        @include($index_additional_view['view'],$index_additional_view['data']);
+        @include($index_additional_view['view'],$index_additional_view['data'])
     @endif
     
     <div class='row'>
@@ -128,7 +128,7 @@
 
 
     @if($index_additional_view && $index_additional_view['position']=='bottom')
-        @include($index_additional_view['view'],$index_additional_view['data']);
+        @include($index_additional_view['view'],$index_additional_view['data'])
     @endif
 
 @endsection
