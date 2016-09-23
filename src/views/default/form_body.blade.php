@@ -430,6 +430,10 @@
 										$tables = explode('.',$datatable_tab);
 										$selects_data = DB::table($tables[0])->select($tables[0].".id");	
 
+										if(\Schema::hasColumn($tables[0],'deleted_at')) {
+											$selects_data->where('deleted_at',NULL);
+										}
+
 										if(@$form['datatable_where']) {
 											$selects_data->whereraw($form['datatable_where']);
 										}
@@ -696,6 +700,10 @@
 
 										$tables = explode('.',$datatable_tab);
 										$selects_data = DB::table($tables[0])->select($tables[0].".id");	
+
+										if(\Schema::hasColumn($tables[0],'deleted_at')) {
+											$selects_data->where('deleted_at',NULL);
+										}
 
 										if(@$form['datatable_where']) {
 											$selects_data->whereraw($form['datatable_where']);

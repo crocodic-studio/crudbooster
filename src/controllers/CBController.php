@@ -723,6 +723,10 @@ class CBController extends Controller {
 			$rows->where($title_field,'like','%'.$q.'%');
 			$rows->take($limit);
 
+			if(\Schema::hasColumn($tables,'deleted_at')) {
+				$rows->where('deleted_at',NULL);
+			}
+
 			if($id) {
 				$rows->where("id",$id);
 			}
