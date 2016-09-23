@@ -18,12 +18,26 @@ class UploadsController extends Controller {
 	    $w = Request::get('w');
 	    $h = Request::get('h');
 	    $h = ($h)?:$w;
+	    $is_download = Request::get('download');
 
 	    $extension = File::extension($path);
 	    $images_ext = array('jpg','jpeg','png','gif','bmp');
 
 	    if(in_array($extension, $images_ext)) {	  
 	    	header('Content-Type: image/'.$extension);  
+
+	    	if($is_download) {
+	    		$filename = Request::get('filename');
+	    		header('Content-Description: File Transfer');
+				header('Content-Type: application/octet-stream');
+				header('Content-Disposition: attachment; filename=' . $$filename); 
+				header('Content-Transfer-Encoding: binary');
+				header('Connection: Keep-Alive');
+				header('Expires: 0');
+				header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+				header('Pragma: public');
+	    	}
+
 	    	$img = Image::make($path);
 	    	if($w) {
 	    		if(!$h) {
@@ -34,7 +48,12 @@ class UploadsController extends Controller {
 	    	}
 	    	return $img->response();
 	    }else{
-	    	return response()->file($path);
+
+	    	if($is_download) {
+	    		return response()->download($path);
+	    	}else{
+	    		return response()->file($path);
+	    	}	    	
 	    }	    	    
 	}
 }
