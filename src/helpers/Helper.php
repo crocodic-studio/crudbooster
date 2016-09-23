@@ -9,45 +9,6 @@
 |
 */
 
-/* 
-| --------------------------------------------------------------------------------------------------------------
-| Alternate Native Mysql SQL_CALC_FOUND_ROWS
-| --------------------------------------------------------------------------------------------------------------
-| @query_builder = query laravel
-|
-*/
-function calc_eloquent_found( $query_builder ){
-    $query = clone $query_builder->getQuery();
-
-    $query->selectRaw('COUNT( DISTINCT '. $query_builder->getModel()->getKeyName() .' ) as total');
-    $query->limit = null;
-    $query->offset = null;
-
-    //TODO: this needs more testing.
-    if( $query->groups ){
-        $subquery = $query->toSql();
-        $chunks = explode( '?', $subquery );
-        $bindings = $query->getBindings();      // do I need to strip out potential select bindings?
-
-        $arr = [];
-        foreach( $chunks as $i => $chunk ){
-            $arr[] = $chunk;
-            if( $bindings[ $i ] ){
-                if( is_string( $bindings[ $i ] ) && !is_numeric( $bindings[ $i ] ) ){
-                    $bindings[ $i ] = '"'. $bindings[ $i ] . '"';
-                }
-                $arr[] = $bindings[ $i ];
-            }
-        }
-        $subquery = implode( '', $arr );
-
-        $result = DB::select( DB::raw("SELECT SUM( sub.total) AS total FROM ($subquery) AS sub") )[0]['total'];
-
-        return $result;
-    }
-
-    return $query->pluck('total');
-}
 
 /* 
 | --------------------------------------------------------------------------------------------------------------
@@ -596,14 +557,16 @@ class Admin'.$controllername.' extends \crocodicstudio\crudbooster\controllers\C
 
         $this->col = array();
 ';
-        
-        foreach(array_slice($coloms,8) as $c) {
+        $coloms_col = array_slice($coloms,0,8);
+        foreach($coloms_col as $c) {
             $label = str_replace("id_","",$c);
             $label = ucwords(str_replace("_"," ",$label));
             $label = str_replace('Cms ','',$label);
             $field = $c;
 
             if(in_array($field, $exception)) continue;
+
+            if(array_search($field, $password_candidate) !== FALSE) continue;
 
             if(substr($field,0,3)=='id_') {
                 $jointable = str_replace('id_','',$field);
