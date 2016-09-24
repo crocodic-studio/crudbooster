@@ -118,8 +118,8 @@ class ModulsController extends CBController {
 		
 
 		$this->addaction = array();				
-		$this->addaction[] = array('label'=>'Up','route'=>url(config('crudbooster.ADMIN_PATH')).'/cms_moduls/arr-sorting/%id%/up','icon'=>'fa fa-arrow-up','ajax'=>true);
-		$this->addaction[] = array('label'=>'Down','route'=>url(config('crudbooster.ADMIN_PATH')).'/cms_moduls/arr-sorting/%id%/down','icon'=>'fa fa-arrow-down','ajax'=>true);
+		$this->addaction[] = array('label'=>'Up','route'=>url(config('crudbooster.ADMIN_PATH')).'/cms_moduls/arr-sorting/[id]/up','icon'=>'fa fa-arrow-up','ajax'=>true);
+		$this->addaction[] = array('label'=>'Down','route'=>url(config('crudbooster.ADMIN_PATH')).'/cms_moduls/arr-sorting/[id]/down','icon'=>'fa fa-arrow-down','ajax'=>true);
 		
 		$this->index_orderby = array("id_cms_moduls_group"=>"asc","sorting"=>"asc");
 
