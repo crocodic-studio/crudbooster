@@ -37,6 +37,9 @@
         background: none;
         color: {{ get_setting("login_font_color")?:'#ffffff' }} !important;
       }
+      html,body {
+        overflow: hidden;
+      }
     </style>
   </head>
   <body class="login-page">
