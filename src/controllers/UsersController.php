@@ -36,8 +36,8 @@ class UsersController extends CBController {
 		$this->form[] = array("label"=>"Email","name"=>"email",'required'=>true,'type'=>'email','validation'=>'required|email|unique:cms_users,email,'.get_row_id());		
 		$this->form[] = array("label"=>"Photo","name"=>"photo","type"=>"upload_standard",'upload_file'=>false,"help"=>"Resolution recomended is 200x200px",'required'=>true,'validation'=>'required|image|max:1000');								
 		if(get_method() == 'getEdit' || get_method() == 'getAdd' || get_method() == 'postAddSave' || get_method() == 'postEditSave') {
-			$this->form[] = array("label"=>"Company","name"=>"id_cms_companies","type"=>"select","datatable"=>"cms_companies,name");				
-			$this->form[] = array("label"=>"Privilege","name"=>"id_cms_privileges","type"=>"select","datatable"=>"cms_privileges,name");		
+			$this->form[] = array("label"=>"Company","name"=>"id_cms_companies","type"=>"select","datatable"=>"cms_companies,name",'required'=>true);				
+			$this->form[] = array("label"=>"Privilege","name"=>"id_cms_privileges","type"=>"select","datatable"=>"cms_privileges,name",'required'=>true);		
 		}
 		$this->form[] = array("label"=>"Change the Password","type"=>"header");
 		$this->form[] = array("label"=>"Password","name"=>"password","type"=>"password","help"=>"Please leave empty if not change");
