@@ -1351,7 +1351,12 @@ class CBController extends Controller {
 			
 		$row = DB::table($this->table)->where($this->primary_key,$id)->first();	
 
-		if(Storage::exists($row->{$column})) Storage::delete($row->{$column});
+		// if(Storage::exists($row->{$column})) Storage::delete($row->{$column});
+
+		$file = str_replace('uploads/','',$row->{$column});
+		if(Storage::exists($file)) {
+            		Storage::delete($file);
+       		}
 
 		DB::table($this->table)->where($this->primary_key,$id)->update(array($column=>NULL));
 			
