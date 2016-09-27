@@ -1,11 +1,10 @@
 # CRUDBOOSTER - Laravel CRUD Generator
-[![Latest Stable Version](https://poser.pugx.org/crocodicstudio/crudbooster/v/stable)](https://packagist.org/packages/crocodicstudio/crudbooster)
+[![Latest Stable Version]([![Latest Stable Version](https://poser.pugx.org/crocodicstudio/crudbooster/v/stable)](https://packagist.org/packages/crocodicstudio/crudbooster))](https://packagist.org/packages/crocodicstudio/crudbooster)
 [![Total Downloads](https://poser.pugx.org/crocodicstudio/crudbooster/downloads)](https://packagist.org/packages/crocodicstudio/crudbooster)
 [![Latest Unstable Version](https://poser.pugx.org/crocodicstudio/crudbooster/v/unstable)](https://packagist.org/packages/crocodicstudio/crudbooster)
 [![License](https://poser.pugx.org/crocodicstudio/crudbooster/license)](https://packagist.org/packages/crocodicstudio/crudbooster)
 [![Monthly Downloads](https://poser.pugx.org/crocodicstudio/crudbooster/d/monthly)](https://packagist.org/packages/crocodicstudio/crudbooster)
 [![Daily Downloads](https://poser.pugx.org/crocodicstudio/crudbooster/d/daily)](https://packagist.org/packages/crocodicstudio/crudbooster)
-[![Twitter](https://img.shields.io/twitter/url/https/github.com/crocodic-studio/crudbooster.svg?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=%5Bobject%20Object%5D)
 
 > Laravel CRUD Generator, Make a Web Application Just In Minutes, Even With Less Code and fewer Steps !
 
