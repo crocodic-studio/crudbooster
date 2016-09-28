@@ -41,8 +41,7 @@ class CBController extends Controller {
 	var $limit              = 20;
 	var $index_return       = FALSE;
 	var $index_table_only   = FALSE;
-	var $table_name         = NULL;
-	var $is_sub				= FALSE;
+	var $table_name         = NULL;	
 	var $parent_id			= 0;
 	var $parent_field		= NULL;
 	var $referal			= NULL;
@@ -180,6 +179,14 @@ class CBController extends Controller {
 		return $this->primary_key;
 	}
 
+	public function form_by_name($name) {
+		foreach($this->form as $f) {
+			if($f['name'] == $name) {
+				return $f;
+			}
+		}
+	}
+
 	public function getIndex()
 	{
 		// DB::connection()->enableQueryLog();		
@@ -246,6 +253,12 @@ class CBController extends Controller {
 			$table = $this->table;
 			$field = $coltab['name'];
 
+			if(strpos($field,'.')!==FALSE) {
+				$result->addselect($field);
+			}else{
+				$result->addselect($table.'.'.$field);
+			}
+
 			if(!$field) die('Please make sure there is key `name` in each row of col');
 
 			//Jika ada subquery
@@ -269,27 +282,49 @@ class CBController extends Controller {
 
 			if($join) {		
 				
-				$join_exp   = explode(',', $join);
-				$join_table = $join_exp[0];
-				$join_name  = $join_exp[1];
-				$join_alias = $join_table;
+				$join_exp     = explode(',', $join);		
+				
+				$join_table  = $join_exp[0];
+				$join_column = $join_exp[1];
+				$join_alias  = $join_table;								
 
-				if(isset($join_table_temp[$join_table])) {
+				if(in_array($join_table, $join_table_temp)) {
 					$join_alias_count += 1;
 					$join_alias = $join_table.$join_alias_count;
 				}
-
-				array_push($join_table_temp, $join_table); 		
+				$join_table_temp[] = $join_table;	
 				
 				$result->leftjoin($join_table.' as '.$join_alias,$join_alias.'.id','=',$table.'.'.$field);
-				$result->addselect($join_alias.'.'.$join_name.' as '.$join_name.'_'.$join_alias);
-				$result->addselect($table.'.'.$field);
+				$result->addselect($join_alias.'.'.$join_column.' as '.$join_column.'_'.$join_alias);
+				
 				$alias[] = $join_alias;
-				$columns_table[$index]['type_data']	 = get_field_type($join_table,$join_name);
-				$columns_table[$index]['field']      = $join_name.'_'.$join_alias;
-				$columns_table[$index]['field_with'] = $join_alias.'.'.$join_name;
-				$columns_table[$index]['field_raw']  = $join_name;
-				 	
+				$columns_table[$index]['type_data']	 = get_field_type($join_table,$join_column);
+				$columns_table[$index]['field']      = $join_column.'_'.$join_alias;
+				$columns_table[$index]['field_with'] = $join_alias.'.'.$join_column;
+				$columns_table[$index]['field_raw']  = $join_column;
+
+				@$join_table1  = $join_exp[2];
+				@$join_column1 = $join_exp[3];
+				@$join_alias1  = $join_table1;
+
+				if($join_table1 && $join_column1) {
+
+					if(in_array($join_table1, $join_table_temp)) {
+						$join_alias_count += 1;
+						$join_alias1 = $join_table1.$join_alias_count;
+					}
+
+					$join_table_temp[] = $join_table1;	
+					
+					$result->leftjoin($join_table1.' as '.$join_alias1,$join_alias1.'.id','=',$join_alias.'.'.$join_column);
+					$result->addselect($join_alias1.'.'.$join_column1.' as '.$join_column1.'_'.$join_alias1);					
+					$alias[] = $join_alias1;
+					$columns_table[$index]['type_data']	 = get_field_type($join_table1,$join_column1);
+					$columns_table[$index]['field']      = $join_column1.'_'.$join_alias1;
+					$columns_table[$index]['field_with'] = $join_alias1.'.'.$join_column1;
+					$columns_table[$index]['field_raw']  = $join_column1;
+				}
+																				 	
 			}else{ 
 
 				$result->addselect($table.'.'.$field);
@@ -697,55 +732,62 @@ class CBController extends Controller {
 	public function getFindData() {
 		$q        = Request::get('q');
 		$id       = Request::get('id');
-		$parid    = Request::get('parid');
-		$parfield = Request::get('parfield');
-		$limit 	  = Request::get('limit')?:10;
+		$limit    = Request::get('limit')?:10;
+		
+		$table1   = (Request::get('table1'))?:$this->table;
+		$column1  = (Request::get('column1'))?:$this->title_field;
+		
+		@$table2  = Request::get('table2');
+		@$column2 = Request::get('column2');
+		
+		@$table3  = Request::get('table3');
+		@$column3 = Request::get('column3');
+		
+		$where    = Request::get('where');
 
-		$table 	  = $this->table;
-		$table 	  = (Request::get('table'))?:$table;
+		$fk 	  = Request::get('fk');
+		$fk_value = Request::get('fk_value');
 
-		$title_field = $this->title_field;
-		$title_field = (Request::get('column'))?:$title_field;
-
-		$where = Request::get('where');
-
-		if(Cache::has('columns_'.$table)) {
-			$columns = Cache::get('columns_'.$table);	
-		}else{
-			$columns = Cache::rememberForever('columns_'.$table, function() {
-			    return \Schema::getColumnListing($table);
-			});
-		}
-
-		if($q || $id || $parid || $parfield) {
-			$rows = DB::table($table);
-			$rows->select('id',$title_field.' as text');
-			$rows->where($title_field,'like','%'.$q.'%');
+		if($q || $id || $table1) {
+			$rows = DB::table($table1);
+			$rows->select($table1.'.id');			
 			$rows->take($limit);
 
-			if(\Schema::hasColumn($tables,'deleted_at')) {
-				$rows->where('deleted_at',NULL);
+			if(\Schema::hasColumn($table1,'deleted_at')) {
+				$rows->where($table1.'.deleted_at',NULL);
+			}
+
+			if($fk && $fk_value) {
+				$rows->where($table1.'.'.$fk,$fk_value);
+			}
+
+			if($table1 && $column1) {
+				$orderby_table  = $table1;
+				$orderby_column = $column1;
+			}
+
+			if($table2 && $column2) {
+				$rows->join($table2,$table2.'.id','=',$table1.'.'.$column1);											
+				$orderby_table  = $table2;
+				$orderby_column = $column2;										
+			}													
+
+			if($table3 && $column3) {
+				$rows->join($table3,$table3.'.id','=',$table2.'.'.$column2);											
+				$orderby_table  = $table3;
+				$orderby_column = $column3;
 			}
 
 			if($id) {
-				$rows->where("id",$id);
-			}
-
-			if($parid && $parfield) {
-				$rows->where($parfield,$parid);
-			}
-
-			if(Session::get('foreign_key')) {				
-				foreach(Session::get('foreign_key') as $k=>$v) {
-					if(in_array($k, $columns)){
-						$rows->where($table.'.'.$k,$v);
-					}
-				}
+				$rows->where($table1.".id",$id);
 			}
 
 			if($where) {
 				$rows->whereraw($where);
 			}
+
+			$rows->addselect($orderby_table.'.'.$orderby_column.' as text');
+			$rows->where($orderby_table.'.'.$orderby_column,'like','%'.$q.'%');
 
 			$result          = array();
 			$result['items'] = $rows->get();
@@ -756,32 +798,12 @@ class CBController extends Controller {
 		return response()->json($result);
 	}
 
-	public function getFindGroupData() {
-		$column = Request::get('column');
-		$raw = explode('.',$column);
-		$table = $raw[0];
-		$table = substr($table,0,(strlen($table)-1));
-		$table = (strpos($column, '.')!==FALSE)?$table:$this->table;
-		$col = (strpos($column, '.')!==FALSE)?$raw[1]:$column;
-
-		if(Cache::has('find_group_data'.$column)) {
-			$rows = Cache::get('find_group_data'.$column);
-		}else{
-			$rows = DB::table($table)->groupby($col)->lists($col);
-			foreach($rows as &$row) {
-				$row = trim(str_limit(strip_tags($row),80));
-			}	
-			if($rows) Cache::put('find_group_data'.$column,$rows,15);
-		}		
-		return response()->json($rows);
-	}
-
 	public function validation() {
 
 		$request_all = Request::all();
 		$array_input = array();
-		$id = get_row_id();
-		$id = intval($id);
+		$id          = get_row_id();
+		$id          = intval($id);
 		foreach($this->data_inputan as $di) {
 			$ai = array();		
 			$name = $di['name'];
@@ -941,8 +963,7 @@ class CBController extends Controller {
 
 	}
 
-	public function getAdd()
-	{
+	public function getAdd(){
 		$data['page_title']      = $this->data['module_name'].": Add New Data";
 		$data['page_menu']       = Route::getCurrentRoute()->getActionName();	
 		$data['table_name']      = $this->table_name;
@@ -1002,8 +1023,7 @@ class CBController extends Controller {
 		
 	}
 	
-	public function getEdit($id)
-	{				
+	public function getEdit($id){				
 		$data['row']             = DB::table($this->table)->where($this->primary_key,$id)->first();		
 		$data['page_menu']       = Route::getCurrentRoute()->getActionName();
 		$title_field             = $this->title_field;
@@ -1218,8 +1238,7 @@ class CBController extends Controller {
 		}
 	}
 
-	public function getDetail($id)
-	{				
+	public function getDetail($id)	{				
 		$data['row']             = DB::table($this->table)->where($this->primary_key,$id)->first();		
 		$data['page_menu']       = Route::getCurrentRoute()->getActionName();
 		$title_field             = $this->title_field;
@@ -1385,9 +1404,6 @@ class CBController extends Controller {
 		insert_log("Delete image for ".$row->{$this->title_field}." at ".$this->data['module_name']);
 		return redirect()->back()->with(['message'=>"The file has been deleted !",'message_type'=>"success"]);
 	}
-
-
-
 
 	public function init_setting() {
 

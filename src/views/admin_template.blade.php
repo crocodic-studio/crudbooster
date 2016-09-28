@@ -38,6 +38,7 @@
         .sub-module-tab li.active {background: #ffffff;box-shadow: 0px -5px 10px #cccccc}
         .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {border:none;}
         .nav-tabs>li>a {border:none;}        
+        .select2-container--default .select2-selection--single {border-radius: 0px !important}
     </style>
 </head>
 <body class="<?php echo (Session::get('theme_color'))?:'skin-blue'?>">

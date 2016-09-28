@@ -128,7 +128,7 @@ class ModulsController extends CBController {
 
 	function hook_before_delete($id) {
 		$modul = DB::table('cms_moduls')->where('id',$id)->first();
-		@unlink(app_path('Http/Controllers/Admin'.$modul->controller.'.php'));		
+		@unlink(app_path('Http/Controllers/'.$modul->controller.'.php'));		
 	}
 
 	public function getFindLastSorting($id_moduls_group) {

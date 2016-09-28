@@ -644,11 +644,10 @@
 									
 									$('#{{$name}}').change(function() {
 										console.log('{{$name}} changed');
-										$('#{{$form['sub_select']}}').html('<option value="">Please wait...</option>');
-										var parid = $(this).val();
-										$.get('{{url("admin/$tab/find-data")}}?parid='+parid+'&parfield={{$name}}&limit=500',function(resp) {
-											$('#{{$form['sub_select']}}').empty();
-											$('#{{$form['sub_select']}}').html("<option value=''>** Please Select Data</option>");
+										$('#{{$form['sub_select']}}').html('<option value="">Please wait loading data...</option>');
+										var id = $(this).val();
+										$.get('{{mainpath("find-data")}}?fk={{$name}}&fk_value='+id+'&limit=1000',function(resp) {								
+											$('#{{$form['sub_select']}}').empty().html("<option value=''>** Please Select as {{$this->form_by_name[$form['sub_select']]['label']}}</option>");
 											$.each(resp.items,function(i,obj) {
 												var selected = (val && val == obj.id)?'selected':'';
 												$('#{{$form['sub_select']}}').append('<option '+selected+' value=\"'+obj.id+'\">'+obj.text+'</option>');
@@ -693,57 +692,53 @@
 									endif;
 
 									if(@$form['datatable']):
-										$datatable_array = explode(",",$form['datatable']);
-										$datatable_tab = $datatable_array[0];
-										$datatable_field = $datatable_array[1];
-										$datatable_field2 = @$datatable_array[2];
+										$raw = explode(",",$form['datatable']);
+										$table1 = $raw[0];
+										$column1 = $raw[1];
+										
+										@$table2 = $raw[2];
+										@$column2 = $raw[3];
 
-										$tables = explode('.',$datatable_tab);
-										$selects_data = DB::table($tables[0])->select($tables[0].".id");	
+										@$table3 = $raw[4];
+										@$column3 = $raw[5];
+										
+										$selects_data = DB::table($table1)->select($table1.".id");	
 
-										if(\Schema::hasColumn($tables[0],'deleted_at')) {
-											$selects_data->where('deleted_at',NULL);
+										if(\Schema::hasColumn($table1,'deleted_at')) {
+											$selects_data->where($table1.'.deleted_at',NULL);
 										}
 
 										if(@$form['datatable_where']) {
 											$selects_data->whereraw($form['datatable_where']);
+										}	
+
+										if($table1 && $column1) {
+											$orderby_table  = $table1;
+											$orderby_column = $column1;
 										}
 
-										if(count($tables)) {
-											for($i=1;$i<=count($tables)-1;$i++) {
-												$tab = $tables[$i];
-												$selects_data->leftjoin($tab,$tab.'.id','=','id_'.$tab);
-											}
-										}																			
+										if($table2 && $column2) {
+											$selects_data->join($table2,$table2.'.id','=',$table1.'.'.$column1);											
+											$orderby_table  = $table2;
+											$orderby_column = $column2;										
+										}													
 
-										$selects_data->addselect($datatable_field);
-
-										if($datatable_field2) {
-											$selects_data->addselect($datatable_field2);
+										if($table3 && $column3) {
+											$selects_data->join($table3,$table3.'.id','=',$table2.'.'.$column2);											
+											$orderby_table  = $table3;
+											$orderby_column = $column3;
 										}
 
-										if(Session::get('foreign_key')) {
-											$columns = \Schema::getColumnListing($datatable_tab);	
-											foreach(Session::get('foreign_key') as $k=>$v) {
-												if(in_array($k, $columns)){
-													$selects_data->where($datatable_tab.'.'.$k,$v);
-												}
-											}
-										}
-
-										$selects_data = $selects_data->orderby($datatable_field,"asc")->get();
+										$selects_data->addselect($orderby_table.'.'.$orderby_column.' as label');
+										$selects_data = $selects_data->orderby($orderby_table.'.'.$orderby_column,"asc")->get();
 										foreach($selects_data as $d) {											
 
-											$val = ($datatable_field2)?$d->{$datatable_field2}:$d->id;
-											$select = ($value == $val)?"selected":"";
+											$val    = $d->id;
+											$select = ($value == $val)?"selected":"";							
 
-											if(Request::get("parent_field")==$name && Request::get("parent_id")==@$val) {
-												$select = "selected";
-											}
+											if(@$form['datatable_exception'] == $val || @$form['datatable_exception'] == $d->label) continue;
 
-											if(@$form['datatable_exception'] == $val || @$form['datatable_exception'] == $d->{$datatable_field}) continue;
-
-											echo "<option $select value='$val'>".$d->{$datatable_field}."</option>";
+											echo "<option $select value='$val'>".$d->label."</option>";
 										}
 									endif
 								?>
@@ -755,39 +750,43 @@
 
 
 						@if(@$type=='select2')
-						<?php 
-							$select2_source = @$form["select2_controller"];
+						<?php 							
 							$datatable = @$form['datatable'];
-							$table_name = "";
-							$column_name = "";
+							$where     = @$form['datatable_where'];
+							
+							$raw       = explode(',',$datatable);
+							$url       = mainpath("find-data");
 
-							$where = @$form['datatable_where'];
-
-							if($datatable) {
-								$raw = explode(',',$datatable);
-								$url = mainpath("find-data");
-								$table_name = $raw[0];
-								$column_name = $raw[1];
-							}else{
-								$url = route($select2_source."GetFindData");
-							}
+							$table1    = $raw[0];
+							$column1   = $raw[1];
+							
+							@$table2   = $raw[2];
+							@$column2  = $raw[3];
+							
+							@$table3   = $raw[4];
+							@$column3  = $raw[5];
 						?>
 						<script>
 							$(function() {
 								$('#<?php echo $name?>').select2({
-								  ajax: {								  	
-								    url: '{!! $url !!}',								    
-								    delay: 250,								   
-								    placeholder: {
+								  placeholder: {
 									    id: '-1', 
 									    text: '** Please Select a {{$form['label']}}'
 									},
+								  allowClear: true,
+								  ajax: {								  	
+								    url: '{!! $url !!}',								    
+								    delay: 250,								   								    
 								    data: function (params) {
 								      var query = {
-								        q: params.term,
-								        table: "{{$table_name}}",
-								        column: "{{$column_name}}",
-								        where:"{{$where}}"
+										q: params.term,
+										table1: "{{$table1}}",
+										column1: "{{$column1}}",
+										table2: "{{$table2}}",
+										column2: "{{$column2}}",
+										table3: "{{$table3}}",
+										column3: "{{$column3}}",
+										where: "{{$where}}"
 								      }
 								      return query;
 								    },
@@ -804,7 +803,15 @@
 							            var id = $(element).val()?$(element).val():"{{$value}}";
 							            if(id!=='') {
 							                $.ajax('{{$url}}', {
-							                    data: {id: id, table: "{{$table_name}}", column: "{{$column_name}}"},
+							                    data: {
+							                    	id: id, 
+							                    	table1: "{{$table1}}",
+													column1: "{{$column1}}",
+													table2: "{{$table2}}",
+													column2: "{{$column2}}",
+													table3: "{{$table3}}",
+													column3: "{{$column3}}"
+												},
 							                    dataType: "json"
 							                }).done(function(data) {							                	
 							                    callback(data.items[0]);	
@@ -812,19 +819,21 @@
 							                });
 							            }
 							      }
-							      @endif
+						
+							      @endif							      
 								});
 
 							})
 						</script>
 						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>												
-							<select class='form-control' id="{{$name}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} name="{{$name}}">	
+							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label><br/>									
+							<select style='width:100%' class='form-control' id="{{$name}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} name="{{$name}}">	
 								
 							</select>
 							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
 							<p class='help-block'>{{ @$form['help'] }}</p>
 						</div>
+						
 						@endif
 
 

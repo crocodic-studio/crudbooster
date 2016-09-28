@@ -61,14 +61,14 @@
             <div class='row'>
 
               @foreach($group_setting as $g)
-                <div class='col-sm-6 group-col group-state'>
+                <div class='col-sm-12 group-col group-state'>
                   <!-- Box -->
-                  <div id='box_main' class="box box-primary">
+                  <div id='box_main' class="box box-primary collapsed-box">
                       <div class="box-header with-border">
                           <h3 class="box-title"><i class='fa fa-cog'></i> {{$g}}</h3> &nbsp;&nbsp;
                            <a title='Add New Setting' class='label label-primary' href='{{mainpath("add?group_setting=$g")}}'><i class='fa fa-plus'></i> New Setting</a>
                           <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
                             
                           </div>
                       </div>

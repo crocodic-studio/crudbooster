@@ -36,7 +36,7 @@ class PrivilegesController extends CBController {
 		$this->form[] = array("label"=>"Theme Color","name"=>"theme_color",'required'=>true);
 
 		$this->addaction[] = array('label'=>'Configuration Dashboard',
-			'route'=>url("admin/set-dashboard-config-mode?id_cms_privileges=%id%"),
+			'route'=>url("admin/set-dashboard-config-mode?id_cms_privileges=[id]"),
 			'icon'=>'fa fa-tachometer');
 
 		$this->constructor();

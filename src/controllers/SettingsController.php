@@ -22,6 +22,8 @@ class SettingsController extends CBController {
 		$this->primary_key   = 'id';
 		$this->title_field   = "name";		
 		$this->index_orderby = array('name'=>'asc');
+		$this->button_delete_data = false;
+		$this->button_show_data = false;
 
 		$this->col = array();
 		$this->col[] = array("label"=>"Nama","name"=>"name","callback_php"=>"ucwords(str_replace('_',' ',%field%))");
@@ -62,7 +64,12 @@ class SettingsController extends CBController {
 		$data['page_menu']       = Route::getCurrentRoute()->getActionName();	
 		$data['table_name']      = $this->table;		
 		$data['controller_name'] = $this->controller_name;
-		$data['group_setting']   = DB::table('cms_settings')->groupby('group_setting')->lists('group_setting');
+
+		if(g('group')) {
+			$data['group_setting']   = DB::table('cms_settings')->where('group_setting',Request::get('group'))->lists('group_setting');
+		}else{
+			$data['group_setting']   = DB::table('cms_settings')->groupby('group_setting')->lists('group_setting');
+		}		
 		return view('crudbooster::default.setting',$data);
 	} 
 
@@ -109,6 +116,8 @@ class SettingsController extends CBController {
 
 
 			DB::table('cms_settings')->where('name',$set->name)->update(['content'=>$content]);
+
+			Cache::forget('setting_'.$set->name);
 		}
 		return redirect()->back()->with(['message'=>'Your setting has been saved !','message_type'=>'success']);
 	}
