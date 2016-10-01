@@ -10,7 +10,7 @@
 
 [<img src="http://crudbooster.com/CrudBooster_Banner.png"/>](http://crudbooster.com) 
 
-CRUDBooster is Laravel Framework that modified to bring a lot of features to develope a web application so simply. One of main feature is Smart CRUD Generator, so CRUDBooster will be create a module automatically included Create, Read, Update, Delete standard function. And CRUDBooster is not usual CRUD Generator,you will get a lot of new experience with a new concept. CRUD Booster is dedicated to those who already understand the basic laravel. We do not recommend for those of you who have never used laravel altogether.
+CRUDBooster is Laravel Framework that modified to bring a lot of features to develop a web application so simply. One of the main features is Smart CRUD Generator, so CRUDBooster will create a module automatically included Create, Read, Update, Delete standard function. And CRUDBooster is not usual CRUD Generator,you will get a lot of new experience with a new concept. CRUD Booster is dedicated to those who already understand the basic laravel. We do not recommend for those of you who have never used laravel altogether.
 
 ## System Requirement
 - PHP >= 5.6.x, PHP <= 7
