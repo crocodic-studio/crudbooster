@@ -1,4 +1,4 @@
-<?php namespace App\Console\Commands;
+<?php namespace crocodicstudio\crudbooster\commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Inspiring;
@@ -52,7 +52,7 @@ class Mailqueues extends Command {
 
 		$this->comment('Mail Queues Started '.$now);
 
-		$queues  = DB::table('cms_email_queue')->where('send_at','<=',$now)->take($limit_an_hour)->get();
+		$queues  = DB::table('cms_email_queues')->where('send_at','<=',$now)->take($limit_an_hour)->get();
 
 		$this->comment('Total Queues : '.count($queues));
 
