@@ -3,11 +3,11 @@
 
 
             @if($button_show_data || $button_reload_data || $button_new_data || $button_delete_data || $index_button || $columns)
-    			  <div id='box-actionmenu' class='box'>
-      				<div class='box-body'>
-      					 @include("crudbooster::default.actionmenu")
-      				</div>
-    			  </div>
+            <div id='box-actionmenu' class='box'>
+              <div class='box-body'>
+                 @include("crudbooster::default.actionmenu")
+              </div>
+            </div>
             @endif
 
 
@@ -63,6 +63,7 @@
                               $('#progress-import').attr('aria-valuenow',100);
                               $('#status-import').addClass('text-success').html("<i class='fa fa-check-square-o'></i> Import Data Completed !");
                               clearInterval(int_prog);
+                              $('#upload-footer').show();
                               console.log('Import Success');
                             }
                         })
@@ -73,9 +74,10 @@
 
                 </div><!-- /.box-body -->
         
-                <div class="box-footer">  
+                <div class="box-footer" id='upload-footer' style="display:none">  
                   <div class='pull-right'>                            
-                      <a onclick="if(confirm('Are you sure want to leave ?')) location.href='{{ mainpath("import-data") }}'" href='javascript:;' class='btn btn-default'>Cancel</a>                                
+                      <a href='{{ mainpath("import-data") }}' class='btn btn-default'><i class='fa fa-upload'></i> Upload Other File</a> 
+                      <a href='{{mainpath()}}' class='btn btn-success'>Finish</a>                                
                   </div>
                 </div><!-- /.box-footer-->
                 
@@ -111,12 +113,17 @@
 
                 <form method='post' id="form" enctype="multipart/form-data" action='{{$action}}'>
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">             
-                        <div class="box-body">
+                        <div class="box-body table-responsive no-padding">
                               <div class='callout callout-info'>
                                   * Just ignoring the column where you are not sure the data is suit with the column or not.<br/>
                                   * Warning !, Unfortunately at this time, the system can't import column that contains image or photo url.
                               </div>
-                              <table class='table table-bordered'>
+                              <style type="text/css">
+                                th, td {
+                                    white-space: nowrap;
+                                }                                
+                              </style>
+                              <table class='table table-bordered' style="width:130%">
                                   <thead>
                                       <tr class='success'>
                                           @foreach($table_columns as $k=>$column)
@@ -138,7 +145,7 @@
                                         @foreach($table_columns as $k=>$column)
                                             <?php if($column == 'id' || $column == 'created_at' || $column == 'updated_at' || $column == 'deleted_at') continue;?>
                                             <td data-no-column='{{$k}}'>
-                                                <select class='form-control select_column' name='select_column[{{$k}}]'>
+                                                <select style='width:120px' class='form-control select_column' name='select_column[{{$k}}]'>
                                                     <option value=''>** Set Column for {{$column}}</option>
                                                     @foreach($data_import_column as $import_column)
                                                     <option value='{{$import_column}}'>{{$import_column}}</option>
@@ -203,7 +210,7 @@
                 <div class="box-header with-border">
                     <h3 class="box-title">Upload a File</h3>
                     <div class="box-tools">
-                                        	
+                                          
                     </div>
                 </div>
         
@@ -217,8 +224,8 @@
                     $action = $action_path."/do-upload-import-data";
                   ?>
 
-        				<form method='post' id="form" enctype="multipart/form-data" action='{{$action}}'>
-        				        <input type="hidden" name="_token" value="{{ csrf_token() }}">	           
+                <form method='post' id="form" enctype="multipart/form-data" action='{{$action}}'>
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">             
                         <div class="box-body">
 
                             <div class='callout callout-success'>
@@ -230,18 +237,18 @@
                                   * Table structure : Line 1 is heading column , and next is the data.  (For example, you can export any module you wish to XLS format)                                                                
                               </div>
 
-                        		<div class='form-group'>
+                            <div class='form-group'>
                                 <label>File XLS / CSV</label>
                                 <input type='file' name='userfile' class='form-control' required />
                                 <div class='help-block'>File type supported only : XLS, XLSX, CSV</div>
                             </div>
                         </div><!-- /.box-body -->
-        				
-                        <div class="box-footer">	
-                        	<div class='pull-right'>														
-                    					<a href='{{ mainpath() }}' class='btn btn-default'>Cancel</a>  
+                
+                        <div class="box-footer">  
+                          <div class='pull-right'>                            
+                              <a href='{{ mainpath() }}' class='btn btn-default'>Cancel</a>  
                               <input type='submit' class='btn btn-primary' name='submit' value='Upload'/>   
-                					</div>
+                          </div>
                         </div><!-- /.box-footer-->
                 </form>
             </div><!-- /.box -->
