@@ -9,6 +9,24 @@
 |
 */
 
+/* 
+| --------------------------------------------------------------------------------------------------------------
+| Check is foreign key or not
+| --------------------------------------------------------------------------------------------------------------
+| @fieldName
+|
+*/
+if(!function_exists("is_foreign_key")) {
+    function is_foreign_key($fieldName) {
+        if(substr($fieldName, 0,3) == 'id_') {
+            return substr($fieldName, 3);
+        }elseif(substr($fieldName, -3) == '_id') {
+            return substr($fieldName, 0, (strlen($fieldName)-3) );
+        }else{
+            return false;
+        }
+    }
+}
 
 /* 
 | --------------------------------------------------------------------------------------------------------------
@@ -96,18 +114,18 @@ if(!function_exists('list_cms_users')) {
 */
 if(!function_exists('auth_api')) {
     function auth_api() {
-        if(get_setting('api_debug_mode')=='false') {
-            $screetkey = Cache::get('screetkey');   
+        if(get_setting('api_debug_mode') == 'false') {
+              
             $result = array();
             $validator = Validator::make(
                 [   
-                'screetkey'             =>$screetkey,
+                
                 'X-Authorization-Token' =>Request::header('X-Authorization-Token'),
                 'X-Authorization-Time'  =>Request::header('X-Authorization-Time'),
                 'useragent'             =>Request::header('User-Agent')
                 ],          
                 [
-                'screetkey'             =>'required',
+                
                 'X-Authorization-Token' =>'required',
                 'X-Authorization-Time'  =>'required',   
                 'useragent'             =>'required'              
@@ -125,13 +143,20 @@ if(!function_exists('auth_api')) {
             }
 
             $user_agent = Request::header('User-Agent');
-            $time       = Request::header('X-Authorization-Time');            
+            $time       = Request::header('X-Authorization-Time'); 
 
-            $server_token = md5( $screetkey . $time . $useragent );
+            $keys = DB::table('cms_apikey')->where('status','active')->lists('screetkey');
+            $server_token = array();
+            $server_token_screet = array();
+            foreach($keys as $key) {
+                $server_token[] = md5( $key . $time . $useragent );
+                $server_token_screet[] = $key;
+            }
+     
             $sender_token = Request::header('X-Authorization-Token');
 
             if(!Cache::has($sender_token)) {
-                if($sender_token != $server_token) {           
+                if(!in_array($sender_token, $server_token)) {           
                     $result['api_status']   = false;
                     $result['api_message']  = "THE TOKEN IS NOT MATCH WITH SERVER TOKEN";
                     $result['sender_token'] = $sender_token;
@@ -150,7 +175,11 @@ if(!function_exists('auth_api')) {
                     $res->send();
                     exit;
                 }
-            }                        
+            }        
+
+            $id = array_search($sender_token,$server_token);
+            $server_screet = $server_token_screet[$id];
+            DB::table('cms_apikey')->where('screetkey',$server_screet)->increment('hit');
 
             $expired_token = date('Y-m-d H:i:s',strtotime('+5 seconds'));
             Cache::put($sender_token,$user_agent,$expired_token);
@@ -439,7 +468,7 @@ function is_exists_controller($table) {
 |
 */
 if(!function_exists('generate_api')) {
-function generate_api($controller_name,$table_name,$permalink,$type) {
+function generate_api($controller_name,$table_name,$permalink,$method_type='post') {
     $php = '
 <?php namespace App\Http\Controllers;
 
@@ -455,29 +484,27 @@ class Api'.$controller_name.'Controller extends \crocodicstudio\crudbooster\cont
 
     function __construct() {    
         $this->table     = "'.$table_name.'";        
-        $this->permalink = "'.$permalink.'";        
+        $this->permalink = "'.$permalink.'";    
+        $this->method_type = "'.$method_type.'";    
     }
 ';
 
 $php .= "\n".'
     public function hook_before(&$postdata) {
         //Code here if you want execute some action before API Query Called
+
     }';
 
+$php .= "\n".'
+    public function hook_query(&$query) {
+        //You can custom the api query 
+
+    }';
 
 $php .= "\n".'
     public function hook_after($postdata,&$result) {
         //Code here if you want execute some action after API Query Called
-    }';
 
-$php .= "\n".'
-    public function hook_query_list(&$data) {
-        //Code here if you want execute some action while API Database Query especially for Listing Type of API
-    }';
-
-$php .= "\n".'
-    public function hook_query_detail(&$data) {
-        //Code here if you want execute some action while API Database Query especially for Detail Type of API
     }';
 
 $php .= "\n".'
