@@ -23,30 +23,27 @@ class UploadsController extends Controller {
 	    $extension = File::extension($path);
 	    $images_ext = array('jpg','jpeg','png','gif','bmp');
 
-	    if(in_array($extension, $images_ext)) {	  
-	    	header('Content-Type: image/'.$extension);  
+	    if(in_array($extension, $images_ext)) {	  	    	
 
-	    	if($is_download) {
-	    		$filename = Request::get('filename');
-	    		header('Content-Description: File Transfer');
-				header('Content-Type: application/octet-stream');
-				header('Content-Disposition: attachment; filename=' . $$filename); 
-				header('Content-Transfer-Encoding: binary');
-				header('Connection: Keep-Alive');
-				header('Expires: 0');
-				header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-				header('Pragma: public');
-	    	}
+	    	$img = Image::cache(function($image) use ($path,$w,$h) {
+	    		$im = $image->make($path);
+		    	if($w) {
+		    		if(!$h) {
+		    			$im->fit($w);
+		    		}else{
+		    			$im->fit($w,$h);
+		    		}	    		
+		    	}
+		    	return $im;
+	    	});
 
-	    	$img = Image::make($path);
-	    	if($w) {
-	    		if(!$h) {
-	    			$img->fit($w);
-	    		}else{
-	    			$img->fit($w,$h);
-	    		}	    		
+	    	if($is_download) {	    		
+	    		$filename = ($filename)?:Request::get('filename').'.'.$extension;
+	    		return Response::make($img,200,array('Content-Type'=>'image/'.$extension,'Content-Disposition'=>'attachment; filename='.$filename));				
+	    	}else{
+	    		return Response::make($img,200,array('Content-Type'=>'image/'.$extension));
 	    	}
-	    	return $img->response();
+	    		    	
 	    }else{
 
 	    	if($is_download) {
