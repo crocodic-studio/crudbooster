@@ -260,16 +260,16 @@
     });	
 
 
-    var lock_screen_timeout;	
-	LOCK_SCREEN_TIME = LOCK_SCREEN_TIME * (60 * 1000);
-	$(function() {
-		$( "body" ).mousemove(function( event ) {
-			clearTimeout(lock_screen_timeout);
-			lock_screen_timeout = setTimeout(function() {
-			location.href = LOCK_SCREEN_URL;
-			},LOCK_SCREEN_TIME);
-		});
-	})
+ //    var lock_screen_timeout;	
+	// LOCK_SCREEN_TIME = LOCK_SCREEN_TIME * (60 * 1000);
+	// $(function() {
+	// 	$( "body" ).mousemove(function( event ) {
+	// 		clearTimeout(lock_screen_timeout);
+	// 		lock_screen_timeout = setTimeout(function() {
+	// 		location.href = LOCK_SCREEN_URL;
+	// 		},LOCK_SCREEN_TIME);
+	// 	});
+	// })
 
 	
 $(function(){
