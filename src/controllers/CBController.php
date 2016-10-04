@@ -67,6 +67,7 @@ class CBController extends Controller {
 	var $index_array 		= FALSE;
 	var $index_only_id 		= NULL;
 	var $button_import_data = TRUE;
+	var $show_addaction 	= TRUE;
 
 	public function constructor() {			
 
@@ -96,7 +97,9 @@ class CBController extends Controller {
 		$this->data_inputan      = $this->form;
 		$this->data['forms']     = $this->data_inputan; 
 		$this->data['form_add']  = $this->form_add;	
-		$this->data['addaction'] = $this->addaction;	
+		if($this->show_addaction) {
+			$this->data['addaction'] = $this->addaction;	
+		}
  
 		$this->data['current_controller'] = stripslashes(strtok(str_replace("\crocodicstudio\crudbooster\controllers","",Route::currentRouteAction()),"@"));		
 	
@@ -104,10 +107,18 @@ class CBController extends Controller {
 		
 		$privileges = DB::table("cms_privileges_roles")
 		            ->join("cms_moduls","cms_moduls.id","=","cms_privileges_roles.id_cms_moduls")
-		            ->where("cms_privileges_roles.id_cms_privileges",get_my_id_privilege())
-		            ->where("cms_moduls.path",get_module_path())->first();
+		            ->where("cms_privileges_roles.id_cms_privileges",get_my_id_privilege());		            
+		if($this->index_array) {
+			$privileges = $privileges->where('cms_moduls.path',get_module_path())->first();
+		}else{
+			if(Request::segment(3) == 'sub-module') {
+				$privileges = $privileges->where('cms_moduls.path',Request::segment(5))->first();
+			}else{
+				$privileges = $privileges->where('cms_moduls.path',get_module_path())->first();
+			}			
+		}
 
-		$this->data['mainpath'] = $this->dashboard = url(config('crudbooster.ADMIN_PATH').'/'.get_module_path());	 
+		$this->data['mainpath'] = $this->dashboard = url(config('crudbooster.ADMIN_PATH').'/'.get_module_path());
 		Session::put('current_mainpath',$this->data['mainpath']);
 
 		  if(Request::segment(3) == 'sub-module') {
@@ -251,13 +262,7 @@ class CBController extends Controller {
 		foreach($columns_table as $index => $coltab) {
 			$join = @$coltab['join'];
 			$table = $this->table;
-			$field = $coltab['name'];
-
-			if(strpos($field,'.')!==FALSE) {
-				$result->addselect($field);
-			}else{
-				$result->addselect($table.'.'.$field);
-			}
+			$field = $coltab['name'];			
 
 			if(!$field) die('Please make sure there is key `name` in each row of col');
 
@@ -271,6 +276,12 @@ class CBController extends Controller {
 				$columns_table[$index]['field_with']  = $field;
 				$columns_table[$index]['is_subquery'] = true;
 				continue;
+			}
+
+			if(strpos($field,'.')!==FALSE) {
+				$result->addselect($field);
+			}else{
+				$result->addselect($table.'.'.$field);
 			}
 
 			$field_array = explode('.', $field);
@@ -540,7 +551,7 @@ class CBController extends Controller {
 		            endif;
 	        	}
 
-	            if($this->sub_module) {
+	            if($this->sub_module && $this->show_addaction) {
 	            	$sub_module_i = 0;
 	            	foreach($this->sub_module as $sm) {     
 	            		if(Request::segment(5) == $sm['path']) continue;       		
@@ -733,6 +744,7 @@ class CBController extends Controller {
 		$q        = Request::get('q');
 		$id       = Request::get('id');
 		$limit    = Request::get('limit')?:10;
+		$format   = Request::get('format');
 		
 		$table1   = (Request::get('table1'))?:$this->table;
 		$column1  = (Request::get('column1'))?:$this->title_field;
@@ -750,7 +762,7 @@ class CBController extends Controller {
 
 		if($q || $id || $table1) {
 			$rows = DB::table($table1);
-			$rows->select($table1.'.id');			
+			$rows->select($table1.'.*');			
 			$rows->take($limit);
 
 			if(\Schema::hasColumn($table1,'deleted_at')) {
@@ -762,18 +774,27 @@ class CBController extends Controller {
 			}
 
 			if($table1 && $column1) {
+
 				$orderby_table  = $table1;
 				$orderby_column = $column1;
 			}
 
 			if($table2 && $column2) {
-				$rows->join($table2,$table2.'.id','=',$table1.'.'.$column1);											
+				$rows->join($table2,$table2.'.id','=',$table1.'.'.$column1);	
+				$columns = get_columns_table($table2);
+				foreach($columns as $col) {
+					$rows->addselect($table2.".".$col." as ".$table2."_".$col);
+				}								
 				$orderby_table  = $table2;
 				$orderby_column = $column2;										
 			}													
 
 			if($table3 && $column3) {
-				$rows->join($table3,$table3.'.id','=',$table2.'.'.$column2);											
+				$rows->join($table3,$table3.'.id','=',$table2.'.'.$column2);
+				$columns = get_columns_table($table3);
+				foreach($columns as $col) {
+					$rows->addselect($table3.".".$col." as ".$table3."_".$col);
+				}										
 				$orderby_table  = $table3;
 				$orderby_column = $column3;
 			}
@@ -786,8 +807,14 @@ class CBController extends Controller {
 				$rows->whereraw($where);
 			}
 
-			$rows->addselect($orderby_table.'.'.$orderby_column.' as text');
-			$rows->where($orderby_table.'.'.$orderby_column,'like','%'.$q.'%');
+			if($format) {				
+				$format = str_replace('&#039;', "'", $format);						
+				$rows->addselect(DB::raw("CONCAT($format) as text"));
+				if($q) $rows->whereraw("CONCAT($format) like '%".$q."%'");
+			}else{
+				$rows->addselect($orderby_table.'.'.$orderby_column.' as text');
+				if($q) $rows->where($orderby_table.'.'.$orderby_column,'like','%'.$q.'%');
+			}			
 
 			$result          = array();
 			$result['items'] = $rows->get();
@@ -1003,10 +1030,6 @@ class CBController extends Controller {
 		//insert log
 		insert_log("Add new data ".$this->arr[$this->title_field]." at ".$this->data['module_name']);
 
-		if(Request::get('submit') == 'Save & Add More') {
-			return redirect(mainpath().'/add?'.$ref_parameter)->with(['message'=>'The data has been added !, please add more...','message_type'=>'success']);
-		}
-
 		if(Request::get('return_url')) {
 			return redirect(Request::get('return_url'))->with(['message'=>'The data has been added !','message_type'=>'success']);
 		}
@@ -1015,7 +1038,11 @@ class CBController extends Controller {
 			return redirect(Request::get('referal').'?'.$ref_parameter)->with(['message'=>'The data has been added !','message_type'=>'success']);
 		}else{
 			if(Request::get('ref_mainpath')) {
-				return redirect(Request::get('ref_mainpath'))->with(['message'=>"The data has been added !",'message_type'=>'success']);	
+				if(Request::get('submit') == 'Save & Add More') {
+					return redirect(Request::get('ref_mainpath').'/add')->with(['message'=>"The data has been added !",'message_type'=>'success']);	
+				}else{
+					return redirect(Request::get('ref_mainpath'))->with(['message'=>"The data has been added !",'message_type'=>'success']);	
+				}				
 			}else{
 				return redirect(mainpath())->with(['message'=>"The data has been added !",'message_type'=>'success']);
 			}				
@@ -1282,10 +1309,6 @@ class CBController extends Controller {
 
 		insert_log("Update data ".$this->arr[$this->title_field]." at ".$this->data['module_name']);
 
-		if(Request::get('submit') == 'Save & Add More') {
-			return redirect(mainpath().'/add?'.$ref_parameter)->with(['message'=>'The data has been updated !, please add more...','message_type'=>'success']);
-		}
-
 		if(Request::get('return_url')) {
 			return redirect(Request::get('return_url'))->with(['message'=>'The data has been updated !','message_type'=>'success']);
 		}
@@ -1294,9 +1317,13 @@ class CBController extends Controller {
 			return redirect(Request::get('referal'))->with(['message'=>'The data has been updated !','message_type'=>'success']);
 		}else{
 			if(Request::get('ref_mainpath')) {
-				return redirect(Request::get('ref_mainpath').'/edit/'.$id)->with(['message'=>"The data has been updated !",'message_type'=>'success']);
+				if(Request::get('submit') == 'Save & Add More') {
+					return redirect(Request::get('ref_mainpath').'/add')->with(['message'=>"The data has been updated, you can add more !",'message_type'=>'success']);
+				}else{
+					return redirect(Request::get('ref_mainpath'))->with(['message'=>"The data has been updated !",'message_type'=>'success']);
+				}
 			}else{
-				return redirect(mainpath().'/edit/'.$id)->with(['message'=>"The data has been updated !",'message_type'=>'success']);
+				return redirect(mainpath())->with(['message'=>"The data has been updated !",'message_type'=>'success']);
 			}			
 		}
 	}
