@@ -15,10 +15,8 @@ use Illuminate\Support\Facades\PDF;
 use Illuminate\Support\Facades\Excel;
 
 class ApiController extends Controller {
-	
-	
-
-	var $setting;
+			
+	var $method_type;
 	var $permalink;
 	var $hook_api_status;
 	var $hook_api_message;	
@@ -36,6 +34,10 @@ class ApiController extends Controller {
 
 	}
 
+	public function hook_query(&$query) {
+
+	}
+
 	public function hook_query_detail(&$data) {
 
 	}
@@ -47,188 +49,236 @@ class ApiController extends Controller {
 		$this->hook_api_message = $message;
 	}
 
-	public function execute_api() {				
-		$this->init_setting();
+	public function execute_api() {						
 
-		$posts = Request::all();
+		// DB::enableQueryLog();
+
+		$posts        = Request::all();
+		$posts_keys   = array_keys($posts);
+		$posts_values = array_values($posts);
+
 		$this->hook_before($posts);
 
-		//Check if cache
-		$cache    	= @$posts['cache'];
-		$cachekey 	= md5('api_'.$this->permalink.'_'.json_encode($posts));
-		if($cache && Cache::has($cachekey)) {
-			$result = Cache::get($cachekey);
-			$this->hook_after($posts,$result);
-			$result['api_cache_mode'] = true;
-			return response()->json($result);
-		}
+		$row_api = DB::table('cms_apicustom')->where('permalink',$this->permalink)->first();	
+		$action_type              = $row_api->aksi;
+		$table                    = $row_api->tabel;
+		$limit                    = ($posts['limit'])?:20;
+		$offset                   = ($posts['offset'])?:0;
+		$orderby                  = ($posts['orderby'])?:$table.'.id,desc';		
+		$uploads_format_candidate = explode(',',config("crudbooster.UPLOAD_TYPES"));	
+		$uploads_candidate        = explode(',',config('crudbooster.IMAGE_FIELDS_CANDIDATE'));
+		$password_candidate       = explode(',',config('crudbooster.PASSWORD_FIELDS_CANDIDATE'));	
+		$asset					  = asset('/');				
+		
+		unset($posts['limit']);
+		unset($posts['offset']);
+		unset($posts['orderby']);	
 
-		$ac = DB::table('cms_apicustom')->where('permalink',$this->permalink)->first();
-		if(!$ac) {
-			$result['api_status'] = 0;
-			$result['api_message'] = 'Sorry this API is no longer available, maybe has changed by admin, or please make sure api is correct.';
+		/* 
+		| ----------------------------------------------
+		| Check the row is exists or not
+		| ----------------------------------------------
+		|
+		*/
+		if(!$row_api) {
+			$result['api_status']  = 0;
+			$result['api_message'] = 'Sorry this API is no longer available, maybe has changed by admin, or please make sure api url is correct.';
 			goto show;
 		}
 
-		$tipe                = $ac->aksi;
-		$table               = $ac->tabel;
-		$limit               = ($posts['limit'])?:20;
-		$offset              = ($posts['offset'])?:0;
-		$orderby             = ($posts['orderby'])?:$table.'.id,desc';
-		$groupby			 = ($posts['groupby'])?:'';
-		$uploads_format_candidate = explode(',',config("crudbooster.UPLOAD_TYPES"));	
-		$uploads_candidate 	 = explode(',',config('crudbooster.IMAGE_FIELDS_CANDIDATE'));
-		$password_candidate  = explode(',',config('crudbooster.PASSWORD_FIELDS_CANDIDATE'));		
-			
-		foreach($uploads_format_candidate as &$up) $up = '.'.$up;
+		@$parameters = unserialize($row_api->parameters);
+		@$responses = unserialize($row_api->responses);		
 
-		$cols_arr = @array_filter(explode(',',$ac->kolom));
-		foreach($cols_arr as &$c) $c = trim($c);
+		/* 
+		| ----------------------------------------------
+		| User Data Validation
+		| ----------------------------------------------
+		|
+		*/
+		if($parameters) {
+			$type_except = ['password','ref'];
+			$input_validator = array();
+			$data_validation = array();
+			foreach($parameters as $param) {
+				$name     = $param['name'];
+				$type     = $param['type'];
+				$value    = $posts[$name];
+				
+				$required = $param['required'];
+				$config   = $param['config'];
+				$used     = $param['used'];
+				$format_validation = array();
 
-		$result = array();
-		unset($posts['debug']);
-		unset($posts['cols']);
-		unset($posts['limit']);
-		unset($posts['offset']);
-		unset($posts['orderby']);
-		unset($posts['groupby']);
-		unset($posts['token_code']);
-		unset($posts['token_time']);
-		unset($posts['cache']);
+				if($used == 0) continue;
+
+				if($required) {
+					$format_validation[] = 'required';
+				}
+				
+				if($type == 'exists') {
+					$format_validation[] = 'exists:'.$config;
+				}elseif ($type == 'unique') {
+					$format_validation[] = 'unique:'.$config;
+				}elseif ($type == 'date_format') {
+					$format_validation[] = 'date_format:'.$config;						
+				}elseif ($type == 'digits_between') {
+					$format_validation[] = 'digits_between:'.$config;						
+				}elseif ($type == 'in') {
+					$format_validation[] = 'in:'.$config;						
+				}elseif ($type == 'mimes') {
+					$format_validation[] = 'mimes:'.$config;						
+				}elseif ($type == 'min') {
+					$format_validation[] = 'min:'.$config;						
+				}elseif ($type == 'max') {
+					$format_validation[] = 'max:'.$config;						
+				}elseif ($type == 'not_in') {
+					$format_validation[] = 'not_in:'.$config;						
+				}else{
+					if(!in_array($type, $type_except)) {
+						$format_validation[] = $type;
+					}						
+				}		
+
+				if($name == 'id') {
+					$format_validation[] = 'exists:'.$table.',id';
+				}						
+				
+				$input_validator[$name] = $value;
+				$data_validation[$name] = implode('|',$format_validation);
+			}
 
 
-		$parameter = '';
-		switch($tipe) {
-			default:
-			case 'detail':
-			case 'list': $parameter = $ac->parameter; break;
-			case 'save_add': $parameter = ($ac->parameter)?:$ac->kolom; break;
-			case 'save_edit': $parameter = ($ac->parameter)?:$ac->kolom; break;
-			case 'delete': $parameter = ($ac->parameter)?:$ac->kolom; break;
+			$validator = Validator::make($input_validator,$data_validation);		    
+		    if ($validator->fails()) 
+		    {
+		        $message = $validator->errors()->all(); 
+		        $message = implode(', ',$message);
+		        $result['api_status'] = 0;
+		        $result['api_message'] = $message;
+		        goto show;
+		    }			
 		}
 
-		if($ac && $parameter && !$posts['bulk']) {
 
-			$params = explode(',',$parameter);
-			$posts_fields = array();
-
-			foreach($params as &$p) $p = trim($p);
-
-			if(count($posts)==0) {
+		/* 
+		| ----------------------------------------------
+		| Method Type validation
+		| ----------------------------------------------
+		|
+		*/
+		if($row_api->method_type) {
+			$method_type = $row_api->method_type;
+			if(!Request::isMethod($method_type)) {
 				$result['api_status'] = 0;
-				$result['api_message'] = "Please completed the parameters : ".implode(', ',$params);
-				goto show;
-			}
-
-			foreach($posts as $k=>$v) {
-				/*
-				if(!in_array($k, $params)) {
-					$result['api_status'] = 0;
-					$result['api_message'] = 'Sorry parameter `'.$k.'` is not available in this API';
-					goto show;
-				}
-				*/
-				
-				$posts_fields[] = $k;
-			}
-
-			$is_not_found_params = array();
-			foreach($params as $p) {
-				if(!in_array($p, $posts_fields)) {
-					$is_not_found_params[] = $p;
-				}
-			}			
-
-			$is_not_found_params = array_unique($is_not_found_params);
-			if(count($is_not_found_params)) {
-				$result['api_status'] = 0;
-				$result['api_message'] = "These params are required : ".implode(', ',$is_not_found_params);
+				$result['api_message'] = "The request method is not allowed !";
 				goto show;
 			}
 		}
 
-		$cols = DB::getSchemaBuilder()->getColumnListing($table);
-				
-		switch($tipe) {
-			case 'list':		
-				$data = DB::table($table);	 				
-				$data->skip($offset);
-				$data->take($limit);
-				$data->addSelect(DB::raw("$table.id"));
-				foreach($cols as $col) {	
-					$data->addSelect($table.'.'.$col);									
-					if(substr($col,0,3)=='id_') {
-						$jointable = substr($col,3);
-						$jointable_field = DB::getSchemaBuilder()->getColumnListing($jointable);
-						$data->leftjoin($jointable,$jointable.'.id','=',$table.'.'.$col);
-						foreach($jointable_field as $jf) {
-							$jf_alias = str_replace('_'.$jointable,'',$jf);
-							$jf_alias = $jointable.'_'.$jf_alias;
+		$responses_fields = array();
+		foreach($responses as $r) {
+			$responses_fields[] = $r['name'];
+		}
+		
+
+		if($action_type == 'list' || $action_type == 'detail' || $action_type == 'delete') {
+			$name_tmp = array();
+			$data = DB::table($table);	 				
+			$data->skip($offset);
+			$data->take($limit);								
+			foreach($responses as $resp) {	
+				$name = $resp['name'];
+				$type = $resp['type'];
+				$subquery = $resp['subquery'];
+				$used = intval($resp['used']);
+
+				if($used == 0) continue;
+
+				if(in_array($name, $name_tmp)) continue;
+
+				if($name == 'ref_id') continue;
+
+				if($subquery) {
+					$data->addSelect(DB::raw(
+						'('.$subquery.') as '.$name
+						));
+					$name_tmp[] = $name;
+					continue;
+				}
+
+
+				$data->addSelect($table.'.'.$name);	
+
+				$name_tmp[] = $name;
+				if(is_foreign_key($name)) {
+					$jointable = is_foreign_key($name);
+					$jointable_field = DB::getSchemaBuilder()->getColumnListing($jointable);
+					$data->leftjoin($jointable,$jointable.'.id','=',$table.'.'.$name);
+					foreach($jointable_field as $jf) {							
+						$jf_alias = $jointable.'_'.$jf;
+						if(in_array($jf_alias, $responses_fields)) {
+
 							$data->addselect($jointable.'.'.$jf.' as '.$jf_alias);							
-						}
-					}
-				}
 
-				if($col == 'deleted_at') {
-					$data->where('deleted_at',NULL);
+							$name_tmp[] = $jf_alias;
+						}							
+					}
 				}
+			} //End Responses
 
-				if($ac && $ac->sub_query_1) {
-					$subquery = $ac->sub_query_1;
-					foreach($posts as $key=>$val) {
-						$subquery = str_replace("%%".$key."%%",$val,$subquery); //add %%PARAM%% alias as parameter
-					}
-					$data->addSelect(DB::raw($subquery));
-				}
-				if($ac && $ac->sub_query_2) {
-					$subquery = $ac->sub_query_2;
-					foreach($posts as $key=>$val) {
-						$subquery = str_replace("%%".$key."%%",$val,$subquery);
-					}
-					$data->addSelect(DB::raw($subquery));
-				}
-				if($ac && $ac->sub_query_3) {
-					$subquery = $ac->sub_query_3;
-					foreach($posts as $key=>$val) {
-						$subquery = str_replace("%%".$key."%%",$val,$subquery);
-					}
-					$data->addSelect(DB::raw($subquery));
-				}
-				
-				foreach($posts as $key => $val) {
-					if(strpos($key,'search_')!==FALSE) {
-						$key = str_replace('search_','',$key);
-						if(!in_array($key, $cols)) continue;
-						$data->where($table.'.'.$key,'like','%'.$val.'%');
-					}else{						
-						if(!in_array($key, $cols)) continue;
-						
-						if(is_array($val)) {
-							$data->where(function($w) use ($val,$key) {
-								$wi = 1;
-								foreach($val as $v) {
-									if($wi==1) $w->where($key,$v);
-									else $w->orwhere($key,$v);
+			if(\Schema::hasColumn($table,'deleted_at')) {
+				$data->where('deleted_at',NULL);
+			}
 
-									$wi++;
-								}								
-							});
+			if($posts['search_in'] && $posts['search_value']) {
+				$search_in = explode(',',$posts['search_in']);
+				$search_value = $posts['search_value'];
+				$data->where(function($w) use ($search_in,$search_value) {
+					foreach($search_in as $k=>$field) {
+						if($k==0) $w->where($field,"like","%$search_value%");
+						else $w->orWhere($field,"like","%$search_value%");
+					}
+				});
+			}
+
+			
+			$data->where(function($w) use ($parameters,$posts,$table) {								
+				foreach($parameters as $param) {
+					$name     = $param['name'];
+					$type     = $param['type'];
+					$value    = $posts[$name];
+					$used     = $param['used'];
+					$required = $param['required'];					
+
+					if($required == '1') {						
+						if(\Schema::hasColumn($table,$name)) {
+							$w->where($table.'.'.$name,$value);
 						}else{
-							$data->where($table.'.'.$key,$val);	
-						}						
-					}
+							$w->having($name,'=',$value);
+						}
+					}else{
+						if($used) {
+							if($value) {
+								if(\Schema::hasColumn($table,$name)) {
+									$w->where($table.'.'.$name,$value);
+								}else{
+									$w->having($name,'=',$value);
+								}
+							}						
+						}
+					}									
 				}
+			});
+									
+			//IF SQL WHERE IS NOT NULL
+			if($row_api->sql_where) {
+				$data->whereraw($row_api->sql_where);
+			}
 
-				if($groupby) {
-					$data->groupby($groupby);
-				}
+			$this->hook_query_list($data);
+			$this->hook_query($data);
 
-				//IF SQL WHERE IS NOT NULL
-				if($ac->sql_where) $data->whereraw($ac->sql_where);
-
-				$this->hook_query_list($data);
-				
-				$datar = array();
+			if($action_type == 'list') {
 				if($orderby) {
 					$orderby_raw = explode(',',$orderby);
 					$orderby_col = $orderby_raw[0];
@@ -238,288 +288,203 @@ class ApiController extends Controller {
 					$orderby_val = 'desc';
 				}
 				
-				$rows = $data->orderby($orderby_col,$orderby_val)->get();		
-				$rows = json_decode(json_encode($rows),true);	
-		
-								
-				foreach($rows as $r) {					
-					foreach($r as $k=>$v) {												
-						foreach($uploads_format_candidate as $uff) {
-							if( ((substr(strtolower($v),-3)==$uff) || (substr(strtolower($v),-4)==$uff) || (substr(strtolower($v),-5)==$uff)) && (substr(strtolower($v),4)!='http') ) {
-									$r[$k] = asset($r[$k]);									
-									break;
+				$rows = $data->orderby($orderby_col,$orderby_val)->get();																						
+
+				if($rows) {
+
+					foreach($rows as &$row) {
+						foreach($row as $k=>$v) {
+							$ext = \File::extension($v);
+							if(in_array($ext, $uploads_format_candidate)) {
+								$row->$k = asset($v);
 							}
-						}	
-						if($cols_arr && !in_array($k, $cols_arr)){
-							unset($r[$k]);
-							continue;
-						}					
-					}					
-					$datar[] = $r;
-				}
-
-
-				$result['api_status'] = 1;
-				$result['api_message'] = 'success';				
-				$result['api_offset'] = $offset;
-				$result['api_limit'] = $limit;
-				$result['data'] = $datar;
-			break;
-			case 'html':
-			case 'detail':
-
-				$passworhash = '';
-
-				$data = DB::table($table);
-				foreach($cols as $col) {					
-					$data->addSelect($table.'.'.$col);									
-					if(substr($col,0,3)=='id_') {
-						$jointable = substr($col,3);
-						$jointable_field = DB::getSchemaBuilder()->getColumnListing($jointable);
-						$data->leftjoin($jointable,$jointable.'.id','=',$table.'.'.$col);
-						foreach($jointable_field as $jf) {
-							$jf_alias = str_replace('_'.$jointable,'',$jf);
-							$jf_alias = $jointable.'_'.$jf_alias;
-							$data->addselect($jointable.'.'.$jf.' as '.$jf_alias);							
 						}
 					}
 
-					if($col == 'deleted_at') {
-						$data->where('deleted_at',NULL);
-					}
+					$result['api_status']  = 1;
+					$result['api_message'] = 'success';				
+					$result['data']        = $rows;
+				}else{
+					$result['api_status']  = 0;
+					$result['api_message'] = 'There is no data found !';				
+					$result['data']        = array();
 				}
+			}elseif ($action_type == 'detail') {
+							
+				$rows = $data->first();
 
-				if($ac && $ac->sub_query_1) {
-					$subquery = $ac->sub_query_1;
-					foreach($posts as $key=>$val) {
-						$subquery = str_replace("%%".$key."%%",$val,$subquery); //add %%PARAM%% alias as parameter
-					}
-					$data->addSelect(DB::raw($subquery));
-				}
-				if($ac && $ac->sub_query_2) {
-					$subquery = $ac->sub_query_2;
-					foreach($posts as $key=>$val) {
-						$subquery = str_replace("%%".$key."%%",$val,$subquery);
-					}
-					$data->addSelect(DB::raw($subquery));
-				}
-				if($ac && $ac->sub_query_3) {
-					$subquery = $ac->sub_query_3;
-					foreach($posts as $key=>$val) {
-						$subquery = str_replace("%%".$key."%%",$val,$subquery);
-					}
-					$data->addSelect(DB::raw($subquery));
-				}
+				if($rows) {
 
-				foreach($posts as $key => $val) {					
-					if(in_array($key, $password_candidate)) continue;
-
-					if(strpos($key,'search_')!==FALSE) {
-						$key = str_replace('search_','',$key);
-						$data->where($table.'.'.$key,'like','%'.$val.'%');
-						if(!in_array($key, $cols)) continue;
-					}else{					
-						if(!in_array($key, $cols)) continue;
-						$data->where($table.'.'.$key,$val);
-					}
-				}
-
-				//IF SQL WHERE IS NOT NULL
-				if($ac->sql_where) $data->whereraw($ac->sql_where);		
-
-				$this->hook_query_detail($data);		
-
-				$data = (array) $data->first();
-				
-				foreach($data as $k=>$v) {
-					
-					if(in_array($k, $password_candidate)) {
-						$password = @$posts[$k];
-						if($password && !Hash::check($password,$v)) {
-							$result['api_status']  = 0;
-							$result['api_message'] = 'Sorry the password is incorrect !';
-							goto show;
+					foreach($rows as $k=>$v) {
+						$ext = \File::extension($v);
+						if(in_array($ext, $uploads_format_candidate)) {
+							$rows->$k = asset($v);
 						}
-					}	
-
-					foreach($uploads_format_candidate as $uff) {
-						if( ((substr(strtolower($v),-3)==$uff) || (substr(strtolower($v),-4)==$uff) || (substr(strtolower($v),-5)==$uff)) && (substr(strtolower($v),4)!='http') ) {
-							$data[$k] = asset($data[$k]);
-							break;
-						} 
-					}	
-
-					if($cols_arr && !in_array($k, $cols_arr)){
-						unset($data[$k]);
-						continue;
-					}			
-				}
-
-
-				if($tipe=='html') {
-					foreach($cols_arr as $c) {
-						echo "<p>".$data[$c]."</p>";
 					}
-					exit;
-				}
 
-				$result['api_status'] = ($data)?1:0;
-				$result['api_message'] = ($data)?'success':'Sorry data not found !';
-				$result = array_merge($result,$data);
-			break;
-			case 'save_add':							
-				if($posts['bulk']) {
-					$bulks = json_decode($posts['bulk'],true);
-					foreach($bulks as $bulk) {
-							$datas = array();
-							foreach($bulk as $k=>$v) {	
-														
-								if(in_array($k, $password_candidate)) {
-									if(!empty($v)) {
-										$v = Hash::make($v);			
-									}else{
-										continue;
-									}			
+					foreach($parameters as $param) {
+						$name     = $param['name'];
+						$type     = $param['type'];
+						$value    = $posts[$name];
+						$used     = $param['used'];
+						$required = $param['required'];
+
+						if($required) {
+							if($type == 'password') {
+								if(!Hash::check($value,$rows->{$name})) {
+									$result['api_status'] = 0;
+									$result['api_message'] = 'Your password is wrong !';
+									goto show;
 								}
-
-								$datas[$k] = $v;																		
 							}
-							$insert = DB::table($table)->insert($datas);
-							$lastInsertId[] = DB::getPdo()->lastInsertId();
-					}
-				}else{
-					
-					$datas = array();
-
-					foreach($posts as $k=>$v) {
-
-						if(in_array($k, $password_candidate)) {
-							if(!empty($v)) {
-								$v = Hash::make($v);			
-							}else{
-								continue;
-							}			
-						}						
-
-						if(in_array($k, $uploads_candidate)) {							
-							$name = $k;
-							if (Request::hasFile($name))
-							{			
-								$file = Request::file($name);					
-								$ext  = $file->getClientOriginalExtension();
-
-								//Create Directory Monthly 
-								Storage::makeDirectory(date('Y-m'));
-
-								//Move file to storage
-								$filename = md5(str_random(5)).'.'.$ext;
-								if($file->move(storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m')),$filename)) {						
-									$v = 'uploads/'.date('Y-m').'/'.$filename;
-								}					  
+						}else{
+							if($used) {
+								if($value) {
+									if(!Hash::check($value,$rows->{$name})) {
+										$result['api_status'] = 0;
+										$result['api_message'] = 'Your password is wrong !';
+										goto show;
+									}
+								}
 							}
 						}
-
-						$datas[$k] = $v;
-					}
-					$insert = DB::table($table)->insert($datas);
-					$lastInsertId = DB::getPdo()->lastInsertId();
-				} 
-				
-				$result['api_status'] = ($insert)?1:0;
-				$result['api_message'] = ($insert)?'The data has been added successfully':'Oops, added data was failed !';
-				$result['id'] = $lastInsertId;
-			break;
-			case 'save_edit':
-				
-				$datas = array();
-				foreach($posts as $k=>$v) {
-					if(in_array($k, $password_candidate)) {
-						if(!empty($v)) {
-							$v = Hash::make($v);			
-						}else{
-							continue;
-						}			
 					}
 
-					if(in_array($k, $uploads_candidate)) {
-						
-						$name = $k;
-						if (Request::hasFile($name))
-							{			
-								$file = Request::file($name);					
-								$ext  = $file->getClientOriginalExtension();
-
-								//Create Directory Monthly 
-								Storage::makeDirectory(date('Y-m'));
-
-								//Move file to storage
-								$filename = md5(str_random(5)).'.'.$ext;
-								if($file->move(storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m')),$filename)) {						
-									$v = 'uploads/'.date('Y-m').'/'.$filename;
-								}					  
-							}
-					}
-
-
-					$datas[$k] = $v;
-				}
-				$update = DB::table($table);
-				
-				//IF SQL WHERE IS NOT NULL
-				if($ac->sql_where) $update->whereraw($ac->sql_where);
-				else $update->where('id',$posts['id']);
-
-				$update = $update->update($datas);
-				$result['api_status'] = ($update)?1:0;
-				$result['api_message'] = ($update)?'The data has been saved successfully':'Oops, saved data was failed !';
-			break;
-			case 'delete':
-				$delete = DB::table($table);
-				foreach($posts as $key => $val) {
-					if(!in_array($key, $cols)) continue;
-					$delete->where($table.'.'.$key,$val);
-				}
-
-				//IF SQL WHERE IS NOT NULL
-				if($ac->sql_where) $delete->whereraw($ac->sql_where);
-
-				if(in_array('deleted_at', $cols)) {
-					$delete = $delete->update(['deleted_at'=>date('Y-m-d H:i:s')]);
+					$result['api_status']  = 1;
+					$result['api_message'] = 'success';
+					$rows                  = (array) $rows;
+					$result                = array_merge($result,$rows);
 				}else{
-					$delete = $delete->delete();
-				}				
-
+					$result['api_status']  = 0;
+					$result['api_message'] = 'There is no data found !';
+				}
+			}elseif($action_type == 'delete') {
+				
+				if(\Schema::hasColumn($table,'deleted_at')) {
+					$delete = $data->update(['deleted_at'=>date('Y-m-d H:i:s')]);
+				}else{
+					$delete = $data->delete();
+				}
 
 				$result['api_status'] = ($delete)?1:0;
-				$result['api_message'] = ($delete)?'Delete data successfully':'failed, maybe id is not found at our database!';				
-			break;
+				$result['api_message'] = ($delete)?"The data has been deleted successfully !":"Oops, Failed to delete data !";
+
+			}
+
+		}elseif ($action_type == 'save_add' || $action_type == 'save_edit') {
+			
+		    $row_assign = array();
+		    foreach($input_validator as $k=>$v) {
+		    	if(\Schema::hasColumn($table,$k)) {
+		    		$row_assign[$k] = $v;
+		    	}
+		    }
+
+		    $row_assign_keys = array_keys($row_assign);
+
+		    foreach($parameters as $param) {
+		    	$name = $param['name'];
+		    	$value = $posts[$name];
+		    	$config = $param['config'];
+		    	$type = $param['type'];
+		    	$required = $param['required'];
+		    	$used = $param['used'];
+
+		    	if(!in_array($name, $row_assign_keys)) {
+					continue;
+				}	
+
+		    	if($type == 'file' || $type == 'image') {
+		    		if (Request::hasFile($name))
+					{			
+						$file = Request::file($name);					
+						$ext  = $file->getClientOriginalExtension();
+
+						//Create Directory Monthly 
+						Storage::makeDirectory(date('Y-m'));
+
+						//Move file to storage
+						$filename = md5(str_random(5)).'.'.$ext;
+						if($file->move(storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m')),$filename)) {						
+							$v = 'uploads/'.date('Y-m').'/'.$filename;
+							$row_assign[$name] = $v;
+						}					  
+					}	
+		    	}elseif ($type == 'base64_file') {
+		    		$filedata = base64_decode($value);
+					$f = finfo_open();
+					$mime_type = finfo_buffer($f, $filedata, FILEINFO_MIME_TYPE);
+					@$mime_type = explode('/',$mime_type);
+					@$mime_type = $mime_type[1];
+					if($mime_type) {
+						if(in_array($mime_type, $uploads_format_candidate)) {
+							Storage::makeDirectory(date('Y-m'));
+							$filename = md5(str_random(5)).'.'.$$mime_type;
+							if(file_put_contents(storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m')).'/'.$filename, $filedata)) {
+								$v = 'uploads/'.date('Y-m').'/'.$filename;
+								$row_assign[$name] = $v;
+							}
+						}
+					}
+		    	}elseif ($type == 'password') {
+		    		$row_assign[$name] = Hash::make($value);
+		    	}
+		    	
+		    }
+
+
+		    if($action_type == 'save_add') {
+		    	$lastId = DB::table($table)->insertGetId($row_assign);
+		    	$result['api_status']  = ($lastId)?1:0;
+				$result['api_message'] = ($lastId)?'The data has been added successfully':'Failed to add data !';
+				$result['id']          = $lastId;
+		    }else{
+
+		    	$update = DB::table($table);
+
+			    $update->where($table.'.id',$row_assign['id']);
+
+			    if($row_api->sql_where) {
+			    	$update->whereraw($row_api->sql_where);
+			    }
+
+			    $this->hook_query_list($update);
+			    $this->hook_query($update);
+
+			    $update = $update->update($row_assign);
+				$result['api_status']  = ($update)?1:0;
+				$result['api_message'] = ($update)?'The data has been saved successfully':'Oops, Failed to save data !';
+
+		    }
+
+		    // Update The Child Table
+		    foreach($parameters as $param) {
+		    	$name = $param['name'];
+		    	$value = $posts[$name];
+		    	$config = $param['config'];
+		    	$type = $param['type'];
+		    	if($type == 'ref') {
+		    		if(\Schema::hasColumn($config,'id_'.$table)) {
+		    			DB::table($config)->where($name,$value)->update(['id_'.$table=>$lastId]);
+		    		}elseif (\Schema::hasColumn($config,$table.'_id')) {
+		    			DB::table($config)->where($name,$value)->update([$table.'_id'=>$lastId]);
+		    		}			    		
+		    	}
+		    }
 		}
 
-		
 
+		
 		show:
 		$result['api_status']  = $this->hook_api_status?:$result['api_status'];
 		$result['api_message'] = $this->hook_api_message?:$result['api_message'];
-		$this->hook_after($posts,$result);
+		// $result['database_query'] = DB::getQueryLog();
 
-		if($cache) {
-			Cache::put($cachekey,$result,$cache);
-		}
+		$this->hook_after($posts,$result);
 
 		return response()->json($result);
 	}
-
-	private function init_setting() {
-		$setting = DB::table('cms_settings')->get();
-		$setting_array = array();
-		foreach($setting as $set) {
-			$setting_array[$set->name] = $set->content;
-		}
-		$this->setting = json_decode(json_encode($setting_array));
-	}	
-
 	
-
 }
 
 
