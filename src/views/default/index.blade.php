@@ -40,7 +40,9 @@
                 $parent_module_class = new $parent_module_class;
 
                 $parent_module_class->index_array = TRUE;
-                $parent_module_class->index_only_id = intval(Request::segment(4));
+                $parent_module_class->show_addaction = FALSE;
+                $parent_module_class->index_only_id = intval(Request::segment(4));    
+                $parent_module_class->constructor();            
                 $index_single = $parent_module_class->getIndex();
             ?>
             <div class='box box-primary' id='box-header-module'>
@@ -95,11 +97,11 @@
             <ul class="nav nav-tabs sub-module-tab"> 
                 <?php 
                   $subs = $parent_module_class->sub_module();
-                  $parent_path = $parent_module_class->mainpath();
+                  $parent_path = mainpath('../../..');
                   foreach($subs as $sub):
                     $active = (Request::segment(5) == $sub['path'])?"active":"";
                 ?>
-                  <li role="presentation" class='{{ $active }}' title="{{$mainpath}}">
+                  <li role="presentation" class='{{ $active }}' title="{{$sub['label']}}">
                       <a href='{{ $parent_path."/sub-module/".Request::segment(4)."/".$sub["path"] }}'><i class='{{$sub["icon"]}}'></i> {{ $sub['label'] }}</a>
                   </li>
                 <?php endforeach;?>
