@@ -636,6 +636,13 @@
 						<?php 
 							if(isset($form['sub_select'])):
 								$tab = str_replace("id_","",$form['sub_select']);
+								$sub_label = '';
+								foreach($forms as $f) {
+									if($f['name'] == $form['sub_select']) {
+										$sub_label = $f['label'];
+										break;
+									}
+								}
 						?>
 								<script>
 								var val;
@@ -646,8 +653,8 @@
 										console.log('{{$name}} changed');
 										$('#{{$form['sub_select']}}').html('<option value="">Please wait loading data...</option>');
 										var id = $(this).val();
-										$.get('{{mainpath("find-data")}}?fk={{$name}}&fk_value='+id+'&limit=1000',function(resp) {								
-											$('#{{$form['sub_select']}}').empty().html("<option value=''>** Please Select as {{$this->form_by_name[$form['sub_select']]['label']}}</option>");
+										$.get('{{mainpath("find-data")}}?table1={{$tab}}&fk={{$name}}&fk_value='+id+'&limit=1000',function(resp) {								
+											$('#{{$form['sub_select']}}').empty().html("<option value=''>** Please Select a {{$sub_label}}</option>");
 											$.each(resp.items,function(i,obj) {
 												var selected = (val && val == obj.id)?'selected':'';
 												$('#{{$form['sub_select']}}').append('<option '+selected+' value=\"'+obj.id+'\">'+obj.text+'</option>');
@@ -693,6 +700,7 @@
 
 									if(@$form['datatable']):
 										$raw = explode(",",$form['datatable']);
+										$format = $form['datatable_format'];
 										$table1 = $raw[0];
 										$column1 = $raw[1];
 										
@@ -729,8 +737,16 @@
 											$orderby_column = $column3;
 										}
 
-										$selects_data->addselect($orderby_table.'.'.$orderby_column.' as label');
-										$selects_data = $selects_data->orderby($orderby_table.'.'.$orderby_column,"asc")->get();
+										if($format) {				
+											$format = str_replace('&#039;', "'", $format);						
+											$selects_data->addselect(DB::raw("CONCAT($format) as label"));	
+											$selects_data = $selects_data->orderby(DB::raw("CONCAT($format)"),"asc")->get();
+										}else{
+											$selects_data->addselect($orderby_table.'.'.$orderby_column.' as label');
+											$selects_data = $selects_data->orderby($orderby_table.'.'.$orderby_column,"asc")->get();
+										}										
+
+										
 										foreach($selects_data as $d) {											
 
 											$val    = $d->id;
@@ -753,7 +769,8 @@
 						<?php 							
 							$datatable = @$form['datatable'];
 							$where     = @$form['datatable_where'];
-							
+							$format    = @$form['datatable_format'];													
+
 							$raw       = explode(',',$datatable);
 							$url       = mainpath("find-data");
 
@@ -766,9 +783,9 @@
 							@$table3   = $raw[4];
 							@$column3  = $raw[5];
 						?>
-						<script>
+						<script>				
 							$(function() {
-								$('#<?php echo $name?>').select2({
+								$('#<?php echo $name?>').select2({								  							  
 								  placeholder: {
 									    id: '-1', 
 									    text: '** Please Select a {{$form['label']}}'
@@ -780,6 +797,7 @@
 								    data: function (params) {
 								      var query = {
 										q: params.term,
+										format: "{{$format}}",
 										table1: "{{$table1}}",
 										column1: "{{$column1}}",
 										table2: "{{$table2}}",
@@ -805,6 +823,7 @@
 							                $.ajax('{{$url}}', {
 							                    data: {
 							                    	id: id, 
+							                    	format: "{{$format}}",
 							                    	table1: "{{$table1}}",
 													column1: "{{$column1}}",
 													table2: "{{$table2}}",
@@ -867,7 +886,7 @@
 
 								<div class="input-group">
 							      <span class="input-group-btn">
-							        <a id="lfm-{{$name}}" data-input="thumbnail" data-preview="holder-{{$name}}" class="btn btn-primary">
+							        <a id="lfm-{{$name}}" data-input="thumbnail-{{$name}}" data-preview="holder-{{$name}}" class="btn btn-primary">
 							          @if(@$form['upload_file'])
 							          	<i class="fa fa-file-o"></i> Choose a file
 							          @else
@@ -875,7 +894,7 @@
 							          @endif
 							        </a>
 							      </span>
-							      <input id="thumbnail" class="form-control" type="text" readonly value='{{$value}}' name="{{$name}}">
+							      <input id="thumbnail-{{$name}}" class="form-control" type="text" readonly value='{{$value}}' name="{{$name}}">
 							    </div>
 
 							    @if(@$form['upload_file'])
