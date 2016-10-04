@@ -94,7 +94,7 @@ $(function(){
 			$.post("{{ mainpath('delete-selected') }}",{id:checks},function(resp) {				
 				show_alert_floating('Delete selected successfully !');
 				hide_alert_floating();
-				$(".btn-reload-table").click();
+				location.reload();
 			})
 		}else{
 			alert("Please checking any checkbox first !");
