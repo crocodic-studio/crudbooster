@@ -43,17 +43,10 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/laravel-filemanager/src/views/script.blade.php' => resource_path('views/vendor/laravel-filemanager/script.blade.php'),
         ],'cb_lfm_config');
-
-
-        
-        
-        require __DIR__.'/validations/validation.php';
-        
+            
+        require __DIR__.'/validations/validation.php';        
         require __DIR__.'/routes.php';    
-        require __DIR__.'/commands/Mailqueues.php';    
-
-
-
+            
         $this->app->booted(function () {
             $schedule = $this->app->make(\Illuminate\Console\Scheduling\Schedule::class);
             $schedule->command('mailqueues')->cron("* * * * * *");
@@ -67,12 +60,16 @@ class CRUDBoosterServiceProvider extends ServiceProvider
      * @return void
      */
     public function register()
-    {                           
+    {                                   
         require __DIR__.'/helpers/Helper.php';      
 
         $this->app['crudbooster'] = $this->app->share(function ()
         {
             return true;
         });
+
+        $this->commands([
+            commands\Mailqueues::class            
+        ]);
     }
 }
