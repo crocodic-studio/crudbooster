@@ -23,8 +23,81 @@ class DatabaseSeeder extends Seeder
         $this->call('Cms_settingsSeeder');              
         $this->call('Cms_postscategoriesSeeder');              
         $this->call('Cms_postsSeeder');      
+        $this->call('ApiUpdateVersion');      
         
         $this->command->info('Updating the data completed !');
+    }
+}
+
+class ApiUpdateVersion extends Seeder {
+    public function run() {
+        $apis = DB::table('cms_apicustom')->whereraw('kolom IS NOT NULL OR sub_query_1 IS NOT NULL')->get();
+        foreach($apis as $a) {
+            @$subquery  = explode(',',$a->sub_query_1);
+            @$kolom     = explode(',',$a->kolom);
+            @$parameter = explode(',',$a->parameter);
+            $params     = array();
+            $respons    = array();
+
+            if($a->aksi == 'list' || $a->aksi == 'detail') {
+                if($parameter) {
+                    foreach($parameter as $p) {                        
+                        $params[] = array('name'=>$p,'type'=>'string','config'=>'','required'=>1,'used'=>1);
+                    }
+                }
+                
+                if($kolom) {
+                    foreach($kolom as $k) {
+                        $respons[] = array('name'=>$k,'type'=>'string','subquery'=>'','used'=>1);
+                    }
+                }
+
+                if($subquery) {
+                    foreach($subquery as $s) {
+                        $s = trim($s);
+                        $s = strtolower($s);
+                        $sraw = explode(') as ',$s);
+                        $config = substr($sraw[0],1);
+                        $name = $sraw[1];
+                        $respons[] = array('name'=>$name,'type'=>'string','subquery'=>$config,'used'=>1);
+                    }
+                }
+            }elseif ($a->aksi == 'save_add') {
+                if($kolom) {
+                    foreach($kolom as $k) {
+                        $params[] = array('name'=>$k,'type'=>'string','config'=>'','used'=>1,'required'=>1);
+                    }
+                }
+            }elseif ($a->aksi == 'save_edit') {
+                if($kolom) {
+                    foreach($kolom as $k) {
+                        $params[] = array('name'=>$k,'type'=>'string','config'=>'','used'=>1,'required'=>1);
+                    }
+                }
+                if($parameter) {
+                    foreach($parameter as $p) {                        
+                        $params[] = array('name'=>$p,'type'=>'string','config'=>'','required'=>1,'used'=>1);
+                    }
+                }
+            }elseif ($a->aksi == 'delete') {
+                if($parameter) {
+                    foreach($parameter as $p) {                        
+                        $params[] = array('name'=>$p,'type'=>'string','config'=>'','required'=>1,'used'=>1);
+                    }
+                }
+            }
+
+
+            DB::table('cms_apicustom')
+            ->where('id',$a->id)
+            ->update([
+                'kolom'=>NULL,
+                'sub_query_1'=>NULL,
+                'parameter'=>NULL,
+                'parameters'=>serialize($params),
+                'responses'=>serialize($respons)
+                ]);
+        }                
     }
 }
 
