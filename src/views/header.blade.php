@@ -54,7 +54,7 @@
                             <p>
                                 {{ get_my_name() }}
                                 <small>{{ get_my_privilege_name() }}</small>
-                                <small><em><?php echo date('d F Y')?></em> </small>
+                                <small><em><?php echo date('d F Y')?></em> </small>                                
                             </p>
                         </li>
 
@@ -64,7 +64,21 @@
                                 <a href="{{ route('UsersControllerGetProfile') }}" class="btn btn-default btn-flat"><i class='fa fa-user'></i> Profile</a>
                             </div>
                             <div class="pull-right">
-                                <a href="{{ route("getLogout") }}" class="btn btn-default btn-flat"><i class='fa fa-power-off'></i> Sign out</a>
+                                <a title='Lock Screen' href="{{ route('getLockScreen') }}" class='btn btn-default btn-flat'><i class='fa fa-key'></i></a> 
+                                <a href="javascript:void(0)" onclick="swal({   
+                                    title: 'Do you want to logout ?',   
+                                    text: 'You should login again in the future, or you may press Lock Screen only',   
+                                    type:'info',   
+                                    showCancelButton:true, 
+                                    allowOutsideClick:true,  
+                                    confirmButtonColor: '#DD6B55',   
+                                    confirmButtonText: 'Logout',   
+                                    cancelButtonText: 'Cancel',
+                                    closeOnConfirm: false 
+                                    }, function(){                                                                                 
+                                        location.href = '{{ route("getLogout") }}';
+
+                                    });" title="Sign Out ?" class="btn btn-danger btn-flat"><i class='fa fa-power-off'></i></a>
                             </div>
                         </li>
                     </ul>
