@@ -9,14 +9,6 @@
         "crud",
         "generator"
     ],
-    "scripts": {
-        "post-update-cmd":[
-            "crudbooster\\CBInstaller::gettingReady",            
-            "php artisan vendor:publish",
-            "php artisan vendor:publish --force --provider=\"crocodicstudio\\crudbooster\\CRUDBoosterServiceProvider\"",
-            "php artisan migrate --seed"
-        ]
-    },
     "authors": [
         {
             "name": "Ferry",
