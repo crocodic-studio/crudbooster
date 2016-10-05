@@ -11,8 +11,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\PDF;
-use Illuminate\Support\Facades\Excel;
 
 class ApiController extends Controller {
 			
@@ -192,7 +190,7 @@ class ApiController extends Controller {
 				$subquery = $resp['subquery'];
 				$used = intval($resp['used']);
 
-				if($used == 0) continue;
+				if($used == 0 && !is_foreign_key($name)) continue;
 
 				if(in_array($name, $name_tmp)) continue;
 
@@ -206,8 +204,9 @@ class ApiController extends Controller {
 					continue;
 				}
 
-
-				$data->addSelect($table.'.'.$name);	
+				if($used) {
+					$data->addSelect($table.'.'.$name);	
+				}				
 
 				$name_tmp[] = $name;
 				if(is_foreign_key($name)) {
@@ -226,6 +225,14 @@ class ApiController extends Controller {
 				}
 			} //End Responses
 
+			foreach($parameters as $param) {
+				$type = $param['type'];
+				$name = $param['name'];
+				if($type == 'password') {
+					$data->addselect($table.'.'.$name);
+				}
+			}
+
 			if(\Schema::hasColumn($table,'deleted_at')) {
 				$data->where('deleted_at',NULL);
 			}
@@ -242,13 +249,17 @@ class ApiController extends Controller {
 			}
 
 			
-			$data->where(function($w) use ($parameters,$posts,$table) {								
+			$data->where(function($w) use ($parameters,$posts,$table,$type_except) {								
 				foreach($parameters as $param) {
 					$name     = $param['name'];
 					$type     = $param['type'];
 					$value    = $posts[$name];
 					$used     = $param['used'];
 					$required = $param['required'];					
+
+					if(in_array($type, $type_except)) {
+						continue;
+					}
 
 					if($required == '1') {						
 						if(\Schema::hasColumn($table,$name)) {
@@ -298,7 +309,11 @@ class ApiController extends Controller {
 							if(in_array($ext, $uploads_format_candidate)) {
 								$row->$k = asset($v);
 							}
-						}
+
+							if(!in_array($k,$responses_fields)) {
+								unset($row[$k]);
+							}
+						}						
 					}
 
 					$result['api_status']  = 1;
@@ -313,14 +328,7 @@ class ApiController extends Controller {
 							
 				$rows = $data->first();
 
-				if($rows) {
-
-					foreach($rows as $k=>$v) {
-						$ext = \File::extension($v);
-						if(in_array($ext, $uploads_format_candidate)) {
-							$rows->$k = asset($v);
-						}
-					}
+				if($rows) {					
 
 					foreach($parameters as $param) {
 						$name     = $param['name'];
@@ -333,14 +341,14 @@ class ApiController extends Controller {
 							if($type == 'password') {
 								if(!Hash::check($value,$rows->{$name})) {
 									$result['api_status'] = 0;
-									$result['api_message'] = 'Your password is wrong !';
+									$result['api_message'] = 'Your password is wrong !';					
 									goto show;
 								}
 							}
 						}else{
 							if($used) {
 								if($value) {
-									if(!Hash::check($value,$rows->{$name})) {
+									if(!Hash::check($value,$row->{$name})) {
 										$result['api_status'] = 0;
 										$result['api_message'] = 'Your password is wrong !';
 										goto show;
@@ -350,13 +358,25 @@ class ApiController extends Controller {
 						}
 					}
 
+
+					foreach($rows as $k=>$v) {
+						$ext = \File::extension($v);
+						if(in_array($ext, $uploads_format_candidate)) {
+							$rows->$k = asset($v);
+						}
+
+						if(!in_array($k,$responses_fields)) {
+							unset($row[$k]);
+						}
+					}
+
 					$result['api_status']  = 1;
 					$result['api_message'] = 'success';
 					$rows                  = (array) $rows;
 					$result                = array_merge($result,$rows);
 				}else{
 					$result['api_status']  = 0;
-					$result['api_message'] = 'There is no data found !';
+					$result['api_message'] = 'There is no data found !';					
 				}
 			}elseif($action_type == 'delete') {
 				
