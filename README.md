@@ -57,19 +57,17 @@ default username : admin@crudbooster.com
 default password : 123456  
 
 ## Update Guide
-To update CRUDBooster, "composer require crocodicstudio/crudbooster"  
-After update the CRUDBooster don't forget to re-publish configuration (Step 4)  
-and re-migration & seeding (Step 5) to make sure any update work properly.
+1. <code>composer require crocodicstudio/crudbooster</code> or <code>composer require crocodicstudio/crudbooster</code>
+1. Re-pulbish asset and configuration (Step 4)  
+1. Migration & Seeding (Step 5) to make sure any update work properly.
 
 
 ## DOCUMENTATION
-The complete documentation can be found at : [http://crudbooster.com/page/documentation](http://crudbooster.com/page/documentation)
+The complete documentation can be found at : 
+[http://crudbooster.com/page/documentation](http://crudbooster.com/page/documentation)
 
 ## SUPPORT AND CONTRIBUTION
-All of issues and new feature request, please create an issue or pull request at GitHub, please do not send an email or Private Message to us.
-
-## UPDATE
-Please stay to check, if you have fork CRUDBooster, please always update.
+All of issues and new feature request, please create an issue at GitHub, please do not send an email or Private Message to us.
 
 ## CREDITS
 1. Laravel Export HTML to Excel by [Maatwebsite](https://github.com/Maatwebsite/Laravel-Excel)
