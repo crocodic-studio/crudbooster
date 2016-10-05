@@ -38,7 +38,7 @@ class UploadsController extends Controller {
 	    	});
 
 	    	if($is_download) {	    		
-	    		$filename = ($filename)?:Request::get('filename').'.'.$extension;
+	    		$filename = (Request::get('filename'))?Request::get('filename').'.'.$extension:$filename;
 	    		return Response::make($img,200,array('Content-Type'=>'image/'.$extension,'Content-Disposition'=>'attachment; filename='.$filename));				
 	    	}else{
 	    		return Response::make($img,200,array('Content-Type'=>'image/'.$extension));
