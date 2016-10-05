@@ -115,11 +115,13 @@
 
                                                   @if($api->aksi == 'list' || $api->aksi == 'detail')
                                                     @foreach($responses as $resp)
-                                                    <tr>
-                                                      <td>{{$i++}}</td>
-                                                      <td width="5%"><em>{{$resp['type']}}</em></td>
-                                                      <td>{{ ($api->aksi=='list')?'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- ':'' }} {{$resp['name']}}</td>                                                   
-                                                    </tr>
+                                                      @if($resp['used'])
+                                                      <tr>
+                                                        <td>{{$i++}}</td>
+                                                        <td width="5%"><em>{{$resp['type']}}</em></td>
+                                                        <td>{{ ($api->aksi=='list')?'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- ':'' }} {{$resp['name']}}</td>                                                   
+                                                      </tr>
+                                                      @endif
                                                     @endforeach
                                                   @endif
 
