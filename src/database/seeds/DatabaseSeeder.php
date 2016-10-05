@@ -126,19 +126,15 @@ class Cms_postsSeeder extends Seeder {
 
 class Cms_postscategoriesSeeder extends Seeder {
     public function run() {
-
-        if(DB::table('cms_users')->count() == 0) {
+        if(DB::table('cms_posts_categories')->count() == 0) {
             $faker = Faker\Factory::create();
-            $id_cms_users = DB::table('cms_users')->lists('id');
-            $id_cms_posts_categories = DB::table('cms_posts_categories')->lists('id');
             for($i=1;$i<=5;$i++) {
-                $a = array();
+                $a               = array();
                 $a['created_at'] = $faker->dateTimeBetween('-1 months','now');
-                $a['name'] = $faker->words(3,true);
+                $a['name']       = $faker->words(3,true);
                 DB::table('cms_posts_categories')->insert($a);
             }
-        }
-        
+        }        
     }
 }
 
