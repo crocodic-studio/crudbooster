@@ -57,7 +57,7 @@ default username : admin@crudbooster.com
 default password : 123456  
 
 ## Update Guide
-1. <code>composer require crocodicstudio/crudbooster</code> or <code>composer require crocodicstudio/crudbooster</code>
+1. <code>composer update crocodicstudio/crudbooster</code>
 1. Re-pulbish asset and configuration (Step 4)  
 1. Migration & Seeding (Step 5) to make sure any update work properly.
 
