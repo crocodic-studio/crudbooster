@@ -14,12 +14,12 @@
             "php vendor/crocodicstudio/crudbooster/src/installer.php",            
             "php artisan vendor:publish",
             "php artisan vendor:publish --force --provider=\"crocodicstudio\\crudbooster\\CRUDBoosterServiceProvider\"",
-            "php artisan migrate --seed",
+            "php artisan migrate --seed"
         ],
         "post-package-update": [
             "php vendor/crocodicstudio/crudbooster/src/installer.php",                        
             "php artisan vendor:publish --force --provider=\"crocodicstudio\\crudbooster\\CRUDBoosterServiceProvider\"",
-            "php artisan migrate --seed",
+            "php artisan migrate --seed"
         ]
     },
     "authors": [
