@@ -10,14 +10,9 @@
         "generator"
     ],
     "scripts": {
-        "post-package-install": [
-            "php src/installer.php",            
+        "post-update-cmd":[
+            "crudbooster\\CBInstaller::gettingReady",            
             "php artisan vendor:publish",
-            "php artisan vendor:publish --force --provider=\"crocodicstudio\\crudbooster\\CRUDBoosterServiceProvider\"",
-            "php artisan migrate --seed"
-        ],
-        "post-package-update": [
-            "php src/installer.php",                        
             "php artisan vendor:publish --force --provider=\"crocodicstudio\\crudbooster\\CRUDBoosterServiceProvider\"",
             "php artisan migrate --seed"
         ]
