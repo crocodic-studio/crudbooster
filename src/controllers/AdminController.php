@@ -44,7 +44,7 @@ class AdminController extends CBController {
 	public function getSetDashboardConfigMode() {
 
 		if(!get_is_superadmin()) {
-			return redirect('admin')->with('message','Sorry this dashboard configuration is not available');
+			return redirect('admin')->with(['message'=>'Sorry The Configuration Dashboard only Available for Super Admin','message_type'=>'warning']);
 		}
 
 		Session::put('dashboard_config_mode',1);
