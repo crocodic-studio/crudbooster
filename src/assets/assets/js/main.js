@@ -178,13 +178,15 @@
 				$('.datepicker').daterangepicker({					
 					singleDatePicker: true,
         			showDropdowns: true,
+        			minDate: '1900-01-01',
 					format:'YYYY-MM-DD'
 				})
 			}
 
 			if($(".datetimepicker").length > 0) {
 				$(".datetimepicker").daterangepicker({
-					singleDatePicker: true,
+					minDate: '1900-01-01',
+					singleDatePicker: true, 
 				    showDropdowns: true,
 				    timePicker:true,
 				    timePicker12Hour: false,
