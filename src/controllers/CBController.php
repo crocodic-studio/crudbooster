@@ -245,6 +245,23 @@ class CBController extends Controller {
 			}
 		}
 
+		//From Dashboard Chart Query 
+		if(Request::get('dq')) {
+			$dq = decrypt(Request::get('dq'));
+			if($dq) {
+				$dq = unserialize($dq);
+				if($dq['sql_where']) {
+					$result->whereraw($dq['sql_where']);
+				}
+				if($dq['limit']) {
+					$limit = $dq['limit']; 
+				}
+				if(isset($dq['noaction']) && $dq['noaction']==1) {
+					$this->button_table_action = false;
+				}
+			}			
+		}
+
 		if($this->data['priv']->is_softdelete==1) {
 			$result->where($this->table.'.deleted_at',NULL);
 		}

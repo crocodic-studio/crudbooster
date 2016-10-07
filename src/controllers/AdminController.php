@@ -128,7 +128,7 @@ class AdminController extends CBController {
 
 		$html .= "<div class='form-group'>";
 			@$html .= "<label>SQL WHERE QUERY</label><textarea required name='sql_where' class='form-control'>$content[sql_where]</textarea>";
-			@$html .= "<div class='help-block'>You can use alias [admin_id_companies],[admin_id]</div>";
+			@$html .= "<div class='help-block'>You can use alias session, e.g : [admin_id_companies],[admin_id]</div>";
 		$html .= "</div>";
 
 		$html .= "</form>";
@@ -212,7 +212,7 @@ class AdminController extends CBController {
 
 		$html .= "<div class='form-group'>";
 			@$html .= "<label>SQL GROUP BY</label><textarea required name='sql_group_by' class='form-control'>$content[sql_group_by]</textarea>";
-			@$html .= "<div class='help-block'>You can use alias [admin_id_companies],[admin_id]</div>";
+			@$html .= "<div class='help-block'>You can use alias session, e.g : [admin_id_companies],[admin_id]</div>";
 		$html .= "</div>";
 
 		$html .= "</form>";
@@ -293,7 +293,7 @@ class AdminController extends CBController {
 
 		$html .= "<div class='form-group'>";
 			@$html .= "<label>SQL WHERE QUERY</label><textarea required name='sql_where' class='form-control'>$content[sql_where]</textarea>";
-			@$html .= "<div class='help-block'>You can use alias [admin_id_companies],[admin_id]</div>";
+			@$html .= "<div class='help-block'>You can use alias session, e.g : [admin_id_companies],[admin_id]</div>";
 		$html .= "</div>";
 
 		$html .= "<div class='form-group'>";
@@ -334,7 +334,7 @@ class AdminController extends CBController {
 			@$html .= "<label>SQL QUERY</label><textarea required rows='6' name='sql_query' class='form-control'>$content[sql_query]</textarea>
 			<div class='help-block'>required select label (for label each side chart), value (for value each side chart), color (for color each side chart). Sparate with comma</div>
 			";
-			@$html .= "<div class='help-block'>You can use alias [admin_id_companies],[admin_id]</div>";
+			@$html .= "<div class='help-block'>You can use alias session, e.g : [admin_id_companies],[admin_id]</div>";
 		$html .= "</div>";
 
 		$html .= "</form>";
@@ -372,6 +372,11 @@ class AdminController extends CBController {
 			@$html .= "<label>LIMIT</label><input required type='number' name='limit' value='$content[limit]' class='form-control'/>";
 		$html .= "</div>";
 
+		$html .= "<div class='form-group'>";
+			@$html .= "<label>SQL Where Query</label><input required type='text' name='sql_where' value='$content[sql_where]' class='form-control'/>";
+			@$html .= "<div class='help-block'>You can use alias session, e.g : [admin_id_companies],[admin_id]</div>";
+		$html .= "</div>"; 
+
 		$html .= "</form>";
 
 		echo $html;
@@ -392,6 +397,7 @@ class AdminController extends CBController {
 		$row = DB::table('cms_dashboard')->where('id',$id)->first();
 		$content = unserialize($row->content);
 		$type = $content['type'];
+		$sessions = Session::all();
 
 		switch($type) {
 			case "statistic_number":
@@ -401,14 +407,15 @@ class AdminController extends CBController {
 				$column         = $content['column'];
 				$sql_where      = $content['sql_where'];				
 				$color          = $content['color'];
-				@$width         = $content['width'];
+				@$width         = $content['width']; 
 
 				$sql_where 		= ($sql_where)?"and ".str_replace("where ", "", $sql_where):"";
-				$sql_where 		= str_ireplace(
-						array("[admin_id]","[admin_id_companies]"),
-						array(get_my_id(),get_my_id_company()),
-						$sql_where
-						);				
+				foreach($sessions as $k=>$v) {
+					if(get_is_superadmin() && $v=='') {
+						$v = 0;
+					}
+					$sql_where = str_replace("[".$k."]", $v, $sql_where);
+				}		
 
 				switch($aggregate_type) {
 					case "count":
@@ -457,11 +464,12 @@ class AdminController extends CBController {
 				$width 			= ($width=='half')?6:12;
 
 				$sql_where 		= ($sql_where)?"and ".str_replace("where ", "", $sql_where):"";
-				$sql_where 		= str_ireplace(
-						array("[admin_id]","[admin_id_companies]"),
-						array(get_my_id(),get_my_id_company()),
-						$sql_where
-						);
+				foreach($sessions as $k=>$v) {
+					if(get_is_superadmin() && $v=='') {
+						$v = 0;
+					}
+					$sql_where = str_replace("[".$k."]", $v, $sql_where);
+				}
 
 				switch($aggregate_type) {
 					case "count":
@@ -540,11 +548,12 @@ class AdminController extends CBController {
 				$width 			= ($width=='half')?6:12;
 
 				$sql_where 		= ($sql_where)?"and ".str_replace("where ", "", $sql_where):"";
-				$sql_where 		= str_ireplace(
-						array("[admin_id]","[admin_id_companies]"),
-						array(get_my_id(),get_my_id_company()),
-						$sql_where
-						);
+				foreach($sessions as $k=>$v) {
+					if(get_is_superadmin() && $v=='') {
+						$v = 0;
+					}
+					$sql_where = str_replace("[".$k."]", $v, $sql_where);
+				}
 
 				switch($aggregate_type) {
 					case "count":
@@ -685,9 +694,29 @@ class AdminController extends CBController {
 				$label         = $content['label'];				
 				$id_cms_moduls = $content['id_cms_moduls'];
 				$limit         = $content['limit'];
+				$sql_where 	   = $content['sql_where'];
 				$moduls        = DB::table('cms_moduls')->where('id',$id_cms_moduls)->first();
 				$main_path     = url(config('crudbooster.ADMIN_PATH').'/'.$moduls->path);
-				$path          = ($limit)?$main_path.'?limit='.$limit:$main_path;
+
+				$param = array();
+				$param['noaction'] = 1;
+				if($limit) {
+					$param['limit'] = $limit;
+				}
+				if($sql_where) {
+					foreach($sessions as $k=>$v) {
+						if(get_is_superadmin() && $v=='') {
+							$v = 0;
+						}
+						$sql_where = str_replace("[".$k."]", $v, $sql_where);
+					}
+					$param['sql_where'] = $sql_where;
+				}
+
+				$param = serialize($param);
+				if($param) { 
+					$main_path = $main_path."?dq=".encrypt($param);
+				}
 
 				$html = " 
 				<div class='col-sm-12 dashboard_widget' id='dashboard_$id'>
@@ -706,7 +735,7 @@ class AdminController extends CBController {
 			      </div>
 			      <script>
 			        $(function() {
-			            $.get('$path',function(htm) {                
+			            $.get('$main_path',function(htm) {                
 			                var raw = $('<div>').append($(htm).find('#table_dashboard').clone()).html();                
 			                $('#table_data_$id').html(raw);
 			            })
@@ -808,6 +837,9 @@ class AdminController extends CBController {
 			Session::put('admin_lock',0);
 			Session::put('theme_color',$priv->theme_color);
 			Session::put("appname",$this->appname);			
+
+			$cb_hook_session = new \App\Http\Controllers\CBHook;
+			$cb_hook_session->afterLogin();
 
 			return redirect()->route('AdminControllerGetIndex'); 
 		}else{

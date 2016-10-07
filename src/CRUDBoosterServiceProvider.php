@@ -43,7 +43,11 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/laravel-filemanager/src/views/script.blade.php' => resource_path('views/vendor/laravel-filemanager/script.blade.php'),
         ],'cb_lfm_config');
-            
+
+        if(!file_exists(app_path('Http/Controllers/CBHook.php'))) {
+            $this->publishes([  __DIR__.'/Controllers/CBHook.php' => app_path('Http/Controllers/CBHook.php')],'cb_hook');
+        }
+                    
         require __DIR__.'/validations/validation.php';        
         require __DIR__.'/routes.php';    
             
