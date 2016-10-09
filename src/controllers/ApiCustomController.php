@@ -235,16 +235,15 @@ class ApiCustomController extends CBController {
 		$a['keterangan'] = g('keterangan');
 
 		if(Request::get('id')) {
-			DB::table('cms_apicustom')->where('id',g('id'))->delete();
-			DB::table('cms_apicustom')->insert($a);
+			DB::table('cms_apicustom')->where('id',g('id'))->update($a);			
 		}else{
-			DB::table('cms_apicustom')->insert($a);
-		}		
 
-		$controllerName = ucwords(str_replace('_',' ',$a['permalink']));
-		$controllerName = str_replace(' ', '', $controllerName);
-		
-		generate_api($controllerName,$a['tabel'],$a['permalink'],$a['method_type']);
+			$controllerName = ucwords(str_replace('_',' ',$a['permalink']));
+			$controllerName = str_replace(' ', '', $controllerName);			
+			generate_api($controllerName,$a['tabel'],$a['permalink'],$a['method_type']);
+
+			DB::table('cms_apicustom')->insert($a);
+		}				
 
 		return redirect(mainpath())->with(['message'=>'Yeay, your api has been saved successfully !','message_type'=>'success']);
 
