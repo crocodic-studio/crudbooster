@@ -1487,7 +1487,7 @@ class CBController extends Controller {
 	public function hook_after_add($id) {
 
 	}
-	public function hook_before_edit(&$arr,&$id) {
+	public function hook_before_edit(&$arr,$id) {
 
 	}
 	public function hook_after_edit($id) {
