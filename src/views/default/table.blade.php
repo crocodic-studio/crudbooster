@@ -41,7 +41,25 @@
                   </div>
                 </div> 
               
-                <div class="box-body no-padding">
+                <script type="text/javascript">
+                  $(document).ready(function() {                      
+                      var $window = $(window);                      
+                      function checkWidth() {
+                          var windowsize = $window.width();
+                          if (windowsize > 500) {
+                              console.log(windowsize);
+                              $('#box-body-table').removeClass('table-responsive');
+                          }else{
+                            console.log(windowsize);
+                              $('#box-body-table').addClass('table-responsive'); 
+                          }
+                      }                      
+                      checkWidth();                      
+                      $(window).resize(checkWidth);
+                  });
+                </script>
+              
+                <div id='box-body-table' class="box-body table-responsive no-padding">
                   <table id='table_dashboard' class="table table-hover table-striped">
                     <thead>
                     <tr>                      
