@@ -36,19 +36,28 @@ class ApiUpdateVersion extends Seeder {
             @$subquery  = explode(',',$a->sub_query_1);
             @$kolom     = explode(',',$a->kolom);
             @$parameter = explode(',',$a->parameter);
+
+            @$subquery  = array_filter($subquery);
+            @$kolom     = array_filter($kolom);
+            @$parameter = array_filter($parameter);
+
             $params     = array();
             $respons    = array();
 
             if($a->aksi == 'list' || $a->aksi == 'detail') {
                 if($parameter) {
-                    foreach($parameter as $p) {                        
-                        $params[] = array('name'=>$p,'type'=>'string','config'=>'','required'=>1,'used'=>1);
+                    foreach($parameter as $p) {         
+                        if($p) {
+                            $params[] = array('name'=>$p,'type'=>'string','config'=>'','required'=>1,'used'=>1);
+                        }                                       
                     }
                 }
                 
                 if($kolom) {
                     foreach($kolom as $k) {
-                        $respons[] = array('name'=>$k,'type'=>'string','subquery'=>'','used'=>1);
+                        if($k) {
+                            $respons[] = array('name'=>$k,'type'=>'string','subquery'=>'','used'=>1);
+                        }                        
                     }
                 }
 
@@ -59,30 +68,40 @@ class ApiUpdateVersion extends Seeder {
                         $sraw = explode(') as ',$s);
                         $config = substr($sraw[0],1);
                         $name = $sraw[1];
-                        $respons[] = array('name'=>$name,'type'=>'string','subquery'=>$config,'used'=>1);
+                        if($name) {
+                            $respons[] = array('name'=>$name,'type'=>'string','subquery'=>$config,'used'=>1);
+                        }
                     }
                 }
             }elseif ($a->aksi == 'save_add') {
                 if($kolom) {
                     foreach($kolom as $k) {
-                        $params[] = array('name'=>$k,'type'=>'string','config'=>'','used'=>1,'required'=>1);
+                        if($k) {
+                            $params[] = array('name'=>$k,'type'=>'string','config'=>'','used'=>1,'required'=>1);
+                        }                        
                     }
                 }
             }elseif ($a->aksi == 'save_edit') {
                 if($kolom) {
                     foreach($kolom as $k) {
-                        $params[] = array('name'=>$k,'type'=>'string','config'=>'','used'=>1,'required'=>1);
+                        if($k) {
+                            $params[] = array('name'=>$k,'type'=>'string','config'=>'','used'=>1,'required'=>1);
+                        }                        
                     }
                 }
                 if($parameter) {
-                    foreach($parameter as $p) {                        
-                        $params[] = array('name'=>$p,'type'=>'string','config'=>'','required'=>1,'used'=>1);
+                    foreach($parameter as $p) {   
+                        if($p) {
+                            $params[] = array('name'=>$p,'type'=>'string','config'=>'','required'=>1,'used'=>1);
+                        }                                             
                     }
                 }
             }elseif ($a->aksi == 'delete') {
                 if($parameter) {
-                    foreach($parameter as $p) {                        
-                        $params[] = array('name'=>$p,'type'=>'string','config'=>'','required'=>1,'used'=>1);
+                    foreach($parameter as $p) {  
+                        if($p) {
+                            $params[] = array('name'=>$p,'type'=>'string','config'=>'','required'=>1,'used'=>1);
+                        }                                              
                     }
                 }
             }
