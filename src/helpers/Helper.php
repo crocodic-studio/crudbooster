@@ -768,7 +768,7 @@ $php .= '
         | Add relational module
         | ----------------------------------------------------------------------     
         | @label       = Name of sub module 
-        | @controller  = Controller name of other module 
+        | @path        = The path of module, see at module generator
         | @foreign_key = required.  
         | 
         */
@@ -941,7 +941,7 @@ $php .= '
     | @id       = current id 
     | 
     */
-    public function hook_before_edit(&$postdata,$id) {        
+    public function hook_before_edit(&$postdata,&$id) {        
         //Your code here
 
     }
