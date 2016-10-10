@@ -168,11 +168,13 @@ class ApiController extends Controller {
 		*/
 		if($row_api->method_type) {
 			$method_type = $row_api->method_type;
-			if(!Request::isMethod($method_type)) {
-				$result['api_status'] = 0;
-				$result['api_message'] = "The request method is not allowed !";
-				goto show;
-			}
+			if($method_type) {
+				if(!Request::isMethod($method_type)) {
+					$result['api_status'] = 0;
+					$result['api_message'] = "The request method is not allowed !";
+					goto show;
+				}
+			}			
 		}
 
 		$responses_fields = array();
