@@ -154,7 +154,9 @@ class ApiController extends Controller {
 		        $result['api_status'] = 0;
 		        $result['api_message'] = $message;
 		        goto show;
-		    }			
+		    }
+
+		    			
 		}
 
 
@@ -400,6 +402,18 @@ class ApiController extends Controller {
 		    	}
 		    }
 
+		    if($action_type == 'save_add') {
+		    	if(\Schema::hasColumn($table,'created_at')) {
+		    		$row_assign['created_at'] = date('Y-m-d H:i:s');
+		    	}
+		    }
+
+		    if($action_type == 'save_edit') {
+		    	if(\Schema::hasColumn($table,'updated_at')) {
+		    		$row_assign['updated_at'] = date('Y-m-d H:i:s');
+		    	}
+		    }
+
 		    $row_assign_keys = array_keys($row_assign);
 
 		    foreach($parameters as $param) {
@@ -454,6 +468,7 @@ class ApiController extends Controller {
 
 
 		    if($action_type == 'save_add') {
+		    	
 		    	$lastId = DB::table($table)->insertGetId($row_assign);
 		    	$result['api_status']  = ($lastId)?1:0;
 				$result['api_message'] = ($lastId)?'The data has been added successfully':'Failed to add data !';
@@ -466,7 +481,7 @@ class ApiController extends Controller {
 
 			    if($row_api->sql_where) {
 			    	$update->whereraw($row_api->sql_where);
-			    }
+			    }			    
 
 			    $this->hook_query_list($update);
 			    $this->hook_query($update);
