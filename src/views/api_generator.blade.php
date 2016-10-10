@@ -97,11 +97,11 @@
                   $('#table-response tbody').append("<tr><td>"+no_params+"</td><td>api_message</td><td>string</td><td>-</td><td><select class='form-control' disabled><option>YES</option></select></td><td>-</td></tr>");
 
                   if(tipe_action == 'list') {
-                    $('#table-response tbody').append("<tr class='info' style='font-weight'><td>#</td><td>items(array)</td><td>&nbsp;</td><td>-</td><td>-</td><td>-</td></tr>");                    
+                    $('#table-response tbody').append("<tr class='info' style='font-weight'><td>#</td><td>data</td><td>&nbsp;</td><td>-</td><td>-</td><td>-</td></tr>");                    
                   }
 
                   if(tipe_action == 'detail') {
-                    $('#table-response tbody').append("<tr class='info' style='font-weight'><td>#</td><td>item(object)</td><td>&nbsp;</td><td>-</td><td>-</td><td>-</td></tr>");                    
+                    $('#table-response tbody').append("<tr class='info' style='font-weight'><td>#</td><td>data</td><td>&nbsp;</td><td>-</td><td>-</td><td>-</td></tr>");                    
                   } 
 
                   no_params = 0;
