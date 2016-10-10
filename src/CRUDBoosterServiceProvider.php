@@ -45,7 +45,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         ],'cb_lfm_config');
 
         if(!file_exists(app_path('Http/Controllers/CBHook.php'))) {
-            $this->publishes([  __DIR__.'/Controllers/CBHook.php' => app_path('Http/Controllers/CBHook.php')],'cb_hook');
+            $this->publishes([  __DIR__.'/controllers/CBHook.php' => app_path('Http/Controllers/CBHook.php')],'cb_hook');
         }
                     
         require __DIR__.'/validations/validation.php';        
