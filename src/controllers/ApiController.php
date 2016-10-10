@@ -405,13 +405,13 @@ class ApiController extends Controller {
 		    }
 
 		    if($action_type == 'save_add') {
-		    	if(\Schema::hasColumn($table,'created_at')) {
+		    	if(\Schema::hasColumn($table,$table.'.created_at')) {
 		    		$row_assign['created_at'] = date('Y-m-d H:i:s');
 		    	}
-		    }
+		    } 
 
 		    if($action_type == 'save_edit') {
-		    	if(\Schema::hasColumn($table,'updated_at')) {
+		    	if(\Schema::hasColumn($table,$table.'.updated_at')) {
 		    		$row_assign['updated_at'] = date('Y-m-d H:i:s');
 		    	}
 		    }
