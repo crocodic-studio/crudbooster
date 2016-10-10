@@ -137,6 +137,8 @@
                     var used = resp[i].used;
                     var config = resp[i].config;
 
+                    console.log(field_name+' - '+field_type);
+
                     if(tipe_action == 'save_add' && field_name == 'id') {
                         $(this).remove();                                              
                     }else{
@@ -146,6 +148,8 @@
                     
                     switch(field_type) {
                       default:
+                        var type = field_type;
+                      break;
                       case 'varchar':
                       case 'nvarchar':
                       case 'char':
@@ -153,7 +157,7 @@
                         var type = 'string';
                         break;
                       case 'integer':
-                        var type = 'integer';
+                        var type = 'integer'; 
                         break;
                       case 'double':
                       case 'float':
@@ -175,13 +179,13 @@
                         break;
                       case 'password':
                         var type = 'password';
-                        break;
+                        break;                      
                     }                                          
 
                     $(this).find('td:nth-child(1)').text(no_params);
                     $(this).find('td:nth-child(2) input').val(field_name);
                     $(this).find('td:nth-child(3) select').val(type);
-                    $(this).find('td:nth-child(4) select').val(config);
+                    $(this).find('td:nth-child(4) input').val(config);
                     $(this).find('td:nth-child(5) select').val(required);
                     $(this).find('td:nth-child(6) select').val(used);
                     
