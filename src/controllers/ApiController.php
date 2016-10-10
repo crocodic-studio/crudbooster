@@ -94,7 +94,7 @@ class ApiController extends Controller {
 		|
 		*/
 		if($parameters) {
-			$type_except = ['password','ref'];
+			$type_except = ['password','ref','base64_file'];
 			$input_validator = array();
 			$data_validation = array();
 			foreach($parameters as $param) {
@@ -455,7 +455,7 @@ class ApiController extends Controller {
 					if($mime_type) {
 						if(in_array($mime_type, $uploads_format_candidate)) {
 							Storage::makeDirectory(date('Y-m'));
-							$filename = md5(str_random(5)).'.'.$$mime_type;
+							$filename = md5(str_random(5)).'.'.$mime_type;
 							if(file_put_contents(storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m')).'/'.$filename, $filedata)) {
 								$v = 'uploads/'.date('Y-m').'/'.$filename;
 								$row_assign[$name] = $v;
