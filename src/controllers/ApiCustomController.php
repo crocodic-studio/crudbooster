@@ -39,6 +39,59 @@ class ApiCustomController extends CBController {
 		return view('crudbooster::api_documentation',$data); 
 	}
 
+	function getDownloadPostman() {
+		$data = array();
+		$data['variables'] = [];
+		$data['info'] = [
+			'name'=>get_setting('appname').' - API',
+			'_postman_id'=>"1765dd11-73d1-2978-ae11-36921dc6263d",
+			'description'=>'',
+			'schema'=>'https://schema.getpostman.com/json/collection/v2.0.0/collection.json'
+		];
+		$items = array();
+		$apis = DB::table('cms_apicustom')->orderby('nama','asc')->get();		
+
+		foreach($apis as $a) {
+			$parameters = unserialize($a->parameters);
+			$formdata = array();
+			$httpbuilder = array();
+			if($parameters) {
+				foreach($parameters as $p) {
+					$enabled = ($p['used']==0)?false:true;
+					$name = $p['name'];
+					$httpbuilder[$name] = '';
+					$formdata[] = ['key'=>$name,'value'=>'','type'=>'text','enabled'=>$enabled];
+				}
+			}			
+
+			if(strtolower($a->method_type) == 'get') {
+				if($httpbuilder) {
+					$httpbuilder = "?".http_build_query($httpbuilder);
+				}
+			}
+
+
+			$items[] = array(
+				'name'=>$a->nama,
+				'request'=>array(
+						'url'=>url('api/'.$a->permalink).$httpbuilder,
+						'method'=>$a->method_type?:'GET',
+						'header'=>[],
+						'body'=>array(
+							'mode'=>'formdata',
+							'formdata'=>$formdata
+							),
+						'description'=>$a->keterangan
+					)								
+				);
+		}
+		$data['item'] = $items; 
+
+		$json = json_encode($data);
+
+		return \Response::make($json,200,array('Content-Type'=>'application/json','Content-Disposition'=>'attachment; filename='.get_setting('appname').' - API For POSTMAN.json'));
+	}
+
 	public function getScreetKey() {
 		
 		$data['page_title'] = 'API Generator';

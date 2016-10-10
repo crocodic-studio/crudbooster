@@ -59,7 +59,11 @@
           </div>
           <table class='table table-striped table-api table-bordered'>
               <thead>
-                  <tr class='info'><th width='2%'>No</th><th>API Name</th></tr>
+                  <tr class='info'><th width='2%'>No</th><th>API Name
+                    <span class='pull-right'>
+                      <a class='btn btn-xs btn-warning' target="_blank" href='{{mainpath("download-postman")}}'>Export For POSTMAN <sup>Beta</sup></a>
+                    </span>
+                  </th></tr>
               </thead> 
               <tbody>
                   <?php $no = 0;?>
