@@ -74,24 +74,6 @@ class ApiController extends Controller {
 			}			
 		}
 
-		$this->hook_before($posts);
-		$action_type              = $row_api->aksi;
-		$table                    = $row_api->tabel;
-		$limit                    = ($posts['limit'])?:20;
-		$offset                   = ($posts['offset'])?:0;
-		$orderby                  = ($posts['orderby'])?:$table.'.id,desc';		
-		$uploads_format_candidate = explode(',',config("crudbooster.UPLOAD_TYPES"));	
-		$uploads_candidate        = explode(',',config('crudbooster.IMAGE_FIELDS_CANDIDATE'));
-		$password_candidate       = explode(',',config('crudbooster.PASSWORD_FIELDS_CANDIDATE'));	
-		$asset					  = asset('/');				
-		
-		unset($posts['limit']);
-		unset($posts['offset']);
-		unset($posts['orderby']);	
-
-
-		
-
 		/* 
 		| ----------------------------------------------
 		| Check the row is exists or not
@@ -174,16 +156,28 @@ class ApiController extends Controller {
 		        $result['api_status'] = 0;
 		        $result['api_message'] = $message;
 		        goto show;
-		    }
-
-		    			
+		    }		    			
 		}		
 
 		$responses_fields = array();
 		foreach($responses as $r) {
 			$responses_fields[] = $r['name'];
 		}
+
+		$this->hook_before($posts);
+		$action_type              = $row_api->aksi;
+		$table                    = $row_api->tabel;
+		$limit                    = ($posts['limit'])?:20;
+		$offset                   = ($posts['offset'])?:0;
+		$orderby                  = ($posts['orderby'])?:$table.'.id,desc';		
+		$uploads_format_candidate = explode(',',config("crudbooster.UPLOAD_TYPES"));	
+		$uploads_candidate        = explode(',',config('crudbooster.IMAGE_FIELDS_CANDIDATE'));
+		$password_candidate       = explode(',',config('crudbooster.PASSWORD_FIELDS_CANDIDATE'));	
+		$asset					  = asset('/');				
 		
+		unset($posts['limit']);
+		unset($posts['offset']);
+		unset($posts['orderby']);				
 
 		if($action_type == 'list' || $action_type == 'detail' || $action_type == 'delete') {
 			$name_tmp = array();
