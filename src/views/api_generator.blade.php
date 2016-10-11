@@ -244,7 +244,7 @@
 
 
                           
-                          $(this).find('.col-delete').html("<a class='btn btn-danger' href='javascript:void(0)' onclick='deleteParam(this)'>Delete</a>");
+                          $(this).find('.col-delete').html("<a class='btn btn-danger' href='javascript:void(0)' onclick='deleteParam(this)'><i class='fa fa-ban'></i></a>");
                           i += 1;
                       })
                   })    
@@ -326,7 +326,7 @@
                     $(this).find('td:nth-child(5) select').val(required);
                     $(this).find('td:nth-child(6) select').val(used);
                     
-                    $(this).find('.col-delete').html("<a class='btn btn-danger' href='javascript:void(0)' onclick='deleteParam(this)'>Delete</a>");
+                    $(this).find('.col-delete').html("<a class='btn btn-danger' href='javascript:void(0)' onclick='deleteParam(this)'><i class='fa fa-ban'></i></a>");
                     i += 1;
                 })
 
@@ -481,7 +481,7 @@
               $('#table-parameters tbody tr').each(function() {
                   no_params += 1;
                   $(this).find('td:nth-child(1)').text(no_params);
-                  $(this).find('.col-delete').html("<a class='btn btn-danger' href='javascript:void(0)' onclick='deleteParam(this)'>Delete</a>");
+                  $(this).find('.col-delete').html("<a class='btn btn-danger' href='javascript:void(0)' onclick='deleteParam(this)'><i class='fa fa-ban'></i></a>");
               });
             }
 
@@ -622,7 +622,7 @@
                             </div>                            
 
                             <table id='table-parameters' class='table table-striped table-bordered'>
-                              <thead><tr><th width="3%">No</th><th>Name</th><th>Validation / Type</th><th>Laravel Validation / Description / Define</th><th width="8%" title='is Mandatory ?'>Mandatory</th><th  width="8%" title='is used ?'>Enable</th><th width="5%">Delete</th></tr></thead>
+                              <thead><tr><th width="3%">No</th><th>Name</th><th>Validation / Type</th><th>Laravel Validation / Description / Define</th><th width="8%" title='is Mandatory ?'>Mandatory</th><th  width="8%" title='is used ?'>Enable</th><th width="5%">-</th></tr></thead>
                               <tbody>
                                   <tr class='row-no-data'><td colspan='7'>There is no data</td></tr>
                               </tbody>
@@ -669,7 +669,7 @@
                                     <td><input class='form-control' type='text' name='params_config[]'></td> 
                                     <td><select class='form-control params_required' name='params_required[]'><option value='1'>YES</option><option value='0'>NO</option></select></td>
                                     <td><select class='form-control params_used' name='params_used[]'><option value='1'>YES</option><option value='0'>NO</option></select></td>
-                                    <td class='col-delete'><a class='btn btn-primary' href='javascript:void(0)' onclick='addParam()'>Add</a></td>
+                                    <td class='col-delete'><a class='btn btn-primary' href='javascript:void(0)' onclick='addParam()'><i class='fa fa-plus'></i></a></td>
                                   </tr>
                               </tfoot>
                             </table>
