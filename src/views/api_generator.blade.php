@@ -106,13 +106,150 @@
 
                   no_params = 0;
                   $.get('{{url(config("crudbooster.ADMIN_PATH"))."/api_generator/column-table"}}/'+t+'/'+type,function(resp) {                                                                          
-                      $.each(resp,function(i,obj) {                                                                                                        
+                      $.each(resp,function(i,obj) {
+
+                          switch(obj.type) {
+                            default:
+                              var obj_type = obj.type;
+                            break;
+                            case 'varchar':
+                            case 'nvarchar':
+                            case 'char':
+                            case 'text':
+                              var obj_type = 'string';
+                              break;
+                            case 'integer':
+                              var obj_type = 'integer'; 
+                              break;
+                            case 'double':
+                            case 'float':
+                            case 'decimal':
+                              var obj_type = 'numeric';
+                              break;
+                            case 'date':
+                              var obj_type = 'date';
+                              break;
+                            case 'datetime':
+                            case 'timestamp':
+                              var obj_type = 'date_format:Y-m-d H:i:s';
+                              break;
+                            case 'email':
+                              var obj_type = 'email';
+                              break;
+                            case 'image':
+                              var obj_type = 'image';
+                              break;
+                            case 'password':
+                              var obj_type = 'password';
+                              break;                      
+                          }
+
                           no_params += 1;
-                          $('#table-response tbody').append("<tr class='success tr-response'><td>"+no_params+"</td><td>&nbsp;&nbsp;- "+obj.name+"<input type='hidden' name='responses_name[]' value='"+obj.name+"'/></td><td>"+obj.type+"<input type='hidden' name='responses_type[]' value='"+obj.type+"'/></td><td>-<input type='hidden' name='responses_subquery[]' value=''/></td><td><select class='form-control responses_used' name='responses_used[]'><option value='1'>YES</option><option value='0'>NO</option></select></td><td>-</td></tr>");
+                          $('#table-response tbody').append("<tr class='success tr-response'><td>"+no_params+"</td><td>&nbsp;&nbsp;- "+obj.name+"<input type='hidden' name='responses_name[]' value='"+obj.name+"'/></td><td>"+obj_type+"<input type='hidden' name='responses_type[]' value='"+obj_type+"'/></td><td>-<input type='hidden' name='responses_subquery[]' value=''/></td><td><select class='form-control responses_used' name='responses_used[]'><option value='1'>YES</option><option value='0'>NO</option></select></td><td><a class='btn btn-danger' href='javascript:void(0)' onclick='deleteResponse(this)'><i class='fa fa-ban'></i></a></td></tr>");
                       })                   
                   })
 
                   $('#table-response tfoot').show();
+            }
+
+            function load_parameters() {
+                  var t           = $('#combo_tabel').val();
+                  var type        = 'save_add';
+                  var tipe_action = $('#tipe_action').val();
+
+                  if(t == '') return false;
+                  if(tipe_action == '') return false;
+
+                  if(tipe_action == 'list' || tipe_action == 'detail') {
+                    $('textarea[name=sub_query_1]').prop('readonly',false);
+                  }else{
+                    $('textarea[name=sub_query_1]').prop('readonly',true);
+                  }
+
+                  $.get('{{url(config("crudbooster.ADMIN_PATH"))."/api_generator/column-table"}}/'+t+'/'+type,function(resp) {  
+                      var no_params = 0;                              
+                      $('#table-parameters tbody').empty();
+                      $.each(resp,function(i,obj) {                                          
+
+                          var param_html = $('#table-parameters tfoot tr').clone();                                                                              
+                          $('#table-parameters tbody').append(param_html);
+                      })
+
+                      var i = 0;
+                      $('#table-parameters tbody tr').each(function() {
+                          
+                          var field_type = resp[i].type;
+                          var field_name = resp[i].name;
+
+                          if(tipe_action == 'save_add' && field_name == 'id') {
+                              $(this).remove();                                              
+                          }else{
+                            no_params += 1;
+                          }
+
+                          
+                          switch(field_type) {
+                            default:
+                            case 'varchar':
+                            case 'nvarchar':
+                            case 'char':
+                            case 'text':
+                              var type = 'string';
+                              break;
+                            case 'integer':
+                              var type = 'integer';
+                              break;
+                            case 'double':
+                            case 'float':
+                            case 'decimal':
+                              var type = 'numeric';
+                              break;
+                            case 'date':
+                              var type = 'date';
+                              break;
+                            case 'datetime':
+                            case 'timestamp':
+                              var type = 'date_format:Y-m-d H:i:s';
+                              break;
+                            case 'email':
+                              var type = 'email';
+                              break;
+                            case 'image':
+                              var type = 'image';
+                              break;
+                            case 'password':
+                              var type = 'password';
+                              break;
+                          }                                          
+
+
+
+                          $(this).find('td:nth-child(1)').text(no_params);
+                          $(this).find('td:nth-child(2) input').val(field_name);
+                          $(this).find('td:nth-child(3) select').val(type);
+
+                          if(tipe_action == 'list' || tipe_action == 'detail' || tipe_action == 'delete') {
+                            $(this).find('td:nth-child(5) select').val('0');
+                            $(this).find('td:nth-child(6) select').val('0');
+                          }
+                          if (tipe_action == 'detail' && field_name == 'id') {
+                            $(this).find('td:nth-child(5) select').val('1');
+                            $(this).find('td:nth-child(6) select').val('1');
+                          }
+
+                          if (tipe_action == 'delete' && field_name == 'id') {
+                            $(this).find('td:nth-child(5) select').val('1');
+                            $(this).find('td:nth-child(6) select').val('1');
+                          }
+
+
+                          
+                          $(this).find('.col-delete').html("<a class='btn btn-danger' href='javascript:void(0)' onclick='deleteParam(this)'>Delete</a>");
+                          i += 1;
+                      })
+                  })    
+
+                  $('#table-parameters tfoot').show();                                                    
             }
 
             function init_data_parameters() {
@@ -296,103 +433,7 @@
                   
                   load_response();
 
-                  var t           = $('#combo_tabel').val();
-                  var type        = 'save_add';
-                  var tipe_action = $('#tipe_action').val();
-
-                  if(t == '') return false;
-                  if(tipe_action == '') return false;
-
-                  if(tipe_action == 'list' || tipe_action == 'detail') {
-                    $('textarea[name=sub_query_1]').prop('readonly',false);
-                  }else{
-                    $('textarea[name=sub_query_1]').prop('readonly',true);
-                  }
-
-                  $.get('{{url(config("crudbooster.ADMIN_PATH"))."/api_generator/column-table"}}/'+t+'/'+type,function(resp) {  
-                      var no_params = 0;                              
-                      $('#table-parameters tbody').empty();
-                      $.each(resp,function(i,obj) {                                          
-
-                          var param_html = $('#table-parameters tfoot tr').clone();                                                                              
-                          $('#table-parameters tbody').append(param_html);
-                      })
-
-                      var i = 0;
-                      $('#table-parameters tbody tr').each(function() {
-                          
-                          var field_type = resp[i].type;
-                          var field_name = resp[i].name;
-
-                          if(tipe_action == 'save_add' && field_name == 'id') {
-                              $(this).remove();                                              
-                          }else{
-                            no_params += 1;
-                          }
-
-                          
-                          switch(field_type) {
-                            default:
-                            case 'varchar':
-                            case 'nvarchar':
-                            case 'char':
-                            case 'text':
-                              var type = 'string';
-                              break;
-                            case 'integer':
-                              var type = 'integer';
-                              break;
-                            case 'double':
-                            case 'float':
-                            case 'decimal':
-                              var type = 'numeric';
-                              break;
-                            case 'date':
-                              var type = 'date';
-                              break;
-                            case 'datetime':
-                            case 'timestamp':
-                              var type = 'date_format:Y-m-d H:i:s';
-                              break;
-                            case 'email':
-                              var type = 'email';
-                              break;
-                            case 'image':
-                              var type = 'image';
-                              break;
-                            case 'password':
-                              var type = 'password';
-                              break;
-                          }                                          
-
-
-
-                          $(this).find('td:nth-child(1)').text(no_params);
-                          $(this).find('td:nth-child(2) input').val(field_name);
-                          $(this).find('td:nth-child(3) select').val(type);
-
-                          if(tipe_action == 'list' || tipe_action == 'detail' || tipe_action == 'delete') {
-                            $(this).find('td:nth-child(5) select').val('0');
-                            $(this).find('td:nth-child(6) select').val('0');
-                          }
-                          if (tipe_action == 'detail' && field_name == 'id') {
-                            $(this).find('td:nth-child(5) select').val('1');
-                            $(this).find('td:nth-child(6) select').val('1');
-                          }
-
-                          if (tipe_action == 'delete' && field_name == 'id') {
-                            $(this).find('td:nth-child(5) select').val('1');
-                            $(this).find('td:nth-child(6) select').val('1');
-                          }
-
-
-                          
-                          $(this).find('.col-delete').html("<a class='btn btn-danger' href='javascript:void(0)' onclick='deleteParam(this)'>Delete</a>");
-                          i += 1;
-                      })
-                  })    
-
-                  $('#table-parameters tfoot').show();                                                    
+                  load_parameters();
               })
 
               $('#table-parameters tfoot tr td:nth-child(2) input').on('input',function() {
@@ -575,7 +616,11 @@
 
 
                         <div class='form-group'>
-                            <label><i class='fa fa-cog'></i> Parameters</label>
+                            <div class="clearfix">
+                              <label><i class='fa fa-cog'></i> Parameters</label>
+                              <a class='pull-right btn btn-xs btn-primary' href='javascript:void(0)' onclick="load_parameters()"><i class='fa fa-refresh'></i> Reset</a>
+                            </div>                            
+
                             <table id='table-parameters' class='table table-striped table-bordered'>
                               <thead><tr><th width="3%">No</th><th>Name</th><th>Validation / Type</th><th>Laravel Validation / Description / Define</th><th width="8%" title='is Mandatory ?'>Mandatory</th><th  width="8%" title='is used ?'>Enable</th><th width="5%">Delete</th></tr></thead>
                               <tbody>
@@ -637,7 +682,10 @@
                         </div>    
 
                         <div class='form-group'>
-                            <label>Response</label>                            
+                            <div class='clearfix'>
+                              <label><i class='fa fa-cog'></i> Response</label>                            
+                              <a class='pull-right btn btn-xs btn-primary' href='javascript:void(0)' onclick='load_response()'><i class='fa fa-refresh'></i> Reset</a>
+                            </div>
                             <div id='response'>
                                 <table id='table-response' class='table table-striped table-bordered'>
                                   <thead>
