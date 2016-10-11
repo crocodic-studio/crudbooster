@@ -86,7 +86,7 @@
                                           <tr><td><strong>METHOD</strong></td><td>{{strtoupper($api->method_type)}}</td></tr>
                                           <tr><td><strong>PARAMETER</strong></td><td>
                                             <table class='table table-bordered table-hover'>
-                                              <thead><tr class='active'><th width="3%">No</th><th width="5%">Type</th><th>Parameter Names</th><th>Mandatory</th></tr></thead>
+                                              <thead><tr class='active'><th width="3%">No</th><th width="5%">Type</th><th>Parameter Names</th><th>Description / Validate / Rule</th><th>Mandatory</th></tr></thead>
                                               <tbody>
                                                   <?php $i = 0;?>
                                                   @foreach($parameters as $param)
@@ -94,7 +94,8 @@
                                                     <tr>
                                                       <td>{{++$i}}</td>
                                                       <td width="5%"><em>{{$param['type']}}</em></td>
-                                                      <td>{{$param['name']}}</td>     
+                                                      <td>{{$param['name']}}</td>    
+                                                      <td>{{$param['config']}}</td> 
                                                       <td>{!! ($param['required'])?"<span class='label label-primary'>REQUIRED</span>":"<span class='label label-default'>OPTIONAL</span>"!!}</td>                   
                                                     </tr>
                                                     @endif

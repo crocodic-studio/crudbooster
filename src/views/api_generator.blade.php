@@ -217,12 +217,8 @@
                 $('#table-response tbody').append("<tr><td>"+no_params+"</td><td>api_message</td><td>string</td><td>-</td><td><select class='form-control' disabled><option>YES</option></select></td><td>-</td></tr>");
 
                 if(tipe_action == 'list') {
-                  $('#table-response tbody').append("<tr class='info' style='font-weight'><td>#</td><td>items(array)</td><td>&nbsp;</td><td>-</td><td>-</td><td>-</td></tr>");                    
-                }
-
-                if(tipe_action == 'detail') {
-                  $('#table-response tbody').append("<tr class='info' style='font-weight'><td>#</td><td>item(object)</td><td>&nbsp;</td><td>-</td><td>-</td><td>-</td></tr>");                    
-                }
+                  $('#table-response tbody').append("<tr class='info' style='font-weight'><td>#</td><td>data</td><td>&nbsp;</td><td>-</td><td>-</td><td>-</td></tr>");                    
+                }                
 
                 no_params = 0;
                 var responses_data = {!! $responses !!};
@@ -233,17 +229,55 @@
                     var used_no    = (obj.used == '0')?"selected":"";
                     var tr_success = (obj.used == '1')?"success":"";
 
+
+                    switch(obj.type) {
+                      default:
+                        var obj_type = obj.type;
+                      break;
+                      case 'varchar':
+                      case 'nvarchar':
+                      case 'char':
+                      case 'text':
+                        var obj_type = 'string';
+                        break;
+                      case 'integer':
+                        var obj_type = 'integer'; 
+                        break;
+                      case 'double':
+                      case 'float':
+                      case 'decimal':
+                        var obj_type = 'numeric';
+                        break;
+                      case 'date':
+                        var obj_type = 'date';
+                        break;
+                      case 'datetime':
+                      case 'timestamp':
+                        var obj_type = 'dateTime';
+                        break;
+                      case 'email':
+                        var obj_type = 'email';
+                        break;
+                      case 'image':
+                        var obj_type = 'image';
+                        break;
+                      case 'password':
+                        var obj_type = 'password';
+                        break;                      
+                    }
+
                     var input_subquery = '';
                     var delete_btn = '';
                     
                     if(obj.subquery=='') {
                       input_subquery = "-<input type='hidden' name='responses_subquery[]' value='"+obj.subquery+"'/>";
+                      delete_btn = "<a class='btn btn-danger' href='javascript:void(0)' onclick='deleteResponse(this)'><i class='fa fa-ban'></i></a>";
                     }else{
                       input_subquery = obj.subquery+"<input type='hidden' name='responses_subquery[]' value='"+obj.subquery+"'/>";
                       delete_btn = "<a class='btn btn-danger' href='javascript:void(0)' onclick='deleteResponse(this)'><i class='fa fa-ban'></i></a>";
                     }                    
 
-                    $('#table-response tbody').append("<tr class='"+tr_success+" tr-response'><td>"+no_params+"</td><td>&nbsp;&nbsp;- "+obj.name+"<input type='hidden' name='responses_name[]' value='"+obj.name+"'/></td><td>"+obj.type+"<input type='hidden' name='responses_type[]' value='"+obj.type+"'/></td><td>"+input_subquery+"</td><td><select class='form-control responses_used' name='responses_used[]'><option "+used_yes+" value='1'>YES</option><option "+used_no+" value='0'>NO</option></select></td><td>"+delete_btn+"</td></tr>");
+                    $('#table-response tbody').append("<tr class='"+tr_success+" tr-response'><td>"+no_params+"</td><td>&nbsp;&nbsp;- "+obj.name+"<input type='hidden' name='responses_name[]' value='"+obj.name+"'/></td><td>"+obj_type+"<input type='hidden' name='responses_type[]' value='"+obj_type+"'/></td><td>"+input_subquery+"</td><td><select class='form-control responses_used' name='responses_used[]'><option "+used_yes+" value='1'>YES</option><option "+used_no+" value='0'>NO</option></select></td><td>"+delete_btn+"</td></tr>");
                 })
 
                 $('#table-response tfoot').show();
@@ -411,7 +445,7 @@
             }
 
             function addResponse() {
-              
+              console.log('addResponse');
               
               var val = $('#table-response tfoot tr td:nth-child(2) input').val();
               var validation = $('#table-response tfoot tr td:nth-child(3) select').val();     
@@ -420,7 +454,7 @@
               
               var check_yes,check_no;
 
-              if(is_check == '1') {
+              if(is_check == '1') { 
                   check_yes = 'selected';
               }else{
                   check_no = 'selected';
@@ -433,7 +467,7 @@
               htm += "<td><a class='btn btn-danger' href='javascript:void(0)' onclick='deleteResponse(this)'><i class='fa fa-ban'></i></a></td></tr>";      
 
               if(val=='') return false;
-              if(subquery == '') return false;
+              // if(subquery == '') return false;
 
               $('#table-response .row-no-data').remove();
               $('#table-response tbody').append(htm);
