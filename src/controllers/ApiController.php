@@ -160,12 +160,12 @@ class ApiController extends Controller {
 		        $result['api_message'] = $message;
 		        goto show;
 		    }		    			
-		}		
+		}			
 
 		$responses_fields = array();
 		foreach($responses as $r) {
-			$responses_fields[] = $r['name'];
-		}
+			if($r['used']) $responses_fields[] = $r['name'];
+		}		
 
 		$this->hook_before($posts);
 
@@ -217,10 +217,8 @@ class ApiController extends Controller {
 					$data->leftjoin($jointable,$jointable.'.id','=',$table.'.'.$name);
 					foreach($jointable_field as $jf) {							
 						$jf_alias = $jointable.'_'.$jf;
-						if(in_array($jf_alias, $responses_fields)) {
-
+						if(in_array($jf_alias, $responses_fields)) {						
 							$data->addselect($jointable.'.'.$jf.' as '.$jf_alias);							
-
 							$name_tmp[] = $jf_alias;
 						}							
 					}
