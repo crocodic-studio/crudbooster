@@ -168,7 +168,7 @@ class ApiController extends Controller {
 		}
 
 		$this->hook_before($posts);
-				
+
 		$limit                    = ($posts['limit'])?:20;
 		$offset                   = ($posts['offset'])?:0;
 		$orderby                  = ($posts['orderby'])?:$table.'.id,desc';		
@@ -399,6 +399,15 @@ class ApiController extends Controller {
 		    foreach($input_validator as $k=>$v) {
 		    	if(\Schema::hasColumn($table,$k)) {
 		    		$row_assign[$k] = $v;
+		    	}
+		    }
+
+		    foreach($parameters as $param) {
+		    	$name = $param['name'];
+		    	$used = $param['used'];
+		    	$value = $posts[$name];
+		    	if($used=='1' && $value=='') {
+		    		unset($row_assign[$name]);
 		    	}
 		    }
 
