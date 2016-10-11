@@ -57,6 +57,9 @@ class ApiController extends Controller {
 		
 		$row_api = DB::table('cms_apicustom')->where('permalink',$this->permalink)->first();	
 
+		$action_type              = $row_api->aksi;
+		$table                    = $row_api->tabel;
+
 		/* 
 		| ----------------------------------------------
 		| Method Type validation
@@ -165,8 +168,7 @@ class ApiController extends Controller {
 		}
 
 		$this->hook_before($posts);
-		$action_type              = $row_api->aksi;
-		$table                    = $row_api->tabel;
+				
 		$limit                    = ($posts['limit'])?:20;
 		$offset                   = ($posts['offset'])?:0;
 		$orderby                  = ($posts['orderby'])?:$table.'.id,desc';		
