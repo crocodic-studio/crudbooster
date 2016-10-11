@@ -54,10 +54,27 @@ class ApiController extends Controller {
 		$posts        = Request::all();
 		$posts_keys   = array_keys($posts);
 		$posts_values = array_values($posts);
+		
+		$row_api = DB::table('cms_apicustom')->where('permalink',$this->permalink)->first();	
+
+		/* 
+		| ----------------------------------------------
+		| Method Type validation
+		| ----------------------------------------------
+		|
+		*/
+		if($row_api->method_type) {
+			$method_type = $row_api->method_type;
+			if($method_type) {
+				if(!Request::isMethod($method_type)) {
+					$result['api_status'] = 0;
+					$result['api_message'] = "The request method is not allowed !";
+					goto show;
+				}
+			}			
+		}
 
 		$this->hook_before($posts);
-
-		$row_api = DB::table('cms_apicustom')->where('permalink',$this->permalink)->first();	
 		$action_type              = $row_api->aksi;
 		$table                    = $row_api->tabel;
 		$limit                    = ($posts['limit'])?:20;
@@ -71,6 +88,9 @@ class ApiController extends Controller {
 		unset($posts['limit']);
 		unset($posts['offset']);
 		unset($posts['orderby']);	
+
+
+		
 
 		/* 
 		| ----------------------------------------------
@@ -157,25 +177,7 @@ class ApiController extends Controller {
 		    }
 
 		    			
-		}
-
-
-		/* 
-		| ----------------------------------------------
-		| Method Type validation
-		| ----------------------------------------------
-		|
-		*/
-		if($row_api->method_type) {
-			$method_type = $row_api->method_type;
-			if($method_type) {
-				if(!Request::isMethod($method_type)) {
-					$result['api_status'] = 0;
-					$result['api_message'] = "The request method is not allowed !";
-					goto show;
-				}
-			}			
-		}
+		}		
 
 		$responses_fields = array();
 		foreach($responses as $r) {
