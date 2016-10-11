@@ -67,7 +67,11 @@ class ApiCustomController extends CBController {
 			if(strtolower($a->method_type) == 'get') {
 				if($httpbuilder) {
 					$httpbuilder = "?".http_build_query($httpbuilder);
+				}else{
+					$httpbuilder = '';
 				}
+			}else{
+				$httpbuilder = '';
 			}
 
 
