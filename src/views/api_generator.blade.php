@@ -677,7 +677,7 @@
 
                         <div class='form-group'>
                             <label>SQL Where Query (Optional)</label>
-                            <textarea name='sql_where' rows='3' class='form-control' value='{{$row->sql_where}}' placeholder="status = '[paramStatus]'"></textarea>
+                            <textarea name='sql_where' rows='3' class='form-control' placeholder="status = '[paramStatus]'">{{$row->sql_where}}</textarea>
                             <div class='help-block'>Use [paramName] to get the parameter value. e.g : [id]</div>
                         </div>    
 
