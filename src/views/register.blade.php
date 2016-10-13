@@ -22,6 +22,9 @@
     <![endif]-->
     <link rel='stylesheet' href='{{asset("vendor/crudbooster/assets/css/main.css")}}'/>
     <style type="text/css">
+      .login-box, .register-box {
+        margin: 2% auto;
+      }
       .login-page, .register-page {
           background: {{ get_setting("login_background_color")?:'#dddddd'}} url('{{ get_setting("login_background_image")?asset(get_setting("login_background_image")):asset('vendor/crudbooster/assets/bg_blur5.jpg') }}');
           color: {{ get_setting("login_font_color")?:'#ffffff' }} !important;

@@ -32,6 +32,9 @@
           background-position: center;
           background-size: cover;
       }
+      .login-box, .register-box {
+        margin: 2% auto;
+      }
       .login-box-body {
         box-shadow: 0px 0px 100px rgba(0,0,0,0.8);              
         background: none;
