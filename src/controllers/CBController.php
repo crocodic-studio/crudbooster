@@ -279,7 +279,8 @@ class CBController extends Controller {
 		foreach($columns_table as $index => $coltab) {
 			$join = @$coltab['join'];
 			$table = $this->table;
-			$field = $coltab['name'];			
+			$field = $coltab['name'];
+			$join_table_temp[] = $table;			
 
 			if(!$field) die('Please make sure there is key `name` in each row of col');
 
