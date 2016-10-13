@@ -74,7 +74,7 @@
             </h1>     
             <ol class="breadcrumb">
                 <li><a title='Main Dashboard' href="{{ url(config('crudbooster.ADMIN_PATH')) }}"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a title='{{ $module_name }}' href="{{ $dashboard }}"><i class='<?php echo @($priv)?$priv->icon:"fa fa-bars"?>'></i> {{ $module_name?:'Dashboard' }}</a></li>
+                <li><a title='{{ $parent_module_name }}' href="{{ $dashboard }}"><i class='<?php echo @($priv)?$priv->icon:"fa fa-bars"?>'></i> {{ $parent_module_name?:'Dashboard' }}</a></li>
                 @if(Request::segment(3) == 'sub-module')                    
                     <li><a title='{{ $data_sub_module->name }}' href='{{ mainpath() }}'><i class='{{ $data_sub_module->icon }}'></i> {{ $data_sub_module->name }} </a></li>
                 @endif

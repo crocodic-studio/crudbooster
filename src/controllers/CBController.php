@@ -122,10 +122,13 @@ class CBController extends Controller {
 		Session::put('current_mainpath',$this->data['mainpath']);
 
 		  if(Request::segment(3) == 'sub-module') {
-	        $module = DB::table('cms_moduls')->where('path',Request::segment(5))->first();
+	        $module = DB::table('cms_moduls')->where('path',Request::segment(5))->first();	   
+	        $parent_module = DB::table('cms_moduls')->where('path',Request::segment(2))->first();     
 	        $this->data['data_sub_module'] = $module;
+	        $this->data['parent_module_name'] = $parent_module->name;
 	        $mainpath = Route($module->controller."GetIndex");
 	      }else{
+	      	$this->data['parent_module_name'] = $privileges->name;
 	        $mainpath = mainpath();
 	      }
 
@@ -1078,6 +1081,7 @@ class CBController extends Controller {
 		$data['controller_name'] = $this->controller_name;
 		$data['parent_field']    = $this->parent_field;
 		$data['parent_id']       = $this->parent_id;
+		$data['command'] 		 = 'edit';
 
 		Session::put('current_row_id',$id);
 
@@ -1293,6 +1297,7 @@ class CBController extends Controller {
 		$data['controller_name'] = $this->controller_name;
 		$data['parent_field']    = $this->parent_field;
 		$data['parent_id']       = $this->parent_id;
+		$data['command'] 		 = 'detail';
 
 		Session::put('current_row_id',$id);
 
