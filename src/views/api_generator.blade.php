@@ -714,6 +714,7 @@
                                             <option value='date'>Date</option>
                                             <option value='datetime'>DateTime</option>
                                             <option value='double'>Double</option>
+                                            <option value='custom'>Custom (Not in Table)</option>
                                           </select>
                                         </td>                                 
                                         <td><input placeholder="E.g : select sum(total) from order_detail where id_order = order.id" name='responses_subquery[]' class='form-control' type='text' ><small>Enter sub query without alias name</small></td>                                     
