@@ -146,7 +146,7 @@
                                                   foreach($dataenum as $enum) {
                                                       $checked = ($enum == $value)?"checked":"";
                                                       echo "<label class='radio-inline'>";
-                                                      echo "<input type='radio' name='".$s->name."[]' value='$enum' $checked > $enum";
+                                                      echo "<input type='radio' name='".$s->name."' value='$enum' $checked > $enum";
                                                       echo "</label>";
                                                   }
                                                 endif;
