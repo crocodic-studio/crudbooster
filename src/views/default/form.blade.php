@@ -57,14 +57,10 @@
         <input type='hidden' name='ref_parameter' value='{{urldecode(http_build_query(@$_GET))}}'/>
                 <div class="box-body">
 
-                  @if($command == 'edit')
-
+                  @if($command == 'detail')
+                       @include("crudbooster::default.form_detail")  
+                  @else
                      @include("crudbooster::default.form_body")         
-
-                  @elseif($command == 'detail')
-                  
-                     @include("crudbooster::default.form_detail")           
-                  
                   @endif
                 </div><!-- /.box-body -->
         
