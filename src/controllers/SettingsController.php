@@ -123,7 +123,7 @@ class SettingsController extends CBController {
 	}
 
 	function hook_before_add(&$arr) {
-		$arr['name'] = str_slug($arr['label']);
+		$arr['name'] = str_slug($arr['label'],'_');
 	}
 
 	function hook_after_edit($id) {
