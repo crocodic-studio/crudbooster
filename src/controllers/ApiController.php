@@ -198,6 +198,8 @@ class ApiController extends Controller {
 
 				if($name == 'ref_id') continue;
 
+				if($type=='custom') continue;
+
 				if($subquery) {
 					$data->addSelect(DB::raw(
 						'('.$subquery.') as '.$name
