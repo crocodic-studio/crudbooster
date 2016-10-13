@@ -143,6 +143,17 @@ class CBController extends Controller {
 				$this->button_save = FALSE;
 			}
 		}
+
+		//From Dashboard Chart Query 
+		if(Request::get('dq')) {
+			$dq = decrypt(Request::get('dq'));
+			if($dq) {
+				$dq = unserialize($dq);
+				if($dq['noaction']) {
+					$this->button_table_action = false;					
+				}
+			}			
+		}	
 		
 		$this->data['priv']               = $privileges;
 		$this->data['dashboard']          = $this->dashboard;		
@@ -506,9 +517,9 @@ class CBController extends Controller {
 			            $pic_small = $pic;
 			            $value = "<a class='fancybox' rel='group_{{$table}}' title='$col[label]: $title' href='".$pic."?w=350'><img width='40px' height='40px' src='".$pic_small."?w=40'/></a>";
 		          }else if(@$col['download']) {
-			            $url = (strpos($value,'http://')!==FALSE)?$value:asset($value);
+			            $url = (strpos($value,'http://')!==FALSE)?$value:asset($value).'?download=1';
 			            if($value) {
-			            	$value = "<a class='btn btn-sm btn-primary' href='$url' target='_blank' title='Download File'>Download</a>";
+			            	$value = "<a class='btn btn-xs btn-primary' href='$url' target='_blank' title='Download File'><i class='fa fa-download'></i> Download</a>";
 			            }else{
 			            	$value = " - ";
 			            }
@@ -846,7 +857,7 @@ class CBController extends Controller {
 		return response()->json($result);
 	}
 
-	public function validation() {
+	public function validation() { 
 
 		$request_all = Request::all();
 		$array_input = array();
@@ -906,6 +917,10 @@ class CBController extends Controller {
 						@$e_id_ignore = $e_raw[2]?:$id;
 
 						$e = 'unique:'.$e_table.','.$e_column.','.$e_id_ignore;	
+
+						if(\Schema::hasColumn($e_table,'deleted_at')) {
+							$e .= ",id,deleted_at,NULL";
+						}	
 					
 					}
 
