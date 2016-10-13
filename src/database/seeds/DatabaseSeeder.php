@@ -429,7 +429,7 @@ class Cms_privilegesSeeder extends Seeder {
             ]);    
         }
         
-        if(DB::table('cms_privileges')->where('name','Member')->count() == 0) {
+        if(DB::table('cms_privileges')->count() == 0) {
             DB::table('cms_privileges')->insert([            
                 'created_at'=>date('Y-m-d H:i:s'),
                 'name'=>'Member',
@@ -622,12 +622,13 @@ class Cms_modulsSeeder extends Seeder {
             'path'=>'cms_menus',
             'table_name'=>'cms_menus',
             'controller'=>'MenusController',
-            'sql_where'=>'','sql_orderby'=>'',
+            'sql_where'=>'',
+            'sql_orderby'=>'',
             'sorting'=>1,
             'limit_data'=>NULL,
             'id_cms_moduls_group'=>4,
             'is_softdelete'=>0,
-            'is_active'=>0
+            'is_active'=>1
         ],[ 
             
             'created_at'=>date('Y-m-d H:i:s'),
