@@ -159,6 +159,7 @@ class CBController extends Controller {
 		$this->data['dashboard']          = $this->dashboard;		
 		$this->data['table']              = $this->table;
 		$this->data['module_name']        = @$privileges->name;
+		$this->data['page_title']		  = @$privileges->name;
 		$this->data['title_field']        = $this->title_field;
 		$this->data['appname']            = $this->setting->appname;
 		$this->data['setting']            = $this->setting;	
