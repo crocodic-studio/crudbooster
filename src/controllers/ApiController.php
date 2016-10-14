@@ -235,8 +235,8 @@ class ApiController extends Controller {
 				}
 			}
 
-			if(\Schema::hasColumn($table,$table.'.deleted_at')) {
-				$data->where('deleted_at',NULL);
+			if(\Schema::hasColumn($table,'deleted_at')) {
+				$data->where($table.'.deleted_at',NULL);
 			}
 
 			if($posts['search_in'] && $posts['search_value']) {
