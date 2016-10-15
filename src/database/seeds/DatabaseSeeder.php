@@ -316,6 +316,15 @@ class Cms_settingsSeeder extends Seeder {
             'group_setting'=>'Application Setting',
             'dataenum'=>NULL,
             'helper'=>NULL],
+        [
+            'created_at'=>date('Y-m-d H:i:s'),
+            'name'=>'google_fcm_key',
+            'label'=>'Google FCM Key',
+            'content'=>'',
+            'content_input_type'=>'text',
+            'group_setting'=>'Application Setting',
+            'dataenum'=>NULL,
+            'helper'=>NULL],
 
         //EMAIL TEMPLATE
         [

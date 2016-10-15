@@ -484,20 +484,25 @@ class ApiController extends Controller {
 				$result['id']          = $lastId;
 		    }else{
 
-		    	$update = DB::table($table);
+		    	try{
+		    		$update = DB::table($table);
 
-			    $update->where($table.'.id',$row_assign['id']);
+				    $update->where($table.'.id',$row_assign['id']);
 
-			    if($row_api->sql_where) {
-			    	$update->whereraw($row_api->sql_where);
-			    }			    
+				    if($row_api->sql_where) {
+				    	$update->whereraw($row_api->sql_where);
+				    }			    
 
-			    $this->hook_query_list($update);
-			    $this->hook_query($update);
+				    $this->hook_query_list($update);
+				    $this->hook_query($update);
 
-			    $update = $update->update($row_assign);
-				$result['api_status']  = ($update)?1:0;
-				$result['api_message'] = ($update)?'The data has been saved successfully':'Oops, Failed to save data !';
+				    $update = $update->update($row_assign);
+					$result['api_status']  = 1;
+					$result['api_message'] = 'The data has been saved successfully';
+		    	}catch(\Exception $e) {
+		    		$result['api_status']  = 0;
+					$result['api_message'] = 'Oops failed to save data, '.$e;
+		    	}
 
 		    }
 

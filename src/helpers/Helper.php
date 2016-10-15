@@ -298,36 +298,46 @@ if(!function_exists('push_notification')) {
 
 /* 
 | --------------------------------------------------------------------------------------------------------------
-| Sending GCM Push Notification
+| Sending FCM Push Notification
 | --------------------------------------------------------------------------------------------------------------
 | $regid     = registration id from google
 | $datae     = data array
 | $googlekey = google api key
 */
-if(!function_exists('send_gcm')) {
-function send_gcm($regid,$data,$google_key=NULL){
-    $google_api_key = ($googlekey)?:config('crudbooster.GOOGLE_API_KEY');
-    $url = 'https://android.googleapis.com/gcm/send';
-    $fields = array(
-      'registration_ids' => $regid,
-      'data' => $data,
-    );
-    $headers = array(
-      'Authorization:key=' . $google_key,
-      'Content-Type:application/json'
-    );
+if(!function_exists('send_fcm')) {
+    function send_fcm($regid,$data){
+        if(!$data['title'] || !$data['content']) return 'title , content null !';
 
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0 );
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0 );
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode( $fields));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    $chresult = json_decode(curl_exec($ch));
-    curl_close($ch);
-    return $chresult;
-}
+        $apikey = get_setting('google_fcm_key');
+        $url            = 'https://fcm.googleapis.com/fcm/send';
+        $fields = array(
+          'registration_ids' => $regid,
+          'data' => $data,
+          'content_available'=>true,
+          'notification'=>array(
+                'sound'=>'default',
+                'badge'=>0,
+                'title'=>$data['title'],
+                'body'=>$data['content']
+            ),
+          'priority'=>'high'
+        );
+        $headers = array(
+          'Authorization:key=' . $apikey,
+          'Content-Type:application/json'
+        );
+
+        $ch = curl_init($url); 
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0 );
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0 );
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode( $fields));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $chresult = curl_exec($ch);
+        curl_close($ch);    
+        return $chresult;
+    }
 }
 
 /* 
