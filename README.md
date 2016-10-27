@@ -19,6 +19,8 @@ CRUDBooster is Laravel Framework that modified to bring a lot of features to dev
 - Mbstring PHP Extension
 - Tokenizer PHP Extension
 
+# CRUDBOOSTER 5.3.0.0 with Laravel 5.3 will be updated ASAP !, Coming soon... ^_^
+
 ## Installation For Laravel 5.2.x
 ### 1. Install via composer
 ```
