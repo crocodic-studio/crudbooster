@@ -3,12 +3,210 @@
 | ---------------------------------------------------------------------------------------------------------------
 | Main Helper of CRUDBooster
 | Do not edit or modify this helper unless your modification will be replace if any update from CRUDBooster.
-| If you want add new helper please refer to CustomHelper.php next this file.
 | 
 | Homepage : http://crudbooster.com
 | ---------------------------------------------------------------------------------------------------------------
 |
 */
+
+/* 
+| --------------------------------------------------------------------------------------------------------------
+| Check is foreign key or not
+| --------------------------------------------------------------------------------------------------------------
+| @fieldName
+|
+*/
+if(!function_exists("is_foreign_key")) {
+    function is_foreign_key($fieldName) {
+        if(substr($fieldName, 0,3) == 'id_') {
+            return substr($fieldName, 3);
+        }elseif(substr($fieldName, -3) == '_id') {
+            return substr($fieldName, 0, (strlen($fieldName)-3) );
+        }else{
+            return false;
+        }
+    }
+}
+
+/* 
+| --------------------------------------------------------------------------------------------------------------
+| To get list table of database
+| --------------------------------------------------------------------------------------------------------------
+| @key = field for filter
+| @type = asc,desc,like,etc
+| @value = value of type
+|
+*/
+if(!function_exists('url_filter_column')) {
+    function url_filter_column($key,$type,$value='') {
+        $params = Request::all();
+        $mainpath = trim(mainpath(),'/');
+        
+        foreach($params as $a=>&$par) {            
+            if($a == 'filter_column') {
+                foreach($par as $b=>$v) {                    
+                    if($v['type'] == 'asc' || $v['type'] == 'desc') {
+                        unset($params[$a][$b]);
+                        break;
+                    }
+                }
+            }
+        }
+
+        if(count($params['filter_column']) == 0) unset($params['filter_column']);        
+      
+        if(isset($params)) {        
+            $params['filter_column'][$key]['type'] = $type;
+            if($value) {
+                $params['filter_column'][$key]['value'] = $value;
+            }
+            return $mainpath.'?'.urldecode(http_build_query($params));
+        }else{
+            return $mainpath.'?filter_column['.$key.'][type]='.$value;
+        }     
+    }
+}
+
+/* 
+| --------------------------------------------------------------------------------------------------------------
+| To get list table of database
+| --------------------------------------------------------------------------------------------------------------
+|
+*/
+if(!function_exists('list_tables')) {
+    function list_tables() {
+        $tables = array();
+
+        try {
+            $tables = DB::select(DB::raw("SELECT TABLE_NAME FROM ".env('DB_DATABASE').".INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE'"));
+        }catch(\Exception $e) {
+
+        }
+
+        try {
+            $tables = DB::select("SHOW TABLES");
+        }catch(\Exception $e) {
+
+        }
+        
+        return $tables;
+    }
+}
+
+/* 
+| --------------------------------------------------------------------------------------------------------------
+| To get list id of cms users
+| --------------------------------------------------------------------------------------------------------------
+| @id_cms_privilege
+|
+*/
+if(!function_exists('list_cms_users')) {
+    function list_cms_users($id_cms_privilege) {
+        return DB::table('cms_users')->where('id_cms_privileges',$id_cms_privilege)->lists('id');
+    }
+}
+
+/* 
+| --------------------------------------------------------------------------------------------------------------
+| Authentification API by CRUDBooster
+| --------------------------------------------------------------------------------------------------------------
+|
+*/
+if(!function_exists('auth_api')) {
+    function auth_api() {
+        if(get_setting('api_debug_mode') == 'false') {
+              
+            $result = array();
+            $validator = Validator::make(
+                [   
+                
+                'X-Authorization-Token' =>Request::header('X-Authorization-Token'),
+                'X-Authorization-Time'  =>Request::header('X-Authorization-Time'),
+                'useragent'             =>Request::header('User-Agent')
+                ],          
+                [
+                
+                'X-Authorization-Token' =>'required',
+                'X-Authorization-Time'  =>'required',   
+                'useragent'             =>'required'              
+                ]
+            );      
+            
+            if ($validator->fails()) 
+            {
+                $message = $validator->errors()->all();         
+                $result['api_status'] = 0;
+                $result['api_message'] = implode(', ',$message);            
+                $res = response()->json($result,200);
+                $res->send();
+                exit;
+            }
+
+            $user_agent = Request::header('User-Agent');
+            $time       = Request::header('X-Authorization-Time'); 
+
+            $keys = DB::table('cms_apikey')->where('status','active')->lists('screetkey');
+            $server_token = array();
+            $server_token_screet = array();
+            foreach($keys as $key) {
+                $server_token[] = md5( $key . $time . $useragent );
+                $server_token_screet[] = $key;
+            }
+     
+            $sender_token = Request::header('X-Authorization-Token');
+
+            if(!Cache::has($sender_token)) {
+                if(!in_array($sender_token, $server_token)) {           
+                    $result['api_status']   = false;
+                    $result['api_message']  = "THE TOKEN IS NOT MATCH WITH SERVER TOKEN";
+                    $result['sender_token'] = $sender_token;
+                    $result['server_token'] = $server_token;
+                    $res = response()->json($result,200);
+                    $res->send();
+                    exit;
+                }
+            }else{
+                if(Cache::get($sender_token) != $user_agent) {
+                    $result['api_status']   = false;
+                    $result['api_message']  = "THE TOKEN IS ALREADY BUT NOT MATCH WITH YOUR DEVICE";
+                    $result['sender_token'] = $sender_token;
+                    $result['server_token'] = $server_token;
+                    $res = response()->json($result,200);
+                    $res->send();
+                    exit;
+                }
+            }        
+
+            $id = array_search($sender_token,$server_token);
+            $server_screet = $server_token_screet[$id];
+            DB::table('cms_apikey')->where('screetkey',$server_screet)->increment('hit');
+
+            $expired_token = date('Y-m-d H:i:s',strtotime('+5 seconds'));
+            Cache::put($sender_token,$user_agent,$expired_token);
+
+        }
+    }
+}
+
+/* 
+| --------------------------------------------------------------------------------------------------------------
+| To get diffrence minute between date
+| --------------------------------------------------------------------------------------------------------------
+| $dateFrom = path of route
+| $dateTo   = controller name
+|
+*/
+
+if(!function_exists('diff_minute')) {
+    function diff_minute($dateFrom,$dateTo='NOW') {
+
+        $dateTo = ($dateTo == 'NOW')?date('Y-m-d H:i:s'):$dateTo;
+
+        $to_time = strtotime($dateTo);
+        $from_time = strtotime($dateFrom);
+        return round(abs($to_time - $from_time) / 60,2);
+    }
+}
 
 /* 
 | --------------------------------------------------------------------------------------------------------------
@@ -62,8 +260,8 @@ if(!function_exists('RouteController')) {
 */ 
 
 if(!function_exists('push_notification')) {
-    function push_notification($content,$icon='fa fa-warning',$type='warning',$command=array(),$id_cms_users=NULL) {
-        $id_cms_users = ($id_cms_users)?:get_my_id();
+    function push_notification($content,$icon='fa fa-warning',$type='warning',$command=array(),$id_cms_users=array()) {
+        $id_cms_users = ($id_cms_users)?:array(get_my_id());
         switch ($type) {
             case 'warning':
                 $icon .= ' text-warning';
@@ -82,51 +280,64 @@ if(!function_exists('push_notification')) {
                 break;
         }
 
-        $a                         = array();
-        $a['created_at']           = date('Y-m-d H:i:s');
-        $a['id_cms_users']         = $id_cms_users;
-        $a['content']              = $content;
-        $a['icon']                 = $icon;
-        $a['notification_command'] = json_encode($command);
-        $a['is_read']              = 0;
-        if(DB::table('cms_notifications')->insert($a)) return true;
-        else return false;
+        foreach($id_cms_users as $id) {
+            $a                         = array();
+            $a['created_at']           = date('Y-m-d H:i:s');
+            $a['id_cms_users']         = $id;
+            $a['content']              = $content;
+            $a['icon']                 = $icon;
+            $a['notification_command'] = json_encode($command);
+            $a['is_read']              = 0;
+            DB::table('cms_notifications')->insert($a);
+        }
+        
+        return true;
     }
 }
 
 
 /* 
 | --------------------------------------------------------------------------------------------------------------
-| Sending GCM Push Notification
+| Sending FCM Push Notification
 | --------------------------------------------------------------------------------------------------------------
 | $regid     = registration id from google
 | $datae     = data array
 | $googlekey = google api key
 */
-if(!function_exists('send_gcm')) {
-function send_gcm($regid,$data,$google_key=NULL){
-    $google_api_key = ($googlekey)?:config('crudbooster.GOOGLE_API_KEY');
-    $url = 'https://android.googleapis.com/gcm/send';
-    $fields = array(
-      'registration_ids' => $regid,
-      'data' => $data,
-    );
-    $headers = array(
-      'Authorization:key=' . $google_key,
-      'Content-Type:application/json'
-    );
+if(!function_exists('send_fcm')) {
+    function send_fcm($regid,$data){
+        if(!$data['title'] || !$data['content']) return 'title , content null !';
 
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0 );
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0 );
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode( $fields));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    $chresult = json_decode(curl_exec($ch));
-    curl_close($ch);
-    return $chresult;
-}
+        $apikey = get_setting('google_fcm_key');
+        $url            = 'https://fcm.googleapis.com/fcm/send';
+        $fields = array(
+          'registration_ids' => $regid,
+          'data' => $data,
+          'content_available'=>true,
+          'notification'=>array(
+                'sound'=>'default',
+                'badge'=>0,
+                'title'=>$data['title'],
+                'body'=>$data['content']
+            ),
+          'priority'=>'high'
+        );
+        $headers = array(
+          'Authorization:key=' . $apikey,
+          'Content-Type:application/json'
+        );
+
+        $ch = curl_init($url); 
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0 );
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0 );
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode( $fields));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $chresult = curl_exec($ch);
+        curl_close($ch);    
+        return $chresult;
+    }
 }
 
 /* 
@@ -207,7 +418,7 @@ function get_columns_table($table) {
 
     $new_result = array(); 
     foreach($result as $ro) {
-        if($ro=='created_at' || $ro=='updated_at' || $ro=='id') continue;
+        if($ro=='created_at' || $ro=='updated_at' || $ro=='id' || $ro=='deleted_at') continue;        
         $new_result[] = $ro;
     }
     return $new_result;
@@ -267,7 +478,7 @@ function is_exists_controller($table) {
 |
 */
 if(!function_exists('generate_api')) {
-function generate_api($controller_name,$table_name,$permalink,$type) {
+function generate_api($controller_name,$table_name,$permalink,$method_type='post') {
     $php = '
 <?php namespace App\Http\Controllers;
 
@@ -283,29 +494,27 @@ class Api'.$controller_name.'Controller extends \crocodicstudio\crudbooster\cont
 
     function __construct() {    
         $this->table     = "'.$table_name.'";        
-        $this->permalink = "'.$permalink.'";        
+        $this->permalink = "'.$permalink.'";    
+        $this->method_type = "'.$method_type.'";    
     }
 ';
 
 $php .= "\n".'
     public function hook_before(&$postdata) {
         //Code here if you want execute some action before API Query Called
+
     }';
 
+$php .= "\n".'
+    public function hook_query(&$query) {
+        //You can custom the api query 
+
+    }';
 
 $php .= "\n".'
     public function hook_after($postdata,&$result) {
         //Code here if you want execute some action after API Query Called
-    }';
 
-$php .= "\n".'
-    public function hook_query_list(&$data) {
-        //Code here if you want execute some action while API Database Query especially for Listing Type of API
-    }';
-
-$php .= "\n".'
-    public function hook_query_detail(&$data) {
-        //Code here if you want execute some action while API Database Query especially for Detail Type of API
     }';
 
 $php .= "\n".'
@@ -331,8 +540,12 @@ if(!function_exists('generate_controller')) {
 function generate_controller($table,$name='') { 
         
         $exception          = ['slug'];
-        $image_candidate    = explode(',',env('IMAGE_FIELDS_CANDIDATE'));
-        $password_candidate = explode(',',env('PASSWORD_FIELDS_CANDIDATE'));
+        $image_candidate    = explode(',',env('IMAGE_FIELDS_CANDIDATE','image,picture,photo,photos,foto,gambar,thumbnail'));
+        $password_candidate = explode(',',env('PASSWORD_FIELDS_CANDIDATE','password,pass,pwd,passwrd,sandi,pin'));
+        $phone_candidate    = explode(',',env('PHONE_FIELDS_CANDIDATE','phone,telp,hp,notelp,no_telp,no_phone,phone_number'));
+        $email_candidate    = explode(',',env('EMAIL_FIELDS_CANDIDATE','email,mail,email_address,mail_address'));
+        $name_candidate     = explode(',',env('NAME_FIELDS_CANDIDATE','name,nama,person_name,person,fullname,full_name,nickname,nick,nick_name'));
+        $url_candidate      = explode(',',env("URL_FIELDS_CANDIDATE",'url,link'));
 
 
         $controllername = ucwords(str_replace('_',' ',$table));        
@@ -371,22 +584,26 @@ class Admin'.$controllername.' extends \crocodicstudio\crudbooster\controllers\C
         $this->title_field        = "'.$name_col.'";
         $this->limit              = 20;
         $this->index_orderby      = ["id"=>"desc"];
-        $this->button_show_data   = true;
-        $this->button_reload_data = true;
+        $this->button_show_data   = true;        
         $this->button_new_data    = true;
         $this->button_delete_data = true;
         $this->button_sort_filter = true;        
         $this->button_export_data = true;
+        $this->button_table_action = true;
+        $this->button_import_data = true;
 
         $this->col = array();
 ';
-
-        foreach($coloms as $c) {
+        $coloms_col = array_slice($coloms,0,8);
+        foreach($coloms_col as $c) {
             $label = str_replace("id_","",$c);
             $label = ucwords(str_replace("_"," ",$label));
+            $label = str_replace('Cms ','',$label);
             $field = $c;
 
             if(in_array($field, $exception)) continue;
+
+            if(array_search($field, $password_candidate) !== FALSE) continue;
 
             if(substr($field,0,3)=='id_') {
                 $jointable = str_replace('id_','',$field);
@@ -403,7 +620,12 @@ class Admin'.$controllername.' extends \crocodicstudio\crudbooster\controllers\C
         $php .= "\n\t\t".'$this->form = array();'."\n";
 
         foreach($coloms as $c) {
-            $add_attr = '';
+            $attribute    = array();
+            $validation   = array();
+            $validation[] = 'required';            
+            $placeholder  = '';
+            $help         = '';
+
             $label = str_replace("id_","",$c);
             $label = ucwords(str_replace("_"," ",$label));      
             $field = $c;
@@ -431,113 +653,350 @@ class Admin'.$controllername.' extends \crocodicstudio\crudbooster\controllers\C
                 case 'varchar':
                 case 'char':
                 $type = "text";
+                $validation[] = "min:3|max:255";                
                 break;
                 case 'text':
                 case 'longtext':
                 $type = 'textarea';
+                $validation[] = "string|min:5|max:5000";                
                 break;
                 case 'date':
                 $type = 'date';
+                $validation[] = "date";
                 break;
                 case 'datetime':
                 case 'timestamp':
                 $type = 'datetime';
+                $validation[] = "date_format:Y-m-d H:i:s";
+                break;
+                case 'time':
+                $type = 'time';
+                $validation[] = 'date_format:H:i:s';
+                break;
+                case 'double':
+                $type = 'money';
+                $validation[] = "integer|min:0";
                 break;
                 case 'enum':
-                $type = 'radio';                
-                $add_attr = ', "dataenum"=>['.$typedata_length.']';                
+                $type = 'radio';                                    
+                $attribute['dataenum'] = "array(".$typedata_length.")";         
+                break;
+                case 'int':
+                case 'integer':
+                $type = 'number';
+                $validation[] = 'integer|min:0';
                 break;
             }
-           
-            $datatable = '';
+                       
             if(substr($field,0,3)=='id_') {
                 $jointable = str_replace('id_','',$field);
                 $joincols = get_columns_table($jointable);
                 $joinname = get_namefield_table($joincols);
-                $datatable = ',"datatable"=>"'.$jointable.','.$joinname.'"';
+                $attribute['datatable'] = $jointable.','.$joinname;
                 $type = 'select';
+            }
+
+            if(substr($field,0,3)=='is_') {
+                $type = 'radio';
+                $label_field = substr($field, 3);
+                $validation[] = 'integer';
+                $attribute['dataenum'] = "array('1|$label_field','0|Non $label_field')";
             }
 
             if(in_array($field, $password_candidate)) {
                 $type = 'password';
-                $add_attr = ', "help"=>"Please leave empty if you did not change the password"';
+                $validation = ['min:5','max:32'];
+                $attribute['help'] = "Minimum 5 characters. Please leave empty if you did not change the password.";                
             }
 
         
             if(in_array($field, $image_candidate)) {
-                $type = 'upload';
-                $add_attr = ', "help"=>"Please upload Image only, Do not upload with file size more than 5 MB, File types support only : JPG, JPEG, PNG, GIF, BMP", "upload_file"=>false';
+                $type = 'upload_standard';                
+                $attribute['help'] = "File types support : JPG, JPEG, PNG, GIF, BMP";
+                $attribute['upload_file'] = FALSE;
             }           
 
-            if($field == 'latitude' || $field == 'longitude') {
-                $type = 'hidden';            
-            }
-
             if($field == 'latitude') {
-                $add_attr .= ',"googlemaps"=>true';
+                $type = 'hidden';      
+                $attribute['googlemaps'] = TRUE;      
+            }
+            if($field == 'longitude') {
+                $type = 'hidden';
             }
 
-            $php .= "\t\t".'$this->form[] = array("label"=>"'.$label.'","name"=>"'.$field.'","type"=>"'.$type.'","required"=>true '.$datatable.' '.$add_attr.' );'."\n";   
+            if(in_array($field, $phone_candidate)) {
+                $type = 'number';
+                $validation = ['required','numeric'];
+                $attribute['placeholder'] = "You can only enter the number only";
+            }
+
+            if(in_array($field, $email_candidate)) {
+                $type = 'email';
+                $validation[] = 'email|unique:'.$table;
+                $attribute['placeholder'] = "Please enter a valid email address";
+            }
+
+            if($type=='text' && in_array($field, $name_candidate)) {
+                $validation[] = 'alpha_spaces';    
+                $attribute['placeholder'] = "You can only enter the letter only";            
+            }
+
+            if($type=='text' && in_array($field, $url_candidate)) {
+                $validation[] = 'url';
+                $attribute['placeholder'] = "Please enter a valid URL";
+            }
+
+            $validation = implode('|',$validation);
+
+            $php .= "\t\t";
+            $php .= '$this->form[] = array("label"=>"'.$label.'","name"=>"'.$field.'","type"=>"'.$type.'","required"=>TRUE';
+            
+            if($validation) $php .= ',"validation"=>"'.$validation.'"';            
+
+            if($attribute) {
+                foreach($attribute as $key=>$val) {
+                    if(is_bool($val)) {
+                        $val = ($val)?"TRUE":"FALSE";
+                    }else{
+                        if(strpos($val, "array(")!==FALSE) {
+                            $val = $val;
+                        }else{
+                            $val = '"'.$val.'"';
+                        }                        
+                    }
+                    $php .= ',"'.$key.'"=>'.$val;
+                }
+            }
+
+            $php .= ");\n";            
         }
 
 $php .= '     
-        
-        //You may use this bellow array to add alert message to this module at overheader
+
+        /* 
+        | ---------------------------------------------------------------------- 
+        | Add relational module
+        | ----------------------------------------------------------------------     
+        | @label       = Name of sub module 
+        | @path        = The path of module, see at module generator
+        | @foreign_key = required.  
+        | 
+        */
+        $this->sub_module     = array();
+
+
+
+
+        /* 
+        | ---------------------------------------------------------------------- 
+        | Add More Action Button / Menu
+        | ----------------------------------------------------------------------     
+        | @label       = Label of action 
+        | @route       = URL , you can use alias to get field, prefix [, suffix ], 
+        |                e.g : [id], [name], [title], etc ...
+        | @icon        = font awesome class icon         
+        | 
+        */
+        $this->addaction = array();
+
+
+
+
+                
+        /* 
+        | ---------------------------------------------------------------------- 
+        | Add alert message to this module at overheader
+        | ----------------------------------------------------------------------     
+        | @message = Text of message 
+        | @type    = warning,success,danger,info        
+        | 
+        */
         $this->alert        = array();
+                
+
         
-        //You may use this bellow array to add more your own header button 
-        $this->index_button = array();            
+        /* 
+        | ---------------------------------------------------------------------- 
+        | Add more button to header button 
+        | ----------------------------------------------------------------------     
+        | @label = Name of button 
+        | @url   = URL Target
+        | @icon  = Icon from Awesome.
+        | 
+        */
+        $this->index_button = array();       
+
+
         
-        //You may use this bellow array to add relational data to next tab 
-        $this->form_tab     = array();
+        /* 
+        | ---------------------------------------------------------------------- 
+        | Add element to form at bottom 
+        | ----------------------------------------------------------------------     
+        | push your html / code in object array         
+        | 
+        */
+        $this->form_add     = array();       
+
+
+
         
-        //You may use this bellow array to add relational data to next area or element, i mean under the existing form 
-        $this->form_sub     = array();
-        
-        //You may use this bellow array to add some or more html that you want under the existing form 
-        $this->form_add     = array();                                                                                      
-        
-        //You may use this bellow array to add statistic at dashboard 
+        /*
+        | ---------------------------------------------------------------------- 
+        | You may use this bellow array to add statistic at dashboard 
+        | ---------------------------------------------------------------------- 
+        | @label, @count, @icon, @color 
+        |
+        */
         $this->index_statistic = array();
+
+
+
+
+        /*
+        | ---------------------------------------------------------------------- 
+        | Add additional view at top or bottom of index 
+        | ---------------------------------------------------------------------- 
+        | @view = view location 
+        | @data = data array for view 
+        |
+        */
+        $this->index_additional_view = array();
+
+
+
+        /*
+        | ---------------------------------------------------------------------- 
+        | Add javascript at body 
+        | ---------------------------------------------------------------------- 
+        | javascript code in the variable 
+        | $this->script_js = "function() { ... }";
+        |
+        */
+        $this->script_js = NULL;
+
+
+
+        /*
+        | ---------------------------------------------------------------------- 
+        | Include Javascript File 
+        | ---------------------------------------------------------------------- 
+        | URL of your javascript each array 
+        | $this->load_js[] = asset("myfile.js");
+        |
+        */
+        $this->load_js = array();
+
+
 
         //No need chanage this constructor
         $this->constructor();
     }
 
 
-    public function hook_before_index(&$result) {
-        //Use this hook for manipulate query of index result 
-        
+    /*
+    | ---------------------------------------------------------------------- 
+    | Hook for manipulate query of index result 
+    | ---------------------------------------------------------------------- 
+    | @query = current database query 
+    |
+    */
+    public function hook_query_index(&$query) {
+        //Your code here
+            
     }
-    public function hook_html_index(&$html,$data) {
-        //Use this hook for manipulate result of html in index 
+
+    /*
+    | ---------------------------------------------------------------------- 
+    | Hook for manipulate row of index table html 
+    | ---------------------------------------------------------------------- 
+    | @html for row html 
+    | @data for get data row
+    | You should using foreach
+    |
+    */    
+    public function hook_row_index(&$html,$data) {
+        //Your code here
 
     }
-    public function hook_before_add(&$arr) {
-        //Use this hook for manipulate data input before add data is execute 
+
+    /*
+    | ---------------------------------------------------------------------- 
+    | Hook for manipulate data input before add data is execute
+    | ---------------------------------------------------------------------- 
+    | @arr
+    |
+    */
+    public function hook_before_add(&$arr) {        
+        //Your code here
 
     }
-    public function hook_after_add($id) {
-        //Use this hook if you want execute other command after add function called 
+
+    /* 
+    | ---------------------------------------------------------------------- 
+    | Hook for execute command after add function called 
+    | ---------------------------------------------------------------------- 
+    | @id = last insert id
+    | 
+    */
+    public function hook_after_add($id) {        
+        //Your code here
 
     }
-    public function hook_before_edit(&$arr,$id) {
-        //Use this hook for manipulate data input before update data is execute 
+
+    /* 
+    | ---------------------------------------------------------------------- 
+    | Hook for manipulate data input before update data is execute
+    | ---------------------------------------------------------------------- 
+    | @postdata = input post data 
+    | @id       = current id 
+    | 
+    */
+    public function hook_before_edit(&$postdata,$id) {        
+        //Your code here
 
     }
+
+    /* 
+    | ---------------------------------------------------------------------- 
+    | Hook for execute command after edit function called
+    | ----------------------------------------------------------------------     
+    | @id       = current id 
+    | 
+    */
     public function hook_after_edit($id) {
-        //Use this hook if you want execute other command after update data called 
+        //Your code here 
 
     }
+
+    /* 
+    | ---------------------------------------------------------------------- 
+    | Hook for execute command before delete function called
+    | ----------------------------------------------------------------------     
+    | @id       = current id 
+    | 
+    */
     public function hook_before_delete($id) {
-        //Use this hook if you want execute other command before delete command called 
+        //Your code here
 
     }
+
+    /* 
+    | ---------------------------------------------------------------------- 
+    | Hook for execute command after delete function called
+    | ----------------------------------------------------------------------     
+    | @id       = current id 
+    | 
+    */
     public function hook_after_delete($id) {
-        //Use this hook if you want execute other command after delete command called 
+        //Your code here
 
     }
-    
+
+
+
+    //By the way, you can still create your own method in here... :) 
+
+
 }
         ';
 
@@ -568,13 +1027,22 @@ function get_field_type($table,$field) {
              $typedata = DB::connection()->getDoctrineColumn($table, $field)->getType()->getName();
         }
         catch(\Exception $e){
+            
+        }
+
+        try{
             //MySQL
             $the_field       = DB::select( DB::raw('SHOW COLUMNS FROM '.$table.' WHERE Field = \''.$field.'\''))[0];
             $col_type        = $the_field->Type;
             preg_match( '/([a-z]+)\((.+)\)/', $col_type, $match );
             $typedata        = $match[1];
             $typedata_length = $match[2];
+        }catch(\Exception $e) {
+
         }
+
+        if(!$typedata) $typedata = 'varchar';
+
         return $typedata;
     });
 
@@ -757,7 +1225,7 @@ function send_email($to,$subject,$html,$from='',$template='') {
 
     $template = ($template)?:"crudbooster::emails.blank";
     $from = ($from)?:$set['smtp_username'];
-    $from = ($from)?:"no-reply@".$_SERVER['SERVER_NAME'];
+    $from = ($from)?:get_setting('email_sender');
     $data['content'] = $html;
     \Mail::send($template,$data,function($message) use ($to,$subject,$from) {
         $message->to($to);
@@ -765,6 +1233,30 @@ function send_email($to,$subject,$html,$from='',$template='') {
         $message->subject($subject);
     });
 }
+}
+
+/* 
+| --------------------------------------------------------------------------------------------------------------
+| To send email with queues
+| --------------------------------------------------------------------------------------------------------------
+| $to       = email destination
+| $subject  = subject of email
+| $content  = content of email 
+| $send_at  = DateTime to send the email
+| $cc       = cc email
+|
+*/
+if(!function_exists('send_email_queue')) {
+    function send_email_queue($to,$subject,$content,$send_at=NULL,$cc=NULL) {
+         $a = array();
+         $a['send_at'] = isset($send_at)?date('Y-m-d H:i:s',strtotime($send_at)):date('Y-m-d H:i:s');
+         $a['email_recipient'] = $to;
+         if(isset($cc)) $a['email_cc'] = $cc;
+         $a['email_subject'] = $subject;
+         $a['email_content'] = $content;
+         $a['is_sent'] = 0;
+         DB::table('cms_email_queues')->insert($a);
+    }
 }
 
 /* 
@@ -920,6 +1412,27 @@ function g($name) {
 
 /* 
 | --------------------------------------------------------------------------------------------------------------
+| Get first row data simply
+| --------------------------------------------------------------------------------------------------------------
+| $id = id of row
+|
+*/
+if(!function_exists('first_row')) {
+function first_row($table,$id) {
+    $row = DB::table($table);
+    if(is_array($id)) {
+        foreach($id as $k=>$v) {
+            $row->where($k,$v);
+        }
+    }else{
+        $row->where('id',$id);
+    }
+    return $row;
+}
+}
+
+/* 
+| --------------------------------------------------------------------------------------------------------------
 | To validation input data more easy . 
 | --------------------------------------------------------------------------------------------------------------
 | $arr = array like laravel validation array definition
@@ -948,11 +1461,16 @@ function valid($arr=array(),$type='json') {
             $result = array();      
             $result['api_status'] = 0;
             $result['api_message'] = implode(', ',$message);
-            $res = response()->json($result,400);
+            $res = response()->json($result,200);
             $res->send();
             exit;
-        }else{            
-            return redirect()->back()->with(['message'=>implode(', ',$message),'message_type'=>"warning"]);
+        }else{                        
+            $res = redirect()->back()            
+            ->with(['message'=>implode('<br/>',$message),'message_type'=>'warning'])
+            ->withInput();
+            \Session::driver()->save();
+            $res->send();
+            exit;
         }        
     }
 }
@@ -1132,7 +1650,9 @@ if(!function_exists('get_method')) {
 */
 if(!function_exists('get_row_id')) {
     function get_row_id() {
-        $id = Request::segment(4);
+        $id = Session::get('current_row_id');
+        $id = intval($id);
+        $id = (!$id)?Request::segment(4):$id;
         $id = intval($id);
         return $id;
     }
@@ -1225,10 +1745,24 @@ if(!function_exists('privilege_is_delete')) {
 */
 if(!function_exists('mainpath')) {
     function mainpath($path=NULL) {
-        $path = ($path)?"/$path":"";
-        $controllername = str_replace(["\crocodicstudio\crudbooster\controllers\\","App\Http\Controllers\\"],"",strtok(Route::currentRouteAction(),'@') );      
-        $route_url = route($controllername.'GetIndex');     
-        return $route_url.$path;        
+        
+        if(Request::segment(3) == 'sub-module') {
+            $route_url = url(config('crudbooster.ADMIN_PATH').'/'.Request::segment(2).'/sub-module/'.Request::segment(4).'/'.Request::segment(5));
+        }else{
+            $controllername = str_replace(["\crocodicstudio\crudbooster\controllers\\","App\Http\Controllers\\"],"",strtok(Route::currentRouteAction(),'@') );      
+            $route_url = route($controllername.'GetIndex');
+        }
+        
+        if($path) {
+            if(substr($path,0,1) == '?') {
+                return trim($route_url,'/').$path;    
+            }else{
+                return $route_url.'/'.$path;
+            }            
+        }else{
+            return trim($route_url,'/');
+        }
+              
     }
 }
 

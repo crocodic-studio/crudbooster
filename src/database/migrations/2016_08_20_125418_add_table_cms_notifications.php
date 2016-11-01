@@ -15,11 +15,11 @@ class AddTableCmsNotifications extends Migration
         Schema::create('cms_notifications', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->integer('id_cms_users');
-            $table->string('content');
-            $table->string('icon');
-            $table->text('notification_command');
-            $table->boolean('is_read');
+            $table->integer('id_cms_users')->nullable();
+            $table->string('content')->nullable();
+            $table->string('icon')->nullable();
+            $table->text('notification_command')->nullable();
+            $table->boolean('is_read')->nullable();
         });
     }
 

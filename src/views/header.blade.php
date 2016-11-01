@@ -1,40 +1,3 @@
-<script type="text/javascript">
-    var total_notification = 0;
-    function loader_notification() {
-      console.log("loader notifications");      
-
-      $.get("{{route('NotificationsControllerGetLatestJson')}}",function(resp) {
-          if(resp.total > total_notification) {
-            send_notification('You have a new notification !',"{{route('NotificationsControllerGetIndex')}}");            
-          }
-
-          $('.notifications-menu #notification_count').text(resp.total);
-          if(resp.total>0) {
-            $('.notifications-menu #notification_count').fadeIn();            
-          }else{
-            $('.notifications-menu #notification_count').hide();
-          }          
-
-          $('.notifications-menu #list_notifications .menu').empty();
-          $('.notifications-menu .header').text('You have '+resp.total+' notifications');
-          var htm = '';
-          $.each(resp.items,function(i,obj) {
-              htm += '<li><a href="{{url(config("crudbooster.ADMIN_PATH")."/read")}}/'+obj.id+'"><i class="'+obj.icon+'"></i> '+obj.content+'</a></li>';
-          })  
-          $('.notifications-menu #list_notifications .menu').html(htm);
-
-          
-
-          total_notification = resp.total;
-      })
-    }
-    $(function() {
-      loader_notification();
-      setInterval(function() {
-          loader_notification();
-      },10000);
-    })
-</script>
 <!-- Main Header -->
 <header class="main-header">
 
@@ -91,7 +54,7 @@
                             <p>
                                 {{ get_my_name() }}
                                 <small>{{ get_my_privilege_name() }}</small>
-                                <small><em><?php echo date('d F Y')?></em> </small>
+                                <small><em><?php echo date('d F Y')?></em> </small>                                
                             </p>
                         </li>
 
@@ -101,7 +64,21 @@
                                 <a href="{{ route('UsersControllerGetProfile') }}" class="btn btn-default btn-flat"><i class='fa fa-user'></i> Profile</a>
                             </div>
                             <div class="pull-right">
-                                <a href="{{ route("getLogout") }}" class="btn btn-default btn-flat"><i class='fa fa-power-off'></i> Sign out</a>
+                                <a title='Lock Screen' href="{{ route('getLockScreen') }}" class='btn btn-default btn-flat'><i class='fa fa-key'></i></a> 
+                                <a href="javascript:void(0)" onclick="swal({   
+                                    title: 'Do you want to logout ?',   
+                                    text: 'You should login again in the future, or you may press Lock Screen only',   
+                                    type:'info',   
+                                    showCancelButton:true, 
+                                    allowOutsideClick:true,  
+                                    confirmButtonColor: '#DD6B55',   
+                                    confirmButtonText: 'Logout',   
+                                    cancelButtonText: 'Cancel',
+                                    closeOnConfirm: false 
+                                    }, function(){                                                                                 
+                                        location.href = '{{ route("getLogout") }}';
+
+                                    });" title="Sign Out ?" class="btn btn-danger btn-flat"><i class='fa fa-power-off'></i></a>
                             </div>
                         </li>
                     </ul>

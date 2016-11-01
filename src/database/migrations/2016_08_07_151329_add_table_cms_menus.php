@@ -16,14 +16,14 @@ class AddTableCmsMenus extends Migration {
 		{
 			$table->increments('id');
 			$table->timestamps();
-			$table->integer('id_cms_menus_groups');
-			$table->string('name');
-			$table->string('menu_type');
-			$table->string('menu_link');
-			$table->integer('id_cms_pages');
-			$table->integer('id_cms_posts');
-			$table->integer('id_cms_posts_categories');
-			$table->integer('parent_id_cms_menus');
+			$table->integer('id_cms_menus_groups')->nullable();
+			$table->string('name')->nullable();
+			$table->string('menu_type')->nullable();
+			$table->string('menu_link')->nullable();
+			$table->integer('id_cms_pages')->nullable();
+			$table->integer('id_cms_posts')->nullable();
+			$table->integer('id_cms_posts_categories')->nullable();
+			$table->integer('parent_id_cms_menus')->nullable();
 		});
 	}
 

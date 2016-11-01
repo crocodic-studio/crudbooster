@@ -1,38 +1,56 @@
 <?php namespace crocodicstudio\crudbooster\controllers;
 
 use crocodicstudio\crudbooster\controllers\Controller;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\PDF;
-use Illuminate\Support\Facades\Excel;
+
+use Storage;
+use Response;
+use Image;
+use File;
+use Request;
 
 class UploadsController extends Controller {
 
 	public function getFile($folder, $filename) {
 		$path = storage_path() . DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $filename;
 
-	    if(!File::exists($path)) abort(404);
+	    if(!Storage::exists($folder.DIRECTORY_SEPARATOR.$filename)) abort(404);
 
-	    $file             = File::get($path);
-	    $type             = File::mimeType($path);
-	    $response         = Response::make($file, 200);
-	    $response->header("Content-Type", $type);
+	    $w = Request::get('w');
+	    $h = Request::get('h');
+	    $h = ($h)?:$w;
+	    $is_download = Request::get('download');
 
-	    $seconds_to_cache = 3600 * (24*30);
-	    $gmt_mtime        = gmdate('D, d M Y H:i:s', time() ) . ' GMT';
-		$ts               = gmdate("D, d M Y H:i:s", time() + $seconds_to_cache) . " GMT";		
-		$response->header("Expires",$ts);
-		$response->header("Last-Modified",$gmt_mtime);
-		$response->header("Pragma","cache");
-		$response->header("Cache-Control","max-age=$seconds_to_cache, must-revalidate");
-	    return $response;
+	    $extension = File::extension($path);
+	    $images_ext = array('jpg','jpeg','png','gif','bmp');
+
+	    if(in_array($extension, $images_ext)) {	  	    	
+
+	    	$img = Image::cache(function($image) use ($path,$w,$h) {
+	    		$im = $image->make($path);
+		    	if($w) {
+		    		if(!$h) {
+		    			$im->fit($w);
+		    		}else{
+		    			$im->fit($w,$h);
+		    		}	    		
+		    	}
+		    	return $im;
+	    	});
+
+	    	if($is_download) {	    		
+	    		$filename = (Request::get('filename'))?Request::get('filename').'.'.$extension:$filename;
+	    		return Response::make($img,200,array('Content-Type'=>'image/'.$extension,'Content-Disposition'=>'attachment; filename='.$filename));				
+	    	}else{
+	    		return Response::make($img,200,array('Content-Type'=>'image/'.$extension));
+	    	}
+	    		    	
+	    }else{
+
+	    	if($is_download) {
+	    		return response()->download($path);
+	    	}else{
+	    		return response()->file($path);
+	    	}	    	
+	    }	    	    
 	}
 }

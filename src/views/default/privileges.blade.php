@@ -26,8 +26,8 @@
 					<div class='form-group'>
 						<label>Set as Superadmin</label><br/>
 						<div class='radio inline'>
-							<label><input {{ (@$row->is_superadmin==1)?'checked':'' }} type='radio' name='is_superadmin' value='1'/> Yes</label> &nbsp;&nbsp;
-							<label><input {{ (@$row->is_superadmin==0)?'checked':'checked' }} type='radio' name='is_superadmin' value='0'/> No</label>
+							<label><input required {{ (@$row->is_superadmin==1)?'checked':'' }} type='radio' name='is_superadmin' value='1'/> Yes</label> &nbsp;&nbsp;
+							<label><input {{ (@$row->is_superadmin==0)?'checked':'' }} type='radio' name='is_superadmin' value='0'/> No</label>
 						</div>
 						<div class="text-danger">{{ $errors->first('is_superadmin') }}</div>
 					</div>

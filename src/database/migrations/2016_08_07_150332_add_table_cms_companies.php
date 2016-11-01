@@ -16,15 +16,15 @@ class AddTableCmsCompanies extends Migration {
 		{
 			$table->increments('id');
 			$table->timestamps();
-			$table->string('name');
-			$table->string('address');
-			$table->string('phone');
-			$table->string('email');
-			$table->string('photo');
-			$table->string('description');
-			$table->string('latitude');
-			$table->string('longitude');
-			$table->boolean('is_primary');
+			$table->string('name')->nullable();
+			$table->string('address')->nullable();
+			$table->string('phone')->nullable();
+			$table->string('email')->nullable();
+			$table->string('photo')->nullable();
+			$table->string('description')->nullable();
+			$table->string('latitude')->nullable();
+			$table->string('longitude')->nullable();
+			$table->boolean('is_primary')->nullable();
 		});
 	}
 

@@ -36,10 +36,10 @@ class PostsController extends CBController {
 
 		$this->form = array();
         $this->form[] = array("name"=>"slug","type"=>"hidden");
-		$this->form[] = array("label"=>"Title","name"=>"title","type"=>"text"  );
-		$this->form[] = array("label"=>"Content","name"=>"content","type"=>"wysiwyg"  );
-		$this->form[] = array("label"=>"Author","name"=>"id_cms_users","type"=>"select" ,"datatable"=>"cms_users,name" );		
-		$this->form[] = array("label"=>"Category","name"=>"id_cms_posts_categories","type"=>"select" ,"datatable"=>"cms_posts_categories,name" );
+		$this->form[] = array("label"=>"Title","name"=>"title","type"=>"text","required"=>true  );
+		$this->form[] = array("label"=>"Content","name"=>"content","type"=>"wysiwyg","required"=>true  );
+		$this->form[] = array("label"=>"Author","name"=>"id_cms_users","type"=>"select" ,"datatable"=>"cms_users,name","required"=>true );		
+		$this->form[] = array("label"=>"Category","name"=>"id_cms_posts_categories","type"=>"select" ,"datatable"=>"cms_posts_categories,name","required"=>true );
 
 		// You may use this bellow array to add alert message to this module at overheader		
 		$this->alert        = array();

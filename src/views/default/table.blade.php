@@ -1,6 +1,6 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">{{$table_name?:"Show Data"}}</h3>
+                    <h3 class="box-title">{{$data_sub_module->name ?:"Show Data"}}</h3>
                     <div class="box-tools pull-right">
 
                       <form method='get' class='pull-right' action='{{Request::url()}}'>                        
@@ -28,9 +28,10 @@
                                 $parameters = Request::all();
                                 unset($parameters['q']);
                                 $build_query = urldecode(http_build_query($parameters));
-                                $build_query = (Request::all())?"?".$build_query:"";
+                                $build_query = ($build_query)?"?".$build_query:"";
+                                $build_query = (Request::all())?$build_query:"";
                               ?>
-                              <button type='button' onclick='location.href="{{url($dashboard).$build_query}}"' title='Reset' class='btn btn-sm btn-warning'><i class='fa fa-ban'></i></button>
+                              <button type='button' onclick='location.href="{{ mainpath($build_query) }}"' title='Reset' class='btn btn-sm btn-warning'><i class='fa fa-ban'></i></button>
                               @endif
                               <button type='submit' class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
                             </div>
@@ -40,36 +41,70 @@
                   </div>
                 </div> 
               
-                <div class="box-body table-responsive no-padding">
+                <script type="text/javascript">
+                  $(document).ready(function() {                      
+                      var $window = $(window);                      
+                      function checkWidth() {
+                          var windowsize = $window.width();
+                          if (windowsize > 500) {
+                              console.log(windowsize);
+                              $('#box-body-table').removeClass('table-responsive');
+                          }else{
+                            console.log(windowsize);
+                              $('#box-body-table').addClass('table-responsive'); 
+                          }
+                      }                      
+                      checkWidth();                      
+                      $(window).resize(checkWidth);
+                  });
+                </script>
+              
+                <div id='box-body-table' class="box-body table-responsive no-padding">
                   <table id='table_dashboard' class="table table-hover table-striped">
                     <thead>
                     <tr>                      
                       <th width='3%'><input type='checkbox' id='checkall'/></th>
                       <?php                       
                         foreach($columns as $col) {
-                            if($col['visible']===0) continue;
+                            if($col['visible']===FALSE) continue;
+                            
+                            $sort_column = Request::get('filter_column');
                             $colname = $col['label'];
+                            $name = $col['name'];
+                            $field = $col['field_with'];
                             $width = ($col['width'])?:"auto";
-                            echo "<th width='$width'>$colname</th>";
+                            $mainpath = trim(mainpath(),'/').$build_query;
+                            echo "<th width='$width'>";
+                            if(isset($sort_column[$field])) {
+                              switch($sort_column[$field]['type']) {                                
+                                case 'asc': 
+                                  $url = url_filter_column($field,'desc');
+                                  echo "<a href='$url' title='Click to sort descending'>$colname &nbsp; <i class='fa fa-sort-desc'></i></a>";
+                                  break;
+                                case 'desc':
+                                  $url = url_filter_column($field,'asc');
+                                  echo "<a href='$url' title='Click to sort ascending'>$colname &nbsp; <i class='fa fa-sort-asc'></i></a>";
+                                  break;
+                                default:
+                                  $url = url_filter_column($field,'asc');
+                                  echo "<a href='$url' title='Click to sort ascending'>$colname &nbsp; <i class='fa fa-sort'></i></a>";
+                                  break;      
+                              }
+                            }else{     
+                                  $url = url_filter_column($field,'asc');                         
+                                  echo "<a href='$url' title='Click to sort ascending'>$colname &nbsp; <i class='fa fa-sort'></i></a>";                                  
+                            }
+                            
+                            
+                            echo "</th>";
                         }
                       ?>   
 
-                      @if($priv->is_edit!=0 || $priv->is_delete!=0 || $priv->is_read!=0)
-                      <?php 
-                        $width = 0;
-                        if($priv->is_edit) {
-                          $width += 33;
-                        }
-                        if($priv->is_delete) {
-                          $width += 33;
-                        }
-                        if($priv->is_read) {
-                          $width += 33;
-                        }
-                        @$width += count($addaction)*33;
-                      ?>
-                      <th width='<?=$width?>px'>Action</th>
-                      @endif                                                               
+                      @if($button_table_action)
+                        @if($priv->is_edit!=0 || $priv->is_delete!=0 || $priv->is_read!=0)                     
+                            <th width='100px'>Action</th>
+                        @endif                   
+                      @endif                                            
                     </tr>
                     </thead>
                     <tbody>
@@ -82,7 +117,28 @@
                       @foreach($html_contents as $hc)
                           {!! '<tr><td>'.implode('</td><td>',$hc).'</td></tr>' !!}
                       @endforeach
-                    </tbody>                 
+                    </tbody>  
+
+
+                    <tfoot>
+                    <tr>                      
+                      <th>&nbsp;</th>
+                      <?php                       
+                        foreach($columns as $col) {
+                            if($col['visible']===FALSE) continue;
+                            $colname = $col['label'];
+                            $width = ($col['width'])?:"auto";
+                            echo "<th width='$width'>$colname</th>";
+                        }
+                      ?>   
+
+                      @if($button_table_action)
+                        @if($priv->is_edit!=0 || $priv->is_delete!=0 || $priv->is_read!=0)
+                        <th> - </th>
+                        @endif                   
+                      @endif                                            
+                    </tr>
+                    </tfoot>               
                   </table>                                   
                 </div><!-- /.box-body -->                
 

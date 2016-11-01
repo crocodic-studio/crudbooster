@@ -7,33 +7,33 @@
 
 
 @if($button_show_data)
-<a href="{{ url($dashboard) }}" id='btn_show_data' class="btn btn-app">
+<a href="{{ mainpath() }}" id='btn_show_data' class="btn btn-app" title="Show Data {{ $data_sub_module->name?: ''}}">
 	<i class="fa fa-bars"></i> Show Data
 </a>
 @endif
 
-@if($button_reload_data)
-<a href="{{ Request::url().$build_query }}" id='btn_reload_data' title='Reload Data' class="btn btn-app btn-reload-table ajax-button">
-	<i class="fa fa-refresh"></i> Reload Data
-</a>
-@endif
-
 @if($button_new_data && $priv->is_create)
-<a href="{{ url($mainpath.'/add') }}" id='btn_add_new_data' class="btn btn-app">
+<a href="{{ mainpath('add') }}" id='btn_add_new_data' class="btn btn-app" title="Add New Data {{ $data_sub_module->name?:'' }}">
 	<i class="fa fa-plus"></i> Add New Data
 </a>
 @endif
 
 @if($button_delete_data && $priv->is_delete)
-	<a href="javascript:void(0)" id='btn_delete_selected' class="disabled btn btn-app btn-delete-selected"><i class="fa fa-trash"></i> Delete Selected</a>
+	<a href="javascript:void(0)" id='btn_delete_selected' title='Delete selected' class="disabled btn btn-app btn-delete-selected"><i class="fa fa-trash"></i> Delete Selected</a>
 @endif
 
 <!--YOUR OWN HEADER BUTTON-->
 @if(count($index_button))
 	@foreach($index_button as $ib)
-	<a href='{{$ib["url"]}}' id='{{str_slug($ib["label"])}}' class='btn btn-app'>
-		<i class='{{$ib["icon"]}}'></i> {{$ib["label"]}}
-	</a>
+		<a href='{{$ib["url"]}}' id='{{str_slug($ib["label"])}}' class='btn btn-app' 
+		@if($ib['onClick']) onClick='return {{$ib["onClick"]}}' @endif
+		@if($ib['onMouseOever']) onMouseOever='return {{$ib["onMouseOever"]}}' @endif
+		@if($ib['onMoueseOut']) onMoueseOut='return {{$ib["onMoueseOut"]}}' @endif
+		@if($ib['onKeyDown']) onKeyDown='return {{$ib["onKeyDown"]}}' @endif
+		@if($ib['onLoad']) onLoad='return {{$ib["onLoad"]}}' @endif
+		>
+			<i class='{{$ib["icon"]}}'></i> {{$ib["label"]}}
+		</a>
 	@endforeach
 @endif
 <!--END OWN HEADER BUTTON-->
@@ -50,7 +50,13 @@
 
 	@if($button_export_data)
 	<a href="javascript:void(0)" id='btn_export_data' data-url-parameter='{{$build_query}}' title='Export Data' class="btn btn-app btn-export-data">
-		<i class="fa fa-download"></i> Export Data
+		<i class="fa fa-upload"></i> Export Data
+	</a>
+	@endif
+
+	@if($button_import_data)
+	<a href="{{ mainpath('import-data') }}" id='btn_import_data' data-url-parameter='{{$build_query}}' title='Import Data' class="btn btn-app btn-import-data">
+		<i class="fa fa-download"></i> Import Data
 	</a>
 	@endif
 
@@ -85,10 +91,10 @@ $(function(){
 			})
 
 			show_alert_floating('Please wait whilte delete selected...');
-			$.post("{{ mainpath('deleted-selected') }}",{id:checks},function(resp) {				
+			$.post("{{ mainpath('delete-selected') }}",{id:checks},function(resp) {				
 				show_alert_floating('Delete selected successfully !');
 				hide_alert_floating();
-				$(".btn-reload-table").click();
+				location.reload();
 			})
 		}else{
 			alert("Please checking any checkbox first !");
@@ -222,7 +228,8 @@ $(function(){
 			<form method='get' action=''>
 				<div class="modal-body">
 					
-					@foreach($columns as $key => $col)					
+					<?php foreach($columns as $key => $col):?>
+						<?php if( isset($col['image']) || isset($col['download']) || $col['visible']===FALSE) continue;?>		
 					<div class='form-group'>
 						<label>{{ $col['label'] }}</label>
 						<div class='row-filter-combo row'>
@@ -267,12 +274,12 @@ $(function(){
 						</div>
 
 					</div>
-					@endforeach					
+					<?php endforeach;?>				
 					
 				</div>
 				<div class="modal-footer">
 					<button class="btn btn-default pull-left" type="button" data-dismiss="modal">Close</button>
-					<button class="btn btn-default pull-left btn-reset" type="reset" onclick='location.href="{{$dashboard}}"' >Reset</button>
+					<button class="btn btn-default pull-left btn-reset" type="reset" onclick='location.href="{{mainpath()}}"' >Reset</button>
 					<button class="btn btn-primary btn-submit" type="submit">Submit</button>
 				</div>
 			</form>
@@ -323,13 +330,20 @@ $(function(){
 				<span aria-hidden="true">×</span></button>
 				<h4 class="modal-title"><i class='fa fa-download'></i> Export Data</h4>
 			</div>
-			<form method='post' target="_blank" action='{{url($mainpath."/export-data?t=".time())}}'> 
+			<?php 
+			  if($data_sub_module) {
+			  	$action_path = Route($data_sub_module->controller."GetIndex");
+		      }else{
+		      	$action_path = mainpath();
+		      }
+			?>
+			<form method='post' target="_blank" action='{{ $action_path."/export-data?t=".time() }}'> 
 			<input type="hidden" name="_token" value="{{ csrf_token() }}">
 			{!! get_input_url_parameters() !!}
 				<div class="modal-body">										
 					<div class="form-group">
 						<label>File Name</label>
-						<input type='text' name='filename' class='form-control' required value='Report {{$modulname}} - {{date("d M Y")}}'/>
+						<input type='text' name='filename' class='form-control' required value='Report {{ ($data_sub_module)?$data_sub_module->name:$module_name }} - {{date("d M Y")}}'/>
 						<div class='help-block'>You can rename the filename according to your whises</div>
 					</div>
 

@@ -16,16 +16,16 @@ class AddTableCmsApicustom extends Migration {
 		{
 			$table->increments('id');
 			$table->timestamps();
-			$table->string('permalink');
-			$table->string('tabel');
-			$table->string('aksi');
-			$table->text('kolom');
-			$table->string('orderby');
-			$table->text('sub_query_1');
-			$table->text('sql_where');
-			$table->string('nama');
-			$table->string('keterangan');
-			$table->string('parameter');
+			$table->string('permalink')->nullable();
+			$table->string('tabel')->nullable();
+			$table->string('aksi')->nullable();
+			$table->text('kolom')->nullable();
+			$table->string('orderby')->nullable();
+			$table->text('sub_query_1')->nullable();
+			$table->text('sql_where')->nullable();
+			$table->string('nama')->nullable();
+			$table->string('keterangan')->nullable();
+			$table->string('parameter')->nullable();
 		});
 	}
 

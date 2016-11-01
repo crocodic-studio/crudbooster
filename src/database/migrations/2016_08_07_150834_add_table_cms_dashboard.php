@@ -16,9 +16,9 @@ class AddTableCmsDashboard extends Migration {
 		{
 			$table->increments('id');
 			$table->timestamps();
-			$table->string('name');
-			$table->integer('id_cms_privileges');
-			$table->longtext('content');
+			$table->string('name')->nullable();
+			$table->integer('id_cms_privileges')->nullable();
+			$table->longtext('content')->nullable();
 		});
 	}
 

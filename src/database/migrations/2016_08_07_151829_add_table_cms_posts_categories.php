@@ -16,8 +16,8 @@ class AddTableCmsPostsCategories extends Migration {
 		{
 			$table->increments('id');
 			$table->timestamps();
-			$table->string('name');
-			$table->string('slug');
+			$table->string('name')->nullable();
+			$table->string('slug')->nullable();
 		});
 	}
 

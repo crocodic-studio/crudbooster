@@ -16,11 +16,11 @@ class AddTableCmsPosts extends Migration {
 		{
 			$table->increments('id');
 			$table->timestamps();
-			$table->string('title');
-			$table->string('slug');
-			$table->text('content');
-			$table->integer('id_cms_users');
-			$table->integer('id_cms_posts_categories');
+			$table->string('title')->nullable();
+			$table->string('slug')->nullable();
+			$table->text('content')->nullable();
+			$table->integer('id_cms_users')->nullable();
+			$table->integer('id_cms_posts_categories')->nullable();
 			$table->softDeletes();
 		});
 	}

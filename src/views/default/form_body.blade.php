@@ -7,6 +7,7 @@
 					.header-title {
 						cursor: pointer;
 					}
+					i.fa-calendar {cursor:pointer;}
 					</style>
 					<script src="{{asset('vendor/laravel-filemanager/js/lfm.js')}}"></script>
 					<script type="text/javascript">
@@ -40,6 +41,11 @@
 									}
 								})
 							}
+
+							$('.form-datepicker i').click(function() {
+								console.log('i datepicker');
+								$(this).parent().parent().find('input').click();
+							})
 						})						
 					</script>
 
@@ -60,9 +66,27 @@
                 			@$value		= (isset($row->{$name}))?$row->{$name}:$value;
 
                 			$old 		= old($name);
-                			$value 		= ($old)?:$value;
+                			$value 		= (!empty($old))?$old:$value;
+                			
+                			$validation = array();
+                			$validation_raw = isset($form['validation'])?explode('|',$form['validation']):array();
+                			if($validation_raw) {
+                				foreach($validation_raw as $vr) {
+                					$vr_a = explode(':',$vr);
+                					if($vr_a[1]) {
+                						$key = $vr_a[0];
+                						$validation[$key] = $vr_a[1];
+                					}else{
+                						$validation[$vr] = TRUE;
+                					}
+                				}
+                			}
 
-                			if( ($parent_field && $name == $parent_field) && !isset($form['visible']) ) continue;
+                			// if( ($parent_field && $name == $parent_field) && !isset($form['visible']) ) continue;
+                			if($parent_field && $parent_field == $name && !$form['noparent']) {
+                				echo "<input type='hidden' name='$name' value='$parent_id'/>";
+                				continue;
+                			}
 
                 			if(isset($form['onlyfor'])) {
 								if(is_array($form['onlyfor'])) {
@@ -100,7 +124,13 @@
                 			$placeholder = (@$form['placeholder'])?"placeholder='".$form['placeholder']."'":"";
 
                 			if(get_method() == 'getDetail') {
-                				$disabled = 'disabled';
+                				$disabled = 'disabled';                				
+                			}
+
+                			if(Request::segment(3) == 'sub-module') {
+                				if(Request::segment(6) == 'detail') {
+                					$disabled = 'disabled';
+                				}
                 			}
 
                 			if(Request::segment(3)=='edit' && $priv->is_edit==0) {
@@ -173,7 +203,7 @@
 					        font-weight: 300;
 					      }
 					    </style>
-                		<div class='form-group peta {{$header_group_class}}'>
+                		<div class='form-group peta {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}'>
 							<input id="pac-input" class="controls" autofocus type="text"
 						        placeholder="Enter a location">
 						    <div id="type-selector" class="controls">
@@ -192,7 +222,9 @@
 						    <div id="map"></div>
 						</div>
                 		<script type="text/javascript">
+                		  var geocoder;
 					      function initMap() {
+					      	geocoder = new google.maps.Geocoder();
 					        var map = new google.maps.Map(document.getElementById('map'), {
 					          @if($row->latitude && $row->longitude)
 					          center: {lat: {{$row->latitude}}, lng: {{$row->longitude}} },
@@ -206,6 +238,7 @@
 					        var marker = new google.maps.Marker({
 					          position: {lat: {{$row->latitude}}, lng: {{$row->longitude}} },
 					          map: map,
+					          draggable:true,
 					          title: 'Location Here !'
 					        });
 					        @endif
@@ -223,8 +256,39 @@
 					        var infowindow = new google.maps.InfoWindow();
 					        var marker = new google.maps.Marker({
 					          map: map,
+					          draggable:true,
 					          anchorPoint: new google.maps.Point(0, -29)
 					        });
+
+					        google.maps.event.addListener(marker, 'dragend', function(marker){
+					        	
+
+					        	  geocoder.geocode({
+								    latLng: marker.latLng
+								  }, function(responses) {
+								    if (responses && responses.length > 0) {
+								      address = responses[0].formatted_address;
+								    } else {
+								      address = 'Cannot determine address at this location.';
+								    }
+
+								    @if($form['googlemaps_address'])
+								  		$("input[name={{$form['googlemaps_address']}}]").val(address);
+									@endif
+
+									console.log(address);
+
+								    infowindow.setContent(address);
+								    // infowindow.open(map, marker);
+								  });
+
+						        var latLng = marker.latLng; 
+						        latitude = latLng.lat();
+						        longitude = latLng.lng();
+						        						          
+						        $("input[name=latitude]").val(latitude);
+						        $("input[name=longitude]").val(longitude);								          						          	
+						     });
 
 					        autocomplete.addListener('place_changed', function() {
 					          infowindow.close();
@@ -242,13 +306,13 @@
 					            map.setCenter(place.geometry.location);
 					            map.setZoom(17);  // Why 17? Because it looks good.
 					          }
-					          marker.setIcon(/** @type  {google.maps.Icon} */({
-					            url: 'http://maps.google.com/mapfiles/ms/icons/red.png',
-					            size: new google.maps.Size(71, 71),
-					            origin: new google.maps.Point(0, 0),
-					            anchor: new google.maps.Point(17, 34),
-					            scaledSize: new google.maps.Size(35, 35)
-					          }));
+					          // marker.setIcon(/** @type  {google.maps.Icon} */({
+					          //   url: 'http://maps.google.com/mapfiles/ms/icons/red.png',
+					          //   size: new google.maps.Size(71, 71),
+					          //   origin: new google.maps.Point(0, 0),
+					          //   anchor: new google.maps.Point(17, 34),
+					          //   scaledSize: new google.maps.Size(35, 35)
+					          // }));
 					          marker.setPosition(place.geometry.location);
 					          marker.setVisible(true);
 
@@ -301,7 +365,7 @@
                 		@endif
 
                 		@if(@$type=='html')
-                		<div class='form-group {{$header_group_class}}'>
+                		<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}'>
                 			{!!$form['html']!!}
                 		</div>
                 		@endif
@@ -325,21 +389,21 @@
                 				
                 			})
                 		</script>
-                		<div class='form-group {{$header_group_class}}'>
-                			<label>{{$form['label']}}</label>
+                		<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}'>
+                			<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
                 			<div id='qrcode_{{$name}}'></div>
                 		</div>                		
                 		@endif
 
                 		@if(@$type=='checkbox')
-						<div class='form-group {{$header_group_class}}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-							<label>{{$form['label']}}</label>							
+						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
+							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>							
 							<?php 
 								$value = explode(";",$value);
 								array_walk($value, 'trim');
 							?>
 							@if(isset($form['dataenum']))
-								@foreach($form['dataenum'] as $d)
+								@foreach($form['dataenum'] as $k=>$d)
 									<?php 
 										if(strpos($d, '|')) {
 											$val = substr($d, 0, strpos($d, '|'));
@@ -365,6 +429,10 @@
 
 										$tables = explode('.',$datatable_tab);
 										$selects_data = DB::table($tables[0])->select($tables[0].".id");	
+
+										if(\Schema::hasColumn($tables[0],'deleted_at')) {
+											$selects_data->where('deleted_at',NULL);
+										}
 
 										if(@$form['datatable_where']) {
 											$selects_data->whereraw($form['datatable_where']);
@@ -404,194 +472,111 @@
 										}
 									endif
 								?>
-							<div class="text-danger">{{ $errors->first($name) }}</div>
+							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
 							<p class='help-block'>{{ @$form['help'] }}</p>
 						</div>
 						@endif
 
 
                 		@if(@$type=='text' || @!$type)
-						<div class='form-group {{$header_group_class}}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-							<label>{{$form['label']}}</label>
-							<input type='text' title="{{$form['label']}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control' name="{{$name}}" id="{{$name}}" value='{{$value}}'/>
-							<div class="text-danger">{{ $errors->first($name) }}</div>
+						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
+							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
+							<input type='text' title="{{$form['label']}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} {{$validation['max']?"maxlength=$validation[max]":""}} class='form-control' name="{{$name}}" id="{{$name}}" value='{{$value}}'/>
+							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
 							<p class='help-block'>{{ @$form['help'] }}</p>
 						</div>
 						@endif
 
-						@if(@$type=='browse')
-						<div class='form-group {{$header_group_class}}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-							<label>{{$form['label']}}</label>
-							<div class="input-group">
-						      <input type="text" class="form-control" id="{{$name.'_label'}}" {{$required}} readonly placeholder="Please browse data...">
-						      <span class="input-group-btn">
-						      	<button class="btn btn-danger btn-delete" id="btn_clear_{{$name}}" type="button" title='Clear' onclick='if(!confirm("Are you sure want to clear ?")) return false'><i class='fa fa-times'></i></button>
-						        <button class="btn btn-primary btn-browse" type="button" data-toggle="modal" title='Browse data' data-target="#modal_{{$name}}"><i class='fa fa-search'></i> Browse</button>						        
-						      </span>
-						    </div><!-- /input-group -->
-						    <input type='hidden' name="{{$name}}" id="{{$name}}" value="{{$value}}"/>
-							<div class="text-danger">{{ $errors->first($name) }}</div>
+						@if(@$type=='number')
+						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
+							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
+							<input type='number' title="{{$form['label']}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} {{$validation['min']?"min=$validation[min]":""}} {{$validation['max']?"max=$validation[max]":""}} class='form-control' name="{{$name}}" id="{{$name}}" value='{{$value}}'/>
+							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
 							<p class='help-block'>{{ @$form['help'] }}</p>
 						</div>
-
-						<div id='modal_{{$name}}' class="modal fade" tabindex="-1" role="dialog">
-						  <div class="modal-dialog modal-lg">
-						    <div class="modal-content">
-						      <div class="modal-header">
-						        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						        <h4 class="modal-title"><i class='fa fa-search'></i> Browse Data : {{$form['label']}} <small>Select one of these rows</small></h4>
-						      </div>
-						      <div class="modal-body">
-						        <table id="table_{{$name}}" class="table table-bordered table-striped">
-						        	<thead>	
-						        		<tr class='info'>	
-						        			@if($form['browse_columns'])		
-						        			<th width='3%'>ID</th>		        		
-							        		@foreach($form['browse_columns'] as $bc)
-							        			<th>{{$bc['label']}}</th>
-							        		@endforeach
-							        		@else
-							        		<th width='3%'>ID</th>
-							        		<th>Name</th>
-							        		@endif
-						        		</tr>
-						        	</thead>
-						        	<tbody>
-
-						        	</tbody>
-						        	<tfoot>
-						        		<tr class='info'>	
-						        			@if($form['browse_columns'])		
-						        			<th width='3%'>ID</th>		        		
-							        		@foreach($form['browse_columns'] as $bc)
-							        			<th>{{$bc['label']}}</th>
-							        		@endforeach
-							        		@else
-							        		<th width='3%'>ID</th>
-							        		<th>Name</th>
-							        		@endif
-						        		</tr>
-						        	</tfoot>
-						        </table>
-						      </div>
-						    </div><!-- /.modal-content -->
-						  </div><!-- /.modal-dialog -->
-						</div><!-- /.modal -->
-
-						
-						<script type="text/javascript">
-							$(function() {
-								$('#table_{{$name}}').DataTable( {
-							        "processing": true,
-							        "serverSide": true,
-							        "ajax": "{{route($form['browse_source'].'GetDataTables')}}?browse_where={{$form['browse_where']}}",
-							        "createdRow": function ( row, data, index ) {
-							             $(row).attr('style','cursor:pointer');
-							             $(row).attr('data-id',data[0]);
-							             $(row).attr('data-label',data[1]);
-							             $(row).addClass('dt_row_browse');
-							        }
-							    });
-
-							    $(document).on("click",".dt_row_browse",function() {
-							    	var id = $(this).attr('data-id');
-							    	var label = $(this).attr('data-label');
-							    	$("#{{$name}}").val(id);
-							    	$("#{{$name.'_label'}}").val(label);
-							    	$("#modal_{{$name}}").modal("hide");
-							    });
-
-							    //current data
-							    @if($value)
-							    $("#{{$name.'_label'}}").val("Please wait load data...");
-							    $.get("{{route($form['browse_source'].'GetCurrentDataTables')}}/{{$value}}",function(resp) {
-							    	$("#{{$name.'_label'}}").val(resp.label);
-							    })
-							    @endif
-
-							    $("#btn_clear_{{$name}}").click(function() {
-							    	$("#{{$name.'_label'}}").val('');
-							    	$("#{{$name}}").val('');
-							    })
-							})
-						</script>
 						@endif
 
-						@if(@$type=='date' || @$type=='datepicker')
-						<div class='form-group {{$header_group_class}}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-							<label>{{$form['label']}}</label>
+						@if(@$type=='email')
+						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
+							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
 							<div class="input-group">
-  								<span class="input-group-addon"><i class='fa fa-calendar'></i></span>
-								<input type='text' title="{{$form['label']}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control notfocus datepicker' name="{{$name}}" id="{{$name}}" value='{{$value}}'/>
+			                	<span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+			                	<input type='email' title="{{$form['label']}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} {{$validation['max']?"maxlength=$validation[max]":""}} class='form-control' name="{{$name}}" id="{{$name}}" value='{{$value}}'/>
+			              	</div>							
+							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
+							<p class='help-block'>{{ @$form['help'] }}</p>
+						</div>
+						@endif
+
+						@if(@$type=='money')
+						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
+							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
+							<input type='text' title="{{$form['label']}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control inputMoney' name="{{$name}}" id="{{$name}}" value='{{$value}}'/>
+							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
+							<p class='help-block'>{{ @$form['help'] }}</p>
+						</div>						
+						@endif
+
+						@if(@$type=='date' || @$type=='datepicker')						
+						<div class='form-group form-datepicker {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
+							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
+							<div class="input-group">  								
+								<span class="input-group-addon"><i class='fa fa-calendar'></i></span>
+								<input type='text' title="{{$form['label']}}" readonly {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control notfocus datepicker' name="{{$name}}" id="{{$name}}" value='{{$value}}'/>						
 							</div>
-							<div class="text-danger">{{ $errors->first($name) }}</div>
+							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
 							<p class='help-block'>{{ @$form['help'] }}</p>
 						</div>
 						@endif
 
-						@if(@$type=='datetime' || @type=='datetimepicker')
-						<script>
-						$(function() {
-							$('.date_{{$name}}').on('changeDate', function (ev) {
-							    $('.date_{{$name}}').trigger("change");
-							});
-							$(".date_{{$name}}, .hour_{{$name}}, minute_{{$name}}").change(function() {
-								var d = $(".date_{{$name}}").val();
-								var h = $(".hour_{{$name}}").val();
-								var m = $(".minute_{{$name}}").val();
-								var s = "00";
-								var datetime = d+' '+h+':'+m+':'+s;
-								$("input[name={{$name}}]").val(datetime);
-								console.log("DateTime : "+datetime);
-							})
+						@if(@$type=='datetime' || @$type=='datetimepicker')
+						<div class='form-group form-datepicker {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
+							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
+							<div class="input-group">  			
+								@if(!$disabled)					
+								<span class="input-group-addon"><i class='fa fa-calendar'></i></span>
+								@endif
+								<input type='text' title="{{$form['label']}}" readonly {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control notfocus datetimepicker' name="{{$name}}" id="{{$name}}" value='{{$value}}'/>					
+							</div>
+							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
+							<p class='help-block'>{{ @$form['help'] }}</p>
+						</div>
+						@endif
 
-						})							
-						</script>
-						<div class='form-group {{$header_group_class}}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-							<label>{{$form['label']}}</label>
-							<div class='row'>
-							<div class='col-sm-3'>
-								<div class="input-group">
-  									<span class="input-group-addon"><i class='fa fa-calendar'></i></span>
-									<input type='text' title="{{$form['label']}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control notfocus datepicker date_{{$name}}' id="{{$name}}" value='{{($value)?date("Y-m-d",strtotime($value)):''}}'/>
+						@if(@$type=='time' || @$type=='timepicker')
+						<div class='bootstrap-timepicker'>
+							<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
+								<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
+								<div class="input-group">	 
+									@if(!$disabled) 								
+									<span class="input-group-addon"><i class='fa fa-clock-o'></i></span>
+									@endif
+									<input type='text' title="{{$form['label']}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control notfocus timepicker' name="{{$name}}" id="{{$name}}" readonly value='{{$value}}'/>									
 								</div>
+								<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
+								<p class='help-block'>{{ @$form['help'] }}</p>
 							</div>
-							<div class='col-sm-1'><select class='form-control hour_{{$name}}'><?php 
-								for($i=0;$i<=24;$i++) {
-									$select = (date("H",strtotime($value)) == str_pad($i,2,0,STR_PAD_LEFT))?"selected":"";
-									echo "<option $select value='".str_pad($i,2,0,STR_PAD_LEFT)."'>".str_pad($i,2,0,STR_PAD_LEFT)."</option>";
-								}
-								?></select></div>
-							<div class='col-sm-1'><select class='form-control minute_{{$name}}'><?php 
-								for($i=0;$i<=60;$i = $i+5) {
-									$select = (date("i",strtotime($value)) == str_pad($i,2,0,STR_PAD_LEFT))?"selected":"";
-									echo "<option $select value='".str_pad($i,2,0,STR_PAD_LEFT)."'>".str_pad($i,2,0,STR_PAD_LEFT)."</option>";
-								}
-								?></select></div>
-							</div>
-							<input type='hidden' name='{{$name}}' value='{{$value}}'/>
-							<div class="text-danger">{{ $errors->first($name) }}</div>
-							<p class='help-block'>{{ @$form['help'] }}</p>
 						</div>
 						@endif
+
 
 						@if(@$type=='hide' || @$type=='hidden')
 						<input type='hidden' name="{{$name}}" value='{{$value}}'/>
 						@endif
  
 						@if(@$type=='textarea')
-						<div class='form-group {{$header_group_class}}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-							<label>{{$form['label']}}</label>							
-							<textarea name="{{$form['name']}}" id="{{$name}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control' rows='5'>{{ $value}}</textarea>
-							<div class="text-danger">{{ $errors->first($name) }}</div>
+						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
+							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>							
+							<textarea name="{{$form['name']}}" id="{{$name}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} {{$validation['max']?"maxlength=$validation[max]":""}} class='form-control' rows='5'>{{ $value}}</textarea>
+							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
 							<p class='help-block'>{{ @$form['help'] }}</p>
 						</div>
 						@endif
 
 
 						@if(@$type=='wysiwyg')
-						<div class='form-group {{$header_group_class}}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-							<label>{{$form['label']}}</label>	
+						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
+							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>	
 							<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 							<textarea id='textarea_{{$name}}' name="{{$name}}" class="form-control my-editor">{!! old($name, $value) !!}</textarea>
 							<script>
@@ -633,16 +618,16 @@
 							  tinymce.init(editor_config);
 							</script>
 							
-							<div class="text-danger">{{ $errors->first($name) }}</div>
+							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
 							<p class='help-block'>{{ @$form['help'] }}</p>
 						</div>
 						@endif
 
 						@if(@$type=='password')
-						<div class='form-group {{$header_group_class}}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-							<label>{{$form['label']}}</label>
-							<input type='password' title="{{$form['label']}}" id="{{$name}}" {{$required}} {!!$placeholder!!} {{$readonly}} {{$disabled}} class='form-control' name="{{$name}}"/>							
-							<div class="text-danger">{{ $errors->first($name) }}</div>
+						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
+							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
+							<input type='password' title="{{$form['label']}}" id="{{$name}}" {{$required}} {!!$placeholder!!} {{$readonly}} {{$disabled}} {{$validation['max']?"maxlength=$validation[max]":""}} class='form-control' name="{{$name}}"/>							
+							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
 							<p class='help-block'>{{ @$form['help'] }}</p>
 						</div>
 						@endif
@@ -651,6 +636,13 @@
 						<?php 
 							if(isset($form['sub_select'])):
 								$tab = str_replace("id_","",$form['sub_select']);
+								$sub_label = '';
+								foreach($forms as $f) {
+									if($f['name'] == $form['sub_select']) {
+										$sub_label = $f['label'];
+										break;
+									}
+								}
 						?>
 								<script>
 								var val;
@@ -659,11 +651,10 @@
 									
 									$('#{{$name}}').change(function() {
 										console.log('{{$name}} changed');
-										$('#{{$form['sub_select']}}').html('<option value="">Please wait...</option>');
-										var parid = $(this).val();
-										$.get('{{url("admin/$tab/find-data")}}?parid='+parid+'&parfield={{$name}}&limit=500',function(resp) {
-											$('#{{$form['sub_select']}}').empty();
-											$('#{{$form['sub_select']}}').html("<option value=''>** Please Select Data</option>");
+										$('#{{$form['sub_select']}}').html('<option value="">Please wait loading data...</option>');
+										var id = $(this).val();
+										$.get('{{mainpath("find-data")}}?table1={{$tab}}&fk={{$name}}&fk_value='+id+'&limit=1000',function(resp) {								
+											$('#{{$form['sub_select']}}').empty().html("<option value=''>** Please Select a {{$sub_label}}</option>");
 											$.each(resp.items,function(i,obj) {
 												var selected = (val && val == obj.id)?'selected':'';
 												$('#{{$form['sub_select']}}').append('<option '+selected+' value=\"'+obj.id+'\">'+obj.text+'</option>');
@@ -680,8 +671,8 @@
 						<?php 
 							endif;
 						?>
-						<div class='form-group {{$header_group_class}}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-							<label>{{$form['label']}}</label>												
+						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
+							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>												
 							<select class='form-control' id="{{$name}}" data-value='{{$value}}' {{$required}} {!!$placeholder!!} {{$readonly}} {{$disabled}} name="{{$name}}">
 								<option value=''>** Please Select a {{$form['label']}}</option>
 								<?php 
@@ -708,80 +699,112 @@
 									endif;
 
 									if(@$form['datatable']):
-										$datatable_array = explode(",",$form['datatable']);
-										$datatable_tab = $datatable_array[0];
-										$datatable_field = $datatable_array[1];
-										$datatable_field2 = @$datatable_array[2];
+										$raw = explode(",",$form['datatable']);
+										$format = $form['datatable_format'];
+										$table1 = $raw[0];
+										$column1 = $raw[1];
+										
+										@$table2 = $raw[2];
+										@$column2 = $raw[3];
 
-										$tables = explode('.',$datatable_tab);
-										$selects_data = DB::table($tables[0])->select($tables[0].".id");	
+										@$table3 = $raw[4];
+										@$column3 = $raw[5];
+										
+										$selects_data = DB::table($table1)->select($table1.".id");	
+
+										if(\Schema::hasColumn($table1,'deleted_at')) {
+											$selects_data->where($table1.'.deleted_at',NULL);
+										}
 
 										if(@$form['datatable_where']) {
 											$selects_data->whereraw($form['datatable_where']);
+										}	
+
+										if($table1 && $column1) {
+											$orderby_table  = $table1;
+											$orderby_column = $column1;
 										}
 
-										if(count($tables)) {
-											for($i=1;$i<=count($tables)-1;$i++) {
-												$tab = $tables[$i];
-												$selects_data->leftjoin($tab,$tab.'.id','=','id_'.$tab);
-											}
-										}																			
+										if($table2 && $column2) {
+											$selects_data->join($table2,$table2.'.id','=',$table1.'.'.$column1);											
+											$orderby_table  = $table2;
+											$orderby_column = $column2;										
+										}													
 
-										$selects_data->addselect($datatable_field);
-
-										if($datatable_field2) {
-											$selects_data->addselect($datatable_field2);
+										if($table3 && $column3) {
+											$selects_data->join($table3,$table3.'.id','=',$table2.'.'.$column2);											
+											$orderby_table  = $table3;
+											$orderby_column = $column3;
 										}
 
-										if(Session::get('foreign_key')) {
-											$columns = \Schema::getColumnListing($datatable_tab);	
-											foreach(Session::get('foreign_key') as $k=>$v) {
-												if(in_array($k, $columns)){
-													$selects_data->where($datatable_tab.'.'.$k,$v);
-												}
-											}
-										}
+										if($format) {				
+											$format = str_replace('&#039;', "'", $format);						
+											$selects_data->addselect(DB::raw("CONCAT($format) as label"));	
+											$selects_data = $selects_data->orderby(DB::raw("CONCAT($format)"),"asc")->get();
+										}else{
+											$selects_data->addselect($orderby_table.'.'.$orderby_column.' as label');
+											$selects_data = $selects_data->orderby($orderby_table.'.'.$orderby_column,"asc")->get();
+										}										
 
-										$selects_data = $selects_data->orderby($datatable_field,"asc")->get();
+										
 										foreach($selects_data as $d) {											
 
-											$val = ($datatable_field2)?$d->{$datatable_field2}:$d->id;
-											$select = ($value == $val)?"selected":"";
+											$val    = $d->id;
+											$select = ($value == $val)?"selected":"";							
 
-											if(Request::get("parent_field")==$name && Request::get("parent_id")==@$val) {
-												$select = "selected";
-											}
+											if(@$form['datatable_exception'] == $val || @$form['datatable_exception'] == $d->label) continue;
 
-											if(@$form['datatable_exception'] == $val || @$form['datatable_exception'] == $d->{$datatable_field}) continue;
-
-											echo "<option $select value='$val'>".$d->{$datatable_field}."</option>";
+											echo "<option $select value='$val'>".$d->label."</option>";
 										}
 									endif
 								?>
 							</select>
-							<div class="text-danger">{{ $errors->first($name) }}</div>
+							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
 							<p class='help-block'>{{ @$form['help'] }}</p>
 						</div>
 						@endif
 
 
 						@if(@$type=='select2')
-						<?php 
-							$select2_source = ($form["select2_source"])?:$form["select2_controller"];
+						<?php 							
+							$datatable = @$form['datatable'];
+							$where     = @$form['datatable_where'];
+							$format    = @$form['datatable_format'];													
+
+							$raw       = explode(',',$datatable);
+							$url       = mainpath("find-data");
+
+							$table1    = $raw[0];
+							$column1   = $raw[1];
+							
+							@$table2   = $raw[2];
+							@$column2  = $raw[3];
+							
+							@$table3   = $raw[4];
+							@$column3  = $raw[5];
 						?>
-						<script>
+						<script>				
 							$(function() {
-								$('#<?php echo $name?>').select2({
-								  ajax: {								  	
-								    url: '{{route($select2_source."GetFindData")}}',
-								    delay: 250,								   
-								    placeholder: {
+								$('#<?php echo $name?>').select2({								  							  
+								  placeholder: {
 									    id: '-1', 
 									    text: '** Please Select a {{$form['label']}}'
 									},
+								  allowClear: true,
+								  ajax: {								  	
+								    url: '{!! $url !!}',								    
+								    delay: 250,								   								    
 								    data: function (params) {
 								      var query = {
-								        q: params.term,
+										q: params.term,
+										format: "{{$format}}",
+										table1: "{{$table1}}",
+										column1: "{{$column1}}",
+										table2: "{{$table2}}",
+										column2: "{{$column2}}",
+										table3: "{{$table3}}",
+										column3: "{{$column3}}",
+										where: "{{$where}}"
 								      }
 								      return query;
 								    },
@@ -797,8 +820,17 @@
 								  initSelection: function(element, callback) {
 							            var id = $(element).val()?$(element).val():"{{$value}}";
 							            if(id!=='') {
-							                $.ajax('{{route($select2_source."GetFindData")}}', {
-							                    data: {id: id},
+							                $.ajax('{{$url}}', {
+							                    data: {
+							                    	id: id, 
+							                    	format: "{{$format}}",
+							                    	table1: "{{$table1}}",
+													column1: "{{$column1}}",
+													table2: "{{$table2}}",
+													column2: "{{$column2}}",
+													table3: "{{$table3}}",
+													column3: "{{$column3}}"
+												},
 							                    dataType: "json"
 							                }).done(function(data) {							                	
 							                    callback(data.items[0]);	
@@ -806,26 +838,28 @@
 							                });
 							            }
 							      }
-							      @endif
+						
+							      @endif							      
 								});
 
 							})
 						</script>
-						<div class='form-group {{$header_group_class}}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-							<label>{{$form['label']}}</label>												
-							<select class='form-control' id="{{$name}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} name="{{$name}}">	
+						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
+							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label><br/>									
+							<select style='width:100%' class='form-control' id="{{$name}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} name="{{$name}}">	
 								
 							</select>
-							<div class="text-danger">{{ $errors->first($name) }}</div>
+							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
 							<p class='help-block'>{{ @$form['help'] }}</p>
 						</div>
+						
 						@endif
 
 
 						@if(@$type=='radio')
-						<div class='form-group {{$header_group_class}}' style="{{@$form['style']}}">
-							<label>{{$form['label']}}</label><br/>
-							<?php foreach($form['dataenum'] as $d):
+						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}'  style="{{@$form['style']}}">
+							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label><br/>
+							<?php foreach($form['dataenum'] as $k=>$d):
 								$val = $lab = '';
 								if(strpos($d,'|')!==FALSE) {
 									$draw = explode("|",$d);
@@ -837,22 +871,22 @@
 								$select = ($value == $val)?"checked":"";
 							?>	
 							<label class='radio-inline'>
-								<input type='radio' {{$select}} name='{{$name}}' {{$readonly}} {{$disabled}} value='{{$val}}'/> {!!$lab!!} 
+								<input type='radio' {{$select}} name='{{$name}}' {{ ($k==0)?$required:'' }} {{$readonly}} {{$disabled}} value='{{$val}}'/> {!!$lab!!} 
 							</label>						
 
 							<?php endforeach;?>																
-							<div class="text-danger">{{ $errors->first($name) }}</div>
+							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
 							<p class='help-block'>{{ @$form['help'] }}</p>
 						</div>
 						@endif
 
 						@if(@$type=='upload')							
-							<div class='form-group {{$header_group_class}}' id='form-group-{{$name}}' style='{{@$form["style"]}}'>
-								<label>{{$form['label']}}</label>
+							<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style='{{@$form["style"]}}'>
+								<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
 
 								<div class="input-group">
 							      <span class="input-group-btn">
-							        <a id="lfm-{{$name}}" data-input="thumbnail" data-preview="holder-{{$name}}" class="btn btn-primary">
+							        <a id="lfm-{{$name}}" data-input="thumbnail-{{$name}}" data-preview="holder-{{$name}}" class="btn btn-primary">
 							          @if(@$form['upload_file'])
 							          	<i class="fa fa-file-o"></i> Choose a file
 							          @else
@@ -860,7 +894,7 @@
 							          @endif
 							        </a>
 							      </span>
-							      <input id="thumbnail" class="form-control" type="text" readonly value='{{$value}}' name="{{$name}}">
+							      <input id="thumbnail-{{$name}}" class="form-control" type="text" readonly value='{{$value}}' name="{{$name}}">
 							    </div>
 
 							    @if(@$form['upload_file'])
@@ -873,7 +907,7 @@
 							    
 
 								<div class='help-block'>{{@$form['help']}}</div>
-								<div class="text-danger">{{ $errors->first($name) }}</div>
+								<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
 							</div>
 							@if(@$form['upload_file'])
 							<script type="text/javascript">$('#lfm-{{$name}}').filemanager('file','{{url("/")}}');</script>
@@ -883,32 +917,34 @@
 						@endif
 
 						@if(@$type=='upload_standard')
-						<div class='form-group {{$header_group_class}}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-							<label>{{$form['label']}}</label>
+						<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
+							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
 							@if($value)
 								<?php 
-									if(Storage::exists($row->{$name})) {
-										
-										$url = asset($row->{$name});
-										$info = new SplFileInfo($url);
-										$ext  = strtolower($info->getExtension());
+									$file = str_replace('uploads/','',$row->{$name});
+									if(Storage::exists($file)) {										
+										$url         = asset($row->{$name});
+										$ext 	     = explode('.',$url);
+										$ext 		 = end($ext);
+										$ext 		 = strtolower($ext);
 										$images_type = array('jpg','png','gif','jpeg','bmp','tiff');									
-										$filesize = Storage::size($row->{$name});																
-										$humansize = human_filesize($filesize);										
+										$filesize    = Storage::size($file);																						
 									}
 									
 									if($filesize):
-									if(in_array($ext, $images_type)):
-								?>
-									<p><img style='max-width:100%' title="Image For {{$form['label']}}, File Size : {{$humansize}}, File Type : {{$ext}}" src='{{$url}}'/></p>
-								<?php else:?>
-									<p><a href='{{$url}}' title='Download File (Size ({{$humansize}}), Type : {{$ext}})'>Download File</a></p>
-								<?php endif;
+										if(in_array($ext, $images_type)):
+										?>
+											<p><img style='max-width:100%' title="Image For {{$form['label']}}, File Type : {{$ext}}" src='{{$url}}'/></p>
+										<?php else:?>
+											<p><a href='{{$url}}'>Download File ({{$ext}})</a></p>
+										<?php endif;
 									else:
-										echo "<p class='text-danger'><i class='fa fa-exclamation-triangle'></i> Oops looks like File was Broken !. Click Delete and Re-Upload.</p>";
+										echo "<p class='text-danger'><i class='fa fa-exclamation-triangle'></i> Oops looks like File ".$row->{$name}." was Broken !. Click Delete and Re-Upload.</p>";
 									endif; 
 								?>
+								@if(!$readonly || !$disabled)
 								<p><a class='btn btn-danger btn-delete btn-sm' onclick="if(!confirm('Are you sure want to delete ? after delete you can upload other file.')) return false" href='{{url($mainpath."/delete-image?image=".$row->{$name}."&id=".$row->id."&column=".$name)}}'><i class='fa fa-ban'></i> Delete </a></p>
+								@endif
 							@endif	
 							@if(!$value)
 							<input type='file' id="{{$name}}" title="{{$form['label']}}" {{$required}} {{$readonly}} {{$disabled}} class='form-control' name="{{$name}}"/>							
@@ -916,7 +952,7 @@
 							@else
 							<p class='text-muted'><em>* If you want to upload other file, please first delete the file.</em></p>
 							@endif
-							<div class="text-danger">{{ $errors->first($name) }}</div>
+							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
 							
 						</div>
 						@endif

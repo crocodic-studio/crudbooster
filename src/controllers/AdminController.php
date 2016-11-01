@@ -31,6 +31,7 @@ class AdminController extends CBController {
 			
 		$id_cms_privileges = Session::get('admin_privileges');
 		$id_cms_privileges = (Session::get('dashboard_config_id_privileges'))?:$id_cms_privileges;
+		$id_cms_privileges = intval($id_cms_privileges);
 		$data['list_id_dashboard'] = DB::table('cms_dashboard')->where("id_cms_privileges",$id_cms_privileges)->orderby("id","asc")->lists('id');
 
 		$data['page_title']       = '<strong>Dashboard</strong> ';
@@ -43,11 +44,11 @@ class AdminController extends CBController {
 	public function getSetDashboardConfigMode() {
 
 		if(!get_is_superadmin()) {
-			return redirect('admin')->with('message','Sorry this dashboard configuration is not available');
+			return redirect('admin')->with(['message'=>'Sorry The Configuration Dashboard only Available for Super Admin','message_type'=>'warning']);
 		}
 
 		Session::put('dashboard_config_mode',1);
-		Session::put('dashboard_config_id_privileges',Request::get('id_cms_privileges'));
+		Session::put('dashboard_config_id_privileges',intval(Request::get('id_cms_privileges')));
 		return redirect('admin');
 	}
 	public function getUnsetDashboardConfigMode() {
@@ -94,7 +95,7 @@ class AdminController extends CBController {
 
 		$list_table = "<select required class='form-control' name='table_name'><option value=''>** Select a Table</option>";
 
-		$tables = DB::select('SHOW TABLES');		
+		$tables = list_tables();		
 		foreach($tables as $tab) {
 			foreach ($tab as $key => $value) {				
 				@$selected = ($value == $content['table_name'])?"selected":"";
@@ -127,7 +128,7 @@ class AdminController extends CBController {
 
 		$html .= "<div class='form-group'>";
 			@$html .= "<label>SQL WHERE QUERY</label><textarea required name='sql_where' class='form-control'>$content[sql_where]</textarea>";
-			@$html .= "<div class='help-block'>You can use alias [admin_id_companies],[admin_id]</div>";
+			@$html .= "<div class='help-block'>You can use alias session, e.g : [admin_id_companies],[admin_id]</div>";
 		$html .= "</div>";
 
 		$html .= "</form>";
@@ -174,7 +175,7 @@ class AdminController extends CBController {
 
 		$list_table = "<select required class='form-control' name='table_name'><option value=''>** Select a Table</option>";
 
-		$tables = DB::select('SHOW TABLES');		
+		$tables = list_tables();		
 		foreach($tables as $tab) {
 			foreach ($tab as $key => $value) {				
 				@$selected = ($value == $content['table_name'])?"selected":"";
@@ -211,7 +212,7 @@ class AdminController extends CBController {
 
 		$html .= "<div class='form-group'>";
 			@$html .= "<label>SQL GROUP BY</label><textarea required name='sql_group_by' class='form-control'>$content[sql_group_by]</textarea>";
-			@$html .= "<div class='help-block'>You can use alias [admin_id_companies],[admin_id]</div>";
+			@$html .= "<div class='help-block'>You can use alias session, e.g : [admin_id_companies],[admin_id]</div>";
 		$html .= "</div>";
 
 		$html .= "</form>";
@@ -259,7 +260,7 @@ class AdminController extends CBController {
 
 		$list_table = "<select required class='form-control' name='table_name'><option value=''>** Select a Table</option>";
 
-		$tables = DB::select('SHOW TABLES');		
+		$tables = list_tables();		
 		foreach($tables as $tab) {
 			foreach ($tab as $key => $value) {				
 				@$selected = ($value == $content['table_name'])?"selected":"";
@@ -292,7 +293,7 @@ class AdminController extends CBController {
 
 		$html .= "<div class='form-group'>";
 			@$html .= "<label>SQL WHERE QUERY</label><textarea required name='sql_where' class='form-control'>$content[sql_where]</textarea>";
-			@$html .= "<div class='help-block'>You can use alias [admin_id_companies],[admin_id]</div>";
+			@$html .= "<div class='help-block'>You can use alias session, e.g : [admin_id_companies],[admin_id]</div>";
 		$html .= "</div>";
 
 		$html .= "<div class='form-group'>";
@@ -333,7 +334,7 @@ class AdminController extends CBController {
 			@$html .= "<label>SQL QUERY</label><textarea required rows='6' name='sql_query' class='form-control'>$content[sql_query]</textarea>
 			<div class='help-block'>required select label (for label each side chart), value (for value each side chart), color (for color each side chart). Sparate with comma</div>
 			";
-			@$html .= "<div class='help-block'>You can use alias [admin_id_companies],[admin_id]</div>";
+			@$html .= "<div class='help-block'>You can use alias session, e.g : [admin_id_companies],[admin_id]</div>";
 		$html .= "</div>";
 
 		$html .= "</form>";
@@ -371,6 +372,11 @@ class AdminController extends CBController {
 			@$html .= "<label>LIMIT</label><input required type='number' name='limit' value='$content[limit]' class='form-control'/>";
 		$html .= "</div>";
 
+		$html .= "<div class='form-group'>";
+			@$html .= "<label>SQL Where Query</label><input required type='text' name='sql_where' value='$content[sql_where]' class='form-control'/>";
+			@$html .= "<div class='help-block'>You can use alias session, e.g : [admin_id_companies],[admin_id]</div>";
+		$html .= "</div>"; 
+
 		$html .= "</form>";
 
 		echo $html;
@@ -391,6 +397,7 @@ class AdminController extends CBController {
 		$row = DB::table('cms_dashboard')->where('id',$id)->first();
 		$content = unserialize($row->content);
 		$type = $content['type'];
+		$sessions = Session::all();
 
 		switch($type) {
 			case "statistic_number":
@@ -400,30 +407,31 @@ class AdminController extends CBController {
 				$column         = $content['column'];
 				$sql_where      = $content['sql_where'];				
 				$color          = $content['color'];
-				@$width         = $content['width'];
+				@$width         = $content['width']; 
 
 				$sql_where 		= ($sql_where)?"and ".str_replace("where ", "", $sql_where):"";
-				$sql_where 		= str_ireplace(
-						array("[admin_id]","[admin_id_companies]"),
-						array(get_my_id(),get_my_id_company()),
-						$sql_where
-						);				
+				foreach($sessions as $k=>$v) {
+					if(get_is_superadmin() && $v=='') {
+						$v = 0;
+					}
+					$sql_where = str_replace("[".$k."]", $v, $sql_where);
+				}		
 
 				switch($aggregate_type) {
 					case "count":
-						$query = "select count($column) as statistic_total from `$table` where 1=1 $sql_where";
+						$query = "select count($column) as statistic_total from $table where 1=1 $sql_where";
 					break;
 					case "sum":
-						$query = "select sum($column) as statistic_total from `$table` where 1=1 $sql_where";
+						$query = "select sum($column) as statistic_total from $table where 1=1 $sql_where";
 					break;
 					case "avg":
-						$query = "select avg($column) as statistic_total from `$table` where 1=1 $sql_where";
+						$query = "select avg($column) as statistic_total from $table where 1=1 $sql_where";
 					break;
 					case "min":
-						$query = "select min($column) as statistic_total from `$table` where 1=1 $sql_where";
+						$query = "select min($column) as statistic_total from $table where 1=1 $sql_where";
 					break;
 					case "max":
-						$query = "select max($column) as statistic_total from `$table` where 1=1 $sql_where";
+						$query = "select max($column) as statistic_total from $table where 1=1 $sql_where";
 					break;
 				}
 
@@ -456,11 +464,12 @@ class AdminController extends CBController {
 				$width 			= ($width=='half')?6:12;
 
 				$sql_where 		= ($sql_where)?"and ".str_replace("where ", "", $sql_where):"";
-				$sql_where 		= str_ireplace(
-						array("[admin_id]","[admin_id_companies]"),
-						array(get_my_id(),get_my_id_company()),
-						$sql_where
-						);
+				foreach($sessions as $k=>$v) {
+					if(get_is_superadmin() && $v=='') {
+						$v = 0;
+					}
+					$sql_where = str_replace("[".$k."]", $v, $sql_where);
+				}
 
 				switch($aggregate_type) {
 					case "count":
@@ -539,11 +548,12 @@ class AdminController extends CBController {
 				$width 			= ($width=='half')?6:12;
 
 				$sql_where 		= ($sql_where)?"and ".str_replace("where ", "", $sql_where):"";
-				$sql_where 		= str_ireplace(
-						array("[admin_id]","[admin_id_companies]"),
-						array(get_my_id(),get_my_id_company()),
-						$sql_where
-						);
+				foreach($sessions as $k=>$v) {
+					if(get_is_superadmin() && $v=='') {
+						$v = 0;
+					}
+					$sql_where = str_replace("[".$k."]", $v, $sql_where);
+				}
 
 				switch($aggregate_type) {
 					case "count":
@@ -684,9 +694,29 @@ class AdminController extends CBController {
 				$label         = $content['label'];				
 				$id_cms_moduls = $content['id_cms_moduls'];
 				$limit         = $content['limit'];
+				$sql_where 	   = $content['sql_where'];
 				$moduls        = DB::table('cms_moduls')->where('id',$id_cms_moduls)->first();
 				$main_path     = url(config('crudbooster.ADMIN_PATH').'/'.$moduls->path);
-				$path          = ($limit)?$main_path.'?limit='.$limit:$main_path;
+
+				$param = array();
+				$param['noaction'] = 1;
+				if($limit) {
+					$param['limit'] = $limit;
+				}
+				if($sql_where) {
+					foreach($sessions as $k=>$v) {
+						if(get_is_superadmin() && $v=='') {
+							$v = 0;
+						}
+						$sql_where = str_replace("[".$k."]", $v, $sql_where);
+					}
+					$param['sql_where'] = $sql_where;
+				}
+
+				$param = serialize($param);
+				if($param) { 
+					$main_path = $main_path."?dq=".encrypt($param);
+				}
 
 				$html = " 
 				<div class='col-sm-12 dashboard_widget' id='dashboard_$id'>
@@ -705,7 +735,7 @@ class AdminController extends CBController {
 			      </div>
 			      <script>
 			        $(function() {
-			            $.get('$path',function(htm) {                
+			            $.get('$main_path',function(htm) {                
 			                var raw = $('<div>').append($(htm).find('#table_dashboard').clone()).html();                
 			                $('#table_data_$id').html(raw);
 			            })
@@ -718,10 +748,11 @@ class AdminController extends CBController {
 
 	public function postSaveCmsDashboard() {
 		$post                   = Request::all();
+		$post['id'] 			= intval($post['id']);
 		$a                      = array();
 		$a['name']              = $post['label'];
 		$a['content']           = serialize($post);
-		$a['id_cms_privileges'] = Session::get('dashboard_config_id_privileges');
+		$a['id_cms_privileges'] = intval(Session::get('dashboard_config_id_privileges'));
 		if($post['id']) {
 			DB::table('cms_dashboard')->where('id',$post['id'])->update($a);
 			$lastId = $post['id'];
@@ -807,6 +838,9 @@ class AdminController extends CBController {
 			Session::put('theme_color',$priv->theme_color);
 			Session::put("appname",$this->appname);			
 
+			$cb_hook_session = new \App\Http\Controllers\CBHook;
+			$cb_hook_session->afterLogin();
+
 			return redirect()->route('AdminControllerGetIndex'); 
 		}else{
 			return redirect()->route('getLogin')->with('message', 'Sorry your password is wrong !');			
@@ -834,13 +868,21 @@ class AdminController extends CBController {
 		$password = \Hash::make($rand_string);
 
 		DB::table('cms_users')->where('email',Request::input('email'))->update(array('password'=>$password));
- 
+ 	
+ 		$appname = get_setting('appname');
 		$user             = DB::table('cms_users')->where("email",Request::input('email'))->first();
 		$data             = array();
 		$data['email']    = $user->email;
 		$data['password'] = $rand_string;
 
-		send_email($user->email,"Forgot Password",$data,$this->setting->email_sender,"emails.forgot");
+		$html = "
+			Hi $user->name, <br/>
+			We're heard that you requested password, this bellow is your new password :<br/>
+			<h3>$rand_string</h3><br/>
+			You can use this password to login at $appname					
+		";
+
+		send_email($user->email,"Forgot Password $appname",$html);
 
 		return redirect()->route('getLogin')->with('message', 'We have sent new password to your email, check inbox or spambox !');
 

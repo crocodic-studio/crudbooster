@@ -36,7 +36,7 @@ class ModulsController extends CBController {
 		$this->form[] = ['label'=>'Basic Configuration','type'=>'header'];	
 		$this->form[] = array("label"=>"Name","name"=>"name","placeholder"=>"Enter a module name",);
 
-		$tables = DB::select('SHOW TABLES');
+		$tables = list_tables();
 		$tables_list = array();		
 		foreach($tables as $tab) {
 			foreach ($tab as $key => $value) {	
@@ -101,31 +101,34 @@ class ModulsController extends CBController {
 		$this->form[] = array("label"=>"SQL Order By","name"=>"sql_orderby","type"=>"text","placeholder"=>"Enter query here","help"=>"Example : column_name ASC, column2_name DESC");
 		$this->form[] = ['label'=>"Limit Data","name"=>"limit_data","type"=>"text","placeholder"=>"Example : 10"];
 		$this->form[] = array("label"=>"Delete Data Mode","name"=>"is_softdelete","type"=>"radio","dataenum"=>['1|Soft Delete','0|Permanent Delete'],"help"=>"Soft Delete Note : Please make sure you have column 'deleted_at' with data type TIMESTAMP","value"=>0);				
-		$this->form[] = array("label"=>"Group","name"=>"id_cms_moduls_group","required"=>"required","type"=>"select","datatable"=>"cms_moduls_group,nama_group","visible"=>true,'value'=>Request::segment(4));		
+		$this->form[] = array("label"=>"Group","name"=>"id_cms_moduls_group","required"=>"required","type"=>"select","datatable"=>"cms_moduls_group,nama_group","visible"=>true,'value'=>Request::segment(4),'noparent'=>true);		
 		$this->form[] = array("label"=>"Active ?","help"=>"Active to visible at sidebar menu, Not Active to unvisible","name"=>"is_active","type"=>"select","dataenum"=>array("1|Active","0|Not Active"),"value"=>1);
 		
 		$url_find_sorting = url(config('crudbooster.ADMIN_PATH').'/cms_moduls/find-last-sorting').'/'.Request::segment(4);
 		
-		$this->form[] = array("label"=>"Sorting","name"=>"sorting","jquery"=>"				
+		$jquery = "				
 				$.get('$url_find_sorting',function(resp) {
 					resp = parseInt(resp) + 1;
 					$('#sorting').val(resp);
-				});
-			","help"=>"Integer/Number");				
+				});";
+
+		if(get_method() == 'getEdit' || Request::segment(6) == 'edit') $jquery = '';
+
+		$this->form[] = array("label"=>"Sorting","name"=>"sorting","jquery"=>"$jquery","help"=>"Integer/Number");				
 		
 
 		$this->addaction = array();				
-		$this->addaction[] = array('label'=>'Up','route'=>url(config('crudbooster.ADMIN_PATH')).'/cms_moduls/arr-sorting/%id%/up','icon'=>'fa fa-arrow-up','ajax'=>true);
-		$this->addaction[] = array('label'=>'Down','route'=>url(config('crudbooster.ADMIN_PATH')).'/cms_moduls/arr-sorting/%id%/down','icon'=>'fa fa-arrow-down','ajax'=>true);
+		$this->addaction[] = array('label'=>'Up','route'=>url(config('crudbooster.ADMIN_PATH')).'/cms_moduls/arr-sorting/[id]/up','icon'=>'fa fa-arrow-up','ajax'=>true);
+		$this->addaction[] = array('label'=>'Down','route'=>url(config('crudbooster.ADMIN_PATH')).'/cms_moduls/arr-sorting/[id]/down','icon'=>'fa fa-arrow-down','ajax'=>true);
 		
 		$this->index_orderby = array("id_cms_moduls_group"=>"asc","sorting"=>"asc");
 
 		$this->constructor();
 	}
 
-	function hook_after_delete($id) {
+	function hook_before_delete($id) {
 		$modul = DB::table('cms_moduls')->where('id',$id)->first();
-		@unlink(base_path('app/Http/Controllers/Admin'.$modul->controller.'.php'));		
+		@unlink(app_path('Http/Controllers/'.$modul->controller.'.php'));		
 	}
 
 	public function getFindLastSorting($id_moduls_group) {
@@ -185,9 +188,13 @@ class ModulsController extends CBController {
 
 		$ref_parameter = Request::input('ref_parameter');		
 		if(Request::get('referal')) {
-			return redirect(Request::get('referal'))->with(['message'=>'Add new data success !','message_type'=>'success']);
+			return redirect(Request::get('referal').'?'.$ref_parameter)->with(['message'=>'The data has been added !','message_type'=>'success']);
 		}else{
-			return redirect($this->mainpath().'/edit/'.$lastid.'?'.$ref_parameter)->with(['message'=>"Add new data success !",'message_type'=>'success']);	
+			if(Request::get('ref_mainpath')) {
+				return redirect(Request::get('ref_mainpath'))->with(['message'=>"The data has been added !",'message_type'=>'success']);	
+			}else{
+				return redirect(mainpath())->with(['message'=>"The data has been added !",'message_type'=>'success']);
+			}				
 		}
 		
 	}

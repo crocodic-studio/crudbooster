@@ -1,74 +1,23 @@
 @extends('crudbooster::admin_template')
 
 @section('content')
+
+    @if($index_additional_view && ($index_additional_view['position']=='top' || !$index_additional_view['position']))
+        @include($index_additional_view['view'],$index_additional_view['data'])
+    @endif
     
     <div class='row'>
         <div class='col-md-12'> 
 
-        @if($form_tab && (Request::get('is_sub') || @$row))            
-        <ul class="nav nav-tabs form-tab">         
-          @foreach($form_tab as $ft)
-          <?php  
-            $url_tab = $ft['route'];
-            @$id = $row->id;           
-            
-            if($ft['foreign_key'] && @$_GET['where']) {
-              $where = $_GET['where'];
-              $field = $ft['foreign_key'];
-              $id = $where[$field];
-            }
-
-            if(!$id) {
-              if(strpos($url_tab, '/edit/')===FALSE) {
-                continue;
-              }              
-            }
-
-            $url_tab = str_replace("%id%",$id,$url_tab); 
-
-            $active = '';   
-
-            if(strpos($url_tab, Session::get('current_mainpath').'/') !==FALSE || strpos($url_tab, Session::get('current_mainpath').'?')!==FALSE) {
-              $active = 'selected';
-            }
-
-          ?> 
-              <li role="presentation" class="active"><a style='cursor:pointer' class='{{$active}}' href="{{$url_tab}}"><i class='<?=($ft["icon"])?:"fa fa-bars"?>'></i> {{$ft[label]}}</a></li>
-            @endforeach
-        </ul>
-        @endif
-
-        <script type="text/javascript">
-            $(function() {
-              $(".form-tab a").each(function() {
-                var hrf = $(this).attr('href');
-                if(hrf.indexOf("/edit/")==-1 && hrf.indexOf("/add")==-1) {
-                  var hr = hrf+'&format=total';
-                  var hdl = $(this);
-                  hdl.append('&nbsp;<em><i class="fa fa-spinner fa-spin"></i></em>');
-                  $.get(hr,function(total) {
-                    hdl.find('em').text('('+total+')');
-                  }).fail(function() {
-                    hdl.find('em').text('(0)');
-                  })
-                }               
-                
-              })
-            })
-          </script>
-
           <div  id='box_main' >
 
             @if($index_statistic)
-
               <div id='box-statistic' class='row'>
               @foreach($index_statistic as $stat)
-
-                  <div  class='col-sm-3'>
+                  <div  class="col-md-{{ $stat['width'] }}">
                       <div class="small-box bg-{{ $stat['color'] }}">
                         <div class="inner">
                           <h3>{{ $stat['count'] }}</h3>
-
                           <p>{{ $stat['label'] }}</p>
                         </div>
                         <div class="icon">
@@ -78,8 +27,88 @@
                   </div>
               @endforeach
               </div>
+            @endif
+
+            @if(Request::segment(3) == 'sub-module')
+            <?php 
+                $parent_module = DB::table('cms_moduls')->where('path',Request::segment(2))->first();
+                
+                $parent_module_class = '\crocodicstudio\crudbooster\controllers\\' . $parent_module->controller;                
+                if(!class_exists($parent_module_class)) {
+                  $parent_module_class = '\App\Http\Controllers\\'.$parent_module->controller;
+                }
+                $parent_module_class = new $parent_module_class;
+
+                $parent_module_class->index_array = TRUE;
+                $parent_module_class->show_addaction = FALSE;
+                $parent_module_class->index_only_id = intval(Request::segment(4));    
+                $parent_module_class->constructor();            
+                $index_single = $parent_module_class->getIndex();
+            ?>
+            <div class='box box-primary' id='box-header-module'>
+              <div class="box-header with-border">
+                <h3 class="box-title">{{ $parent_module->name }}</h3>
+
+                <div class="box-tools pull-right">
+                  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                  </button>
+                </div>
+                <!-- /.box-tools -->
+              </div>
+              <div class='box-body'>
+                  <table class='table table-striped'>
+                    <thead>
+                    <tr>                                            
+                      <?php                       
+                        $parent_columns = $parent_module_class->columns_table();
+
+                        foreach($parent_columns as $col) {                            
+                            if($col['visible']===FALSE) continue;                            
+                            $sort_column = Request::get('filter_column');
+                            $colname = $col['label'];
+                            $name = $col['name'];
+                            $field = $col['field_with'];
+                            $width = ($col['width'])?:"auto";
+                            $mainpath = trim(mainpath(),'/').$build_query;
+                            echo "<th width='$width'>$colname</th>";                            
+                        }
+                      ?>   
+
+                      @if($priv->is_edit!=0 || $priv->is_delete!=0 || $priv->is_read!=0)                      
+                      <th width='100px'>Action</th>
+                      @endif                                                               
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($index_single as $column)
+                        <tr>
+                            @foreach($column as $k=>$col)
+                              <?php if($k==0) continue;?>
+                              <td>{!! $col !!}</td>
+                            @endforeach
+                        </tr>
+                    @endforeach
+                    </tbody>
+                  </table>
+              </div>
+            </div>
+
+
+            <ul class="nav nav-tabs sub-module-tab"> 
+                <?php 
+                  $subs = $parent_module_class->sub_module();
+                  $parent_path = mainpath('../../..');
+                  foreach($subs as $sub):
+                    $active = (Request::segment(5) == $sub['path'])?"active":"";
+                ?>
+                  <li role="presentation" class='{{ $active }}' title="{{$sub['label']}}">
+                      <a href='{{ $parent_path."/sub-module/".Request::segment(4)."/".$sub["path"] }}'><i class='{{$sub["icon"]}}'></i> {{ $sub['label'] }}</a>
+                  </li>
+                <?php endforeach;?>
+            </ul>
 
             @endif
+
 
 
             <div class='box'>
@@ -97,5 +126,11 @@
         </div><!-- /.col -->
 
 
-    </div><!-- /.row -->    
+    </div><!-- /.row -->  
+
+
+    @if($index_additional_view && $index_additional_view['position']=='bottom')
+        @include($index_additional_view['view'],$index_additional_view['data'])
+    @endif
+
 @endsection

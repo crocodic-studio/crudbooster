@@ -21,6 +21,11 @@ Route::group(['middleware'=>['api','\crocodicstudio\crudbooster\middlewares\CBAu
 
 });
 
+/* ROUTER FOR UPLOADS */
+Route::group(['middleware'=>['web'],'namespace'=>$namespace],function() {	
+	Route::get('uploads/{folder}/{filename}', ['as'=>'getUploads','uses'=>'UploadsController@getFile']);
+});
+
 
 /* ROUTER FOR WEB */
 Route::group(['middleware'=>['web'],'prefix'=>config('crudbooster.ADMIN_PATH'),'namespace'=>$namespace], function () {
@@ -33,9 +38,7 @@ Route::group(['middleware'=>['web'],'prefix'=>config('crudbooster.ADMIN_PATH'),'
 	Route::get('register', ['uses'=>'AdminController@getRegister','as'=>'getRegister']);
 	Route::get('logout', ['uses'=>'AdminController@getLogout','as'=>'getLogout']);			
 	Route::post('login', ['uses'=>'AdminController@postLogin','as'=>'postLogin']);	
-	Route::get('login', ['uses'=>'AdminController@getLogin','as'=>'getLogin']);
-	/* ROUTE FOR UPLOADS */
-	Route::get('uploads/{folder}/{filename}', ['as'=>'getUploads','uses'=>'UploadsController@getFile']);
+	Route::get('login', ['uses'=>'AdminController@getLogin','as'=>'getLogin']);	
 });
 
 
