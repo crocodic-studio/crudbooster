@@ -781,6 +781,11 @@ class CBController extends Controller {
 		
 		$table1   = (Request::get('table1'))?:$this->table;
 		$column1  = (Request::get('column1'))?:$this->title_field;
+
+		if(!\Schema::hasColumn($table1,$column1)) {
+			$list_columns = get_columns_table($table1);
+			$column1      = get_namefield_table($list_columns);
+		}
 		
 		@$table2  = Request::get('table2');
 		@$column2 = Request::get('column2');
