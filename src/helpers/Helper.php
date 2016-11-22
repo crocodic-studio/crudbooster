@@ -224,18 +224,21 @@ if(!function_exists('RouteController')) {
 
         $namespace = ($namespace)?:'App\Http\Controllers';
 
-        Route::get($prefix,['uses'=>$controller.'@getIndex','as'=>$controller.'GetIndex']);
         $controller_class = new ReflectionClass($namespace.'\\'.$controller);                          
         $controller_methods = $controller_class->getMethods(ReflectionMethod::IS_PUBLIC);
         $wildcards = '/{one?}/{two?}/{three?}/{four?}/{five?}';         
         foreach($controller_methods as $method) {
-            if ($method->class != 'Illuminate\Routing\Controller' && $method->name != 'getIndex') {                                             
+            if ($method->class != 'Illuminate\Routing\Controller') {                                             
                 if(substr($method->name, 0, 3) == 'get') {
                     $method_name = substr($method->name, 3);
                     $slug = array_filter(preg_split('/(?=[A-Z])/',$method_name));   
-                    $slug = strtolower(implode('-',$slug));
-                    $slug = ($slug == 'index')?'':$slug;
-                    Route::get($prefix.$slug.$wildcards,['uses'=>$controller.'@'.$method->name,'as'=>$controller.'Get'.$method_name] );
+                    $slug = strtolower(implode('-',$slug));                    
+                    if($slug == 'index') {
+                        Route::get($prefix,['uses'=>$controller.'@'.$method->name,'as'=>$controller.'GetIndex'] );
+                    }else{
+                        Route::get($prefix.$slug.$wildcards,['uses'=>$controller.'@'.$method->name,'as'=>$controller.'Get'.$method_name] );
+                    }
+                    
                 }elseif(substr($method->name, 0, 4) == 'post') {
                     $method_name = substr($method->name, 4);
                     $slug = array_filter(preg_split('/(?=[A-Z])/',$method_name));                                   

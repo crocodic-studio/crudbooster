@@ -313,7 +313,7 @@ class ApiController extends Controller {
 							}
 
 							if(!in_array($k,$responses_fields)) {
-								unset($row[$k]);
+								unset($row->$k);
 							}
 						}						
 					}
@@ -474,6 +474,14 @@ class ApiController extends Controller {
 		    	}
 		    	
 		    }
+
+		    //Make sure if saving/updating data additional param included
+			$arrkeys = array_keys($row_assign);			
+			foreach($posts as $key => $value) {
+				if(!in_array($key, $arrkeys)) {
+					$row_assign[$key] = $value;
+				}
+			}
 
 
 		    if($action_type == 'save_add') {

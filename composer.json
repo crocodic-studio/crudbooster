@@ -18,7 +18,7 @@
     "minimum-stability": "dev",
     "require": {
         "php":">=5.5.9",
-        "barryvdh/laravel-dompdf": "0.6.*",
+        "barryvdh/laravel-dompdf": "0.7.*",
         "doctrine/dbal": "~2.3",
         "laravelcollective/bus": "^5.2",
         "maatwebsite/excel": "~2.1.0",                

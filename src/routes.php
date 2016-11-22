@@ -51,8 +51,10 @@ Route::group(['middleware'=>['web','\crocodicstudio\crudbooster\middlewares\CBBa
 		try {
 			$moduls = DB::table('cms_moduls')->whereIn('controller',$master_controller)->get();
 			foreach($moduls as $v) {
-				if(@$v->path && @$v->controller) {					
-					RouteController($v->path,$v->controller);								
+				if(@$v->path && @$v->controller) {		
+					$path = $v->path;
+					$path = explode("/", $path)[0];			
+					RouteController($path,$v->controller);								
 				}						
 			}
 		} catch (Exception $e) {
@@ -74,7 +76,9 @@ Route::group(['middleware'=>['web','\crocodicstudio\crudbooster\middlewares\CBBa
 		$moduls = DB::table('cms_moduls')->whereIn('controller',$master_controller)->get();
 		foreach($moduls as $v) {
 			if(@$v->path && @$v->controller) {		
-				RouteController($v->path,$v->controller,$namespace='\crocodicstudio\crudbooster\controllers');
+				$path = $v->path;
+				$path = explode("/", $path)[0];
+				RouteController($path,$v->controller,$namespace='\crocodicstudio\crudbooster\controllers');
 			}						
 		}
 	}catch(Exception $e) {

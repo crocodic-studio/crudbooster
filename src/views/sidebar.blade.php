@@ -247,6 +247,7 @@
                     $groups = DB::table("cms_moduls_group")->orderby("sorting_group","asc")->get();
                     foreach($groups as $g):
                         $current_path = Request::segment(2);
+                        $current_path2 = Request::segment(2).'/'.Request::segment(3);
 
                         $moduls = DB::table("cms_moduls")
                             ->where("is_active",1)     
@@ -264,7 +265,7 @@
                     <?php                          
                         foreach($moduls as $modul):
                     ?>            
-                        <li class="<?=($modul->path==$current_path)?'active':''?>"><a href="{{ url(config('crudbooster.ADMIN_PATH').'/'.$modul->path) }}"><i class='<?=$modul->icon?>'></i><span><?=$modul->name?></span></a></li>
+                        <li class="<?=($modul->path==$current_path || $modul->path==$current_path2)?'active':''?>"><a href="{{ url(config('crudbooster.ADMIN_PATH').'/'.$modul->path) }}"><i class='<?=$modul->icon?>'></i><span><?=$modul->name?></span></a></li>
                     <?php endforeach;?>
 
 
