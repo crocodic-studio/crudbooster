@@ -639,17 +639,7 @@ class Admin'.$controllername.' extends \crocodicstudio\crudbooster\controllers\C
             }
             
 
-            try{
-                 $typedata = DB::connection()->getDoctrineColumn($table, $field)->getType()->getName();
-            }
-            catch(\Exception $e){
-                //MySQL
-                $the_field       = DB::select( DB::raw('SHOW COLUMNS FROM '.$table.' WHERE Field = \''.$field.'\''))[0];
-                $col_type        = $the_field->Type;
-                preg_match( '/([a-z]+)\((.+)\)/', $col_type, $match );
-                $typedata        = $match[1];
-                $typedata_length = $match[2];
-            }
+            $typedata = get_field_type($table,$field);
 
             switch($typedata) {
                 default:
@@ -679,10 +669,6 @@ class Admin'.$controllername.' extends \crocodicstudio\crudbooster\controllers\C
                 case 'double':
                 $type = 'money';
                 $validation[] = "integer|min:0";
-                break;
-                case 'enum':
-                $type = 'radio';                                    
-                $attribute['dataenum'] = "array(".$typedata_length.")";         
                 break;
                 case 'int':
                 case 'integer':
@@ -1020,37 +1006,27 @@ $php .= '
 |
 */
 if(!function_exists('get_field_type')) {
-function get_field_type($table,$field) {
-    if(Cache::has('field_type_'.$table.'_'.$field)) {
-        return Cache::get('field_type_'.$table.'_'.$field);
-    }
-    
-    $typedata = Cache::rememberForever('field_type_'.$table.'_'.$field,function() use ($table,$field) {
-        try{
-             $typedata = DB::connection()->getDoctrineColumn($table, $field)->getType()->getName();
+    function get_field_type($table,$field) {
+        if(Cache::has('field_type_'.$table.'_'.$field)) {
+            return Cache::get('field_type_'.$table.'_'.$field);
         }
-        catch(\Exception $e){
-            
-        }
+        
+        $typedata = Cache::rememberForever('field_type_'.$table.'_'.$field,function() use ($table,$field) {
 
-        try{
-            //MySQL
-            $the_field       = DB::select( DB::raw('SHOW COLUMNS FROM '.$table.' WHERE Field = \''.$field.'\''))[0];
-            $col_type        = $the_field->Type;
-            preg_match( '/([a-z]+)\((.+)\)/', $col_type, $match );
-            $typedata        = $match[1];
-            $typedata_length = $match[2];
-        }catch(\Exception $e) {
+            try{
+                //MySQL & SQL Server
+                $typedata = DB::select(DB::raw("select DATA_TYPE from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='$table' and COLUMN_NAME = '$field'"))[0]->DATA_TYPE;            
+            }catch(\Exception $e) {
 
-        }
+            }
 
-        if(!$typedata) $typedata = 'varchar';
+            if(!$typedata) $typedata = 'varchar';
+
+            return $typedata;
+        });
 
         return $typedata;
-    });
-
-    return $typedata;
-}
+    }
 }
 
 /* 
