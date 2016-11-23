@@ -21,13 +21,7 @@ class AddTableCmsModuls extends Migration {
 			$table->string('path')->nullable();
 			$table->string('table_name')->nullable();
 			$table->string('controller')->nullable();
-			$table->string('sql_where')->nullable();
-			$table->string('sql_orderby')->nullable();
-			$table->integer('sorting')->nullable();
-			$table->integer('limit_data')->nullable();
-			$table->integer('id_cms_moduls_group')->nullable();
-			$table->boolean('is_softdelete')->nullable();
-			$table->boolean('is_active')->nullable();
+			$table->boolean('is_protected')->default(0);			
 		});
 	}
 

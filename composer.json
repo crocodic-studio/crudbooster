@@ -1,6 +1,6 @@
 {
     "name": "crocodicstudio/crudbooster",
-    "description": "CRUDBooster Laravel CRUD Generator, Make a Web Application Just In Minutes, Even With Less Code and fewer Steps !",
+    "description": "CRUDBooster Laravel CRUD Generator. One Control, Powerfull, Mobile API Optimization",
     "type": "project",
     "license": "MIT",
     "keywords":[
@@ -17,10 +17,9 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "php":">=5.5.9",
+        "php":">=5.6",
         "barryvdh/laravel-dompdf": "0.7.*",
-        "doctrine/dbal": "~2.3",
-        "laravelcollective/bus": "^5.2",
+        "doctrine/dbal": "~2.3",        
         "maatwebsite/excel": "~2.1.0",                
         "unisharp/laravel-filemanager": "^1.6",
         "intervention/imagecache":"2.*"

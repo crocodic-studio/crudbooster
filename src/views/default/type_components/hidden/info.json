@@ -1,0 +1,7 @@
+{
+	"title":"Hidden Input",
+	"type":"hidden",
+	"attribute":{		
+		"name":"string column name"
+	}
+}

@@ -1,0 +1,13 @@
+{
+	"title":"Upload Input",
+	"type":"upload",
+	"attribute":{
+		"label":"string",
+		"name":"string column name",
+		"style":"string inline stylesheet",
+		"help":"string help-block",		
+		"readonly":"boolean",
+		"disabled":"boolean"
+
+	}
+}

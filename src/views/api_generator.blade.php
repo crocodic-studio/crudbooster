@@ -2,10 +2,18 @@
 
 @section('content')   
 
+<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css" rel="stylesheet">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('.wysiwyg').summernote();
+  })
+</script>
+
 <ul class="nav nav-tabs">
-        <li><a href="{{ mainpath() }}"><i class='fa fa-file'></i> API Documentation</a></li>
-        <li><a href="{{ mainpath('screet-key') }}"><i class='fa fa-key'></i> API Screet Key</a></li>
-        <li class='active'><a href="{{ mainpath('generator') }}"><i class='fa fa-cog'></i> API Generator</a></li>        
+        <li><a href="{{ CRUDBooster::mainpath() }}"><i class='fa fa-file'></i> API Documentation</a></li>
+        <li><a href="{{ CRUDBooster::mainpath('screet-key') }}"><i class='fa fa-key'></i> API Screet Key</a></li>
+        <li class='active'><a href="{{ CRUDBooster::mainpath('generator') }}"><i class='fa fa-cog'></i> API Generator</a></li>        
       </ul>
 
       <div class='box'>
@@ -622,7 +630,7 @@
                             </div>                            
 
                             <table id='table-parameters' class='table table-striped table-bordered'>
-                              <thead><tr><th width="3%">No</th><th>Name</th><th>Validation / Type</th><th>Laravel Validation / Description / Define</th><th width="8%" title='is Mandatory ?'>Mandatory</th><th  width="8%" title='is used ?'>Enable</th><th width="5%">-</th></tr></thead>
+                              <thead><tr><th width="3%">No</th><th>Name</th><th>Type</th><th>Laravel Validation / Description / Value</th><th width="8%" title='is Mandatory ?'>Mandatory</th><th  width="8%" title='is used ?'>Enable</th><th width="5%">-</th></tr></thead>
                               <tbody>
                                   <tr class='row-no-data'><td colspan='7'>There is no data</td></tr>
                               </tbody>
@@ -640,6 +648,8 @@
                                       <option value='exists'>Exists (table,column)</option>
                                       <option value='unique'>Unique (table,column,except)</option>
                                       <option value='password'>Password</option>
+                                      <option value='search'>Search</option>
+                                      <option value='custom'>Custom (Not In Table)</option>                                      
                                     </optgroup>
                                     <optgroup label='Other Validation'>
                                       <option value='array'>Array</option>                                
@@ -650,7 +660,7 @@
                                       <option value='boolean'>Boolean</option>                                       
                                       <option value='date'>Date (Y-m-d)</option>
                                       <option value='date_format:Y-m-d H:i:s'>DateTime (Y-m-d H:i:s)</option>    
-                                      <option value='date_format'>Date Format Custom</option>    
+                                      <option value='date_format'>Date Format Custom</option>                                          
                                       <option value='digits'>Digits</option>                                    
                                       <option value='digits_between'>Digits Between (Min,Max)</option>
                                       <option value='in'>In (a,b,c)</option>                                                  
@@ -673,6 +683,10 @@
                                   </tr>
                               </tfoot>
                             </table>
+
+                            <div class="help-block">
+                              To set as comment at description. Add prefix * (asterisk) before description. Unless will be set as default value.
+                            </div>
                         </div>
 
                         <div class='form-group'>
@@ -728,7 +742,7 @@
                       
                         <div class='form-group'>
                             <label>API Description</label>
-                            <textarea name='keterangan' rows='3' class='form-control' placeholder='Optional'>{{$row->keterangan}}</textarea>
+                            <textarea name='keterangan' rows='3' class='form-control wysiwyg' placeholder='Optional'>{{$row->keterangan}}</textarea>
                         </div>
                       
                         <div class='form-group'>

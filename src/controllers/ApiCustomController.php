@@ -3,7 +3,7 @@
 use crocodicstudio\crudbooster\controllers\Controller;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Mail;
@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\PDF;
 use Illuminate\Support\Facades\Excel;
+use CRUDbooster;
 
 class ApiCustomController extends CBController {
 
@@ -28,7 +29,7 @@ class ApiCustomController extends CBController {
 	}
 
 
-	function getIndex() {		
+	function getIndex(Request $request) {		
 
 		$data = array();
 		
@@ -43,7 +44,7 @@ class ApiCustomController extends CBController {
 		$data = array();
 		$data['variables'] = [];
 		$data['info'] = [
-			'name'=>get_setting('appname').' - API',
+			'name'=>CRUDBooster::getSetting('appname').' - API',
 			'_postman_id'=>"1765dd11-73d1-2978-ae11-36921dc6263d",
 			'description'=>'',
 			'schema'=>'https://schema.getpostman.com/json/collection/v2.0.0/collection.json'
@@ -60,7 +61,7 @@ class ApiCustomController extends CBController {
 					$enabled = ($p['used']==0)?false:true;
 					$name = $p['name'];
 					$httpbuilder[$name] = '';
-					$formdata[] = ['key'=>$name,'value'=>'','type'=>'text','enabled'=>$enabled];
+					if($enabled) $formdata[] = ['key'=>$name,'value'=>'','type'=>'text','enabled'=>$enabled];
 				}
 			}			
 
@@ -93,7 +94,7 @@ class ApiCustomController extends CBController {
 
 		$json = json_encode($data);
 
-		return \Response::make($json,200,array('Content-Type'=>'application/json','Content-Disposition'=>'attachment; filename='.get_setting('appname').' - API For POSTMAN.json'));
+		return \Response::make($json,200,array('Content-Type'=>'application/json','Content-Disposition'=>'attachment; filename='.CRUDBooster::getSetting('appname').' - API For POSTMAN.json'));
 	}
 
 	public function getScreetKey() {
@@ -109,7 +110,7 @@ class ApiCustomController extends CBController {
 		$data['page_title'] = 'API Generator';
 		$data['page_menu']  = Route::getCurrentRoute()->getActionName();
 
-		$tables = list_tables();
+		$tables = CRUDBooster::listTables();
 		$tables_list = array();
 		foreach($tables as $tab) {
 			foreach ($tab as $key => $value) {
@@ -132,7 +133,7 @@ class ApiCustomController extends CBController {
 		$data['page_title'] = 'API Generator';
 		$data['page_menu']  = Route::getCurrentRoute()->getActionName();
 
-		$tables      = list_tables();
+		$tables      = CRUDBooster::listTables();
 		$tables_list = array();
 		foreach($tables as $tab) {
 			foreach ($tab as $key => $value) {
@@ -168,20 +169,20 @@ class ApiCustomController extends CBController {
 		return response()->json($response);
 	}
 
-	public function getStatusApikey() {
-		valid(['id','status'],'view');
+	public function getStatusApikey(Request $request) {
+		CRUDBooster::valid(['id','status'],'view');
 
-		$id = Request::get('id');
-		$status = (Request::get('status')==1)?"active":"non active";
+		$id = $request->get('id');
+		$status = ($request->get('status')==1)?"active":"non active";
 
 		DB::table('cms_apikey')->where('id',$id)->update(['status'=>$status]);
 
 		return redirect()->back()->with(['message'=>'You have been update api key status !','message_type'=>'success']);
 	}
 
-	public function getDeleteApiKey() {		
+	public function getDeleteApiKey(Request $request) {		
 
-		$id = Request::get('id');
+		$id = $request->get('id');
 		if(DB::table('cms_apikey')->where('id',$id)->delete()) {
 			return response()->json(['status'=>1]);
 		}else{
@@ -193,7 +194,7 @@ class ApiCustomController extends CBController {
 	function getColumnTable($table,$type='list') {
 		$result = array();
 
-		$cols = DB::getSchemaBuilder()->getColumnListing($table);
+		$cols = CRUDBooster::getTableColumns($table);
 		
 		$except = ['created_at','deleted_at','updated_at'];
 
@@ -203,7 +204,7 @@ class ApiCustomController extends CBController {
 
 			if(in_array($ro, $except)) continue;
 
-			$type_field = get_field_type($table,$ro);
+			$type_field = CRUDBooster::getFieldType($table,$ro);
 
 			$type_field = (array_search($ro, explode(',',config('crudbooster.EMAIL_FIELDS_CANDIDATE')) )!==FALSE)?"email":$type_field;
 			$type_field = (array_search($ro, explode(',',config('crudbooster.IMAGE_FIELDS_CANDIDATE')) )!==FALSE)?"image":$type_field;
@@ -223,7 +224,7 @@ class ApiCustomController extends CBController {
 
 							if(substr($t, 0,3) == 'id_') continue;
 
-							$type_field   = get_field_type($table2,$t);
+							$type_field   = CRUDBooster::getFieldType($table2,$t);
 							$t            = str_replace("_$table2","",$t);
 							$new_result[] = array('name'=>$table2.'_'.$t,'type'=>$type_field);
 						}
@@ -235,15 +236,15 @@ class ApiCustomController extends CBController {
 		return response()->json($new_result);
 	}
 
-	function postSaveApiCustom() {
+	function postSaveApiCustom(Request $request) {
 
-		$posts = Request::all();		
+		$posts = $request->all();		
 
 		$a = array();		
 
 		$a['nama']        = g('nama');
-		$a['tabel']       = Request::input('tabel');
-		$a['aksi']        = Request::input('aksi');
+		$a['tabel']       = $posts['tabel'];
+		$a['aksi']        = $posts['aksi'];
 		$a['permalink']   = g('permalink');
 		$a['method_type'] = g('method_type');
 		
@@ -291,18 +292,18 @@ class ApiCustomController extends CBController {
 		$a['responses']  = serialize($json);
 		$a['keterangan'] = g('keterangan');
 
-		if(Request::get('id')) {
+		if($request->get('id')) {
 			DB::table('cms_apicustom')->where('id',g('id'))->update($a);			
 		}else{
 
 			$controllerName = ucwords(str_replace('_',' ',$a['permalink']));
 			$controllerName = str_replace(' ', '', $controllerName);			
-			generate_api($controllerName,$a['tabel'],$a['permalink'],$a['method_type']);
+			CRUDBooster::generateAPI($controllerName,$a['tabel'],$a['permalink'],$a['method_type']);
 
 			DB::table('cms_apicustom')->insert($a);
 		}				
 
-		return redirect(mainpath())->with(['message'=>'Yeay, your api has been saved successfully !','message_type'=>'success']);
+		return redirect(CRUDBooster::mainpath())->with(['message'=>'Yeay, your api has been saved successfully !','message_type'=>'success']);
 
 	}
 

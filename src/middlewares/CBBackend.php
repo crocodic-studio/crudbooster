@@ -3,6 +3,7 @@
 namespace crocodicstudio\crudbooster\middlewares;
 
 use Closure;
+use CRUDBooster;
 
 class CBBackend
 {
@@ -17,11 +18,11 @@ class CBBackend
     {   
         $admin_path = config('crudbooster.ADMIN_PATH')?:'admin';
 
-        if(get_my_id()==''){
+        if(CRUDBooster::myId()==''){
             $url = url($admin_path.'/login'); 
-            return redirect($url)->with('message','You are not logged in !');
+            return redirect($url)->with('message',trans('crudbooster.not_logged_in'));
         }
-        if(get_is_locked()){
+        if(CRUDBooster::isLocked()){
             $url = url($admin_path.'/lock-screen');
             return redirect($url);
         }

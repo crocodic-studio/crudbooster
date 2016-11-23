@@ -17,8 +17,7 @@ class AddTableCmsNotifications extends Migration
             $table->timestamps();
             $table->integer('id_cms_users')->nullable();
             $table->string('content')->nullable();
-            $table->string('icon')->nullable();
-            $table->text('notification_command')->nullable();
+            $table->string('url')->nullable();
             $table->boolean('is_read')->nullable();
         });
     }

@@ -3,9 +3,9 @@
 @section('content')   
 
 <ul class="nav nav-tabs">
-        <li class="active"><a href="{{ mainpath() }}"><i class='fa fa-file'></i> API Documentation</a></li>
-        <li><a href="{{ mainpath('screet-key') }}"><i class='fa fa-key'></i> API Screet Key</a></li>
-        <li><a href="{{ mainpath('generator') }}"><i class='fa fa-cog'></i> API Generator</a></li>        
+        <li class="active"><a href="{{ CRUDBooster::mainpath() }}"><i class='fa fa-file'></i> API Documentation</a></li>
+        <li><a href="{{ CRUDBooster::mainpath('screet-key') }}"><i class='fa fa-key'></i> API Screet Key</a></li>
+        <li><a href="{{ CRUDBooster::mainpath('generator') }}"><i class='fa fa-cog'></i> API Generator</a></li>        
       </ul>
 
       <div class='box'>
@@ -61,7 +61,7 @@
               <thead>
                   <tr class='info'><th width='2%'>No</th><th>API Name
                     <span class='pull-right'>
-                      <a class='btn btn-xs btn-warning' target="_blank" href='{{mainpath("download-postman")}}'>Export For POSTMAN <sup>Beta</sup></a>
+                      <a class='btn btn-xs btn-warning' target="_blank" href='{{CRUDBooster::mainpath("download-postman")}}'>Export For POSTMAN <sup>Beta</sup></a>
                     </span>
                   </th></tr>
               </thead> 
@@ -91,11 +91,22 @@
                                                   <?php $i = 0;?>
                                                   @foreach($parameters as $param)
                                                     @if($param['used'])
+                                                    <?php 
+                                                    $param_exception = ['in','not_in','digits_between'];
+                                                    if($param['config'] && substr($param['config'], 0, 1) != '*' && !in_array($param['type'], $param_exception)) continue;?>
                                                     <tr>
                                                       <td>{{++$i}}</td>
                                                       <td width="5%"><em>{{$param['type']}}</em></td>
                                                       <td>{{$param['name']}}</td>    
-                                                      <td>{{$param['config']}}</td> 
+                                                      <td>
+                                                        
+                                                        @if(substr($param['config'],0,1) == '*')
+                                                            <span class='text-info'>{{substr($param['config'],1)}}</span>                                
+                                                        @else
+                                                          {{$param['config']}}
+                                                        @endif
+
+                                                      </td> 
                                                       <td>{!! ($param['required'])?"<span class='label label-primary'>REQUIRED</span>":"<span class='label label-default'>OPTIONAL</span>"!!}</td>                   
                                                     </tr>
                                                     @endif

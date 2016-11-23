@@ -1,0 +1,16 @@
+{
+	"title":"Select2 Input",
+	"type":"select2",
+	"attribute":{
+		"label":"string",
+		"name":"string column name",
+		"style":"string inline stylesheet",
+		"help":"string help-block",		
+
+		"dataenum":["0|a","1|b","2|c"],
+		"datatable":"table_name,column_name",
+		"datatable_where":"string where condition",
+		"datatable_format":"string sql concat",
+		"datatable_exception":"string value exception"		
+	}
+}

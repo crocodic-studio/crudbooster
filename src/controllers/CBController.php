@@ -5,7 +5,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 use crocodicstudio\crudbooster\controllers\Controller;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Mail;
@@ -15,291 +15,134 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\PDF;
 use Maatwebsite\Excel\Facades\Excel;
+use CRUDBooster;
+use Schema;
 
 class CBController extends Controller {
- 
+ 	
+	public $data_inputan;	
+	public $columns_table;	
+	public $module_name;
+	public $table;
+	public $title_field;	
+	public $primary_key        = 'id';	
+	public $arr                = array();
+	public $col                = array();
+	public $form               = array();		
+	public $data               = array();
+	public $addaction          = array();
+	public $orderby            = array();
+	public $password_candidate = NULL;
+	public $date_candidate     = NULL;
+	public $limit              = 20;
+	public $global_privilege   = FALSE;
 	
-	var $data_inputan;
-	var $dashboard;
-	var $setting;
-	var $columns_table;	
-	var $module_name;
-	var $table;
-	var $primary_key		= 'id';
-	var $title_field;	
-	var $arr                = array();
-	var $col                = array();
-	var $form               = array();
-	var $form_tab           = array();
-	var $form_sub           = array();
-	var $form_add           = array();
-	var $data               = array();
-	var $addaction          = array();
-	var $index_orderby      = array();
-	var $password_candidate = NULL;
-	var $date_candidate     = NULL;
-	var $limit              = 20;
-	var $index_return       = FALSE;
-	var $index_table_only   = FALSE;
-	var $table_name         = NULL;	
-	var $parent_id			= 0;
-	var $parent_field		= NULL;
-	var $referal			= NULL;
-	var $controller_name 	= NULL;
-	var $alert				= array();
-	var $index_button		= array();
-	var $button_show_data   = TRUE;
-	var $button_reload_data = TRUE;
-	var $button_new_data    = TRUE;
-	var $button_delete_data = TRUE;
-	var $button_sort_filter = TRUE;
-	var $button_filter_data = TRUE;
-	var $button_export_data = TRUE;			
-	var $button_cancel		= TRUE;
-	var $button_addmore		= TRUE;
-	var $button_save		= TRUE;
-	var $button_table_action = TRUE;
-	var $index_statistic	= array(); 
-	var $index_additional_view = array();
-	var $load_js 			= array();
-	var $script_js 			= NULL;
-	var $sub_module			= array();	
-	var $index_array 		= FALSE;
-	var $index_only_id 		= NULL;
-	var $button_import_data = TRUE;
-	var $show_addaction 	= TRUE;
+	public $alert                 = array();
+	public $index_button          = array();
+	
+	public $button_filter       = TRUE;
+	public $button_export       = TRUE;
+	public $button_import       = TRUE;
+	public $button_show         = TRUE;
+	public $button_addmore      = TRUE;
+	public $button_table_action = TRUE;
+	public $button_add          = TRUE;
+	public $button_delete       = TRUE;				
+	public $button_cancel       = TRUE;	
+	public $button_save         = TRUE;	
+	public $button_edit         = TRUE;
+	public $button_detail       = TRUE;	
+	public $button_action_style = 'button_icon';
+	public $button_action_width = NULL;	
+	
+	public $index_statistic       = array(); 
+	public $index_additional_view = array();
+	public $load_js               = array();
+	public $script_js             = NULL;
+	public $sub_module            = array();	
+	public $index_array           = FALSE;
+	public $index_only_id         = NULL;	
+	public $show_addaction        = TRUE;
+	public $table_row_color 	  = array();
+	public $button_selected 	  = array();
 
-	public function constructor() {			
-
-		if(!\Schema::hasTable('cms_settings')) return false;
-
-		$this->init_setting();
- 		
-		$current_url = Request::url();		
-
-		if(Session::get('foreign_key')) {
-			foreach($this->form as &$f) {
-				foreach(Session::get('foreign_key') as $k=>$v) {
-					if($f['name']==$k) {
-						$f['label'] = $k;
-						$f['name'] = $k;
-						$f['type'] = 'hide';
-						unset($f['datatable']);
-						unset($f['dataenum']);
-						$f['value'] = $v;
-					}
-				}
-			}
-		}
-
+	public function constructor() {					 				
 
 		$this->columns_table     = $this->col; 		
 		$this->data_inputan      = $this->form;
-		$this->data['forms']     = $this->data_inputan; 
-		$this->data['form_add']  = $this->form_add;	
-		if($this->show_addaction) {
-			$this->data['addaction'] = $this->addaction;	
-		}
- 
-		$this->data['current_controller'] = stripslashes(strtok(str_replace("\crocodicstudio\crudbooster\controllers","",Route::currentRouteAction()),"@"));		
-	
-		$tablename = ucfirst($this->table);		
+		$this->data['forms']     = $this->data_inputan;					
+		$this->data['addaction'] = ($this->show_addaction)?$this->addaction:NULL;					
 		
-		$privileges = DB::table("cms_privileges_roles")
-		            ->join("cms_moduls","cms_moduls.id","=","cms_privileges_roles.id_cms_moduls")
-		            ->where("cms_privileges_roles.id_cms_privileges",get_my_id_privilege());		            
-		if($this->index_array) {
-			$privileges = $privileges->where('cms_moduls.path',get_module_path())->first();
-		}else{
-			if(Request::segment(3) == 'sub-module') {
-				$privileges = $privileges->where('cms_moduls.path',Request::segment(5))->first();
-			}else{
-				$privileges = $privileges->where('cms_moduls.path',get_module_path())->first();
-			}			
-		}
-
-		$this->data['mainpath'] = $this->dashboard = url(config('crudbooster.ADMIN_PATH').'/'.get_module_path());
-		Session::put('current_mainpath',$this->data['mainpath']);
-
-		  if(Request::segment(3) == 'sub-module') {
-	        $module = DB::table('cms_moduls')->where('path',Request::segment(5))->first();	   
-	        $parent_module = DB::table('cms_moduls')->where('path',Request::segment(2))->first();     
-	        $this->data['data_sub_module'] = $module;
-	        $this->data['parent_module_name'] = $parent_module->name;
-	        $mainpath = Route($module->controller."GetIndex");
-	      }else{
-	      	$this->data['parent_module_name'] = $privileges->name;
-	        $mainpath = mainpath();
-	      }
-
-		if(get_method() == 'getDetail') {
-			$this->button_addmore = false;
-			$this->button_save    = false;			
-		}
-
-		if(Request::segment(3) == 'sub-module') {
-			if(Request::segment(6) == 'detail') {
-				$this->button_addmore = FALSE;
-				$this->button_save = FALSE;
-			}
-		}
-
-		//From Dashboard Chart Query 
-		if(Request::get('dq')) {
-			$dq = decrypt(Request::get('dq'));
-			if($dq) {
-				$dq = unserialize($dq);
-				if($dq['noaction']) {
-					$this->button_table_action = false;					
-				}
-			}			
-		}	
-		
-		$this->data['priv']               = $privileges;
-		$this->data['dashboard']          = $this->dashboard;		
-		$this->data['table']              = $this->table;
-		$this->data['module_name']        = @$privileges->name;
-		$this->data['page_title']		  = @$privileges->name;
-		$this->data['title_field']        = $this->title_field;
-		$this->data['appname']            = $this->setting->appname;
-		$this->data['setting']            = $this->setting;	
-		$this->data['table_name']         = $this->table_name;	
-		$this->data['alerts']             = $this->alert;
-		$this->data['index_button']       = $this->index_button;
-		$this->data['button_show_data']   = $this->button_show_data;
-		$this->data['button_reload_data'] = $this->button_reload_data;
-		$this->data['button_new_data']    = $this->button_new_data;
-		$this->data['button_delete_data'] = $this->button_delete_data;
-		$this->data['button_sort_filter'] = $this->button_sort_filter;		
-		$this->data['button_export_data'] = $this->button_export_data;
-		$this->data['button_addmore'] 	  = $this->button_addmore;
-		$this->data['button_cancel'] 	  = $this->button_cancel;
-		$this->data['button_save'] 		  = $this->button_save;
-		$this->data['button_table_action'] = $this->button_table_action;
-		$this->data['index_statistic']	  = $this->index_statistic;
+		$privileges              = CRUDBooster::myPrivilege();							
+						
+		$this->data['table']                 = $this->table;		
+		$this->data['page_title']            = @$privileges->name;
+		$this->data['title_field']           = $this->title_field;
+		$this->data['appname']               = CRUDBooster::getSetting('appname');					
+		$this->data['alerts']                = $this->alert;
+		$this->data['index_button']          = $this->index_button;
+		$this->data['button_detail']         = $this->button_detail;		
+		$this->data['button_edit']         	 = $this->button_edit;		
+		$this->data['button_show']           = $this->button_show;		
+		$this->data['button_add']            = $this->button_add;
+		$this->data['button_delete']         = $this->button_delete;
+		$this->data['button_filter']    	 = $this->button_filter;		
+		$this->data['button_export']         = $this->button_export;
+		$this->data['button_addmore']        = $this->button_addmore;
+		$this->data['button_cancel']         = $this->button_cancel;
+		$this->data['button_save']           = $this->button_save;
+		$this->data['button_table_action']   = $this->button_table_action;
+		$this->data['button_import']         = $this->button_import;
+		$this->data['button_action_width']   = $this->button_action_width;
+		$this->data['button_selected']   	 = $this->button_selected;
+		$this->data['index_statistic']       = $this->index_statistic;
 		$this->data['index_additional_view'] = $this->index_additional_view;
-		$this->data['load_js'] 			  = $this->load_js;
-		$this->data['script_js'] 		  = $this->script_js;
-		$this->data['sub_module']		  = $this->sub_module;
-		$this->data['button_import_data'] = $this->button_import_data;
+		$this->data['table_row_color']       = $this->table_row_color;
+		$this->data['load_js']               = $this->load_js;
+		$this->data['script_js']             = $this->script_js;				
 
         view()->share($this->data);
 	} 
 
-	public function columns_table() {
-		return $this->columns_table;
-	}
+	public function getIndex(Request $request) {
+		$module = CRUDBooster::getCurrentModule();
 
-	public function sub_module() {
-		return $this->sub_module;
-	}	
-
-	public function mainpath() {
-		return $this->data['mainpath'];
-	}
-
-	public function title_field() {
-		return $this->title_field;
-	}
-	public function primary_key() {
-		return $this->primary_key;
-	}
-
-	public function form_by_name($name) {
-		foreach($this->form as $f) {
-			if($f['name'] == $name) {
-				return $f;
-			}
+		if(!CRUDBooster::isView() && $this->global_privilege==FALSE) {
+			CRUDBooster::insertLog(trans('crudbooster.log_try_view',['module'=>$module->name]));
+			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));			
 		}
-	}
-
-	public function getIndex()
-	{
-		// DB::connection()->enableQueryLog();		
-
-		Session::forget('current_row_id');
-
-		$is_sub_module = (Request::segment(3) == 'sub-module')?TRUE:FALSE;
-
-		if($this->data['priv']->limit_data) {
-			$this->limit = $this->data['priv']->limit_data;
-		}
-
-		if($this->data['priv']->is_visible==0) {
-
-			insert_log("Trying view data at ".$this->data['module_name']);
-			return redirect('admin')->with(['message'=>'You can not access that area !','message_type'=>'warning']);
-		}
-
-		$data['table_name'] 	  = $this->table_name;
-		$data['page_title']       = $this->data['module_name'];
-		$data['page_description'] = "Data List";
-		$data['page_menu'] 		  = Route::getCurrentRoute()->getActionName();
+		
+		$data['table'] 	  = $this->table;
+		$data['page_title']       = $module->name;
+		$data['page_description'] = trans('crudbooster.default_module_description');		
 		$data['date_candidate']   = $this->date_candidate;
-		$data['limit'] = $limit   = (Request::get('limit'))?Request::get('limit'):$this->limit;
+		$data['limit'] = $limit   = ($request->get('limit'))?$request->get('limit'):$this->limit;
 
-		if(Cache::has('columns_'.$this->table)) {
-			$columns = Cache::get('columns_'.$this->table);	
-		}else{
-			$columns = Cache::rememberForever('columns_'.$this->table, function() {
-			    return \Schema::getColumnListing($this->table);
-			});
-		}		
-		
-		$columns_table            = $this->columns_table;		
+		// $table_columns 			  = Schema::getColumnListing($this->table);		
+		$table_columns 	= Cache::remember('columns_'.$this->table,120,function() {
+			return Schema::getColumnListing($this->table);
+		});			
 		$result                   = DB::table($this->table)->select(DB::raw($this->table.".".$this->primary_key));
-		
-		$this->hook_before_index($result);
+				
 		$this->hook_query_index($result);
 
-		if(Session::get('foreign_key')) {
-			foreach(Session::get('foreign_key') as $k=>$v) {
-				if(in_array($k, $columns)){
-					$result->where($this->table.'.'.$k,$v);
-				}
-			}
-		}
-
-		//From Dashboard Chart Query 
-		if(Request::get('dq')) {
-			$dq = decrypt(Request::get('dq'));
-			if($dq) {
-				$dq = unserialize($dq);
-				if($dq['sql_where']) {
-					$result->whereraw($dq['sql_where']);
-				}
-				if($dq['limit']) {
-					$limit = $dq['limit']; 
-				}
-				if(isset($dq['noaction']) && $dq['noaction']==1) {
-					$this->button_table_action = false;
-				}
-			}			
-		}
-
-		if($this->data['priv']->is_softdelete==1) {
+		if(in_array('deleted_at', $table_columns)) {
 			$result->where($this->table.'.deleted_at',NULL);
 		}
-
-		if(@$this->data['priv']->sql_where) {
-			$sqlwhere = $this->data['priv']->sql_where;
-			$sqlwhere = str_ireplace("where ","",$sqlwhere);
-			$sqlwhere = str_replace(array("[admin_id]","[admin_id_companies]"),array(get_my_id(),get_my_id_company()),$sqlwhere);
-			$result->whereraw($sqlwhere);
-		}
 		
-		$alias = array();
+		$alias            = array();
 		$join_alias_count = 0;
-		$join_table_temp = array();
-		foreach($columns_table as $index => $coltab) {
-			$join = @$coltab['join'];
-			$table = $this->table;
-			$field = $coltab['name'];
+		$join_table_temp  = array();
+		$table            = $this->table;
+		$columns_table    = $this->columns_table;
+		foreach($columns_table as $index => $coltab) {			
+
+			$join = @$coltab['join'];			
+			$field = @$coltab['name'];
 			$join_table_temp[] = $table;			
 
 			if(!$field) die('Please make sure there is key `name` in each row of col');
-
-			//Jika ada subquery
+			
 			if(strpos($field, ' as ')!==FALSE) {
 				$field = substr($field, strpos($field, ' as ')+4);
 				$result->addselect(DB::raw($coltab['name']));
@@ -339,11 +182,18 @@ class CBController extends Controller {
 				$join_table_temp[] = $join_table;	
 				
 				$result->leftjoin($join_table.' as '.$join_alias,$join_alias.'.id','=',$table.'.'.$field);
-				$result->addselect($join_alias.'.'.$join_column.' as '.$join_column.'_'.$join_alias);
+				$result->addselect($join_alias.'.'.$join_column.' as '.$join_alias.'_'.$join_column);
+
+				$join_table_columns = CRUDBooster::getTableColumns($join_table);				
+				if($join_table_columns) {
+					foreach($join_table_columns as $jtc) {
+						$result->addselect($join_alias.'.'.$jtc.' as '.$join_alias.'_'.$jtc);
+					}
+				}
 				
 				$alias[] = $join_alias;
-				$columns_table[$index]['type_data']	 = get_field_type($join_table,$join_column);
-				$columns_table[$index]['field']      = $join_column.'_'.$join_alias;
+				$columns_table[$index]['type_data']	 = CRUDBooster::getFieldType($join_table,$join_column);
+				$columns_table[$index]['field']      = $join_alias.'_'.$join_column;
 				$columns_table[$index]['field_with'] = $join_alias.'.'.$join_column;
 				$columns_table[$index]['field_raw']  = $join_column;
 
@@ -363,7 +213,7 @@ class CBController extends Controller {
 					$result->leftjoin($join_table1.' as '.$join_alias1,$join_alias1.'.id','=',$join_alias.'.'.$join_column);
 					$result->addselect($join_alias1.'.'.$join_column1.' as '.$join_column1.'_'.$join_alias1);					
 					$alias[] = $join_alias1;
-					$columns_table[$index]['type_data']	 = get_field_type($join_table1,$join_column1);
+					$columns_table[$index]['type_data']	 = CRUDBooster::getFieldType($join_table1,$join_column1);
 					$columns_table[$index]['field']      = $join_column1.'_'.$join_alias1;
 					$columns_table[$index]['field_with'] = $join_alias1.'.'.$join_column1;
 					$columns_table[$index]['field_raw']  = $join_column1;
@@ -372,38 +222,33 @@ class CBController extends Controller {
 			}else{ 
 
 				$result->addselect($table.'.'.$field);
-				$columns_table[$index]['type_data']	 = get_field_type($table,$field);
+				$columns_table[$index]['type_data']	 = CRUDBooster::getFieldType($table,$field);
 				$columns_table[$index]['field']      = $field;
 				$columns_table[$index]['field_raw']  = $field;
 				$columns_table[$index]['field_with'] = $table.'.'.$field;
 			}					
 		}
 
- 		if($this->parent_field && $this->parent_id) {
- 			$result->where($table.'.'.$this->parent_field,$this->parent_id);
- 		}
-
-		if(Request::get('q') && !$this->index_array) {
-			
-			$result->where(function($w) use ($columns_table) {
+		if($request->get('q')) {			
+			$result->where(function($w) use ($columns_table, $request) {
 				foreach($columns_table as $col) {		
 						if(!$col['field_with']) continue;		
 						if($col['is_subquery']) continue;			
-						$w->orwhere($col['field_with'],"like","%".Request::get("q")."%");				
+						$w->orwhere($col['field_with'],"like","%".$request->get("q")."%");				
 				}
 			});		
 		}			
 
-		if(Request::get('where') && !$this->index_array) {			
-			foreach(Request::get('where') as $k=>$v) {
+		if($request->get('where')) {			
+			foreach($request->get('where') as $k=>$v) {
 				$result->where($table.'.'.$k,$v); 
 			}			
 		}
 		
 		$filter_is_orderby = false;
-		if(Request::get('filter_column') && !$this->index_array) {
+		if($request->get('filter_column')) {
 
-			$filter_column = Request::get('filter_column');
+			$filter_column = $request->get('filter_column');
 			$result->where(function($w) use ($filter_column,$fc) {				
 				foreach($filter_column as $key=>$fc) {				
 
@@ -451,64 +296,43 @@ class CBController extends Controller {
 			}					
 		}
 
-		if($this->index_only_id) {
-			$result->where($this->table.'.'.$this->primary_key,$this->index_only_id);
-		}
-
-
 		if($filter_is_orderby == true) {
 			$data['result']  = $result->paginate($limit);
 		}else{
-			if(@$this->data['priv']->sql_orderby) {
-				$data['result'] = $result->orderbyraw($this->data['priv']->sql_orderby)->paginate($limit);
-			}else{
-				if($this->index_orderby) {
-					foreach($this->index_orderby as $k=>$v) {
-						if(strpos($k, '.')!==FALSE) {
-							$orderby_table = explode(".",$k)[0];
-						}else{
-							$orderby_table = $table;
-						}
-						$result->orderby($orderby_table.'.'.$k,$v);
+			if($this->orderby) {
+				foreach($this->orderby as $k=>$v) {
+					if(strpos($k, '.')!==FALSE) {
+						$orderby_table = explode(".",$k)[0];
+					}else{
+						$orderby_table = $table;
 					}
-					$data['result'] = $result->paginate($limit);
-				}else{
-					$data['result'] = $result->orderby($this->table.'.'.$this->primary_key,'desc')->paginate($limit);	
+					$result->orderby($orderby_table.'.'.$k,$v);
 				}
+				$data['result'] = $result->paginate($limit);
+			}else{
+				$data['result'] = $result->orderby($this->table.'.'.$this->primary_key,'desc')->paginate($limit);	
 			}
 		}
 								
 		$data['columns'] = $columns_table;
 
-		if($this->index_return==true) {			
-			return $data;			
-		}
-
-		// $queries = DB::getQueryLog();				
-
-		if(Request::get('format')=='total') {
-			return calc_eloquent_found($result);
-		}
-
-
 		//LISTING INDEX HTML
-		$priv          = $this->data['priv'];
 		$addaction     = $this->data['addaction'];
-		$mainpath      = mainpath();		
+		$mainpath      = CRUDBooster::mainpath();		
 		$orig_mainpath = $this->data['mainpath'];
 		$title_field   = $this->title_field;
 		$html_contents = array();
 		foreach($data['result'] as $row) {
 			$html_content = array();
 
-			$html_content[] = "<input type='checkbox' class='checkbox' name='checkbox' value='$row->id'/>";
+			$html_content[] = "<input type='checkbox' class='checkbox' name='checkbox[]' value='$row->id'/>";
 
 			foreach($columns_table as $col) {     
 		          if($col['visible']===FALSE) continue;
 
 		          $value = @$row->{$col['field']}; 
-
 		          $title = @$row->{$this->title_field};
+		          $label = $col['label'];
 
 		          if(isset($col['image'])) {
 			            if($value=='') {
@@ -516,7 +340,7 @@ class CBController extends Controller {
 			            }
 			            $pic = (strpos($value,'http://')!==FALSE)?$value:asset($value);
 			            $pic_small = $pic;
-			            $value = "<a class='fancybox' rel='group_{{$table}}' title='$col[label]: $title' href='".$pic."?w=350'><img width='40px' height='40px' src='".$pic_small."?w=40'/></a>";
+			            $value = "<a class='fancybox' rel='group_{{$table}}' title='$label: $title' href='".$pic."?w=350'><img width='40px' height='40px' src='".$pic_small."?w=40'/></a>";
 		          }else if(@$col['download']) {
 			            $url = (strpos($value,'http://')!==FALSE)?$value:asset($value).'?download=1';
 			            if($value) {
@@ -536,206 +360,52 @@ class CBController extends Controller {
 			            	$value = nl2br($value);
 			            }
 			            
-			            if(isset($col['callback_php'])) {
-			              $col['callback_php'] = str_replace('%field%',$value,$col['callback_php']);  
+			            if(isset($col['callback_php'])) {			              
 			              foreach($row as $k=>$v) {
 			              		$col['callback_php'] = str_replace("[".$k."]",$v,$col['callback_php']);			              		
 			              }
 			              @eval("\$value = ".$col['callback_php'].";");			              
-			            }
-
-			            if(isset($col['callback_html'])) {
-			              $callback = str_replace('%field%',$value,$col['callback_html']);
-			              foreach($row as $k=>$v) {
-			              		$col['callback_html'] = str_replace("[".$k."]",$v,$col['callback_html']);			              		
-			              }
-			              $value = $callback;                                  
-			            }		                                            		           
+			            }				                                            		          
 		          }                
 
 		          $html_content[] = $value;
-	      } //end foreach columns_table
+	        } //end foreach columns_table
 
 
-	      if($this->button_table_action):
-		      if($priv->is_edit!=0 || $priv->is_delete!=0 || $priv->is_read!=0):
-	         	$td = "<div class='btn-group btn-group-action'>
-	                  <button type='button' class='btn btn-xs btn-primary btn-action'>Action</button>
-	                  <button type='button' class='btn btn-xs btn-primary dropdown-toggle' title='Click to see menu' data-toggle='dropdown'>
-	                    <span class='caret'></span>
-	                    <span class='sr-only'>Toggle Dropdown</span>
-	                  </button>
-	                  <ul class='dropdown-menu dropdown-menu-action' role='menu'>";
-	            if(!$this->index_array) {
-		            if(count(@$addaction)):				
-		                foreach($addaction as $fb):
-		                	$ajax  = (isset($fb["ajax"]))?"class='ajax-button'":"";                     			                	
+	      if($this->button_table_action):	      		      		      
 
-		                	$url = $fb['route'];
-		                	foreach($row as $k=>$v) {
-				            	$url = str_replace("[".$k."]",$v,$url);			              		
-				            }
-
-		                	$icon  = $fb['icon'];
-		                	$label = ($icon)?"<i class='$icon'></i> ".$fb['label']:$fb['label'];               	
-		                	$td    .= "<li><a title='".$fb["label"]."' href='".$url."' $ajax >$label</a></li>";
-		                endforeach;
-		                $td .= "<li class='divider'></li>";
-		            endif;
-	        	}
-
-	            if($this->sub_module && $this->show_addaction) {
-	            	$sub_module_i = 0;
-	            	foreach($this->sub_module as $sm) {     
-	            		if(Request::segment(5) == $sm['path']) continue;       		
-	            		$icon = ($sm['icon'])?:"fa fa-bars";
-	            		$url = mainpath("sub-module/$row->id/$sm[path]");
-	            		$td .= "<li><a title='$sm[label]' href='$url'><i class='$icon'></i> $sm[label]</a></li>";
-	            		$sub_module_i++;
-	            	}
-	            	if($sub_module_i) {
-	            		$td .= "<li class='divider'></li>";
-	            	}            	
-	            }
-
-	         	
-	         	if($priv->is_read) {
-
-	         		if($this->index_array) {
-	         			$url = url("$orig_mainpath/detail/$row->id");
-	         		}else{
-	         			$url = url("$mainpath/detail/$row->id");
-	         		}
-
-	            	$td .= "<li><a title='Detail Data' href='$url'><i class='fa fa-search'></i> Detail Data</a></li>";
-	            }
-	      		
-	      		if($priv->is_edit):      	
-
-				    if($this->index_array) {
-	         			$url = url("$orig_mainpath/edit/$row->id");
-	         		}else{
-	         			$url = url("$mainpath/edit/$row->id");
-	         		}
-	      			
-	      			$td .= "<li><a title='Edit Data' href='$url'><i class='fa fa-pencil'></i> Edit Data</a></li>";
-	            endif;
-
-	            if($priv->is_delete):
-	            	if($this->index_array) {    			
-	         			$url = url("$orig_mainpath/delete/$row->id");
-				    }else{
-				    	$url = url("$mainpath/delete/$row->id");
-				    }			    
-	            	$td .= "<li><a title='Delete Data' href='javascript:;' onclick='swal({   title: \"Are you sure?\",   text: \"You will not be able to recover this record data!\",   type: \"warning\",   showCancelButton: true,   confirmButtonColor: \"#DD6B55\",   confirmButtonText: \"Yes, delete it!\",   closeOnConfirm: false }, function(){  location.href=\"$url\" });'><i class='fa fa-trash'></i> Delete</a></li>";
-	            endif;  
-
-	            
-
-	            $td .= "
-	                  </ul>
-	                </div>";
-
-	          	$html_content[] = $td;
-	          endif;
+	      		$button_action_style = $this->button_action_style;
+	      		$html_content[] = "<div style='text-align:right'>".view('crudbooster::components.action',compact('addaction','row','button_action_style'))->render()."</div>";		      	         	
+	          
           endif;//button_table_action
+
+
+          $this->hook_row_index($html_content);
 
 	      $html_contents[] = $html_content;
 		} //end foreach data[result]
+		
  		
- 		$html_contents = ['html'=>$html_contents,'data'=>$data['result']];
-		$this->hook_html_index($html_contents['html'],$html_contents['data']);
-		$this->hook_row_index($html_contents['html'],$html_contents['data']);
+ 		$html_contents = ['html'=>$html_contents,'data'=>$data['result']];				
 
-		if($this->index_array == TRUE) {
-			return $html_contents['html'];
-		}
-
-		$data['html_contents'] = $html_contents['html'];
+		$data['html_contents'] = $html_contents;
 
 		return view("crudbooster::default.index",$data);
 		
 	}
 
-	public function getSubModule($parent_id,$module_path,$action='index',$id=NULL) {
-		$parent_module_path = Request::segment(2);
-		$parent_module = DB::table('cms_moduls')->where('path',$parent_module_path)->first();
-		$sub_module = DB::table('cms_moduls')->where('path',$module_path)->first();
-		if(!$parent_module || !$sub_module) return redirect()->back()->with(['message'=>'Sorry the module is does not exists !','message_type'=>'warning']);
-
-
-		$sub_module_config = $this->sub_module();
-		$parent_field = '';
-		foreach($sub_module_config as $s) {
-			if($s['path'] == $module_path) {
-				$parent_field = $s['foreign_key'];
-				break;
-			}
-		}
-
-		if(!$parent_field) die('You did not set the foreign key at $this->sub_module ');
-
-		$sub_module_class = __NAMESPACE__ . '\\' . $sub_module->controller;
-		if(!class_exists($sub_module_class)) {
-			$sub_module_class = '\App\Http\Controllers\\'.$sub_module->controller;
-		}
-
-		$sub_module_class = new $sub_module_class;		
-		$sub_module_class->parent_id = $parent_id;	
-		$sub_module_class->parent_field = $parent_field;	
-		$method_need_id = array('getDetail','getEdit','postEditSave','getDelete');
-
-		$controller_class = new \ReflectionClass($sub_module_class);                          
-        $controller_methods = $controller_class->getMethods(\ReflectionMethod::IS_PUBLIC);
-        foreach($controller_methods as $method) {
-        	if ($method->class != 'Illuminate\Routing\Controller') {                                             
-                // return $sub_module_class->{$method->name};
-                $method_name = $method->name;
-                if(substr($method_name, 0, 3) == 'get') {
-                    $slug = substr($method_name, 3);
-                    $slug = array_filter(preg_split('/(?=[A-Z])/',$slug));   
-                    $slug = strtolower(implode('-',$slug));
-                    
-                    if($action == $slug) {
-                    	if(in_array($method_name, $method_need_id)) {
-                    		return $sub_module_class->$method_name($id);                    	
-                    	}else{
-                    		return $sub_module_class->$method_name();                    	
-                    	}                     	
-                    }
-
-                }elseif(substr($method_name, 0, 4) == 'post') {
-                    $slug = substr($method_name, 4);
-                    $slug = array_filter(preg_split('/(?=[A-Z])/',$slug));   
-                    $slug = strtolower(implode('-',$slug));                                
-
-                    if($action == $slug) {
-                    	if(in_array($method_name, $method_need_id)) {
-                    		return $sub_module_class->$method_name($id);                    	
-                    	}else{
-                    		return $sub_module_class->$method_name();                    	
-                    	}                     	
-                    }
-                }
-               
-            }
-        }	        
-	}	
-
 	public function getExportData() {
-		return redirect(mainpath());
+		return redirect(CRUDBooster::mainpath());
 	}
 
-	public function postExportData() {
-		$this->limit        = Request::input('limit');
-		$this->index_return = true;
-		$response           = $this->getIndex();
-		$filetype 			= Request::input('fileformat');
-		$filename 			= Request::input('filename');
-		$papersize			= Request::input('page_size');
-		$paperorientation	= Request::input('page_orientation');	
+	public function postExportData(Request $request) {
+		
+		$filetype 			= $request->input('fileformat');
+		$filename 			= $request->input('filename');
+		$papersize			= $request->input('page_size');
+		$paperorientation	= $request->input('page_orientation');	
 	
-		if(Request::input('default_paper_size')) {
+		if($request->input('default_paper_size')) {
 			DB::table('cms_settings')->where('name','default_paper_size')->update(['content'=>$papersize]);
 		}
 
@@ -751,7 +421,7 @@ class CBController extends Controller {
 				Excel::create($filename, function($excel) use ($response) {
 					$excel->setTitle($filename)
 					->setCreator("crudbooster.com")
-					->setCompany($this->setting->appname);					
+					->setCompany(CRUDBooster::getSetting('appname'));					
 				    $excel->sheet($filename, function($sheet) use ($response) {
 				    	$sheet->setOrientation($paperorientation);
 				        $sheet->loadview('crudbooster::export',$response);
@@ -762,7 +432,7 @@ class CBController extends Controller {
 				Excel::create($filename, function($excel) use ($response) {
 					$excel->setTitle($filename)
 					->setCreator("crudbooster.com")
-					->setCompany($this->setting->appname);					
+					->setCompany(CRUDBooster::getSetting('appname'));					
 				    $excel->sheet($filename, function($sheet) use ($response) {
 				    	$sheet->setOrientation($paperorientation);
 				        $sheet->loadview('crudbooster::export',$response);
@@ -772,11 +442,17 @@ class CBController extends Controller {
 		}
 	}
 
-	public function getDataTable() {
-		$table = Request::get('table');
-		$label = Request::get('label');
-		$foreign_key_name = Request::get('fk_name');
-		$foreign_key_value = Request::get('fk_value');
+	public function postDataQuery(Request $request) {
+		$query = $request->get('query');
+		$query = DB::select(DB::raw($query));
+		return response()->json($query);
+	}
+
+	public function getDataTable(Request $request) {
+		$table = $request->get('table');
+		$label = $request->get('label');
+		$foreign_key_name = $request->get('fk_name');
+		$foreign_key_value = $request->get('fk_value');
 		if($table && $label && $foreign_key_name && $foreign_key_value) {
 			$query = DB::table($table)->select('id as select_value',$label.' as select_label')->where($foreign_key_name,$foreign_key_value)->orderby($label,'asc')->get();
 			return response()->json($query);
@@ -785,37 +461,32 @@ class CBController extends Controller {
 		}
 	}
 
-	public function getFindData() {
-		$q        = Request::get('q');
-		$id       = Request::get('id');
-		$limit    = Request::get('limit')?:10;
-		$format   = Request::get('format');
+	public function getFindData(Request $request) {
+		$q        = $request->get('q');
+		$id       = $request->get('id');
+		$limit    = $request->get('limit')?:10;
+		$format   = $request->get('format');
 		
-		$table1   = (Request::get('table1'))?:$this->table;
-		$column1  = (Request::get('column1'))?:$this->title_field;
+		$table1   = ($request->get('table1'))?:$this->table;
+		$column1  = ($request->get('column1'))?:$this->title_field;
+		
+		@$table2  = $request->get('table2');
+		@$column2 = $request->get('column2');
+		
+		@$table3  = $request->get('table3');
+		@$column3 = $request->get('column3');
+		
+		$where    = $request->get('where');
 
-		if(!\Schema::hasColumn($table1,$column1)) {
-			$list_columns = get_columns_table($table1);
-			$column1      = get_namefield_table($list_columns);
-		}
-		
-		@$table2  = Request::get('table2');
-		@$column2 = Request::get('column2');
-		
-		@$table3  = Request::get('table3');
-		@$column3 = Request::get('column3');
-		
-		$where    = Request::get('where');
-
-		$fk 	  = Request::get('fk');
-		$fk_value = Request::get('fk_value');
+		$fk 	  = $request->get('fk');
+		$fk_value = $request->get('fk_value');
 
 		if($q || $id || $table1) {
 			$rows = DB::table($table1);
 			$rows->select($table1.'.*');			
 			$rows->take($limit);
 
-			if(\Schema::hasColumn($table1,'deleted_at')) {
+			if(Schema::hasColumn($table1,'deleted_at')) {
 				$rows->where($table1.'.deleted_at',NULL);
 			}
 
@@ -875,11 +546,11 @@ class CBController extends Controller {
 		return response()->json($result);
 	}
 
-	public function validation() { 
+	public function validation(Request $request) { 
 
-		$request_all = Request::all();
+		$request_all = $request->all();
 		$array_input = array();
-		$id          = get_row_id();
+		$id          = CRUDBooster::getCurrentId();
 		$id          = intval($id);
 		foreach($this->data_inputan as $di) {
 			$ai = array();		
@@ -936,7 +607,7 @@ class CBController extends Controller {
 
 						$e = 'unique:'.$e_table.','.$e_column.','.$e_id_ignore;	
 
-						if(\Schema::hasColumn($e_table,'deleted_at')) {
+						if(Schema::hasColumn($e_table,'deleted_at')) {
 							$e .= ",id,deleted_at,NULL";
 						}	
 					
@@ -970,13 +641,16 @@ class CBController extends Controller {
 		}
 	}
 
-	public function input_assignment($id=null) {		
+	public function input_assignment(Request $request,$id=null) {		
+
 		foreach($this->data_inputan as $ro) {
 			$name = $ro['name'];
 
 			if(!$name) continue;
 
-			$inputdata = Request::get($name);
+			if($ro['exception']) continue;
+
+			$inputdata = $request->get($name);
 
 			if($ro['type']=='money') {
 				$inputdata = preg_replace('/[^\d-]+/', '', $inputdata); 
@@ -984,13 +658,13 @@ class CBController extends Controller {
 
 			if(isset($ro['onlyfor'])) {
 				if(is_array($ro['onlyfor'])) {
-					if(in_array(Session::get('admin_privileges_name'), $ro['onlyfor'])) {
+					if(in_array($request->session()->get('admin_privileges_name'), $ro['onlyfor'])) {
 						$this->arr[$name] = $inputdata;
 					}else{
 						continue;
 					}
 				}else{
-					if(Session::get('admin_privileges_name') == $ro['onlyfor']) {
+					if($request->session()->get('admin_privileges_name') == $ro['onlyfor']) {
 						$this->arr[$name] = $inputdata;
 					}else{
 						continue;
@@ -1002,11 +676,8 @@ class CBController extends Controller {
 				$this->arr[$name] = $inputdata;
 			}
 
-			if($name == 'slug') {
-				$this->arr[$name] = slug(Request::get($this->title_field),$this->table,$this->title_field,$id);
-			}
-
-			if(in_array($name, $this->password_candidate)) {
+			$password_candidate = explode(',',config('crudbooster.PASSWORD_FIELDS_CANDIDATE'));
+			if(in_array($name, $password_candidate)) {
 				if(!empty($this->arr[$name])) {
 					$this->arr[$name] = Hash::make($this->arr[$name]);
 				}else{
@@ -1014,15 +685,15 @@ class CBController extends Controller {
 				}
 			}
 
-			if($ro['type']=='checkbox' && $inputdata) {
+			if($ro['type']=='checkbox') {
 				$this->arr[$name] = implode(";",$inputdata);
 			}
 
 			if(@$ro['type']=='upload_standard') {				
 				unset($this->arr[$name]);
-				if (Request::hasFile($name))
+				if ($request->hasFile($name))
 				{			
-					$file = Request::file($name);					
+					$file = $request->file($name);					
 					$ext  = $file->getClientOriginalExtension();
 
 					//Create Directory Monthly 
@@ -1045,102 +716,106 @@ class CBController extends Controller {
 	}
 
 	public function getAdd(){
-		$data['page_title']      = $this->data['module_name'].": Add New Data";
-		$data['page_menu']       = Route::getCurrentRoute()->getActionName();	
-		$data['table_name']      = $this->table_name;
-		$data['referal']         = $this->referal;
-		$data['controller_name'] = $this->controller_name;
-		$data['parent_field']    = $this->parent_field;
-		$data['parent_id']       = $this->parent_id;
 
-		return view('crudbooster::default.form',$data);
-		
-	}
-	
-	public function postAddSave() {
-
-		if($this->data['priv']->is_create==0) {
-
-			insert_log("Trying add data ".Request::get($this->title_field)." at ".$this->data['module_name']);
-			return redirect('admin')->with(['message'=>'You can not access that area !','message_type'=>'warning']);
+		if(!CRUDBooster::isCreate() && $this->global_privilege==FALSE || $this->button_add==FALSE) {			
+			CRUDBooster::insertLog(trans('crudbooster.log_try_add',['module'=>CRUDBooster::getCurrentModule()->name ]));			
+			CRUDBooster::redirect(CRUDBooster::adminPath(),trans("crudbooster.denied_access"));
 		}
 
-		$this->validation();	
-		$this->input_assignment();
+		$page_title      = trans("crudbooster.add_data_page_title",['module'=>CRUDBooster::getCurrentModule()->name]);
+		$page_menu       = Route::getCurrentRoute()->getActionName();		
+		$command 		 = 'add';
+		return view('crudbooster::default.form',compact('page_title','page_menu','command'));			
+	}
+	
+	public function postAddSave(Request $request) {
 
-		if (\Schema::hasColumn($this->table, 'created_at')) 
+		// dd($request->all());		
+
+		if(!CRUDBooster::isCreate() && $this->global_privilege==FALSE || $this->button_add==FALSE) {			
+			CRUDBooster::insertLog(trans('crudbooster.log_try_add_save',['name'=>$request->input($this->title_field),'module'=>CRUDBooster::getCurrentModule()->name ]));			
+			CRUDBooster::redirect(CRUDBooster::adminPath(),trans("crudbooster.denied_access"));
+		}
+
+		$this->validation($request);	
+		$this->input_assignment($request);
+
+		if (Schema::hasColumn($this->table, 'created_at')) 
 		{
 		    $this->arr['created_at'] = date('Y-m-d H:i:s');
 		}	
 
-		$this->hook_before_add($this->arr);		
+		$this->hook_before_add($this->arr);	
 
-		DB::table($this->table)->insert($this->arr);
-		$lastid        = DB::getPdo()->lastInsertId();
-		$ref_parameter = Request::input('ref_parameter');
+		//Auto Increment
+		$this->arr[$this->primary_key] = DB::table($this->table)->max($this->primary_key) + 1;	
 
-		$this->hook_after_add($lastid);
+		DB::table($this->table)->insert($this->arr);		
 
-		//insert log
-		insert_log("Add new data ".$this->arr[$this->title_field]." at ".$this->data['module_name']);
+		$this->hook_after_add($this->arr['id']);
 
-		if(Request::get('return_url')) {
-			return redirect(Request::get('return_url'))->with(['message'=>'The data has been added !','message_type'=>'success']);
+		//Insert Children
+		foreach($this->data_inputan as $d) {
+			if($d['type'] == 'child') {
+				$fields = $d['fields'];
+				$table = $d['table'];
+				$fk = $d['foreign_key'];
+				if($request->get('child_'.$table)) {
+					foreach($request->get('child_'.$table) as $child_row) {
+						$child_row = json_decode($child_row,true);
+						$child_row[$fk] = $this->arr[$this->primary_key];
+						CRUDBooster::insert($table,$child_row);
+					}
+				}
+				Session::forget('session_child_data_'.$table);
+			}
 		}
 
-		if(Request::get('referal')) {
-			return redirect(Request::get('referal').'?'.$ref_parameter)->with(['message'=>'The data has been added !','message_type'=>'success']);
+		//insert log		
+		CRUDBooster::insertLog(trans("crudbooster.log_add",['name'=>$this->arr[$this->title_field],'module'=>CRUDBooster::getCurrentModule()->name]));
+
+		if($request->get('return_url')) {			
+			CRUDBooster::redirect($request->get('return_url'),trans("crudbooster.alert_add_data_success"),'success');
 		}else{
-			if(Request::get('ref_mainpath')) {
-				if(Request::get('submit') == 'Save & Add More') {
-					return redirect(Request::get('ref_mainpath').'/add')->with(['message'=>"The data has been added !",'message_type'=>'success']);	
-				}else{
-					return redirect(Request::get('ref_mainpath'))->with(['message'=>"The data has been added !",'message_type'=>'success']);	
-				}				
+			if($request->get('submit') == trans('crudbooster.button_save_more')) {
+				CRUDBooster::redirect(CRUDBooster::mainpath('add'),trans("crudbooster.alert_add_data_success"),'success');
 			}else{
-				return redirect(mainpath())->with(['message'=>"The data has been added !",'message_type'=>'success']);
-			}				
-		}
-		
+				CRUDBooster::redirect(CRUDBooster::mainpath(),trans("crudbooster.alert_add_data_success"),'success');
+			}
+		}		
 	}
+
 	
-	public function getEdit($id){				
-		$data['row']             = DB::table($this->table)->where($this->primary_key,$id)->first();		
-		$data['page_menu']       = Route::getCurrentRoute()->getActionName();
-		$title_field             = $this->title_field;
-		$data['page_title']      = $this->data['module_name'].": Edit ".$data['row']->{$title_field};
-		$data['table_name']      = $this->table_name;
-		$data['referal']         = $this->referal;
-		$data['controller_name'] = $this->controller_name;
-		$data['parent_field']    = $this->parent_field;
-		$data['parent_id']       = $this->parent_id;
-		$data['command'] 		 = 'edit';
+	
+	public function getEdit(Request $request,$id){		
+		
+		$row             = DB::table($this->table)->where($this->primary_key,$id)->first();	
 
-		Session::put('current_row_id',$id);
+		if(!CRUDBooster::isRead() && $this->global_privilege==FALSE || $this->button_edit==FALSE) {			
+			CRUDBooster::insertLog(trans("crudbooster.log_try_edit",['name'=>$row->{$this->title_field},'module'=>CRUDBooster::getCurrentModule()->name]));
+			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));			
+		}
 
-		return view('crudbooster::default.form',$data);
+			
+		$page_menu       = Route::getCurrentRoute()->getActionName();				
+		$page_title 	 = trans("crudbooster.edit_data_page_title",['module'=>CRUDBooster::getCurrentModule()->name,'name'=>$row->{$this->title_field}]);		
+		$command 		 = 'edit';
+		$request->session()->put('current_row_id',$id);
+		return view('crudbooster::default.form',compact('id','row','page_menu','page_title','command'));
 	}
 
-	public function getImportData() {
-		$path = $this->data['priv']->path;
-		$module = DB::table('cms_moduls')->where('path',$path)->first();
-		$data['module'] 		 = $module;
-		$data['page_menu']       = Route::getCurrentRoute()->getActionName();
-		$title_field             = $this->title_field;
+	public function getImportData(Request $request) {
+		$data['page_menu']       = Route::getCurrentRoute()->getActionName();		
 		$data['page_title']      = 'Import Data '.$module->name;
-		$data['table']      	 = $this->table;
-		$data['referal']         = $this->referal;
-		$data['controller_name'] = $this->controller_name;
 
-
-		if(Request::get('file') && !Request::get('import')) {
-			$file = base64_decode(Request::get('file'));
+		if($request->get('file') && !$request->get('import')) {
+			$file = base64_decode($request->get('file'));
 			$file = trim(str_replace('uploads','app',$file),'/');
 			$file = storage_path($file);
 			$rows = Excel::load($file,function($reader) {				
 			})->get();
 
-			Session::put('total_data_import',count($rows));
+			$request->session()->put('total_data_import',count($rows));
 			
 			$data_import_column = array();
 			foreach($rows as $value) {				
@@ -1165,26 +840,18 @@ class CBController extends Controller {
 	}
 
 	public function postDoneImport() {
-		$path = $this->data['priv']->path;
-		$module = DB::table('cms_moduls')->where('path',$path)->first();
-		$data['module'] 		 = $module;
-		$data['page_menu']       = Route::getCurrentRoute()->getActionName();
-		$title_field             = $this->title_field;
-		$data['page_title']      = 'Import Data '.$module->name;
-		$data['table']      	 = $this->table;
-		$data['referal']         = $this->referal;
-		$data['controller_name'] = $this->controller_name;		
-
+		$data['page_menu']       = Route::getCurrentRoute()->getActionName();		
+		$data['page_title']      = trans('crudbooster.import_page_title',['module'=>$module->name]);	
 		Session::put('select_column',Request::get('select_column'));
 
 		return view('crudbooster::import',$data);
 	}
 
-	public function postDoImportChunk() {
-		$file_md5 = md5(Request::get('file'));
+	public function postDoImportChunk(Request $request) {
+		$file_md5 = md5($request->get('file'));
 
-		if(Request::get('file') && Request::get('resume')==1) {
-			$total = Session::get('total_data_import');
+		if($request->get('file') && $request->get('resume')==1) {
+			$total = $request->session()->get('total_data_import');
 			$prog = intval(Cache::get('success_'.$file_md5)) / $total * 100;
 			$prog = round($prog,2);
 			if($prog >= 100) {
@@ -1193,12 +860,12 @@ class CBController extends Controller {
 			return response()->json(['progress'=> $prog, 'last_error'=>Cache::get('error_'.$file_md5) ]);
 		}
 
-		$select_column = Session::get('select_column');
+		$select_column = $request->session()->get('select_column');
 		$select_column = array_filter($select_column);
 		$table_columns = DB::getSchemaBuilder()->getColumnListing($this->table);
 
 		
-		$file = base64_decode(Request::get('file'));
+		$file = base64_decode($request->get('file'));
 		$file = trim(str_replace('uploads','app',$file),'/');
 		$file = storage_path($file);		
 
@@ -1206,7 +873,7 @@ class CBController extends Controller {
 		})->get();		
 
 		$has_created_at = false;
-		if(\Schema::hasColumn($this->table,'created_at')) {
+		if(Schema::hasColumn($this->table,'created_at')) {
 			$has_created_at = true;
 		}
 		
@@ -1222,7 +889,7 @@ class CBController extends Controller {
 					if($value->$s == '') continue;
 
 					$relation_table = substr($colname,3);
-					$relation_moduls = DB::table('cms_moduls')->where('table_name',$relation_table)->first();
+					$relation_moduls = DB::table('cms_moduls')->where('table',$relation_table)->first();
 
 					$relation_class = __NAMESPACE__ . '\\' . $relation_moduls->controller;
 					if(!class_exists($relation_class)) {
@@ -1235,7 +902,7 @@ class CBController extends Controller {
 					$relation_insert_data = array();
 					$relation_insert_data[$title_field] = $value->$s;
 
-					if(\Schema::hasColumn($relation_table,'created_at')) {
+					if(Schema::hasColumn($relation_table,'created_at')) {
 						$relation_insert_data['created_at'] = date('Y-m-d H:i:s');
 					}
 
@@ -1283,11 +950,11 @@ class CBController extends Controller {
 		return response()->json(['status'=>true]);
 	}
 
-	public function postDoUploadImportData() {
+	public function postDoUploadImportData(Request $request) {
 	
-		if (Request::hasFile('userfile'))
+		if ($request->hasFile('userfile'))
 		{			
-			$file = Request::file('userfile');					
+			$file = $request->file('userfile');					
 			$ext  = $file->getClientOriginalExtension();
 
 
@@ -1312,45 +979,45 @@ class CBController extends Controller {
 			if($file->move(storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m')),$filename)) {						
 				$url_filename = 'uploads/'.date('Y-m').'/'.$filename;
 			}			
-			$url = mainpath('import-data').'?file='.base64_encode($url_filename);
-			// $url = action($this->data['priv']->controller.'@getImportData').'?file='.base64_encode($url_filename);			
+			$url = CRUDBooster::mainpath('import-data').'?file='.base64_encode($url_filename);					
 			return redirect($url);		  
 		}else{
 			return redirect()->back();
 		}
 	}
 
-	public function getDetail($id)	{				
-		$data['row']             = DB::table($this->table)->where($this->primary_key,$id)->first();		
-		$data['page_menu']       = Route::getCurrentRoute()->getActionName();
-		$title_field             = $this->title_field;
-		$data['page_title']      = $this->data['module_name'].": Detail ".$data['row']->{$title_field};
-		$data['table_name']      = $this->table_name;
-		$data['referal']         = $this->referal;
-		$data['controller_name'] = $this->controller_name;
-		$data['parent_field']    = $this->parent_field;
-		$data['parent_id']       = $this->parent_id;
-		$data['command'] 		 = 'detail';
+	public function getDetail($id)	{			
+		$row        = DB::table($this->table)->where($this->primary_key,$id)->first();	
+
+		if(!CRUDBooster::isRead() && $this->global_privilege==FALSE || $this->button_detail==FALSE) {			
+			CRUDBooster::insertLog(trans("crudbooster.log_try_view",['name'=>$row->{$this->title_field},'module'=>CRUDBooster::getCurrentModule()->name]));
+			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));			
+		}
+
+		$module     = CRUDBooster::getCurrentModule();		
+			
+		$page_menu  = Route::getCurrentRoute()->getActionName();		
+		$page_title = trans("crudbooster.detail_data_page_title",['module'=>$module->name,'name'=>$row->{$this->title_field}]);		 		
+		$command    = 'detail';
 
 		Session::put('current_row_id',$id);
 
-		return view('crudbooster::default.form',$data);
+		return view('crudbooster::default.form',compact('row','page_menu','page_title','command'));
 	}
 	 
-	public function postEditSave($id) {
+	public function postEditSave(Request $request,$id) {
 
 		$row = DB::table($this->table)->where($this->primary_key,$id)->first();	
 
-		if($this->data['priv']->is_edit==0) {
-			
-			insert_log("Trying add data ".$row->{$this->title_field}." at ".$this->data['module_name']);
-			return redirect('admin')->with(['message'=>'You can not access that area !','message_type'=>'warning']);
+		if(!CRUDBooster::isUpdate() && $this->global_privilege==FALSE || $this->button_detail==FALSE) {			
+			CRUDBooster::insertLog(trans("crudbooster.log_try_add",['name'=>$row->{$this->title_field},'module'=>CRUDBooster::getCurrentModule()->name]));
+			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));			
 		}
 		
-		$this->validation();
-		$this->input_assignment($id);
+		$this->validation($request);
+		$this->input_assignment($request,$id);
 
-		if (\Schema::hasColumn($this->table, 'updated_at')) 
+		if (Schema::hasColumn($this->table, 'updated_at')) 
 		{
 		    $this->arr['updated_at'] = date('Y-m-d H:i:s');
 		}
@@ -1361,26 +1028,17 @@ class CBController extends Controller {
 
 		$this->hook_after_edit($id);
 
-		//insert log
+		//insert log		
+		CRUDBooster::insertLog(trans("crudbooster.log_update",['name'=>$this->arr[$this->title_field],'module'=>CRUDBooster::getCurrentModule()->name]));
 
-		insert_log("Update data ".$this->arr[$this->title_field]." at ".$this->data['module_name']);
-
-		if(Request::get('return_url')) {
-			return redirect(Request::get('return_url'))->with(['message'=>'The data has been updated !','message_type'=>'success']);
-		}
-
-		if(Request::get('referal')) {
-			return redirect(Request::get('referal'))->with(['message'=>'The data has been updated !','message_type'=>'success']);
+		if($request->get('return_url')) {			
+			CRUDBooster::redirect($request->get('return_url'),trans("crudbooster.alert_update_data_success"),'success');
 		}else{
-			if(Request::get('ref_mainpath')) {
-				if(Request::get('submit') == 'Save & Add More') {
-					return redirect(Request::get('ref_mainpath').'/add')->with(['message'=>"The data has been updated, you can add more !",'message_type'=>'success']);
-				}else{
-					return redirect(Request::get('ref_mainpath'))->with(['message'=>"The data has been updated !",'message_type'=>'success']);
-				}
+			if($request->get('submit') == trans('crudbooster.button_save_more')) {
+				CRUDBooster::redirect(CRUDBooster::mainpath('add'),trans("crudbooster.alert_update_data_success"),'success');
 			}else{
-				return redirect(mainpath())->with(['message'=>"The data has been updated !",'message_type'=>'success']);
-			}			
+				CRUDBooster::redirect(CRUDBooster::mainpath(),trans("crudbooster.alert_update_data_success"),'success');
+			}
 		}
 	}
 	
@@ -1388,19 +1046,18 @@ class CBController extends Controller {
 
 		$row = DB::table($this->table)->where($this->primary_key,$id)->first();	
 
-		if($this->data['priv']->is_delete==0) {
-
-			insert_log("Trying delete data ".$row->{$this->title_field}." at ".$this->data['module_name']);
-			return redirect('admin')->with(['message'=>'You can not access that area !','message_type'=>'warning']);
+		if(!CRUDBooster::isDelete() && $this->global_privilege==FALSE || $this->button_delete==FALSE) {			
+			CRUDBooster::insertLog(trans("crudbooster.log_try_delete",['name'=>$row->{$this->title_field},'module'=>CRUDBooster::getCurrentModule()->name]));			
+			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
 		}
 
 			
-		//insert log
-		insert_log("Delete data ".$row->{$this->title_field}." at ".$this->data['module_name']);
+		//insert log		
+		CRUDBooster::insertLog(trans("crudbooster.log_delete",['name'=>$row->{$this->title_field},'module'=>CRUDBooster::getCurrentModule()->name]));
 
 		$this->hook_before_delete($id);
 
-		if($this->data['priv']->is_softdelete==1) {
+		if(Schema::hasColumn($this->table,'deleted_at')) {
 			DB::table($this->table)->where($this->primary_key,$id)->update(['deleted_at'=>date('Y-m-d H:i:s')]);
 		}else{
 			DB::table($this->table)->where($this->primary_key,$id)->delete();
@@ -1408,117 +1065,258 @@ class CBController extends Controller {
 		
 		$this->hook_after_delete($id);
 
-		return redirect()->back()->with(['message'=>"Data has been deleted !",'message_type'=>"success"]);
+		$url = g('return_url')?:CRUDBooster::referer();
+
+		CRUDBooster::redirect($url,trans("crudbooster.alert_delete_data_success"),'success');		
 	}
 
-	public function postDeleteSelected() {
+	public function postActionSelected(Request $request) {
 
-		if($this->data['priv']->is_delete==0) {
+		$id_selected = $request->input('checkbox');
+		$button_name = $request->input('button_name');
 
-			insert_log("Trying delete data at ".$this->data['module_name']);
-			return redirect('admin')->with(['message'=>'You can not access that area !','message_type'=>'warning']);
-		}
-
-		$id = Request::input('id');
-		if($id) {
-
-			foreach($id as $d) {
-				//insert log
-				$row               = DB::table($this->table)->where($this->primary_key,$d)->first();
-
-				insert_log("Delete data ".$row->{$this->title_field}." at ".$this->data['module_name']);
+		if($button_name == 'deleted') {
+			if(!CRUDBooster::isDelete()) {
+				CRUDBooster::insertLog(trans("crudbooster.log_try_delete_selected",['module'=>CRUDBooster::getCurrentModule()->name]));
+				CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
 			}
 
-			
-			if($this->data['priv']->is_softdelete==1) {
-				DB::table($this->table)->whereIn($this->primary_key,$id)->update(['deleted_at'=>date('Y-m-d H:i:s')]);
+			if(Schema::hasColumn($this->table,'deleted_at')) {
+				DB::table($this->table)->whereIn('id',$id_selected)->update(['deleted_at'=>date('Y-m-d H:i:s')]);
 			}else{
-				DB::table($this->table)->whereIn($this->primary_key,$id)->delete();
-			}
-
+				DB::table($this->table)->whereIn('id',$id_selected)->delete();	
+			} 
+			CRUDBooster::insertLog(trans("crudbooster.log_delete",['name'=>implode(',',$id_selected),'module'=>CRUDBooster::getCurrentModule()->name]));			
 		}
+
+		$this->actionButtonSelected($id_selected,$button_name);
 	}
 
-	public function getDeleteImage() {		
-		$id     = Request::get('id');
-		$column = Request::get('column');
+	public function getDeleteImage(Request $request) {		
+		$id     = $request->get('id');
+		$column = $request->get('column');
 
 		$row    = DB::table($this->table)->where($this->primary_key,$id)->first();
 
-		if($this->data['priv']->is_create==0) {
-
-			insert_log("Trying delete image ".$row->{$this->title_field}." at ".$this->data['module_name']);
-			return redirect('admin')->with(['message'=>'You can not access that area !','message_type'=>'warning']);
+		if(!CRUDBooster::isDelete() && $this->global_privilege==FALSE) {			
+			CRUDBooster::insertLog(trans("crudbooster.log_try_delete_image",['name'=>$row->{$this->title_field},'module'=>CRUDBooster::getCurrentModule()->name]));			
+			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
 		}
 			
-		$row = DB::table($this->table)->where($this->primary_key,$id)->first();	
-
-		// if(Storage::exists($row->{$column})) Storage::delete($row->{$column});
+		$row = DB::table($this->table)->where($this->primary_key,$id)->first();			
 
 		$file = str_replace('uploads/','',$row->{$column});
 		if(Storage::exists($file)) {
-            		Storage::delete($file);
-       		}
+        	Storage::delete($file);
+       	}
 
-		DB::table($this->table)->where($this->primary_key,$id)->update(array($column=>NULL));
-			
-		insert_log("Delete image for ".$row->{$this->title_field}." at ".$this->data['module_name']);
+		DB::table($this->table)->where($this->primary_key,$id)->update([$column=>NULL]);
+					
+		CRUDBooster::insertLog(trans("crudbooster.log_delete_image",['name'=>$row->{$this->title_field},'module'=>CRUDBooster::getCurrentModule()->name]));
 
-		return redirect()->back()->with(['message'=>"The file has been deleted !",'message_type'=>"success"]);
+		CRUDBooster::redirect($request->server('HTTP_REFERER'),trans('crudbooster.alert_delete_data_success'));
 	}
 
-	public function getDeleteFilemanager() {		
-		$id     = Request::get('id');
-		$column = Request::get('column');
+	public function postUploadSummernote(Request $request) {
+		$name = 'userfile';
+		if ($request->hasFile($name))
+		{			
+			$file = $request->file($name);					
+			$ext  = $file->getClientOriginalExtension();
 
-		$row    = DB::table($this->table)->where($this->primary_key,$id)->first();
+			//Create Directory Monthly 
+			Storage::makeDirectory(date('Y-m'));
 
-		if($this->data['priv']->is_create==0) {			
-			insert_log("Trying delete image ".$row->{$this->title_field}." at ".$this->data['module_name']);
-			return redirect('admin')->with(['message'=>'You can not access that area !','message_type'=>'warning']);
+			//Move file to storage
+			$filename = md5(str_random(5)).'.'.$ext;
+			if($file->move(storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m')),$filename)) {						
+				echo asset('uploads/'.date('Y-m').'/'.$filename);
+			}					  
 		}
-			
-		$row = DB::table($this->table)->where($this->primary_key,$id)->first();	
-
-		if($column && $row->{$column})	@unlink($row->{$column});
-
-		DB::table($this->table)->where($this->primary_key,$id)->update(array($column=>NULL));		
-
-		insert_log("Delete image for ".$row->{$this->title_field}." at ".$this->data['module_name']);
-		return redirect()->back()->with(['message'=>"The file has been deleted !",'message_type'=>"success"]);
 	}
 
-	public function init_setting() {
+	public function postAddSaveSession(Request $request) {
+		$columns = json_decode($request->get('columns'));
+		$fields  = json_decode($request->get('fields'));
+		$foreign_key = $request->get('foreign_key');
+		$table 	 = $request->get('table');
+		$data    = array();	
+		
+		if(Session::has('session_child_data_'.$table)) {
+			$session_child_data = Session::get('session_child_data_'.$table);
+		}else{
+			$session_child_data = [];
+		}							
 
-		$this->password_candidate = explode(',',config('crudbooster.PASSWORD_FIELDS_CANDIDATE'));
-		$this->date_candidate     = explode(',',config('crudbooster.DATE_FIELDS_CANDIDATE'));
+		$data_item = array();
+		foreach($request->all() as $key=>$val) {
+			if($key=='columns' || $key=='table' || $key=='fields' || $key=='foreign_key' || $key=='child_parent_id') continue;
+			$data_item[$key] = $val;
+		}
 
-		if(\Schema::hasTable('cms_settings')) {
-			$setting = DB::table('cms_settings')->get();
-			$setting_array = array();
-			foreach($setting as $set) {
-				$setting_array[$set->name] = $set->content;
+		$images_ext = array('jpg','jpeg','png','gif','bmp');
+
+		foreach($columns as $col) {
+			if($request->hasFile($col->name)) {
+				$file = $request->file($col->name);					
+				$ext  = strtolower($file->getClientOriginalExtension());
+
+				//Create Directory Monthly 
+				Storage::makeDirectory(date('Y-m'));
+
+				//Move file to storage
+				$filename = md5(str_random(5)).'.'.$ext;
+				if($file->move(storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m')),$filename)) {	
+					if(in_array($ext, $images_ext)) {
+						$data[] = "<a class='fancybox' href='".asset('uploads/'.date('Y-m').'/'.$filename)."'><img src='".asset('uploads/'.date('Y-m').'/'.$filename)."' width='50px' height='50px'/></a>";
+					}else{
+						$data[] = "<a target='_blank' href='".asset('uploads/'.date('Y-m').'/'.$filename)."?download=1'>Download</a>";
+					}				
+					
+					$data_item[$col->name] = 'uploads/'.date('Y-m').'/'.$filename;					
+				}
+			}else{
+
+				if(substr($request->get($col->name), 0, 8) == 'uploads/') {
+					$ext = pathinfo($request->get($col->name), PATHINFO_EXTENSION);
+					if(in_array($ext, $images_ext)) {
+						$data[] = "<a class='fancybox' href='".asset($request->get($col->name))."'><img src='".asset($request->get($col->name))."' width='50px' height='50px'/></a>";
+					}else{
+						$data[] = "<a target='_blank' href='".asset($request->get($col->name))."?download=1'>Download</a>";
+					}
+				}else{
+					$data[] = $request->get($col->name);	
+				}								
+			}			
+		}
+
+
+		if($request->get('child_parent_id')) {
+			
+			$data_item[$foreign_key] = $request->get('child_parent_id');
+
+			if($request->get('id')!='') {				
+				DB::table($table)->where('id',$request->get('id'))->update($data_item);
+			}else{
+				CRUDBooster::insert($table,$data_item);
 			}
-			$this->setting = json_decode(json_encode($setting_array));
-		}
+
+			return response()->json(['status'=>true]);
+
+		}else{
+			if($request->get('id') != '') {
+				$id = (int) $request->get('id');
+			}else{
+				$id = (int) count($session_child_data);
+			}	
+
+
+			//Action
+			$data_item = json_encode($data_item);		
+			$action = "<a href='javascript:void(0)' data-id='$id' data-table='$table' data-item='$data_item' class='btn btn-success btn-xs btn-edit-child'><i class='fa fa-pencil'></i></a> <a href='javascript:void(0)' data-id='$id' data-table='$table' class='btn btn-warning btn-xs btn-delete-child'><i class='fa fa-trash'></i></a>";
+			$action .= "<input type='hidden' name='child_".$table."[".$id."]' value='$data_item'/>";
+			$data[] = $action;
+
+			$session_child_data[$id] = $data;
 				
+			Session::put('session_child_data_'.$table,$session_child_data);		
+
+			return response()->json(['status'=>true]);
+		}					
 	}
+
+	public function getSessionChildData(Request $request,$table) {
+
+		$fk = $request->get('fk');
+		$fk_value = $request->get('fk_value');
+		$images_ext = array('jpg','jpeg','png','gif','bmp');
+
+		if($fk && $fk_value) {
+			$form = NULL;
+			foreach($this->data_inputan as $d) {
+				if($d['table'] && $d['table'] == $table) {
+					$form = $d;
+					break;
+				}
+			}
+
+			$columns = $form['columns'];			
+
+			$query = DB::table($table)->where($fk,$fk_value)->orderby('id','desc')->get();
+			$result = array();
+			
+			foreach($query as $row) {	
+
+				$ro = array();
+
+				foreach($row as $key=>$val) {				
+					foreach($columns as $c) {
+						if($key == $c['name']) {
+
+							if(substr($val, 0, 8) == 'uploads/') {
+								$ext = pathinfo($val, PATHINFO_EXTENSION);
+								if(in_array($ext, $images_ext)) {
+									$ro[] = "<a class='fancybox' href='".asset($val)."'><img src='".asset($val)."' width='50px' height='50px'/></a>";
+								}else{
+									$ro[] = "<a target='_blank' href='".asset($val)."?download=1'>Download</a>";
+								}
+							}else{
+								$ro[] = $val;	
+							}							
+						}
+					}
+				}
+				
+
+				$id = $row->id;		
+				$data_item = json_encode($row);		
+
+				$action = "<a href='javascript:void(0)' data-id='$id' data-table='$table' data-item='$data_item' class='btn btn-success btn-xs btn-edit-child'><i class='fa fa-pencil'></i></a> <a href='javascript:void(0)' data-id='$id' data-table='$table' class='btn btn-warning btn-xs btn-delete-child'><i class='fa fa-trash'></i></a>";
+				$action .= "<input type='hidden' name='child_".$table."[".$id."]' value='$data_item'/>";
+				$ro[] = $action;
+
+				$result[] = $ro;
+			}
+
+			return response()->json($result);
+
+		}else{
+			return response()->json(Session::get('session_child_data_'.$table));
+		}			
+	}
+
+	public function postDeleteSessionChildData(Request $request) {
+		$id = $request->get('id');
+		$table = $request->get('table');
+		$session_child_data = Session::get('session_child_data_'.$table);
+		unset($session_child_data[$id]);
+		Session::put('session_child_data_'.$table,$session_child_data);
+
+		try{
+			if(Schema::hasColumn($table,'deleted_at')) {
+				DB::table($table)->where('id',$id)->update(['deleted_at'=>date('Y-m-d H:i:s')]);
+			}else{
+				DB::table($table)->where('id',$id)->delete();	
+			}
+			
+		}catch(\Exception $e) {
+
+		}
+
+		return response()->json(['status'=>true]);
+	}
+
+	public function actionButtonSelected($id_selected,$button_name) {
+
+    }
 
 	public function hook_query_index(&$query) {
 
 	}
 
-	public function hook_row_index(&$html,$data) {        
+	public function hook_row_index(&$columns) {
 
     }
-
-	public function hook_before_index(&$result) {
-
-	}
-
-	public function hook_html_index(&$html,$data) {
-
-	}
 
 	public function hook_before_add(&$arr) {
 
