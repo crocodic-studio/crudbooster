@@ -648,7 +648,7 @@
 
 										if(fk_value!='') {					
 											$current.html("<option value=''>{{trans('crudbooster.text_loading')}} {{$form['label']}}");
-											$.get("{{CRUDBooster::mainpath('data-table')}}?table="+table+"&label="+label+"&fk_name="+fk_name+"&fk_value="+fk_value,function(response) {
+											$.get("{{mainpath('data-table')}}?table="+table+"&label="+label+"&fk_name="+fk_name+"&fk_value="+fk_value,function(response) {
 												if(response) {
 													$current.html("<option value=''>{{trans('crudbooster.text_prefix_option')}} {{$form['label']}}");
 													$.each(response,function(i,obj) {
