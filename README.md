@@ -14,6 +14,7 @@ CRUDBooster is Laravel Framework that modified to bring a lot of features to dev
 
 ## System Requirement
 - PHP >= 5.6.x, PHP <= 7
+- Laravel 5.3.x
 - Mcrypt PHP Extension
 - OpenSSL PHP Extension
 - Mbstring PHP Extension
