@@ -1,0 +1,15 @@
+{
+	"title": "Child Table",
+	"type": "child",
+	"attribute": {
+		"label":"string",
+		"table":"string",
+		"foreign_key":"string",
+		"columns":[
+		  {"label":"string","name":"string","image":"boolean"}
+		  ],
+		"fields":[
+		  {"label":"string","name":"string","type":["text","textarea","upload","select","radio"],"help":"string","dataenum":["a","b","c"],"dataquery":"sql query, should response value & label"}
+		  ]
+	}
+}

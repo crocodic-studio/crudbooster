@@ -35,16 +35,12 @@
           <div class="error-page">
             <h2 class="headline text-yellow"> 404</h2>
             <div class="error-content">
-              <h3><i class="fa fa-warning text-yellow"></i> Oops! Page Not Found</h3>
+              <h3><i class="fa fa-warning text-yellow"></i> {{trans('crudbooster.page_not_found')}}</h3>
               <p>                
-                We are unable search the page that you are looking for.<br/>
-                But, you are stiil able to go back just <a href='{{url("/")}}'>click here</a> to go homepage.                
+                {{trans('crudbooster.page_not_found_text')}}
               </p>
               <p>Tips : <br/>                
-                * Please make sure the URL is correct<br/>
-                * Please make sure the font capitalizing is correct because case sensitive<br/>
-                * Maybe the page that you are looking for has been deleted by Admin<br/>
-                * You can go back by click Back Button at browser<br/>
+                {{trans('crudbooster.page_not_found_tips')}}
               </p>
             </div><!-- /.error-content -->
           </div><!-- /.error-page -->

@@ -17,9 +17,12 @@ class AddTableCmsEmailQueues extends Migration
             $table->timestamps();
             $table->dateTime('send_at')->nullable();
             $table->string('email_recipient')->nullable();
-            $table->string('email_cc')->nullable();
+            $table->string('email_from_email')->nullable();
+            $table->string('email_from_name')->nullable();
+            $table->string('email_cc_email')->nullable();            
             $table->string('email_subject')->nullable();
             $table->text('email_content')->nullable();
+            $table->text('email_attachments')->nullable();
             $table->boolean('is_sent')->nullable();            
         });
     }

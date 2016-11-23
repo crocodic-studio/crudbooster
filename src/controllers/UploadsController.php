@@ -20,7 +20,7 @@ class UploadsController extends Controller {
 	    $h = ($h)?:$w;
 	    $is_download = Request::get('download');
 
-	    $extension = File::extension($path);
+	    $extension = strtolower(File::extension($path));
 	    $images_ext = array('jpg','jpeg','png','gif','bmp');
 
 	    if(in_array($extension, $images_ext)) {	  	    	

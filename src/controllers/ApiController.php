@@ -28,15 +28,7 @@ class ApiController extends Controller {
 		
 	}
 
-	public function hook_query_list(&$data) {
-
-	}
-
 	public function hook_query(&$query) {
-
-	}
-
-	public function hook_query_detail(&$data) {
 
 	}
 
@@ -99,7 +91,7 @@ class ApiController extends Controller {
 		|
 		*/
 		if($parameters) {
-			$type_except = ['password','ref','base64_file'];
+			$type_except = ['password','ref','base64_file','custom','search'];
 			$input_validator = array();
 			$data_validation = array();
 			foreach($parameters as $param) {
@@ -113,6 +105,8 @@ class ApiController extends Controller {
 				$format_validation = array();
 
 				if($used == 0) continue;
+
+				if($param['config'] && substr($param['config'], 0, 1) != '*') continue;
 
 				if($required) {
 					$format_validation[] = 'required';
@@ -192,7 +186,7 @@ class ApiController extends Controller {
 				$subquery = $resp['subquery'];
 				$used = intval($resp['used']);
 
-				if($used == 0 && !is_foreign_key($name)) continue;
+				if($used == 0 && !CRUDBooster::isForeignKey($name)) continue;
 
 				if(in_array($name, $name_tmp)) continue;
 
@@ -213,9 +207,9 @@ class ApiController extends Controller {
 				}				
 
 				$name_tmp[] = $name;
-				if(is_foreign_key($name)) {
-					$jointable = is_foreign_key($name);
-					$jointable_field = DB::getSchemaBuilder()->getColumnListing($jointable);
+				if(CRUDBooster::isForeignKey($name)) {
+					$jointable = CRUDBooster::isForeignKey($name);
+					$jointable_field = CRUDBooster::getTableColumns($jointable);
 					$data->leftjoin($jointable,$jointable.'.id','=',$table.'.'.$name);
 					foreach($jointable_field as $jf) {							
 						$jf_alias = $jointable.'_'.$jf;
@@ -228,10 +222,39 @@ class ApiController extends Controller {
 			} //End Responses
 
 			foreach($parameters as $param) {
-				$type = $param['type'];
-				$name = $param['name'];
+				$name     = $param['name'];
+				$type     = $param['type'];
+				$value    = $posts[$name];
+				$used     = $param['used'];
+				$required = $param['required'];
+				$config = $param['config'];
+
 				if($type == 'password') {
 					$data->addselect($table.'.'.$name);
+				}
+
+				if($type == 'search') {
+					$search_in = explode(',',$config);
+
+					if($required == '1') {						
+						$data->where(function($w) use ($search_in,$value) {
+							foreach($search_in as $k=>$field) {
+								if($k==0) $w->where($field,"like","%$value%");
+								else $w->orWhere($field,"like","%$value%");
+							}
+						});
+					}else{
+						if($used) {
+							if($value) {
+								$data->where(function($w) use ($search_in,$value) {
+									foreach($search_in as $k=>$field) {
+										if($k==0) $w->where($field,"like","%$value%");
+										else $w->orWhere($field,"like","%$value%");
+									}
+								});
+							}						
+						}
+					}
 				}
 			}
 
@@ -239,18 +262,6 @@ class ApiController extends Controller {
 				$data->where($table.'.deleted_at',NULL);
 			}
 
-			if($posts['search_in'] && $posts['search_value']) {
-				$search_in = explode(',',$posts['search_in']);
-				$search_value = $posts['search_value'];
-				$data->where(function($w) use ($search_in,$search_value) {
-					foreach($search_in as $k=>$field) {
-						if($k==0) $w->where($field,"like","%$search_value%");
-						else $w->orWhere($field,"like","%$search_value%");
-					}
-				});
-			}
-
-			
 			$data->where(function($w) use ($parameters,$posts,$table,$type_except) {								
 				foreach($parameters as $param) {
 					$name     = $param['name'];
@@ -261,6 +272,10 @@ class ApiController extends Controller {
 
 					if(in_array($type, $type_except)) {
 						continue;
+					}
+
+					if(substr($param['config'], 0,1) != '*') {
+						$value = $param['config'];
 					}
 
 					if($required == '1') {						
@@ -282,13 +297,13 @@ class ApiController extends Controller {
 					}									
 				}
 			});
+
 									
 			//IF SQL WHERE IS NOT NULL
 			if($row_api->sql_where) {
 				$data->whereraw($row_api->sql_where);
 			}
-
-			$this->hook_query_list($data);
+			
 			$this->hook_query($data);
 
 			if($action_type == 'list') {
@@ -313,7 +328,7 @@ class ApiController extends Controller {
 							}
 
 							if(!in_array($k,$responses_fields)) {
-								unset($row->$k);
+								unset($row[$k]);
 							}
 						}						
 					}
@@ -338,6 +353,10 @@ class ApiController extends Controller {
 						$value    = $posts[$name];
 						$used     = $param['used'];
 						$required = $param['required'];
+
+						if(substr($param['config'], 0,1) != '*') {
+							$value = $param['config'];
+						}
 
 						if($required) {
 							if($type == 'password') {
@@ -377,7 +396,7 @@ class ApiController extends Controller {
 					$rows                  = (array) $rows;
 					$result                = array_merge($result,$rows);
 				}else{
-					$result['api_status']  = 0;
+					$result['api_status']  = 1;
 					$result['api_message'] = 'There is no data found !';					
 				}
 			}elseif($action_type == 'delete') {
@@ -388,7 +407,7 @@ class ApiController extends Controller {
 					$delete = $data->delete();
 				}
 
-				$result['api_status'] = ($delete)?1:0;
+				$result['api_status'] = 1;
 				$result['api_message'] = ($delete)?"The data has been deleted successfully !":"Oops, Failed to delete data !";
 
 			}
@@ -412,13 +431,13 @@ class ApiController extends Controller {
 		    }
 
 		    if($action_type == 'save_add') {
-		    	if(\Schema::hasColumn($table,$table.'.created_at')) {
+		    	if(\Schema::hasColumn($table,'created_at')) {
 		    		$row_assign['created_at'] = date('Y-m-d H:i:s');
 		    	}
 		    } 
 
 		    if($action_type == 'save_edit') {
-		    	if(\Schema::hasColumn($table,$table.'.updated_at')) {
+		    	if(\Schema::hasColumn($table,'updated_at')) {
 		    		$row_assign['updated_at'] = date('Y-m-d H:i:s');
 		    	}
 		    }
@@ -436,6 +455,10 @@ class ApiController extends Controller {
 		    	if(!in_array($name, $row_assign_keys)) {
 					continue;
 				}	
+
+				if(substr($param['config'], 0,1) != '*') {
+					$value = $param['config'];
+				}
 
 		    	if($type == 'file' || $type == 'image') {
 		    		if (Request::hasFile($name))
@@ -476,20 +499,21 @@ class ApiController extends Controller {
 		    }
 
 		    //Make sure if saving/updating data additional param included
-			$arrkeys = array_keys($row_assign);			
-			foreach($posts as $key => $value) {
-				if(!in_array($key, $arrkeys)) {
-					$row_assign[$key] = $value;
-				}
-			}
+		    $arrkeys = array_keys($row_assign);      
+		    foreach($posts as $key => $value) {
+		        if(!in_array($key, $arrkeys)) {
+		          $row_assign[$key] = $value;
+		        }
+		    }
 
 
 		    if($action_type == 'save_add') {
 		    	
-		    	$lastId = DB::table($table)->insertGetId($row_assign);
-		    	$result['api_status']  = ($lastId)?1:0;
-				$result['api_message'] = ($lastId)?'The data has been added successfully':'Failed to add data !';
-				$result['id']          = $lastId;
+		    	$row_assign['id'] = DB::table($table)->max('id') + 1;
+		    	DB::table($table)->insert($row_assign);
+		    	$result['api_status']  = 1;
+				$result['api_message'] = ($row_assign['id'])?'The data has been added successfully':'Failed to add data !';
+				$result['id']          = $row_assign['id'];
 		    }else{
 
 		    	try{
@@ -500,8 +524,7 @@ class ApiController extends Controller {
 				    if($row_api->sql_where) {
 				    	$update->whereraw($row_api->sql_where);
 				    }			    
-
-				    $this->hook_query_list($update);
+				    
 				    $this->hook_query($update);
 
 				    $update = $update->update($row_assign);

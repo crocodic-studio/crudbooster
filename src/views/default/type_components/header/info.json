@@ -1,0 +1,7 @@
+{
+	"title":"Header",
+	"type":"header",
+	"attribute":{
+		"label":"string"		
+	}
+}

@@ -3,6 +3,8 @@
 return [
 	
 	'ADMIN_PATH'                =>'admin',
+
+	'USER_TABLE'				=>'cms_users',
 	
 	'IMAGE_FIELDS_CANDIDATE'    =>'image,picture,photo,photos,foto,gambar,thumbnail',
 	
@@ -19,6 +21,4 @@ return [
 	'URL_FIELDS_CANDIDATE'		=>'url,link',
 	
 	'UPLOAD_TYPES'              =>'jpg,png,jpeg,gif,bmp,pdf,xls,xlsx,doc,docx,txt,zip,rar,7z',
-
-	'LIMIT_EMAIL_PER_HOUR'		=> 200,	
 ];

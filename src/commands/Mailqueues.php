@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use DB;
 use Cache;
 use Request;
+use CRUDBooster;
 
 class Mailqueues extends Command {
 
@@ -34,21 +35,6 @@ class Mailqueues extends Command {
 		
 		
 		$now           = date('Y-m-d H:i:s');
-		$limit_an_hour = config('crudbooster.LIMIT_EMAIL_PER_HOUR',200);
-
-		if(Cache::has('total_email_sent')) {
-			if(Cache::get('total_email_sent') >= $limit_an_hour) {
-
-				$count_minute = diff_minute(Cache::get('last_email_sent'));
-
-				if($count_minute >= 60) {
-					Cache::put('total_email_sent',0);
-				}else{
-					return false;
-				}				
-			}
-		}
-
 
 		$this->comment('Mail Queues Started '.$now);
 
@@ -60,13 +46,9 @@ class Mailqueues extends Command {
 		Cache::put('last_email_sent',date('Y-m-d H:i:s'));
 		
 		foreach($queues as $q) {
-			if (filter_var($q->email_recipient, FILTER_VALIDATE_EMAIL) !== false) {
-				$domain  = substr (Request::root(), 7);				
-				$to      = $q->email_recipient;
-				$subject = $q->email_subject;
-				$message = $q->email_content;
-				send_email($to,$subject,$message);
-				$this->comment('Email send -> '.$subject);
+			if (filter_var($q->email_recipient, FILTER_VALIDATE_EMAIL) !== false) {				
+				CRUDBooster::sendEmailQueue($queue);
+				$this->comment('Email send -> '.$q->subject);
 			}
 			DB::table('mailqueues')->where('id',$q->id)->delete();
 		}

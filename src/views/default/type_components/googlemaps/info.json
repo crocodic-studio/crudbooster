@@ -1,0 +1,10 @@
+{
+	"title":"Google Maps",
+	"type":"googlemaps",
+	"attribute":{
+		"label":"string",
+		"latitude":"string column of latitude",
+		"longitude":"string column of longitude",
+		"address":"string column of address"
+	}
+}

@@ -3,7 +3,7 @@
 use crocodicstudio\crudbooster\controllers\Controller;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Mail;
@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\PDF;
 use Illuminate\Support\Facades\Excel;
+use CRUDBooster;
 
 class PrivilegesController extends CBController {
 
@@ -21,23 +22,22 @@ class PrivilegesController extends CBController {
 		$this->module_name = "Privilege";
 		$this->table       = 'cms_privileges';
 		$this->primary_key = 'id';
-		$this->title_field = "name";		
+		$this->title_field = "name";	
+		$this->button_import = false;
+		$this->button_export = false;
+		$this->button_action_style = 'button_icon';	
+		$this->button_detail = false;
 
 		$this->col   = array();
 		$this->col[] = array("label"=>"ID","name"=>"id");
 		$this->col[] = array("label"=>"Name","name"=>"name");
 		$this->col[] = array("label"=>"Superadmin","name"=>"is_superadmin",'callback_php'=>'($row->is_superadmin)?"<span class=\"label label-success\">Superadmin</span>":"<span class=\"label label-default\">Standard</span>"');
-		$this->col[] = array("label"=>"Avail. Register","name"=>"is_register",'callback_php'=>'($row->is_register)?"<span class=\"label label-success\">Available</span>":"<span class=\"label label-default\">Not Available</span>"');
 
 		$this->form   = array();
 		$this->form[] = array("label"=>"Name","name"=>"name",'required'=>true);
 		$this->form[] = array("label"=>"Is Superadmin","name"=>"is_superadmin",'required'=>true);		
 		$this->form[] = array("label"=>"Is Register","name"=>"is_register",'required'=>true);		
 		$this->form[] = array("label"=>"Theme Color","name"=>"theme_color",'required'=>true);
-
-		$this->addaction[] = array('label'=>'Configuration Dashboard',
-			'route'=>url("admin/set-dashboard-config-mode?id_cms_privileges=[id]"),
-			'icon'=>'fa fa-tachometer');
 
 		$this->constructor();
 	}
@@ -48,6 +48,7 @@ class PrivilegesController extends CBController {
 		$id = 0; 
 		$data['page_title'] = "Add Data";	
 		$data['moduls'] = DB::table("cms_moduls")
+		->where('is_protected',0)
 		->select("cms_moduls.*",
 			DB::raw("(select is_visible from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id') as is_visible"),
 			DB::raw("(select is_create from cms_privileges_roles where id_cms_moduls  = cms_moduls.id and id_cms_privileges = '$id') as is_create"),
@@ -57,23 +58,27 @@ class PrivilegesController extends CBController {
 			)
 		->orderby("name","asc")->get();		
 		$data['page_menu'] = Route::getCurrentRoute()->getActionName();
-		return view('crudbooster::default.privileges',$data);
+		return view('crudbooster::privileges',$data);
 	}
 	
 
-	public function postAddSave() {
-		$this->validation();				
-		$this->input_assignment();		
+	public function postAddSave(Request $request) {
+		$this->validation($request);				
+		$this->input_assignment($request);		
+
+		$this->arr[$this->primary_key] = DB::table($this->table)->max($this->primary_key) + 1;	
+
 		DB::table($this->table)->insert($this->arr);
-		$id = DB::getPdo()->lastInsertId();
+		$id = $this->arr[$this->primary_key];
 
 		//set theme 
-		Session::put('theme_color',$this->arr['theme_color']);
+		$request->session()->put('theme_color',$this->arr['theme_color']);
 
-		$priv = Request::input("privileges");
+		$priv = $request->input("privileges");
 		if($priv) {
 			foreach($priv as $id_modul => $data) {
 				$arrs = array();
+				$arrs['id'] = DB::table('cms_privileges_roles')->max('id') + 1;
 				$arrs['is_visible'] = @$data['is_visible']?:0;
 				$arrs['is_create'] = @$data['is_create']?:0;
 				$arrs['is_read'] = @$data['is_read']?:0;
@@ -84,43 +89,48 @@ class PrivilegesController extends CBController {
 				DB::table("cms_privileges_roles")->insert($arrs);
 			}	
 		}
-				
-		return redirect($this->dashboard)->with(['message'=>"Data has been added !",'message_type'=>'success']);
+		
+		//Refresh Session Roles
+		$roles = DB::table('cms_privileges_roles')
+		->where('id_cms_privileges',CRUDBooster::myPrivilegeId())
+		->join('cms_moduls','cms_moduls.id','=','id_cms_moduls')
+		->select('cms_moduls.name','cms_moduls.path','is_visible','is_create','is_read','is_edit','is_delete')
+		->get();
+		Session::put('admin_privileges_roles',$roles);
+
+		CRUDBooster::redirect(CRUDBooster::mainpath(),trans("crudbooster.alert_add_data_success"),'success');		
 	}
 	
-	public function getEdit($id)
+	public function getEdit(Request $request, $id)
 	{
-		$data['page_title'] = "Edit Data";	
-		$data['row'] = DB::table($this->table)->where("id",$id)->first();
+		
+		$row = DB::table($this->table)->where("id",$id)->first();
 
-		$data['moduls'] = DB::table("cms_moduls")
-		->select("cms_moduls.*",
-			DB::raw("(select is_visible from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id') as is_visible"),
-			DB::raw("(select is_create from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id') as is_create"),
-			DB::raw("(select is_read from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id') as is_read"),
-			DB::raw("(select is_edit from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id') as is_edit"),
-			DB::raw("(select is_delete from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id') as is_delete")
-			)
+		$page_title = trans('crudbooster.edit_data_page_title',['module'=>'Privilege','name'=>$row->name]);
+
+		$moduls = DB::table("cms_moduls")
+		->where('is_protected',0)
+		->select("cms_moduls.*")
 		->orderby("name","asc")->get();
-		$data['page_menu'] = Route::getCurrentRoute()->getActionName();
-		return view('crudbooster::default.privileges',$data);
+		$page_menu = Route::getCurrentRoute()->getActionName();
+		return view('crudbooster::privileges',compact('row','page_title','moduls','page_menu'));
 	}
 	 
-	public function postEditSave($id) {
+	public function postEditSave(Request $request,$id) {
 		
-		$this->validation();
-		$this->input_assignment();
+		$this->validation($request);
+		$this->input_assignment($request,$id);
+
+		$row = CRUDBooster::first($this->table,$id);
+
 		DB::table($this->table)->where($this->primary_key,$id)->update($this->arr);
-
-		//set theme 
-		Session::put('theme_color',$this->arr['theme_color']);
-
-		
-		$priv = Request::input("privileges");
+						
+		$priv = $request->input("privileges");
 		if($priv) {
 			DB::table("cms_privileges_roles")->where("id_cms_privileges",$id)->delete();
 			foreach($priv as $id_modul => $data) {
 				$arrs = array();
+				$arrs['id'] = DB::table('cms_privileges_roles')->max('id') + 1;
 				$arrs['is_visible'] = @$data['is_visible']?:0;
 				$arrs['is_create'] = @$data['is_create']?:0;
 				$arrs['is_read'] = @$data['is_read']?:0;
@@ -131,14 +141,28 @@ class PrivilegesController extends CBController {
 				DB::table("cms_privileges_roles")->insert($arrs);
 			}
 		}
-		return redirect($this->dashboard)->with(['message'=>"Data has been updated !",'message_type'=>'success']);
+
+
+		//Refresh Session Roles
+		if($id==CRUDBooster::myPrivilegeId()) {
+			$roles = DB::table('cms_privileges_roles')
+			->where('id_cms_privileges',CRUDBooster::myPrivilegeId())
+			->join('cms_moduls','cms_moduls.id','=','id_cms_moduls')
+			->select('cms_moduls.name','cms_moduls.path','is_visible','is_create','is_read','is_edit','is_delete')
+			->get();
+			Session::put('admin_privileges_roles',$roles);
+
+			$request->session()->put('theme_color',$this->arr['theme_color']);
+		}		
+
+		CRUDBooster::redirect(CRUDBooster::mainpath(),trans("crudbooster.alert_update_data_success",['module'=>"Privilege",'title'=>$row->name]),'success');
 	}
 	
 	public function getDelete($id) {
 		$row = DB::table($this->table)->where($this->primary_key,$id)->first();
 		DB::table($this->table)->where($this->primary_key,$id)->delete();
 		DB::table("cms_privileges_roles")->where("id_cms_privileges",$row->id)->delete();
-		return redirect()->back()->with(['message'=>"Data has been deleted !",'message_type'=>"success"]);
+		CRUDBooster::redirect(CRUDBooster::mainpath(),trans("crudbooster.alert_delete_data_success"),'success');		
 	}
 
 	

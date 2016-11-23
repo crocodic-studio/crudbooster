@@ -42,7 +42,7 @@ $.AdminLTE.options = {
   //General animation speed for JS animated elements such as box collapse/expand and
   //sidebar treeview slide up/down. This options accepts an integer as milliseconds,
   //'fast', 'normal', or 'slow'
-  animationSpeed: 500,
+  animationSpeed: 100,
   //Sidebar push menu toggle button selector
   sidebarToggleSelector: "[data-toggle='offcanvas']",
   //Activate sidebar push menu
@@ -52,7 +52,7 @@ $.AdminLTE.options = {
   //Enable sidebar expand on hover effect for sidebar mini
   //This option is forced to true if both the fixed layout and sidebar mini
   //are used together
-  sidebarExpandOnHover: false,
+  sidebarExpandOnHover: true,
   //BoxRefresh Plugin
   enableBoxRefresh: true,
   //Bootstrap.js tooltip

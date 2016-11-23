@@ -7,283 +7,108 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="{{ get_my_photo() }}" style='height:50px;width:50px' class="img-circle" alt="User Image" />
+                <img src="{{ CRUDBooster::myPhoto() }}" style='height:50px;width:50px' class="img-circle" alt="User Image" />
             </div>
             <div class="pull-left info">
-                <p>{{ get_my_name() }}</p>
+                <p>{{ CRUDBooster::myName() }}</p>
                 <!-- Status -->
-                <a href="#"><i class="fa fa-circle text-success"></i> Online</a> • <a target="_blank" href="{{url('/')}}">Visit FrontEnd</a>
+                <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
         </div>
 
 
-        <?php if(Session::get('dashboard_config_mode')==1):?>
-
-        <script type="text/javascript">
-            function add_statistic_datatable() {
-                
-                $("#modal_widget_statistic .modal-title").text("Datatable Setting");
-                $("#modal_widget_statistic .modal-body").load("{{route('AdminControllerGetSettingDatatable')}}",function() {
-                    $("#modal_widget_statistic").modal("show");   
-                });
-            }
-
-            function edit_statistic_datatable(id) {
-                
-                $("#modal_widget_statistic .modal-title").text("Datatable Setting");
-                $("#modal_widget_statistic .modal-body").load("{{route('AdminControllerGetSettingDatatable')}}/"+id,function() {
-                    $("#modal_widget_statistic").modal("show");                                            
-                });                
-            }
-
-            function add_statistic_donut() {
-                
-                $("#modal_widget_statistic .modal-title").text("Chart Donut Setting");
-                $("#modal_widget_statistic .modal-body").load("{{route('AdminControllerGetSettingChartDonut')}}",function() {
-                    $("#modal_widget_statistic").modal("show");   
-                });
-            }
-
-            function edit_statistic_donut(id) {
-                
-                $("#modal_widget_statistic .modal-title").text("Chart Donut Setting");
-                $("#modal_widget_statistic .modal-body").load("{{route('AdminControllerGetSettingChartDonut')}}/"+id,function() {
-                    $("#modal_widget_statistic").modal("show");   
-                });                
-            }
-
-             function add_statistic_bar() {
-                
-                $("#modal_widget_statistic .modal-title").text("Chart Bar Setting");
-                $("#modal_widget_statistic .modal-body").load("{{route('AdminControllerGetSettingChartBar')}}",function() {
-                    $("#modal_widget_statistic").modal("show");   
-
-                    $("#modal_widget_statistic select[name=table_name]").change(function() {
-                        var table_name = $(this).val();
-                        $.get("{{route('AdminControllerGetSelectColumnTable')}}/"+table_name,function(resp) {
-                            $("#modal_widget_statistic select[name=column]").html(resp);
-                        });
-                    });
-                });
-            }
-
-            function edit_statistic_bar(id) {
-                
-                $("#modal_widget_statistic .modal-title").text("Chart Bar Setting");
-                $("#modal_widget_statistic .modal-body").load("{{route('AdminControllerGetSettingChartBar')}}/"+id,function() {
-                    $("#modal_widget_statistic").modal("show");   
-
-                    $("#modal_widget_statistic select[name=table_name]").change(function() {
-                        var table_name = $(this).val();
-                        var current = $("#modal_widget_statistic select[name=column]").attr("data-current");
-                        $.get("{{route('AdminControllerGetSelectColumnTable')}}/"+table_name+"/"+current,function(resp) {
-                            $("#modal_widget_statistic select[name=column]").html(resp);
-                        })
-                    })                      
-
-                    $("#modal_widget_statistic select[name=table_name]").trigger('change');
-                });                
-            }
-
-
-
-            function add_statistic_line() {
-                
-                $("#modal_widget_statistic .modal-title").text("Chart Line Setting");
-                $("#modal_widget_statistic .modal-body").load("{{route('AdminControllerGetSettingChartLine')}}",function() {
-                    $("#modal_widget_statistic").modal("show");   
-
-                    $("#modal_widget_statistic select[name=table_name]").change(function() {
-                        var table_name = $(this).val();
-                        $.get("{{route('AdminControllerGetSelectColumnTable')}}/"+table_name,function(resp) {
-                            $("#modal_widget_statistic select[name=column]").html(resp);
-                        })
-                    })                      
-                });                
-            }
-
-            function edit_statistic_line(id) {
-                
-                $("#modal_widget_statistic .modal-title").text("Chart Line Setting");
-                $("#modal_widget_statistic .modal-body").load("{{route('AdminControllerGetSettingChartLine')}}/"+id,function() {
-                    $("#modal_widget_statistic").modal("show");   
-
-                    $("#modal_widget_statistic select[name=table_name]").change(function() {
-                        var table_name = $(this).val();
-                        var current = $("#modal_widget_statistic select[name=column]").attr("data-current");
-                        $.get("{{route('AdminControllerGetSelectColumnTable')}}/"+table_name+"/"+current,function(resp) {
-                            $("#modal_widget_statistic select[name=column]").html(resp);
-                        })
-                    })                      
-
-                    $("#modal_widget_statistic select[name=table_name]").trigger('change');
-                });                
-            }
-
-            function add_statistic_number() {
-                
-                $("#modal_widget_statistic .modal-title").text("Statistic Number Setting");
-                $("#modal_widget_statistic .modal-body").load("{{route('AdminControllerGetSettingStatNumber')}}",function() {
-                    $("#modal_widget_statistic").modal("show");    
-
-                    $("#modal_widget_statistic select[name=table_name]").change(function() {
-                        var table_name = $(this).val();
-                        $.get("{{route('AdminControllerGetSelectColumnTable')}}/"+table_name,function(resp) {
-                            $("#modal_widget_statistic select[name=column]").html(resp);
-                        })
-                    })                    
-                });                
-            }            
-
-            function edit_statistic_number(id) {
-                
-                $("#modal_widget_statistic .modal-title").text("Statistic Number Setting");
-                $("#modal_widget_statistic .modal-body").load("{{route('AdminControllerGetSettingStatNumber')}}/"+id,function() {
-                    $("#modal_widget_statistic").modal("show");    
-
-                    $("#modal_widget_statistic select[name=table_name]").change(function() {
-                        var table_name = $(this).val();
-                        var current = $("#modal_widget_statistic select[name=column]").attr("data-current");
-                        $.get("{{route('AdminControllerGetSelectColumnTable')}}/"+table_name+"/"+current,function(resp) {
-                            $("#modal_widget_statistic select[name=column]").html(resp);
-                        })
-                    })   
-
-                    $("#modal_widget_statistic select[name=table_name]").trigger('change');                 
-                });                
-            }
-            $(function() {
-                $("#dashboard").on("click",".btn-edit-stat",function() {
-                    var id = $(this).attr('data-id');
-                    edit_statistic_number(id);
-                });
-                $("#dashboard").on("click",".btn-edit-chart-line",function() {
-                    var id = $(this).attr('data-id');
-                    edit_statistic_line(id);
-                });
-                $("#dashboard").on("click",".btn-edit-chart-bar",function() {
-                    var id = $(this).attr('data-id');
-                    edit_statistic_bar(id);
-                });
-                $("#dashboard").on("click",".btn-edit-chart-donut",function() {
-                    var id = $(this).attr('data-id');
-                    edit_statistic_donut(id);
-                });
-                $("#dashboard").on("click",".btn-edit-datatable",function() {
-                    var id = $(this).attr('data-id');
-                    edit_statistic_datatable(id);
-                });
-
-                $("#modal_widget_statistic").on("submit","form",function() {
-                    $.ajax({
-                        data:$(this).serialize(),
-                        type:'post',
-                        url:$(this).attr('action'),
-                        success:function(id) {
-                            $.get("{{route('AdminControllerGetStatisticDashboard')}}/"+id,function(html_widget) {
-                                console.log('l '+$("#dashboard_"+id).length);
-                                if($("#dashboard_"+id).length>0) {
-                                    $("#dashboard_"+id).replaceWith(html_widget);
-                                }else{
-                                    $("#dashboard").append(html_widget);    
-                                }
-                                
-                            })
-                            $("#modal_widget_statistic").modal("hide");
-                        },
-                        error: function(xhr, textStatus, errorThrown){
-                           alert('Request Failed');
-                        }
-                    })
-                    return false;
-                })
-
-                $("#dashboard").on("click",".btn-delete-stat",function() {
-                    var h = $(this).parents('.dashboard_widget');
-                    var id = $(this).attr('data-id');
-                    if(confirm("Are you sure want to delete ?")) {                        
-                        $.get("{{route('AdminControllerGetRemoveCmsDashboard')}}/"+id,function(resp) {
-                            h.remove();
-                        });
-                    }
-                })
-
-                $("#modal_widget_statistic .btn-add").click(function() {
-                    $("#modal_widget_statistic form").submit();
-                })
-
-            })
-        </script>
-
-            <div class='dashboard-config-menu'>
-                <ul class='sidebar-menu'>
-                    <li class='header'>Config Menu</li>
-                    <li><a href='#' onclick="add_statistic_number()"><span>Statistic Number</span><i class='fa fa-plus pull-right'></i></a></li>
-                    <li class="treeview">
-                        <a href='#'><span>Statistic Graphic</span> <i class='fa fa-angle-left pull-right'></i></a>
-                        <ul class="treeview-menu">
-                            <li><a href='#' onclick="add_statistic_line()"><span>Line Chart</span><i class='fa fa-plus pull-right'></i></a></li>
-                            <li><a href='#' onclick="add_statistic_bar()"><span>Bar Chart</span><i class='fa fa-plus pull-right'></i></a></li>
-                            <li><a href='#' onclick="add_statistic_donut()"><span>Donut Chart</span><i class='fa fa-plus pull-right'></i></a></li>
-                        </ul>
-                    </li>                
-                    <li><a href='#' onclick="add_statistic_datatable()"><span>Data Table</span><i class='fa fa-plus pull-right'></i></a></li>
-                    <li><a href='{{route("AdminControllerGetUnsetDashboardConfigMode")}}'><i class='fa fa-power-off'></i> <span>Back To Admin</span></a></li>
-                </ul>
-            </div>
-        <?php else:?>
+     
             <div class='main-menu'> 
 
             <!-- Sidebar Menu -->
             <ul class="sidebar-menu">
-                <li class="header">Menu Navigasi</li>
+                <li class="header">{{trans("crudbooster.menu_navigation")}}</li>
                 <!-- Optionally, you can add icons to the links -->
-            
-                <li ><a href="{{ route('AdminControllerGetIndex') }}"><i class='fa fa-dashboard'></i><span>Dashboard</span></a></li>
+
+                <?php $dashboard = CRUDBooster::sidebarDashboard();?>
+                @if($dashboard)
+                    <li data-id='{{$dashboard->id}}' class='{{(CRUDBooster::getCurrentDashboardId()==$dashboard->id)?"active":""}}'><a href='{{CRUDBooster::adminPath()}}?m=0&d={{$dashboard->id}}' class='{{($dashboard->color)?"text-".$dashboard->color:""}}' ><i class='fa fa-dashboard'></i> <span>{{trans("crudbooster.text_dashboard")}}</span> </a></li>
+                @endif
                 
-                <?php        
-                    $id_privileges = Session::get('admin_privileges');
-
-                    $groups = DB::table("cms_moduls_group")->orderby("sorting_group","asc")->get();
-                    foreach($groups as $g):
-                        $current_path = Request::segment(2);
-                        $current_path2 = Request::segment(2).'/'.Request::segment(3);
-
-                        $moduls = DB::table("cms_moduls")
-                            ->where("is_active",1)     
-                            ->where("id_cms_moduls_group",$g->id)               
-                            ->whereraw("cms_moduls.id in (select b.id_cms_moduls from cms_privileges_roles b where b.id_cms_privileges = '$id_privileges' and is_visible = 1)")
-                            ->orderby("sorting","asc")->get();
-                ?>
-                    @if($g->is_group==1)
-                        <li class="treeview <?=(count($moduls)==0)?'hide':''?>">
-                            <a href="#"><i class='{{$g->icon_group}}'></i> <span>{{$g->nama_group}}</span> <i class="fa fa-angle-left pull-right"></i></a>
-                            <ul class="treeview-menu">
-                    @endif
-
-
-                    <?php                          
-                        foreach($moduls as $modul):
-                    ?>            
-                        <li class="<?=($modul->path==$current_path || $modul->path==$current_path2)?'active':''?>"><a href="{{ url(config('crudbooster.ADMIN_PATH').'/'.$modul->path) }}"><i class='<?=$modul->icon?>'></i><span><?=$modul->name?></span></a></li>
-                    <?php endforeach;?>
-
-
-                    @if($g->is_group==1)
+                @foreach(CRUDBooster::sidebarMenu() as $menu)                         
+                    <li data-id='{{$menu->id}}' class='{{(count($menu->children))?"treeview":""}} {{(CRUDBooster::getCurrentMenuId()==$menu->id && CRUDBooster::getCurrentDashboardId()!=$menu->id )?"active":""}}'><a href='{{$menu->url}}?m={{$menu->id}}' class='{{($menu->color)?"text-".$menu->color:""}}'><i class='{{$menu->icon}} {{($menu->color)?"text-".$menu->color:""}}'></i> <span>{{$menu->name}}</span> 
+                    @if(count($menu->children))<i class="fa fa-angle-left pull-right"></i>@endif
+                    </a>
+                        @if(count($menu->children))
+                            <ul class="treeview-menu"> 
+                                @foreach($menu->children as $child)
+                                    <li data-id='{{$child->id}}' class='{{(CRUDBooster::getCurrentMenuId()==$child->id && CRUDBooster::getCurrentDashboardId()!=$child->id)?"active":""}}'><a href='{{$child->url}}?m={{$child->id}}'><i class='{{$child->icon}}'></i> <span>{{$child->name}}</span></a></li>
+                                @endforeach
                             </ul>
-                        </li>
-                    @endif
-
-                <?php
-                    endforeach;
-                ?>
+                        @endif
+                    </li>
+                @endforeach
 
 
+
+                @if(CRUDBooster::isSuperadmin())
+                    <li class="header">SUPERADMIN</li>
+                    <li class='treeview'>
+                        <a href='#'><i class='fa fa-key'></i> <span>Privileges & Roles</span>  <i class="fa fa-angle-left pull-right"></i></a>
+                        <ul class='treeview-menu'>
+                            <li><a href='{{Route("PrivilegesControllerGetAdd")}}?m=0'><i class='fa fa-plus'></i> Add New Privilege</a></li>
+                            <li><a href='{{Route("PrivilegesControllerGetIndex")}}?m=0'><i class='fa fa-bars'></i> List Privilege</a></li>
+                        </ul>
+                    </li>
+                                                        
+                    <li><a href='{{Route("MenusControllerGetIndex")}}?m=0'><i class='fa fa-bars'></i> Menu Management</a></li>                    
+                    <li class="treeview">
+                    <a href="#"><i class='fa fa-wrench'></i> <span>Settings</span> <i class="fa fa-angle-left pull-right"></i></a>
+                        <ul class="treeview-menu"> 
+                            <li class="<?=('settings'==$current_path && !Request::get('group'))?'active':''?>"><a href='{{route("SettingsControllerGetAdd")}}?m=0'><i class='fa fa-plus'></i> Add New Setting</a></li>
+                            <?php 
+                                $groupSetting = DB::table('cms_settings')->groupby('group_setting')->pluck('group_setting');
+                                foreach($groupSetting as $gs):
+                            ?>                                
+                            <li class="<?=($gs == Request::get('group'))?'active':''?>"><a href='{{route("SettingsControllerGetShow")}}?group={{urlencode($gs)}}&m=0'><i class='fa fa-wrench'></i> {{$gs}}</a></li>
+                            <?php endforeach;?>        
+                        </ul>
+                    </li>
+                    <li class='treeview'>
+                        <a href='#'><i class='fa fa-th'></i> <span>Module Generator</span>  <i class="fa fa-angle-left pull-right"></i></a>
+                        <ul class='treeview-menu'>
+                            <li><a href='{{Route("ModulsControllerGetAdd")}}?m=0'><i class='fa fa-plus'></i> Add New Module</a></li>
+                            <li><a href='{{Route("ModulsControllerGetIndex")}}?m=0'><i class='fa fa-bars'></i> List Module</a></li>
+                        </ul>
+                    </li>
+
+                    <li class='treeview'>
+                        <a href='#'><i class='fa fa-dashboard'></i> <span>Statistic Builder</span>  <i class="fa fa-angle-left pull-right"></i></a>
+                        <ul class='treeview-menu'>
+                            <li><a href='{{Route("StatisticBuilderControllerGetAdd")}}?m=0'><i class='fa fa-plus'></i> Add New Statistic</a></li>
+                            <li><a href='{{Route("StatisticBuilderControllerGetIndex")}}?m=0'><i class='fa fa-bars'></i> List Statistic</a></li>
+                        </ul>
+                    </li>
+
+                    <li class='treeview'>
+                        <a href='#'><i class='fa fa-fire'></i> <span>API Generator</span>  <i class="fa fa-angle-left pull-right"></i></a>
+                        <ul class='treeview-menu'>
+                            <li><a href='{{Route("ApiCustomControllerGetGenerator")}}?m=0'><i class='fa fa-plus'></i> Add New API</a></li>
+                            <li><a href='{{Route("ApiCustomControllerGetIndex")}}?m=0'><i class='fa fa-bars'></i> List API (Documentation)</a></li>
+                            <li><a href='{{Route("ApiCustomControllerGetScreetKey")}}?m=0'><i class='fa fa-bars'></i> Generate Screet Key</a></li>
+                        </ul>
+                    </li>
+
+                    <li class='treeview'>
+                        <a href='#'><i class='fa fa-envelope-o'></i> <span>Email Templates</span>  <i class="fa fa-angle-left pull-right"></i></a>
+                        <ul class='treeview-menu'>
+                            <li><a href='{{Route("EmailTemplatesControllerGetAdd")}}?m=0'><i class='fa fa-plus'></i> Add New Email</a></li>
+                            <li><a href='{{Route("EmailTemplatesControllerGetIndex")}}?m=0'><i class='fa fa-bars'></i> List Email Template</a></li>        
+                        </ul>
+                    </li>
+                    
+                    <li><a href='{{Route("LogsControllerGetIndex")}}?m=0'><i class='fa fa-flag'></i> Log User Access</a></li>
+                @endif
 
             </ul><!-- /.sidebar-menu -->
 
             </div>
-        <?php endif;?>
+       
     </section>
     <!-- /.sidebar -->
 </aside>

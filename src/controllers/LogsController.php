@@ -19,17 +19,20 @@ class LogsController extends CBController {
 	public function __construct() {		
 		$this->table       = 'cms_logs';
 		$this->primary_key = 'id';
-		$this->title_field = "ipaddress";			
+		$this->title_field = "ipaddress";	
+		$this->button_export = false;
+		$this->button_import = false;			
 
 		$this->col = array();
-		$this->col[] = array("label"=>"Created At","name"=>"created_at");
+		$this->col[] = array("label"=>"Time Access","name"=>"created_at");
 		$this->col[] = array("label"=>"IP Address","name"=>"ipaddress");	
 		$this->col[] = array("label"=>"User","name"=>"id_cms_users","join"=>"cms_users,name");	
 		$this->col[] = array("label"=>"Description","name"=>"description");		
 		
 		$this->form = array(); 	
-		$this->form[] = array("label"=>"Created At","name"=>"created_at","readonly"=>true);
+		$this->form[] = array("label"=>"Time Access","name"=>"created_at","readonly"=>true);
 		$this->form[] = array("label"=>"IP Address","name"=>"ipaddress","readonly"=>true);	
+		$this->form[] = array("label"=>"User Agent","name"=>"useragent","readonly"=>true);	
 		$this->form[] = array("label"=>"URL","name"=>"url","readonly"=>true);	
 		$this->form[] = array("label"=>"User","name"=>"id_cms_users","type"=>"select","datatable"=>"cms_users,name","readonly"=>true);	
 		$this->form[] = array("label"=>"Description","name"=>"description","readonly"=>true);	

@@ -3,9 +3,9 @@
 @section('content')   
 
 <ul class="nav nav-tabs">
-        <li ><a href="{{ mainpath() }}"><i class='fa fa-file'></i> API Documentation</a></li>
-        <li class="active"><a href="{{ mainpath('screet-key') }}"><i class='fa fa-key'></i> API Screet Key</a></li>
-        <li><a href="{{ mainpath('generator') }}"><i class='fa fa-cog'></i> API Generator</a></li>        
+        <li ><a href="{{ CRUDBooster::mainpath() }}"><i class='fa fa-file'></i> API Documentation</a></li>
+        <li class="active"><a href="{{ CRUDBooster::mainpath('screet-key') }}"><i class='fa fa-key'></i> API Screet Key</a></li>
+        <li><a href="{{ CRUDBooster::mainpath('generator') }}"><i class='fa fa-cog'></i> API Generator</a></li>        
       </ul>
 
       <div class='box'>
@@ -27,9 +27,9 @@
 			<td>{!! ($row->status=='active')?"<span class='label label-success'>Active</span>":"<span class='label label-default'>Non Active</span>" !!}</td>
 			<td>
 				@if($row->status == 'active')
-					<a class='btn btn-xs btn-default' href='{{ mainpath("status-apikey?id=$row->id&status=0") }}'>Non Active</a>
+					<a class='btn btn-xs btn-default' href='{{ CRUDBooster::mainpath("status-apikey?id=$row->id&status=0") }}'>Non Active</a>
 				@else
-					<a class='btn btn-xs btn-default' href='{{ mainpath("status-apikey?id=$row->id&status=1") }}'>Active</a>
+					<a class='btn btn-xs btn-default' href='{{ CRUDBooster::mainpath("status-apikey?id=$row->id&status=1") }}'>Active</a>
 				@endif
 
 				<a class='btn btn-xs btn-danger' href='javascript:void(0)' onclick='deleteApi({{$row->id}})'>Delete</a>
@@ -48,7 +48,7 @@
     	$.get("<?php echo route('ApiCustomControllerGetGenerateScreetKey')?>",function(resp) {    
     		lastno += 1;                    
 	            $('#table-apikey').append("<tr><td>"+lastno+"</td><td>"+resp.key+"</td><td>0</td><td><span class='label label-success'>Active</span></td><td>"+
-	            	"<a class='btn btn-xs btn-default' href='{{mainpath("status-apikey")}}?id="+resp.id+"&status=0'>Non Active</a> <a class='btn btn-xs btn-danger' href='javascript:void(0)' onclick='deleteApi("+resp.id+")'>Delete</a> </td></tr>"
+	            	"<a class='btn btn-xs btn-default' href='{{CRUDBooster::mainpath("status-apikey")}}?id="+resp.id+"&status=0'>Non Active</a> <a class='btn btn-xs btn-danger' href='javascript:void(0)' onclick='deleteApi("+resp.id+")'>Delete</a> </td></tr>"
 	            	);
 	            $('.no-screetkey').remove();
 	            swal("Success!", "Your new screet key has been generated successfully", "success"); 
@@ -60,7 +60,7 @@
     		text:"You will not be able to recover this data!",
     		type: "warning",   showCancelButton: true,   confirmButtonColor: "#DD6B55",   confirmButtonText: "Yes, delete it!",   closeOnConfirm: false  		
     	},function() {
-    		$.get("{{mainpath('delete-api-key')}}?id="+id,function(resp) {
+    		$.get("{{CRUDBooster::mainpath('delete-api-key')}}?id="+id,function(resp) {
     			if(resp.status == 1) {
     				swal("Success!","The screet key has been deleted !","success");
     			}else{
