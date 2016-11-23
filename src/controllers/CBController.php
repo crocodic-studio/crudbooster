@@ -1014,7 +1014,7 @@ class CBController extends Controller {
 				}
 			}
 
-			if($ro['type']=='checkbox') {
+			if($ro['type']=='checkbox' && $inputdata) {
 				$this->arr[$name] = implode(";",$inputdata);
 			}
 
