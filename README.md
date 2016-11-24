@@ -29,7 +29,6 @@ composer require crocodicstudio/crudbooster
 ### 2. Add Dependencies Package to Service Provider (config/app.php)
 ```
 Barryvdh\DomPDF\ServiceProvider::class,
-Collective\Bus\BusServiceProvider::class,
 Maatwebsite\Excel\ExcelServiceProvider::class,
 Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider::class,
 Intervention\Image\ImageServiceProvider::class,

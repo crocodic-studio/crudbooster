@@ -228,7 +228,7 @@ class CRUDBooster  {
 	  				break;	  			
 	  		}
 
-	  		$menu->url = $url;
+	  		@$menu->url = $url;
 
 	  		return $menu;
 		}

@@ -22,6 +22,7 @@ class AddTableCmsModuls extends Migration {
 			$table->string('table_name')->nullable();
 			$table->string('controller')->nullable();
 			$table->boolean('is_protected')->default(0);			
+			$table->boolean('is_active')->default(0);			
 		});
 	}
 

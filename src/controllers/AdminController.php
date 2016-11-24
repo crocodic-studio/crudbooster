@@ -17,7 +17,7 @@ class AdminController extends CBController {
 	function getIndex(Request $request) {
 
 		$dashboard = CRUDBooster::sidebarDashboard();
-		if($dashboard) {
+		if($dashboard && $dashboard->url) {
 			return redirect($dashboard->url.'?m='.$request->get('m').'&d='.$request->get('d'));
 		}
 
