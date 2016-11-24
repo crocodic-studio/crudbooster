@@ -325,17 +325,6 @@ class Cms_modulsSeeder extends Seeder {
             'is_protected'=>1,                                
             'is_active'=>1
         ],
-        [
-            
-            'created_at'=>date('Y-m-d H:i:s'),
-            'name'=>'Moduls',
-            'icon'=>'fa fa-cog',
-            'path'=>'cms_moduls',
-            'table_name'=>'cms_moduls',
-            'controller'=>'ModulsController',
-            'is_protected'=>1,                                
-            'is_active'=>1
-        ],
         [   
             
             'created_at'=>date('Y-m-d H:i:s'),
@@ -363,8 +352,28 @@ class Cms_modulsSeeder extends Seeder {
             'name'=>'Module Generator',
             'icon'=>'fa fa-database',
             'path'=>'module_generator',
-            'table_name'=>'cms_moduls_group',
-            'controller'=>'ModulsGroupController',
+            'table_name'=>'cms_moduls',
+            'controller'=>'ModulsController',
+            'is_protected'=>1,                                
+            'is_active'=>1
+        ],[ 
+            
+            'created_at'=>date('Y-m-d H:i:s'),
+            'name'=>'Menu Management',
+            'icon'=>'fa fa-bars',
+            'path'=>'menu_management',
+            'table_name'=>'cms_menus',
+            'controller'=>'MenusController',
+            'is_protected'=>1,                                
+            'is_active'=>1
+        ],[ 
+            
+            'created_at'=>date('Y-m-d H:i:s'),
+            'name'=>'Email Template',
+            'icon'=>'fa fa-envelope-o',
+            'path'=>'email_templates',
+            'table_name'=>'cms_email_templates',
+            'controller'=>'EmailTemplatesController',
             'is_protected'=>1,                                
             'is_active'=>1
         ],[ 
