@@ -1,4 +1,4 @@
-# CRUDBOOSTER - Laravel CRUD Generator
+# CRUDBOOSTER 5.3 - Laravel CRUD Generator
 [![Latest Stable Version](https://poser.pugx.org/crocodicstudio/crudbooster/v/stable)](https://packagist.org/packages/crocodicstudio/crudbooster)
 [![Total Downloads](https://poser.pugx.org/crocodicstudio/crudbooster/downloads)](https://packagist.org/packages/crocodicstudio/crudbooster)
 [![Latest Unstable Version](https://poser.pugx.org/crocodicstudio/crudbooster/v/unstable)](https://packagist.org/packages/crocodicstudio/crudbooster)
@@ -14,14 +14,13 @@ CRUDBooster is Laravel Framework that modified to bring a lot of features to dev
 
 ## System Requirement
 - PHP >= 5.6.x, PHP <= 7
+- Laravel 5.3.x
 - Mcrypt PHP Extension
 - OpenSSL PHP Extension
 - Mbstring PHP Extension
 - Tokenizer PHP Extension
 
-# CRUDBOOSTER 5.3.0.0 with Laravel 5.3 will be updated ASAP !, Coming soon... ^_^
-
-## Installation For Laravel 5.2.x
+## Installation For Laravel 5.3.x
 ### 1. Install via composer
 ```
 composer require crocodicstudio/crudbooster
@@ -29,7 +28,6 @@ composer require crocodicstudio/crudbooster
 ### 2. Add Dependencies Package to Service Provider (config/app.php)
 ```
 Barryvdh\DomPDF\ServiceProvider::class,
-Collective\Bus\BusServiceProvider::class,
 Maatwebsite\Excel\ExcelServiceProvider::class,
 Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider::class,
 Intervention\Image\ImageServiceProvider::class,
@@ -40,6 +38,7 @@ crocodicstudio\crudbooster\CRUDBoosterServiceProvider::class,
 'PDF' => Barryvdh\DomPDF\Facade::class,
 'Excel' => Maatwebsite\Excel\Facades\Excel::class,
 'Image' => Intervention\Image\Facades\Image::class,
+'CRUDBooster' => crocodicstudio\crudbooster\helpers\CRUDBooster::class,
 ```
 ### 4. Publish Configuration and Databases
 ```
