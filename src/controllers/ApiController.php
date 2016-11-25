@@ -209,7 +209,7 @@ class ApiController extends Controller {
 
 				$name_tmp[] = $name;
 				if(CRUDBooster::isForeignKey($name)) {
-					$jointable = CRUDBooster::isForeignKey($name);
+					$jointable = CRUDBooster::getTableForeignKey($name);
 					$jointable_field = CRUDBooster::getTableColumns($jointable);
 					$data->leftjoin($jointable,$jointable.'.id','=',$table.'.'.$name);
 					foreach($jointable_field as $jf) {							
