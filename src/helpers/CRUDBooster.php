@@ -17,8 +17,8 @@ class CRUDBooster  {
 			}
 
 		    $query = DB::table('cms_settings')->where('name',$name)->first();
-            Cache::forever('setting_'.$name,$query->content);
-            return $query->content;       
+		    Cache::forever('setting_'.$name,$query->content);
+		    return $query->content;       
 		}
 
 		public static function insert($table,$data=[]) {
@@ -557,6 +557,16 @@ class CRUDBooster  {
 		            exit;
 		        }        
 		    }
+		}
+	
+		public static function getTableForeignKey($fieldName) {
+			$table = null;
+			if(substr($fieldName, 0,3) == 'id_') {
+				$table = substr($fieldName, 3);	        		            
+			}elseif(substr($fieldName, -3) == '_id') {
+			    $table = substr($fieldName, 0, (strlen($fieldName)-3) );
+			}
+	        	return $table;
 		}
 
 		public static function isForeignKey($fieldName) {
