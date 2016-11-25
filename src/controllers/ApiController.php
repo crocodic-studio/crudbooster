@@ -270,19 +270,19 @@ class ApiController extends Controller {
 					$type     = $param['type'];
 					$value    = $posts[$name];
 					$used     = $param['used'];
-					$required = $param['required'];					
+					$required = $param['required'];								
 
 					if(in_array($type, $type_except)) {
 						continue;
 					}
 
-					if(substr($param['config'], 0,1) != '*') {
+					if($param['config']!='' && substr($param['config'], 0,1) != '*') {
 						$value = $param['config'];
 					}
 
 					if($required == '1') {						
 						if(\Schema::hasColumn($table,$name)) {
-							$w->where($table.'.'.$name,$value);
+							$w->where($table.'.'.$name,$value);							
 						}else{
 							$w->having($name,'=',$value);
 						}
@@ -356,7 +356,7 @@ class ApiController extends Controller {
 						$used     = $param['used'];
 						$required = $param['required'];
 
-						if(substr($param['config'], 0,1) != '*') {
+						if($param['config']!='' && substr($param['config'], 0,1) != '*') {
 							$value = $param['config'];
 						}
 
