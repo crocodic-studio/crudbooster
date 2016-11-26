@@ -29,7 +29,7 @@ class CRUDBooster  {
 				}
 			}
 
-			if(DB::table($table)->insert($data)) return true;
+			if(DB::table($table)->insert($data)) return $data['id'];
 			else return false;
 		}
 
