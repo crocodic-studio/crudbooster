@@ -23,7 +23,7 @@ class SettingsController extends CBController {
 		$this->primary_key        = 'id';
 		$this->title_field        = "name";		
 		$this->index_orderby      = array('name'=>'asc');
-		$this->button_delete = false;
+		$this->button_delete = true;
 		$this->button_show   = false;
 		$this->button_cancel = false;
 
@@ -65,6 +65,10 @@ class SettingsController extends CBController {
 		$data['page_title'] = urldecode($request->get('group'));		
 		return view('crudbooster::setting',$data);
 	} 
+	
+	function hook_before_edit(&$posdata,$id) {
+		$this->return_url = CRUDBooster::mainpath("show")."?group=".$posdata['group_setting'];
+	}
 
 	function getDeleteFileSetting() {
 		$id = g('id');
@@ -117,6 +121,7 @@ class SettingsController extends CBController {
 
 	function hook_before_add(&$arr) {
 		$arr['name'] = str_slug($arr['label'],'_');
+		$this->return_url = CRUDBooster::mainpath("show")."?group=".$arr['group_setting'];
 	}
 
 	function hook_after_edit($id) {
