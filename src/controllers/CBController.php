@@ -65,6 +65,7 @@ class CBController extends Controller {
 	public $show_addaction        = TRUE;
 	public $table_row_color 	  = array();
 	public $button_selected 	  = array();
+	public $return_url 			  = NULL;
 
 	public function constructor() {					 				
 
@@ -771,11 +772,13 @@ class CBController extends Controller {
 			}
 		}
 
+		$this->return_url = ($this->return_url)?$this->return_url:$request->get('return_url');
+
 		//insert log		
 		CRUDBooster::insertLog(trans("crudbooster.log_add",['name'=>$this->arr[$this->title_field],'module'=>CRUDBooster::getCurrentModule()->name]));
 
-		if($request->get('return_url')) {			
-			CRUDBooster::redirect($request->get('return_url'),trans("crudbooster.alert_add_data_success"),'success');
+		if($this->return_url) {			
+			CRUDBooster::redirect($this->return_url,trans("crudbooster.alert_add_data_success"),'success');
 		}else{
 			if($request->get('submit') == trans('crudbooster.button_save_more')) {
 				CRUDBooster::redirect(CRUDBooster::mainpath('add'),trans("crudbooster.alert_add_data_success"),'success');
@@ -1028,11 +1031,13 @@ class CBController extends Controller {
 
 		$this->hook_after_edit($id);
 
+		$this->return_url = ($this->return_url)?$this->return_url:$request->get('return_url');		
+
 		//insert log		
 		CRUDBooster::insertLog(trans("crudbooster.log_update",['name'=>$this->arr[$this->title_field],'module'=>CRUDBooster::getCurrentModule()->name]));
 
-		if($request->get('return_url')) {			
-			CRUDBooster::redirect($request->get('return_url'),trans("crudbooster.alert_update_data_success"),'success');
+		if($this->return_url) {			
+			CRUDBooster::redirect($this->return_url,trans("crudbooster.alert_update_data_success"),'success');
 		}else{
 			if($request->get('submit') == trans('crudbooster.button_save_more')) {
 				CRUDBooster::redirect(CRUDBooster::mainpath('add'),trans("crudbooster.alert_update_data_success"),'success');
