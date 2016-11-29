@@ -4,11 +4,11 @@
 								  	height: ($(window).height() - 300),
 								    callbacks: {
 								        onImageUpload: function(image) {
-								            uploadImage(image[0]);
+								            uploadImage{{$name}}(image[0]);
 								        }
 								    }
 								  });
-								  function uploadImage(image) {
+								  function uploadImage{{$name}}(image) {
 									    var data = new FormData();
 									    data.append("userfile", image);
 									    $.ajax({
