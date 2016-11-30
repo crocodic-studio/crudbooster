@@ -1046,7 +1046,7 @@ class CRUDBooster  {
 	                $type = 'radio';
 	                $label_field = ucwords(substr($field, 3));
 	                $validation = ['required|integer'];
-	                $attribute['dataenum'] = "['1|$label_field','0|Un-$label_field']";
+	                $attribute['dataenum'] = ['1|'.$label_field,'0|Un-'.$label_field];
 	            }
 
 	            if(in_array($field, $password_candidate)) {
