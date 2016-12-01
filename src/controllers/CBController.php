@@ -559,13 +559,13 @@ class CBController extends Controller {
 
 			if( !isset($request_all[$name]) ) continue; 
 
-			if($di['type'] != 'upload_standard') {
+			if($di['type'] != 'upload') {
 				if(@$di['required']) {
 					$ai[] = 'required';
 				}	
 			}
 
-			if($di['type'] == 'upload_standard') {
+			if($di['type'] == 'upload') {
 				if($id) {
 					$row = DB::table($this->table)->where($this->primary_key,$id)->first();
 					if($row->{$di['name']}=='') {
@@ -690,7 +690,7 @@ class CBController extends Controller {
 				$this->arr[$name] = implode(";",$inputdata);
 			}
 
-			if(@$ro['type']=='upload_standard') {				
+			if(@$ro['type']=='upload') {				
 				unset($this->arr[$name]);
 				if ($request->hasFile($name))
 				{			
