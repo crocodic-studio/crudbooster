@@ -11,8 +11,7 @@ use CRUDbooster;
 
 class AdminCmsUsersController extends \crocodicstudio\crudbooster\controllers\CBController {
 
-	public function __construct() {
-		$this->module_name         = "User";
+	public function __construct() {		
 		$this->table               = 'cms_users';
 		$this->primary_key         = 'id';
 		$this->title_field         = "name";
