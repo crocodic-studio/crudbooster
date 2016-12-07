@@ -103,7 +103,7 @@
 		$(function() {
 			new Morris.Bar({
 			  element: 'chartContainer-{{$componentID}}',
-			  data: $.parseJSON('{!! $data_result!!}'),
+			  data: $.parseJSON("{!! addslashes($data_result) !!}"),
 			  xkey: 'y',
 			  ykeys: {!! json_encode($area_name_safe) !!},
 			  labels: {!! json_encode($area_name) !!},

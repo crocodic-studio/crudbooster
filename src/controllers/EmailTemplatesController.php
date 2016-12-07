@@ -3,7 +3,7 @@
 	use crocodicstudio\crudbooster\controllers\Controller;
 	use Illuminate\Support\Facades\Session;
 	use Illuminate\Support\Facades\Storage;
-	use Illuminate\Http\Request;
+	use Illuminate\Support\Facades\Request;
 	use Illuminate\Support\Facades\DB;
 	use Illuminate\Support\Facades\App;
 	use Illuminate\Support\Facades\Mail;
@@ -17,7 +17,7 @@
 
 	class EmailTemplatesController extends \crocodicstudio\crudbooster\controllers\CBController {
 
-	    public function __construct(Request $request) {
+	    public function __construct() {
 	        $this->table              = "cms_email_templates";
 	        $this->primary_key        = "id";
 	        $this->title_field        = "name";

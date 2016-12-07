@@ -1,11 +1,15 @@
-<div class='form-group {{$col_width}} {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-							<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>							
-							<?php 
-								$value = explode(";",$value);
-								array_walk($value, 'trim');
-							?>
+<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
+							<label class='control-label col-sm-2'>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>							
+							<div class="{{$col_width?:'col-sm-10'}}">
+					
 							@if(isset($form['dataenum']))
-								@foreach($form['dataenum'] as $k=>$d)
+								<?php 
+									$value = explode(";",$value);
+									array_walk($value, 'trim');
+									$dataenum = $form['dataenum'];
+									$dataenum = (is_array($dataenum))?$dataenum:explode(";",$dataenum);
+								?>
+								@foreach($dataenum as $k=>$d)
 									<?php 
 										if(strpos($d, '|')) {
 											$val = substr($d, 0, strpos($d, '|'));
@@ -50,16 +54,17 @@
 										$selects_data->addselect($datatable_field);				
 
 										$selects_data = $selects_data->orderby($datatable_field,"asc")->get();
+
+										$value = explode(";",$value);
 										foreach($selects_data as $d) {											
 
-											$val = $d->{$datatable_field};
-											$checked = (in_array($val, $value))?"checked":"";											
+											$val = $d->{$datatable_field};											
+											$checked = (in_array($val, $value))?"checked":"";										
 
-											if(@$form['datatable_exception'] == $val || @$form['datatable_exception'] == $d->{$datatable_field}) continue;
-
-											echo "<div class='checkbox $disabled'>
+											echo "
+											<div class='checkbox $disabled'>
 											  <label>
-											    <input type='checkbox' $disabled $checked name='".$name."[]' value='".$d->{$datatable_field}."'> ".$d->{$datatable_field}."								    
+											    <input type='checkbox' $disabled $checked name='".$name."[]' value='".$d->id."'> ".$d->{$datatable_field}."								    
 											  </label>
 											</div>";
 										}
@@ -67,4 +72,5 @@
 								?>
 							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
 							<p class='help-block'>{{ @$form['help'] }}</p>
+							</div>
 						</div>

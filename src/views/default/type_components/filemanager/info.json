@@ -2,14 +2,19 @@
 	"title":"Filemanager Input",
 	"type":"filemanager",
 	"attribute":{
-		"label":"string",
-		"name":"string column name",
-		"style":"string inline stylesheet",
-		"help":"string help-block",		
-		"readonly":"boolean",
-		"disabled":"boolean",
+		
+		"optional": {
+			"style":"string inline stylesheet",
+			"help":"string help-block",		
+			"readonly":"boolean",
+			"disabled":"boolean"
+		},
+		"required":{
+			"filemanager_type":"file or image"	
+		}
+		
 
-		"filemanager_type":["file","image"]
+		
 
 	}
 }

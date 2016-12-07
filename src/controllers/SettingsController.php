@@ -3,7 +3,7 @@
 use crocodicstudio\crudbooster\controllers\Controller;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Mail;
@@ -17,7 +17,7 @@ use CRUDBooster;
 
 class SettingsController extends CBController {
 
-	public function __construct(Request $request) {
+	public function __construct() {
 		$this->module_name        = "Settings";
 		$this->table              = 'cms_settings';
 		$this->primary_key        = 'id';
@@ -26,6 +26,8 @@ class SettingsController extends CBController {
 		$this->button_delete = true;
 		$this->button_show   = false;
 		$this->button_cancel = false;
+		$this->button_import = false;
+		$this->button_export = false;
 
 		$this->col = array();
 		$this->col[] = array("label"=>"Nama","name"=>"name","callback_php"=>"ucwords(str_replace('_',' ',%field%))");
@@ -34,8 +36,8 @@ class SettingsController extends CBController {
 		$this->form = array();
 		
 		
-		if($request->get('group_setting')) {
-			$value = $request->get('group_setting');
+		if(Request::get('group_setting')) {
+			$value = Request::get('group_setting');
 		}else{
 			$value = 'General Setting';
 		}
@@ -61,8 +63,8 @@ class SettingsController extends CBController {
 		$this->constructor();
 	}
 
-	function getShow(Request $request) {
-		$data['page_title'] = urldecode($request->get('group'));		
+	function getShow() {
+		$data['page_title'] = urldecode(Request::get('group'));		
 		return view('crudbooster::setting',$data);
 	} 
 	
@@ -75,20 +77,20 @@ class SettingsController extends CBController {
 		$row = first_row('cms_settings',$id);
 		if(Storage::exists($row->content)) Storage::delete($row->content);
 		DB::table('cms_settings')->where('id',$id)->update(['content'=>NULL]);
-		CRUDBooster::redirect($request->server('HTTP_REFERER'),trans('alert_delete_data_success'),'success');		
+		CRUDBooster::redirect(Request::server('HTTP_REFERER'),trans('alert_delete_data_success'),'success');		
 	}	
 
 
-	function postSaveSetting(Request $request) {
-		$group = $request->get('group_setting');
+	function postSaveSetting() {
+		$group = Request::get('group_setting');
 		$setting = DB::table('cms_settings')->where('group_setting',$group)->get();
 		foreach($setting as $set) {
 			
 			$name = $set->name;
 
-			$content = $request->get($set->name);
+			$content = Request::get($set->name);
 
-			if ($request->hasFile($name))
+			if (Request::hasFile($name))
 			{			
 
 				if($set->content_input_type == 'upload_image') {
@@ -98,7 +100,7 @@ class SettingsController extends CBController {
 				}
 
 
-				$file = $request->file($name);					
+				$file = Request::file($name);					
 				$ext  = $file->getClientOriginalExtension();
 
 				//Create Directory Monthly 

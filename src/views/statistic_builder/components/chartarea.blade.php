@@ -49,31 +49,32 @@
 		<?php 
 			$sqls = explode(';',$value);
 			$dataPoints = array();
-			$datax = array();
+			$datax = array();			
 
 			foreach($sqls as $i=>$sql) {
 
 				$datamerger = array();
-
+			
 				$sessions = Session::all();
 			    foreach($sessions as $key=>$val) {
 			      $sql = str_replace("[".$key."]", $val, $sql);
 			    }
 
 			    try{
-			    	$query = DB::select(DB::raw($sql));				  	
+			    	$query = DB::select(DB::raw($sql));				    	
 				  	foreach($query as $r) {
 				  		$datax[] = $r->label;
 				  		$datamerger[] = $r->value;
 				  	}
 			    }catch(\Exception $e) {
-
+			    	echo $e;
+			    	// echo $e->getMessage();
 			    }
 
 			    $dataPoints[$i] = $datamerger;
-			}			
+			}				
 
-			$datax = array_unique($datax);
+			$datax = array_unique($datax);			
 
 			$area_name = explode(';',$config->area_name);
 			$area_name_safe = $area_name;
@@ -103,7 +104,7 @@
 		$(function() {
 			new Morris.Area({
 			  element: 'chartContainer-{{$componentID}}',
-			  data: $.parseJSON('{!! $data_result!!}'),
+			  data: $.parseJSON("{!! addslashes($data_result) !!}"),
 			  xkey: 'y',
 			  ykeys: {!! json_encode($area_name_safe) !!},
 			  labels: {!! json_encode($area_name) !!},

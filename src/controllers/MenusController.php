@@ -3,7 +3,7 @@
 use crocodicstudio\crudbooster\controllers\Controller;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Mail;
@@ -17,7 +17,7 @@ use CRUDBooster;
 
 	class MenusController extends CBController {
 
-	    public function __construct(Request $request) {
+	    public function __construct() {
 	        $this->table              = "cms_menus";
 	        $this->primary_key        = "id";
 	        $this->title_field        = "name";
@@ -50,10 +50,10 @@ use CRUDBooster;
 			$custom       = view('crudbooster::components.list_icon',compact('fontawesome','row'))->render();
 			$this->form[] = ['label'=>'Icon','name'=>'icon','type'=>'custom','html'=>$custom,'required'=>true];
 			$this->form[] = ['label'=>'Color','name'=>'color','type'=>'select2','dataenum'=>['normal','red','green','aqua','light-blue','red','yellow','muted'],'required'=>true,'value'=>'normal'];
-			$this->form[] = array("label"=>"Is Active","name"=>"is_active","type"=>"radio","required"=>TRUE,"validation"=>"required|integer","dataenum"=>array('1|Active','0|InActive'),'value'=>'1');
-			$this->form[] = array("label"=>"Is Dashboard","name"=>"is_dashboard","type"=>"radio","required"=>TRUE,"validation"=>"required|integer","dataenum"=>array('1|Yes','0|No'),'value'=>'0');
+			$this->form[] = array("label"=>"Active","name"=>"is_active","type"=>"radio","required"=>TRUE,"validation"=>"required|integer","dataenum"=>array('1|Active','0|InActive'),'value'=>'1');
+			$this->form[] = array("label"=>"Dashboard","name"=>"is_dashboard","type"=>"radio","required"=>TRUE,"validation"=>"required|integer","dataenum"=>array('1|Yes','0|No'),'value'=>'0');
 
-			$id_cms_privileges = $request->get('id_cms_privileges');
+			$id_cms_privileges = Request::get('id_cms_privileges');
 			$this->form[] = array("label"=>"id_cms_privileges","name"=>"id_cms_privileges","type"=>"hidden","value"=>$id_cms_privileges);
     
 	        //No Need Change This Constructor
@@ -61,12 +61,12 @@ use CRUDBooster;
 	    }
 
 
-	  public function getIndex(Request $request) {
+	  public function getIndex() {
 
 	  	
 	  	$privileges = DB::table('cms_privileges')->get();
 
-	  	$id_cms_privileges = $request->get('id_cms_privileges');
+	  	$id_cms_privileges = Request::get('id_cms_privileges');
 	  	$id_cms_privileges = ($id_cms_privileges)?:CRUDBooster::myPrivilegeId();
 
 
@@ -98,7 +98,7 @@ use CRUDBooster;
 	  		}
 	  	}
 
-	  	$return_url = $request->fullUrl();
+	  	$return_url = Request::fullUrl();
 
 	  	$page_title = 'Menu Management';
 
@@ -131,9 +131,9 @@ use CRUDBooster;
 	  	DB::table('cms_menus')->where('parent_id',$id)->delete();
 	  }
 
-	  public function postSaveMenu(Request $request) {
-	  		$post = $request->input('menus');
-	  		$isActive = $request->input('isActive');
+	  public function postSaveMenu() {
+	  		$post = Request::input('menus');
+	  		$isActive = Request::input('isActive');
 	  		$post = json_decode($post,true);	  		
 	  		
 	  		$i = 1;

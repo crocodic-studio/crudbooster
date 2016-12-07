@@ -3,7 +3,7 @@
 use crocodicstudio\crudbooster\controllers\Controller;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Mail;
@@ -19,17 +19,21 @@ class ApiCustomController extends CBController {
 
 	
 	public function __construct() {		
-		$this->table       = 'cms_apicustom';
-		$this->primary_key = 'id';
-		$this->title_field = "nama";
-		$this->button_show_data = false;
-		$this->button_new_data = false;
-		$this->button_delete_data = false;			
+		$this->table         = 'cms_apicustom';
+		$this->primary_key   = 'id';
+		$this->title_field   = "nama";
+		$this->button_show   = false;
+		$this->button_new    = false;
+		$this->button_delete = false;	
+		$this->button_add    = false;
+		$this->button_import = false;
+		$this->button_export = false;
+			
 		$this->constructor();
 	}
 
 
-	function getIndex(Request $request) {		
+	function getIndex() {		
 
 		$data = array();
 		
@@ -169,20 +173,20 @@ class ApiCustomController extends CBController {
 		return response()->json($response);
 	}
 
-	public function getStatusApikey(Request $request) {
+	public function getStatusApikey() {
 		CRUDBooster::valid(['id','status'],'view');
 
-		$id = $request->get('id');
-		$status = ($request->get('status')==1)?"active":"non active";
+		$id = Request::get('id');
+		$status = (Request::get('status')==1)?"active":"non active";
 
 		DB::table('cms_apikey')->where('id',$id)->update(['status'=>$status]);
 
 		return redirect()->back()->with(['message'=>'You have been update api key status !','message_type'=>'success']);
 	}
 
-	public function getDeleteApiKey(Request $request) {		
+	public function getDeleteApiKey() {		
 
-		$id = $request->get('id');
+		$id = Request::get('id');
 		if(DB::table('cms_apikey')->where('id',$id)->delete()) {
 			return response()->json(['status'=>1]);
 		}else{
@@ -236,9 +240,9 @@ class ApiCustomController extends CBController {
 		return response()->json($new_result);
 	}
 
-	function postSaveApiCustom(Request $request) {
+	function postSaveApiCustom() {
 
-		$posts = $request->all();		
+		$posts = Request::all();		
 
 		$a = array();		
 
@@ -292,7 +296,7 @@ class ApiCustomController extends CBController {
 		$a['responses']  = serialize($json);
 		$a['keterangan'] = g('keterangan');
 
-		if($request->get('id')) {
+		if(Request::get('id')) {
 			DB::table('cms_apicustom')->where('id',g('id'))->update($a);			
 		}else{
 

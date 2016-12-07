@@ -1,5 +1,8 @@
 
-                		<div class='form-group {{$col_width}} peta {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}'>
+                		<div class='form-group peta {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}'>
+                			<label class='control-label col-sm-2'>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
+                			
+                			<div class="{{$col_width?:'col-sm-10'}}">
 							<input id="pac-input" class="controls" autofocus type="text"
 						        placeholder="Enter a location">
 						    <div id="type-selector" class="controls">
@@ -16,6 +19,8 @@
 						      <label for="changetype-geocode">Geocodes</label>
 						    </div>
 						    <div id="map"></div>
+
+						    </div>
 						</div>
                 		<script type="text/javascript">
                 		  var geocoder;

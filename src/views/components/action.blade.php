@@ -1,40 +1,40 @@
-@if($button_action_style == 'button_text')
-       
-        @foreach($addaction as $a)
-          <?php 
-            foreach($row as $key=>$val) {
-              $a['url'] = str_replace("[".$key."]",$val,$a['url']);
-            }
+@foreach($addaction as $a)
+  <?php 
+    foreach($row as $key=>$val) {
+      $a['url'] = str_replace("[".$key."]",$val,$a['url']);
+    }
 
-            $label = $a['label'];
-            $url = $a['url'];
-            $icon = $a['icon'];
-            $color = $a['color']?:'primary';
+    $label = $a['label'];
+    $url = $a['url'];
+    $icon = $a['icon'];
+    $color = $a['color']?:'primary';
 
-            if(isset($a['showIf'])) {
+    if(isset($a['showIf'])) {
 
-              $query = $a['showIf'];
-              
-              foreach($row as $key=>$val) {
-                $query = str_replace("[".$key."]",'"'.$val.'"',$query);
-              }              
+      $query = $a['showIf'];
+      
+      foreach($row as $key=>$val) {
+        $query = str_replace("[".$key."]",'"'.$val.'"',$query);
+      }              
 
-              @eval("if($query) {
-                  echo \"<a class='btn btn-xs btn-\$color' title='\$label' href='\$url'>$label</a>&nbsp;\";
-              }");           
+      @eval("if($query) {
+          echo \"<a class='btn btn-xs btn-\$color' title='\$label' href='\$url'><i class='\$icon'></i> $label</a>&nbsp;\";
+      }");           
 
-            }else{
-              echo "<a class='btn btn-xs btn-$color' title='$label' href='$url'>$label</a>&nbsp;";              
-            }
-          ?>          
-        @endforeach
+    }else{
+      echo "<a class='btn btn-xs btn-$color' title='$label' href='$url'><i class='$icon'></i> $label</a>&nbsp;";              
+    }
+  ?>          
+@endforeach
+
+@if($button_action_style == 'button_text')               
 
       	@if(CRUDBooster::isRead() && $button_detail)         		
-        	<a class='btn btn-xs btn-primary' title='{{trans("crudbooster.action_detail_data")}}' href='{{CRUDBooster::mainpath("detail/$row->id")}}'>{{trans("crudbooster.action_detail_data")}}</a> 
+        	<a class='btn btn-xs btn-primary' title='{{trans("crudbooster.action_detail_data")}}' href='{{CRUDBooster::mainpath("detail/$row->id")."?return_url=".urlencode(Request::fullUrl())}}'>{{trans("crudbooster.action_detail_data")}}</a> 
         @endif
   		
   		@if(CRUDBooster::isUpdate() && $button_edit)     				    	
-  			<a class='btn btn-xs btn-success' title='{{trans("crudbooster.action_edit_data")}}' href='{{CRUDBooster::mainpath("edit/$row->id")}}'>{{trans("crudbooster.action_edit_data")}}</a> 
+  			<a class='btn btn-xs btn-success' title='{{trans("crudbooster.action_edit_data")}}' href='{{CRUDBooster::mainpath("edit/$row->id")."?return_url=".urlencode(Request::fullUrl())."&parent_id=".g("parent_id")."&parent_field=".$parent_field }}'>{{trans("crudbooster.action_edit_data")}}</a> 
         @endif
 
         @if(CRUDBooster::isDelete() && $button_delete)
@@ -43,41 +43,13 @@
         @endif
 @elseif($button_action_style == 'button_icon_text')
        
-        @foreach($addaction as $a)
-          <?php 
-            foreach($row as $key=>$val) {
-              $a['url'] = str_replace("[".$key."]",$val,$a['url']);
-            }
-
-            $label = $a['label'];
-            $url = $a['url'];
-            $icon = $a['icon'];
-            $color = $a['color']?:'primary';
-
-            if(isset($a['showIf'])) {
-
-              $query = $a['showIf'];
-              
-              foreach($row as $key=>$val) {
-                $query = str_replace("[".$key."]",'"'.$val.'"',$query);
-              }              
-
-              @eval("if($query) {
-                  echo \"<a class='btn btn-xs btn-\$color' title='\$label' href='\$url'><i class='\$icon'></i> $label</a>&nbsp;\";
-              }");           
-
-            }else{
-              echo "<a class='btn btn-xs btn-$color' title='$label' href='$url'><i class='$icon'></i> $label</a>&nbsp;";              
-            }
-          ?>          
-        @endforeach
 
       	@if(CRUDBooster::isRead() && $button_detail)         		
-        	<a class='btn btn-xs btn-primary' title='{{trans("crudbooster.action_detail_data")}}' href='{{CRUDBooster::mainpath("detail/$row->id")}}'><i class='fa fa-search'></i> {{trans("crudbooster.action_detail_data")}}</a> 
+        	<a class='btn btn-xs btn-primary' title='{{trans("crudbooster.action_detail_data")}}' href='{{CRUDBooster::mainpath("detail/$row->id")."?return_url=".urlencode(Request::fullUrl())}}'><i class='fa fa-eye'></i> {{trans("crudbooster.action_detail_data")}}</a> 
         @endif
   		
   		@if(CRUDBooster::isUpdate() && $button_edit)     				    	
-  			<a class='btn btn-xs btn-success' title='{{trans("crudbooster.action_edit_data")}}' href='{{CRUDBooster::mainpath("edit/$row->id")}}'><i class='fa fa-pencil'></i> {{trans("crudbooster.action_edit_data")}}</a> 
+  			<a class='btn btn-xs btn-success' title='{{trans("crudbooster.action_edit_data")}}' href='{{CRUDBooster::mainpath("edit/$row->id")."?return_url=".urlencode(Request::fullUrl())."&parent_id=".g("parent_id")."&parent_field=".$parent_field }}'><i class='fa fa-pencil'></i> {{trans("crudbooster.action_edit_data")}}</a> 
         @endif
 
         @if(CRUDBooster::isDelete() && $button_delete)
@@ -101,7 +73,7 @@
                   }
 
                   $label = $a['label'];
-                  $url = $a['url'];
+                  $url = $a['url']."?return_url=".urlencode(Request::fullUrl());
                   $icon = $a['icon'];
                   $color = $a['color']?:'primary';
 
@@ -114,21 +86,21 @@
                     }              
 
                     @eval("if($query) {
-                        echo \"<li><a title='\$label' href='\$url'><i class='\$icon'></i></a></li>\";
+                        echo \"<li><a title='\$label' href='\$url'><i class='\$icon'></i> \$label</a></li>\";
                     }");           
 
                   }else{
-                    echo "<li><a title='$label' href='$url'><i class='$icon'></i></a></li>";              
+                    echo "<li><a title='$label' href='$url'><i class='$icon'></i> $label</a></li>";              
                   }
                 ?>          
               @endforeach
 
               @if(CRUDBooster::isRead() && $button_detail)            
-                  <li><a title='{{trans("crudbooster.action_detail_data")}}' href='{{CRUDBooster::mainpath("detail/$row->id")}}'><i class='fa fa-search'></i> {{trans("crudbooster.action_detail_data")}}</a></li>
+                  <li><a title='{{trans("crudbooster.action_detail_data")}}' href='{{CRUDBooster::mainpath("detail/$row->id")."?return_url=".urlencode(Request::fullUrl())}}'><i class='fa fa-eye'></i> {{trans("crudbooster.action_detail_data")}}</a></li>
                 @endif
               
               @if(CRUDBooster::isUpdate() && $button_edit)                    
-                <li><a title='{{trans("crudbooster.action_edit_data")}}' href='{{CRUDBooster::mainpath("edit/$row->id")}}'><i class='fa fa-pencil'></i> {{trans("crudbooster.action_edit_data")}}</a></li>
+                <li><a title='{{trans("crudbooster.action_edit_data")}}' href='{{CRUDBooster::mainpath("edit/$row->id")."?return_url=".urlencode(Request::fullUrl())."&parent_id=".g("parent_id")."&parent_field=".$parent_field}}'><i class='fa fa-pencil'></i> {{trans("crudbooster.action_edit_data")}}</a></li>
                 @endif
 
                 @if(CRUDBooster::isDelete() && $button_delete)
@@ -140,41 +112,12 @@
 
 @else
 
-        @foreach($addaction as $a)
-          <?php 
-            foreach($row as $key=>$val) {
-              $a['url'] = str_replace("[".$key."]",$val,$a['url']);
-            }
-
-            $label = $a['label'];
-            $url = $a['url'];
-            $icon = $a['icon'];
-            $color = $a['color']?:'primary';
-
-            if(isset($a['showIf'])) {
-
-              $query = $a['showIf'];
-              
-              foreach($row as $key=>$val) {
-                $query = str_replace("[".$key."]",'"'.$val.'"',$query);
-              }              
-
-              @eval("if($query) {
-                  echo \"<a class='btn btn-xs btn-\$color' title='\$label' href='\$url'><i class='\$icon'></i></a>&nbsp;\";
-              }");           
-
-            }else{
-              echo "<a class='btn btn-xs btn-$color' title='$label' href='$url'><i class='$icon'></i></a>&nbsp;";              
-            }
-          ?>          
-        @endforeach
-
         @if(CRUDBooster::isRead() && $button_detail)            
-          <a class='btn btn-xs btn-primary' title='{{trans("crudbooster.action_detail_data")}}' href='{{CRUDBooster::mainpath("detail/$row->id")}}'><i class='fa fa-search'></i></a> 
+          <a class='btn btn-xs btn-primary' title='{{trans("crudbooster.action_detail_data")}}' href='{{CRUDBooster::mainpath("detail/$row->id")."?return_url=".urlencode(Request::fullUrl())}}'><i class='fa fa-eye'></i></a> 
         @endif
       
       @if(CRUDBooster::isUpdate() && $button_edit)                    
-        <a class='btn btn-xs btn-success' title='{{trans("crudbooster.action_edit_data")}}' href='{{CRUDBooster::mainpath("edit/$row->id")}}'><i class='fa fa-pencil'></i></a> 
+        <a class='btn btn-xs btn-success' title='{{trans("crudbooster.action_edit_data")}}' href='{{CRUDBooster::mainpath("edit/$row->id")."?return_url=".urlencode(Request::fullUrl())."&parent_id=".g("parent_id")."&parent_field=".$parent_field}}'><i class='fa fa-pencil'></i></a> 
         @endif
 
         @if(CRUDBooster::isDelete() && $button_delete)

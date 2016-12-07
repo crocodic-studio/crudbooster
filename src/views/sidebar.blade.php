@@ -55,6 +55,14 @@
                             <li><a href='{{Route("PrivilegesControllerGetIndex")}}?m=0'><i class='fa fa-bars'></i> List Privilege</a></li>
                         </ul>
                     </li>
+
+                    <li class='treeview'>
+                        <a href='#'><i class='fa fa-users'></i> <span>Users Management</span>  <i class="fa fa-angle-left pull-right"></i></a>
+                        <ul class='treeview-menu'>
+                            <li><a href='{{Route("AdminCmsUsersControllerGetAdd")}}?m=0'><i class='fa fa-plus'></i> Add New User</a></li>
+                            <li><a href='{{Route("AdminCmsUsersControllerGetIndex")}}?m=0'><i class='fa fa-bars'></i> List Privilege</a></li>
+                        </ul>
+                    </li>
                                                         
                     <li><a href='{{Route("MenusControllerGetIndex")}}?m=0'><i class='fa fa-bars'></i> Menu Management</a></li>                    
                     <li class="treeview">
@@ -72,7 +80,7 @@
                     <li class='treeview'>
                         <a href='#'><i class='fa fa-th'></i> <span>Module Generator</span>  <i class="fa fa-angle-left pull-right"></i></a>
                         <ul class='treeview-menu'>
-                            <li><a href='{{Route("ModulsControllerGetAdd")}}?m=0'><i class='fa fa-plus'></i> Add New Module</a></li>
+                            <li><a href='{{Route("ModulsControllerGetStep1")}}?m=0'><i class='fa fa-plus'></i> Add New Module</a></li>
                             <li><a href='{{Route("ModulsControllerGetIndex")}}?m=0'><i class='fa fa-bars'></i> List Module</a></li>
                         </ul>
                     </li>

@@ -12,9 +12,8 @@
             continue;
         }
       }
-
       $colname = $col['label'];
-      echo "<th>$colname</th>";
+      echo "<th style='background:#eeeeee'>$colname</th>";
     }
     ?>
   </tr>
@@ -71,12 +70,7 @@
       $col['callback_php'] = str_replace('%field%',$value,$col['callback_php']);
       @eval("\$value = ".$col['callback_php'].";");
     }
-    if(!empty($col['callback_html'])) {
-      $callback = str_replace('%field%',$value,$col['callback_html']);
-      $value = $callback;
-    }
- 
-      
+
       echo "<td>".$value."</td>";
     }
     }

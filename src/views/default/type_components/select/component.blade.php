@@ -35,8 +35,10 @@
 		})
 	</script>
 	@endif
-	<div class='form-group {{$col_width}} {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-		<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>												
+	<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
+		<label class='control-label col-sm-2'>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>			
+
+		<div class="{{$col_width?:'col-sm-10'}}">									
 		<select class='form-control' id="{{$name}}" data-value='{{$value}}' {{$required}} {!!$placeholder!!} {{$readonly}} {{$disabled}} name="{{$name}}">
 			<option value=''>{{trans('crudbooster.text_prefix_option')}} {{$form['label']}}</option>
 			<?php 	
@@ -54,7 +56,10 @@
 					endif;
 
 					if(@$form['dataenum']):
-						foreach($form['dataenum'] as $d) {
+						$dataenum = $form['dataenum'];
+						$dataenum = (is_array($dataenum))?$dataenum:explode(";",$dataenum);
+
+						foreach($dataenum as $d) {
 
 							$val = $lab = '';
 							if(strpos($d,'|')!==FALSE) {
@@ -65,11 +70,7 @@
 								$val = $lab = $d;
 							}
 
-							$select = ($value == $val)?"selected":"";
-
-							if(Request::get("parent_field")==$name && Request::get("parent_id")==@$val) {
-								$select = "selected";
-							}
+							$select = ($value == $val)?"selected":"";				
 
 							echo "<option $select value='$val'>$lab</option>";
 						}
@@ -129,8 +130,6 @@
 							$val    = $d->id;
 							$select = ($value == $val)?"selected":"";							
 
-							if(@$form['datatable_exception'] == $val || @$form['datatable_exception'] == $d->label) continue;
-
 							echo "<option $select value='$val'>".$d->label."</option>";
 						}
 					endif;
@@ -139,4 +138,5 @@
 		</select>
 		<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
 		<p class='help-block'>{{ @$form['help'] }}</p>
+		</div>
 	</div>
