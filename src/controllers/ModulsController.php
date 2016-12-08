@@ -104,10 +104,8 @@ class ModulsController extends CBController {
 	}	
 
 	function hook_before_delete($id) {
-		$modul = DB::table('cms_moduls')->where('id',$id)->first();
-		$table = $module->table_name;
-		DB::table('cms_menus')->where('path','like',$table.'%')->delete();
-
+		$modul = DB::table('cms_moduls')->where('id',$id)->first();				
+		$menus = DB::table('cms_menus')->where('path','like','%'.$modul->controller.'%')->get();		
 		@unlink(app_path('Http/Controllers/'.$modul->controller.'.php'));		
 	}
 
@@ -171,12 +169,12 @@ class ModulsController extends CBController {
 	}
 
 	public function postStep2() {
-		$name = Request::name;
-		$table_name = Request::table;
-		$icon = Request::icon;
-		$path = Request::path;
+		$name       = Request::get('name');
+		$table_name = Request::get('table');
+		$icon       = Request::get('icon');
+		$path       = Request::get('path');
 
-		if(!Request::id) {			
+		if(!Request::get('id')) {	
 			$created_at = now();
 			$id = DB::table($this->table)->max('id') + 1;
 
