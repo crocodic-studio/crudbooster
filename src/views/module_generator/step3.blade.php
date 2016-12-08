@@ -215,32 +215,39 @@
 
 	            $.get("{{CRUDBooster::mainpath('type-info')}}/"+v,function(response) {
 	            	var data = JSON.parse(response);
-	        		$.each(data.attribute.required,function(key,val) {
-	        			t.parent('tr').find('.option_area').append(
-	    				"<div class='form-group'>"+
-	    					"<label>"+key+"</label>"+
-	    					"<input class='form-control required' name='option["+tr_index+"]["+key+"]' placeholder='"+val+"' type='text'/>"+
-	    				"</div>"
-	    				);        			        		
-	        		});
-
-	        		$.each(data.attribute.requiredOne,function(key,val) {
-	        			t.parent('tr').find('.option_area').append(
-	    				"<div class='form-group'>"+
-	    					"<label>"+key+"</label>"+
-	    					"<input class='form-control required-one'  name='option["+tr_index+"]["+key+"]' placeholder='"+val+"' type='text'/>"+
-	    				"</div>"
-	    				);        			        		
-	        		});
-
-	        		$.each(data.attribute.optional,function(key,val) {
-	        			t.parent('tr').find('.option_area').append(
-	    				"<div class='form-group'>"+
-	    					"<label>"+key+"</label>"+
-	    					"<input class='form-control' name='option["+tr_index+"]["+key+"]' placeholder='"+val+"' type='text'/>"+
-	    				"</div>"
-	    				);        			        		
-	        		});        		
+	        		if(data.attribute.required) {
+                        $.each(data.attribute.required,function(key,val) {
+                        t.parent('tr').find('.option_area').append(
+                            "<div class='form-group'>"+
+                                "<label>"+key+"</label>"+
+                                "<input class='form-control required' name='option["+tr_index+"]["+key+"]' placeholder='"+val+"' type='text'/>"+
+                            "</div>"
+                            );                                  
+                        });
+                    }
+                    
+                    if(data.attribute.requiredOne) {
+                        $.each(data.attribute.requiredOne,function(key,val) {
+                            t.parent('tr').find('.option_area').append(
+                            "<div class='form-group'>"+
+                                "<label>"+key+"</label>"+
+                                "<input class='form-control required-one'  name='option["+tr_index+"]["+key+"]' placeholder='"+val+"' type='text'/>"+
+                            "</div>"
+                            );                                  
+                        });
+                    }
+                    
+                    if(data.attribute.optional) {
+                        
+                        $.each(data.attribute.optional,function(key,val) {
+                            t.parent('tr').find('.option_area').append(
+                            "<div class='form-group'>"+
+                                "<label>"+key+"</label>"+
+                                "<input class='form-control' name='option["+tr_index+"]["+key+"]' placeholder='"+val+"' type='text'/>"+
+                            "</div>"
+                            );                                  
+                        });             
+                    }        		
 	        	})
 
 	        }else if ( input_name == 'validation[]') {
