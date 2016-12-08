@@ -1223,11 +1223,7 @@ class CRUDBooster  {
 	                    if(is_bool($val)) {
 	                        $val = ($val)?"TRUE":"FALSE";
 	                    }else{
-	                        if(strpos($val, "array(")!==FALSE) {
-	                            $val = $val;
-	                        }else{
-	                            $val = '"'.$val.'"';
-	                        }                        
+	                        $val = '"'.$val.'"';                       
 	                    }
 	                    $php .= ',"'.$key.'"=>'.$val;
 	                }
