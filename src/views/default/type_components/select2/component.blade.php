@@ -37,7 +37,7 @@
 											column2: "{{$column2}}",
 											table3: "{{$table3}}",
 											column3: "{{$column3}}",
-											where: "{{$where}}"
+											where: "{!! addslashes($where) !!}"
 									      }
 									      return query;
 									    },
