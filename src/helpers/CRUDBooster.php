@@ -1385,15 +1385,8 @@ class CRUDBooster  {
 	    | ---------------------------------------------------------------------- 
 	    |
 	    */    
-	    public function hook_row_index(&$columns) {	        
-	    	foreach($columns as $column_index => $value) {
-	    		//Your Custom Start Here
-
-
-
-	    		//Your Custom End Here
-	    		$columns[$column_index] = $value;
-	    	}
+	    public function hook_row_index($index,&$value) {	        
+	    	//Your code here
 	    }
 
 	    /*

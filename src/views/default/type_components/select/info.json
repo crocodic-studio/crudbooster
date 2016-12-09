@@ -7,14 +7,14 @@
 		},
 		"requiredOne":{
 			"dataenum":"value1;value2;value3",
-			"datatable":"table_name,column_name"
+			"datatable":"table_name,column_name",
+			"dataquery":"string sql query. Response should label & value",
 		},
 		"optional":{
 			"style":"string inline stylesheet",
 			"help":"string help-block",
 			"datatable_where":"string where condition",		
-			"datatable_format":"sql concat alike. e.g : id,' - ',title",	
-			"dataquery":"string sql query. Response should label & value",			
+			"datatable_format":"sql concat alike. e.g : id,' - ',title",					
 			"parent_select":"string parent name"
 		}								
 	}

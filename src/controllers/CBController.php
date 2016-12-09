@@ -452,7 +452,10 @@ class CBController extends Controller {
           endif;//button_table_action
 
 
-          $this->hook_row_index($html_content);
+          foreach($html_contents as $i=>$v) {
+          	$this->hook_row_index($i,$v);
+          	$html_contents[$i] = $v;
+          }
 
 	      $html_contents[] = $html_content;
 		} //end foreach data[result]
@@ -1338,7 +1341,7 @@ class CBController extends Controller {
 	public function hook_query_index(&$query) {
 	}
 
-	public function hook_row_index(&$columns) {
+	public function hook_row_index($index,&$value) {
     }
 
 	public function hook_before_add(&$arr) {
