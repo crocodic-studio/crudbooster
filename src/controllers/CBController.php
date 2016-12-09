@@ -948,7 +948,7 @@ class CBController extends Controller {
 
 		$row = DB::table($this->table)->where($this->primary_key,$id)->first();	
 
-		if(!CRUDBooster::isUpdate() && $this->global_privilege==FALSE || $this->button_detail==FALSE) {			
+		if(!CRUDBooster::isUpdate() && $this->global_privilege==FALSE) {			
 			CRUDBooster::insertLog(trans("crudbooster.log_try_add",['name'=>$row->{$this->title_field},'module'=>CRUDBooster::getCurrentModule()->name]));
 			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));			
 		}
