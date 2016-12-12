@@ -2,9 +2,24 @@
 
 @section('content')
 
-    @if($index_additional_view && ($index_additional_view['position']=='top' || !$index_additional_view['position']))
-        @include($index_additional_view['view'],$index_additional_view['data'])
+   @if($index_statistic)
+      <div id='box-statistic' class='row'>
+      @foreach($index_statistic as $stat)
+          <div  class="{{ ($stat['width'])?:'col-sm-3' }}">
+              <div class="small-box bg-{{ $stat['color']?:'red' }}">
+                <div class="inner">
+                  <h3>{{ $stat['count'] }}</h3>
+                  <p>{{ $stat['label'] }}</p>
+                </div>
+                <div class="icon">
+                  <i class="{{ $stat['icon'] }}"></i>
+                </div>                    
+              </div>
+          </div>
+      @endforeach
+      </div>
     @endif
+
 
     @if(g('return_url'))
     <p><a href='{{g("return_url")}}'><i class='fa fa-chevron-circle-left'></i> &nbsp; {{trans('crudbooster.form_back_to_list',['module'=>ucwords(str_replace('_',' ',g('parent_table')))])}}</a></p>
@@ -99,10 +114,5 @@
       </div>
     </div>
     
-
-
-    @if($index_additional_view && $index_additional_view['position']=='bottom')
-        @include($index_additional_view['view'],$index_additional_view['data'])
-    @endif
 
 @endsection
