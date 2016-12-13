@@ -579,7 +579,7 @@ class CBController extends Controller {
 
 			if($table2 && $column2) {
 				$rows->join($table2,$table2.'.id','=',$table1.'.'.$column1);	
-				$columns = get_columns_table($table2);
+				$columns = CRUDBooster::getTableColumns($table2);
 				foreach($columns as $col) {
 					$rows->addselect($table2.".".$col." as ".$table2."_".$col);
 				}								
@@ -589,7 +589,7 @@ class CBController extends Controller {
 
 			if($table3 && $column3) {
 				$rows->join($table3,$table3.'.id','=',$table2.'.'.$column2);
-				$columns = get_columns_table($table3);
+				$columns = CRUDBooster::getTableColumns($table3);
 				foreach($columns as $col) {
 					$rows->addselect($table3.".".$col." as ".$table3."_".$col);
 				}										
