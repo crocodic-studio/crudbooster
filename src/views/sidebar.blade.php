@@ -31,13 +31,13 @@
                 @endif
                 
                 @foreach(CRUDBooster::sidebarMenu() as $menu)                         
-                    <li data-id='{{$menu->id}}' class='{{(count($menu->children))?"treeview":""}} {{(CRUDBooster::getCurrentMenuId()==$menu->id && CRUDBooster::getCurrentDashboardId()!=$menu->id )?"active":""}}'><a href='{{$menu->url}}?m={{$menu->id}}' class='{{($menu->color)?"text-".$menu->color:""}}'><i class='{{$menu->icon}} {{($menu->color)?"text-".$menu->color:""}}'></i> <span>{{$menu->name}}</span> 
+                    <li data-id='{{$menu->id}}' class='{{(count($menu->children))?"treeview":""}} {{(CRUDBooster::getCurrentMenuId()==$menu->id && CRUDBooster::getCurrentDashboardId()!=$menu->id )?"active":""}}'><a href='{{ ($menu->is_broken)?"javascript:alert('Controller / Route Not Found')":$menu->url."?m=".$menu->id }}' class='{{($menu->color)?"text-".$menu->color:""}}'><i class='{{$menu->icon}} {{($menu->color)?"text-".$menu->color:""}}'></i> <span>{{$menu->name}}</span> 
                     @if(count($menu->children))<i class="fa fa-angle-left pull-right"></i>@endif
                     </a>
                         @if(count($menu->children))
                             <ul class="treeview-menu"> 
                                 @foreach($menu->children as $child)
-                                    <li data-id='{{$child->id}}' class='{{(CRUDBooster::getCurrentMenuId()==$child->id && CRUDBooster::getCurrentDashboardId()!=$child->id)?"active":""}}'><a href='{{$child->url}}?m={{$child->id}}'><i class='{{$child->icon}}'></i> <span>{{$child->name}}</span></a></li>
+                                    <li data-id='{{$child->id}}' class='{{(CRUDBooster::getCurrentMenuId()==$child->id && CRUDBooster::getCurrentDashboardId()!=$child->id)?"active":""}}'><a href='{{ ($child->is_broken)?"javascript:alert('Controller / Route Not Found')":$child->url."?m=".$child->id }}'><i class='{{$child->icon}}'></i> <span>{{$child->name}}</span></a></li>
                                 @endforeach
                             </ul>
                         @endif

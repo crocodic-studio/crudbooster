@@ -328,52 +328,68 @@ class CRUDBooster  {
 		  	->where('is_active',1)
 		  	->where('is_dashboard',0)
 		  	->orderby('sorting','asc')
+		  	->select('cms_menus.*')
 		  	->get();
 
 		  	foreach($menu_active as &$menu) {
 
-		  		switch ($menu->type) {
-		  			case 'Route':
-		  				$url = route($menu->path);
-		  				break;
-		  			default:
-		  			case 'URL External':
-		  				$url = $menu->path;
-		  				break;
-		  			case 'Controller & Method':
-		  				$url = action($menu->path);
-		  				break;
-		  			case 'Admin Path':
-		  				$url = self::adminPath($menu->path);
-		  				break;
-		  			
-		  		}
+		  		try{
+		  			switch ($menu->type) {
+			  			case 'Route':		  				  				
+			  				$url = route($menu->path);
+			  				break;
+			  			default:
+			  			case 'URL External':
+			  				$url = $menu->path;
+			  				break;
+			  			case 'Controller & Method':
+			  				$url = action($menu->path);
+			  				break;
+			  			case 'Admin Path':
+			  				$url = self::adminPath($menu->path);
+			  				break;		  			
+			  		}
 
+			  		$menu->is_broken = false;
+		  		}catch(\Exception $e) {
+		  			$url = "#";
+		  			$menu->is_broken = true;
+		  		}
+		  				  		
 		  		$menu->url = $url;
 
 		  		$child = DB::table('cms_menus')
 		  		->where('is_dashboard',0)
 		  		->where('is_active',1)
-		  		->where('parent_id',$menu->id)->orderby('sorting','asc')->get();
+		  		->where('parent_id',$menu->id)
+		  		->select('cms_menus.*')
+		  		->orderby('sorting','asc')->get();
 		  		if(count($child)) {
 
 		  			foreach($child as &$c) {		  
 
-		  				switch ($c->type) {
-				  			case 'Route':
-				  				$url = route($c->path);
-				  				break;
-				  			default:
-				  			case 'URL External':
-				  				$url = $c->path;
-				  				break;
-				  			case 'Controller & Method':
-				  				$url = action($c->path);
-				  				break;	
-				  			case 'Admin Path':
-				  				$url = self::adminPath($menu->path);
-				  				break;			  			
-				  		}
+		  				try{
+		  					switch ($c->type) {
+					  			case 'Route':
+					  				$url = route($c->path);
+					  				break;
+					  			default:
+					  			case 'URL External':
+					  				$url = $c->path;
+					  				break;
+					  			case 'Controller & Method':
+					  				$url = action($c->path);
+					  				break;	
+					  			case 'Admin Path':
+					  				$url = self::adminPath($menu->path);
+					  				break;			  			
+					  		}
+					  		$c->is_broken = false;
+		  				}catch(\Exception $e) {
+		  					$url = "#";		  	
+		  					$c->is_broken = true;				
+		  				}		  								  		
+
 				  		$c->url = $url;
 		  			}
 
@@ -1492,24 +1508,32 @@ class CRUDBooster  {
 
 	        $namespace = ($namespace)?:'App\Http\Controllers';
 
-	        Route::get($prefix,['uses'=>$controller.'@getIndex','as'=>$controller.'GetIndex']);
-	        $controller_class = new \ReflectionClass($namespace.'\\'.$controller);                          
-	        $controller_methods = $controller_class->getMethods(\ReflectionMethod::IS_PUBLIC);
-	        $wildcards = '/{one?}/{two?}/{three?}/{four?}/{five?}';         
-	        foreach($controller_methods as $method) {
-	            if ($method->class != 'Illuminate\Routing\Controller' && $method->name != 'getIndex') {                                             
-	                if(substr($method->name, 0, 3) == 'get') {
-	                    $method_name = substr($method->name, 3);
-	                    $slug = array_filter(preg_split('/(?=[A-Z])/',$method_name));   
-	                    $slug = strtolower(implode('-',$slug));
-	                    $slug = ($slug == 'index')?'':$slug;
-	                    Route::get($prefix.$slug.$wildcards,['uses'=>$controller.'@'.$method->name,'as'=>$controller.'Get'.$method_name] );
-	                }elseif(substr($method->name, 0, 4) == 'post') {
-	                    $method_name = substr($method->name, 4);
-	                    $slug = array_filter(preg_split('/(?=[A-Z])/',$method_name));                                   
-	                    Route::post($prefix.strtolower(implode('-',$slug)).$wildcards,['uses'=>$controller.'@'.$method->name,'as'=>$controller.'Post'.$method_name] );
-	                }
-	            }                   
+	        try{
+	        	Route::get($prefix,['uses'=>$controller.'@getIndex','as'=>$controller.'GetIndex']);
+
+		        $controller_class = new \ReflectionClass($namespace.'\\'.$controller);                          
+		        $controller_methods = $controller_class->getMethods(\ReflectionMethod::IS_PUBLIC);
+		        $wildcards = '/{one?}/{two?}/{three?}/{four?}/{five?}';         
+		        foreach($controller_methods as $method) {	      
+
+		            if ($method->class != 'Illuminate\Routing\Controller' && $method->name != 'getIndex') {                                             
+		                if(substr($method->name, 0, 3) == 'get') {
+		                    $method_name = substr($method->name, 3);
+		                    $slug = array_filter(preg_split('/(?=[A-Z])/',$method_name));   
+		                    $slug = strtolower(implode('-',$slug));
+		                    $slug = ($slug == 'index')?'':$slug;
+		                    Route::get($prefix.$slug.$wildcards,['uses'=>$controller.'@'.$method->name,'as'=>$controller.'Get'.$method_name] );
+		                }elseif(substr($method->name, 0, 4) == 'post') {
+		                    $method_name = substr($method->name, 4);
+		                    $slug = array_filter(preg_split('/(?=[A-Z])/',$method_name));                                   
+		                    Route::post($prefix.strtolower(implode('-',$slug)).$wildcards,['uses'=>$controller.'@'.$method->name,'as'=>$controller.'Post'.$method_name] );
+		                }
+		            }                   
+		        }
+	        }catch(\Exception $e) {
+
 	        }
+
+	        
 	    }
 }

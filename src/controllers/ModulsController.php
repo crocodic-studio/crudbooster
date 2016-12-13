@@ -105,7 +105,7 @@ class ModulsController extends CBController {
 
 	function hook_before_delete($id) {
 		$modul = DB::table('cms_moduls')->where('id',$id)->first();				
-		$menus = DB::table('cms_menus')->where('path','like','%'.$modul->controller.'%')->get();		
+		$menus = DB::table('cms_menus')->where('path','like','%'.$modul->controller.'%')->delete();		
 		@unlink(app_path('Http/Controllers/'.$modul->controller.'.php'));		
 	}
 

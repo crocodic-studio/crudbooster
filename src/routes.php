@@ -46,15 +46,13 @@ Route::group(['middleware'=>['web'],'prefix'=>config('crudbooster.ADMIN_PATH'),'
 Route::group(['middleware'=>['web','\crocodicstudio\crudbooster\middlewares\CBBackend'],'prefix'=>config('crudbooster.ADMIN_PATH'),'namespace'=>'App\Http\Controllers'], function () {
 				
 		try {
-			$master_controller = glob(app_path('Http/Controllers/*.php'));
-			foreach($master_controller as &$m) $m = str_replace('.php','',basename($m));
-
-			$moduls = DB::table('cms_moduls')->whereIn('controller',$master_controller)->get();
-			foreach($moduls as $v) {
-				if(@$v->path && @$v->controller) {					
-					CRUDBooster::routeController($v->path,$v->controller);								
-				}						
-			}
+			$moduls = DB::table('cms_moduls')
+			->where('path','!=','')
+			->where('controller','!=','')
+			->where('is_protected',0)->get();			
+			foreach($moduls as $v) {						
+				CRUDBooster::routeController($v->path,$v->controller);						
+			}			
 		} catch (Exception $e) {
 			
 		}			
