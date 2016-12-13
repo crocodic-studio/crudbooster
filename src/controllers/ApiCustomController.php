@@ -44,6 +44,15 @@ class ApiCustomController extends CBController {
 		return view('crudbooster::api_documentation',$data); 
 	}
 
+	function apiDocumentation() {		
+
+		$data = array();
+				
+		$data['apis']       = DB::table('cms_apicustom')->orderby('nama','asc')->get();
+
+		return view('crudbooster::api_documentation_public',$data); 
+	}
+
 	function getDownloadPostman() {
 		$data = array();
 		$data['variables'] = [];

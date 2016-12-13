@@ -46,7 +46,7 @@ class AdminController extends CBController {
 		}else{
 			echo "<script>alert('".trans('crudbooster.alert_password_wrong')."');history.go(-1);</script>";				
 		}
-	}
+	}	
 
 	public function getLogin()
 	{											
