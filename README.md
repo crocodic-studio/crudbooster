@@ -1,4 +1,4 @@
-# CRUDBOOSTER 5.2 - Laravel CRUD Generator
+# CRUDBOOSTER 5.3 - Laravel CRUD Generator
 [![Latest Stable Version](https://poser.pugx.org/crocodicstudio/crudbooster/v/stable)](https://packagist.org/packages/crocodicstudio/crudbooster)
 [![Total Downloads](https://poser.pugx.org/crocodicstudio/crudbooster/downloads)](https://packagist.org/packages/crocodicstudio/crudbooster)
 [![Latest Unstable Version](https://poser.pugx.org/crocodicstudio/crudbooster/v/unstable)](https://packagist.org/packages/crocodicstudio/crudbooster)
@@ -12,15 +12,8 @@
 
 CRUDBooster is Laravel Framework that modified to bring a lot of features to develop a web application so simply. One of the main features is Smart CRUD Generator, so CRUDBooster will create a module automatically included Create, Read, Update, Delete standard function. And CRUDBooster is not usual CRUD Generator,you will get a lot of new experience with a new concept. CRUD Booster is dedicated to those who already understand the basic laravel. We do not recommend for those of you who have never used laravel altogether.
 
-## Getting Started Guide For Laravel 5.2
-[http://crudbooster.com/page/getting-started](http://crudbooster.com/page/getting-started)
-
-## DOCUMENTATION
-The complete documentation can be found at : 
-[http://crudbooster.com/page/documentation](http://crudbooster.com/page/documentation)
-
-## HOW ABOUT LARAVEL 5.3 ?
-Yes, we still work hard to finishing CRUDBooster 5.3, we wont to release before the documentation done.
+## Getting Started & Documentation
+[http://crudbooster.com/doc/5.3/intro](http://crudbooster.com/doc/5.3/intro)
 
 ## SUPPORT AND CONTRIBUTION
 All of issues and new feature request, please create an issue at GitHub, please do not send an email or Private Message to us.
