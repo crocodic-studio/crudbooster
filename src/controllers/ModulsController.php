@@ -245,7 +245,7 @@ class ModulsController extends CBController {
 			Session::put('admin_privileges_roles',$roles);
 			return redirect(Route("ModulsControllerGetStep2",["id"=>$id]));
 		}else{
-			$id = Request::id;
+			$id = Request::get('id');
 			DB::table($this->table)->where('id',$id)->update(compact("name","table_name","icon","path"));	
 
 			$row = DB::table('cms_moduls')->where('id',$id)->first();
