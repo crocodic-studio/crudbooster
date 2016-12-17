@@ -276,13 +276,16 @@ class ModulsController extends CBController {
 		$id          = Request::input('id');		
 		$width       = Request::input('width');
 
-		$row = DB::table('cms_moduls')->where('id',$id)->first();
+		$row = DB::table('cms_moduls')->where('id',$id)->first();	
 
 		$i             = 0;
 		$script_cols   = [];		
 		foreach($column as $col) {
 
-			if(!$name[$i]) continue;
+			if(!$name[$i]) {
+				$i++;
+				continue;
+			}
 
 			$script_cols[$i] = "\t\t\t".'$this->col[] = ["label"=>"'.$col.'","name"=>"'.$name[$i].'"';
 			
@@ -309,7 +312,7 @@ class ModulsController extends CBController {
 			$script_cols[$i] .= "];";
 			
 			$i++;
-		}
+		}		
 
 		$scripts    = implode("\n",$script_cols);
 		$raw        = file_get_contents(app_path('Http/Controllers/'.$row->controller.'.php'));
@@ -321,7 +324,7 @@ class ModulsController extends CBController {
 		$file_controller .= "\t\t\t".'$this->col = [];'."\n";
 		$file_controller .= $scripts."\n";
 		$file_controller .= "\t\t\t# END COLUMNS DO NOT REMOVE THIS LINE\n\n";
-		$file_controller .= "\t\t\t".trim($rraw[1]);
+		$file_controller .= "\t\t\t".trim($rraw[1]);	
 		
 		file_put_contents(app_path('Http/Controllers/'.$row->controller.'.php'), $file_controller);
 

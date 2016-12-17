@@ -55,14 +55,24 @@
 
 										$selects_data = $selects_data->orderby($datatable_field,"asc")->get();
 
-										$value = explode(";",$value);
+										if($form['relationship_table']) {											
+											@$valueserial = unserialize($value);
+											$value = [];
+											if($valueserial) {
+												foreach($valueserial as $a) {
+													$value[] = $a['label'];
+												}
+											}
+											
+										}else{
+											$value = explode(';',$value);
+										}
+										
 										foreach($selects_data as $d) {											
-
-											$val = $d->{$datatable_field};											
+											$val = $d->{$datatable_field};			
 											$checked = (in_array($val, $value))?"checked":"";										
-
 											echo "
-											<div class='checkbox $disabled'>
+											<div data-val='$val' class='checkbox $disabled'>
 											  <label>
 											    <input type='checkbox' $disabled $checked name='".$name."[]' value='".$d->id."'> ".$d->{$datatable_field}."								    
 											  </label>

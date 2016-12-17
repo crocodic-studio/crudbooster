@@ -1401,7 +1401,7 @@ class CRUDBooster  {
 	    | ---------------------------------------------------------------------- 
 	    |
 	    */    
-	    public function hook_row_index($index,&$value) {	        
+	    public function hook_row_index($column_index,&$column_value) {	        
 	    	//Your code here
 	    }
 

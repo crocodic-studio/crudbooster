@@ -388,7 +388,7 @@ class CBController extends Controller {
 					'color'=>$s['button_color']
 				];	
 			}
-		}
+		}		
 
 		$mainpath      = CRUDBooster::mainpath();		
 		$orig_mainpath = $this->data['mainpath'];
@@ -413,32 +413,48 @@ class CBController extends Controller {
 			            $pic = (strpos($value,'http://')!==FALSE)?$value:asset($value);
 			            $pic_small = $pic;
 			            $value = "<a class='fancybox' rel='group_{{$table}}' title='$label: $title' href='".$pic."?w=350'><img width='40px' height='40px' src='".$pic_small."?w=40'/></a>";
-		          }else if(@$col['download']) {
+		          }
+
+		          if(@$col['download']) {
 			            $url = (strpos($value,'http://')!==FALSE)?$value:asset($value).'?download=1';
 			            if($value) {
 			            	$value = "<a class='btn btn-xs btn-primary' href='$url' target='_blank' title='Download File'><i class='fa fa-download'></i> Download</a>";
 			            }else{
 			            	$value = " - ";
 			            }
-		          }else{
+		          }
 
-			            //limit character
-			            if($col['str_limit']) {
-			            	$value = trim(strip_tags($value));
-			            	$value = str_limit($value,$col['str_limit']);
-			            }
+		            if($col['str_limit']) {
+		            	$value = trim(strip_tags($value));
+		            	$value = str_limit($value,$col['str_limit']);
+		            }
 
-			            if($col['nl2br']) {
-			            	$value = nl2br($value);
-			            }
-			            
-			            if(isset($col['callback_php'])) {			              
-			              foreach($row as $k=>$v) {
-			              		$col['callback_php'] = str_replace("[".$k."]",$v,$col['callback_php']);			              		
-			              }
-			              @eval("\$value = ".$col['callback_php'].";");			              
-			            }				                                            		          
-		          }                
+		            if($col['nl2br']) {
+		            	$value = nl2br($value);
+		            } 
+		            
+		            if($col['callback_php']) {				            			             
+		              foreach($row as $k=>$v) {
+		              		$col['callback_php'] = str_replace("[".$k."]",$v,$col['callback_php']);			              		
+		              }
+		              @eval("\$value = ".$col['callback_php'].";");			              
+		            }    
+
+
+		            $datavalue = @unserialize($value);
+					if ($datavalue !== false) {						
+						if($datavalue) {
+							$prevalue = [];
+							foreach($datavalue as $d) {
+								if($d['label']) {
+									$prevalue[] = $d['label'];	
+								}						    	
+						    }
+						    if(count($prevalue)) {
+						    	$value = implode(", ",$prevalue);	
+						    }						    
+						}					    
+					}         
 
 		          $html_content[] = $value;
 	        } //end foreach columns_table
@@ -452,9 +468,9 @@ class CBController extends Controller {
           endif;//button_table_action
 
 
-          foreach($html_contents as $i=>$v) {
+          foreach($html_content as $i=>$v) {
           	$this->hook_row_index($i,$v);
-          	$html_contents[$i] = $v;
+          	$html_content[$i] = $v;
           }
 
 	      $html_contents[] = $html_content;
@@ -755,9 +771,9 @@ class CBController extends Controller {
 			}
 
 			if($ro['type']=='checkbox') {
-				$this->arr[$name] = implode(";",$inputdata);
-
+				$this->arr[$name] = implode(";",$inputdata);		
 			}
+			
 
 			if(@$ro['type']=='upload') {				
 				// unset($this->arr[$name]);
@@ -816,7 +832,7 @@ class CBController extends Controller {
 		}
 
 		$this->validation();	
-		$this->input_assignment();
+		$this->input_assignment();		
 
 		if (Schema::hasColumn($this->table, 'created_at')) 
 		{
@@ -874,10 +890,16 @@ class CBController extends Controller {
 					$foreignKey = CRUDBooster::getForeignKey($this->table,$ro['relationship_table']);
 					$foreignKey2 = CRUDBooster::getForeignKey($datatable,$ro['relationship_table']);				
 
-					$field_temp = DB::table($datatable)->whereIn("id",$inputdata)->pluck($datatable_field)->toArray();
-					if($field_temp) {						
+					$datatable_query = DB::table($datatable)->whereIn('id',$inputdata)->select('id',$datatable_field.' as label')->get();
+					$datatable_input = [];
+					foreach($datatable_query as $d) {
+						$datatable_input[] = (array) $d;
+					}
+					$field_temp = serialize($datatable_input);
 
-						DB::table($this->table)->where("id",$id)->update([$name=>implode(";",$field_temp)]);
+					if($field_temp) {												
+
+						DB::table($this->table)->where("id",$id)->update([$name=>$field_temp]);
 						
 						foreach($inputdata as $input_id) {						
 							DB::table($ro['relationship_table'])->insert([
@@ -954,7 +976,7 @@ class CBController extends Controller {
 		}
 		
 		$this->validation();
-		$this->input_assignment($id);
+		$this->input_assignment($id);		
 
 		if (Schema::hasColumn($this->table, 'updated_at')) 
 		{
@@ -989,10 +1011,17 @@ class CBController extends Controller {
 					$foreignKey2 = CRUDBooster::getForeignKey($datatable,$ro['relationship_table']);
 
 					DB::table($ro['relationship_table'])->where($foreignKey,$id)->delete();
+					
+					$datatable_query = DB::table($datatable)->whereIn('id',$inputdata)->select('id',$datatable_field.' as label')->get();
+					$datatable_input = [];
+					foreach($datatable_query as $d) {
+						$datatable_input[] = (array) $d;
+					}
+					$field_temp = serialize($datatable_input);
 
-					$field_temp = DB::table($datatable)->whereIn("id",$inputdata)->pluck($datatable_field)->toArray();
-
-					DB::table($this->table)->where("id",$id)->update([$name=>implode(";",$field_temp)]);
+					if($field_temp) {						
+						DB::table($this->table)->where("id",$id)->update([$name=>$field_temp]);
+					}
 					
 					foreach($inputdata as $input_id) {						
 						DB::table($ro['relationship_table'])->insert([
