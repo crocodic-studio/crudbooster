@@ -60,7 +60,7 @@
                         <a href='#'><i class='fa fa-users'></i> <span>Users Management</span>  <i class="fa fa-angle-left pull-right"></i></a>
                         <ul class='treeview-menu'>
                             <li><a href='{{Route("AdminCmsUsersControllerGetAdd")}}?m=0'><i class='fa fa-plus'></i> Add New User</a></li>
-                            <li><a href='{{Route("AdminCmsUsersControllerGetIndex")}}?m=0'><i class='fa fa-bars'></i> List Privilege</a></li>
+                            <li><a href='{{Route("AdminCmsUsersControllerGetIndex")}}?m=0'><i class='fa fa-bars'></i> List User</a></li>
                         </ul>
                     </li>
                                                         
