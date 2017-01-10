@@ -213,8 +213,8 @@
 
             	t.parent('tr').find('.option_area').empty();
 
-	            $.get("{{CRUDBooster::mainpath('type-info')}}/"+v,function(response) {
-	            	var data = JSON.parse(response);
+	            $.getJSON("{{CRUDBooster::mainpath('type-info')}}/"+v,function(data) {
+	            	// var data = JSON.parse(response);
 	        		if(data.attribute.required) {
                         $.each(data.attribute.required,function(key,val) {
                         t.parent('tr').find('.option_area').append(

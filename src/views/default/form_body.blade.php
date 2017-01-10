@@ -4,6 +4,7 @@
 $asset_already = [];
 foreach($forms as $form) {
 	$type = @$form['type']?:'text';
+	$name = $form['name'];
 
 	if(in_array($type, $asset_already)) continue;
 ?>
