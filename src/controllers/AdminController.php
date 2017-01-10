@@ -138,10 +138,11 @@ class AdminController extends CBController {
 	}	
 
 	public function getLogout() {
-		Session::flush();
+		
 		$me = CRUDBooster::me();
 		CRUDBooster::insertLog(trans("crudbooster.log_logout",['email'=>$me->email]));
 
+		Session::flush();
 		return redirect()->route('getLogin')->with('message',trans("crudbooster.message_after_logout"));
 	}
 
