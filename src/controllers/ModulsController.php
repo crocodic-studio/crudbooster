@@ -377,7 +377,7 @@ class ModulsController extends CBController {
 			if($l!='') {
 				$script_form[$i] = "\t\t\t".'$this->form[] = ["label"=>"'.$l.'","name"=>"'.$name[$i].'","type"=>"'.$type[$i].'","validation"=>"'.$validation[$i].'","width"=>"'.$width[$i].'"';
 
-				if($option) {
+				if($option && $option[$i]) {
 					foreach($option[$i] as $key=>$val) {
 						if($key && $val) {
 							$script_form[$i] .= ',"'.$key.'"=>"'.$val.'"';

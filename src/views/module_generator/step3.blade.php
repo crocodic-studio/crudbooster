@@ -205,16 +205,15 @@
             console.log(tr_index);
             
             var input_name = $(this).parent().parent('td').find('input[type=text]').attr('name');            
-           
+            
             if( input_name  == 'type[]' ) {
-
             	$(this).parent('ul').prev('input[type=text]').val(v);            
             	$(this).parent('ul').remove();
 
-            	t.parent('tr').find('.option_area').empty();
+            	t.parent('tr').find('.option_area').empty();                
 
 	            $.getJSON("{{CRUDBooster::mainpath('type-info')}}/"+v,function(data) {
-	            	// var data = JSON.parse(response);
+	            	                    
 	        		if(data.attribute.required) {
                         $.each(data.attribute.required,function(key,val) {
                         t.parent('tr').find('.option_area').append(
@@ -237,8 +236,7 @@
                         });
                     }
                     
-                    if(data.attribute.optional) {
-                        
+                    if(data.attribute.optional) {                        
                         $.each(data.attribute.optional,function(key,val) {
                             t.parent('tr').find('.option_area').append(
                             "<div class='form-group'>"+
