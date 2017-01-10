@@ -51,24 +51,24 @@
                     <li class='treeview'>
                         <a href='#'><i class='fa fa-key'></i> <span>Privileges & Roles</span>  <i class="fa fa-angle-left pull-right"></i></a>
                         <ul class='treeview-menu'>
-                            <li><a href='{{Route("PrivilegesControllerGetAdd")}}?m=0'><i class='fa fa-plus'></i> Add New Privilege</a></li>
-                            <li><a href='{{Route("PrivilegesControllerGetIndex")}}?m=0'><i class='fa fa-bars'></i> List Privilege</a></li>
+                            <li class="{{ (Request::is('admin/privileges/add*')) ? 'active' : '' }}"><a href='{{Route("PrivilegesControllerGetAdd")}}?m=0'>{{ $current_path }}<i class='fa fa-plus'></i> Add New Privilege</a></li>
+                            <li class="{{ (Request::is('admin/privileges')) ? 'active' : '' }}"><a href='{{Route("PrivilegesControllerGetIndex")}}?m=0'><i class='fa fa-bars'></i> List Privilege</a></li>
                         </ul>
                     </li>
 
                     <li class='treeview'>
                         <a href='#'><i class='fa fa-users'></i> <span>Users Management</span>  <i class="fa fa-angle-left pull-right"></i></a>
                         <ul class='treeview-menu'>
-                            <li><a href='{{Route("AdminCmsUsersControllerGetAdd")}}?m=0'><i class='fa fa-plus'></i> Add New User</a></li>
-                            <li><a href='{{Route("AdminCmsUsersControllerGetIndex")}}?m=0'><i class='fa fa-bars'></i> List User</a></li>
+                            <li class="{{ (Request::is('admin/users/add*')) ? 'active' : '' }}"><a href='{{Route("AdminCmsUsersControllerGetAdd")}}?m=0'><i class='fa fa-plus'></i> Add New User</a></li>
+                            <li class="{{ (Request::is('admin/users')) ? 'active' : '' }}"><a href='{{Route("AdminCmsUsersControllerGetIndex")}}?m=0'><i class='fa fa-bars'></i> List User</a></li>
                         </ul>
                     </li>
-                                                        
-                    <li><a href='{{Route("MenusControllerGetIndex")}}?m=0'><i class='fa fa-bars'></i> Menu Management</a></li>                    
+
+                    <li class="{{ (Request::is('admin/menu_management*')) ? 'active' : '' }}"><a href='{{Route("MenusControllerGetIndex")}}?m=0'><i class='fa fa-bars'></i> Menu Management</a></li>
                     <li class="treeview">
                     <a href="#"><i class='fa fa-wrench'></i> <span>Settings</span> <i class="fa fa-angle-left pull-right"></i></a>
-                        <ul class="treeview-menu"> 
-                            <li class="<?=('settings'==$current_path && !Request::get('group'))?'active':''?>"><a href='{{route("SettingsControllerGetAdd")}}?m=0'><i class='fa fa-plus'></i> Add New Setting</a></li>
+                        <ul class="treeview-menu">
+                            <li class="{{ (Request::is('admin/settings/add*')) ? 'active' : '' }}"><a href='{{route("SettingsControllerGetAdd")}}?m=0'><i class='fa fa-plus'></i> Add New Setting</a></li>
                             <?php 
                                 $groupSetting = DB::table('cms_settings')->groupby('group_setting')->pluck('group_setting');
                                 foreach($groupSetting as $gs):
@@ -80,37 +80,37 @@
                     <li class='treeview'>
                         <a href='#'><i class='fa fa-th'></i> <span>Module Generator</span>  <i class="fa fa-angle-left pull-right"></i></a>
                         <ul class='treeview-menu'>
-                            <li><a href='{{Route("ModulsControllerGetStep1")}}?m=0'><i class='fa fa-plus'></i> Add New Module</a></li>
-                            <li><a href='{{Route("ModulsControllerGetIndex")}}?m=0'><i class='fa fa-bars'></i> List Module</a></li>
+                            <li class="{{ (Request::is('admin/module_generator/step1')) ? 'active' : '' }}"><a href='{{Route("ModulsControllerGetStep1")}}?m=0'><i class='fa fa-plus'></i> Add New Module</a></li>
+                            <li class="{{ (Request::is('admin/module_generator')) ? 'active' : '' }}"><a href='{{Route("ModulsControllerGetIndex")}}?m=0'><i class='fa fa-bars'></i> List Module</a></li>
                         </ul>
                     </li>
 
                     <li class='treeview'>
                         <a href='#'><i class='fa fa-dashboard'></i> <span>Statistic Builder</span>  <i class="fa fa-angle-left pull-right"></i></a>
                         <ul class='treeview-menu'>
-                            <li><a href='{{Route("StatisticBuilderControllerGetAdd")}}?m=0'><i class='fa fa-plus'></i> Add New Statistic</a></li>
-                            <li><a href='{{Route("StatisticBuilderControllerGetIndex")}}?m=0'><i class='fa fa-bars'></i> List Statistic</a></li>
+                            <li class="{{ (Request::is('admin/statistic_builder/add')) ? 'active' : '' }}"><a href='{{Route("StatisticBuilderControllerGetAdd")}}?m=0'><i class='fa fa-plus'></i> Add New Statistic</a></li>
+                            <li class="{{ (Request::is('admin/statistic_builder')) ? 'active' : '' }}"><a href='{{Route("StatisticBuilderControllerGetIndex")}}?m=0'><i class='fa fa-bars'></i> List Statistic</a></li>
                         </ul>
                     </li>
 
                     <li class='treeview'>
                         <a href='#'><i class='fa fa-fire'></i> <span>API Generator</span>  <i class="fa fa-angle-left pull-right"></i></a>
                         <ul class='treeview-menu'>
-                            <li><a href='{{Route("ApiCustomControllerGetGenerator")}}?m=0'><i class='fa fa-plus'></i> Add New API</a></li>
-                            <li><a href='{{Route("ApiCustomControllerGetIndex")}}?m=0'><i class='fa fa-bars'></i> List API (Documentation)</a></li>
-                            <li><a href='{{Route("ApiCustomControllerGetScreetKey")}}?m=0'><i class='fa fa-bars'></i> Generate Screet Key</a></li>
+                            <li class="{{ (Request::is('admin/api_generator/generator*')) ? 'active' : '' }}"><a href='{{Route("ApiCustomControllerGetGenerator")}}?m=0'><i class='fa fa-plus'></i> Add New API</a></li>
+                            <li class="{{ (Request::is('admin/api_generator')) ? 'active' : '' }}"><a href='{{Route("ApiCustomControllerGetIndex")}}?m=0'><i class='fa fa-bars'></i> List API (Documentation)</a></li>
+                            <li class="{{ (Request::is('admin/api_generator/screet-key*')) ? 'active' : '' }}"><a href='{{Route("ApiCustomControllerGetScreetKey")}}?m=0'><i class='fa fa-bars'></i> Generate Screet Key</a></li>
                         </ul>
                     </li>
 
                     <li class='treeview'>
                         <a href='#'><i class='fa fa-envelope-o'></i> <span>Email Templates</span>  <i class="fa fa-angle-left pull-right"></i></a>
                         <ul class='treeview-menu'>
-                            <li><a href='{{Route("EmailTemplatesControllerGetAdd")}}?m=0'><i class='fa fa-plus'></i> Add New Email</a></li>
-                            <li><a href='{{Route("EmailTemplatesControllerGetIndex")}}?m=0'><i class='fa fa-bars'></i> List Email Template</a></li>        
+                            <li class="{{ (Request::is('admin/email_templates/add*')) ? 'active' : '' }}"><a href='{{Route("EmailTemplatesControllerGetAdd")}}?m=0'><i class='fa fa-plus'></i> Add New Email</a></li>
+                            <li class="{{ (Request::is('admin/email_templates')) ? 'active' : '' }}"><a href='{{Route("EmailTemplatesControllerGetIndex")}}?m=0'><i class='fa fa-bars'></i> List Email Template</a></li>
                         </ul>
                     </li>
-                    
-                    <li><a href='{{Route("LogsControllerGetIndex")}}?m=0'><i class='fa fa-flag'></i> Log User Access</a></li>
+
+                    <li class="{{ (Request::is('admin/logs*')) ? 'active' : '' }}"><a href='{{Route("LogsControllerGetIndex")}}?m=0'><i class='fa fa-flag'></i> Log User Access</a></li>
                 @endif
 
             </ul><!-- /.sidebar-menu -->
