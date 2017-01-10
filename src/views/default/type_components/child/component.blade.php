@@ -60,7 +60,7 @@
 									</td>
 								@endif
 							@else
-								<td>{{ $s->$col['name'] }}</td>
+								<td>{{ trim(strip_tags($s->$col['name'])) }}</td>
 							@endif
 						@endforeach
 						<td>
