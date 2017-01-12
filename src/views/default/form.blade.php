@@ -49,12 +49,12 @@
                               @endif
                               @if(CRUDBooster::isCreate() || CRUDBooster::isUpdate())
 
-                                 @if(CRUDBooster::isCreate() && $button_addmore==TRUE && $command == 'add')                                                                 
-                                    <button type='submit' name='submit' class='btn btn-success'><i class='fa fa-plus-circle'></i> {{trans("crudbooster.button_save_more")}}</button>
+                                 @if(CRUDBooster::isCreate() && $button_addmore==TRUE && $command == 'add')                                                                                                     
+                                    <input type="submit" name="submit" value='{{trans("crudbooster.button_save_more")}}' class='btn btn-success'>
                                  @endif
 
                                  @if($button_save && $command != 'detail')
-                                    <button type='submit' name='submit' class='btn btn-success'><i class='fa fa-check-circle'></i> {{trans("crudbooster.button_save")}}</button>
+                                    <input type="submit" name="submit" value='{{trans("crudbooster.button_save")}}' class='btn btn-success'>
                                  @endif
                                  
                               @endif
