@@ -53,7 +53,6 @@
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
-        atmonshi --test
 
         <section class="content-header">
           <?php 
