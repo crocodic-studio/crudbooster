@@ -52,7 +52,7 @@
     @include('crudbooster::sidebar')
 
     <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">	
+    <div class="content-wrapper">
 
         <section class="content-header">
           <?php 
