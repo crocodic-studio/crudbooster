@@ -375,17 +375,16 @@ class ModulsController extends CBController {
 		foreach($label as $l) {
 			
 			if($l!='') {
-				$script_form[$i] = "\t\t\t".'$this->form[] = ["label"=>"'.$l.'","name"=>"'.$name[$i].'","type"=>"'.$type[$i].'","validation"=>"'.$validation[$i].'","width"=>"'.$width[$i].'"';
-
-				if($option && $option[$i]) {
-					foreach($option[$i] as $key=>$val) {
-						if($key && $val) {
-							$script_form[$i] .= ',"'.$key.'"=>"'.$val.'"';
-						}						
-					}
+				$form = $option[$i];
+				if(!is_array($form)) {
+					$form = array();
 				}
-
-				$script_form[$i] .= '];';
+				$form['label'] = $l;
+				$form['name'] = $name[$i];
+				$form['type'] = $type[$i];
+				$form['validation'] = $validation[$i];
+				$form['width'] = $width[$i];
+				$script_form[$i] = "\t\t\t".'$this->form[] = '.var_export($form, true).";";
 			}
 			
 			$i++;

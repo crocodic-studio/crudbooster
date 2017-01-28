@@ -404,10 +404,11 @@
         						if($types->attribute->required):
         						foreach($types->attribute->required as $key=>$val):
         							@$value = $form[$key];
+		
         					?>
 	        					<div class="form-group">
 	        						<label>{{$key}}</label>
-	        						<input type="text" name="option[{{$index}}][{{$key}}]" placeholder="{{$val}}" value="{{$value}}" class="form-control">
+										<input type="text" name="option[{{$index}}][{{$key}}]" placeholder="{{$val}}" value="{{$value}}" class="form-control">
 	        					</div>
         					<?php endforeach; endif;?>
 
@@ -424,13 +425,18 @@
 
         					<?php 
         						if($types->attribute->optional):
-        						foreach($types->attribute->optional as $key=>$val):
-        							@$value = $form[$key];
+								foreach($types->attribute->optional as $key=>$val):
+									@$value = $form[$key];
+									
         					?>
 	        					<div class="form-group">
 	        						<label>{{$key}}</label>
-	        						<input type="text" name="option[{{$index}}][{{$key}}]" placeholder="{{$val}}" value="{{$value}}" class="form-control">
-	        					</div>
+									@if(is_object($val) && property_exists($val, 'type') && $val->type == 'textarea')
+										<textarea type="text" name="option[{{$index}}][{{$key}}]" placeholder="{{$val->placeholder}}" class="form-control">{{$value}}</textarea>
+									@else
+										<input type="text" name="option[{{$index}}][{{$key}}]" placeholder="{{$val}}" value="{{$value}}" class="form-control">
+									@endif
+								</div>
         					<?php endforeach; endif;?>
 
         					<?php endif;?>
