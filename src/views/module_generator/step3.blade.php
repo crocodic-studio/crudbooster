@@ -238,12 +238,23 @@
                     
                     if(data.attribute.optional) {                        
                         $.each(data.attribute.optional,function(key,val) {
-                            t.parent('tr').find('.option_area').append(
-                            "<div class='form-group'>"+
-                                "<label>"+key+"</label>"+
-                                "<input class='form-control' name='option["+tr_index+"]["+key+"]' placeholder='"+val+"' type='text'/>"+
-                            "</div>"
-                            );                                  
+							if(typeof(val) == "object") {
+								if(val.type == 'textarea') {
+									t.parent('tr').find('.option_area').append(
+									"<div class='form-group'>"+
+										"<label>"+key+"</label>"+
+										"<textarea class='form-control' name='option["+tr_index+"]["+key+"]' placeholder='"+val.placeholder+"' ></textarea>"+
+									"</div>"
+									);
+								}
+							} else {
+								t.parent('tr').find('.option_area').append(
+								"<div class='form-group'>"+
+									"<label>"+key+"</label>"+
+									"<input class='form-control' name='option["+tr_index+"]["+key+"]' placeholder='"+val+"' type='text'/>"+
+								"</div>"
+								);
+							}
                         });             
                     }        		
 	        	})
