@@ -2,12 +2,14 @@
 	"title":"Text Input",
 	"type":"text",
 	"attribute":{
-		"label":"string",
-		"name":"string column name",
-		"style":"string inline stylesheet",
+		
+		"optional": {
+			"style":"string inline stylesheet",
 		"help":"string help-block",
 		"placeholder":"string placeholder",
 		"readonly":"boolean",
-		"disabled":"boolean"
+		"disabled":"boolean"	
+		}
+		
 	}
 }

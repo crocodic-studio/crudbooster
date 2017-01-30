@@ -54,6 +54,7 @@ return [
 
 	'alert_delete_selected'         =>'Are you sure want to delete all selected data ?',
 	'alert_delete_selected_success' =>'Delete selected success !',
+	'alert_action' 					=>'You have :action successfully !',
 	'alert_add_data_success'        =>'The data has been added !',
 	'alert_add_data_failed'         =>'Failed to save the data !',
 	'alert_update_data_success'     =>'The data has been updated !',
@@ -67,10 +68,13 @@ return [
 	'alert_primary'                 =>'Information',
 	'alert_session_expired'         =>'Your session was expired, please login again !',
 	'alert_password_wrong'			=>'Sorry your password is wrong !',
+	'alert_required' 				=>'Please make sure to fill out all the required fields correctly',
+	'alert_error_ajax'				=>'Okay, It is embarasing, something went wrong, we will fix it soon !',
+	'alert_validation_error'		=>'Please fill out the form correctly : :error',
 
-	'add_data_page_title'    => ':module  &raquo; Add Data',
-	'edit_data_page_title'   => ':module &raquo; Edit Data &raquo; :name',
-	'detail_data_page_title' => ':module &raquo; Detail Data &raquo; :name',
+	'add_data_page_title'    => 'Add :module',
+	'edit_data_page_title'   => 'Edit :module',
+	'detail_data_page_title' => 'Detail :module',
 
 	'default_module_description'=>'Data List',
 
@@ -79,7 +83,7 @@ return [
 
 
 	'action_show_data'       =>'Show Data',
-	'action_add_data'        =>'Add New Data',
+	'action_add_data'        =>'Add Data',
 	'action_delete_selected' =>'Delete Selected',	
 
 	'action_label'       =>'Action',
@@ -90,7 +94,9 @@ return [
 	
 	
 	'button_cancel'          =>'Cancel',
-	'button_back'            =>'&laquo; Back',
+	'button_add'			 =>'Add Data',
+	'button_edit'			 =>'Edit Data',
+	'button_back'            =>'Back',
 	'button_save'            =>'Save',
 	'button_save_more'       =>'Save & Add More',
 	'button_import'          =>'Import Data',
@@ -99,9 +105,9 @@ return [
 	'button_close'           =>'Close',
 	'button_submit'          =>'Submit',
 	'button_logout'          =>'Logout',	
-	'button_sign_in'         => 'Sign In',
-	'button_selected_action' => 'Selected Action',
-	'button_download_file'   => 'Download file',
+	'button_sign_in'         =>'Sign In',
+	'button_selected_action' =>'Bulk Actions',
+	'button_download_file'   =>'Download file',
 
 		
 
@@ -119,7 +125,7 @@ return [
 
 	'import_page_title'         =>'Import Data :module',	
 	'dashboard_default_text'    =>'Welcome to the dashboard of :appname',	
-	'form_back_to_list'         =>'&laquo; Back To List Data :module',	
+	'form_back_to_list'         =>'Back To List Data :module',	
 	'not_logged_in'             =>'You are not logged in !',	
 	'menu_navigation'           =>"Navigation",
 	'table_data_not_found'      =>"No Data Avaliable",

@@ -1,17 +1,18 @@
 {
 	"title":"Select Input",
 	"type":"select",
-	"attribute":{
-		"label":"string",
-		"name":"string column name",
-		"style":"string inline stylesheet",
-		"help":"string help-block",		
-
-		"dataenum":["0|a","1|b","2|c"],
-		"datatable":"table_name,column_name",
-		"datatable_where":"string where condition",
-		"datatable_exception":"string value exception",
-		"dataquery":"string sql query. Response should label & value",
-		"parent_select":"string parent name"
+	"attribute":{		
+		"requiredOne":{
+			"dataenum":"value1;value2;value3",
+			"datatable":"table_name,column_name",
+			"dataquery":"string sql query. Response should label & value"
+		},
+		"optional":{
+			"style":"string inline stylesheet",
+			"help":"string help-block",
+			"datatable_where":"string where condition",		
+			"datatable_format":"sql concat alike. e.g : id,' - ',title",					
+			"parent_select":"string parent name"
+		}								
 	}
 }

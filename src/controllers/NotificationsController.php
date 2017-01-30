@@ -17,7 +17,7 @@ use CRUDBooster;
 
 class NotificationsController extends CBController {
 
-    public function __construct() {
+    public function cbInit() {
         $this->table         = "cms_notifications";
         $this->primary_key   = "id";
         $this->title_field   = "content";
@@ -42,9 +42,6 @@ class NotificationsController extends CBController {
 		$this->form[] = array("label"=>"Notification Command","name"=>"notification_command","type"=>"textarea"   );
 		$this->form[] = array("label"=>"Is Read","name"=>"is_read","type"=>"text"   );
      
-
-        //No need chanage this constructor
-        $this->constructor();
     }
 
     public function getLatestJson() {
@@ -64,7 +61,7 @@ class NotificationsController extends CBController {
     public function getRead($id) {
         DB::table('cms_notifications')->where('id',$id)->update(['is_read'=>1]);
         $row = DB::table('cms_notifications')->where('id',$id)->first();
-        return redirect($row->to);        
+        return redirect($row->url);        
     }
     
 }

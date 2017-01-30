@@ -4,6 +4,7 @@
 $asset_already = [];
 foreach($forms as $form) {
 	$type = @$form['type']?:'text';
+	$name = $form['name'];
 
 	if(in_array($type, $asset_already)) continue;
 ?>
@@ -58,10 +59,16 @@ foreach($forms as $form) {
 		$form['type'] = ($form['type'])?:'text';
 		$type         = @$form['type'];
 		$required     = (@$form['required'])?"required":"";
+		$required  	  = (@strpos($form['validation'], 'required')!==FALSE)?"required":$required;
 		$readonly     = (@$form['readonly'])?"readonly":"";
 		$disabled     = (@$form['disabled'])?"disabled":"";                			
 		$placeholder  = (@$form['placeholder'])?"placeholder='".$form['placeholder']."'":"";   
-		$col_width    = @$form['width']?:"col-sm-12";
+		$col_width    = @$form['width']?:"col-sm-9";		
+
+		if($parent_field == $name) {
+			$type = 'hidden';
+			$value = $parent_id;
+		}	
 
 		if($type=='header') {
 			$header_group_class = "header-group-$index";
@@ -70,12 +77,12 @@ foreach($forms as $form) {
 		}      
 
 		?>
-		@if(file_exists(base_path('/vendor/crocodicstudio/crudbooster/src/views/default/type_components/'.$form['type'].'/component.blade.php')))
-			@include('crudbooster::default.type_components.'.$form['type'].'.component')
-		@elseif(file_exists(resource_path('views/vendor/crudbooster/type_components/'.$form['type'].'/component.blade.php')))
-			@include('vendor.crudbooster.type_components.'.$form['type'].'.component')
+		@if(file_exists(base_path('/vendor/crocodicstudio/crudbooster/src/views/default/type_components/'.$type.'/component.blade.php')))
+			@include('crudbooster::default.type_components.'.$type.'.component')
+		@elseif(file_exists(resource_path('views/vendor/crudbooster/type_components/'.$type.'/component.blade.php')))
+			@include('vendor.crudbooster.type_components.'.$type.'.component')
 		@else
-			<p class='text-danger'>{{$form['type']}} is not found in type component system</p><br/>
+			<p class='text-danger'>{{$type}} is not found in type component system</p><br/>
 		@endif
 	<?php 
 	}        			                	

@@ -3,7 +3,7 @@
 use crocodicstudio\crudbooster\controllers\Controller;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Mail;
@@ -18,7 +18,7 @@ use CRUDBooster;
 class PrivilegesController extends CBController {
 
 	
-	public function __construct() {
+	public function cbInit() {
 		$this->module_name = "Privilege";
 		$this->table       = 'cms_privileges';
 		$this->primary_key = 'id';
@@ -37,14 +37,14 @@ class PrivilegesController extends CBController {
 		$this->form[] = array("label"=>"Name","name"=>"name",'required'=>true);
 		$this->form[] = array("label"=>"Is Superadmin","name"=>"is_superadmin",'required'=>true);		
 		$this->form[] = array("label"=>"Is Register","name"=>"is_register",'required'=>true);		
-		$this->form[] = array("label"=>"Theme Color","name"=>"theme_color",'required'=>true);
-
-		$this->constructor();
+		$this->form[] = array("label"=>"Theme Color","name"=>"theme_color",'required'=>true);		
 	}
 
 
 	public function getAdd()
 	{
+		$this->cbLoader();
+
 		$id = 0; 
 		$data['page_title'] = "Add Data";	
 		$data['moduls'] = DB::table("cms_moduls")
@@ -62,7 +62,7 @@ class PrivilegesController extends CBController {
 	}
 	
 
-	public function postAddSave(Request $request) {
+	public function postAddSave() {
 		$this->validation($request);				
 		$this->input_assignment($request);		
 
@@ -72,9 +72,9 @@ class PrivilegesController extends CBController {
 		$id = $this->arr[$this->primary_key];
 
 		//set theme 
-		$request->session()->put('theme_color',$this->arr['theme_color']);
+		Session::put('theme_color',$this->arr['theme_color']);
 
-		$priv = $request->input("privileges");
+		$priv = Request::input("privileges");
 		if($priv) {
 			foreach($priv as $id_modul => $data) {
 				$arrs = array();
@@ -101,8 +101,9 @@ class PrivilegesController extends CBController {
 		CRUDBooster::redirect(CRUDBooster::mainpath(),trans("crudbooster.alert_add_data_success"),'success');		
 	}
 	
-	public function getEdit(Request $request, $id)
+	public function getEdit($id)
 	{
+		$this->cbLoader();
 		
 		$row = DB::table($this->table)->where("id",$id)->first();
 
@@ -116,7 +117,7 @@ class PrivilegesController extends CBController {
 		return view('crudbooster::privileges',compact('row','page_title','moduls','page_menu'));
 	}
 	 
-	public function postEditSave(Request $request,$id) {
+	public function postEditSave($id) {
 		
 		$this->validation($request);
 		$this->input_assignment($request,$id);
@@ -125,7 +126,7 @@ class PrivilegesController extends CBController {
 
 		DB::table($this->table)->where($this->primary_key,$id)->update($this->arr);
 						
-		$priv = $request->input("privileges");
+		$priv = Request::input("privileges");
 		if($priv) {
 			DB::table("cms_privileges_roles")->where("id_cms_privileges",$id)->delete();
 			foreach($priv as $id_modul => $data) {
@@ -152,7 +153,7 @@ class PrivilegesController extends CBController {
 			->get();
 			Session::put('admin_privileges_roles',$roles);
 
-			$request->session()->put('theme_color',$this->arr['theme_color']);
+			Session::put('theme_color',$this->arr['theme_color']);
 		}		
 
 		CRUDBooster::redirect(CRUDBooster::mainpath(),trans("crudbooster.alert_update_data_success",['module'=>"Privilege",'title'=>$row->name]),'success');

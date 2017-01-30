@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
+use CRUDBooster;
 
 class ApiController extends Controller {
 			
@@ -208,8 +209,9 @@ class ApiController extends Controller {
 
 				$name_tmp[] = $name;
 				if(CRUDBooster::isForeignKey($name)) {
-					$jointable = CRUDBooster::isForeignKey($name);
+					$jointable = CRUDBooster::getTableForeignKey($name);
 					$jointable_field = CRUDBooster::getTableColumns($jointable);
+
 					$data->leftjoin($jointable,$jointable.'.id','=',$table.'.'.$name);
 					foreach($jointable_field as $jf) {							
 						$jf_alias = $jointable.'_'.$jf;
@@ -268,19 +270,19 @@ class ApiController extends Controller {
 					$type     = $param['type'];
 					$value    = $posts[$name];
 					$used     = $param['used'];
-					$required = $param['required'];					
+					$required = $param['required'];								
 
 					if(in_array($type, $type_except)) {
 						continue;
 					}
 
-					if(substr($param['config'], 0,1) != '*') {
+					if($param['config']!='' && substr($param['config'], 0,1) != '*') {
 						$value = $param['config'];
 					}
 
 					if($required == '1') {						
 						if(\Schema::hasColumn($table,$name)) {
-							$w->where($table.'.'.$name,$value);
+							$w->where($table.'.'.$name,$value);							
 						}else{
 							$w->having($name,'=',$value);
 						}
@@ -354,7 +356,7 @@ class ApiController extends Controller {
 						$used     = $param['used'];
 						$required = $param['required'];
 
-						if(substr($param['config'], 0,1) != '*') {
+						if($param['config']!='' && substr($param['config'], 0,1) != '*') {
 							$value = $param['config'];
 						}
 
@@ -396,7 +398,7 @@ class ApiController extends Controller {
 					$rows                  = (array) $rows;
 					$result                = array_merge($result,$rows);
 				}else{
-					$result['api_status']  = 1;
+					$result['api_status']  = 0;
 					$result['api_message'] = 'There is no data found !';					
 				}
 			}elseif($action_type == 'delete') {
@@ -407,7 +409,7 @@ class ApiController extends Controller {
 					$delete = $data->delete();
 				}
 
-				$result['api_status'] = 1;
+				$result['api_status'] = ($delete)?1:0;
 				$result['api_message'] = ($delete)?"The data has been deleted successfully !":"Oops, Failed to delete data !";
 
 			}
@@ -511,7 +513,7 @@ class ApiController extends Controller {
 		    	
 		    	$row_assign['id'] = DB::table($table)->max('id') + 1;
 		    	DB::table($table)->insert($row_assign);
-		    	$result['api_status']  = 1;
+		    	$result['api_status']  = ($row_assign['id'])?1:0;
 				$result['api_message'] = ($row_assign['id'])?'The data has been added successfully':'Failed to add data !';
 				$result['id']          = $row_assign['id'];
 		    }else{

@@ -2,14 +2,20 @@
 	"title":"Checkbox",
 	"type":"checkbox",
 	"attribute":{
-		"label":"string",
-		"name":"string column name",
-		"style":"string inline stylesheet",
-		"help":"string help-block",		
 
-		"dataenum":["0|a","1|b","2|c"],
-		"datatable":"table_name,column_name",
-		"datatable_where":"string where condition",
-		"datatable_exception":"string value exception"
+		"optional":{
+			"style":"string inline stylesheet",
+			"help":"string help-block",
+			"datatable_where":"string where condition",
+			"relationship_table":"A many to many relationship table. (datatable is needed)"	
+		},
+		"requiredOne": {
+			"dataenum":"value1;value2",
+			"datatable":"table_name,column_name"
+		},
+		"required": {
+						
+		}				
+		
 	}
 }

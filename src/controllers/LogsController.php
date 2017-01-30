@@ -16,12 +16,15 @@ use Illuminate\Support\Facades\Excel;
 
 class LogsController extends CBController {
 
-	public function __construct() {		
-		$this->table       = 'cms_logs';
-		$this->primary_key = 'id';
-		$this->title_field = "ipaddress";	
+	public function cbInit() {		
+		$this->table         = 'cms_logs';
+		$this->primary_key   = 'id';
+		$this->title_field   = "ipaddress";	
 		$this->button_export = false;
-		$this->button_import = false;			
+		$this->button_import = false;
+		$this->button_add    = false;
+		$this->button_edit   = false;
+		$this->button_delete = false;			
 
 		$this->col = array();
 		$this->col[] = array("label"=>"Time Access","name"=>"created_at");
@@ -36,8 +39,7 @@ class LogsController extends CBController {
 		$this->form[] = array("label"=>"URL","name"=>"url","readonly"=>true);	
 		$this->form[] = array("label"=>"User","name"=>"id_cms_users","type"=>"select","datatable"=>"cms_users,name","readonly"=>true);	
 		$this->form[] = array("label"=>"Description","name"=>"description","readonly"=>true);	
-		
-		$this->constructor();
+				
 	}
 	
 

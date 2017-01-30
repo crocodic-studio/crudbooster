@@ -21,137 +21,20 @@
                           $('#form-table').submit();
                         }
                       })
+
+                      $('table tbody tr .button_action a').click(function(e) {
+                        e.stopPropagation();
+                      })
                   });
                 </script>
 
-
-
-                  <div class='row'>
-                    <div class='col-sm-8'>
-                          
-                            
-
-                            <div class="selected-action" style="display:inline-block;position:relative">
-                              <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{trans("crudbooster.button_selected_action")}}
-                                <span class="fa fa-caret-down"></span></button>                              
-                              <ul class="dropdown-menu">    
-                                @if($button_delete && CRUDBooster::isDelete())                                                                                                                                                         
-                                <li><a href="javascript:void(0)" data-name='delete' title='{{trans('crudbooster.action_delete_selected')}}'><i class="fa fa-trash"></i> {{trans('crudbooster.action_delete_selected')}}</a></li>
-                                @endif
-
-                                @if($button_selected)
-                                  @foreach($button_selected as $button)
-                                    <li><a href="javascript:void(0)" data-name='{{$button["name"]}}' title='{{$button["label"]}}''><i class="fa fa-{{$button['icon']}}"></i> {{$button['label']}}</a></li>
-                                  @endforeach
-                                @endif
-
-                              </ul>
-                            </div>                          
-
-                          @if($button_show)
-                          <a href="{{ CRUDBooster::mainpath() }}" id='btn_show_data' class="btn btn-sm btn-primary" title="{{trans('crudbooster.action_show_data')}}">
-                            <i class="fa fa-bars"></i> {{trans('crudbooster.action_show_data')}}
-                          </a>
-                          @endif
-
-                          @if($button_add && CRUDBooster::isCreate())
-                          <a href="{{ CRUDBooster::mainpath('add') }}" id='btn_add_new_data' class="btn btn-sm btn-primary" title="{{trans('crudbooster.action_add_data')}}">
-                            <i class="fa fa-plus"></i> {{trans('crudbooster.action_add_data')}}
-                          </a>
-                          @endif                          
-
-                          @if($button_filter)
-                          <a href="javascript:void(0)" id='btn_advanced_filter' data-url-parameter='{{$build_query}}' title='Advanced Filter Data' class="btn btn-sm btn-primary {{(Request::get('filter_column'))?'active':''}}">                               
-                            <i class="fa fa-filter"></i> {{trans("crudbooster.button_filter")}}
-                          </a>
-                          @endif  
-
-                          @if($button_export)
-                          <a href="javascript:void(0)" id='btn_export_data' data-url-parameter='{{$build_query}}' title='Export Data' class="btn btn-sm btn-primary btn-export-data">
-                            <i class="fa fa-upload"></i> {{trans("crudbooster.button_export")}}
-                          </a>
-                          @endif
-
-                          @if($button_import)
-                          <a href="{{ CRUDBooster::mainpath('import-data') }}" id='btn_import_data' data-url-parameter='{{$build_query}}' title='Import Data' class="btn btn-sm btn-primary btn-import-data">
-                            <i class="fa fa-download"></i> {{trans("crudbooster.button_import")}}
-                          </a>
-                          @endif
-
-                          <!--ADD ACTIon-->
-                           @if(count($index_button))
-                          <div class="more-action" style="display:inline-block;position:relative">
-                            <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">More Action
-                              <span class="fa fa-caret-down"></span></button>
-                            <ul class="dropdown-menu">
-                                
-                             
-                                  @foreach($index_button as $ib)
-                                   <li> <a href='{{$ib["url"]}}' id='{{str_slug($ib["label"])}}' class='btn btn-primary btn-xs' 
-                                    @if($ib['onClick']) onClick='return {{$ib["onClick"]}}' @endif
-                                    @if($ib['onMouseOever']) onMouseOever='return {{$ib["onMouseOever"]}}' @endif
-                                    @if($ib['onMoueseOut']) onMoueseOut='return {{$ib["onMoueseOut"]}}' @endif
-                                    @if($ib['onKeyDown']) onKeyDown='return {{$ib["onKeyDown"]}}' @endif
-                                    @if($ib['onLoad']) onLoad='return {{$ib["onLoad"]}}' @endif
-                                    >
-                                      <i class='{{$ib["icon"]}}'></i> {{$ib["label"]}}
-                                    </a></li>
-                                  @endforeach                                                          
-                              
-
-                            </ul>
-                          </div>
-                          @endif
-                          
-                    </div>
-                    <div class='col-sm-4' align="right">
-
-                        <form method='get' style="display:inline-block;width: 260px;" action='{{Request::url()}}'>
-                              <div class="input-group">
-                                <input type="text" name="q" value="{{ Request::get('q') }}" class="form-control input-sm pull-right" placeholder="Search"/>                            
-                                {!! CRUDBooster::getUrlParameters(['q']) !!}
-                                <div class="input-group-btn">
-                                  @if(Request::get('q'))
-                                  <?php 
-                                    $parameters = Request::all();
-                                    unset($parameters['q']);
-                                    $build_query = urldecode(http_build_query($parameters));
-                                    $build_query = ($build_query)?"?".$build_query:"";
-                                    $build_query = (Request::all())?$build_query:"";
-                                  ?>
-                                  <button type='button' onclick='location.href="{{ CRUDBooster::mainpath($build_query) }}"' title='Reset' class='btn btn-sm btn-warning'><i class='fa fa-ban'></i></button>
-                                  @endif
-                                  <button type='submit' class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
-                                </div>
-                              </div>
-                          </form>
-
-
-                        <form method='get' id='form-limit-paging' style="display:inline-block" action='{{Request::url()}}'>                        
-                            {!! CRUDBooster::getUrlParameters(['limit']) !!}
-                            <div class="input-group">
-                              <select onchange="$('#form-limit-paging').submit()" name='limit' style="width: 56px;"  class='form-control input-sm'>
-                                  <option {{($limit==5)?'selected':''}} value='5'>5</option> 
-                                  <option {{($limit==10)?'selected':''}} value='10'>10</option>
-                                  <option {{($limit==20)?'selected':''}} value='20'>20</option>
-                                  <option {{($limit==25)?'selected':''}} value='25'>25</option>
-                                  <option {{($limit==50)?'selected':''}} value='50'>50</option>
-                                  <option {{($limit==100)?'selected':''}} value='100'>100</option>
-                                  <option {{($limit==200)?'selected':''}} value='200'>200</option>
-                              </select>                              
-                            </div>
-                          </form>
-
-                          
-                    </div>
-                  </div>
                                             
                   <form id='form-table' method='post' action='{{CRUDBooster::mainpath("action-selected")}}'>
                   <input type='hidden' name='button_name' value=''/>
                   <input type='hidden' name='_token' value='{{csrf_token()}}'/>
                   <table id='table_dashboard' class="table table-hover table-striped table-bordered">
                     <thead>
-                    <tr>                      
+                    <tr class="active">                      
                       <th width='3%'><input type='checkbox' id='checkall'/></th>
                       <?php                       
                         foreach($columns as $col) {
@@ -424,6 +307,7 @@
                     <h4 class="modal-title"><i class='fa fa-filter'></i> {{trans("crudbooster.filter_dialog_title")}}</h4>
                   </div>
                   <form method='get' action=''>
+                    <input type="hidden" name="lasturl" value="{{Request::get('lasturl')?:Request::fullUrl()}}">
                     <div class="modal-body">
                       
                       <?php foreach($columns as $key => $col):?>
@@ -477,7 +361,7 @@
                     </div>
                     <div class="modal-footer" align="right">
                       <button class="btn btn-default" type="button" data-dismiss="modal">{{trans("crudbooster.button_close")}}</button>
-                      <button class="btn btn-default btn-reset" type="reset" onclick='location.href="{{CRUDBooster::mainpath()}}"' >Reset</button>
+                      <button class="btn btn-default btn-reset" type="reset" onclick='location.href="{{Request::get("lasturl")}}"' >Reset</button>
                       <button class="btn btn-primary btn-submit" type="submit">{{trans("crudbooster.button_submit")}}</button>
                     </div>
                   </form>

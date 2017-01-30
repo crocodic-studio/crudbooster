@@ -1,7 +1,8 @@
-<div class='form-group {{$col_width}} {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style='{{@$form["style"]}}'>
-				<label>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
+<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style='{{@$form["style"]}}'>
+				<label class='control-label col-sm-2'>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
 
-				<div class="input-group">
+				<div class="{{$col_width?:'col-sm-10'}}">
+				<div class="input-group">	
 			      <span class="input-group-btn">
 			        <a id="lfm-{{$name}}" data-input="thumbnail-{{$name}}" data-preview="holder-{{$name}}" class="btn btn-primary">
 			          @if(@$form['filemanager_type'])
@@ -25,6 +26,7 @@
 
 				<div class='help-block'>{{@$form['help']}}</div>
 				<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
+				</div>
 			</div>
 			@if(@$form['filemanager_type'])
 			<script type="text/javascript">$('#lfm-{{$name}}').filemanager('file','{{url("/")}}');</script>

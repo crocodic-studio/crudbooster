@@ -4,6 +4,7 @@ use Unisharp\Laravelfilemanager\controllers\Controller;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
+use CRUDBooster;
 
 /**
  * Class LfmController
@@ -120,7 +121,7 @@ class LfmController extends Controller {
 
     public function getUserSlug()
     {
-        return empty(get_my_id()) ? '' : get_my_id();
+        return empty(CRUDBooster::myId()) ? '' : CRUDBooster::myId();
     }
 
 

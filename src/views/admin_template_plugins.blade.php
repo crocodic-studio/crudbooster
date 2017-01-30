@@ -43,12 +43,21 @@
 	<!--MONEY FORMAT-->
 	<script src="{{asset('vendor/crudbooster/jquery.price_format.2.0.min.js')}}"></script>
 
+	<!--DATATABLE-->	
+  	<link rel="stylesheet" href="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/datatables/dataTables.bootstrap.css')}}">
+	<script src="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/datatables/jquery.dataTables.min.js')}}"></script>
+	<script src="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/datatables/dataTables.bootstrap.min.js')}}"></script>
+
 	<script>			
 		var ASSET_URL           = "{{asset('/')}}";
 		var APP_NAME            = "{{CRUDBooster::getSetting('appname')}}";		
 		var ADMIN_PATH          = '{{url(config("crudbooster.ADMIN_PATH")) }}';
 		var NOTIFICATION_JSON   = "{{route('NotificationsControllerGetLatestJson')}}";
 		var NOTIFICATION_INDEX  = "{{route('NotificationsControllerGetIndex')}}";		
+
+		$(function() {
+			$('.datatables-simple').DataTable();
+		})
 	</script>
 	<script src="{{asset('vendor/crudbooster/assets/js/main.js')}}"></script>
 	<link rel='stylesheet' href='{{asset("vendor/crudbooster/assets/css/main.css")}}'/>

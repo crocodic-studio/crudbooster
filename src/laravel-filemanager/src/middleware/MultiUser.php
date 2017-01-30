@@ -3,6 +3,7 @@
 namespace Unisharp\Laravelfilemanager\middleware;
 
 use Closure;
+use CRUDBooster;
 
 class MultiUser
 {
@@ -11,7 +12,7 @@ class MultiUser
     	if (\Config::get('lfm.allow_multi_user') === true) {
     		$slug = \Config::get('lfm.user_field');
 
-            $new_working_dir = '/' . get_my_id();
+            $new_working_dir = '/' . CRUDBooster::myId();
 
 	        $previous_dir = $request->input('working_dir');
 
@@ -31,7 +32,7 @@ class MultiUser
     		return true;
         }
 
-        if (starts_with($previous_dir, '/' . get_my_id() )) {
+        if (starts_with($previous_dir, '/' . CRUDBooster::myId() )) {
         	return true;
         }
 

@@ -2,12 +2,12 @@
 	"title":"Date Time Input",
 	"type":"datetime",
 	"attribute":{
-		"label":"string",
-		"name":"string column name",
+		"optional": {
 		"style":"string inline stylesheet",
 		"help":"string help-block",
 		"placeholder":"string placeholder",
 		"readonly":"boolean",
 		"disabled":"boolean"
+		}
 	}
 }

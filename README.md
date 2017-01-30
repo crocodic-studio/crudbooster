@@ -12,60 +12,8 @@
 
 CRUDBooster is Laravel Framework that modified to bring a lot of features to develop a web application so simply. One of the main features is Smart CRUD Generator, so CRUDBooster will create a module automatically included Create, Read, Update, Delete standard function. And CRUDBooster is not usual CRUD Generator,you will get a lot of new experience with a new concept. CRUD Booster is dedicated to those who already understand the basic laravel. We do not recommend for those of you who have never used laravel altogether.
 
-## System Requirement
-- PHP >= 5.6.x, PHP <= 7
-- Laravel 5.3.x
-- Mcrypt PHP Extension
-- OpenSSL PHP Extension
-- Mbstring PHP Extension
-- Tokenizer PHP Extension
-
-## Installation For Laravel 5.3.x
-### 1. Install via composer
-```
-composer require crocodicstudio/crudbooster
-```
-### 2. Add Dependencies Package to Service Provider (config/app.php)
-```
-Barryvdh\DomPDF\ServiceProvider::class,
-Maatwebsite\Excel\ExcelServiceProvider::class,
-Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider::class,
-Intervention\Image\ImageServiceProvider::class,
-crocodicstudio\crudbooster\CRUDBoosterServiceProvider::class,
-```
-### 3. Add Bellow Facades to (config/app.php)
-```
-'PDF' => Barryvdh\DomPDF\Facade::class,
-'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-'Image' => Intervention\Image\Facades\Image::class,
-'CRUDBooster' => crocodicstudio\crudbooster\helpers\CRUDBooster::class,
-```
-### 4. Publish Configuration and Databases
-```
-php artisan vendor:publish
-```
-Then  
-```
-php artisan vendor:publish --force --provider="crocodicstudio\crudbooster\CRUDBoosterServiceProvider"
-```
-### 5. Migrating and Seeding the Core Database of CRUDBooster
-```
-php artisan migrate --seed
-```
-### 6. Testing
-Try to login at /admin  
-default username : admin@crudbooster.com  
-default password : 123456  
-
-## Update Guide
-1. <code>composer update crocodicstudio/crudbooster</code>
-1. Re-pulbish asset and configuration (Step 4)  
-1. Migration & Seeding (Step 5) to make sure any update work properly.
-
-
-## DOCUMENTATION
-The complete documentation can be found at : 
-[http://crudbooster.com/page/documentation](http://crudbooster.com/page/documentation)
+## Getting Started & Documentation
+[http://crudbooster.com/doc/5.3/intro](http://crudbooster.com/doc/5.3/intro)
 
 ## SUPPORT AND CONTRIBUTION
 All of issues and new feature request, please create an issue at GitHub, please do not send an email or Private Message to us.

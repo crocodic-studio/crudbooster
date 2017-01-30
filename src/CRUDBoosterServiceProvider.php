@@ -1,6 +1,4 @@
-<?php
-
-namespace crocodicstudio\crudbooster;
+<?php namespace crocodicstudio\crudbooster;
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\ServiceProvider;
@@ -51,7 +49,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         }
 
         if(!file_exists(app_path('Http/Controllers/AdminCmsUsersController.php'))) {
-            $this->publishes([__DIR__.'/userfiles/controllers/AdminCmsUsersController.php' => app_path('Http/Controllers/AdminCmsUsersController.php')],'AdminCmsUsersController');
+            $this->publishes([__DIR__.'/userfiles/controllers/AdminCmsUsersController.php' => app_path('Http/Controllers/AdminCmsUsersController.php')],'cb_user_controller');
         }
                     
         require __DIR__.'/validations/validation.php';        

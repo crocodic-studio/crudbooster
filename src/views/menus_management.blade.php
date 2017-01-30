@@ -118,7 +118,7 @@
          </div>         
 
          <div class='row'>
-              <div class="col-sm-6">
+              <div class="col-sm-5">
 
                 <div class="panel panel-success">
                   <div class="panel-heading">
@@ -172,13 +172,13 @@
                   
 
               </div>
-              <div class="col-sm-6">
+              <div class="col-sm-7">
                   <div class="panel panel-default">
                     <div class="panel-heading">
                       Add Menu
                     </div>
                     <div class="panel-body">
-                      <form method='post' id="form" enctype="multipart/form-data" action='{{CRUDBooster::mainpath("add-save")}}'>
+                      <form class='form-horizontal' method='post' id="form" enctype="multipart/form-data" action='{{CRUDBooster::mainpath("add-save")}}'>
                       <input type="hidden" name="_token" value="{{ csrf_token() }}">  
                       <input type='hidden' name='return_url' value='{{Request::fullUrl()}}'/>
                       @include("crudbooster::default.form_body")

@@ -16,6 +16,7 @@ class CreateCmsMenus extends Migration
             $table->increments('id');
             $table->string('name')->nullable();
             $table->string('type')->default('url');
+            $table->string('path')->nullable();
             $table->string('color')->nullable();
             $table->string('icon')->nullable();
             $table->integer('parent_id')->nullable();

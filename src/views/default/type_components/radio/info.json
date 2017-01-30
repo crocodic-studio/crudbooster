@@ -2,11 +2,14 @@
 	"title":"Radio Input",
 	"type":"radio",
 	"attribute":{
-		"label":"string",
-		"name":"string column name",
-		"style":"string inline stylesheet",
-		"help":"string help-block",		
-
-		"dataenum":["0|a","1|b","2|c"]
+		
+		"optional": {
+			"style":"string inline stylesheet",
+			"help":"string help-block"
+		},
+		"required":{
+			"dataenum":"value1;value2;value3"		
+		}	
+		
 	}
 }

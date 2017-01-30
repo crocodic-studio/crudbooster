@@ -3,7 +3,7 @@
 	use crocodicstudio\crudbooster\controllers\Controller;
 	use Illuminate\Support\Facades\Session;
 	use Illuminate\Support\Facades\Storage;
-	use Illuminate\Http\Request;
+	use Illuminate\Support\Facades\Request;
 	use Illuminate\Support\Facades\DB;
 	use Illuminate\Support\Facades\App;
 	use Illuminate\Support\Facades\Mail;
@@ -17,7 +17,7 @@
 
 	class EmailTemplatesController extends \crocodicstudio\crudbooster\controllers\CBController {
 
-	    public function __construct(Request $request) {
+	    public function cbInit() {
 	        $this->table              = "cms_email_templates";
 	        $this->primary_key        = "id";
 	        $this->title_field        = "name";
@@ -42,21 +42,16 @@
 
 			$this->form = array();
 			$this->form[] = array("label"=>"Template Name","name"=>"name","type"=>"text","required"=>TRUE,"validation"=>"required|min:3|max:255|alpha_spaces","placeholder"=>"You can only enter the letter only");
-			$this->form[] = array("label"=>"Slug","type"=>"text","name"=>"slug","required"=>true,'validation'=>'required|unique');
+			$this->form[] = array("label"=>"Slug","type"=>"text","name"=>"slug","required"=>true,'validation'=>'required|unique:cms_email_templates,slug');
 			$this->form[] = array("label"=>"Subject","name"=>"subject","type"=>"text","required"=>TRUE,"validation"=>"required|min:3|max:255");
-			$this->form[] = array("label"=>"Content","name"=>"content","type"=>"wysiwyg","required"=>TRUE,"validation"=>"required|min:3|max:255");
+			$this->form[] = array("label"=>"Content","name"=>"content","type"=>"wysiwyg","required"=>TRUE,"validation"=>"required");
 			$this->form[] = array("label"=>"Description","name"=>"description","type"=>"text","required"=>TRUE,"validation"=>"required|min:3|max:255");
 			
 			$this->form[] = array("label"=>"From Name","name"=>"from_name","type"=>"text","required"=>false,"width"=>"col-sm-6",'placeholder'=>'Optional');
 			$this->form[] = array("label"=>"From Email","name"=>"from_email","type"=>"email","required"=>false,"validation"=>"email","width"=>"col-sm-6",'placeholder'=>'Optional');
 			
 			$this->form[] = array("label"=>"Cc Email","name"=>"cc_email","type"=>"email","required"=>false,"validation"=>"email",'placeholder'=>'Optional');
-
-
-
-
-	        //No need chanage this constructor
-	        $this->constructor();
+	        
 	    }
 
 

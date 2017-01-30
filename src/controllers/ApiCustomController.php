@@ -3,7 +3,7 @@
 use crocodicstudio\crudbooster\controllers\Controller;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Mail;
@@ -18,19 +18,21 @@ use CRUDbooster;
 class ApiCustomController extends CBController {
 
 	
-	public function __construct() {		
-		$this->table       = 'cms_apicustom';
-		$this->primary_key = 'id';
-		$this->title_field = "nama";
-		$this->button_show_data = false;
-		$this->button_new_data = false;
-		$this->button_delete_data = false;			
-		$this->constructor();
+	public function cbInit() {		
+		$this->table         = 'cms_apicustom';
+		$this->primary_key   = 'id';
+		$this->title_field   = "nama";
+		$this->button_show   = false;
+		$this->button_new    = false;
+		$this->button_delete = false;	
+		$this->button_add    = false;
+		$this->button_import = false;
+		$this->button_export = false;				
 	}
 
 
-	function getIndex(Request $request) {		
-
+	function getIndex() {		
+		$this->cbLoader();
 		$data = array();
 		
 		$data['page_title'] = 'API Generator';
@@ -40,7 +42,17 @@ class ApiCustomController extends CBController {
 		return view('crudbooster::api_documentation',$data); 
 	}
 
+	function apiDocumentation() {		
+		$this->cbLoader();
+		$data = array();
+				
+		$data['apis']       = DB::table('cms_apicustom')->orderby('nama','asc')->get();
+
+		return view('crudbooster::api_documentation_public',$data); 
+	}
+
 	function getDownloadPostman() {
+		$this->cbLoader();
 		$data = array();
 		$data['variables'] = [];
 		$data['info'] = [
@@ -98,7 +110,7 @@ class ApiCustomController extends CBController {
 	}
 
 	public function getScreetKey() {
-		
+		$this->cbLoader();
 		$data['page_title'] = 'API Generator';
 		$data['page_menu']  = Route::getCurrentRoute()->getActionName();
 		$data['apikeys'] = DB::table('cms_apikey')->get();
@@ -106,7 +118,7 @@ class ApiCustomController extends CBController {
 	}
 
 	public function getGenerator() {
-
+		$this->cbLoader();
 		$data['page_title'] = 'API Generator';
 		$data['page_menu']  = Route::getCurrentRoute()->getActionName();
 
@@ -124,7 +136,7 @@ class ApiCustomController extends CBController {
 	}
 
 	public function getEditApi($id) {
-
+		$this->cbLoader();
 		$row = DB::table('cms_apicustom')->where('id',$id)->first();
 
 		$data['row']        = $row;
@@ -147,7 +159,7 @@ class ApiCustomController extends CBController {
 	}
  
 	function getGenerateScreetKey() {				
-
+		$this->cbLoader();
 		//Generate a random string.
 		$token = openssl_random_pseudo_bytes(16);
 		 
@@ -169,20 +181,20 @@ class ApiCustomController extends CBController {
 		return response()->json($response);
 	}
 
-	public function getStatusApikey(Request $request) {
+	public function getStatusApikey() {
 		CRUDBooster::valid(['id','status'],'view');
 
-		$id = $request->get('id');
-		$status = ($request->get('status')==1)?"active":"non active";
+		$id = Request::get('id');
+		$status = (Request::get('status')==1)?"active":"non active";
 
 		DB::table('cms_apikey')->where('id',$id)->update(['status'=>$status]);
 
 		return redirect()->back()->with(['message'=>'You have been update api key status !','message_type'=>'success']);
 	}
 
-	public function getDeleteApiKey(Request $request) {		
+	public function getDeleteApiKey() {		
 
-		$id = $request->get('id');
+		$id = Request::get('id');
 		if(DB::table('cms_apikey')->where('id',$id)->delete()) {
 			return response()->json(['status'=>1]);
 		}else{
@@ -192,6 +204,7 @@ class ApiCustomController extends CBController {
 
 
 	function getColumnTable($table,$type='list') {
+		$this->cbLoader();
 		$result = array();
 
 		$cols = CRUDBooster::getTableColumns($table);
@@ -236,9 +249,9 @@ class ApiCustomController extends CBController {
 		return response()->json($new_result);
 	}
 
-	function postSaveApiCustom(Request $request) {
-
-		$posts = $request->all();		
+	function postSaveApiCustom() {
+		$this->cbLoader();
+		$posts = Request::all();		
 
 		$a = array();		
 
@@ -292,7 +305,7 @@ class ApiCustomController extends CBController {
 		$a['responses']  = serialize($json);
 		$a['keterangan'] = g('keterangan');
 
-		if($request->get('id')) {
+		if(Request::get('id')) {
 			DB::table('cms_apicustom')->where('id',g('id'))->update($a);			
 		}else{
 
@@ -308,6 +321,7 @@ class ApiCustomController extends CBController {
 	}
 
 	function getDeleteApi($id) {
+		$this->cbLoader();	
 		$row = DB::table('cms_apicustom')->where('id',$id)->first();
 		DB::table('cms_apicustom')->where('id',$id)->delete();
 

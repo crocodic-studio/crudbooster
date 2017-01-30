@@ -23,16 +23,16 @@
     <link rel='stylesheet' href='{{asset("vendor/crudbooster/assets/css/main.css")}}'/>
     <style type="text/css">
       .login-page, .register-page {
-          background: {{ CRUDBooster::getSetting("login_background_color")?:'#dddddd'}} url('{{ CRUDBooster::getSetting("login_background_image")?asset(CRUDBooster::getSetting("login_background_image")):asset('vendor/crudbooster/assets/bg_blur5.jpg') }}');
+          background: {{ CRUDBooster::getSetting("login_background_color")?:'#dddddd'}} url('{{ CRUDBooster::getSetting("login_background_image")?asset(CRUDBooster::getSetting("login_background_image")):asset('vendor/crudbooster/assets/bg_blur3.jpg') }}');
           color: {{ CRUDBooster::getSetting("login_font_color")?:'#ffffff' }} !important;
           background-repeat: no-repeat;
           background-position: center;
           background-size: cover;
       }
       .login-box-body {
-        box-shadow: 0px 0px 100px rgba(0,0,0,0.8);              
-        background: none;
-        color: {{ CRUDBooster::getSetting("login_font_color")?:'#ffffff' }} !important;
+        box-shadow: 0px 0px 50px rgba(0,0,0,0.8);              
+        background: rgba(255,255,255,0.9);
+        color: {{ CRUDBooster::getSetting("login_font_color")?:'#666666' }} !important;
       }
     </style>
   </head>

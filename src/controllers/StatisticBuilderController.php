@@ -3,7 +3,7 @@
 	use crocodicstudio\crudbooster\controllers\Controller;
 	use Illuminate\Support\Facades\Session;
 	use Illuminate\Support\Facades\Storage;
-	use Illuminate\Http\Request;
+	use Illuminate\Support\Facades\Request;	
 	use Illuminate\Support\Facades\DB;
 	use Illuminate\Support\Facades\App;
 	use Illuminate\Support\Facades\Mail;
@@ -17,7 +17,7 @@
 
 	class StatisticBuilderController extends CBController {
 
-	    public function __construct(Request $request) {
+	    public function cbInit() {
 	        $this->table              = "cms_statistics";
 	        $this->primary_key        = "id";
 	        $this->title_field        = "name";
@@ -45,12 +45,10 @@
 			
 			$this->addaction   = array();
 			$this->addaction[] = ['label'=>'Builder','url'=>CRUDBooster::mainpath('builder').'/[id]','icon'=>'fa fa-wrench'];
-
-	        //No need chanage this constructor
-	        $this->constructor();
 	    }	    
 
 	    public function getShow($slug) {
+	    	$this->cbLoader();
 			$row               = CRUDBooster::first($this->table,['slug'=>$slug]);
 			$id_cms_statistics = $row->id;
 			$page_title        = $row->name;	    				
@@ -58,6 +56,7 @@
 	    }
 
 	    public function getBuilder($id_cms_statistics) {
+	    	$this->cbLoader();
 	    	$page_title = 'Statistic Builder';	    		    	
 	    	return view('crudbooster::statistic_builder.builder',compact('page_title','id_cms_statistics'));
 	    }
@@ -92,12 +91,12 @@
 	    	return response()->json(compact('componentID','layout'));
 	    }
 
-	    public function postAddComponent(Request $request) {
-
-			$component_name    = $request->get('component_name');
-			$id_cms_statistics = $request->get('id_cms_statistics');
-			$sorting           = $request->get('sorting');
-			$area 			   = $request->get('area');
+	    public function postAddComponent() {
+	    	$this->cbLoader();
+			$component_name    = Request::get('component_name');
+			$id_cms_statistics = Request::get('id_cms_statistics');
+			$sorting           = Request::get('sorting');
+			$area 			   = Request::get('area');
 
 	    	$componentID = md5(time());
 
@@ -117,18 +116,18 @@
 	    	return response()->json(compact('layout','componentID'));
 	    }
 
-	    public function postUpdateAreaComponent(Request $request) {
+	    public function postUpdateAreaComponent() {
 	    	DB::table('cms_statistic_components')
-	    	->where('componentID',$request->get('componentid'))
+	    	->where('componentID',Request::get('componentid'))
 	    	->update([
-	    		'sorting'=>$request->get('sorting'),
-	    		'area_name'=>$request->get('areaname')	    		
+	    		'sorting'=>Request::get('sorting'),
+	    		'area_name'=>Request::get('areaname')	    		
 	    		]);
 	    	return response()->json(['status'=>true]);
 	    }
 
 	    public function getEditComponent($componentID) {
-
+	    	$this->cbLoader();
 	    	$component_row = CRUDBooster::first('cms_statistic_components',['componentID'=>$componentID]);
 
 	    	$config = json_decode($component_row->config);
@@ -137,12 +136,12 @@
 	    	return view('crudbooster::statistic_builder.components.'.$component_row->component_name,compact('command','componentID','config'));	
 	    }
 
-	    public function postSaveComponent(Request $request) {
+	    public function postSaveComponent() {
 	    	DB::table('cms_statistic_components')
-	    	->where('componentID',$request->get('componentid'))
+	    	->where('componentID',Request::get('componentid'))
 	    	->update([
-	    		'name'=>$request->get('name'),
-	    		'config'=>json_encode($request->get('config'))
+	    		'name'=>Request::get('name'),
+	    		'config'=>json_encode(Request::get('config'))
 	    		]);
 	    	return response()->json(['status'=>true]);
 	    }
