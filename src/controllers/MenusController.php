@@ -17,7 +17,7 @@ use CRUDBooster;
 
 	class MenusController extends CBController {
 
-	    public function __construct() {
+	    public function cbInit() {
 	        $this->table              = "cms_menus";
 	        $this->primary_key        = "id";
 	        $this->title_field        = "name";
@@ -55,14 +55,12 @@ use CRUDBooster;
 
 			$id_cms_privileges = Request::get('id_cms_privileges');
 			$this->form[] = array("label"=>"id_cms_privileges","name"=>"id_cms_privileges","type"=>"hidden","value"=>$id_cms_privileges);
-    
-	        //No Need Change This Constructor
-	        $this->constructor();
+    	        
 	    }
 
 
 	  public function getIndex() {
-
+	  	$this->cbLoader();
 	  	
 	  	$privileges = DB::table('cms_privileges')->get();
 

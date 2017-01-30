@@ -18,7 +18,7 @@ use CRUDbooster;
 class ApiCustomController extends CBController {
 
 	
-	public function __construct() {		
+	public function cbInit() {		
 		$this->table         = 'cms_apicustom';
 		$this->primary_key   = 'id';
 		$this->title_field   = "nama";
@@ -27,14 +27,12 @@ class ApiCustomController extends CBController {
 		$this->button_delete = false;	
 		$this->button_add    = false;
 		$this->button_import = false;
-		$this->button_export = false;
-			
-		$this->constructor();
+		$this->button_export = false;				
 	}
 
 
 	function getIndex() {		
-
+		$this->cbLoader();
 		$data = array();
 		
 		$data['page_title'] = 'API Generator';
@@ -45,7 +43,7 @@ class ApiCustomController extends CBController {
 	}
 
 	function apiDocumentation() {		
-
+		$this->cbLoader();
 		$data = array();
 				
 		$data['apis']       = DB::table('cms_apicustom')->orderby('nama','asc')->get();
@@ -54,6 +52,7 @@ class ApiCustomController extends CBController {
 	}
 
 	function getDownloadPostman() {
+		$this->cbLoader();
 		$data = array();
 		$data['variables'] = [];
 		$data['info'] = [
@@ -111,7 +110,7 @@ class ApiCustomController extends CBController {
 	}
 
 	public function getScreetKey() {
-		
+		$this->cbLoader();
 		$data['page_title'] = 'API Generator';
 		$data['page_menu']  = Route::getCurrentRoute()->getActionName();
 		$data['apikeys'] = DB::table('cms_apikey')->get();
@@ -119,7 +118,7 @@ class ApiCustomController extends CBController {
 	}
 
 	public function getGenerator() {
-
+		$this->cbLoader();
 		$data['page_title'] = 'API Generator';
 		$data['page_menu']  = Route::getCurrentRoute()->getActionName();
 
@@ -137,7 +136,7 @@ class ApiCustomController extends CBController {
 	}
 
 	public function getEditApi($id) {
-
+		$this->cbLoader();
 		$row = DB::table('cms_apicustom')->where('id',$id)->first();
 
 		$data['row']        = $row;
@@ -160,7 +159,7 @@ class ApiCustomController extends CBController {
 	}
  
 	function getGenerateScreetKey() {				
-
+		$this->cbLoader();
 		//Generate a random string.
 		$token = openssl_random_pseudo_bytes(16);
 		 
@@ -205,6 +204,7 @@ class ApiCustomController extends CBController {
 
 
 	function getColumnTable($table,$type='list') {
+		$this->cbLoader();
 		$result = array();
 
 		$cols = CRUDBooster::getTableColumns($table);
@@ -250,7 +250,7 @@ class ApiCustomController extends CBController {
 	}
 
 	function postSaveApiCustom() {
-
+		$this->cbLoader();
 		$posts = Request::all();		
 
 		$a = array();		
@@ -321,6 +321,7 @@ class ApiCustomController extends CBController {
 	}
 
 	function getDeleteApi($id) {
+		$this->cbLoader();	
 		$row = DB::table('cms_apicustom')->where('id',$id)->first();
 		DB::table('cms_apicustom')->where('id',$id)->delete();
 

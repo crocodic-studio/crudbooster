@@ -141,7 +141,7 @@ class CRUDBooster  {
 		}
 
 		public static function myId() {
-	        return Session::get('admin_id');
+			return Session::get('admin_id');
 	    }
 
 	    public static function isSuperadmin() {
@@ -1059,7 +1059,7 @@ class CRUDBooster  {
 
 	class Admin'.$controllername.' extends \crocodicstudio\crudbooster\controllers\CBController {
 
-	    public function __construct() {
+	    public function cbInit() {
 	    	# START CONFIGURATION DO NOT REMOVE THIS LINE
 			$this->table               = "'.$table.'";	        
 			$this->title_field         = "'.$name_col.'";
@@ -1361,11 +1361,6 @@ class CRUDBooster  {
 	        |
 	        */
 	        $this->load_js = array();
-
-
-
-	        //No need chanage this constructor
-	        $this->constructor();
 	    }
 
 

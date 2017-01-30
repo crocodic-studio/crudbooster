@@ -7,7 +7,7 @@ use CRUDbooster;
 
 class AdminCmsUsersController extends \crocodicstudio\crudbooster\controllers\CBController {
 
-	public function __construct() {
+	public function cbInit() {
 		# START CONFIGURATION DO NOT REMOVE THIS LINE
 		$this->table               = 'cms_users';
 		$this->primary_key         = 'id';
@@ -42,11 +42,11 @@ class AdminCmsUsersController extends \crocodicstudio\crudbooster\controllers\CB
 			$this->button_delete  = false;	
 			$this->hide_form      = ['id_cms_privileges'];		
 		}		
-		
-		$this->constructor();
+				
 	}
 
-	public function getProfile() {				
+	public function getProfile() {	
+		$this->cbLoader();			
 		$data['page_title'] = trans("crudbooster.label_button_profile");
 		$data['row']        = DB::table($this->table)->where($this->primary_key,CRUDBooster::myId())->first();
 		$data['return_url'] = Request::fullUrl();

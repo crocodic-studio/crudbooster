@@ -17,7 +17,7 @@
 
 	class StatisticBuilderController extends CBController {
 
-	    public function __construct() {
+	    public function cbInit() {
 	        $this->table              = "cms_statistics";
 	        $this->primary_key        = "id";
 	        $this->title_field        = "name";
@@ -45,12 +45,10 @@
 			
 			$this->addaction   = array();
 			$this->addaction[] = ['label'=>'Builder','url'=>CRUDBooster::mainpath('builder').'/[id]','icon'=>'fa fa-wrench'];
-
-	        //No need chanage this constructor
-	        $this->constructor();
 	    }	    
 
 	    public function getShow($slug) {
+	    	$this->cbLoader();
 			$row               = CRUDBooster::first($this->table,['slug'=>$slug]);
 			$id_cms_statistics = $row->id;
 			$page_title        = $row->name;	    				
@@ -58,6 +56,7 @@
 	    }
 
 	    public function getBuilder($id_cms_statistics) {
+	    	$this->cbLoader();
 	    	$page_title = 'Statistic Builder';	    		    	
 	    	return view('crudbooster::statistic_builder.builder',compact('page_title','id_cms_statistics'));
 	    }
@@ -93,7 +92,7 @@
 	    }
 
 	    public function postAddComponent() {
-
+	    	$this->cbLoader();
 			$component_name    = Request::get('component_name');
 			$id_cms_statistics = Request::get('id_cms_statistics');
 			$sorting           = Request::get('sorting');
@@ -128,7 +127,7 @@
 	    }
 
 	    public function getEditComponent($componentID) {
-
+	    	$this->cbLoader();
 	    	$component_row = CRUDBooster::first('cms_statistic_components',['componentID'=>$componentID]);
 
 	    	$config = json_decode($component_row->config);

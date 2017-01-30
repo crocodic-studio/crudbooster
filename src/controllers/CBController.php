@@ -69,9 +69,14 @@ class CBController extends Controller {
 	public $hide_form			  = array();
 	public $index_return 		  = FALSE; //for export
 
-	public function constructor() {					 		
-		
-		$this->checkHideForm();
+	public function __construct() {
+
+	}
+
+	public function cbLoader() {					 		
+		$this->cbInit();
+
+		$this->checkHideForm();		
 
 		$this->columns_table                 = $this->col; 		
 		$this->data_inputan                  = $this->form;
@@ -119,6 +124,8 @@ class CBController extends Controller {
 	}
 
 	public function getIndex() {
+		$this->cbLoader();
+
 		$module = CRUDBooster::getCurrentModule();
 
 		if(!CRUDBooster::isView() && $this->global_privilege==FALSE) {
@@ -771,7 +778,9 @@ class CBController extends Controller {
 			}
 
 			if($ro['type']=='checkbox') {
-				$this->arr[$name] = implode(";",$inputdata);		
+				if($inputdata) {
+					$this->arr[$name] = implode(";",$inputdata);							
+				}
 			}
 			
 
@@ -805,13 +814,14 @@ class CBController extends Controller {
 	}
 
 	public function getAddRaw() {
+		$this->cbLoader();
 		$parent_field = Request::get('parent_field');
 		$parent_id    = Request::get('parent_id');
 		return view('crudbooster::default.form_body',['parent_field'=>$parent_field,'parent_id'=>$parent_id]);
 	}
 
 	public function getAdd(){
-
+		$this->cbLoader();
 		if(!CRUDBooster::isCreate() && $this->global_privilege==FALSE || $this->button_add==FALSE) {			
 			CRUDBooster::insertLog(trans('crudbooster.log_try_add',['module'=>CRUDBooster::getCurrentModule()->name ]));			
 			CRUDBooster::redirect(CRUDBooster::adminPath(),trans("crudbooster.denied_access"));
@@ -825,7 +835,7 @@ class CBController extends Controller {
 	}
 	
 	public function postAddSave() {	
-
+		$this->cbLoader();
 		if(!CRUDBooster::isCreate() && $this->global_privilege==FALSE || $this->button_add==FALSE) {			
 			CRUDBooster::insertLog(trans('crudbooster.log_try_add_save',['name'=>Request::input($this->title_field),'module'=>CRUDBooster::getCurrentModule()->name ]));			
 			CRUDBooster::redirect(CRUDBooster::adminPath(),trans("crudbooster.denied_access"));
@@ -937,6 +947,7 @@ class CBController extends Controller {
 	}
 
 	public function getEditRaw($id) {
+		$this->cbLoader();
 		$parent_field = Request::get('parent_field');
 		$parent_id    = Request::get('parent_id');
 		if(Request::get('temporary')) {
@@ -950,7 +961,7 @@ class CBController extends Controller {
 	}
 		
 	public function getEdit($id){
-		
+		$this->cbLoader();
 		$row             = DB::table($this->table)->where($this->primary_key,$id)->first();	
 
 		if(!CRUDBooster::isRead() && $this->global_privilege==FALSE || $this->button_edit==FALSE) {			
@@ -967,7 +978,7 @@ class CBController extends Controller {
 	}
 
 	public function postEditSave($id) {
-
+		$this->cbLoader();
 		$row = DB::table($this->table)->where($this->primary_key,$id)->first();	
 
 		if(!CRUDBooster::isUpdate() && $this->global_privilege==FALSE) {			
@@ -1053,7 +1064,7 @@ class CBController extends Controller {
 	}
 	
 	public function getDelete($id) {
-
+		$this->cbLoader();
 		$row = DB::table($this->table)->where($this->primary_key,$id)->first();	
 
 		if(!CRUDBooster::isDelete() && $this->global_privilege==FALSE || $this->button_delete==FALSE) {			
@@ -1087,6 +1098,7 @@ class CBController extends Controller {
 	}
 
 	public function getDetail($id)	{
+		$this->cbLoader();
 		$row        = DB::table($this->table)->where($this->primary_key,$id)->first();	
 
 		if(!CRUDBooster::isRead() && $this->global_privilege==FALSE || $this->button_detail==FALSE) {			
@@ -1106,6 +1118,7 @@ class CBController extends Controller {
 	}
 
 	public function getImportData() {
+		$this->cbLoader();
 		$data['page_menu']       = Route::getCurrentRoute()->getActionName();		
 		$data['page_title']      = 'Import Data '.$module->name;
 
@@ -1141,6 +1154,7 @@ class CBController extends Controller {
 	}
 
 	public function postDoneImport() {
+		$this->cbLoader();
 		$data['page_menu']       = Route::getCurrentRoute()->getActionName();		
 		$data['page_title']      = trans('crudbooster.import_page_title',['module'=>$module->name]);	
 		Session::put('select_column',Request::get('select_column'));
@@ -1149,6 +1163,7 @@ class CBController extends Controller {
 	}
 
 	public function postDoImportChunk() {
+		$this->cbLoader();
 		$file_md5 = md5(Request::get('file'));
 
 		if(Request::get('file') && Request::get('resume')==1) {
@@ -1252,7 +1267,7 @@ class CBController extends Controller {
 	}
 
 	public function postDoUploadImportData() {
-	
+		$this->cbLoader();
 		if (Request::hasFile('userfile'))
 		{			
 			$file = Request::file('userfile');					
@@ -1288,7 +1303,7 @@ class CBController extends Controller {
 	}
 		 
 	public function postActionSelected() {
-
+		$this->cbLoader();
 		$id_selected = Request::input('checkbox');
 		$button_name = Request::input('button_name');			
 
@@ -1317,7 +1332,8 @@ class CBController extends Controller {
 		return redirect()->back()->with(['message_type'=>'success','message'=>$message]);
 	}
 
-	public function getDeleteImage() {		
+	public function getDeleteImage() {	
+		$this->cbLoader();	
 		$id     = Request::get('id');
 		$column = Request::get('column');
 
@@ -1347,6 +1363,7 @@ class CBController extends Controller {
 	}
 
 	public function postUploadSummernote() {
+		$this->cbLoader();
 		$name = 'userfile';
 		if (Request::hasFile($name))
 		{			

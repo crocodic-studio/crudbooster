@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Excel;
 
 class LogsController extends CBController {
 
-	public function __construct() {		
+	public function cbInit() {		
 		$this->table         = 'cms_logs';
 		$this->primary_key   = 'id';
 		$this->title_field   = "ipaddress";	
@@ -39,8 +39,7 @@ class LogsController extends CBController {
 		$this->form[] = array("label"=>"URL","name"=>"url","readonly"=>true);	
 		$this->form[] = array("label"=>"User","name"=>"id_cms_users","type"=>"select","datatable"=>"cms_users,name","readonly"=>true);	
 		$this->form[] = array("label"=>"Description","name"=>"description","readonly"=>true);	
-		
-		$this->constructor();
+				
 	}
 	
 

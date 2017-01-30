@@ -17,7 +17,7 @@
 
 	class EmailTemplatesController extends \crocodicstudio\crudbooster\controllers\CBController {
 
-	    public function __construct() {
+	    public function cbInit() {
 	        $this->table              = "cms_email_templates";
 	        $this->primary_key        = "id";
 	        $this->title_field        = "name";
@@ -51,12 +51,7 @@
 			$this->form[] = array("label"=>"From Email","name"=>"from_email","type"=>"email","required"=>false,"validation"=>"email","width"=>"col-sm-6",'placeholder'=>'Optional');
 			
 			$this->form[] = array("label"=>"Cc Email","name"=>"cc_email","type"=>"email","required"=>false,"validation"=>"email",'placeholder'=>'Optional');
-
-
-
-
-	        //No need chanage this constructor
-	        $this->constructor();
+	        
 	    }
 
 

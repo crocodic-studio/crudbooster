@@ -14,7 +14,15 @@
     $(function() {
         $('select[name=table]').change(function() {
             var v = $(this).val();
-            $('input[name=path]').val(v);
+            $.get("{{CRUDBooster::mainpath('check-slug')}}/"+v,function(resp) {
+                if(resp.total==0) {
+                    $('input[name=path]').val(v);
+                }    else{
+                    v = v+resp.lastid;
+                    $('input[name=path]').val(v);
+                }
+            })
+            
         })	
     })
 </script>

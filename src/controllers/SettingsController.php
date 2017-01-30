@@ -17,7 +17,7 @@ use CRUDBooster;
 
 class SettingsController extends CBController {
 
-	public function __construct() {
+	public function cbInit() {
 		$this->module_name        = "Settings";
 		$this->table              = 'cms_settings';
 		$this->primary_key        = 'id';
@@ -60,10 +60,11 @@ class SettingsController extends CBController {
 			");
 		$this->form[] = array("label"=>"Helper Text","name"=>"helper","type"=>"text");				
 		
-		$this->constructor();
+		
 	}
 
 	function getShow() {
+		$this->cbLoader();
 		$data['page_title'] = urldecode(Request::get('group'));		
 		return view('crudbooster::setting',$data);
 	} 

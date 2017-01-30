@@ -18,7 +18,7 @@ use CRUDBooster;
 class PrivilegesController extends CBController {
 
 	
-	public function __construct() {
+	public function cbInit() {
 		$this->module_name = "Privilege";
 		$this->table       = 'cms_privileges';
 		$this->primary_key = 'id';
@@ -37,14 +37,14 @@ class PrivilegesController extends CBController {
 		$this->form[] = array("label"=>"Name","name"=>"name",'required'=>true);
 		$this->form[] = array("label"=>"Is Superadmin","name"=>"is_superadmin",'required'=>true);		
 		$this->form[] = array("label"=>"Is Register","name"=>"is_register",'required'=>true);		
-		$this->form[] = array("label"=>"Theme Color","name"=>"theme_color",'required'=>true);
-
-		$this->constructor();
+		$this->form[] = array("label"=>"Theme Color","name"=>"theme_color",'required'=>true);		
 	}
 
 
 	public function getAdd()
 	{
+		$this->cbLoader();
+
 		$id = 0; 
 		$data['page_title'] = "Add Data";	
 		$data['moduls'] = DB::table("cms_moduls")
@@ -103,6 +103,7 @@ class PrivilegesController extends CBController {
 	
 	public function getEdit($id)
 	{
+		$this->cbLoader();
 		
 		$row = DB::table($this->table)->where("id",$id)->first();
 
