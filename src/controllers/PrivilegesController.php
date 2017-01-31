@@ -63,6 +63,8 @@ class PrivilegesController extends CBController {
 	
 
 	public function postAddSave() {
+		$this->cbLoader();
+
 		$this->validation($request);				
 		$this->input_assignment($request);		
 
@@ -118,7 +120,8 @@ class PrivilegesController extends CBController {
 	}
 	 
 	public function postEditSave($id) {
-		
+		$this->cbLoader();
+
 		$this->validation($request);
 		$this->input_assignment($request,$id);
 
@@ -160,6 +163,8 @@ class PrivilegesController extends CBController {
 	}
 	
 	public function getDelete($id) {
+		$this->cbLoader();
+		
 		$row = DB::table($this->table)->where($this->primary_key,$id)->first();
 		DB::table($this->table)->where($this->primary_key,$id)->delete();
 		DB::table("cms_privileges_roles")->where("id_cms_privileges",$row->id)->delete();
