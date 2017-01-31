@@ -1033,6 +1033,13 @@ class CRUDBooster  {
 	        }
 
 	        $path = base_path("app/Http/Controllers/");        
+	        $countSameFile = count(glob($path.'Admin'.$controllername.'.php'));
+
+	        if($countSameFile!=0) {
+	        		$suffix = $countSameFile;
+	        		$controllername = ucwords(str_replace(array('_','-'),' ',$name)).$suffix;            
+		            $controllername = str_replace(' ','',$controllername).'Controller';
+	        }
 	        
 	        $coloms   = CRUDBooster::getTableColumns($table);
 	        $name_col = CRUDBooster::getNameTable($coloms);

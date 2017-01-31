@@ -188,7 +188,8 @@ class ModulsController extends CBController {
 
 			if(DB::table('cms_moduls')->where('path',$path)->count()) {
 				return redirect()->back()->with(['message'=>'Sorry the slug has already exists, please choose another !','message_type'=>'warning']);
-			}
+			}			
+
 
 			$created_at = now();
 			$id = DB::table($this->table)->max('id') + 1;
