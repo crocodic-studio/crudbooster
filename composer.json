@@ -21,7 +21,7 @@
         "barryvdh/laravel-dompdf": "0.7.*",
         "doctrine/dbal": "~2.3",        
         "maatwebsite/excel": "~2.1.0",                
-        "unisharp/laravel-filemanager": "^1.6",
+        "unisharp/laravel-filemanager": "1.6.*",
         "intervention/imagecache":"2.*"
     },
     "autoload": {

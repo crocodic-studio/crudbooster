@@ -106,7 +106,7 @@
 
               <form method='get' action='' id='form-privilege'>
                 <div class='form-group'>
-                <label class='label-control'>Privilege</label>
+                <label class='label-control'>Selected Privilege <a href='#' title='Select the privilege you wish for the menu'>(?)</a></label>
                 <select class='form-control' onChange="$('#form-privilege').submit()" name='id_cms_privileges'>                  
                     @foreach($privileges as $p)
                       <option value='{{$p->id}}' {{($id_cms_privileges == $p->id)?"selected":""}}>{{$p->name}}</option>
@@ -173,7 +173,7 @@
 
               </div>
               <div class="col-sm-7">
-                  <div class="panel panel-default">
+                  <div class="panel panel-primary">
                     <div class="panel-heading">
                       Add Menu
                     </div>
@@ -182,7 +182,7 @@
                       <input type="hidden" name="_token" value="{{ csrf_token() }}">  
                       <input type='hidden' name='return_url' value='{{Request::fullUrl()}}'/>
                       @include("crudbooster::default.form_body")
-                      <p align="right"><input type='submit' class='btn btn-primary' value='{{trans("crudbooster.button_submit")}}'/></p>
+                      <p align="right"><input type='submit' class='btn btn-primary' value='Add Menu'/></p>
                       </form>
                     </div>             
                   </div>

@@ -293,30 +293,32 @@ class CRUDBooster  {
 			}
 		}
 
-		public static function sidebarDashboard() {
+		public static function sidebarDashboard() {			
+
 			$menu = DB::table('cms_menus')
 		  	->where('id_cms_privileges',self::myPrivilegeId())
 		  	->where('is_dashboard',1)
 		  	->where('is_active',1)		  	
-		  	->first();
+		  	->first();		  	
 
 		  	switch ($menu->type) {
 	  			case 'Route':
 	  				$url = route($menu->path);
 	  				break;
 	  			default:
-	  			case 'URL External':
+	  			case 'URL':
 	  				$url = $menu->path;
 	  				break;
 	  			case 'Controller & Method':
 	  				$url = action($menu->path);
 	  				break;
-	  			case 'Admin Path':
+	  			case 'Module':
+	  			case 'Statistic':
 	  				$url = self::adminPath($menu->path);
 	  				break;	  			
 	  		}
 
-	  		@$menu->url = $url;
+	  		@$menu->url = $url;	  	  	
 
 	  		return $menu;
 		}
@@ -339,13 +341,14 @@ class CRUDBooster  {
 			  				$url = route($menu->path);
 			  				break;
 			  			default:
-			  			case 'URL External':
+			  			case 'URL':
 			  				$url = $menu->path;
 			  				break;
 			  			case 'Controller & Method':
 			  				$url = action($menu->path);
 			  				break;
-			  			case 'Admin Path':
+			  			case 'Module':
+			  			case 'Statistic':
 			  				$url = self::adminPath($menu->path);
 			  				break;		  			
 			  		}
@@ -374,13 +377,14 @@ class CRUDBooster  {
 					  				$url = route($c->path);
 					  				break;
 					  			default:
-					  			case 'URL External':
+					  			case 'URL':
 					  				$url = $c->path;
 					  				break;
 					  			case 'Controller & Method':
 					  				$url = action($c->path);
 					  				break;	
-					  			case 'Admin Path':
+					  			case 'Module':
+					  			case 'Statistic':
 					  				$url = self::adminPath($menu->path);
 					  				break;			  			
 					  		}

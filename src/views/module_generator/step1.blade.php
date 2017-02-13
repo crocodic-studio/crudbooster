@@ -50,10 +50,6 @@
         <input type="hidden" name="_token" value="{{csrf_token()}}">
         <input type="hidden" name="id" value="{{$row->id}}" >
         <div class="form-group">
-            <label for="">Module Name</label>
-            <input type="text" class="form-control" required name="name" value="{{$row->name}}" >
-        </div>
-        <div class="form-group">
             <label for="">Table</label>                   
             <select name="table" id="table" required class="select2 form-control" value="{{$row->table_name}}">
                 <option value="">{{trans('crudbooster.text_prefix_option')}} Table</option>
@@ -63,7 +59,12 @@
                     
                 @endforeach
             </select>
-        </div>        
+        </div>
+        <div class="form-group">
+            <label for="">Module Name</label>
+            <input type="text" class="form-control" required name="name" value="{{$row->name}}" >
+        </div>
+                
         <div class="form-group">
             <label for="">Icon</label>
             <select name="icon" id="icon" required class="select2 form-control">

@@ -47,6 +47,20 @@
 			$this->addaction[] = ['label'=>'Builder','url'=>CRUDBooster::mainpath('builder').'/[id]','icon'=>'fa fa-wrench'];
 	    }	    
 
+	    public function getShowDashboard() {
+	    	$this->cbLoader();
+	    	$m = CRUDBooster::sidebarDashboard();	 
+	    	$m->path = str_replace("statistic_builder/show/","",$m->path);   	
+	    	if($m->type != 'Statistic') {
+	    		redirect('/');
+	    	}
+			$row               = CRUDBooster::first($this->table,['slug'=>$m->path]);
+			
+			$id_cms_statistics = $row->id;
+			$page_title        = $row->name;	    				
+	    	return view('crudbooster::statistic_builder.show',compact('page_title','id_cms_statistics'));
+	    }
+
 	    public function getShow($slug) {
 	    	$this->cbLoader();
 			$row               = CRUDBooster::first($this->table,['slug'=>$slug]);

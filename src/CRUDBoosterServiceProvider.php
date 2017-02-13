@@ -70,8 +70,8 @@ class CRUDBoosterServiceProvider extends ServiceProvider
     public function register()
     {                                   
         require __DIR__.'/helpers/Helper.php';      
-
-        $this->app['crudbooster'] = $this->app->share(function ()
+        
+        $this->app->singleton('crudbooster', function ()
         {
             return true;
         });

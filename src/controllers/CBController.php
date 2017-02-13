@@ -69,9 +69,6 @@ class CBController extends Controller {
 	public $hide_form			  = array();
 	public $index_return 		  = FALSE; //for export
 
-	public function __construct() {
-
-	}
 
 	public function cbLoader() {					 		
 		$this->cbInit();
@@ -108,10 +105,20 @@ class CBController extends Controller {
 		$this->data['script_js']             = $this->script_js;	
 		$this->data['sub_module']            = $this->sub_module;	
 		$this->data['parent_field'] 		 = (g('parent_field'))?:$this->parent_field;			
-		$this->data['parent_id'] 		 	 = (g('parent_id'))?:$this->parent_id;			
+		$this->data['parent_id'] 		 	 = (g('parent_id'))?:$this->parent_id;		
+
+		if(CRUDBooster::getCurrentMethod() == 'getProfile') {
+			Session::put('current_row_id',CRUDBooster::myId());
+			$this->data['return_url'] = Request::fullUrl();
+		}	
 
         view()->share($this->data);
 	} 
+
+	public function cbView($template,$data) {
+		$this->cbLoader();
+		echo view($template,$data);
+	}
 
 	private function checkHideForm() {
 		if(count($this->hide_form)) {
@@ -836,7 +843,7 @@ class CBController extends Controller {
 	
 	public function postAddSave() {	
 		$this->cbLoader();
-		if(!CRUDBooster::isCreate() && $this->global_privilege==FALSE || $this->button_add==FALSE) {			
+		if(!CRUDBooster::isCreate() && $this->global_privilege==FALSE) {			
 			CRUDBooster::insertLog(trans('crudbooster.log_try_add_save',['name'=>Request::input($this->title_field),'module'=>CRUDBooster::getCurrentModule()->name ]));			
 			CRUDBooster::redirect(CRUDBooster::adminPath(),trans("crudbooster.denied_access"));
 		}
@@ -1313,12 +1320,16 @@ class CBController extends Controller {
 				CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
 			}
 
+			$this->hook_before_delete($id_selected);
+
 			if(Schema::hasColumn($this->table,'deleted_at')) {
 				DB::table($this->table)->whereIn('id',$id_selected)->update(['deleted_at'=>date('Y-m-d H:i:s')]);
 			}else{
 				DB::table($this->table)->whereIn('id',$id_selected)->delete();	
 			} 
-			CRUDBooster::insertLog(trans("crudbooster.log_delete",['name'=>implode(',',$id_selected),'module'=>CRUDBooster::getCurrentModule()->name]));			
+			CRUDBooster::insertLog(trans("crudbooster.log_delete",['name'=>implode(',',$id_selected),'module'=>CRUDBooster::getCurrentModule()->name]));		
+
+			$this->hook_after_delete($id_selected);	
 
 			$message = trans("crudbooster.alert_delete_selected_success");
 			return redirect()->back()->with(['message_type'=>'success','message'=>$message]);

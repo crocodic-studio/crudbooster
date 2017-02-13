@@ -102,6 +102,10 @@ class ModulsController extends CBController {
 		
 	}	
 
+	function hook_query_index(&$query) {
+		$query->where('is_protected',0);	
+	}
+
 	function hook_before_delete($id) {
 		$modul = DB::table('cms_moduls')->where('id',$id)->first();				
 		$menus = DB::table('cms_menus')->where('path','like','%'.$modul->controller.'%')->delete();		
@@ -123,7 +127,7 @@ class ModulsController extends CBController {
 		return redirect()->route("ModulsControllerGetStep1");
 	}
 
-	public function getStep1($id='') {
+	public function getStep1($id=0) {
 		$this->cbLoader();
 		$tables = CRUDBooster::listTables();
 		$tables_list = array();		

@@ -156,10 +156,7 @@
     <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script type="text/javascript">
-    $(function() {             	
-        @if(CRUDBooster::getCurrentMethod() == 'getShow')
-            window.history.pushState(null, null, '{{CRUDBooster::adminPath()}}');
-        @endif
+    $(function() {             	       
 
         var cloneSidebar = $('.control-sidebar').clone();
 
