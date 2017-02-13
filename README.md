@@ -16,9 +16,9 @@ CRUDBooster is Laravel Framework that modified to bring a lot of features to dev
 [http://crudbooster.com/doc/5.3/intro](http://crudbooster.com/doc/5.3/intro)
 
 ## TELEGRAM GROUP CHAT
-INDONESIA (ID) : https://t.me/joinchat/AAAAAELA7nvsNSbzC9KMug
+INDONESIA (ID) : https://t.me/joinchat/AAAAAELA7nvsNSbzC9KMugr
 
-INTERNATIONAL (EN) : https://t.me/joinchat/AAAAAAuX-EIFMIxLzpe2iQ
+INTERNATIONAL (EN) : https://t.me/joinchat/AAAAAEBPmHP7tU9BTJvZmQ
 
 ## SUPPORT AND CONTRIBUTION
 Thank you for your contribution. Create pull request but don't push to master. Pull to currently branch version.
