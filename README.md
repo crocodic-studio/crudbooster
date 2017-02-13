@@ -16,7 +16,7 @@ CRUDBooster is Laravel Framework that modified to bring a lot of features to dev
 [http://crudbooster.com/doc/5.3/intro](http://crudbooster.com/doc/5.3/intro)
 
 ## TELEGRAM GROUP CHAT
-INDONESIA (ID) : https://t.me/joinchat/AAAAAELA7nvsNSbzC9KMugr
+INDONESIA (ID) : https://t.me/joinchat/AAAAAELA7nvsNSbzC9KMug
 
 INTERNATIONAL (EN) : https://t.me/joinchat/AAAAAEBPmHP7tU9BTJvZmQ
 
