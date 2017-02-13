@@ -51,6 +51,9 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         if(!file_exists(app_path('Http/Controllers/AdminCmsUsersController.php'))) {
             $this->publishes([__DIR__.'/userfiles/controllers/AdminCmsUsersController.php' => app_path('Http/Controllers/AdminCmsUsersController.php')],'cb_user_controller');
         }
+
+        @unlink(base_path('database/migrations/2014_10_12_000000_create_users_table.php'));
+        @unlink(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'));
                     
         require __DIR__.'/validations/validation.php';        
         require __DIR__.'/routes.php';    
