@@ -15,8 +15,12 @@ CRUDBooster is Laravel Framework that modified to bring a lot of features to dev
 ## Getting Started & Documentation
 [http://crudbooster.com/doc/5.3/intro](http://crudbooster.com/doc/5.3/intro)
 
+## TELEGRAM GROUP CHAT
+INDONESIA (ID) : https://t.me/joinchat/AAAAAELA7nvsNSbzC9KMug
+INTERNATIONAL (EN) : https://t.me/joinchat/AAAAAAuX-EIFMIxLzpe2iQ
+
 ## SUPPORT AND CONTRIBUTION
-All of issues and new feature request, please create an issue at GitHub, please do not send an email or Private Message to us.
+Thank you for your contribution. Create pull request but don't push to master. Pull to currently branch version.
 
 ## CREDITS
 1. Laravel Export HTML to Excel by [Maatwebsite](https://github.com/Maatwebsite/Laravel-Excel)
