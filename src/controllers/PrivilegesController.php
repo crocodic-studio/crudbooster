@@ -35,8 +35,7 @@ class PrivilegesController extends CBController {
 
 		$this->form   = array();
 		$this->form[] = array("label"=>"Name","name"=>"name",'required'=>true);
-		$this->form[] = array("label"=>"Is Superadmin","name"=>"is_superadmin",'required'=>true);		
-		$this->form[] = array("label"=>"Is Register","name"=>"is_register",'required'=>true);		
+		$this->form[] = array("label"=>"Is Superadmin","name"=>"is_superadmin",'required'=>true);				
 		$this->form[] = array("label"=>"Theme Color","name"=>"theme_color",'required'=>true);		
 	}
 
