@@ -772,7 +772,7 @@ class CBController extends Controller {
 			}
 
 			if($name) {
-				if(!empty($inputdata)) {
+				if($inputdata!='') {
 					$this->arr[$name] = $inputdata;
 				}else{
 					$this->arr[$name] = "";

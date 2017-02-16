@@ -385,7 +385,7 @@ class CRUDBooster  {
 					  				break;	
 					  			case 'Module':
 					  			case 'Statistic':
-					  				$url = self::adminPath($menu->path);
+					  				$url = self::adminPath($c->path);
 					  				break;			  			
 					  		}
 					  		$c->is_broken = false;
