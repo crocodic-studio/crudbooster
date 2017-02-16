@@ -771,8 +771,12 @@ class CBController extends Controller {
 				$inputdata = preg_replace('/[^\d-]+/', '', $inputdata); 
 			}
 
-			if($name && isset($inputdata)) {
-				$this->arr[$name] = $inputdata;
+			if($name) {
+				if(!empty($inputdata)) {
+					$this->arr[$name] = $inputdata;
+				}else{
+					$this->arr[$name] = "";
+				}				
 			}
 
 			$password_candidate = explode(',',config('crudbooster.PASSWORD_FIELDS_CANDIDATE'));
@@ -785,7 +789,7 @@ class CBController extends Controller {
 			}
 
 			if($ro['type']=='checkbox') {
-				if($inputdata) {
+				if(is_array($inputdata)) {
 					$this->arr[$name] = implode(";",$inputdata);							
 				}
 			}
@@ -1204,44 +1208,50 @@ class CBController extends Controller {
 		foreach($rows as $value) {				
 			$a = array();
 			foreach($select_column as $sk => $s) {
-				$colname = $table_columns[$sk];
+				$colname = $table_columns[$sk];				
 
 				if(CRUDBooster::isForeignKey($colname)) {
 
 					//Skip if value is empty
 					if($value->$s == '') continue;
 
-					$relation_table = CRUDBooster::getTableForeignKey($colname);
-					$relation_moduls = DB::table('cms_moduls')->where('table_name',$relation_table)->first();
+					if(intval($value->$s)) {
+						$a[$colname] = $value->$s;
+					}else{
+						$relation_table = CRUDBooster::getTableForeignKey($colname);
+						$relation_moduls = DB::table('cms_moduls')->where('table_name',$relation_table)->first();					
 
-					$relation_class = __NAMESPACE__ . '\\' . $relation_moduls->controller;
-					if(!class_exists($relation_class)) {
-						$relation_class = '\App\Http\Controllers\\'.$relation_moduls->controller;
-					}
-					$relation_class = new $relation_class;
+						$relation_class = __NAMESPACE__ . '\\' . $relation_moduls->controller;
+						if(!class_exists($relation_class)) {
+							$relation_class = '\App\Http\Controllers\\'.$relation_moduls->controller;
+						}
+						$relation_class = new $relation_class;
+						$relation_class->cbLoader();
 
-					$title_field = $relation_class->title_field;
+						$title_field = $relation_class->title_field;
 
-					$relation_insert_data = array();
-					$relation_insert_data[$title_field] = $value->$s;
+						$relation_insert_data = array();
+						$relation_insert_data[$title_field] = $value->$s;
 
-					if(CRUDBooster::isColumnExists($relation_table,'created_at')) {
-						$relation_insert_data['created_at'] = date('Y-m-d H:i:s');
-					}
+						if(CRUDBooster::isColumnExists($relation_table,'created_at')) {
+							$relation_insert_data['created_at'] = date('Y-m-d H:i:s');
+						}
 
-					try{
-						$relation_exists = DB::table($relation_table)->where($title_field,$value->$s)->first();
-						if($relation_exists) {
-							$relation_primary_key = $relation_class->primary_key();
-							$relation_id = $relation_exists->$relation_primary_key;
-						}else{
-							$relation_id = DB::table($relation_table)->insertGetId($relation_insert_data);
-						}						
+						try{
+							$relation_exists = DB::table($relation_table)->where($title_field,$value->$s)->first();
+							if($relation_exists) {
+								$relation_primary_key = $relation_class->primary_key;
+								$relation_id = $relation_exists->$relation_primary_key;
+							}else{
+								$relation_id = DB::table($relation_table)->insertGetId($relation_insert_data);
+							}						
 
-						$a[$colname] = $relation_id;
-					}catch(\Exception $e) {
-
-					}				
+							$a[$colname] = $relation_id;
+						}catch(\Exception $e) {
+							exit($e);
+						}
+					} //END IS INT
+						
 				}else{
 					$a[$colname] = $value->$s;
 				}				
