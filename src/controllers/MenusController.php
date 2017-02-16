@@ -77,6 +77,7 @@ use CRUDBooster;
 					if(n == 'Module') {
 						$('#form-group-path').hide();
 						$('#form-group-statistic_slug').hide();
+						$('#statistic_slug,#path').prop('required',false);
 
 						$('#form-group-module_slug').show();
 						$('#module_slug').prop('required',true);
@@ -85,12 +86,19 @@ use CRUDBooster;
 					}else if (n == 'Statistic') {
 						$('#form-group-path').hide();
 						$('#form-group-module_slug').hide();
+						$('#module_slug,#path').prop('required',false);
 
 						$('#form-group-statistic_slug').show();
 						$('#statistic_slug').prop('required',true);
 						$('#form-group-statistic_slug label .text-danger').remove();
 						$('#form-group-statistic_slug label').append('<span class=\"text-danger\" title=\"This field is required\">*</span>');
 					}else {
+						$('#module_slug,#statistic_slug').prop('required',false);
+						
+						$('#path').prop('required',true);
+						$('#form-group-path label .text-danger').remove();
+						$('#form-group-path label').append('<span class=\"text-danger\" title=\"This field is required\">*</span>');
+
 						$('#form-group-path').show();
 						$('#form-group-module_slug,#form-group-statistic_slug').hide();
 					}
@@ -184,7 +192,7 @@ use CRUDBooster;
 
 	  		if($postdata['type'] == 'Statistic') {
 	  			$stat = CRUDBooster::first('cms_statistics',['id'=>$postdata['statistic_slug']]);
-	  			$postdata['path'] = $stat->slug;	  			
+	  			$postdata['path'] = 'statistic_builder/show/'.$stat->slug;	  			
 	  		}elseif ($postdata['type'] == 'Module') {
 	  			$stat = CRUDBooster::first('cms_moduls',['id'=>$postdata['module_slug']]);
 	  			$postdata['path'] = $stat->path;	  		
