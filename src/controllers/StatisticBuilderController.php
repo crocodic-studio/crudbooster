@@ -38,7 +38,6 @@
 
 			$this->col         = array();
 			$this->col[]       = array("label"=>"Name","name"=>"name" );
-			$this->col[]       = array("label"=>"Slug","name"=>"slug",'callback_php'=>'"<span class=\"badge badge-default\">statistic_builder/show/".$row->slug."</span>"');
 			
 			$this->form        = array();
 			$this->form[]      = array("label"=>"Name","name"=>"name","type"=>"text","required"=>TRUE,"validation"=>"required|min:3|max:255","placeholder"=>"You can only enter the letter only");
@@ -71,6 +70,12 @@
 
 	    public function getBuilder($id_cms_statistics) {
 	    	$this->cbLoader();
+
+	    	if(!CRUDBooster::isSuperadmin()) {
+				CRUDBooster::insertLog(trans("crudbooster.log_try_view",['name'=>'Builder','module'=>'Statistic']));
+				CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
+			}
+
 	    	$page_title = 'Statistic Builder';	    		    	
 	    	return view('crudbooster::statistic_builder.builder',compact('page_title','id_cms_statistics'));
 	    }
@@ -142,6 +147,12 @@
 
 	    public function getEditComponent($componentID) {
 	    	$this->cbLoader();
+
+	    	if(!CRUDBooster::isSuperadmin()) {
+				CRUDBooster::insertLog(trans("crudbooster.log_try_view",['name'=>'Edit Component','module'=>'Statistic']));
+				CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
+			}
+
 	    	$component_row = CRUDBooster::first('cms_statistic_components',['componentID'=>$componentID]);
 
 	    	$config = json_decode($component_row->config);

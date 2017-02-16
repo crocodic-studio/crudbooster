@@ -128,6 +128,12 @@ use CRUDBooster;
 
 	  public function getIndex() {
 	  	$this->cbLoader();
+
+	  	$module = CRUDBooster::getCurrentModule();
+	  	if(!CRUDBooster::isView() && $this->global_privilege==FALSE) {
+			CRUDBooster::insertLog(trans('crudbooster.log_try_view',['module'=>$module->name]));
+			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));			
+		}
 	  	
 	  	$privileges = DB::table('cms_privileges')->get();
 

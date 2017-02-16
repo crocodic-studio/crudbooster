@@ -33,6 +33,12 @@ class ApiCustomController extends CBController {
 
 	function getIndex() {		
 		$this->cbLoader();
+
+		if(!CRUDBooster::isSuperadmin()) {
+			CRUDBooster::insertLog(trans("crudbooster.log_try_view",['name'=>'API Index','module'=>'API']));
+			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
+		}
+
 		$data = array();
 		
 		$data['page_title'] = 'API Generator';
@@ -119,6 +125,12 @@ class ApiCustomController extends CBController {
 
 	public function getGenerator() {
 		$this->cbLoader();
+
+		if(!CRUDBooster::isSuperadmin()) {
+			CRUDBooster::insertLog(trans("crudbooster.log_try_view",['name'=>'API Index','module'=>'API']));
+			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
+		}
+
 		$data['page_title'] = 'API Generator';
 		$data['page_menu']  = Route::getCurrentRoute()->getActionName();
 
@@ -137,6 +149,12 @@ class ApiCustomController extends CBController {
 
 	public function getEditApi($id) {
 		$this->cbLoader();
+
+		if(!CRUDBooster::isSuperadmin()) {
+			CRUDBooster::insertLog(trans("crudbooster.log_try_view",['name'=>'API Edit','module'=>'API']));
+			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
+		}
+
 		$row = DB::table('cms_apicustom')->where('id',$id)->first();
 
 		$data['row']        = $row;
