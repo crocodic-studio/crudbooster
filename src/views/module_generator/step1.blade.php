@@ -13,7 +13,7 @@
     })
     $(function() {
         $('select[name=table]').change(function() {
-            var v = $(this).val();
+            var v = $(this).val().replace(".", "_");
             $.get("{{CRUDBooster::mainpath('check-slug')}}/"+v,function(resp) {
                 if(resp.total==0) {
                     $('input[name=path]').val(v);
