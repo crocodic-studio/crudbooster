@@ -307,6 +307,7 @@
                     <h4 class="modal-title"><i class='fa fa-filter'></i> {{trans("crudbooster.filter_dialog_title")}}</h4>
                   </div>
                   <form method='get' action=''>
+                    <input type="hidden" name="lasturl" value="{{Request::get('lasturl')?:Request::fullUrl()}}">
                     <div class="modal-body">
                       
                       <?php foreach($columns as $key => $col):?>
@@ -360,7 +361,7 @@
                     </div>
                     <div class="modal-footer" align="right">
                       <button class="btn btn-default" type="button" data-dismiss="modal">{{trans("crudbooster.button_close")}}</button>
-                      <button class="btn btn-default btn-reset" type="reset" onclick='location.href="{{CRUDBooster::mainpath().'?'.http_build_query(Request::all())}}"' >Reset</button>
+                      <button class="btn btn-default btn-reset" type="reset" onclick='location.href="{{Request::get("lasturl")}}"' >Reset</button>
                       <button class="btn btn-primary btn-submit" type="submit">{{trans("crudbooster.button_submit")}}</button>
                     </div>
                   </form>

@@ -17,7 +17,7 @@
 
 	class StatisticBuilderController extends CBController {
 
-	    public function __construct() {
+	    public function cbInit() {
 	        $this->table              = "cms_statistics";
 	        $this->primary_key        = "id";
 	        $this->title_field        = "name";
@@ -38,19 +38,30 @@
 
 			$this->col         = array();
 			$this->col[]       = array("label"=>"Name","name"=>"name" );
-			$this->col[]       = array("label"=>"Slug","name"=>"slug",'callback_php'=>'"<span class=\"badge badge-default\">statistic_builder/show/".$row->slug."</span>"');
 			
 			$this->form        = array();
 			$this->form[]      = array("label"=>"Name","name"=>"name","type"=>"text","required"=>TRUE,"validation"=>"required|min:3|max:255","placeholder"=>"You can only enter the letter only");
 			
 			$this->addaction   = array();
 			$this->addaction[] = ['label'=>'Builder','url'=>CRUDBooster::mainpath('builder').'/[id]','icon'=>'fa fa-wrench'];
-
-	        //No need chanage this constructor
-	        $this->constructor();
 	    }	    
 
+	    public function getShowDashboard() {
+	    	$this->cbLoader();
+	    	$m = CRUDBooster::sidebarDashboard();	 
+	    	$m->path = str_replace("statistic_builder/show/","",$m->path);   	
+	    	if($m->type != 'Statistic') {
+	    		redirect('/');
+	    	}
+			$row               = CRUDBooster::first($this->table,['slug'=>$m->path]);
+			
+			$id_cms_statistics = $row->id;
+			$page_title        = $row->name;	    				
+	    	return view('crudbooster::statistic_builder.show',compact('page_title','id_cms_statistics'));
+	    }
+
 	    public function getShow($slug) {
+	    	$this->cbLoader();
 			$row               = CRUDBooster::first($this->table,['slug'=>$slug]);
 			$id_cms_statistics = $row->id;
 			$page_title        = $row->name;	    				
@@ -58,6 +69,13 @@
 	    }
 
 	    public function getBuilder($id_cms_statistics) {
+	    	$this->cbLoader();
+
+	    	if(!CRUDBooster::isSuperadmin()) {
+				CRUDBooster::insertLog(trans("crudbooster.log_try_view",['name'=>'Builder','module'=>'Statistic']));
+				CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
+			}
+
 	    	$page_title = 'Statistic Builder';	    		    	
 	    	return view('crudbooster::statistic_builder.builder',compact('page_title','id_cms_statistics'));
 	    }
@@ -93,7 +111,7 @@
 	    }
 
 	    public function postAddComponent() {
-
+	    	$this->cbLoader();
 			$component_name    = Request::get('component_name');
 			$id_cms_statistics = Request::get('id_cms_statistics');
 			$sorting           = Request::get('sorting');
@@ -128,6 +146,12 @@
 	    }
 
 	    public function getEditComponent($componentID) {
+	    	$this->cbLoader();
+
+	    	if(!CRUDBooster::isSuperadmin()) {
+				CRUDBooster::insertLog(trans("crudbooster.log_try_view",['name'=>'Edit Component','module'=>'Statistic']));
+				CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
+			}
 
 	    	$component_row = CRUDBooster::first('cms_statistic_components',['componentID'=>$componentID]);
 

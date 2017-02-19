@@ -27,7 +27,7 @@
 
                 <?php $dashboard = CRUDBooster::sidebarDashboard();?>
                 @if($dashboard)
-                    <li data-id='{{$dashboard->id}}' class='{{(CRUDBooster::getCurrentDashboardId()==$dashboard->id)?"active":""}}'><a href='{{CRUDBooster::adminPath()}}?m=0&d={{$dashboard->id}}' class='{{($dashboard->color)?"text-".$dashboard->color:""}}' ><i class='fa fa-dashboard'></i> <span>{{trans("crudbooster.text_dashboard")}}</span> </a></li>
+                    <li data-id='{{$dashboard->id}}' class="{{ (Request::is(config('crudbooster.ADMIN_PATH'))) ? 'active' : '' }}"><a href='{{CRUDBooster::adminPath()}}' class='{{($dashboard->color)?"text-".$dashboard->color:""}}' ><i class='fa fa-dashboard'></i> <span>{{trans("crudbooster.text_dashboard")}}</span> </a></li>
                 @endif
 
                 @foreach(CRUDBooster::sidebarMenu() as $menu)

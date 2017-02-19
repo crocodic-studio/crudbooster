@@ -7,14 +7,15 @@ use CRUDbooster;
 
 class AdminCmsUsersController extends \crocodicstudio\crudbooster\controllers\CBController {
 
-	public function __construct() {
+
+	public function cbInit() {
 		# START CONFIGURATION DO NOT REMOVE THIS LINE
 		$this->table               = 'cms_users';
 		$this->primary_key         = 'id';
 		$this->title_field         = "name";
 		$this->button_action_style = 'button_icon';	
-		$this->button_import 	   = false;	
-		$this->button_export 	   = false;	
+		$this->button_import 	   = FALSE;	
+		$this->button_export 	   = FALSE;	
 		# END CONFIGURATION DO NOT REMOVE THIS LINE
 	
 		# START COLUMNS DO NOT REMOVE THIS LINE
@@ -35,21 +36,21 @@ class AdminCmsUsersController extends \crocodicstudio\crudbooster\controllers\CB
 		# END FORM DO NOT REMOVE THIS LINE
 
 		if(CRUDBooster::getCurrentMethod() == 'getProfile') {
-			$this->button_addmore = false;
-			$this->button_cancel  = false;
-			$this->button_show    = false;			
-			$this->button_add     = false;
-			$this->button_delete  = false;	
+			$this->button_addmore = FALSE;
+			$this->button_cancel  = FALSE;
+			$this->button_show    = FALSE;			
+			$this->button_add     = FALSE;
+			$this->button_delete  = FALSE;	
 			$this->hide_form      = ['id_cms_privileges'];		
 		}		
-		
-		$this->constructor();
+				
 	}
 
 	public function getProfile() {				
+
 		$data['page_title'] = trans("crudbooster.label_button_profile");
-		$data['row']        = DB::table($this->table)->where($this->primary_key,CRUDBooster::myId())->first();
-		$data['return_url'] = Request::fullUrl();
-		return view('crudbooster::default.form',$data);
+		$data['row']        = CRUDBooster::first('cms_users',CRUDBooster::myId());
+
+		$this->cbView('crudbooster::default.form',$data);				
 	}
 }

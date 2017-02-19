@@ -13,9 +13,10 @@
 		<div class="box-body">
 			<?php 
 				$classname         = 'App\Http\Controllers\\'.$form['controller'];
-				$sub               = new $classname();				
+				$sub               = new $classname();		
+				$sub->cbLoader();		
 				$subtable          = $sub->table;
-				$columns           = $sub->columns_table;			
+				$columns           = $sub->columns_table;					
 				$fk                = CRUDBooster::getForeignKey($table,$subtable);	
 				$fk_id 			   = ($row)?$row->id:0;	
 				if($row) {

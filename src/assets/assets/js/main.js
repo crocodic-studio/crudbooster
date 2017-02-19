@@ -15,7 +15,7 @@
 		};
 
 		function beep() {
-			console.log("Play a Sound notification");
+			
 			$("#sound_beep").remove();
 			$('body').append('<audio id="sound_beep" style="display:none" autoplay>'+
   			+'<source src="'+ASSET_URL+'/vendor/crudbooster/assets/sound/bell_ring.ogg" type="audio/ogg">'
@@ -111,8 +111,7 @@
 
 
 		var total_notification = 0;
-    function loader_notification() {
-      console.log("loader notifications");      
+    function loader_notification() {       
 
       $.get(NOTIFICATION_JSON,function(resp) {
           if(resp.total > total_notification) {

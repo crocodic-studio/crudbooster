@@ -17,7 +17,7 @@ use CRUDBooster;
 
 class SettingsController extends CBController {
 
-	public function __construct() {
+	public function cbInit() {
 		$this->module_name        = "Settings";
 		$this->table              = 'cms_settings';
 		$this->primary_key        = 'id';
@@ -60,10 +60,17 @@ class SettingsController extends CBController {
 			");
 		$this->form[] = array("label"=>"Helper Text","name"=>"helper","type"=>"text");				
 		
-		$this->constructor();
+		
 	}
 
 	function getShow() {
+		$this->cbLoader();
+
+		if(!CRUDBooster::isSuperadmin()) {
+			CRUDBooster::insertLog(trans("crudbooster.log_try_view",['name'=>'Setting','module'=>'Setting']));
+			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
+		}
+
 		$data['page_title'] = urldecode(Request::get('group'));		
 		return view('crudbooster::setting',$data);
 	} 
@@ -82,6 +89,12 @@ class SettingsController extends CBController {
 
 
 	function postSaveSetting() {
+
+		if(!CRUDBooster::isSuperadmin()) {
+			CRUDBooster::insertLog(trans("crudbooster.log_try_view",['name'=>'Setting','module'=>'Setting']));
+			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
+		}
+		
 		$group = Request::get('group_setting');
 		$setting = DB::table('cms_settings')->where('group_setting',$group)->get();
 		foreach($setting as $set) {

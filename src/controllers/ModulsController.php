@@ -17,7 +17,7 @@ use CRUDBooster;
 
 class ModulsController extends CBController {
 	
-	public function __construct() {		
+	public function cbInit() {		
 		$this->table               = 'cms_moduls';
 		$this->primary_key         = 'id';
 		$this->title_field         = "name";
@@ -99,9 +99,12 @@ class ModulsController extends CBController {
 		$this->addaction[] = ['label'=>'Module Wizard','icon'=>'fa fa-wrench','url'=>CRUDBooster::mainpath('step1').'/[id]',"showIf"=>"[is_protected] == 0"];
 	
 		$this->index_button[] = ['label'=>'Generate New Module','icon'=>'fa fa-plus','url'=>CRUDBooster::mainpath('step1'),'color'=>'success'];
-
-		$this->constructor();
+		
 	}	
+
+	function hook_query_index(&$query) {
+		$query->where('is_protected',0);	
+	}
 
 	function hook_before_delete($id) {
 		$modul = DB::table('cms_moduls')->where('id',$id)->first();				
@@ -114,17 +117,44 @@ class ModulsController extends CBController {
 		return response()->json($columns);
 	}
 
+	public function getCheckSlug($slug) {
+		$check = DB::table('cms_moduls')->where('path',$slug)->count();
+		$lastId = DB::table('cms_moduls')->max('id')+1;
+		return response()->json(['total'=>$check,'lastid'=>$lastId]);
+	}
+
 	public function getAdd() {
+		$this->cbLoader();
+
+		$module = CRUDBooster::getCurrentModule();
+
+		if(!CRUDBooster::isView() && $this->global_privilege==FALSE) {
+			CRUDBooster::insertLog(trans('crudbooster.log_try_view',['module'=>$module->name]));
+			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));			
+		}
+
 		return redirect()->route("ModulsControllerGetStep1");
 	}
 
-	public function getStep1($id='') {
+	public function getStep1($id=0) {
+		$this->cbLoader();
+
+		$module = CRUDBooster::getCurrentModule();
+
+		if(!CRUDBooster::isView() && $this->global_privilege==FALSE) {
+			CRUDBooster::insertLog(trans('crudbooster.log_try_view',['module'=>$module->name]));
+			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));			
+		}
 
 		$tables = CRUDBooster::listTables();
 		$tables_list = array();		
 		foreach($tables as $tab) {
 			foreach ($tab as $key => $value) {	
-				$label = $value;									
+				$label = $value;	
+
+				if(substr($label, 0,4) == 'cms_' && $label != 'cms_users') continue;
+				if($label == 'migrations') continue;
+
 				$tables_list[] = $value;
 			}
 		}		
@@ -137,7 +167,15 @@ class ModulsController extends CBController {
 	}
 
 	public function getStep2($id) {
-		
+		$this->cbLoader();
+
+		$module = CRUDBooster::getCurrentModule();
+
+		if(!CRUDBooster::isView() && $this->global_privilege==FALSE) {
+			CRUDBooster::insertLog(trans('crudbooster.log_try_view',['module'=>$module->name]));
+			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));			
+		}
+
 		$row = DB::table('cms_moduls')->where('id',$id)->first();
 
 		$columns = CRUDBooster::getTableColumns($row->table_name);
@@ -169,12 +207,27 @@ class ModulsController extends CBController {
 	}
 
 	public function postStep2() {
+		$this->cbLoader();
+
+		$module = CRUDBooster::getCurrentModule();
+
+		if(!CRUDBooster::isView() && $this->global_privilege==FALSE) {
+			CRUDBooster::insertLog(trans('crudbooster.log_try_view',['module'=>$module->name]));
+			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));			
+		}
+
 		$name       = Request::get('name');
 		$table_name = Request::get('table');
 		$icon       = Request::get('icon');
 		$path       = Request::get('path');
 
-		if(!Request::get('id')) {	
+		if(!Request::get('id')) {
+
+			if(DB::table('cms_moduls')->where('path',$path)->count()) {
+				return redirect()->back()->with(['message'=>'Sorry the slug has already exists, please choose another !','message_type'=>'warning']);
+			}			
+
+
 			$created_at = now();
 			$id = DB::table($this->table)->max('id') + 1;
 
@@ -266,6 +319,15 @@ class ModulsController extends CBController {
 	}
 
 	public function postStep3() {
+		$this->cbLoader();
+
+		$module = CRUDBooster::getCurrentModule();
+
+		if(!CRUDBooster::isView() && $this->global_privilege==FALSE) {
+			CRUDBooster::insertLog(trans('crudbooster.log_try_view',['module'=>$module->name]));
+			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));			
+		}
+
 		$column      = Request::input('column');
 		$name        = Request::input('name');
 		$join_table  = Request::input('join_table');
@@ -332,6 +394,14 @@ class ModulsController extends CBController {
 	}
 
 	public function getStep3($id) {
+		$this->cbLoader();
+
+		$module = CRUDBooster::getCurrentModule();
+
+		if(!CRUDBooster::isView() && $this->global_privilege==FALSE) {
+			CRUDBooster::insertLog(trans('crudbooster.log_try_view',['module'=>$module->name]));
+			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));			
+		}
 
 		$row = DB::table('cms_moduls')->where('id',$id)->first();
 
@@ -358,6 +428,8 @@ class ModulsController extends CBController {
 	}
 
 	public function postStep4() {
+		$this->cbLoader();	
+
 		$post = Request::all();
 		$id = $post['id'];
 
@@ -409,6 +481,14 @@ class ModulsController extends CBController {
 	}
 
 	public function getStep4($id) {
+		$this->cbLoader();
+
+		$module = CRUDBooster::getCurrentModule();
+
+		if(!CRUDBooster::isView() && $this->global_privilege==FALSE) {
+			CRUDBooster::insertLog(trans('crudbooster.log_try_view',['module'=>$module->name]));
+			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));			
+		}
 
 		$row = DB::table('cms_moduls')->where('id',$id)->first();
 
@@ -427,6 +507,7 @@ class ModulsController extends CBController {
 	}
 
 	public function postStepFinish() {
+		$this->cbLoader();
 		$id = Request::input('id');
 		$row = DB::table('cms_moduls')->where('id',$id)->first();
 
@@ -471,6 +552,13 @@ class ModulsController extends CBController {
 	}
 	
 	public function postAddSave() {
+		$this->cbLoader();
+
+		if(!CRUDBooster::isCreate() && $this->global_privilege==FALSE) {			
+			CRUDBooster::insertLog(trans('crudbooster.log_try_add_save',['name'=>Request::input($this->title_field),'module'=>CRUDBooster::getCurrentModule()->name ]));			
+			CRUDBooster::redirect(CRUDBooster::adminPath(),trans("crudbooster.denied_access"));
+		}
+
 		$this->validation();					
 		$this->input_assignment();	
 
@@ -567,7 +655,15 @@ class ModulsController extends CBController {
 	
 	 
 	public function postEditSave($id) {
-		
+		$this->cbLoader();
+
+		$row = DB::table($this->table)->where($this->primary_key,$id)->first();	
+
+		if(!CRUDBooster::isUpdate() && $this->global_privilege==FALSE) {			
+			CRUDBooster::insertLog(trans("crudbooster.log_try_add",['name'=>$row->{$this->title_field},'module'=>CRUDBooster::getCurrentModule()->name]));
+			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));			
+		}
+
 		$this->validation();
 		$this->input_assignment();
 
