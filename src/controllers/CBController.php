@@ -771,6 +771,8 @@ class CBController extends Controller {
 				$inputdata = preg_replace('/[^\d-]+/', '', $inputdata); 
 			}
 
+			if($ro['type']=='child') continue;
+
 			if($name) {
 				if($inputdata!='') {
 					$this->arr[$name] = $inputdata;
