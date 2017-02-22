@@ -797,14 +797,25 @@ class CRUDBooster  {
 
 	    public static function listTables() {
 	        $tables = array();
+	        $multiple_db = config('crudbooster.MULTIPLE_DATABASE_MODULE');
+	        $multiple_db = ($multiple_db)?$multiple_db:array();
 
-	        try {
-	            //$tables = DB::select(DB::raw("SELECT TABLE_NAME FROM ".env('DB_DATABASE').".INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE'"));
-		    	$tables = DB::select("SELECT CONCAT(TABLE_SCHEMA,'.',TABLE_NAME) FROM INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA != 'mysql' AND TABLE_SCHEMA != 'performance_schema' AND TABLE_SCHEMA != 'information_schema'");
-	        }catch(\Exception $e) {
-		    	$tables = array();
-	        }
-	        
+	        if($multiple_db) {
+	        	try {	            
+	        		$multiple_db[] = env('DB_DATABASE');
+	        		$query_table_schema = implode("','",$multiple_db);
+			    	$tables = DB::select("SELECT CONCAT(TABLE_SCHEMA,'.',TABLE_NAME) FROM INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA != 'mysql' AND TABLE_SCHEMA != 'performance_schema' AND TABLE_SCHEMA != 'information_schema' AND TABLE_SCHEMA != 'phpmyadmin' AND TABLE_SCHEMA IN ('$query_table_schema')");				    				
+		        }catch(\Exception $e) {
+			    	$tables = array();
+		        }
+	        }else{
+	        	try{	        		
+		        	$tables = DB::select("SELECT CONCAT(TABLE_SCHEMA,'.',TABLE_NAME) FROM INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = '".env('DB_DATABASE')."'");
+	        	}catch(\Exception $e) {
+	        		$tables = array();
+	        	}
+	        }	        
+
 	        return $tables;
 	    }
 
