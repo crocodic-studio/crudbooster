@@ -189,7 +189,7 @@ class ModulsController extends CBController {
 			}
 		}
 
-		if(file_exists(app_path('Http/Controllers/'.$row->controller.'.php'))) {
+		if(file_exists(app_path('Http/Controllers/'.str_replace('.', '', $row->controller).'.php'))) {
 			$response = file_get_contents(app_path('Http/Controllers/'.$row->controller.'.php'));
 			$column_datas = extract_unit($response,"# START COLUMNS DO NOT REMOVE THIS LINE","# END COLUMNS DO NOT REMOVE THIS LINE");			
 			$column_datas = str_replace('$this->','$cb_', $column_datas);			
@@ -304,9 +304,9 @@ class ModulsController extends CBController {
 			$row = DB::table('cms_moduls')->where('id',$id)->first();
 			
 			if(file_exists(app_path('Http/Controllers/'.$row->controller.'.php'))) {
-				$response = file_get_contents(app_path('Http/Controllers/'.$row->controller.'.php'));	
+				$response = file_get_contents(app_path('Http/Controllers/'.str_replace('.', '', $row->controller).'.php'));	
 			}else{
-				$response = file_get_contents(__DIR__.'/'.$row->controller.'.php');	
+				$response = file_get_contents(__DIR__.'/'.str_replace('.', '', $row->controller).'.php');	
 			}			
 
 			if(strpos($response, "# START COLUMNS") !== TRUE) {
