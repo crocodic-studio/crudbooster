@@ -667,17 +667,39 @@ class CRUDBooster  {
 		    }
 		}
 
+		public static function parseSqlTable($field) {
+			$f = explode('.', $field);
+
+			if(count($f) == 1) {
+				return array("table"=>$f[0], "database"=>env('DB_DATABASE'));
+			} elseif(count($f) == 2) {
+				return array("database"=>$f[0], "table"=>$f[1]);
+			}
+
+			return false;
+		}
+
+		public static function findPrimaryKey($table) {
+			$table = CRUDBooster::parseSqlTable($table);
+			$keys = DB::select('SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :database AND TABLE_NAME = :table AND COLUMN_KEY = \'PRI\'', ['database'=>$table['database'], 'table'=>$table['table']]);
+			return $keys[0]->COLUMN_NAME;
+		}
+
 		public static function newId($table) {
-			$id = DB::table($table)->max('id') + 1;
-			return $id;
+			$key = CRUDBooster::findPrimaryKey($table);
+			$id = DB::select('SELECT MAX('.trim(DB::connection()->getPdo()->quote($key), "'").') as max FROM '.trim(DB::connection()->getPdo()->quote($table), "'"));
+			return $id[0]->max + 1;
 		}
 
 		public static function isColumnExists($table,$field) {
 			if(Cache::has('isColumnExists_'.$table.'_'.$field)) {
 				return Cache::get('isColumnExists_'.$table.'_'.$field);
 			}
+			$table = CRUDBooster::parseSqlTable($table);
 
-			if(Schema::hasColumn($table,$field)) {
+			$result = DB::select('SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :database AND TABLE_NAME = :table AND COLUMN_NAME = :field', ['database'=>$table['database'], 'table'=>$table['table'], 'field'=>$field]);
+
+			if(count($result) > 0) {
 				Cache::forever('isColumnExists_'.$table.'_'.$field,true);
 				return true;
 			}else{
@@ -777,15 +799,10 @@ class CRUDBooster  {
 	        $tables = array();
 
 	        try {
-	            $tables = DB::select(DB::raw("SELECT TABLE_NAME FROM ".env('DB_DATABASE').".INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE'"));
+	            //$tables = DB::select(DB::raw("SELECT TABLE_NAME FROM ".env('DB_DATABASE').".INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE'"));
+		    	$tables = DB::select("SELECT CONCAT(TABLE_SCHEMA,'.',TABLE_NAME) FROM INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA != 'mysql' AND TABLE_SCHEMA != 'performance_schema' AND TABLE_SCHEMA != 'information_schema'");
 	        }catch(\Exception $e) {
-
-	        }
-
-	        try {
-	            $tables = DB::select("SHOW TABLES");
-	        }catch(\Exception $e) {
-
+		    	$tables = array();
 	        }
 	        
 	        return $tables;
@@ -934,13 +951,16 @@ class CRUDBooster  {
 	    }
 
 		public static function getTableColumns($table) {
-		    $cols = DB::getSchemaBuilder()->getColumnListing($table);
+		    //$cols = DB::getSchemaBuilder()->getColumnListing($table);
+		    $table = CRUDBooster::parseSqlTable($table);
+		    $cols = collect(DB::select('SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :database AND TABLE_NAME = :table', ['database'=>$table['database'], 'table'=>$table['table']]))->map(function($x){ return (array) $x; })->toArray();
+
 		    $result = array();
 		    $result = $cols;
 
 		    $new_result = array(); 
 		    foreach($result as $ro) {		          
-		        $new_result[] = $ro;
+		        $new_result[] = $ro['COLUMN_NAME'];
 		    }
 		    return $new_result;
 		}
