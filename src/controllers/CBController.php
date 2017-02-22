@@ -69,9 +69,6 @@ class CBController extends Controller {
 	public $hide_form			  = array();
 	public $index_return 		  = FALSE; //for export
 
-	public function __construct() {
-
-	}
 
 	public function cbLoader() {					 		
 		$this->cbInit();
@@ -108,10 +105,20 @@ class CBController extends Controller {
 		$this->data['script_js']             = $this->script_js;	
 		$this->data['sub_module']            = $this->sub_module;	
 		$this->data['parent_field'] 		 = (g('parent_field'))?:$this->parent_field;			
-		$this->data['parent_id'] 		 	 = (g('parent_id'))?:$this->parent_id;			
+		$this->data['parent_id'] 		 	 = (g('parent_id'))?:$this->parent_id;		
+
+		if(CRUDBooster::getCurrentMethod() == 'getProfile') {
+			Session::put('current_row_id',CRUDBooster::myId());
+			$this->data['return_url'] = Request::fullUrl();
+		}	
 
         view()->share($this->data);
 	} 
+
+	public function cbView($template,$data) {
+		$this->cbLoader();
+		echo view($template,$data);
+	}
 
 	private function checkHideForm() {
 		if(count($this->hide_form)) {
@@ -764,8 +771,14 @@ class CBController extends Controller {
 				$inputdata = preg_replace('/[^\d-]+/', '', $inputdata); 
 			}
 
-			if($name && isset($inputdata)) {
-				$this->arr[$name] = $inputdata;
+			if($ro['type']=='child') continue;
+
+			if($name) {
+				if($inputdata!='') {
+					$this->arr[$name] = $inputdata;
+				}else{
+					$this->arr[$name] = "";
+				}				
 			}
 
 			$password_candidate = explode(',',config('crudbooster.PASSWORD_FIELDS_CANDIDATE'));
@@ -778,7 +791,7 @@ class CBController extends Controller {
 			}
 
 			if($ro['type']=='checkbox') {
-				if($inputdata) {
+				if(is_array($inputdata)) {
 					$this->arr[$name] = implode(";",$inputdata);							
 				}
 			}
@@ -836,7 +849,7 @@ class CBController extends Controller {
 	
 	public function postAddSave() {	
 		$this->cbLoader();
-		if(!CRUDBooster::isCreate() && $this->global_privilege==FALSE || $this->button_add==FALSE) {			
+		if(!CRUDBooster::isCreate() && $this->global_privilege==FALSE) {			
 			CRUDBooster::insertLog(trans('crudbooster.log_try_add_save',['name'=>Request::input($this->title_field),'module'=>CRUDBooster::getCurrentModule()->name ]));			
 			CRUDBooster::redirect(CRUDBooster::adminPath(),trans("crudbooster.denied_access"));
 		}
@@ -1197,44 +1210,50 @@ class CBController extends Controller {
 		foreach($rows as $value) {				
 			$a = array();
 			foreach($select_column as $sk => $s) {
-				$colname = $table_columns[$sk];
+				$colname = $table_columns[$sk];				
 
 				if(CRUDBooster::isForeignKey($colname)) {
 
 					//Skip if value is empty
 					if($value->$s == '') continue;
 
-					$relation_table = CRUDBooster::getTableForeignKey($colname);
-					$relation_moduls = DB::table('cms_moduls')->where('table_name',$relation_table)->first();
+					if(intval($value->$s)) {
+						$a[$colname] = $value->$s;
+					}else{
+						$relation_table = CRUDBooster::getTableForeignKey($colname);
+						$relation_moduls = DB::table('cms_moduls')->where('table_name',$relation_table)->first();					
 
-					$relation_class = __NAMESPACE__ . '\\' . $relation_moduls->controller;
-					if(!class_exists($relation_class)) {
-						$relation_class = '\App\Http\Controllers\\'.$relation_moduls->controller;
-					}
-					$relation_class = new $relation_class;
+						$relation_class = __NAMESPACE__ . '\\' . $relation_moduls->controller;
+						if(!class_exists($relation_class)) {
+							$relation_class = '\App\Http\Controllers\\'.$relation_moduls->controller;
+						}
+						$relation_class = new $relation_class;
+						$relation_class->cbLoader();
 
-					$title_field = $relation_class->title_field;
+						$title_field = $relation_class->title_field;
 
-					$relation_insert_data = array();
-					$relation_insert_data[$title_field] = $value->$s;
+						$relation_insert_data = array();
+						$relation_insert_data[$title_field] = $value->$s;
 
-					if(CRUDBooster::isColumnExists($relation_table,'created_at')) {
-						$relation_insert_data['created_at'] = date('Y-m-d H:i:s');
-					}
+						if(CRUDBooster::isColumnExists($relation_table,'created_at')) {
+							$relation_insert_data['created_at'] = date('Y-m-d H:i:s');
+						}
 
-					try{
-						$relation_exists = DB::table($relation_table)->where($title_field,$value->$s)->first();
-						if($relation_exists) {
-							$relation_primary_key = $relation_class->primary_key();
-							$relation_id = $relation_exists->$relation_primary_key;
-						}else{
-							$relation_id = DB::table($relation_table)->insertGetId($relation_insert_data);
-						}						
+						try{
+							$relation_exists = DB::table($relation_table)->where($title_field,$value->$s)->first();
+							if($relation_exists) {
+								$relation_primary_key = $relation_class->primary_key;
+								$relation_id = $relation_exists->$relation_primary_key;
+							}else{
+								$relation_id = DB::table($relation_table)->insertGetId($relation_insert_data);
+							}						
 
-						$a[$colname] = $relation_id;
-					}catch(\Exception $e) {
-
-					}				
+							$a[$colname] = $relation_id;
+						}catch(\Exception $e) {
+							exit($e);
+						}
+					} //END IS INT
+						
 				}else{
 					$a[$colname] = $value->$s;
 				}				
@@ -1313,12 +1332,16 @@ class CBController extends Controller {
 				CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
 			}
 
+			$this->hook_before_delete($id_selected);
+
 			if(Schema::hasColumn($this->table,'deleted_at')) {
 				DB::table($this->table)->whereIn('id',$id_selected)->update(['deleted_at'=>date('Y-m-d H:i:s')]);
 			}else{
 				DB::table($this->table)->whereIn('id',$id_selected)->delete();	
 			} 
-			CRUDBooster::insertLog(trans("crudbooster.log_delete",['name'=>implode(',',$id_selected),'module'=>CRUDBooster::getCurrentModule()->name]));			
+			CRUDBooster::insertLog(trans("crudbooster.log_delete",['name'=>implode(',',$id_selected),'module'=>CRUDBooster::getCurrentModule()->name]));		
+
+			$this->hook_after_delete($id_selected);	
 
 			$message = trans("crudbooster.alert_delete_selected_success");
 			return redirect()->back()->with(['message_type'=>'success','message'=>$message]);

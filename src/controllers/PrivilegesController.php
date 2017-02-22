@@ -35,8 +35,7 @@ class PrivilegesController extends CBController {
 
 		$this->form   = array();
 		$this->form[] = array("label"=>"Name","name"=>"name",'required'=>true);
-		$this->form[] = array("label"=>"Is Superadmin","name"=>"is_superadmin",'required'=>true);		
-		$this->form[] = array("label"=>"Is Register","name"=>"is_register",'required'=>true);		
+		$this->form[] = array("label"=>"Is Superadmin","name"=>"is_superadmin",'required'=>true);				
 		$this->form[] = array("label"=>"Theme Color","name"=>"theme_color",'required'=>true);		
 	}
 
@@ -44,6 +43,11 @@ class PrivilegesController extends CBController {
 	public function getAdd()
 	{
 		$this->cbLoader();
+
+		if(!CRUDBooster::isCreate() && $this->global_privilege==FALSE) {			
+			CRUDBooster::insertLog(trans('crudbooster.log_try_add',['module'=>CRUDBooster::getCurrentModule()->name ]));			
+			CRUDBooster::redirect(CRUDBooster::adminPath(),trans("crudbooster.denied_access"));
+		}
 
 		$id = 0; 
 		$data['page_title'] = "Add Data";	
@@ -63,6 +67,13 @@ class PrivilegesController extends CBController {
 	
 
 	public function postAddSave() {
+		$this->cbLoader();
+
+		if(!CRUDBooster::isCreate() && $this->global_privilege==FALSE) {			
+			CRUDBooster::insertLog(trans('crudbooster.log_try_add_save',['name'=>Request::input($this->title_field),'module'=>CRUDBooster::getCurrentModule()->name ]));			
+			CRUDBooster::redirect(CRUDBooster::adminPath(),trans("crudbooster.denied_access"));
+		}
+
 		$this->validation($request);				
 		$this->input_assignment($request);		
 
@@ -105,7 +116,12 @@ class PrivilegesController extends CBController {
 	{
 		$this->cbLoader();
 		
-		$row = DB::table($this->table)->where("id",$id)->first();
+		$row = DB::table($this->table)->where("id",$id)->first();		
+
+		if(!CRUDBooster::isRead() && $this->global_privilege==FALSE) {			
+			CRUDBooster::insertLog(trans("crudbooster.log_try_edit",['name'=>$row->{$this->title_field},'module'=>CRUDBooster::getCurrentModule()->name]));
+			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));			
+		}
 
 		$page_title = trans('crudbooster.edit_data_page_title',['module'=>'Privilege','name'=>$row->name]);
 
@@ -118,11 +134,17 @@ class PrivilegesController extends CBController {
 	}
 	 
 	public function postEditSave($id) {
-		
-		$this->validation($request);
-		$this->input_assignment($request,$id);
+		$this->cbLoader();
 
 		$row = CRUDBooster::first($this->table,$id);
+
+		if(!CRUDBooster::isUpdate() && $this->global_privilege==FALSE) {			
+			CRUDBooster::insertLog(trans("crudbooster.log_try_add",['name'=>$row->{$this->title_field},'module'=>CRUDBooster::getCurrentModule()->name]));
+			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));			
+		}
+
+		$this->validation($request);
+		$this->input_assignment($request,$id);
 
 		DB::table($this->table)->where($this->primary_key,$id)->update($this->arr);
 						
@@ -160,7 +182,15 @@ class PrivilegesController extends CBController {
 	}
 	
 	public function getDelete($id) {
+		$this->cbLoader();
+		
 		$row = DB::table($this->table)->where($this->primary_key,$id)->first();
+
+		if(!CRUDBooster::isDelete() && $this->global_privilege==FALSE) {			
+			CRUDBooster::insertLog(trans("crudbooster.log_try_delete",['name'=>$row->{$this->title_field},'module'=>CRUDBooster::getCurrentModule()->name]));			
+			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
+		}
+
 		DB::table($this->table)->where($this->primary_key,$id)->delete();
 		DB::table("cms_privileges_roles")->where("id_cms_privileges",$row->id)->delete();
 		CRUDBooster::redirect(CRUDBooster::mainpath(),trans("crudbooster.alert_delete_data_success"),'success');		
