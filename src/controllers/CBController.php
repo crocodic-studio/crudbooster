@@ -109,8 +109,8 @@ class CBController extends Controller {
 
 		if(CRUDBooster::getCurrentMethod() == 'getProfile') {
 			Session::put('current_row_id',CRUDBooster::myId());
-			$this->data['return_url'] = Request::fullUrl();
-		}
+			$this->data['return_url'] = Request::fullUrl();			
+		}		
 
         view()->share($this->data);
 	}
@@ -765,6 +765,8 @@ class CBController extends Controller {
 
 			if($ro['exception']) continue;
 
+			if($this->hide_form && in_array($name, $this->hide_form)) continue;
+
 			$inputdata = Request::get($name);
 
 			if($ro['type']=='money') {
@@ -1000,7 +1002,7 @@ class CBController extends Controller {
 		}
 
 		$this->validation();
-		$this->input_assignment($id);
+		$this->input_assignment($id);		
 
 		if (Schema::hasColumn($this->table, 'updated_at'))
 		{

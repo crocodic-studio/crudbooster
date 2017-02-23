@@ -35,7 +35,7 @@ class AdminCmsUsersController extends \crocodicstudio\crudbooster\controllers\CB
 		$this->form[] = array("label"=>"Password","name"=>"password","type"=>"password","help"=>"Please leave empty if not change");
 		# END FORM DO NOT REMOVE THIS LINE
 
-		if(CRUDBooster::getCurrentMethod() == 'getProfile') {
+		if(CRUDBooster::getCurrentMethod() == 'getProfile' || CRUDBooster::getCurrentMethod() == 'postAddSave' || CRUDBooster::getCurrentMethod() == 'postEditSave') {
 			$this->button_addmore = FALSE;
 			$this->button_cancel  = FALSE;
 			$this->button_show    = FALSE;			
