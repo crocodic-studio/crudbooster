@@ -888,6 +888,11 @@ class CBController extends Controller {
 				foreach($subtable_data as &$s) {
 					$s->id = $i;
 					$s->$fk = $id;
+					foreach($s as $k=>$v) {
+						if(CRUDBooster::isForeignKey($k)) {
+							unset($s->{$k.'_label'});
+						}
+					}
 					$i++;
 				}
 

@@ -54,6 +54,18 @@ class CRUDBooster  {
 					}								
 				}
 			}
+
+			$i = 0;
+			foreach($result as $key=>$val) {
+				foreach($val as $k=>$v) {
+					if(self::isForeignKey($k)) {			
+						$getTableForeignKey = self::getTableForeignKey($k);								
+						$result[$i]->{$k.'_label'} = "<em>".ucwords($getTableForeignKey)."</em>";
+					}
+				}
+				$i++;
+			}	
+
 			return $result;
 		}
 
