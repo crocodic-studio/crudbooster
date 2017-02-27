@@ -147,4 +147,15 @@ return [
     'Email_Templates'     => 'Modelos de e-mail', 
     'Log_User_Access'     => 'Histórico de acesso', 
     'SUPERADMIN'          => 'SUPER-ADMNISTRADOR', 
+
+    'click_here'                => 'Clique aqui',
+    'notificationYouHave'       => 'você tem',
+    'notificationNotifications' => 'Notificações',
+
+    'right' => 'direita',
+    'left'  => 'esquerda',
+
+    'all_rights_reserved' => 'Todos os Direitos Reservados',
+    'copyright'           => 'Copyright',
+    'powered_by'          => 'Desenvolvido por',
 ];
