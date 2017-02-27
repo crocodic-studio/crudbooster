@@ -175,4 +175,12 @@ return [
     'all_rights_reserved' => 'All Rights Reserved',
     'copyright'           => 'Copyright',
     'powered_by'          => 'Powered by',
+
+    'NOTIFICATION_YOU_HAVE'      => 'You Have',
+    'NOTIFICATION_NOTIFICATIONS' => 'Notifications',
+    'NOTIFICATION_NEW'           => 'You have a new notification !',
+
+    'login_register_style' => 'Login Register Style',
+    'email_setting'        => 'Email Setting',
+    'application_setting'  => 'Application Setting',
 ];

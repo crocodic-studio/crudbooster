@@ -175,4 +175,12 @@ return [
     'all_rights_reserved' => 'كافة الحقوق محفوظة',
     'copyright'           => 'حقوق النسخ',
     'powered_by'          => 'انشئ بواسطة',
+
+    'NOTIFICATION_YOU_HAVE'      => 'لديك',
+    'NOTIFICATION_NOTIFICATIONS' => 'تنبيهات',
+    'NOTIFICATION_NEW'           => 'لديك تنبيه جديد',
+
+    'login_register_style' => 'شاشة الدخول والتسجيل',
+    'email_setting'        => 'اعدادات البريد',
+    'application_setting'  => 'اعدادات عامة',
 ];
