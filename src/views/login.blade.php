@@ -15,7 +15,12 @@
     <!-- Theme style -->
     <link href="{{asset('vendor/crudbooster/assets/adminlte/dist/css/AdminLTE.min.css')}}" rel="stylesheet" type="text/css" />
 
-    
+    <!-- support rtl-->
+    @if (App::getLocale() == 'ar')
+      <link rel="stylesheet" href="//cdn.rawgit.com/morteza/bootstrap-rtl/v3.3.4/dist/css/bootstrap-rtl.min.css">
+      <link href="{{ asset("vendor/crudbooster/assets/rtl.css")}}" rel="stylesheet" type="text/css" />
+    @endif
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -80,7 +85,7 @@
           </div>       
           
           <div class='row'>
-            <div class='col-xs-12' align="center"><p style="padding:10px 0px 10px 0px">{{trans("crudbooster.text_forgot_password")}} <a href='{{route("getForgot")}}'>Click here</a>   </p></div>
+            <div class='col-xs-12' align="center"><p style="padding:10px 0px 10px 0px">{{trans("crudbooster.text_forgot_password")}} <a href='{{route("getForgot")}}'>{{trans("crudbooster.click_here")}}</a>   </p></div>
           </div>
         </form>
         

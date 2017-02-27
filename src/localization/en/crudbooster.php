@@ -164,4 +164,15 @@ return [
     'Email_Templates'     => 'Email Templates',
     'Log_User_Access'     => 'Log User Access',
     'SUPERADMIN'          => 'SUPERADMIN',
+
+    'click_here'                => 'Click here',
+    'notificationYouHave'       => 'you have',
+    'notificationNotifications' => 'Notifications',
+
+    'right' => 'right',
+    'left'  => 'left',
+
+    'all_rights_reserved' => 'All Rights Reserved',
+    'copyright'           => 'Copyright',
+    'powered_by'          => 'Powered by',
 ];

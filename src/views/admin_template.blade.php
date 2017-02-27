@@ -13,7 +13,13 @@
     
     <!-- Theme style -->
     <link href="{{ asset("vendor/crudbooster/assets/adminlte/dist/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css" />    
-    <link href="{{ asset("vendor/crudbooster/assets/adminlte/dist/css/skins/_all-skins.min.css")}}" rel="stylesheet" type="text/css" />      
+    <link href="{{ asset("vendor/crudbooster/assets/adminlte/dist/css/skins/_all-skins.min.css")}}" rel="stylesheet" type="text/css" />
+
+    <!-- support rtl-->
+    @if (App::getLocale() == 'ar')
+        <link rel="stylesheet" href="//cdn.rawgit.com/morteza/bootstrap-rtl/v3.3.4/dist/css/bootstrap-rtl.min.css">
+        <link href="{{ asset("vendor/crudbooster/assets/rtl.css")}}" rel="stylesheet" type="text/css" />
+    @endif
 
     <!-- load js -->
     <script type="text/javascript">
@@ -111,7 +117,7 @@
 
 
           <ol class="breadcrumb">
-            <li><a href="{{CRUDBooster::adminPath()}}"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li><a href="{{CRUDBooster::adminPath()}}"><i class="fa fa-dashboard"></i> {{ trans('crudbooster.home') }}</a></li>
             <li class="active">{{$module->name}}</li>
           </ol>
           @else
