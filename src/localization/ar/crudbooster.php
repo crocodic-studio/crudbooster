@@ -169,6 +169,12 @@ return [
     'notificationYouHave'       => 'لديك',
     'notificationNotifications' => 'تنبيهات',
 
+    /*
+     * this is for html direction to use in html and css classes like :
+     * pull-left , pull-right , text-right ...
+     * to make it easy to use the the view for rtl langs .
+     * unless your language use right-to-left direction , you should keep it as it is :
+     */
     'right' => 'left',
     'left'  => 'right',
 
