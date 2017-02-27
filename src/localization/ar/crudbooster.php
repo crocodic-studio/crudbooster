@@ -164,4 +164,15 @@ return [
     'Email_Templates'     => 'قوالب البريد الإلكتروني',
     'Log_User_Access'     => 'سجلات النظام',
     'SUPERADMIN'          => 'مدير النظام ',
+
+    'click_here'                => 'اضغط هنا ',
+    'notificationYouHave'       => 'لديك',
+    'notificationNotifications' => 'تنبيهات',
+
+    'right' => 'left',
+    'left'  => 'right',
+
+    'all_rights_reserved' => 'كافة الحقوق محفوظة',
+    'copyright'           => 'حقوق النسخ',
+    'powered_by'          => 'انشئ بواسطة',
 ];
