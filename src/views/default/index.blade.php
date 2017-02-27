@@ -74,7 +74,7 @@
 
             <form method='get' style="display:inline-block;width: 260px;" action='{{Request::url()}}'>
                 <div class="input-group">
-                  <input type="text" name="q" value="{{ Request::get('q') }}" class="form-control input-sm pull-right" placeholder="Search"/>
+                  <input type="text" name="q" value="{{ Request::get('q') }}" class="form-control input-sm pull-{{ trans('crudbooster.right') }}" placeholder="Search"/>
                   {!! CRUDBooster::getUrlParameters(['q']) !!}
                   <div class="input-group-btn">
                     @if(Request::get('q'))
