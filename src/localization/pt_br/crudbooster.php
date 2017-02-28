@@ -152,8 +152,8 @@ return [
     'notificationYouHave'       => 'você tem',
     'notificationNotifications' => 'Notificações',
 
-    'right' => 'direita',
-    'left'  => 'esquerda',
+    'right' => 'right',
+    'left'  => 'left',
 
     'all_rights_reserved' => 'Todos os Direitos Reservados',
     'copyright'           => 'Copyright',
