@@ -159,9 +159,9 @@ return [
     'copyright'           => 'Copyright',
     'powered_by'          => 'Desenvolvido por',
 
-    'NOTIFICATION_YOU_HAVE'      => 'You Have',
-    'NOTIFICATION_NOTIFICATIONS' => 'Notifications',
-    'NOTIFICATION_NEW'           => 'You have a new notification !',
+    'NOTIFICATION_YOU_HAVE'      => 'Você tem',
+    'NOTIFICATION_NOTIFICATIONS' => 'Notificações',
+    'NOTIFICATION_NEW'           => 'Você tem uma nova notificação!',
 
     'login_register_style' => 'Login Register Style',
     'email_setting'        => 'Email Setting',
