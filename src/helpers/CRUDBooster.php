@@ -1415,6 +1415,32 @@ class CRUDBooster  {
 	        |
 	        */
 	        $this->load_js = array();
+	        
+	        
+	        
+	        /*
+	        | ---------------------------------------------------------------------- 
+	        | Add css style at body 
+	        | ---------------------------------------------------------------------- 
+	        | css code in the variable 
+	        | $this->style_css = ".style{....}";
+	        |
+	        */
+	        $this->style_css = NULL;
+	        
+	        
+	        
+	        /*
+	        | ---------------------------------------------------------------------- 
+	        | Include css File 
+	        | ---------------------------------------------------------------------- 
+	        | URL of your css each array 
+	        | $this->load_css[] = asset("myfile.css");
+	        |
+	        */
+	        $this->load_css = array();
+	        
+	        
 	    }
 
 

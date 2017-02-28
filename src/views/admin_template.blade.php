@@ -21,6 +21,18 @@
         <link href="{{ asset("vendor/crudbooster/assets/rtl.css")}}" rel="stylesheet" type="text/css" />
     @endif
 
+    <!-- load css -->
+    <style type="text/css">
+        @if($style_css)
+            {!! $style_css !!}
+        @endif
+    </style>
+    @if($load_css)
+        @foreach($load_css as $css)
+            <link href="{{$css}}" rel="stylesheet" type="text/css" />
+        @endforeach
+    @endif
+
     <!-- load js -->
     <script type="text/javascript">
       var site_url = "{{url('/')}}" ;
