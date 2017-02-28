@@ -165,9 +165,7 @@ return [
     'Log_User_Access'     => 'سجلات النظام',
     'SUPERADMIN'          => 'مدير النظام ',
 
-    'click_here'                => 'اضغط هنا ',
-    'notificationYouHave'       => 'لديك',
-    'notificationNotifications' => 'تنبيهات',
+    'click_here'                => 'اضغط هنا ',    
 
     /*
      * this is for html direction to use in html and css classes like :
@@ -182,9 +180,9 @@ return [
     'copyright'           => 'حقوق النسخ',
     'powered_by'          => 'انشئ بواسطة',
 
-    'NOTIFICATION_YOU_HAVE'      => 'لديك',
-    'NOTIFICATION_NOTIFICATIONS' => 'تنبيهات',
-    'NOTIFICATION_NEW'           => 'لديك تنبيه جديد',
+    'notification_you_have'      => 'لديك',
+    'notification_notification' => 'تنبيهات',
+    'notification_new'           => 'لديك تنبيه جديد',
 
     'login_register_style' => 'شاشة الدخول والتسجيل',
     'email_setting'        => 'اعدادات البريد',

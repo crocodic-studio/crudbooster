@@ -148,9 +148,7 @@ return [
     'Log_User_Access'     => 'Histórico de acesso', 
     'SUPERADMIN'          => 'SUPER-ADMNISTRADOR', 
 
-    'click_here'                => 'Clique aqui',
-    'notificationYouHave'       => 'você tem',
-    'notificationNotifications' => 'Notificações',
+    'click_here'                => 'Clique aqui',    
 
     'right' => 'right',
     'left'  => 'left',
@@ -159,9 +157,9 @@ return [
     'copyright'           => 'Copyright',
     'powered_by'          => 'Desenvolvido por',
 
-    'NOTIFICATION_YOU_HAVE'      => 'You Have',
-    'NOTIFICATION_NOTIFICATIONS' => 'Notifications',
-    'NOTIFICATION_NEW'           => 'You have a new notification !',
+    'notification_you_have'      => 'você tem',
+    'notification_notification' => 'Notificações',
+    'notification_new'           => 'You have a new notification !',
 
     'login_register_style' => 'Login Register Style',
     'email_setting'        => 'Email Setting',
