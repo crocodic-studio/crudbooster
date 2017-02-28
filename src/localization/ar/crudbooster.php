@@ -169,10 +169,24 @@ return [
     'notificationYouHave'       => 'لديك',
     'notificationNotifications' => 'تنبيهات',
 
+    /*
+     * this is for html direction to use in html and css classes like :
+     * pull-left , pull-right , text-right ...
+     * to make it easy to use the the view for rtl langs .
+     * unless your language use right-to-left direction , you should keep it as it is :
+     */
     'right' => 'left',
     'left'  => 'right',
 
     'all_rights_reserved' => 'كافة الحقوق محفوظة',
     'copyright'           => 'حقوق النسخ',
     'powered_by'          => 'انشئ بواسطة',
+
+    'NOTIFICATION_YOU_HAVE'      => 'لديك',
+    'NOTIFICATION_NOTIFICATIONS' => 'تنبيهات',
+    'NOTIFICATION_NEW'           => 'لديك تنبيه جديد',
+
+    'login_register_style' => 'شاشة الدخول والتسجيل',
+    'email_setting'        => 'اعدادات البريد',
+    'application_setting'  => 'اعدادات عامة',
 ];

@@ -53,7 +53,11 @@
 		var APP_NAME            = "{{CRUDBooster::getSetting('appname')}}";		
 		var ADMIN_PATH          = '{{url(config("crudbooster.ADMIN_PATH")) }}';
 		var NOTIFICATION_JSON   = "{{route('NotificationsControllerGetLatestJson')}}";
-		var NOTIFICATION_INDEX  = "{{route('NotificationsControllerGetIndex')}}";		
+		var NOTIFICATION_INDEX  = "{{route('NotificationsControllerGetIndex')}}";
+
+		var NOTIFICATION_YOU_HAVE      = "{{trans('crudbooster.NOTIFICATION_YOU_HAVE')}}";
+		var NOTIFICATION_NOTIFICATIONS = "{{trans('crudbooster.NOTIFICATION_NOTIFICATIONS')}}";
+		var NOTIFICATION_NEW           = "{{trans('crudbooster.NOTIFICATION_NEW')}}";
 
 		$(function() {
 			$('.datatables-simple').DataTable();

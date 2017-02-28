@@ -169,10 +169,24 @@ return [
     'notificationYouHave'       => 'you have',
     'notificationNotifications' => 'Notifications',
 
+    /*
+     * this is for html direction to use in html and css classes like :
+     * pull-left , pull-right , text-right ...
+     * to make it easy to use the the view for rtl langs .
+     * unless your language use right-to-left direction , you should keep it as it is :
+     */
     'right' => 'right',
     'left'  => 'left',
 
     'all_rights_reserved' => 'All Rights Reserved',
     'copyright'           => 'Copyright',
     'powered_by'          => 'Powered by',
+
+    'NOTIFICATION_YOU_HAVE'      => 'You Have',
+    'NOTIFICATION_NOTIFICATIONS' => 'Notifications',
+    'NOTIFICATION_NEW'           => 'You have a new notification !',
+
+    'login_register_style' => 'Login Register Style',
+    'email_setting'        => 'Email Setting',
+    'application_setting'  => 'Application Setting',
 ];
