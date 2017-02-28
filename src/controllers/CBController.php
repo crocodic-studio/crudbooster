@@ -80,6 +80,7 @@ class CBController extends Controller {
 		$this->columns_table                 = $this->col;
 		$this->data_inputan                  = $this->form;
 		$this->data['forms']                 = $this->data_inputan;
+		$this->data['hide_form'] 			 = $this->hide_form;
 		$this->data['addaction']             = ($this->show_addaction)?$this->addaction:NULL;
 		$this->data['table']                 = $this->table;
 		$this->data['title_field']           = $this->title_field;
@@ -665,7 +666,7 @@ class CBController extends Controller {
 		$id          = intval($id);
 		foreach($this->data_inputan as $di) {
 			$ai = array();
-			$name = $di['name'];
+			$name = $di['name'];			
 
 			if( !isset($request_all[$name]) ) continue;
 
@@ -760,7 +761,9 @@ class CBController extends Controller {
 		}
 	}
 
-	public function input_assignment($id=null) {
+	public function input_assignment($id=null) {			
+
+		$hide_form = (Request::get('hide_form'))?unserialize(Request::get('hide_form')):array();
 
 		foreach($this->data_inputan as $ro) {
 			$name = $ro['name'];
@@ -769,7 +772,13 @@ class CBController extends Controller {
 
 			if($ro['exception']) continue;
 
-			if($this->hide_form && in_array($name, $this->hide_form)) continue;
+			if($name=='hide_form') continue;
+
+			if(count($hide_form)) {
+				if(in_array($name, $hide_form)) {
+					continue;
+				}
+			}
 
 			$inputdata = Request::get($name);
 
