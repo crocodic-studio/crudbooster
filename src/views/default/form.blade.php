@@ -23,9 +23,12 @@
                 ?>
                 <form class='form-horizontal' method='post' id="form" enctype="multipart/form-data" action='{{$action}}'>
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">    
-                <input type='hidden' name='return_url' value='{{ @$return_url }}'/>      
+                <input type='hidden' name='return_url' value='{{ @$return_url }}'/>                      
                 <input type='hidden' name='ref_mainpath' value='{{ CRUDBooster::mainpath() }}'/>      
                 <input type='hidden' name='ref_parameter' value='{{urldecode(http_build_query(@$_GET))}}'/>
+                @if($hide_form)
+                  <input type="hidden" name="hide_form" value='{!! serialize($hide_form) !!}'>
+                @endif
                         <div class="box-body">
 
                           @if($command == 'detail')
