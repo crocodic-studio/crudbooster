@@ -165,9 +165,7 @@ return [
     'Log_User_Access'     => 'Log User Access',
     'SUPERADMIN'          => 'SUPERADMIN',
 
-    'click_here'                => 'Click here',
-    'notificationYouHave'       => 'you have',
-    'notificationNotifications' => 'Notifications',
+    'click_here'                => 'Click here',    
 
     /*
      * this is for html direction to use in html and css classes like :
@@ -182,9 +180,9 @@ return [
     'copyright'           => 'Copyright',
     'powered_by'          => 'Powered by',
 
-    'NOTIFICATION_YOU_HAVE'      => 'You Have',
-    'NOTIFICATION_NOTIFICATIONS' => 'Notifications',
-    'NOTIFICATION_NEW'           => 'You have a new notification !',
+    'notification_you_have'      => 'You Have',
+    'notification_notification' => 'Notifications',
+    'notification_new'           => 'You have a new notification !',
 
     'login_register_style' => 'Login Register Style',
     'email_setting'        => 'Email Setting',
