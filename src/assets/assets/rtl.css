@@ -59,14 +59,6 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, .main-header .logo {
     margin-left: 10px;
 }
 
-.linThrough {
-    text-decoration: line-through;
-}
-
-.inActive {
-    background-color: #ccc !important;
-}
-
 .skin-blue .sidebar-menu > li > a {
     border-right: 3px solid transparent;
     border-left: none !important;

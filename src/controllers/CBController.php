@@ -58,7 +58,9 @@ class CBController extends Controller {
 	public $index_statistic       = array();
 	public $index_additional_view = array();
 	public $load_js               = array();
+	public $load_css              = array();
 	public $script_js             = NULL;
+	public $style_css             = NULL;
 	public $sub_module            = array();
 	public $show_addaction        = TRUE;
 	public $table_row_color 	  = array();
@@ -102,7 +104,9 @@ class CBController extends Controller {
 		$this->data['index_additional_view'] = $this->index_additional_view;
 		$this->data['table_row_color']       = $this->table_row_color;
 		$this->data['load_js']               = $this->load_js;
+		$this->data['load_css']              = $this->load_css;
 		$this->data['script_js']             = $this->script_js;
+		$this->data['style_css']             = $this->style_css;
 		$this->data['sub_module']            = $this->sub_module;
 		$this->data['parent_field'] 		 = (g('parent_field'))?:$this->parent_field;
 		$this->data['parent_id'] 		 	 = (g('parent_id'))?:$this->parent_id;
