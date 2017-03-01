@@ -1185,7 +1185,7 @@ class CRUDBooster  {
 	                case 'varchar':
 	                case 'char':
 	                $type = "text";
-	                $validation[] = "min:3|max:255";                
+	                $validation[] = "min:1|max:255";                
 	                break;
 	                case 'text':
 	                case 'longtext':
