@@ -59,6 +59,8 @@ class SettingsController extends CBController {
 			show_radio_data();
 			");
 		$this->form[] = array("label"=>"Helper Text","name"=>"helper","type"=>"text");				
+                $this->form[] = array("label"=>"Translate Group Setting","name"=>"translate_group_setting","type"=>"text");
+                $this->form[] = array("label"=>"Translate Label","name"=>"translate_label","type"=>"text");
 		
 		
 	}

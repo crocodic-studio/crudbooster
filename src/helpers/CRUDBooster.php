@@ -285,6 +285,18 @@ class CRUDBooster  {
 			}			 
 		}
 
+                public static function getTitleModule($module_name,$type="") {
+                        $module = self::getCurrentModule();
+                        $translate = json_decode($module->translate);
+                        $translate = (array) $translate;
+                        $response = $translate[\App::getLocale()]->{$type};
+                        if(is_null($response)) {
+                            $response = "INVALID !!!";
+                        }
+                        return $response;
+                }
+                                
+
 		public static function getCurrentDashboardId() {
 			if(Request::get('d') != NULL) {				
 				Session::put('currentDashboardId',Request::get('d'));
