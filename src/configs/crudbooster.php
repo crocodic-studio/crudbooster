@@ -16,7 +16,7 @@ return [
 
 	'PHONE_FIELDS_CANDIDATE'	=>'phone,phonenumber,phone_number,telp,hp,no_hp,no_telp',
 
-	'NAME_FIELDS_CANDIDATE'		=>'name,nama,person_name,person,fullname,full_name,nickname,nick,nick_name',
+	'NAME_FIELDS_CANDIDATE'		=>'name,nama,person_name,person,fullname,full_name,nickname,nick,nick_name,title,judul,content',
 
 	'URL_FIELDS_CANDIDATE'		=>'url,link',
 	
