@@ -27,9 +27,9 @@ return [
     'text_loading'                => 'Yükleniyor lütfen bekleyiniz...',
 
     'message_after_logout'    => 'Teşekkür Ederim, Sonra Görüşürüz !',
-    'message_forgot_password' => 'We have sent new password to your email, check inbox or spambox !',
+    'message_forgot_password' => 'E-postanıza yeni şifre gönderdik, gelen kutusu veya spam kutunuzu kontrol edin !',
 
-    'page_not_found'      => 'Oops! Page Not Found',
+    'page_not_found'      => 'Haydaa! Sayfa bulunamadı.',
     'page_not_found_text' => 'We are unable search the page that you are looking for.',
     'page_not_found_tips' => '* Please make sure the URL is correct<br/>
                 * Please make sure the font capitalizing is correct because case sensitive<br/>
@@ -136,9 +136,9 @@ return [
     'denied_delete' => 'Sorry you do not have privilege to delete the data !',
 
     'user_image'           => 'User Image',
-    'online'               => 'Online',
+    'online'               => 'Çevrimiçi',
     'controller_route_404' => 'Controller / Route Not Found',
-    'home'                 => 'Home',
+    'home'                 => 'Anasayfa',
 
     'Privileges_Roles'    => 'Privileges Roles',
     'Add_New_Privilege'   => 'Add New Privilege',
@@ -148,24 +148,24 @@ return [
     'Menu_Management'     => 'Menu Management',
     'Add_New_Setting'     => 'Add New Setting',
     'Add_New_Module'      => 'Add New Module',
-    'List_Module'         => 'List Module',
-    'Add_New_Statistic'   => 'Add New Statistic',
-    'List_Statistic'      => 'List Statistic',
-    'Add_New_API'         => 'Add New API',
-    'API_Generator'       => 'API Generator',
-    'Statistic_Builder'   => 'Statistic Builder',
-    'Module_Generator'    => 'Module Generator',
-    'settings'            => 'Settings',
+    'List_Module'         => 'Modülleri Listele',
+    'Add_New_Statistic'   => 'Yeni İstatistik Ekle',
+    'List_Statistic'      => 'İstatistikleri Listele',
+    'Add_New_API'         => 'Yeni API Ekle',
+    'API_Generator'       => 'API Oluşturucu',
+    'Statistic_Builder'   => 'İstatistik Oluşturucu',
+    'Module_Generator'    => 'Modül Oluşturucu',
+    'settings'            => 'Ayarlar',
     'Users_Management'    => 'Users Management',
     'list_API'            => 'List API (Documentation)',
-    'Generate_Screet_Key' => 'Generate Screet Key',
-    'Add_New_Email'       => 'Add New Email',
-    'List_Email_Template' => 'List Email Template',
-    'Email_Templates'     => 'Email Templates',
-    'Log_User_Access'     => 'Log User Access',
+    'Generate_Screet_Key' => 'Güvenli Anahtar Oluşturma',
+    'Add_New_Email'       => 'Yeni E-Posta Ekle',
+    'List_Email_Template' => 'E-Posta Şablonu Listesi',
+    'Email_Templates'     => 'E-Posta Şablonları',
+    'Log_User_Access'     => 'Kullanıcı Günlük Erişimi',
     'SUPERADMIN'          => 'SUPERADMIN',
 
-    'click_here'                => 'Click here',    
+    'click_here'                => 'Buraya Tıklayınız',    
 
     /*
      * this is for html direction to use in html and css classes like :
@@ -173,8 +173,8 @@ return [
      * to make it easy to use the the view for rtl langs .
      * unless your language use right-to-left direction , you should keep it as it is :
      */
-    'right' => 'right',
-    'left'  => 'left',
+    'right' => 'sağ',
+    'left'  => 'sol',
 
     'all_rights_reserved' => 'All Rights Reserved',
     'copyright'           => 'Copyright',
@@ -184,7 +184,7 @@ return [
     'notification_notification' => 'Notifications',
     'notification_new'           => 'You have a new notification !',
 
-    'login_register_style' => 'Login Register Style',
-    'email_setting'        => 'Email Setting',
-    'application_setting'  => 'Application Setting',
+    'login_register_style' => 'Kayıt Sayfası Stili',
+    'email_setting'        => 'Email Ayarları',
+    'application_setting'  => 'Uygulama Ayarları',
 ];
