@@ -18,11 +18,6 @@ CRUDBooster is Laravel Framework that modified to bring a lot of features to dev
 ## YOUTUBE CHANNEL
 https://www.youtube.com/channel/UCgOJR3khWEykIBBR8vAGtcA
 
-## TELEGRAM GROUP CHAT
-INDONESIA (ID) : https://t.me/joinchat/AAAAAELA7nvsNSbzC9KMug
-
-INTERNATIONAL (EN) : https://t.me/joinchat/AAAAAEBPmHP7tU9BTJvZmQ
-
 ## SUPPORT AND CONTRIBUTION
 Thank you for your contribution. Create pull request but don't push to master. Pull to currently branch version.
 
