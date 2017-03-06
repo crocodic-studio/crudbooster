@@ -989,7 +989,8 @@ class CRUDBooster  {
 		}
 
 		public static function getNameTable($columns) {
-		    $name_col_candidate = array("name","nama","title","judul","content");   
+		    $name_col_candidate = config('crudbooster.NAME_FIELDS_CANDIDATE');
+		    $name_col_candidate = explode(',',$name_col_candidate);  
 		    $name_col = '';
 		    foreach($columns as $c) {
 		        foreach($name_col_candidate as $cc) {
@@ -1151,6 +1152,11 @@ class CRUDBooster  {
 	                $joincols = CRUDBooster::getTableColumns($jointable);
 	                $joinname = CRUDBooster::getNameTable($joincols);
 	                $php .= "\t\t".'$this->col[] = array("label"=>"'.$label.'","name"=>"'.$field.'","join"=>"'.$jointable.','.$joinname.'");'."\n";
+	            }elseif(substr($field, -3) == '_id') {
+			   		$jointable = substr($field, 0, (strlen($field)-3) );		
+			   		$joincols = CRUDBooster::getTableColumns($jointable);
+	                $joinname = CRUDBooster::getNameTable($joincols);
+	            	$php .= "\t\t".'$this->col[] = array("label"=>"'.$label.'","name"=>"'.$field.'","join"=>"'.$jointable.','.$joinname.'");'."\n";
 	            }else{
 	                $image = '';
 	                if(in_array($field, $image_candidate)) $image = ',"image"=>true';
@@ -1185,7 +1191,7 @@ class CRUDBooster  {
 	                case 'varchar':
 	                case 'char':
 	                $type = "text";
-	                $validation[] = "min:3|max:255";                
+	                $validation[] = "min:1|max:255";                
 	                break;
 	                case 'text':
 	                case 'longtext':
