@@ -27,7 +27,7 @@
 				if($row) {
 					
 				$subquery = DB::table($subtable)->select($subtable.'.id');
-				$subquery->where($fk,$fk_id);
+				$subquery->where($subtable.'.'.$fk,$fk_id);
 				foreach ($columns as $key => $value) {
 					if(strpos($value['name'], ' as ')!==FALSE) {
 						$subquery->addselect(DB::raw($value['name']));
