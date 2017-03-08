@@ -107,6 +107,7 @@ return [
     'button_sign_in'         => 'Sign In',
     'button_selected_action' => 'Bulk Actions',
     'button_download_file'   => 'Download file',
+    'button_reset'           => 'Reset',
 
 
     'export_dialog_title'            => "Export Data",
@@ -187,4 +188,25 @@ return [
     'login_register_style' => 'Login Register Style',
     'email_setting'        => 'Email Setting',
     'application_setting'  => 'Application Setting',
+    
+    'filter_select_operator_type' => 'Select Operator Type',
+    'filter_ascending' => 'ASCENDING',
+    'filter_descending' => 'DESCENDING',
+    'filter_equal_to'=> '=(Equal to)',
+    'filter_like'=> 'LIKE',
+    'filter_not_like'=>'NOT LIKE',
+    'filter_greater_than_or_equal'=>'>>= (Greater Than or Equal)',
+    'filter_less_than_or_equal'=>'<= (Less Than or Equal)',
+    'filter_less_than'=>'< (Less Than)',
+    'filter_greater_than'=>'> (Greater Than)',
+    'filter_not_equal_to'=>'!= (Not Equal to)',
+    'filter_in'=>'IN',
+    'filter_not_in'=>'NOT IN',
+    'filter_between'=>'BETWEEN',
+    'filter_sort_ascending'=>'Sort ascending',
+    'filter_sort_descending'=>'Sort Descending',    
+    'filter_eg'=>'e.g',
+    'filter_lorem_ipsum'=>'Lorem ipsum',
+    'filter_lorem_ipsum_dolor_sit'=>'Lorem,Ipsum,Dolor Sit',
+    'filter_lorem_ipsum'=>'Lorem ipsum',
 ];
