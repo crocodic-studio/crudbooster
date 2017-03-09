@@ -104,7 +104,7 @@
 				                    <?php 
 				                    if($col['callback_php']) {
 				                      foreach($s as $k=>$v) {
-				                          $col['callback_php'] = str_replace("[".$k."]",$v,$col['callback_php']);
+							  $col['callback_php'] = str_replace('$row->'.$k,$v,$col['callback_php']);
 				                      }
 				                      @eval("echo ".$col['callback_php'].";");
 				                    }
