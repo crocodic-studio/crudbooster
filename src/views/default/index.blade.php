@@ -67,14 +67,14 @@
         <div class="box-tools pull-{{ trans('crudbooster.right') }}" style="padding-top:5px">
           
               @if($button_filter)
-              <a style="margin-top:-23px" href="javascript:void(0)" id='btn_advanced_filter' data-url-parameter='{{$build_query}}' title='Advanced Filter Data' class="btn btn-sm btn-default {{(Request::get('filter_column'))?'active':''}}">                               
+              <a style="margin-top:-23px" href="javascript:void(0)" id='btn_advanced_filter' data-url-parameter='{{$build_query}}' title='{{trans('crudbooster.filter_dialog_title')}}' class="btn btn-sm btn-default {{(Request::get('filter_column'))?'active':''}}">                               
                 <i class="fa fa-filter"></i> {{trans("crudbooster.button_filter")}}
               </a>
               @endif
 
             <form method='get' style="display:inline-block;width: 260px;" action='{{Request::url()}}'>
                 <div class="input-group">
-                  <input type="text" name="q" value="{{ Request::get('q') }}" class="form-control input-sm pull-{{ trans('crudbooster.right') }}" placeholder="Search"/>
+                  <input type="text" name="q" value="{{ Request::get('q') }}" class="form-control input-sm pull-{{ trans('crudbooster.right') }}" placeholder="{{trans('crudbooster.filter_search')}}"/>
                   {!! CRUDBooster::getUrlParameters(['q']) !!}
                   <div class="input-group-btn">
                     @if(Request::get('q'))
@@ -85,7 +85,7 @@
                       $build_query = ($build_query)?"?".$build_query:"";
                       $build_query = (Request::all())?$build_query:"";
                     ?>
-                    <button type='button' onclick='location.href="{{ CRUDBooster::mainpath().$build_query}}"' title='Reset' class='btn btn-sm btn-warning'><i class='fa fa-ban'></i></button>
+                    <button type='button' onclick='location.href="{{ CRUDBooster::mainpath().$build_query}}"' title="{{trans('crudbooster.button_reset')}}" class='btn btn-sm btn-warning'><i class='fa fa-ban'></i></button>
                     @endif
                     <button type='submit' class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
                   </div>

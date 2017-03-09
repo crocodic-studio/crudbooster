@@ -422,8 +422,9 @@ class CRUDBooster  {
 				text: \"".trans('crudbooster.delete_description_confirm')."\",   
 				type: \"warning\",   
 				showCancelButton: true,   
-				confirmButtonColor: \"#DD6B55\",   
-				confirmButtonText: \"Yes!\",   
+				confirmButtonColor: \"#ff0000\",   
+				confirmButtonText: \"".trans('crudbooster.confirmation_yes')."\",  
+				cancelButtonText: \"".trans('crudbooster.confirmation_no')."\",  
 				closeOnConfirm: false }, 
 				function(){  location.href=\"$redirectTo\" });";
 		}		
