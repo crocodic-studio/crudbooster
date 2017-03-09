@@ -164,4 +164,27 @@ return [
     'Email_Templates'     => 'Email Templates',
     'Log_User_Access'     => 'Log User Access',
     'SUPERADMIN'          => 'SUPERADMIN',
+
+    'click_here'                => 'Click here',    
+
+    /*
+     * this is for html direction to use in html and css classes like :
+     * pull-left , pull-right , text-right ...
+     * to make it easy to use the the view for rtl langs .
+     * unless your language use right-to-left direction , you should keep it as it is :
+     */
+    'right' => 'right',
+    'left'  => 'left',
+
+    'all_rights_reserved' => 'All Rights Reserved',
+    'copyright'           => 'Copyright',
+    'powered_by'          => 'Powered by',
+
+    'notification_you_have'      => 'You Have',
+    'notification_notification' => 'Notifications',
+    'notification_new'           => 'You have a new notification !',
+
+    'login_register_style' => 'Login Register Style',
+    'email_setting'        => 'Email Setting',
+    'application_setting'  => 'Application Setting',
 ];

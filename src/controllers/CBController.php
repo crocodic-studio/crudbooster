@@ -58,7 +58,9 @@ class CBController extends Controller {
 	public $index_statistic       = array();
 	public $index_additional_view = array();
 	public $load_js               = array();
+	public $load_css              = array();
 	public $script_js             = NULL;
+	public $style_css             = NULL;
 	public $sub_module            = array();
 	public $show_addaction        = TRUE;
 	public $table_row_color 	  = array();
@@ -78,6 +80,7 @@ class CBController extends Controller {
 		$this->columns_table                 = $this->col;
 		$this->data_inputan                  = $this->form;
 		$this->data['forms']                 = $this->data_inputan;
+		$this->data['hide_form'] 			 = $this->hide_form;
 		$this->data['addaction']             = ($this->show_addaction)?$this->addaction:NULL;
 		$this->data['table']                 = $this->table;
 		$this->data['title_field']           = $this->title_field;
@@ -102,15 +105,17 @@ class CBController extends Controller {
 		$this->data['index_additional_view'] = $this->index_additional_view;
 		$this->data['table_row_color']       = $this->table_row_color;
 		$this->data['load_js']               = $this->load_js;
+		$this->data['load_css']              = $this->load_css;
 		$this->data['script_js']             = $this->script_js;
+		$this->data['style_css']             = $this->style_css;
 		$this->data['sub_module']            = $this->sub_module;
 		$this->data['parent_field'] 		 = (g('parent_field'))?:$this->parent_field;
 		$this->data['parent_id'] 		 	 = (g('parent_id'))?:$this->parent_id;
 
 		if(CRUDBooster::getCurrentMethod() == 'getProfile') {
 			Session::put('current_row_id',CRUDBooster::myId());
-			$this->data['return_url'] = Request::fullUrl();
-		}
+			$this->data['return_url'] = Request::fullUrl();			
+		}		
 
         view()->share($this->data);
 	}
@@ -661,7 +666,7 @@ class CBController extends Controller {
 		$id          = intval($id);
 		foreach($this->data_inputan as $di) {
 			$ai = array();
-			$name = $di['name'];
+			$name = $di['name'];			
 
 			if( !isset($request_all[$name]) ) continue;
 
@@ -756,7 +761,9 @@ class CBController extends Controller {
 		}
 	}
 
-	public function input_assignment($id=null) {
+	public function input_assignment($id=null) {			
+
+		$hide_form = (Request::get('hide_form'))?unserialize(Request::get('hide_form')):array();
 
 		foreach($this->data_inputan as $ro) {
 			$name = $ro['name'];
@@ -764,6 +771,14 @@ class CBController extends Controller {
 			if(!$name) continue;
 
 			if($ro['exception']) continue;
+
+			if($name=='hide_form') continue;
+
+			if(count($hide_form)) {
+				if(in_array($name, $hide_form)) {
+					continue;
+				}
+			}
 
 			$inputdata = Request::get($name);
 
@@ -886,6 +901,11 @@ class CBController extends Controller {
 				foreach($subtable_data as &$s) {
 					$s->id = $i;
 					$s->$fk = $id;
+					foreach($s as $k=>$v) {
+						if(CRUDBooster::isForeignKey($k)) {
+							unset($s->{$k.'_label'});
+						}
+					}
 					$i++;
 				}
 
@@ -1000,7 +1020,7 @@ class CBController extends Controller {
 		}
 
 		$this->validation();
-		$this->input_assignment($id);
+		$this->input_assignment($id);		
 
 		if (Schema::hasColumn($this->table, 'updated_at'))
 		{

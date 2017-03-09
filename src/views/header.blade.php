@@ -60,10 +60,10 @@
 
                         <!-- Menu Footer-->
                         <li class="user-footer">
-                            <div class="pull-left">
+                            <div class="pull-{{ trans('crudbooster.right') }}">
                                 <a href="{{ route('AdminCmsUsersControllerGetProfile') }}?m=0" class="btn btn-default btn-flat"><i class='fa fa-user'></i> {{trans("crudbooster.label_button_profile")}}</a>
                             </div>
-                            <div class="pull-right">
+                            <div class="pull-{{ trans('crudbooster.left') }}">
                                 <a title='Lock Screen' href="{{ route('getLockScreen') }}" class='btn btn-default btn-flat'><i class='fa fa-key'></i></a> 
                                 <a href="javascript:void(0)" onclick="swal({   
                                     title: '{{trans('crudbooster.alert_want_to_logout')}}',                                       

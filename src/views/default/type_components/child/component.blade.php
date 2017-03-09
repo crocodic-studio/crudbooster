@@ -1,3 +1,10 @@
+<?php 
+	$classname         = 'App\Http\Controllers\\'.$form['controller'];
+	$sub               = new $classname();		
+	$sub->cbLoader();		
+	$subtable          = $sub->table;
+	$columns           = $sub->columns_table;
+?>
 <div class='form-group {{$header_group_class}} {{ ($errors->first($form['name']))?"has-error":"" }}' id='form-group-{{$form['name']}}'>								
 	
 	<label class='control-label col-sm-2'>{{$form['label']}}</label>							
@@ -7,20 +14,40 @@
 		<div class="box-header">
 		  <h1 class="box-title">{{$form['label']}}</h1>		  
 		  <div class="box-tools">
+		  	@if($sub->button_add)
 		  	<a class='btn btn-primary btn-sm btn-add' href='javascript:void(0)'><i class='fa fa-plus'></i> {{trans('crudbooster.button_add')}}</a>
+		  	@endif
 		  </div>
 		</div>
 		<div class="box-body">
 			<?php 
-				$classname         = 'App\Http\Controllers\\'.$form['controller'];
-				$sub               = new $classname();		
-				$sub->cbLoader();		
-				$subtable          = $sub->table;
-				$columns           = $sub->columns_table;					
+									
 				$fk                = CRUDBooster::getForeignKey($table,$subtable);	
 				$fk_id 			   = ($row)?$row->id:0;	
 				if($row) {
-				$subquery          = DB::table($subtable)->where($fk,$fk_id)->get();	
+					
+				$subquery = DB::table($subtable)->select($subtable.'.id');
+				$subquery->where($subtable.'.'.$fk,$fk_id);
+				foreach ($columns as $key => $value) {
+					if(strpos($value['name'], ' as ')!==FALSE) {
+						$subquery->addselect(DB::raw($value['name']));
+						continue;
+					}
+
+					if($value['join']) {
+						$join_exp     = explode(',', $value['join']);
+						$join_table  = $join_exp[0];
+						$join_column = $join_exp[1];						
+						$join_alias  = str_replace(".", "_", $join_table);
+						$subquery->leftjoin($join_table.' as '.$join_alias,$join_alias.'.id','=',$subtable.'.'.$value['name']);
+						$subquery->addselect($join_alias.'.'.$join_column.' as '.$value['name'].'_label');
+
+					}else{						
+						$subquery->addselect($subtable.'.'.$value['name']);
+					}
+				}
+				
+				$subquery = $subquery->get();						
 				}else{
 				$subquery          = CRUDBooster::getTemporary($subtable,[$fk=>$fk_id]);									
 				}
@@ -34,7 +61,7 @@
 			<thead>
 				<tr>
 					@foreach($columns as $col)
-						<?php if($col['name'] == $fk) continue;?>
+						<?php if($col['name'] == $fk || $col['visible']===FALSE) continue;?>
 						<th>{{$col['label']}}</th>
 					@endforeach		
 						<th width="90px">{{trans('crudbooster.action_label')}}</th>
@@ -44,29 +71,57 @@
 				@foreach($subquery as $s)
 					<tr>
 						@foreach($columns as $col)
-							<?php if($col['name'] == $fk) continue;?>
+							<?php 
+								if($col['name'] == $fk || $col['visible']===FALSE) continue;
 
+								$value = $s->$col['name'];
+								if(strpos($col['name'], ' as ')!==FALSE) {
+									$field = substr($col['name'], strpos($col['name'], ' as ')+4);									
+									$value = $s->$field;
+								}	
+								if($col['join']) {
+									$value = $s->{$col['name'].'_label'};
+								}
+							?>
+							
 							@if($col['image'])
-								@if($s->$col['name'])
-									<td><a rel='img-{{$name}}' class='fancybox' href='{{ asset($s->$col['name']) }}'><img class='thumbnail' src="{{ asset($s->$col['name']) }}" width='40px' height='40px'/></a></td>
+								@if($value)
+									<td><a rel='img-{{$name}}' class='fancybox' href='{{ asset($value) }}'><img class='thumbnail' src="{{ asset($value) }}" width='40px' height='40px'/></a></td>
 								@else
 									<td>-</td>
 								@endif
 							@elseif($col['download'])
-								@if($s->$col['name'])
-									<td><a target="_blank" href='{{ asset($s->$col['name']) }}'>Download File</a></td>
+								@if($value)
+									<td><a target="_blank" href='{{ asset($value) }}'>Download File</a></td>
 								@else
 									<td>
 										-
 									</td>
 								@endif
 							@else
-								<td>{{ trim(strip_tags($s->$col['name'])) }}</td>
+								@if($col['callback_php'])
+				                  <td>
+				                    <?php 
+				                    if($col['callback_php']) {
+				                      foreach($s as $k=>$v) {
+				                          $col['callback_php'] = str_replace("[".$k."]",$v,$col['callback_php']);
+				                      }
+				                      @eval("echo ".$col['callback_php'].";");
+				                    }
+				                    ?>
+				                  </td>
+				                @else
+				                <td>{{ trim(strip_tags($value)) }}</td>
+				                @endif								
 							@endif
 						@endforeach
 						<td>
+							@if($sub->button_edit)
 							<a href="javascript:void(0)" data-id="{{$s->id}}" class='btn btn-sm btn-success btn-edit'><i class='fa fa-pencil'></i></a>										
+							@endif
+							@if($sub->button_delete)
 							<a href="javascript:void(0)" data-id="{{$s->id}}" class='btn btn-sm btn-warning btn-delete'><i class='fa fa-trash'></i></a>										
+							@endif
 						</td>
 					</tr>
 				@endforeach

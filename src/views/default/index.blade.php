@@ -22,7 +22,7 @@
 
 
     @if(g('return_url'))
-    <p><a href='{{g("return_url")}}'><i class='fa fa-chevron-circle-left'></i> &nbsp; {{trans('crudbooster.form_back_to_list',['module'=>ucwords(str_replace('_',' ',g('parent_table')))])}}</a></p>
+    <p><a href='{{g("return_url")}}'><i class='fa fa-chevron-circle-{{ trans('crudbooster.left') }}'></i> &nbsp; {{trans('crudbooster.form_back_to_list',['module'=>ucwords(str_replace('_',' ',g('parent_table')))])}}</a></p>
     @endif
 
     @if($parent_table)
@@ -46,7 +46,7 @@
  
     <div class="box">
       <div class="box-header">  
-        <div class="pull-left">
+        <div class="pull-{{ trans('crudbooster.left') }}">
           <div class="selected-action" style="display:inline-block;position:relative;">
               <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class='fa fa-check-square-o'></i> {{trans("crudbooster.button_selected_action")}}
                 <span class="fa fa-caret-down"></span></button>                              
@@ -64,7 +64,7 @@
               </ul>
           </div>
         </div>
-        <div class="box-tools pull-right" style="padding-top:5px">
+        <div class="box-tools pull-{{ trans('crudbooster.right') }}" style="padding-top:5px">
           
               @if($button_filter)
               <a style="margin-top:-23px" href="javascript:void(0)" id='btn_advanced_filter' data-url-parameter='{{$build_query}}' title='Advanced Filter Data' class="btn btn-sm btn-default {{(Request::get('filter_column'))?'active':''}}">                               
@@ -74,7 +74,7 @@
 
             <form method='get' style="display:inline-block;width: 260px;" action='{{Request::url()}}'>
                 <div class="input-group">
-                  <input type="text" name="q" value="{{ Request::get('q') }}" class="form-control input-sm pull-right" placeholder="Search"/>                            
+                  <input type="text" name="q" value="{{ Request::get('q') }}" class="form-control input-sm pull-{{ trans('crudbooster.right') }}" placeholder="Search"/>
                   {!! CRUDBooster::getUrlParameters(['q']) !!}
                   <div class="input-group-btn">
                     @if(Request::get('q'))

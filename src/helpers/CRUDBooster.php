@@ -54,6 +54,18 @@ class CRUDBooster  {
 					}								
 				}
 			}
+
+			$i = 0;
+			foreach($result as $key=>$val) {
+				foreach($val as $k=>$v) {
+					if(self::isForeignKey($k)) {			
+						$getTableForeignKey = self::getTableForeignKey($k);								
+						$result[$i]->{$k.'_label'} = "<em>".ucwords($getTableForeignKey)."</em>";
+					}
+				}
+				$i++;
+			}	
+
 			return $result;
 		}
 
@@ -797,14 +809,25 @@ class CRUDBooster  {
 
 	    public static function listTables() {
 	        $tables = array();
+	        $multiple_db = config('crudbooster.MULTIPLE_DATABASE_MODULE');
+	        $multiple_db = ($multiple_db)?$multiple_db:array();
 
-	        try {
-	            //$tables = DB::select(DB::raw("SELECT TABLE_NAME FROM ".env('DB_DATABASE').".INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE'"));
-		    	$tables = DB::select("SELECT CONCAT(TABLE_SCHEMA,'.',TABLE_NAME) FROM INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA != 'mysql' AND TABLE_SCHEMA != 'performance_schema' AND TABLE_SCHEMA != 'information_schema'");
-	        }catch(\Exception $e) {
-		    	$tables = array();
-	        }
-	        
+	        if($multiple_db) {
+	        	try {	            
+	        		$multiple_db[] = env('DB_DATABASE');
+	        		$query_table_schema = implode("','",$multiple_db);
+			    	$tables = DB::select("SELECT CONCAT(TABLE_SCHEMA,'.',TABLE_NAME) FROM INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA != 'mysql' AND TABLE_SCHEMA != 'performance_schema' AND TABLE_SCHEMA != 'information_schema' AND TABLE_SCHEMA != 'phpmyadmin' AND TABLE_SCHEMA IN ('$query_table_schema')");				    				
+		        }catch(\Exception $e) {
+			    	$tables = array();
+		        }
+	        }else{
+	        	try{	        		
+		        	$tables = DB::select("SELECT CONCAT(TABLE_SCHEMA,'.',TABLE_NAME) FROM INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = '".env('DB_DATABASE')."'");
+	        	}catch(\Exception $e) {
+	        		$tables = array();
+	        	}
+	        }	        
+
 	        return $tables;
 	    }
 
@@ -966,7 +989,8 @@ class CRUDBooster  {
 		}
 
 		public static function getNameTable($columns) {
-		    $name_col_candidate = array("name","nama","title","judul","content");   
+		    $name_col_candidate = config('crudbooster.NAME_FIELDS_CANDIDATE');
+		    $name_col_candidate = explode(',',$name_col_candidate);  
 		    $name_col = '';
 		    foreach($columns as $c) {
 		        foreach($name_col_candidate as $cc) {
@@ -1128,6 +1152,11 @@ class CRUDBooster  {
 	                $joincols = CRUDBooster::getTableColumns($jointable);
 	                $joinname = CRUDBooster::getNameTable($joincols);
 	                $php .= "\t\t".'$this->col[] = array("label"=>"'.$label.'","name"=>"'.$field.'","join"=>"'.$jointable.','.$joinname.'");'."\n";
+	            }elseif(substr($field, -3) == '_id') {
+			   		$jointable = substr($field, 0, (strlen($field)-3) );		
+			   		$joincols = CRUDBooster::getTableColumns($jointable);
+	                $joinname = CRUDBooster::getNameTable($joincols);
+	            	$php .= "\t\t".'$this->col[] = array("label"=>"'.$label.'","name"=>"'.$field.'","join"=>"'.$jointable.','.$joinname.'");'."\n";
 	            }else{
 	                $image = '';
 	                if(in_array($field, $image_candidate)) $image = ',"image"=>true';
@@ -1162,7 +1191,7 @@ class CRUDBooster  {
 	                case 'varchar':
 	                case 'char':
 	                $type = "text";
-	                $validation[] = "min:3|max:255";                
+	                $validation[] = "min:1|max:255";                
 	                break;
 	                case 'text':
 	                case 'longtext':
@@ -1392,6 +1421,32 @@ class CRUDBooster  {
 	        |
 	        */
 	        $this->load_js = array();
+	        
+	        
+	        
+	        /*
+	        | ---------------------------------------------------------------------- 
+	        | Add css style at body 
+	        | ---------------------------------------------------------------------- 
+	        | css code in the variable 
+	        | $this->style_css = ".style{....}";
+	        |
+	        */
+	        $this->style_css = NULL;
+	        
+	        
+	        
+	        /*
+	        | ---------------------------------------------------------------------- 
+	        | Include css File 
+	        | ---------------------------------------------------------------------- 
+	        | URL of your css each array 
+	        | $this->load_css[] = asset("myfile.css");
+	        |
+	        */
+	        $this->load_css = array();
+	        
+	        
 	    }
 
 
