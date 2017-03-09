@@ -151,6 +151,12 @@ return [
 
     'click_here'                => 'Clique aqui',    
 
+    /*
+     * esse trecho serve para indicar sobre a orientação no html, assim como:
+     * pull-left , pull-right , text-right ...
+     * isso é para ficar mais facil de se usar com as linguagens rtl.
+     * a menos que a leitura de sua linguagem seja da direita para esquerda, deixe dessa forma:
+     */
     'right' => 'right',
     'left'  => 'left',
 
@@ -160,39 +166,39 @@ return [
 
     'notification_you_have'      => 'você tem',
     'notification_notification' => 'Notificações',
-    'notification_new'           => 'You have a new notification !',
+    'notification_new'           => 'Você tem uma nova notificação!',
 
     'login_register_style' => 'Login Register Style',
-    'email_setting'        => 'Email Setting',
-    'application_setting'  => 'Application Setting',
+    'email_setting'        => 'Configurações de E-mail',
+    'application_setting'  => 'Configurações do Aplicativo',
 
      // table filter & sort 
-    'filter_select_operator_type' => 'Select Operator Type',
-    'filter_ascending' => 'ASCENDING',
-    'filter_descending' => 'DESCENDING',
-    'filter_equal_to'=> '=(Equal to)',
+    'filter_select_operator_type' => 'Selecione o operador',
+    'filter_ascending' => 'ASCENDENTE',
+    'filter_descending' => 'DESCENDENTE',
+    'filter_equal_to'=> '=(Igual a)',
     'filter_like'=> 'LIKE',
     'filter_not_like'=>'NOT LIKE',
-    'filter_greater_than_or_equal'=>'>>= (Greater Than or Equal)',
-    'filter_less_than_or_equal'=>'<= (Less Than or Equal)',
-    'filter_less_than'=>'< (Less Than)',
-    'filter_greater_than'=>'> (Greater Than)',
-    'filter_not_equal_to'=>'!= (Not Equal to)',
+    'filter_greater_than_or_equal'=>'>>= (Maior que, ou igual)',
+    'filter_less_than_or_equal'=>'<= (Menor que, ou igual)',
+    'filter_less_than'=>'< (Menor que)',
+    'filter_greater_than'=>'> (Maior que)',
+    'filter_not_equal_to'=>'!= (Diferente de)',
     'filter_in'=>'IN',
     'filter_not_in'=>'NOT IN',
     'filter_between'=>'BETWEEN',
-    'filter_sort_ascending'=>'Sort ascending',
-    'filter_sort_descending'=>'Sort Descending',    
-    'filter_eg'=>'e.g',
+    'filter_sort_ascending'=>'Ordernação ascendente',
+    'filter_sort_descending'=>'Ordernação descendente',    
+    'filter_eg'=>'ex.',
     'filter_lorem_ipsum'=>'Lorem ipsum',
     'filter_lorem_ipsum_dolor_sit'=>' Lorem,Ipsum,Dolor Sit',
-    'filter_search'=>'Search',
+    'filter_search'=>'Buscar',
 
     // confirmation
-    'confirmation_yes'=>'Yes!',
-    'confirmation_no'=>'No',
+    'confirmation_yes'=>'Sim!',
+    'confirmation_no'=>'Não',
 
     //filemanager
-    'chose_an_image' =>'Choose an image ',
-    'chose_an_file' =>'Choose an file '
+    'chose_an_image' =>'Escolha uma imagem ',
+    'chose_an_file' =>'Escolha um arquivo '
 ];
