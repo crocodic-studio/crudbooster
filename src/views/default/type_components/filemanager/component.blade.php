@@ -6,9 +6,9 @@
 			      <span class="input-group-btn">
 			        <a id="lfm-{{$name}}" data-input="thumbnail-{{$name}}" data-preview="holder-{{$name}}" class="btn btn-primary">
 			          @if(@$form['filemanager_type'])
-			          	<i class="fa fa-file-o"></i> Choose a file
+			          	<i class="fa fa-file-o"></i> {{trans("crudbooster.chose_an_file")}}
 			          @else
-			          	<i class='fa fa-picture-o'></i> Choose an image
+			          	<i class='fa fa-picture-o'></i>{{trans("crudbooster.chose_an_image")}}
 			          @endif
 			        </a>
 			      </span>

@@ -17,7 +17,7 @@
                       $('.selected-action ul li a').click(function() {
                         var name = $(this).data('name');
                         $('#form-table input[name="button_name"]').val(name);
-                        if(confirm("Are you sure want to do this action ?")) {                            
+                        if(confirm("{{trans("crudbooster.alert_delete_selected")}}")) {                            
                           $('#form-table').submit();
                         }
                       })
@@ -212,67 +212,67 @@
                     filter_value.val('').show().focus();  
                     p.find('.between-group').hide();
                     
-                    filter_value.attr('placeholder','e.g : Lorem Ipsum').prop('disabled',false);
+                    filter_value.attr('placeholder','{{trans("crudbooster.filter_eg")}} : {{trans("crudbooster.filter_lorem_ipsum")}}').prop('disabled',false);
                   break;
                   case 'asc':
                     filter_value.val('').show().focus();
                     p.find('.between-group').hide();
 
-                    filter_value.prop('disabled',true).attr('placeholder','Sort ascending');
+                    filter_value.prop('disabled',true).attr('placeholder','{{trans("crudbooster.filter_sort_ascending")}}');
                   break;
                   case 'desc':
                     filter_value.val('').show().focus();
                     p.find('.between-group').hide();
 
-                    filter_value.prop('disabled',true).attr('placeholder','Sort descending');
+                    filter_value.prop('disabled',true).attr('placeholder','{{trans("crudbooster.filter_sort_descending")}}');
                   break;
                   case '=':
                     filter_value.val('').show().focus();
                     p.find('.between-group').hide();
 
-                    filter_value.prop('disabled',false).attr('placeholder','e.g : Lorem Ipsum');
+                    filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : {{trans("crudbooster.filter_lorem_ipsum")}}');
                   break;
                   case '>=':        
                     filter_value.val('').show().focus();
                     p.find('.between-group').hide();
 
-                    filter_value.prop('disabled',false).attr('placeholder','e.g : 1000');
+                    filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : 1000');
                   break;
                   case '<=':        
                     filter_value.val('').show().focus();
                     p.find('.between-group').hide();
 
-                    filter_value.prop('disabled',false).attr('placeholder','e.g : 1000');
+                    filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : 1000');
                   break;
                   case '>':       
                     filter_value.val('').show().focus();
                     p.find('.between-group').hide();
 
-                    filter_value.prop('disabled',false).attr('placeholder','e.g : 1000');
+                    filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : 1000');
                   break;
                   case '<':       
                     filter_value.val('').show().focus();
                     p.find('.between-group').hide();
 
-                    filter_value.prop('disabled',false).attr('placeholder','e.g : 1000'); 
+                    filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : 1000'); 
                   break; 
                   case '!=':
                     filter_value.val('').show().focus();
                     p.find('.between-group').hide();
 
-                    filter_value.prop('disabled',false).attr('placeholder','e.g : Lorem Ipsum');
+                    filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : {{trans("crudbooster.filter_lorem_ipsum")}}');
                   break;
                   case 'in':
                     filter_value.val('').show().focus();
                     p.find('.between-group').hide();
 
-                    filter_value.prop('disabled',false).attr('placeholder','e.g : Lorem,Ipsum,Dolor Sit');
+                    filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : {{trans("crudbooster.filter_lorem_ipsum_dolor_sit")}}');
                   break;
                   case 'not in':
                     filter_value.val('').show().focus();
                     p.find('.between-group').hide();
 
-                    filter_value.prop('disabled',false).attr('placeholder','e.g : Lorem,Ipsum,Dolor Sit');
+                    filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : {{trans("crudbooster.filter_lorem_ipsum_dolor_sit")}}');
                   break;
                   case 'between':       
                     filter_value.val('').hide();
@@ -318,20 +318,20 @@
 
                           <div class='col-sm-6'>
                             <select name='filter_column[{{$col["field_with"]}}][type]' data-type='{{$col["type_data"]}}' class="filter-combo form-control">
-                              <option value=''>** Select Operator Type</option>             
-                              @if(in_array($col['type_data'],['string','varcar','text']))<option {{ (CRUDBooster::getTypeFilter($col["field_with"]) == 'like')?"selected":"" }} value='like'>LIKE</option> @endif
-                              @if(in_array($col['type_data'],['string','varcar','text']))<option {{ (CRUDBooster::getTypeFilter($col["field_with"]) == 'not like')?"selected":"" }} value='not like'>NOT LIKE</option>@endif
-                              <option typeallow='all' {{ (CRUDBooster::getTypeFilter($col["field_with"]) == 'asc')?"selected":"" }} value='asc'>ASCENDING</option>
-                              <option typeallow='all' {{ (CRUDBooster::getTypeFilter($col["field_with"]) == 'desc')?"selected":"" }} value='desc'>DESCENDING</option>
-                              <option typeallow='all' {{ (CRUDBooster::getTypeFilter($col["field_with"]) == '=')?"selected":"" }} value='='>= (Equal To)</option>
-                              @if(in_array($col['type_data'],['int','integer','double','float','decimal']))<option {{ (CRUDBooster::getTypeFilter($col["field_with"]) == '>=')?"selected":"" }} value='>='>>= (Greater Than or Equal)</option>@endif
-                              @if(in_array($col['type_data'],['int','integer','double','float','decimal']))<option {{ (CRUDBooster::getTypeFilter($col["field_with"]) == '<=')?"selected":"" }} value='<='><= (Less Than or Equal)</option>@endif
-                              @if(in_array($col['type_data'],['int','integer','double','float','decimal']))<option {{ (CRUDBooster::getTypeFilter($col["field_with"]) == '<')?"selected":"" }} value='<'>< (Less Than)</option>@endif
-                              @if(in_array($col['type_data'],['int','integer','double','float','decimal']))<option {{ (CRUDBooster::getTypeFilter($col["field_with"]) == '>')?"selected":"" }} value='>'>> (Greater Than)</option>@endif
-                              <option typeallow='all' {{ (CRUDBooster::getTypeFilter($col["field_with"]) == '!=')?"selected":"" }} value='!='>!= (Not Equal To)</option>
-                              <option typeallow='all' {{ (CRUDBooster::getTypeFilter($col["field_with"]) == 'in')?"selected":"" }} value='in'>IN</option>
-                              <option typeallow='all' {{ (CRUDBooster::getTypeFilter($col["field_with"]) == 'not in')?"selected":"" }} value='not in'>NOT IN</option>
-                              @if(in_array($col['type_data'],['date','time','datetime','int','integer','double','float','decimal']))<option {{ (CRUDBooster::getTypeFilter($col["field_with"]) == 'between')?"selected":"" }} value='between'>BETWEEN</option>@endif                         
+                              <option value=''>** {{trans("crudbooster.filter_select_operator_type")}}</option>             
+                              @if(in_array($col['type_data'],['string','varcar','text']))<option {{ (CRUDBooster::getTypeFilter($col["field_with"]) == 'like')?"selected":"" }} value='like'>{{trans("crudbooster.filter_like")}}</option> @endif
+                              @if(in_array($col['type_data'],['string','varcar','text']))<option {{ (CRUDBooster::getTypeFilter($col["field_with"]) == 'not like')?"selected":"" }} value='not like'>{{trans("crudbooster.filter_not_like")}}</option>@endif
+                              <option typeallow='all' {{ (CRUDBooster::getTypeFilter($col["field_with"]) == 'asc')?"selected":"" }} value='asc'>{{trans("crudbooster.filter_ascending")}}</option>
+                              <option typeallow='all' {{ (CRUDBooster::getTypeFilter($col["field_with"]) == 'desc')?"selected":"" }} value='desc'>{{trans("crudbooster.filter_descending")}}</option>
+                              <option typeallow='all' {{ (CRUDBooster::getTypeFilter($col["field_with"]) == '=')?"selected":"" }} value='='>{{trans("crudbooster.filter_equal_to")}}</option>
+                              @if(in_array($col['type_data'],['int','integer','double','float','decimal']))<option {{ (CRUDBooster::getTypeFilter($col["field_with"]) == '>=')?"selected":"" }} value='>='>{{trans("crudbooster.filter_greater_than_or_equal)")}}</option>@endif
+                              @if(in_array($col['type_data'],['int','integer','double','float','decimal']))<option {{ (CRUDBooster::getTypeFilter($col["field_with"]) == '<=')?"selected":"" }} value='<='>{{trans("crudbooster.filter_less_than_or_equal)")}}</option>@endif
+                              @if(in_array($col['type_data'],['int','integer','double','float','decimal']))<option {{ (CRUDBooster::getTypeFilter($col["field_with"]) == '<')?"selected":"" }} value='<'>{{trans("crudbooster.filter_less_than)")}}</option>@endif
+                              @if(in_array($col['type_data'],['int','integer','double','float','decimal']))<option {{ (CRUDBooster::getTypeFilter($col["field_with"]) == '>')?"selected":"" }} value='>'>{{trans("crudbooster.filter_greater_than)")}}</option>@endif
+                              <option typeallow='all' {{ (CRUDBooster::getTypeFilter($col["field_with"]) == '!=')?"selected":"" }} value='!='>{{trans("crudbooster.filter_not_equal_to")}}</option>
+                              <option typeallow='all' {{ (CRUDBooster::getTypeFilter($col["field_with"]) == 'in')?"selected":"" }} value='in'>{{trans("crudbooster.filter_in")}}</option>
+                              <option typeallow='all' {{ (CRUDBooster::getTypeFilter($col["field_with"]) == 'not in')?"selected":"" }} value='not in'>{{trans("crudbooster.filter_not_in")}}</option>
+                              @if(in_array($col['type_data'],['date','time','datetime','int','integer','double','float','decimal']))<option {{ (CRUDBooster::getTypeFilter($col["field_with"]) == 'between')?"selected":"" }} value='between'>{{trans("crudbooster.filter_between")}}</option>@endif                         
                             </select>
                           </div>
                           <div class='col-sm-6'>
@@ -361,7 +361,7 @@
                     </div>
                     <div class="modal-footer" align="right">
                       <button class="btn btn-default" type="button" data-dismiss="modal">{{trans("crudbooster.button_close")}}</button>
-                      <button class="btn btn-default btn-reset" type="reset" onclick='location.href="{{Request::get("lasturl")}}"' >Reset</button>
+                      <button class="btn btn-default btn-reset" type="reset" onclick='location.href="{{Request::get("lasturl")}}"' >{{trans("crudbooster.button_reset")}}</button>
                       <button class="btn btn-primary btn-submit" type="submit">{{trans("crudbooster.button_submit")}}</button>
                     </div>
                   </form>
