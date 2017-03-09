@@ -128,6 +128,7 @@ class CRUDBooster  {
 		}
 
 		public static function first($table,$id) {
+			$table = self::parseSqlTable($table)['table'];
 			if(is_int($id)) {
 				return DB::table($table)->where('id',$id)->first();
 			}elseif (is_array($id)) {
@@ -140,6 +141,8 @@ class CRUDBooster  {
 		}
 
 		public static function get($table,$string_conditions=NULL,$orderby=NULL,$limit=NULL,$skip=NULL) {
+			$table = self::parseSqlTable($table);
+			$table = $table['table'];
 			$query = DB::table($table);
 			if($string_conditions) $query->whereraw($string_conditions);
 			if($orderby) $query->orderbyraw($orderby);
@@ -681,14 +684,16 @@ class CRUDBooster  {
 		}
 
 		public static function parseSqlTable($field) {
+
 			$f = explode('.', $field);
 
 			if(count($f) == 1) {
 				return array("table"=>$f[0], "database"=>env('DB_DATABASE'));
 			} elseif(count($f) == 2) {
 				return array("database"=>$f[0], "table"=>$f[1]);
+			}elseif (count($f) == 3) {
+				return array("table"=>$f[0],"schema"=>$f[1],"table"=>$f[2]);
 			}
-
 			return false;
 		}
 
@@ -1168,7 +1173,7 @@ class CRUDBooster  {
 	        $php .= "\n\t\t\t# END COLUMNS DO NOT REMOVE THIS LINE";
 
 	        $php .= "\n\t\t\t# START FORM DO NOT REMOVE THIS LINE";
-	        $php .= "\n\t\t".'$this->form = array();'."\n";
+	        $php .= "\n\t\t".'$this->form = [];'."\n";
 
 	        foreach($coloms as $c) {
 	            $attribute    = array();
@@ -1291,9 +1296,11 @@ class CRUDBooster  {
 	            $validation = implode('|',$validation);
 
 	            $php .= "\t\t";
-	            $php .= '$this->form[] = array("label"=>"'.$label.'","name"=>"'.$field.'","type"=>"'.$type.'","required"=>TRUE';
+	            $php .= '$this->form[] = ["label"=>"'.$label.'","name"=>"'.$field.'","type"=>"'.$type.'","required"=>TRUE';
 	            
-	            if($validation) $php .= ',"validation"=>"'.$validation.'"';            
+	            if($validation) {
+	            	$php .= ',"validation"=>"'.$validation.'"';            
+	            }
 
 	            if($attribute) {
 	                foreach($attribute as $key=>$val) {
@@ -1306,7 +1313,7 @@ class CRUDBooster  {
 	                }
 	            }
 
-	            $php .= ");\n";            
+	            $php .= "];\n";            
 	        }
 
 	        $php .= "\n\t\t\t# END FORM DO NOT REMOVE THIS LINE";

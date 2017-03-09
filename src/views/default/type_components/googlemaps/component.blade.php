@@ -28,7 +28,7 @@
 					      	geocoder = new google.maps.Geocoder();
 					        var map = new google.maps.Map(document.getElementById('map'), {
 					          @if($row->{$form['latitude']} && $row->{$form['longitude']})
-							  	center: {lat: <?php echo $row->{$form['latitude']};?>, lng: <?php echo $row->{$form['longitude']};?> },
+							  	center: {lat: <?php echo $row->{$form['latitude']}?:0;?>, lng: <?php echo $row->{$form['longitude']}?:0;?> },
 							  @else 
 							  	center: {lat: -7.0157404, lng: 110.4171283},
 							  @endif
@@ -36,7 +36,7 @@
 					        });
 					        
 					        var marker = new google.maps.Marker({
-					          position: {lat: <?php echo $row->{$form['latitude']}?>, lng: <?php echo $row->{$form['longitude']}?> },
+					          position: {lat: <?php echo $row->{$form['latitude']}?:0?>, lng: <?php echo $row->{$form['longitude']}?:0?> },
 					          map: map,
 					          draggable:true,
 					          title: 'Location Here !'
@@ -72,7 +72,7 @@
 								      address = 'Cannot determine address at this location.';
 								    }
 
-								    @if($form['googlemaps_address'])
+								    @if($form['address'])
 								  		$("input[name={{$form['address']}}]").val(address);
 									@endif
 
@@ -121,7 +121,7 @@
 					          var latitude = place.geometry.location.lat();
 							  var longitude = place.geometry.location.lng(); 
 
-							  @if($form['googlemaps_address'])
+							  @if($form['address'])
 							  	$("input[name={{$form['address']}}]").val(address);
 							  @endif
 					          
