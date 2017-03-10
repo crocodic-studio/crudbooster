@@ -147,7 +147,7 @@ class CBController extends Controller {
 
 		if(Request::get('parent_table')) {
 			$data['parent_table'] = DB::table(Request::get('parent_table'))->where('id',Request::get('parent_id'))->first();
-			if(Schema::hasColumn($this->table,'id_'.g('parent_table'))) {
+			if(CRUDBooster::isColumnExists($this->table,'id_'.g('parent_table'))) {
 				$data['parent_field'] = $parent_field = 'id_'.g('parent_table');
 			}else {
 				$data['parent_field'] = $parent_field = g('parent_table').'_id';
@@ -419,7 +419,7 @@ class CBController extends Controller {
 			$html_content[] = "<input type='checkbox' class='checkbox' name='checkbox[]' value='$row->id'/>";
 
 			foreach($columns_table as $col) {
-		          if($col['visible']===FALSE) continue;
+		          if($col['visible']===FALSE) continue;		          
 
 		          $value = @$row->{$col['field']};
 		          $title = @$row->{$this->title_field};
@@ -573,6 +573,50 @@ class CBController extends Controller {
 		}
 	}
 
+	public function getModalData() {
+		$table = Request::get('table');
+		$where = Request::get('where');
+		$where = urldecode($where);
+		$columns = Request::get('columns');
+		$columns = explode(",",$columns);
+
+		$table = CRUDBooster::parseSqlTable($table)['table'];
+		$result = DB::table($table);
+
+		if(Request::get('q')) {
+			$result->where(function($where) use ($columns) {
+				foreach($columns as $c=>$col) {
+					if($c==0) {
+						$where->where($col,'like','%'.Request::get('q').'%');
+					}else{
+						$where->orWhere($col,'like','%'.Request::get('q').'%');
+					}
+				}
+			});
+		}
+
+		if($where) {
+			$result->whereraw($where);
+		}
+
+		$result->orderby('id','desc');
+
+		$data['result'] = $result->paginate(6);
+		$data['columns'] = $columns;
+		return view('crudbooster::default.type_components.datamodal.browser',$data);
+	}
+
+	public function getUpdateSingle() {
+		$table = Request::get('table');
+		$column = Request::get('column');
+		$value = Request::get('value');
+		$id = Request::get('id');
+
+		DB::table($table)->where('id',$id)->update([$column => $value]);
+
+		return redirect()->back()->with(['message_type'=>'success','message'=>trans('crudbooster.alert_delete_data_success')]);
+	}
+
 	public function getFindData() {
 		$q        = Request::get('q');
 		$id       = Request::get('id');
@@ -598,7 +642,7 @@ class CBController extends Controller {
 			$rows->select($table1.'.*');
 			$rows->take($limit);
 
-			if(Schema::hasColumn($table1,'deleted_at')) {
+			if(CRUDBooster::isColumnExists($table1,'deleted_at')) {
 				$rows->where($table1.'.deleted_at',NULL);
 			}
 
@@ -719,7 +763,7 @@ class CBController extends Controller {
 
 						$e = 'unique:'.$e_table.','.$e_column.','.$e_id_ignore;
 
-						if(Schema::hasColumn($e_table,'deleted_at')) {
+						if(CRUDBooster::isColumnExists($e_table,'deleted_at')) {
 							$e .= ",id,deleted_at,NULL";
 						}
 
@@ -763,7 +807,7 @@ class CBController extends Controller {
 
 	public function input_assignment($id=null) {			
 
-		$hide_form = (Request::get('hide_form'))?unserialize(Request::get('hide_form')):array();
+		$hide_form = (Request::get('hide_form'))?unserialize(Request::get('hide_form')):array();	
 
 		foreach($this->data_inputan as $ro) {
 			$name = $ro['name'];
@@ -778,6 +822,14 @@ class CBController extends Controller {
 				if(in_array($name, $hide_form)) {
 					continue;
 				}
+			}
+
+			if($ro['type']=='checkbox' && $ro['relationship_table']) {
+				continue;
+			}
+
+			if($ro['type']=='select2' && $ro['relationship_table']) {
+				continue; 
 			}
 
 			$inputdata = Request::get($name);
@@ -806,14 +858,30 @@ class CBController extends Controller {
 			}
 
 			if($ro['type']=='checkbox') {
+
 				if(is_array($inputdata)) {
-					$this->arr[$name] = implode(";",$inputdata);
+					if($ro['datatable'] != '') {						
+						$table_checkbox = explode(',',$ro['datatable'])[0];
+						$field_checkbox = explode(',',$ro['datatable'])[1];
+						$data_checkbox = DB::table($table_checkbox)->whereIn('id',$inputdata)->pluck($field_checkbox)->toArray();
+						$this->arr[$name] = implode(";",$data_checkbox);	
+					}else{						
+						$this->arr[$name] = implode(";",$inputdata);	
+					}					
+				}
+			}
+
+			if($ro['type']=='googlemaps') {
+				if($ro['latitude'] && $ro['longitude']) {
+					$latitude_name = $ro['latitude'];
+					$longitude_name = $ro['longitude'];
+					$this->arr[$latitude_name] = Request::get('input-latitude-'.$name);
+					$this->arr[$longitude_name] = Request::get('input-longitude-'.$name);
 				}
 			}
 
 
-			if(@$ro['type']=='upload') {
-				// unset($this->arr[$name]);
+			if(@$ro['type']=='upload') {				
 				if (Request::hasFile($name))
 				{
 					$file = Request::file($name);
@@ -834,11 +902,12 @@ class CBController extends Controller {
 				}
 			}
 
-			if(@$ro['type']=='upload') {
+			if(@$ro['type']=='filemanager') {
 				$url = str_replace(asset('/'),'',$this->arr[$name]);
+				$url = str_replace("//","/",$url);
 				$this->arr[$name] = $url;
 			}
-		}
+		}		
 	}
 
 	public function getAddRaw() {
@@ -870,9 +939,9 @@ class CBController extends Controller {
 		}
 
 		$this->validation();
-		$this->input_assignment();
+		$this->input_assignment();		
 
-		if (Schema::hasColumn($this->table, 'created_at'))
+		if (CRUDBooster::isColumnExists($this->table, 'created_at'))
 		{
 		    $this->arr['created_at'] = date('Y-m-d H:i:s');
 		}
@@ -884,7 +953,7 @@ class CBController extends Controller {
 			$this->arr[$this->primary_key] = $id = CRUDBooster::newIdTemporary();
 			CRUDBooster::insertTemporary($this->table,$this->arr);
 		}else{
-			$this->arr[$this->primary_key] = $id = CRUDBooster::newId($this->table);
+			$this->arr[$this->primary_key] = $id = CRUDBooster::newId($this->table);			
 			DB::table($this->table)->insert($this->arr);
 		}
 
@@ -929,21 +998,11 @@ class CBController extends Controller {
 			if($ro['type'] == 'checkbox') {
 				if($ro['relationship_table']) {
 					$datatable = explode(",",$ro['datatable'])[0];
-					$datatable_field = explode(",",$ro['datatable'])[1];
-					$foreignKey = CRUDBooster::getForeignKey($this->table,$ro['relationship_table']);
 					$foreignKey2 = CRUDBooster::getForeignKey($datatable,$ro['relationship_table']);
+					$foreignKey = CRUDBooster::getForeignKey($this->table,$ro['relationship_table']);
+					DB::table($ro['relationship_table'])->where($foreignKey,$id)->delete();
 
-					$datatable_query = DB::table($datatable)->whereIn('id',$inputdata)->select('id',$datatable_field.' as label')->get();
-					$datatable_input = [];
-					foreach($datatable_query as $d) {
-						$datatable_input[] = (array) $d;
-					}
-					$field_temp = serialize($datatable_input);
-
-					if($field_temp) {
-
-						DB::table($this->table)->where("id",$id)->update([$name=>$field_temp]);
-
+					if($inputdata) {
 						foreach($inputdata as $input_id) {
 							DB::table($ro['relationship_table'])->insert([
 								'id'=>CRUDBooster::newId($ro['relationship_table']),
@@ -954,6 +1013,48 @@ class CBController extends Controller {
 					}
 
 				}
+			}
+
+
+			if($ro['type'] == 'select2') {
+				if($ro['relationship_table']) {
+					$datatable = explode(",",$ro['datatable'])[0];
+					$foreignKey2 = CRUDBooster::getForeignKey($datatable,$ro['relationship_table']);
+					$foreignKey = CRUDBooster::getForeignKey($this->table,$ro['relationship_table']);
+					DB::table($ro['relationship_table'])->where($foreignKey,$id)->delete();
+
+					if($inputdata) {
+						foreach($inputdata as $input_id) {
+							DB::table($ro['relationship_table'])->insert([
+								'id'=>CRUDBooster::newId($ro['relationship_table']),
+								$foreignKey=>$id,
+								$foreignKey2=>$input_id
+								]);
+						}
+					}
+
+				}
+			}
+
+			if($ro['type']=='child') {
+				$name = str_slug($ro['label'],'');
+				$columns = $ro['columns'];				
+				$count_input_data = count(Request::get($name.'-'.$columns[0]['name']))-1;
+				$child_array = [];
+
+				for($i=0;$i<=$count_input_data;$i++) {
+					$fk = $ro['foreign_key'];
+					$column_data = [];
+					$column_data[$fk] = $id;
+					foreach($columns as $col) {
+						$colname = $col['name'];
+						$column_data[$colname] = Request::get($name.'-'.$colname)[$i];
+					}
+					$child_array[] = $column_data;
+				}	
+
+				$childtable = CRUDBooster::parseSqlTable($ro['table'])['table'];
+				DB::table($childtable)->insert($child_array);
 			}
 		}
 
@@ -1020,19 +1121,18 @@ class CBController extends Controller {
 		}
 
 		$this->validation();
-		$this->input_assignment($id);		
+		$this->input_assignment($id);				
 
-		if (Schema::hasColumn($this->table, 'updated_at'))
+		if (CRUDBooster::isColumnExists($this->table, 'updated_at'))
 		{
 		    $this->arr['updated_at'] = date('Y-m-d H:i:s');
 		}
 
 		$this->hook_before_edit($this->arr,$id);
 
-		if(Request::get('temporary')) {
+		if(Request::get('temporary')) {			
 			CRUDBooster::updateTemporary($this->table,['id'=>$id],$this->arr);
-		}else{
-
+		}else{			
 			DB::table($this->table)->where($this->primary_key,$id)->update($this->arr);
 		}
 
@@ -1049,34 +1149,80 @@ class CBController extends Controller {
 			//Insert Data Checkbox if Type Datatable
 			if($ro['type'] == 'checkbox') {
 				if($ro['relationship_table']) {
-					$datatable = explode(",",$ro['datatable'])[0];
-					$datatable_field = explode(",",$ro['datatable'])[1];
-					$foreignKey = CRUDBooster::getForeignKey($this->table,$ro['relationship_table']);
+					$datatable = explode(",",$ro['datatable'])[0];					
+					
 					$foreignKey2 = CRUDBooster::getForeignKey($datatable,$ro['relationship_table']);
-
+					$foreignKey = CRUDBooster::getForeignKey($this->table,$ro['relationship_table']);
 					DB::table($ro['relationship_table'])->where($foreignKey,$id)->delete();
 
-					$datatable_query = DB::table($datatable)->whereIn('id',$inputdata)->select('id',$datatable_field.' as label')->get();
-					$datatable_input = [];
-					foreach($datatable_query as $d) {
-						$datatable_input[] = (array) $d;
+					if($inputdata) {
+						foreach($inputdata as $input_id) {
+							DB::table($ro['relationship_table'])->insert([
+								'id'=>CRUDBooster::newId($ro['relationship_table']),
+								$foreignKey=>$id,
+								$foreignKey2=>$input_id
+								]);
+						}
 					}
-					$field_temp = serialize($datatable_input);
-
-					if($field_temp) {
-						DB::table($this->table)->where("id",$id)->update([$name=>$field_temp]);
-					}
-
-					foreach($inputdata as $input_id) {
-						DB::table($ro['relationship_table'])->insert([
-							'id'=>CRUDBooster::newId($ro['relationship_table']),
-							$foreignKey=>$id,
-							$foreignKey2=>$input_id
-							]);
-					}
+					
 
 				}
 			}
+
+
+			if($ro['type'] == 'select2') {
+				if($ro['relationship_table']) {
+					$datatable = explode(",",$ro['datatable'])[0];					
+					
+					$foreignKey2 = CRUDBooster::getForeignKey($datatable,$ro['relationship_table']);
+					$foreignKey = CRUDBooster::getForeignKey($this->table,$ro['relationship_table']);
+					DB::table($ro['relationship_table'])->where($foreignKey,$id)->delete();
+
+					if($inputdata) {
+						foreach($inputdata as $input_id) {
+							DB::table($ro['relationship_table'])->insert([
+								'id'=>CRUDBooster::newId($ro['relationship_table']),
+								$foreignKey=>$id,
+								$foreignKey2=>$input_id
+								]);
+						}
+					}
+					
+
+				}
+			}
+
+			if($ro['type']=='child') {
+				$name = str_slug($ro['label'],'');
+				$columns = $ro['columns'];				
+				$count_input_data = count(Request::get($name.'-'.$columns[0]['name']))-1;
+				$child_array = [];
+				$childtable = CRUDBooster::parseSqlTable($ro['table'])['table'];
+				$fk = $ro['foreign_key'];
+
+				DB::table($childtable)->where($fk,$id)->delete();
+				$lastId = CRUDBooster::newId($childtable);
+
+				for($i=0;$i<=$count_input_data;$i++) {
+					
+					$column_data = [];
+					$column_data['id'] = $lastId;
+					$column_data[$fk] = $id;
+					foreach($columns as $col) {
+						$colname = $col['name'];
+						$column_data[$colname] = Request::get($name.'-'.$colname)[$i];
+					}
+					$child_array[] = $column_data;
+
+					$lastId++;
+				}	
+
+				$child_array = array_reverse($child_array);
+				
+				DB::table($childtable)->insert($child_array);
+			}
+
+
 		}
 
 
@@ -1115,7 +1261,7 @@ class CBController extends Controller {
 			CRUDBooster::deleteTemporary($this->table,$id);
 		}else{
 
-			if(Schema::hasColumn($this->table,'deleted_at')) {
+			if(CRUDBooster::isColumnExists($this->table,'deleted_at')) {
 				DB::table($this->table)->where($this->primary_key,$id)->update(['deleted_at'=>date('Y-m-d H:i:s')]);
 			}else{
 				DB::table($this->table)->where($this->primary_key,$id)->delete();
@@ -1147,7 +1293,7 @@ class CBController extends Controller {
 
 		Session::put('current_row_id',$id);
 
-		return view('crudbooster::default.form',compact('row','page_menu','page_title','command'));
+		return view('crudbooster::default.form',compact('row','page_menu','page_title','command','id'));
 	}
 
 	public function getImportData() {
@@ -1222,7 +1368,7 @@ class CBController extends Controller {
 		})->get();
 
 		$has_created_at = false;
-		if(Schema::hasColumn($this->table,'created_at')) {
+		if(CRUDBooster::isColumnExists($this->table,'created_at')) {
 			$has_created_at = true;
 		}
 
@@ -1354,7 +1500,7 @@ class CBController extends Controller {
 
 			$this->hook_before_delete($id_selected);
 
-			if(Schema::hasColumn($this->table,'deleted_at')) {
+			if(CRUDBooster::isColumnExists($this->table,'deleted_at')) {
 				DB::table($this->table)->whereIn('id',$id_selected)->update(['deleted_at'=>date('Y-m-d H:i:s')]);
 			}else{
 				DB::table($this->table)->whereIn('id',$id_selected)->delete();
@@ -1420,6 +1566,25 @@ class CBController extends Controller {
 			$filename = md5(str_random(5)).'.'.$ext;
 			if($file->move(storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m')),$filename)) {
 				echo asset('uploads/'.date('Y-m').'/'.$filename);
+			}
+		}
+	}
+
+	public function postUploadFile() {
+		$this->cbLoader();
+		$name = 'userfile';
+		if (Request::hasFile($name))
+		{
+			$file = Request::file($name);
+			$ext  = $file->getClientOriginalExtension();
+
+			//Create Directory Monthly
+			Storage::makeDirectory(date('Y-m'));
+
+			//Move file to storage
+			$filename = md5(str_random(5)).'.'.$ext;
+			if($file->move(storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m')),$filename)) {
+				echo 'uploads/'.date('Y-m').'/'.$filename;
 			}
 		}
 	}

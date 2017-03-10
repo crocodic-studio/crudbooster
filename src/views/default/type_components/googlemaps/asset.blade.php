@@ -2,8 +2,8 @@
 async defer></script>
 
 <style>
-  #map {
-    height: 300px;
+  .map {
+    height: 400px;
   }
   .controls {
     margin-top: 10px;
@@ -16,7 +16,10 @@ async defer></script>
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
   }
 
-  #pac-input {
+  .pac-container {
+    z-index: 9999999 !important;
+  }
+  .pac-input {    
     background-color: #fff;
     font-family: Roboto;
     font-size: 15px;
@@ -27,7 +30,7 @@ async defer></script>
     width: 300px;
   }
 
-  #pac-input:focus {
+  .pac-input:focus {
     border-color: #4d90fe;
   }
 
@@ -35,13 +38,13 @@ async defer></script>
     font-family: Roboto;
   }
 
-  #type-selector {
+  .type-selector {
     color: #fff;
     background-color: #4d90fe;
     padding: 5px 11px 0px 11px;
   }
 
-  #type-selector label {
+  .type-selector label {
     font-family: Roboto;
     font-size: 13px;
     font-weight: 300;

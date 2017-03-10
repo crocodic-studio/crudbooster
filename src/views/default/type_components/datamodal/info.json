@@ -1,0 +1,20 @@
+{
+	"title":"Data Modal",
+	"type":"datamodal",
+	"attribute":{		
+		"required":{
+			"datamodal_table":"table name",
+			"datamodal_columns":"column name, sparate with comma",
+			"datamodal_size":{
+				"type":"radio",
+				"enum":["large","small"]
+			}			
+		},
+		"optional": {			
+			"datamodal_where":"string where condition",		
+			"style":"string inline stylesheet",
+			"help":"string help-block"
+		}
+									
+	}
+}

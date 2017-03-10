@@ -710,10 +710,11 @@ class CRUDBooster  {
 		}
 
 		public static function isColumnExists($table,$field) {
+			$table = CRUDBooster::parseSqlTable($table);
+
 			if(Cache::has('isColumnExists_'.$table.'_'.$field)) {
 				return Cache::get('isColumnExists_'.$table.'_'.$field);
-			}
-			$table = CRUDBooster::parseSqlTable($table);
+			}			
 
 			$result = DB::select('SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :database AND TABLE_NAME = :table AND COLUMN_NAME = :field', ['database'=>$table['database'], 'table'=>$table['table'], 'field'=>$field]);
 
@@ -724,12 +725,16 @@ class CRUDBooster  {
 				Cache::forever('isColumnExists_'.$table.'_'.$field,false);
 				return false;
 			}
+
+			
 		}
 
 		public static function getForeignKey($parent_table,$child_table) {
-			if(self::isColumnExists($child_table,'id_'.$parent_table)) {
+			$parent_table = CRUDBooster::parseSqlTable($parent_table)['table'];
+			$child_table = CRUDBooster::parseSqlTable($child_table)['table'];
+			if(self::isColumnExists($child_table,'id_'.$parent_table)) {				
 				return 'id_'.$parent_table;
-			}else{
+			}else{				
 				return $parent_table.'_id';
 			}
 		}

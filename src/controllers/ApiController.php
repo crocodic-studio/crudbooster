@@ -260,7 +260,7 @@ class ApiController extends Controller {
 				}
 			}
 
-			if(\Schema::hasColumn($table,'deleted_at')) {
+			if(CRUDBooster::isColumnExists($table,'deleted_at')) {
 				$data->where($table.'.deleted_at',NULL);
 			}
 
@@ -281,7 +281,7 @@ class ApiController extends Controller {
 					}
 
 					if($required == '1') {						
-						if(\Schema::hasColumn($table,$name)) {
+						if(CRUDBooster::isColumnExists($table,$name)) {
 							$w->where($table.'.'.$name,$value);							
 						}else{
 							$w->having($name,'=',$value);
@@ -289,7 +289,7 @@ class ApiController extends Controller {
 					}else{
 						if($used) {
 							if($value) {
-								if(\Schema::hasColumn($table,$name)) {
+								if(CRUDBooster::isColumnExists($table,$name)) {
 									$w->where($table.'.'.$name,$value);
 								}else{
 									$w->having($name,'=',$value);
@@ -403,7 +403,7 @@ class ApiController extends Controller {
 				}
 			}elseif($action_type == 'delete') {
 				
-				if(\Schema::hasColumn($table,'deleted_at')) {
+				if(CRUDBooster::isColumnExists($table,'deleted_at')) {
 					$delete = $data->update(['deleted_at'=>date('Y-m-d H:i:s')]);
 				}else{
 					$delete = $data->delete();
@@ -418,7 +418,7 @@ class ApiController extends Controller {
 			
 		    $row_assign = array();
 		    foreach($input_validator as $k=>$v) {
-		    	if(\Schema::hasColumn($table,$k)) {
+		    	if(CRUDBooster::isColumnExists($table,$k)) {
 		    		$row_assign[$k] = $v;
 		    	}
 		    }
@@ -433,13 +433,13 @@ class ApiController extends Controller {
 		    }
 
 		    if($action_type == 'save_add') {
-		    	if(\Schema::hasColumn($table,'created_at')) {
+		    	if(CRUDBooster::isColumnExists($table,'created_at')) {
 		    		$row_assign['created_at'] = date('Y-m-d H:i:s');
 		    	}
 		    } 
 
 		    if($action_type == 'save_edit') {
-		    	if(\Schema::hasColumn($table,'updated_at')) {
+		    	if(CRUDBooster::isColumnExists($table,'updated_at')) {
 		    		$row_assign['updated_at'] = date('Y-m-d H:i:s');
 		    	}
 		    }
@@ -546,9 +546,9 @@ class ApiController extends Controller {
 		    	$config = $param['config'];
 		    	$type = $param['type'];
 		    	if($type == 'ref') {
-		    		if(\Schema::hasColumn($config,'id_'.$table)) {
+		    		if(CRUDBooster::isColumnExists($config,'id_'.$table)) {
 		    			DB::table($config)->where($name,$value)->update(['id_'.$table=>$lastId]);
-		    		}elseif (\Schema::hasColumn($config,$table.'_id')) {
+		    		}elseif (CRUDBooster::isColumnExists($config,$table.'_id')) {
 		    			DB::table($config)->where($name,$value)->update([$table.'_id'=>$lastId]);
 		    		}			    		
 		    	}

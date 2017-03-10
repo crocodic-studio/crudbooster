@@ -46,3 +46,14 @@ function g($name) {
 }
 }
 
+if(!function_exists('min_var_export')) {
+	function min_var_export($input) {
+	    if(is_array($input)) {
+	        $buffer = [];
+	        foreach($input as $key => $value)
+	            $buffer[] = var_export($key, true)."=>".min_var_export($value);
+	        return "[".implode(",",$buffer)."]";
+	    } else
+	        return var_export($input, true);
+	}
+}

@@ -3,68 +3,132 @@
                 			<label class='control-label col-sm-2'>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
                 			
                 			<div class="{{$col_width?:'col-sm-10'}}">
-							<input id="pac-input" class="controls" autofocus type="text"
-						        placeholder="Enter a location">
-						    <div id="type-selector" class="controls">
-						      <input type="radio" name="type" id="changetype-all" checked="checked">
-						      <label for="changetype-all">All</label>
 
-						      <input type="radio" name="type" id="changetype-establishment">
-						      <label for="changetype-establishment">Establishments</label>
 
-						      <input type="radio" name="type" id="changetype-address">
-						      <label for="changetype-address">Addresses</label>
+                			<div class="input-group">
+						      <input type="text" class="form-control" id="{{$name}}" {{ ($readonly)?"readonly":"" }} {{ ($required)?"required":""}} value="{{$value}}" name="{{$name}}">
+						      <input type="hidden" name="input-latitude-{{$name}}" id="input-latitude-{{$name}}" value="{{ ($form['latitude'])?$row->$form['latitude']:0 }}">
+						      <input type="hidden" name="input-longitude-{{$name}}" id="input-longitude-{{$name}}" value="{{ ($form['longitude'])?$row->$form['longitude']:0 }}">
+						      <span class="input-group-btn">
+						        <button class="btn btn-primary" onclick="showMapModal{{$name}}()" type="button"><i class='fa fa-map-marker'></i> Browse Map</button>
+						      </span>
+						    </div><!-- /input-group -->
 
-						      <input type="radio" name="type" id="changetype-geocode">
-						      <label for="changetype-geocode">Geocodes</label>
-						    </div>
-						    <div id="map"></div>
+
+						    <div id='googlemaps-modal-{{$name}}' class="modal fade" tabindex="-1" role="dialog">
+							  <div class="modal-dialog" role="document">
+							    <div class="modal-content">
+							      <div class="modal-header">
+							        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							        <h4 class="modal-title"><i class='fa fa-search'></i> Browse Map</h4>
+							      </div>
+							      <div class="modal-body">
+							        
+							      	<input id="input-search-autocomplete-{{$name}}" class="controls pac-input" autofocus type="text"
+								        placeholder="Search location here...">
+								    <div id="type-selector-{{$name}}" class="controls hide type-selector">
+								      <input type="radio" name="type" id="changetype-all" checked="checked">
+								      <label for="changetype-all">All</label>
+
+								      <input type="radio" name="type" id="changetype-establishment">
+								      <label for="changetype-establishment">Establishments</label>
+
+								      <input type="radio" name="type" id="changetype-address">
+								      <label for="changetype-address">Addresses</label>
+
+								      <input type="radio" name="type" id="changetype-geocode">
+								      <label for="changetype-geocode">Geocodes</label>
+								    </div>
+								    <div class="map" id='map-{{$name}}'></div>
+								    <br/>
+								    <p>
+								    	<span class="text-info" style="font-weight: bold">Current Location :</span><br/>
+								    	<span id='current-location-span-{{$name}}'>{{ ($value)?$value:'-' }}</span>
+								    </p>
+
+							      </div>
+							      <div class="modal-footer">
+							        <button type="button" class="btn btn-primary" onclick="setIt{{$name}}()" data-dismiss="modal">Set It</button>							        
+							      </div>
+							    </div><!-- /.modal-content -->
+							  </div><!-- /.modal-dialog -->
+							</div><!-- /.modal -->
+
+
+							
 
 						    </div>
 						</div>
                 		<script type="text/javascript">
+                		  
+
+                		  	var address_temp_{{$name}},latitude_temp_{{$name}},longitude_temp_{{$name}};
+
+                		  	function setIt{{$name}}() {
+                		  		console.log(address_temp_{{$name}});
+                		  		$('#{{$name}}').val(address_temp_{{$name}});
+                		  		$("#input-latitude-{{$name}}").val(latitude_temp_{{$name}});
+						        $("#input-longitude-{{$name}}").val(longitude_temp_{{$name}});	
+                		    }
+
+                			var is_init_map_{{$name}} = false;
+                		  function showMapModal{{$name}}() {
+                		  	$('#googlemaps-modal-{{$name}}').modal('show');                		  	                		  
+                		  }
+
+                		  $('#googlemaps-modal-{{$name}}').on('shown.bs.modal', function(){
+                		  		if(is_init_map_{{$name}} == false) {
+	                		  		console.log('Init Map {{$name}}');
+	                		  		initMap{{$index}}();
+	                		  		is_init_map_{{$name}} = true;
+	                		  	}
+                		  });
+
                 		  var geocoder;
+                		  
 					      function initMap{{$index}}() {
 					      	geocoder = new google.maps.Geocoder();
-					        var map = new google.maps.Map(document.getElementById('map'), {
+					        var map = new google.maps.Map(document.getElementById('map-{{$name}}'), {
 					          @if($row->{$form['latitude']} && $row->{$form['longitude']})
 							  	center: {lat: <?php echo $row->{$form['latitude']}?:0;?>, lng: <?php echo $row->{$form['longitude']}?:0;?> },
-							  @else 
-							  	center: {lat: -7.0157404, lng: 110.4171283},
 							  @endif
 					          zoom: 12
-					        });
-					        
-					        var marker = new google.maps.Marker({
-					          position: {lat: <?php echo $row->{$form['latitude']}?:0?>, lng: <?php echo $row->{$form['longitude']}?:0?> },
+					        });	
+
+					        var marker_default_location = new google.maps.Marker({
 					          map: map,
-					          draggable:true,
-					          title: 'Location Here !'
-					        });
+					          draggable:true,					          					          
+					        });				        							
 					       
-
 					        var input = /** @type  {!HTMLInputElement} */(
-					            document.getElementById('pac-input'));
+					            document.getElementById('input-search-autocomplete-{{$name}}'));
 
-					        var types = document.getElementById('type-selector');
+					        var types = document.getElementById('type-selector-{{$name}}');
 					        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 					        map.controls[google.maps.ControlPosition.TOP_LEFT].push(types);
 
 					        var autocomplete = new google.maps.places.Autocomplete(input);
 					        autocomplete.bindTo('bounds', map);
 
-					        var infowindow = new google.maps.InfoWindow();
-					        var marker = new google.maps.Marker({
-					          map: map,
-					          draggable:true,
-					          anchorPoint: new google.maps.Point(0, -29)
-					        });
+					        var infoWindow = new google.maps.InfoWindow();
 
-					        google.maps.event.addListener(marker, 'dragend', function(marker){
-					        	
+					        // Try HTML5 geolocation.
 
-					        	  geocoder.geocode({
-								    latLng: marker.latLng
+					        @if(!$row->$form['latitude'] && !$row->$form['longitude'])
+
+					        if (navigator.geolocation) {
+					          navigator.geolocation.getCurrentPosition(function(position) {
+
+					          	latitude_temp_{{$name}} = position.coords.latitude;
+					          	longitude_temp_{{$name}} = position.coords.longitude;
+
+					            var pos = {
+					              lat: position.coords.latitude,
+					              lng: position.coords.longitude
+					            };
+
+					            geocoder.geocode({
+								    latLng: pos
 								  }, function(responses) {
 								    if (responses && responses.length > 0) {
 								      address = responses[0].formatted_address;
@@ -72,28 +136,81 @@
 								      address = 'Cannot determine address at this location.';
 								    }
 
-								    @if($form['address'])
-								  		$("input[name={{$form['address']}}]").val(address);
-									@endif
+								    $('#current-location-span-{{$name}}').text(address);
+								   									  	
+						            map.setCenter(pos);
+								    
+								   	marker_default_location.setPosition(pos);
 
-									console.log(address);
+								   	address_temp_{{$name}} = address;
 
-								    infowindow.setContent(address);
+								   	infoWindow.close();
+								  	infoWindow.setContent(address);
+					          		infoWindow.open(map, marker_default_location);	
+								});
+					            
+					          }, function() {
+					            console.log('GPS not found !');
+					          });
+					        } else {					          
+					          console.log('GPS not found !');
+					        }
+
+					        @else 
+					        	var pos = {
+					              lat: {{ $row->$form['latitude']?:0 }},
+					              lng: {{ $row->$form['longitude']?:0 }}
+					            };
+
+					            latitude_temp_{{$name}} = {{ $row->$form['latitude']?:0 }};
+					          	longitude_temp_{{$name}} = {{ $row->$form['longitude']?:0 }};
+
+					          	address_temp_{{$name}} = "{{$value}}";
+
+					            map.setCenter(pos);
+								    
+							   	marker_default_location.setPosition(pos);
+
+							   	infoWindow.close();
+							  	infoWindow.setContent("{{$value}}");
+				          		infoWindow.open(map, marker_default_location);
+
+					        @endif
+
+					        google.maps.event.addListener(marker_default_location, 'dragend', function(marker_default_location){
+					        	
+					        	  geocoder.geocode({
+								    latLng: marker_default_location.latLng
+								  }, function(responses) {
+								    if (responses && responses.length > 0) {
+								      address = responses[0].formatted_address;
+								    } else {
+								      address = 'Cannot determine address at this location.';
+								    }
+
+								    address_temp_{{$name}} = address;
+
+								    infoWindow.setContent(address);								    
+								   								  	
+								  	$('#current-location-span-{{$name}}').text(address);															    
 								    
 								  });
 
-						        var latLng = marker.latLng; 
+						        var latLng = marker_default_location.latLng; 
 						        latitude = latLng.lat();
 						        longitude = latLng.lng();
 						        						          
-						        $("input[name={{$form['latitude']}}]").val(latitude);
-						        $("input[name={{$form['longitude']}}]").val(longitude);								          						          	
+						        latitude_temp_{{$name}} = latitude;
+						        longitude_temp_{{$name}} = longitude;
+
 						     });
 
 					        autocomplete.addListener('place_changed', function() {
-					          infowindow.close();
-					          marker.setVisible(false);
+					          infoWindow.close();
+					          marker_default_location.setVisible(false);
+
 					          var place = autocomplete.getPlace();
+
 					          if (!place.geometry) {
 					            window.alert("Autocomplete's returned place contains no geometry");
 					            return;
@@ -106,8 +223,8 @@
 					            map.setZoom(17); 
 					          }
 			
-					          marker.setPosition(place.geometry.location);
-					          marker.setVisible(true);
+					          marker_default_location.setPosition(place.geometry.location);
+					          marker_default_location.setVisible(true);
 
 					          var address = '';
 					          if (place.address_components) {
@@ -121,15 +238,17 @@
 					          var latitude = place.geometry.location.lat();
 							  var longitude = place.geometry.location.lng(); 
 
-							  @if($form['address'])
-							  	$("input[name={{$form['address']}}]").val(address);
-							  @endif
-					          
-					          $("input[name={{$form['latitude']}}]").val(latitude);
-						      $("input[name={{$form['longitude']}}]").val(longitude);
+							  address_temp_{{$name}} = address;
 
-					          infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
-					          infowindow.open(map, marker);
+							  $('#current-location-span-{{$name}}').text(address);
+
+							  infoWindow.setContent(address);
+
+							  latitude_temp_{{$name}} = latitude;
+							  longitude_temp_{{$name}} = longitude;							  
+
+					          infoWindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+					          infoWindow.open(map, marker_default_location);
 					        });
 
 					        function setupClickListener(id, types) {
@@ -144,7 +263,5 @@
 					        setupClickListener('changetype-establishment', ['establishment']);
 					        setupClickListener('changetype-geocode', ['geocode']);
 					      }
-					      $(function() {
-					      	initMap{{$index}}();
-					      })
+					      
 					    </script>		        					    
