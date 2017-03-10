@@ -12,6 +12,12 @@ class CRUDBoosterServiceProvider extends ServiceProvider
      */
     public function boot()
     {        
+
+        //Creating symlink to media files
+        if(!file_exists(public_path('uploads'))) {            
+            app('files')->link(storage_path('app'), public_path('uploads'));
+        }
+
         $this->loadViewsFrom(__DIR__.'/views', 'crudbooster');
 
         $this->publishes([  __DIR__.'/configs/crudbooster.php' => config_path('crudbooster.php')],'cb_config');                

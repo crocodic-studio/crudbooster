@@ -426,12 +426,12 @@ class CBController extends Controller {
 		          $label = $col['label'];
 
 		          if(isset($col['image'])) {
-			            if($value=='') {
-			              $value = "http://placehold.it/50x50&text=NO+IMAGE";
-			            }
-			            $pic = (strpos($value,'http://')!==FALSE)?$value:asset($value);
-			            $pic_small = $pic;
-			            $value = "<a class='fancybox' rel='group_{{$table}}' title='$label: $title' href='".$pic."?w=350'><img width='40px' height='40px' src='".$pic_small."?w=40'/></a>";
+			            if($value=='') {			              
+			              $value = "<a class='fancybox' rel='group_{{$table}}' title='$label: $title' href='http://placehold.it/50x50&text=NO+IMAGE'><img width='40px' height='40px' src='http://placehold.it/50x50&text=NO+IMAGE'/></a>";
+			            }else{
+							$pic = (strpos($value,'http://')!==FALSE)?$value:asset($value);				            
+				            $value = "<a class='fancybox' rel='group_{{$table}}' title='$label: $title' href='".$pic."'><img width='40px' height='40px' src='".$pic."'/></a>";
+			            }			            
 		          }
 
 		          if(@$col['download']) {
@@ -891,8 +891,18 @@ class CBController extends Controller {
 					Storage::makeDirectory(date('Y-m'));
 
 					//Move file to storage
-					$filename = md5(str_random(5)).'.'.$ext;
-					if($file->move(storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m')),$filename)) {
+					$filename = md5(str_random(5)).'.'.$ext;					
+					$file_path = storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m'));
+
+					try{
+						\Image::make($file->getRealPath())->resize(330, null, function ($constraint) {
+						    $constraint->aspectRatio();
+						})->save($file_path.'/thumb_'.$filename,80);	
+					}catch(\Exception $e) {
+
+					}
+					
+					if($file->move($file_path,$filename)) {
 						$this->arr[$name] = 'uploads/'.date('Y-m').'/'.$filename;
 					}
 				}
