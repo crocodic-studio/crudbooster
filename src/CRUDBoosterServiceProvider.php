@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\ServiceProvider;
+use crocodicstudio\crudbooster\commands\CrudboosterInstallationCommand;
+use crocodicstudio\crudbooster\commands\CrudboosterUpdateCommand;
+use Illuminate\Foundation\AliasLoader;
 
 class CRUDBoosterServiceProvider extends ServiceProvider
 {
@@ -10,6 +13,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
      *
      * @return void
      */
+
     public function boot()
     {        
 
@@ -24,8 +28,12 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         }
 
         $this->loadViewsFrom(__DIR__.'/views', 'crudbooster');
-
-        $this->publishes([  __DIR__.'/configs/crudbooster.php' => config_path('crudbooster.php')],'cb_config');                
+            
+        if(file_exists(config_path('crudbooster.php'))) {            
+            $this->mergeConfigFrom(__DIR__.'/configs/crudbooster.php','crudbooster');  
+        }else{
+            $this->publishes([__DIR__.'/configs/crudbooster.php' => config_path('crudbooster.php')],'cb_config');            
+        }
         
         $this->publishes([__DIR__.'/localization' => resource_path('lang')], 'cb_localization');                 
 
@@ -86,7 +94,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
      */
     public function register()
     {                                   
-        require __DIR__.'/helpers/Helper.php';      
+        require __DIR__.'/helpers/Helper.php';              
         
         $this->app->singleton('crudbooster', function ()
         {
@@ -96,5 +104,36 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->commands([
             commands\Mailqueues::class            
         ]);
+
+        $this->registerCrudboosterCommand();
+
+        $this->commands('crudboosterinstall');
+        $this->commands('crudboosterupdate');
+
+
+        $this->app->register('Barryvdh\DomPDF\ServiceProvider');
+        $this->app->register('Maatwebsite\Excel\ExcelServiceProvider');
+        $this->app->register('Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider');
+        $this->app->register('Intervention\Image\ImageServiceProvider');
+
+        $loader = AliasLoader::getInstance();
+        $loader->alias('PDF', 'Barryvdh\DomPDF\Facade');
+        $loader->alias('Excel', 'Maatwebsite\Excel\Facades\Excel');
+        $loader->alias('Image', 'Intervention\Image\Facades\Image');
+        $loader->alias('CRUDBooster', 'crocodicstudio\crudbooster\helpers\CRUDBooster');
+    }
+
+
+    private function registerCrudboosterCommand()
+    {
+        $this->app['crudboosterinstall'] = $this->app->share(function($app)
+        {
+            return new CrudboosterInstallationCommand;
+        });
+
+        $this->app['crudboosterupdate'] = $this->app->share(function($app)
+        {
+            return new CrudboosterUpdateCommand;
+        });
     }
 }
