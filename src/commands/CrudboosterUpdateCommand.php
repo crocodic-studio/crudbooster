@@ -41,6 +41,7 @@ class CrudboosterUpdateCommand extends Command {
 
 		$this->info('Publishing assets...');
 		$this->callSilent('vendor:publish');		
+		$this->callSilent('vendor:publish',['--tag'=>'cb_lfm','--force'=>'default']);
 		
 		$this->info('Migrating database...');
 		$this->callSilent('migrate',['--seed'=>'default']);

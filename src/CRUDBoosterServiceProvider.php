@@ -51,11 +51,11 @@ class CRUDBoosterServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__.'/laravel-filemanager/src/config/lfm.php' => config_path('lfm.php'),
-        ],'cb_lfm_config');        
+        ],'cb_lfm');        
 
         $this->publishes([
             __DIR__.'/laravel-filemanager/src/views/script.blade.php' => resource_path('views/vendor/laravel-filemanager/script.blade.php'),
-        ],'cb_lfm_config');
+        ],'cb_lfm');
 
         $this->publishes([
             __DIR__.'/userfiles/views/vendor/crudbooster/type_components/readme.txt' => resource_path('views/vendor/crudbooster/type_components/readme.txt'),
@@ -69,10 +69,11 @@ class CRUDBoosterServiceProvider extends ServiceProvider
             $this->publishes([__DIR__.'/userfiles/controllers/AdminCmsUsersController.php' => app_path('Http/Controllers/AdminCmsUsersController.php')],'cb_user_controller');
         }
 
+
+        /* Removing the default user and password reset, it makes you ambigous when using CRUDBooster */
         if(file_exists(base_path('database/migrations/2014_10_12_000000_create_users_table.php'))) {        
             @unlink(base_path('database/migrations/2014_10_12_000000_create_users_table.php'));
         }
-
         if(file_exists(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'))) {            
             @unlink(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'));
         }

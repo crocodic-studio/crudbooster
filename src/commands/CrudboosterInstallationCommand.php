@@ -40,7 +40,8 @@ class CrudboosterInstallationCommand extends Command {
 		$this->info('---');
 
 		$this->info('Publishing assets...');
-		$this->callSilent('vendor:publish');		
+		$this->callSilent('vendor:publish');	
+		$this->callSilent('vendor:publish',['--tag'=>'cb_lfm','--force'=>'default']);	
 
 		$this->info('Setting The Database Configuration : ');
 		$db_name = $this->ask('DATABASE NAME');
