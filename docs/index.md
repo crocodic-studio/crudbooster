@@ -11,3 +11,33 @@ CRUDBooster is CRUD Generator for laravel, with the most important features web 
 - Tokenizer PHP Extension
 - FileInfo PHP Extension
 
+## Installation
+- Open the terminal, navigate to your project directory.
+```php
+$ composer require crocodicstudio/crudbooster=5.3.2.*
+```
+- Add the following class, to "providers" array in the file **config/app.php**
+```php
+crocodicstudio\crudbooster\CRUDBoosterServiceProvider::class,
+```
+- Run the following command at the terminal
+```php
+$ php artisan crudbooster:install
+```
+
+## Update
+- Open the terminal, navigate to your project directory.
+```php
+$ composer require crocodicstudio/crudbooster=5.3.2.*
+```
+- Run the following command at the terminal
+```php
+$ php artisan crudbooster:update
+```
+
+## Backend URL
+```php
+/admin/login
+```
+- default email : admin@crudbooster.com
+- default password : 123456
