@@ -43,4 +43,4 @@ $ php artisan crudbooster:update
 - default password : 123456
 
 ## Documentation
-- [English Documentation](docs/en/index.md)
+- [English Documentation](en/index.md)
