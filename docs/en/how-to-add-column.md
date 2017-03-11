@@ -1,4 +1,4 @@
-# How To Add Column At Table
+# How To Add Column At Grid Data
 This documentation is for manual add column only instead by using Module Generator.
 
 Open file controller that you want to add column at `app/Http/Controllers/AdminModuleController.php`
