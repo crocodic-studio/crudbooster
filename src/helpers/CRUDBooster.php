@@ -712,17 +712,17 @@ class CRUDBooster  {
 		public static function isColumnExists($table,$field) {
 			$table = CRUDBooster::parseSqlTable($table);
 
-			if(Cache::has('isColumnExists_'.$table.'_'.$field)) {
-				return Cache::get('isColumnExists_'.$table.'_'.$field);
+			if(Cache::has('isColumnExists_'.$table['table'].'_'.$field)) {
+				return Cache::get('isColumnExists_'.$table['table'].'_'.$field);
 			}			
 
 			$result = DB::select('SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :database AND TABLE_NAME = :table AND COLUMN_NAME = :field', ['database'=>$table['database'], 'table'=>$table['table'], 'field'=>$field]);
 
 			if(count($result) > 0) {
-				Cache::forever('isColumnExists_'.$table.'_'.$field,true);
+				Cache::forever('isColumnExists_'.$table['table'].'_'.$field,true);
 				return true;
 			}else{
-				Cache::forever('isColumnExists_'.$table.'_'.$field,false);
+				Cache::forever('isColumnExists_'.$table['table'].'_'.$field,false);
 				return false;
 			}
 
