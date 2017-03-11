@@ -31,101 +31,7 @@ class CRUDBooster  {
 
 			if(DB::table($table)->insert($data)) return $data['id'];
 			else return false;
-		}
-
-		public static function getTemporary($table,$where=[]) {
-			$temp = Cache::get('insert_temp_'.self::myId())?:array();			
-			$result = [];
-			foreach($temp as $i=>$t) {
-				if($t['table']==$table) {
-					$row = $t['data'];
-					if($where) {
-						$is_where = 0;
-						foreach($where as $k=>$v) {
-							if($row[$k] == $v) {
-								$is_where += 1;
-							}
-						}
-						if($is_where) {
-							$result[$i] = (object) $row;
-						}						
-					}else{						
-						$result[$i] = (object) $row;
-					}								
-				}
-			}
-
-			$i = 0;
-			foreach($result as $key=>$val) {
-				foreach($val as $k=>$v) {
-					if(self::isForeignKey($k)) {			
-						$getTableForeignKey = self::getTableForeignKey($k);								
-						$result[$i]->{$k.'_label'} = "<em>".ucwords($getTableForeignKey)."</em>";
-					}
-				}
-				$i++;
-			}	
-
-			return $result;
-		}
-
-		public static function firstTemporary($table,$id) {
-			$temp = Cache::get('insert_temp_'.self::myId())?:array();
-			foreach($temp as $t) {
-				if($t['data']['id']==$id) {
-					return (object) $t['data'];
-				}
-			}
-		}
-
-		public static function newIdTemporary() {
-			$temp = Cache::get('insert_temp_'.self::myId())?:array();
-			$newId = count($temp) + 1;			
-			return $newId;
-		}
-
-		public static function insertTemporary($table,$data=[]) {
-			$temp = Cache::get('insert_temp_'.self::myId())?:array();
-			$temp[] = ['table'=>$table,'data'=>$data];
-			Cache::put('insert_temp_'.self::myId(),$temp,3600);				
-			return true; 
-		}
-
-		public static function updateTemporary($table,$where=[],$data=[]) {
-			$temp = self::getTemporary($table,$where);
-			$temp_raw = Cache::get('insert_temp_'.self::myId())?:array();
-			foreach($temp as $i=>$t) {
-				$row = (array) $t;
-				foreach($data as $k=>$v) {
-					$row[$k] = $v;
-				}
-				$temp_raw[$i]['data'] = $row;
-			}
-			Cache::put('insert_temp_'.self::myId(),$temp_raw,3600);
-			return true;
-		}
-
-		public static function clearTemporary($table) {
-			$temp = Cache::get('insert_temp_'.self::myId())?:array();
-			foreach($temp as $i => $t) {
-				if($t['table'] == $table) {
-					unset($temp[$i]);
-				}
-			}
-			Cache::put('insert_temp_'.self::myId(),$temp,3600);
-			return true;
-		}
-
-		public static function deleteTemporary($table,$id) {
-			$temp = Cache::get('insert_temp_'.self::myId())?:array();
-			foreach($temp as $i => $t) {
-				if($t['table'] == $table && $t['data']['id']== $id) {
-					unset($temp[$i]);
-				}
-			}
-			Cache::put('insert_temp_'.self::myId(),$temp,3600);
-			return true;
-		}
+		}	
 
 		public static function first($table,$id) {
 			$table = self::parseSqlTable($table)['table'];
@@ -527,11 +433,11 @@ class CRUDBooster  {
 
 		public static function timeAgo($datetime_to,$datetime_from=NULL, $full = false) {
 		    $datetime_from = ($datetime_from)?:date('Y-m-d H:i:s');
-		    $now = new DateTime;
+		    $now = new \DateTime;
 		    if($datetime_from!='') {
-		        $now = new DateTime($datetime_from);
+		        $now = new \DateTime($datetime_from);
 		    }
-		    $ago = new DateTime($datetime_to);
+		    $ago = new \DateTime($datetime_to);
 		    $diff = $now->diff($ago);
 
 		    $diff->w = floor($diff->d / 7);
@@ -710,26 +616,31 @@ class CRUDBooster  {
 		}
 
 		public static function isColumnExists($table,$field) {
-			if(Cache::has('isColumnExists_'.$table.'_'.$field)) {
-				return Cache::get('isColumnExists_'.$table.'_'.$field);
-			}
 			$table = CRUDBooster::parseSqlTable($table);
+
+			if(Cache::has('isColumnExists_'.$table['table'].'_'.$field)) {
+				return Cache::get('isColumnExists_'.$table['table'].'_'.$field);
+			}			
 
 			$result = DB::select('SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :database AND TABLE_NAME = :table AND COLUMN_NAME = :field', ['database'=>$table['database'], 'table'=>$table['table'], 'field'=>$field]);
 
 			if(count($result) > 0) {
-				Cache::forever('isColumnExists_'.$table.'_'.$field,true);
+				Cache::forever('isColumnExists_'.$table['table'].'_'.$field,true);
 				return true;
 			}else{
-				Cache::forever('isColumnExists_'.$table.'_'.$field,false);
+				Cache::forever('isColumnExists_'.$table['table'].'_'.$field,false);
 				return false;
 			}
+
+			
 		}
 
 		public static function getForeignKey($parent_table,$child_table) {
-			if(self::isColumnExists($child_table,'id_'.$parent_table)) {
+			$parent_table = CRUDBooster::parseSqlTable($parent_table)['table'];
+			$child_table = CRUDBooster::parseSqlTable($child_table)['table'];
+			if(self::isColumnExists($child_table,'id_'.$parent_table)) {				
 				return 'id_'.$parent_table;
-			}else{
+			}else{				
 				return $parent_table.'_id';
 			}
 		}

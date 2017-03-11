@@ -6,9 +6,9 @@
 	});
 	$('.form-datepicker i').click(function() {
 		console.log('i datepicker');
-		$(this).parent().parent().find('input').click();
+		
 	})
+	function showDatepicker{{$name}}() {
+		$('.datepicker{{$name}}').datepicker('show');
+	}
 </script>
-<style type="text/css">
-	i.fa-calendar {cursor:pointer;}
-</style>
