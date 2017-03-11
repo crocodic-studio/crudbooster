@@ -892,14 +892,6 @@ class CBController extends Controller {
 					//Move file to storage
 					$filename = md5(str_random(5)).'.'.$ext;					
 					$file_path = storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m'));
-
-					try{
-						\Image::make($file->getRealPath())->resize(330, null, function ($constraint) {
-						    $constraint->aspectRatio();
-						})->save($file_path.'/thumb_'.$filename,80);	
-					}catch(\Exception $e) {
-
-					}
 					
 					if($file->move($file_path,$filename)) {
 						$this->arr[$name] = 'uploads/'.date('Y-m').'/'.$filename;
@@ -917,13 +909,6 @@ class CBController extends Controller {
 				$this->arr[$name] = $url;
 			}
 		}		
-	}
-
-	public function getAddRaw() {
-		$this->cbLoader();
-		$parent_field = Request::get('parent_field');
-		$parent_id    = Request::get('parent_id');
-		return view('crudbooster::default.form_body',['parent_field'=>$parent_field,'parent_id'=>$parent_id]);
 	}
 
 	public function getAdd(){
@@ -957,43 +942,10 @@ class CBController extends Controller {
 
 		$this->hook_before_add($this->arr);
 
-		//Auto Increment
-		if(Request::get('temporary')) {
-			$this->arr[$this->primary_key] = $id = CRUDBooster::newIdTemporary();
-			CRUDBooster::insertTemporary($this->table,$this->arr);
-		}else{
-			$this->arr[$this->primary_key] = $id = CRUDBooster::newId($this->table);			
-			DB::table($this->table)->insert($this->arr);
-		}
+		$this->arr[$this->primary_key] = $id = CRUDBooster::newId($this->table);			
+		DB::table($this->table)->insert($this->arr);
 
 		$this->hook_after_add($this->arr[$this->primary_key]);
-
-
-		if(Request::get('subtable')) {
-			foreach(Request::get('subtable') as $st) {
-				$subtable      = $st['table'];
-				$fk            = $st['fk'];
-				$subtable_data = CRUDBooster::getTemporary($subtable);
-
-				$i = CRUDBooster::newId($subtable);
-				foreach($subtable_data as &$s) {
-					$s->id = $i;
-					$s->$fk = $id;
-					foreach($s as $k=>$v) {
-						if(CRUDBooster::isForeignKey($k)) {
-							unset($s->{$k.'_label'});
-						}
-					}
-					$i++;
-				}
-
-				$subtable_data = json_decode(json_encode($subtable_data),true);
-				//Bulk Insert
-				DB::table($subtable)->insert($subtable_data);
-				//Clear Temporary For Related Table
-				CRUDBooster::clearTemporary($subtable);
-			}
-		}
 
 
 		//Looping Data Input Again After Insert
@@ -1089,20 +1041,6 @@ class CBController extends Controller {
 		}
 	}
 
-	public function getEditRaw($id) {
-		$this->cbLoader();
-		$parent_field = Request::get('parent_field');
-		$parent_id    = Request::get('parent_id');
-		if(Request::get('temporary')) {
-			$row          = CRUDBooster::firstTemporary($this->table,$id);
-		}else{
-			$row          = DB::table($this->table)->where($this->primary_key,$id)->first();
-		}
-
-		Session::put('current_row_id',$id);
-		return view('crudbooster::default.form_body',['row'=>$row,'id'=>$id,'parent_field'=>$parent_field,'parent_id'=>$parent_id]);
-	}
-
 	public function getEdit($id){
 		$this->cbLoader();
 		$row             = DB::table($this->table)->where($this->primary_key,$id)->first();
@@ -1139,12 +1077,7 @@ class CBController extends Controller {
 
 		$this->hook_before_edit($this->arr,$id);
 
-		if(Request::get('temporary')) {			
-			CRUDBooster::updateTemporary($this->table,['id'=>$id],$this->arr);
-		}else{			
-			DB::table($this->table)->where($this->primary_key,$id)->update($this->arr);
-		}
-
+		DB::table($this->table)->where($this->primary_key,$id)->update($this->arr);
 
 		$this->hook_after_edit($id);
 
@@ -1266,15 +1199,10 @@ class CBController extends Controller {
 
 		$this->hook_before_delete($id);
 
-		if(Request::get('temporary')) {
-			CRUDBooster::deleteTemporary($this->table,$id);
+		if(CRUDBooster::isColumnExists($this->table,'deleted_at')) {
+			DB::table($this->table)->where($this->primary_key,$id)->update(['deleted_at'=>date('Y-m-d H:i:s')]);
 		}else{
-
-			if(CRUDBooster::isColumnExists($this->table,'deleted_at')) {
-				DB::table($this->table)->where($this->primary_key,$id)->update(['deleted_at'=>date('Y-m-d H:i:s')]);
-			}else{
-				DB::table($this->table)->where($this->primary_key,$id)->delete();
-			}
+			DB::table($this->table)->where($this->primary_key,$id)->delete();
 		}
 
 
