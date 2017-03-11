@@ -41,3 +41,6 @@ $ php artisan crudbooster:update
 ```
 - default email : admin@crudbooster.com
 - default password : 123456
+
+## Documentation
+- [English Documentation](docs/en/index.md)
