@@ -1,4 +1,4 @@
 # CRUDBooster Documentation 
 ## Table Of Contents
 - [How To Install/Update](../index.md)
-- [How To Create Module (CRUD)](how-to-create-module.md)
+- [How To Create Module (CRUD)](./how-to-create-module.md)
