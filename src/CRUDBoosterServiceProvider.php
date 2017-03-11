@@ -13,18 +13,21 @@ class CRUDBoosterServiceProvider extends ServiceProvider
     public function boot()
     {        
 
-        //Creating symlink to media files
+        //Create symlink for uploads path
         if(!file_exists(public_path('uploads'))) {            
             app('files')->link(storage_path('app'), public_path('uploads'));
+        }
+
+        //Crate symlink for assets
+        if(!file_exists(public_path('vendor/crudbooster'))) {
+            app('files')->link(base_path('vendor/crocodicstudio/crudbooster/src/assets'),public_path('vendor/crudbooster'));
         }
 
         $this->loadViewsFrom(__DIR__.'/views', 'crudbooster');
 
         $this->publishes([  __DIR__.'/configs/crudbooster.php' => config_path('crudbooster.php')],'cb_config');                
         
-        $this->publishes([__DIR__.'/localization' => resource_path('lang')], 'cb_localization'); 
-
-        $this->publishes([__DIR__.'/assets' => public_path('vendor/crudbooster')], 'cb_public');             
+        $this->publishes([__DIR__.'/localization' => resource_path('lang')], 'cb_localization');                 
 
         $this->publishes([__DIR__.'/database' => base_path('database')],'cb_migration');
 
@@ -58,8 +61,13 @@ class CRUDBoosterServiceProvider extends ServiceProvider
             $this->publishes([__DIR__.'/userfiles/controllers/AdminCmsUsersController.php' => app_path('Http/Controllers/AdminCmsUsersController.php')],'cb_user_controller');
         }
 
-        @unlink(base_path('database/migrations/2014_10_12_000000_create_users_table.php'));
-        @unlink(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'));
+        if(file_exists(base_path('database/migrations/2014_10_12_000000_create_users_table.php'))) {        
+            @unlink(base_path('database/migrations/2014_10_12_000000_create_users_table.php'));
+        }
+
+        if(file_exists(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'))) {            
+            @unlink(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'));
+        }
                     
         require __DIR__.'/validations/validation.php';        
         require __DIR__.'/routes.php';    
