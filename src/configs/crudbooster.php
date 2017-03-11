@@ -22,5 +22,9 @@ return [
 	
 	'UPLOAD_TYPES'              =>'jpg,png,jpeg,gif,bmp,pdf,xls,xlsx,doc,docx,txt,zip,rar,7z',
 
+	'DEFAULT_THUMBNAIL_WIDTH' 	=>300,
+
+	'IMAGE_EXTENSIONS'			=>'jpg,png,jpeg,gif,bmp',
+
 	'MULTIPLE_DATABASE_MODULE' 	=>[],
 ];
