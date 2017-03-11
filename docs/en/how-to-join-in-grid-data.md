@@ -1,4 +1,4 @@
-# How To Make A Join Table in Grid Data Column
+# How To Make A Join Table in Grid Data
 
 ### Table : Products
 | Field Name | Data Type |
