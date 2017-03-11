@@ -433,11 +433,11 @@ class CRUDBooster  {
 
 		public static function timeAgo($datetime_to,$datetime_from=NULL, $full = false) {
 		    $datetime_from = ($datetime_from)?:date('Y-m-d H:i:s');
-		    $now = new DateTime;
+		    $now = new \DateTime;
 		    if($datetime_from!='') {
-		        $now = new DateTime($datetime_from);
+		        $now = new \DateTime($datetime_from);
 		    }
-		    $ago = new DateTime($datetime_to);
+		    $ago = new \DateTime($datetime_to);
 		    $diff = $now->diff($ago);
 
 		    $diff->w = floor($diff->d / 7);
