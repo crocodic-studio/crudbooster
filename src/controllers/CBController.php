@@ -758,6 +758,11 @@ class CBController extends Controller {
 						$e_raw = explode(',',$e);
 
 						@$e_table = $e_raw[0];
+
+						if($e_table) {
+							$e_table = CRUDBooster::parseSqlTable($e_table)['table'];
+						}
+
 						@$e_column = $e_raw[1]?:$di['name'];
 						@$e_id_ignore = $e_raw[2]?:$id;
 
@@ -768,12 +773,6 @@ class CBController extends Controller {
 						}
 
 					}
-
-					// if($e == 'image'){
-					// 	if($id) {
-					// 		$e = NULL;
-					// 	}
-					// }
 
 				}
 
