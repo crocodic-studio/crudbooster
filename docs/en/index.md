@@ -7,9 +7,17 @@
 - [How To Put Number Format In Grid Data Column](./how-to-put-number-format.md)
 - [How To Make A Subquery Column in Grid Data](./how-to-make-subquery.md)
 - [How To Make A Child Form (Master - Detail)](./how-to-make-a-child-form.md)
+- [How To Make A Custom Form Input Type](./form-custom.md)
+- [How To Integrate Google Maps When Input Address](./form-googlemaps.md)
+- [How To Upload A File With File Manager](./form-filemanager.md)
 - **Form Input Type**
   - [checkbox](./form-checkbox.md)
   - [child](./how-to-make-a-child-form.md)
   - [custom](./form-custom.md)
   - [datamodal](./form-datamodal.md)
+  - [date](./form-date.md)
+  - [datetime](./form-datetime.md)
+  - [email](./form-email.md)
+  - [filemanager](./form-filemanager.md)
+  - [googlemaps](./form-googlemaps.md)
   - ...
