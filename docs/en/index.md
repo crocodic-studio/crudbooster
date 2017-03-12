@@ -8,7 +8,6 @@
   - [How To Put Number Format In Grid Data Column](./how-to-put-number-format.md)
   - [How To Make A Subquery Column in Grid Data](./how-to-make-subquery.md)
 - **Form Section**
-  - [How To Make A Child Form (Master - Detail)](./how-to-make-a-child-form.md)
   - [How To Make A Custom Form Input Type](./form-custom.md)
   - [How To Integrate Google Maps When Input Address](./form-googlemaps.md)
   - [How To Upload A File With File Manager](./form-filemanager.md)
@@ -34,3 +33,21 @@
     - [time](./form-time.md)
     - [upload](./form-upload.md)
     - [wysiwyg](./form-wysiwyg.md)
+- How To Make A Graded Module (Parent Module -> Sub Module -> Sub Module)
+- [How To Make A Child Form (Master - Detail)](./how-to-make-a-child-form.md)
+- How To Put A Condition At Grid Data Query
+- How To Inject A Post Data In Create/Update/Delete Data Process
+- How To Add More Action Button In Grid Data
+- How To Add More Bulk Action In Grid Data
+- How To Add More Button At Top Of Grid Data
+- How To Create A Message Info At Top Of Grid Data (Bootstrap Alert)
+- How To Make A Custom Background Of Row With Specific Condition
+- How To Make A Simple Statistic At Top Of Grid Data
+- How To Put Your Own Javascript
+- How To Put Your Own CSS Stylesheet
+- How To Change The Application Name
+- How To Make A Custom View Of Index Method
+- How TO Make A Custom View Of Add Method
+- How To Make A Custom View Of Edit Method
+- How To Make A Custom View Of Detail Method
+- How To Add An Action Button And Put A Custom Function
