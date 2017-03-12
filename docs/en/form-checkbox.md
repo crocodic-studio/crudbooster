@@ -1,11 +1,11 @@
 # Checkbox Form Type
 
-## Checkbox With Your Own Enum
+### Checkbox With Your Own Enum
 ```php
 $this->form[] = ['label'=>'Platform','name'=>'platform','type'=>'checkbox','dataenum'=>'Android;IOS;Website'];
 ```
 
-## Checkbox With Looking Up Table
+### Checkbox With Looking Up Table
 ```php
 $this->form[] = ['label'=>'Platform','name'=>'platform','type'=>'checkbox','datatable'=>'platform,name'];
 ```
