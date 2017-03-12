@@ -39,9 +39,11 @@ class CrudboosterInstallationCommand extends Command {
 		$this->info('Thank you for choose the CRUDBooster');
 		$this->info('---');
 
-		$this->info('Publishing assets...');
+		$this->info('Publishing files...');
 		$this->callSilent('vendor:publish');	
+		$this->callSilent('vendor:publish',['--tag'=>'cb_migration','--force'=>'default']);
 		$this->callSilent('vendor:publish',['--tag'=>'cb_lfm','--force'=>'default']);	
+		$this->callSilent('vendor:publish',['--tag'=>'cb_localization','--force'=>'default']);	
 
 		$this->info('Setting The Database Configuration : ');
 		$db_name = $this->ask('DATABASE NAME');
