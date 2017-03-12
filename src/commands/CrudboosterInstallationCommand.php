@@ -46,16 +46,38 @@ class CrudboosterInstallationCommand extends Command {
 		$this->callSilent('vendor:publish',['--tag'=>'cb_localization','--force'=>'default']);	
 
 		$this->info('Setting The Database Configuration : ');
-		$db_name = $this->ask('DATABASE NAME');
-		$db_username = $this->ask('USERNAME');
-		$db_password = $this->ask('PASSWORD',false);
-		if($db_password===FALSE) {			
-			$db_password = '';
-		}
+		$default     = 'mysql';
+		$db_driver   = $this->choice('DB DRIVER (DEFAULT MYSQL) ? enter to skip', ['mysql', 'pgsql','sqlsrv'], $default);
+		$db_host     = $this->ask('DATABASE HOST (DEFAULT 127.0.0.1) ? enter to skip',false);
+		$db_host     = ($db_host === FALSE)?'127.0.0.1':$db_host;
+		$db_port     = $this->ask("DATABASE PORT (DEFAULT 3306) ? enter to skip",false);
+		$db_port     = ($db_port === FALSE)?'3306':$db_port;
+		$db_name     = $this->ask('DATABASE NAME ?');
+		$db_username = $this->ask('USERNAME ?');
+		$db_password = $this->ask('PASSWORD ?',false);
+		$db_password = ($db_password === FALSE)?'':$db_password;
 
 		copy(base_path('.env.example'),base_path('.env'));
 
 		file_put_contents(App::environmentFilePath(), str_replace(	        
+	        'DB_CONNECTION=mysql',
+	        'DB_CONNECTION='.$db_driver,
+	        file_get_contents(App::environmentFilePath())
+	    ));
+
+	    file_put_contents(App::environmentFilePath(), str_replace(	        
+	        'DB_HOST=127.0.0.1',
+	        'DB_HOST='.$db_host,
+	        file_get_contents(App::environmentFilePath())
+	    ));
+
+	    file_put_contents(App::environmentFilePath(), str_replace(	        
+	        'DB_PORT=3306',
+	        'DB_PORT='.$db_port,
+	        file_get_contents(App::environmentFilePath())
+	    ));
+
+	    file_put_contents(App::environmentFilePath(), str_replace(	        
 	        'DB_DATABASE=homestead',
 	        'DB_DATABASE='.$db_name,
 	        file_get_contents(App::environmentFilePath())
@@ -73,8 +95,18 @@ class CrudboosterInstallationCommand extends Command {
 	        file_get_contents(App::environmentFilePath())
 	    ));
 
+	    \Config::set('database.default',$db_driver);
+	    \Config::set('database.connections.'.$db_driver.'.driver',$db_driver);
+	    \Config::set('database.connections.'.$db_driver.'.host',$db_host);
+	    \Config::set('database.connections.'.$db_driver.'.port',$db_port);
+	    \Config::set('database.connections.'.$db_driver.'.database',$db_name);
+	    \Config::set('database.connections.'.$db_driver.'.username',$db_username);
+	    \Config::set('database.connections.'.$db_driver.'.password',$db_password);	    
+	    DB::reconnect($db_driver);
+
 		
 		$this->info('Migrating database...');
+		$this->callSilent('migrate:reset');
 		$this->callSilent('migrate',['--seed'=>'default']);
 
 		//Generate Key Env
