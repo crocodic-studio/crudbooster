@@ -3,7 +3,7 @@ Showing popup that contains a data table that you can choose
 
 ## Code Example
 ```php
-$this->form[] = ['label'=>'Product Name','name'=>'products_id','datamodal_table'=>'products','datamodal_where'=>'','datamodal_columns'=>'name,description,price','datamodal_size'=>'large','type'=>'datamodal','required'=>true];	
+$this->form[] = ['label'=>'Product Name','name'=>'products_id','type'=>'datamodal','datamodal_table'=>'products','datamodal_where'=>'','datamodal_columns'=>'name,description,price','datamodal_size'=>'large','required'=>true];	
 ```
 ## Legend
 | Attribute Name | Example | Description
