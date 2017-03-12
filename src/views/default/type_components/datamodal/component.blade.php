@@ -22,7 +22,7 @@
 </div>
 
 <script type="text/javascript">
-	var url_{{$name}} = "{{CRUDBooster::mainpath('modal-data')}}?table={{$form['datamodal_table']}}&columns=id,{{$form['datamodal_columns']}}&name_column={{$name}}&where={{urlencode($form['datamodal_where'])}}";
+	var url_{{$name}} = "{{CRUDBooster::mainpath('modal-data')}}?table={{$form['datamodal_table']}}&columns=id,{{$form['datamodal_columns']}}&name_column={{$name}}&where={{urlencode($form['datamodal_where'])}}&select_to={{ urlencode($form['datamodal_select_to']) }}";
 	var url_is_setted_{{$name}} = false;
 	function showModal{{$name}}() {
 		if(url_is_setted_{{$name}} == false) {								    			
@@ -38,6 +38,12 @@
 		$('#{{$name}} .input-label').val(label);
 		$('#{{$name}} .input-id').val(id);
 		hideModal{{$name}}();
+	}
+	function selectAdditionalData{{$name}}(select_to_json) {
+		$.each(select_to_json,function(key,val) {
+			console.log('#'+key+ ' = '+v);
+			$('#'+key).val(v).trigger('change');			
+		})
 	}
 </script>
 

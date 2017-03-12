@@ -1,6 +1,8 @@
 @include('crudbooster::admin_template_plugins')
 
-
+<?php 
+	$name = Request::get('name_column');
+?>
 <form method='get' action="">
 {!! CRUDBooster::getUrlParameters(['q']) !!}
 <input type="text" placeholder="Search and enter..." name="q" title="Enter to search" value="{{Request::get('q')}}" class="form-control">
@@ -25,9 +27,22 @@
 			}else{
 				echo "<td>".str_limit(strip_tags($row->$col),50)."</td>";
 			}
+			$select_data_result = [];
+			$select_data = Request::get('select_to');
+			if($select_data) {				
+				$select_data = explode(',',$select_data);
+				if($select_data) {
+					foreach($select_data as $s) {
+						$s_exp = explode(':',$s);
+						$field_name = $s_exp[0];
+						$target_field_name = $s_exp[1];
+						$select_data_result[$target_field_name] = $row->$field_name;
+					}
+				}				
+			}
 		?>		
 		@endforeach
-		<td><a class='btn btn-primary' href='javascript:void(0)' onclick='parent.selectData{{Request::get("name_column")}}( {{$row->id}}, "{{$row->$columns[1]}}" )'><i class='fa fa-check-circle'></i> Select</a></td>
+		<td><a class='btn btn-primary' href='javascript:void(0)' onclick='parent.selectData{{$name}}( {{$row->id}}, "{{$row->$columns[1]}}" );parent.selectAdditionalData{{$name}}({!! json_encode($select_data_result) !!})'><i class='fa fa-check-circle'></i> Select</a></td>
 	</tr>
 	@endforeach
 </tbody>
