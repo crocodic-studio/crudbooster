@@ -127,14 +127,12 @@ class CRUDBoosterServiceProvider extends ServiceProvider
 
     private function registerCrudboosterCommand()
     {
-        $this->app['crudboosterinstall'] = $this->app->share(function($app)
-        {
+        $this->app->singleton('crudboosterinstall',function() {
             return new CrudboosterInstallationCommand;
         });
 
-        $this->app['crudboosterupdate'] = $this->app->share(function($app)
-        {
+        $this->app->singleton('crudboosterupdate',function() {
             return new CrudboosterUpdateCommand;
-        });
+        });        
     }
 }
