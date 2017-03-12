@@ -10,7 +10,7 @@ $this->form[] = ['label'=>'Platform','name'=>'platform','type'=>'checkbox','data
 $this->form[] = ['label'=>'Platform','name'=>'platform','type'=>'checkbox','datatable'=>'platform,name'];
 ```
 
-## Legend
+### Legend
 | Attribute Name | Example |
 | -------------- | ------- |
 | dataenum | `Android;Ios;Website` . sparate with comma |
