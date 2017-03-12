@@ -63,4 +63,4 @@ $this->form[] = ['label'=>'Orders Detail','name'=>'orders_detail','type'=>'child
 
 ## What's Next
 - [Back To Index](./index.md)
-- How To Make A Datamodal Input Type
+- [How To Make A Datamodal Input Type](./form-datamodal.md)
