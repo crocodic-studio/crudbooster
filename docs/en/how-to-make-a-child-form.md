@@ -43,6 +43,12 @@ $columns[] = ['label'=>'Discount','name'=>'discount','type'=>'number','required'
 $columns[] = ['label'=>'Sub Total','name'=>'subtotal','type'=>'number','formula'=>"[qty] * [price] - [discount]","readonly"=>true,'required'=>true];
 $this->form[] = ['label'=>'Orders Detail','name'=>'orders_detail','type'=>'child','columns'=>$columns,'table'=>'orders_detail','foreign_key'=>'orders_id'];
 ```
+## Legend For Child Type
+| Attribute | Description |
+| --------- | ----------- |
+| columns | Fill an array like an example | 
+| table | the relationship (detail) table |
+| foreign_key | fk for relationship (detail) table |
 
 ## Child Form Type Available
 | Type Name | Additional Attribute |
@@ -50,7 +56,7 @@ $this->form[] = ['label'=>'Orders Detail','name'=>'orders_detail','type'=>'child
 | text | min,max |
 | number | min,max |
 | textarea | max |
-| select | datatable |
+| select | datatable - e.g : 'tableName,fieldName' |
 | radio | dataenum - e.g : ['a','b','c [, ...]] | 
 | upload | upload_type - (image,file) |
 | datamodal | datamodal_table,datamodal_columns,datamodal_select_to,datamodal_where,datamodal_size |
