@@ -22,7 +22,7 @@
 | customers_id | int(11) |
 | order_number | varchar(25) |
 
-## Table Detail : ordes_detail
+## Table Detail : orders_detail
 | Field Name | Data Type |
 | ---------- | --------- |
 | id | int(PK) |
