@@ -13,7 +13,7 @@
 CRUDBooster is Laravel Framework that modified to bring a lot of features to develop a web application so simply. One of the main features is Smart CRUD Generator, so CRUDBooster will create a module automatically included Create, Read, Update, Delete standard function. And CRUDBooster is not usual CRUD Generator,you will get a lot of new experience with a new concept. CRUD Booster is dedicated to those who already understand the basic laravel. We do not recommend for those of you who have never used laravel altogether.
 
 ## Getting Started & Documentation
-[http://crudbooster.com/doc/5.3/intro](http://crudbooster.com/doc/5.3/intro)
+[Documentation in English](./docs/en/index.md)
 
 ## YOUTUBE CHANNEL
 https://www.youtube.com/channel/UCgOJR3khWEykIBBR8vAGtcA
