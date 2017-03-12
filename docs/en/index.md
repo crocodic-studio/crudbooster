@@ -7,3 +7,9 @@
 - [How To Put Number Format In Grid Data Column](./how-to-put-number-format.md)
 - [How To Make A Subquery Column in Grid Data](./how-to-make-subquery.md)
 - [How To Make A Child Form (Master - Detail)](./how-to-make-a-child-form.md)
+- **Form Input Type**
+  - [checkbox](./form-checkbox.md)
+  - [child](./how-to-make-a-child-form.md)
+  - [custom](./form-custom.md)
+  - [datamodal](./form-datamodal.md)
+  - ...
