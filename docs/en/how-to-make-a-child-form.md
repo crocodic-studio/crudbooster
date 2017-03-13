@@ -43,6 +43,8 @@ $columns[] = ['label'=>'Discount','name'=>'discount','type'=>'number','required'
 $columns[] = ['label'=>'Sub Total','name'=>'subtotal','type'=>'number','formula'=>"[qty] * [price] - [discount]","readonly"=>true,'required'=>true];
 $this->form[] = ['label'=>'Orders Detail','name'=>'orders_detail','type'=>'child','columns'=>$columns,'table'=>'orders_detail','foreign_key'=>'orders_id'];
 ```
+![image](https://cloud.githubusercontent.com/assets/6733315/23845358/208c7d2c-07fa-11e7-8391-cdef668e977c.png)
+
 ## Legend For Child Type
 | Attribute | Description |
 | --------- | ----------- |
