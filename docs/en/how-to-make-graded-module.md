@@ -1,7 +1,6 @@
 # How To Make A Graded Module (Parent Module -> Sub Module -> Sub Module)
 
 ### Albums Table
-**albums**
 | Field Name     | Data Type    |
 | -------------- | ------------ |
 | id             | int(PK)      |
@@ -10,7 +9,6 @@
 | description    | varchar(255) |
 
 ### Photos Table
-**photos**
 | Field Name | Data Type |
 | ---------- | --------- |
 | id | int(PK) |
