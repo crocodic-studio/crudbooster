@@ -3,6 +3,7 @@
 ### Albums Table
 **albums**
 | Field Name | Data Type |
+| ---------- | --------- |
 | id | int(PK) |
 | created_at | timestamp |
 | name | varchar(255) |
@@ -11,6 +12,7 @@
 ### Photos Table
 **photos**
 | Field Name | Data Type |
+| ---------- | --------- |
 | id | int(PK) |
 | created_at | timestamp |
 | name | varchar(255) |
