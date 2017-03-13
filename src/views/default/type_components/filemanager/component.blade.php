@@ -25,7 +25,7 @@
 			          	&nbsp;<a class='btn btn-danger btn-delete btn-xs' onclick='swal({   title: "Are you sure?",   text: "You will not be able to undo this action!",   type: "warning",   showCancelButton: true,   confirmButtonColor: "#DD6B55",   confirmButtonText: "Yes, delete !",   closeOnConfirm: false }, function(){  location.href="{{url($mainpath."/delete-filemanager?file=".$row->{$name}."&id=".$row->id."&column=".$name)}}" });' href='javascript:void(0)' title='Delete this file'><i class='fa fa-ban'></i></a>
 			          	</div>@endif
 			        @else
-			          	<p><img id='holder-{{$name}}' {{ ($value)?'src='.asset($value):'' }} style="margin-top:15px;max-height:100px;"></p>
+			          	<p><a class="fancybox" href="{{ ($value)?asset($value):'' }}"><img id='holder-{{$name}}' {{ ($value)?'src='.asset($value):'' }} style="margin-top:15px;max-height:100px;"></a></p>
 			        @endif
 
 			        @if(!$readonly || !$disabled)
