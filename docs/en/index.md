@@ -42,7 +42,7 @@
     - [upload](./form-upload.md)
     - [wysiwyg](./form-wysiwyg.md)
 - [How To Make A Graded Module (Parent Module -> Sub Module -> Sub Module)](./how-to-make-graded-module.md)
-- How To Implement A Many To Many Relationship To Form (E.g : Film -> R <- Actors)
+- [How To Implement A Many To Many Relationship To Form (E.g : Film -> R <- Actors)](./how-to-many-to-many.md)
 - How To Implement An One To Many Relationship To Form (E.g : Product <- Category)
 - How To Put A Custom Condition At Grid Data Query
 - How To Inject A Post Data In Create/Update/Delete Data Process
