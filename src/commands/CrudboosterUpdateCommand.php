@@ -39,11 +39,13 @@ class CrudboosterUpdateCommand extends Command {
 		$this->info('Thank you for choose the CRUDBooster');
 		$this->info('---');
 
-		$this->info('Publishing assets...');
+		$this->info('Publishing files...');
 		$this->callSilent('vendor:publish');		
-		$this->callSilent('vendor:publish',['--tag'=>'cb_lfm','--force'=>'default']);
+		$this->callSilent('vendor:publish',['--tag'=>'cb_migration','--force'=>'default']);
+		$this->callSilent('vendor:publish',['--tag'=>'cb_lfm','--force'=>'default']);	
+		$this->callSilent('vendor:publish',['--tag'=>'cb_localization','--force'=>'default']);
 		
-		$this->info('Migrating database...');
+		$this->info('Update database...');
 		$this->callSilent('migrate',['--seed'=>'default']);
 		
 		$this->info('Update CRUDBooster Done !');

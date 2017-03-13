@@ -1,11 +1,55 @@
 # CRUDBooster Documentation 
 ## Table Of Contents
-- [How To Install/Update](../index.md)
+- [How To Install/Update](./installation.md)
 - [How To Create Module (CRUD)](./how-to-create-module.md)
-- [How To Add Column In Grid Data](./how-to-add-column.md)
-- [How To Join Table In Grid Data](./how-to-join-in-grid-data.md)
-- [How To Put Number Format In Grid Data Column](./how-to-put-number-format.md)
-- [How To Make A Subquery Column in Grid Data](./how-to-make-subquery.md)
-
-## What's Next
-- [How To install/Update](../index.md)
+- **Grid Data Column Section**
+  - [How To Add Column In Grid Data](./how-to-add-column.md)
+  - [How To Join Table In Grid Data](./how-to-join-in-grid-data.md)
+  - [How To Put Number Format In Grid Data Column](./how-to-put-number-format.md)
+  - [How To Make A Subquery Column in Grid Data](./how-to-make-subquery.md)
+  - How To Add More Action Button In Grid Data
+  - How To Add More Bulk Action In Grid Data
+  - How To Add More Button At Top Of Grid Data
+  - How To Create A Message Info At Top Of Grid Data (Bootstrap Alert)
+  - How To Make A Custom Background Of Row With Specific Condition
+  - How To Make A Simple Statistic At Top Of Grid Data
+  - How To Add An Action Button And Put A Custom Function  
+- **Form Section**
+  - [How To Make A Child Form (Master - Detail)](./how-to-make-a-child-form.md)
+  - [How To Make A Custom Form Input Type](./form-custom.md)
+  - [How To Integrate Google Maps When Input Address](./form-googlemaps.md)
+  - [How To Upload A File With File Manager](./form-filemanager.md)
+  - **Form Input Type**
+    - [checkbox](./form-checkbox.md)
+    - [child](./how-to-make-a-child-form.md)
+    - [custom](./form-custom.md)
+    - [datamodal](./form-datamodal.md)
+    - [date](./form-date.md)
+    - [datetime](./form-datetime.md)
+    - [email](./form-email.md)
+    - [filemanager](./form-filemanager.md)
+    - [googlemaps](./form-googlemaps.md)
+    - [hidden](./form-hidden.md)
+    - [money](./form-money.md)
+    - [number](./form-number.md)
+    - [password](./form-password.md)
+    - [radio](./form-radio.md)
+    - [select](./form-select.md)
+    - [select2](./form-select2.md)
+    - [text](./form-text.md)
+    - [textarea](./form-textarea.md)
+    - [time](./form-time.md)
+    - [upload](./form-upload.md)
+    - [wysiwyg](./form-wysiwyg.md)
+- [How To Make A Graded Module (Parent Module -> Sub Module -> Sub Module)](./how-to-make-graded-module.md)
+- [How To Implement A Many To Many Relationship To Form (E.g : Film -> R <- Actors)](./how-to-many-to-many.md)
+- How To Implement An One To Many Relationship To Form (E.g : Product <- Category)
+- How To Put A Custom Condition At Grid Data Query
+- How To Inject A Post Data In Create/Update/Delete Data Process
+- How To Put Your Own Javascript
+- How To Put Your Own CSS Stylesheet
+- How To Change The Application Name
+- How To Make A Custom View Of Index Method
+- How TO Make A Custom View Of Add Method
+- How To Make A Custom View Of Edit Method
+- How To Make A Custom View Of Detail Method

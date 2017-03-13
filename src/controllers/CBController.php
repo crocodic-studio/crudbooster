@@ -175,13 +175,9 @@ class CBController extends Controller {
 		$result                   = DB::table($this->table)->select(DB::raw($this->table.".".$this->primary_key));
 
 		if(Request::get('parent_id')) {
-			if(CRUDBooster::isColumnExists($this->table,'id_'.Request::get('parent_table'))) {
-				$result->where($this->table.'.id_'.Request::get('parent_table'),Request::get('parent_id'));
-			}elseif (CRUDBooster::isColumnExists($this->table,Request::get('parent_table').'_id')) {
-				$result->where($this->table.'.'.Request::get('parent_table').'_id',Request::get('parent_id'));
-			}else{
-				return redirect()->back()->with(['message'=>'There is no FK for that table','message_type'=>'warning']);
-			}
+			$table_parent = $this->table;
+			$table_parent = CRUDBooster::parseSqlTable($table_parent)['table'];
+			$result->where($table_parent.'.'.Request::get('foreign_key'),Request::get('parent_id'));
 		}
 
 
@@ -400,10 +396,11 @@ class CBController extends Controller {
 
 		if($this->sub_module) {
 			foreach($this->sub_module as $s) {
+				$table_parent = CRUDBooster::parseSqlTable($this->table)['table'];
 				$addaction[] = [
 					'label'=>$s['label'],
 					'icon'=>$s['button_icon'],
-					'url'=>CRUDBooster::adminPath($s['path']).'?parent_table='.$this->table.'&parent_columns='.$s['parent_columns'].'&parent_id=[id]&return_url='.urlencode(Request::fullUrl()),
+					'url'=>CRUDBooster::adminPath($s['path']).'?parent_table='.$table_parent.'&parent_columns='.$s['parent_columns'].'&parent_id=[id]&return_url='.urlencode(Request::fullUrl()).'&foreign_key='.$s['foreign_key'].'&label='.urlencode($s['label']),
 					'color'=>$s['button_color']
 				];
 			}

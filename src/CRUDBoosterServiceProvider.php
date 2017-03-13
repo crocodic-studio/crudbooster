@@ -24,7 +24,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
 
         //Crate symlink for assets
         if(!file_exists(public_path('vendor/crudbooster'))) {
-            app('files')->link(base_path('vendor/crocodicstudio/crudbooster/src/assets'),public_path('vendor/crudbooster'));
+            app('files')->link(__DIR__.'/assets',public_path('vendor/crudbooster'));
         }
 
         $this->loadViewsFrom(__DIR__.'/views', 'crudbooster');
@@ -127,14 +127,12 @@ class CRUDBoosterServiceProvider extends ServiceProvider
 
     private function registerCrudboosterCommand()
     {
-        $this->app['crudboosterinstall'] = $this->app->share(function($app)
-        {
+        $this->app->singleton('crudboosterinstall',function() {
             return new CrudboosterInstallationCommand;
         });
 
-        $this->app['crudboosterupdate'] = $this->app->share(function($app)
-        {
+        $this->app->singleton('crudboosterupdate',function() {
             return new CrudboosterUpdateCommand;
-        });
+        });        
     }
 }

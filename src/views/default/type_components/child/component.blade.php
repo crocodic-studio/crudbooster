@@ -21,7 +21,7 @@
 				<div class='col-sm-10'>
 					<div class="panel panel-default">
 						<div class="panel-heading"><i class="fa fa-pencil-square-o"></i> Form</div>
-						<div class="panel-body">
+						<div class="panel-body child-form-area">
 							@foreach($form['columns'] as $col)	
 							<?php $name_column = $name.$col['name'];?>
 							<div class='form-group'>
@@ -59,7 +59,7 @@
 								    </div><!-- /input-group -->
 
 								    <script type="text/javascript">
-								    	var url_{{$name_column}} = "{{CRUDBooster::mainpath('modal-data')}}?table={{$col['datamodal_table']}}&columns=id,{{$col['datamodal_columns']}}&name_column={{$name_column}}&where={{urlencode($col['datamodal_where'])}}";
+								    	var url_{{$name_column}} = "{{CRUDBooster::mainpath('modal-data')}}?table={{$col['datamodal_table']}}&columns=id,{{$col['datamodal_columns']}}&name_column={{$name_column}}&where={{urlencode($col['datamodal_where'])}}&select_to={{ urlencode($col['datamodal_select_to']) }}";
 								    	var url_is_setted_{{$name_column}} = false;
 								    	function showModal{{$name_column}}() {
 								    		if(url_is_setted_{{$name_column}} == false) {								    			
@@ -76,6 +76,12 @@
 								    		$('#{{$name_column}} .input-id').val(id);
 								    		hideModal{{$name_column}}();
 								    	}
+								    	function selectAdditionalData{{$name_column}}(select_to_json) {
+											$.each(select_to_json,function(key,v) {
+												console.log('#{{$name}}'+key+ ' = '+v);
+												$('#{{$name}}'+key).val(v).trigger('change');
+											})
+										}
 								    </script>
 
 									<div id='modal-datamodal-{{$name_column}}' class="modal" tabindex="-1" role="dialog">
