@@ -44,7 +44,7 @@
 - [How To Make A Graded Module (Parent Module -> Sub Module -> Sub Module)](./how-to-make-graded-module.md)
 - [How To Implement A Many To Many Relationship To Form (E.g : Film -> R <- Actors)](./how-to-many-to-many.md)
 - [How To Implement An One To Many Relationship To Form (E.g : Product <- Category)](./how-to-one-to-many.md)
-- How To Put A Custom Condition At Grid Data Query
+- [How To Put A Custom Condition At Grid Data Query](./how-to-put-custom-condition-grid-data.md)
 - How To Inject A Post Data In Create/Update/Delete Data Process
 - How To Put Your Own Javascript
 - How To Put Your Own CSS Stylesheet
