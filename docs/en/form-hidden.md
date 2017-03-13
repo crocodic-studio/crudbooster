@@ -1,4 +1,4 @@
-# Date Form Type
+# Hidden Form Type
 
 ### Code Sample
 ```php
