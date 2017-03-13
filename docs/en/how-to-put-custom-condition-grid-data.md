@@ -11,7 +11,7 @@ public function hook_query_index(&$query) {
 ```
 This special method come in each controller that you've genereated. If you don't find it, you may create it one.
 
-For example, you have the table `products`: 
+For example, you have a table `products`: 
 
 | Field Name | Data Type | 
 | ---------- | --------- |
