@@ -1,4 +1,4 @@
-# Date Form Type
+# Money Form Type
 Input text with auto money number format
 
 ### Code Sample
