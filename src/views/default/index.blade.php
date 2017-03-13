@@ -31,7 +31,7 @@
         <table class='table table-bordered'>
           <tbody>
             <tr class='active'>
-              <td colspan="2"><strong><i class='fa fa-bars'></i> {{ ucwords(str_replace('_',' ',g('parent_table'))) }}</strong></td>
+              <td colspan="2"><strong><i class='fa fa-bars'></i> {{ ucwords(urldecode(g('label'))) }}</strong></td>
             </tr>
             @foreach(explode(',',urldecode(g('parent_columns'))) as $c)
             <tr>
