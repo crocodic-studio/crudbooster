@@ -22,6 +22,11 @@ class CRUDBoosterServiceProvider extends ServiceProvider
             app('files')->link(storage_path('app'), public_path('uploads'));
         }
 
+        //Create vendor folder at public
+        if(!file_exists(public_path('vendor'))) {
+            mkdir(public_path('vendor'));
+        }
+
         //Crate symlink for assets
         if(!file_exists(public_path('vendor/crudbooster'))) {
             app('files')->link(__DIR__.'/assets',public_path('vendor/crudbooster'));
