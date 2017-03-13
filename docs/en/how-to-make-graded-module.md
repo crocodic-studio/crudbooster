@@ -25,6 +25,7 @@ $this->sub_module[] = ['label'=>'Photos','path'=>'photos','parent_columns'=>'nam
 
 ### Legend
 | Attribute Name | Description | 
+| -------------- | ----------- |
 | label | Specify the label of sub module |
 | path | Specify the module path (slug) |
 | parent_columns | Specify the parent fields in this case Album Fields that you want to show. Sparate it with comma |
