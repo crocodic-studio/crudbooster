@@ -2,12 +2,12 @@
 
 ### Albums Table
 **albums**
-| Field Name | Data Type |
-| ---------- | --------- |
-| id | int(PK) |
-| created_at | timestamp |
-| name | varchar(255) |
-| description | varchar(255) |
+| Field Name     | Data Type    |
+| -------------- | ------------ |
+| id             | int(PK)      |
+| created_at     | timestamp    |
+| name           | varchar(255) |
+| description    | varchar(255) |
 
 ### Photos Table
 **photos**
