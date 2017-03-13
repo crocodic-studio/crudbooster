@@ -57,7 +57,8 @@ class CrudboosterInstallationCommand extends Command {
 		$db_password = $this->ask('PASSWORD ?',false);
 		$db_password = ($db_password === FALSE)?'':$db_password;
 
-		copy(base_path('.env.example'),base_path('.env'));
+		copy(base_path('.env.example'),base_path('.env'));		
+		$this->callSilent('key:generate');
 
 		file_put_contents(App::environmentFilePath(), str_replace(	        
 	        'DB_CONNECTION=mysql',
@@ -107,10 +108,7 @@ class CrudboosterInstallationCommand extends Command {
 		
 		$this->info('Migrating database...');
 		$this->callSilent('migrate:reset');
-		$this->callSilent('migrate',['--seed'=>'default']);
-
-		//Generate Key Env
-		$this->callSilent('key:generate'); 
+		$this->callSilent('migrate',['--seed'=>'default']);		
 		
 		$this->info('Install CRUDBooster Done !');
 	}
