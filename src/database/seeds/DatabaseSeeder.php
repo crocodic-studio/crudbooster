@@ -202,7 +202,7 @@ class Cms_settingsSeeder extends Seeder {
         ];
 
         foreach($data as $row) {
-            if(DB::table('cms_settings')->where('name',$d['name'])->count()) {
+            if(DB::table('cms_settings')->where('name',$row['name'])->count()) {
                 continue;
             }
             $row['id'] = DB::table('cms_settings')->max('id') + 1;
