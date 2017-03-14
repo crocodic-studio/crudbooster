@@ -107,7 +107,7 @@ return [
     'button_sign_in'         => 'تسجيل الدخول',
     'button_selected_action' => 'الاجراء الجماعي',
     'button_download_file'   => 'تنزيل الملف',
-    'button_reset'           => 'Reset',
+    'button_reset'           => 'اعادة تعيين',
 
     'export_dialog_title'            => "تصدير البيانات",
     'export_dialog_filename'         => 'اسم الملف',
