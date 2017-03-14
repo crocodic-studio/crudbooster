@@ -339,13 +339,13 @@
 
                             <div class='row between-group' style="{{ (CRUDBooster::getTypeFilter($col["field_with"]) == 'between')?"display:block":"display:none" }}">
                               <div class='col-sm-6'>
-                                <input type='text' class='filter-value-between form-control {{ (in_array($col["type_data"],["date","time","datetime"]))?"datepicker":"" }}' disabled placeholder='{{$col["label"]}} from' name='filter_column[{{$col["field_with"]}}][value][]' value='<?php 
+                                <input type='text' class='filter-value-between form-control {{ (in_array($col["type_data"],["date","time","datetime"]))?"datepicker":"" }}' disabled placeholder='{{$col["label"]}} {{trans("crudbooster.filter_from")}}' name='filter_column[{{$col["field_with"]}}][value][]' value='<?php
                                 $value = CRUDBooster::getValueFilter($col["field_with"]); 
                                 echo (CRUDBooster::getTypeFilter($col["field_with"])=='between')?$value[0]:"";
                                 ?>'>
                               </div>
                               <div class='col-sm-6'>
-                                <input type='text' class='filter-value-between form-control {{ (in_array($col["type_data"],["date","time","datetime"]))?"datepicker":"" }}' disabled placeholder='{{$col["label"]}} to' name='filter_column[{{$col["field_with"]}}][value][]' value='<?php 
+                                <input type='text' class='filter-value-between form-control {{ (in_array($col["type_data"],["date","time","datetime"]))?"datepicker":"" }}' disabled placeholder='{{$col["label"]}} {{trans("crudbooster.filter_to")}}' name='filter_column[{{$col["field_with"]}}][value][]' value='<?php
                                 $value = CRUDBooster::getValueFilter($col["field_with"]); 
                                 echo (CRUDBooster::getTypeFilter($col["field_with"])=='between')?$value[1]:"";
                                 ?>'>
