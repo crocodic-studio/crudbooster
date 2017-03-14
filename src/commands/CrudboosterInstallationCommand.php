@@ -33,7 +33,7 @@ class CrudboosterInstallationCommand extends Command {
 	 */
 	public function handle()
 	{
-
+		
 		$this->info($this->description);
 		$this->info('---');
 		$this->info('Thank you for choose the CRUDBooster');
@@ -57,8 +57,8 @@ class CrudboosterInstallationCommand extends Command {
 		$db_password = $this->ask('PASSWORD ?',false);
 		$db_password = ($db_password === FALSE)?'':$db_password;
 
-		copy(base_path('.env.example'),base_path('.env'));		
-		$this->callSilent('key:generate');
+		copy(base_path('.env.example'),base_path('.env'));				
+
 
 		file_put_contents(App::environmentFilePath(), str_replace(	        
 	        'DB_CONNECTION=mysql',
@@ -96,6 +96,14 @@ class CrudboosterInstallationCommand extends Command {
 	        file_get_contents(App::environmentFilePath())
 	    ));
 
+	    $key = 'base64:'.base64_encode(str_random(32));
+    	file_put_contents(App::environmentFilePath(), str_replace(	        
+	        'APP_KEY=',
+	        'APP_KEY='.$key,
+	        file_get_contents(App::environmentFilePath())
+	    ));
+	   
+
 	    \Config::set('database.default',$db_driver);
 	    \Config::set('database.connections.'.$db_driver.'.driver',$db_driver);
 	    \Config::set('database.connections.'.$db_driver.'.host',$db_host);
@@ -107,7 +115,12 @@ class CrudboosterInstallationCommand extends Command {
 
 		
 		$this->info('Migrating database...');		
-		$this->callSilent('migrate',['--seed'=>'default']);		
+		
+		$this->callSilent('migrate',['--force'=>true]);		
+		$this->callSilent('db:seed');
+
+		$this->callSilent('config:clear');		
+		$this->call('optimize');
 		
 		$this->info('Install CRUDBooster Done !');
 	}
