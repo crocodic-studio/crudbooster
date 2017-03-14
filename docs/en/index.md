@@ -48,7 +48,7 @@
 - [How To Inject A Post Data In Create/Update/Delete Data Process](./how-to-inject-postdata.md)
 - [How To Put Your Own Javascript](./how-to-put-your-own-javascript.md)
 - [How To Put Your Own CSS Stylesheet](./how-to-put-own-css.md)
-- How To Change The Application Name
+- [How To Change The Application Name](./how-to-change-app-name.md)
 - How To Make A Custom View Of Index Method
 - How TO Make A Custom View Of Add Method
 - How To Make A Custom View Of Edit Method
