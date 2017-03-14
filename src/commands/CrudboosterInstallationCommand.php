@@ -106,8 +106,7 @@ class CrudboosterInstallationCommand extends Command {
 	    DB::reconnect($db_driver);
 
 		
-		$this->info('Migrating database...');
-		$this->callSilent('migrate:reset');
+		$this->info('Migrating database...');		
 		$this->callSilent('migrate',['--seed'=>'default']);		
 		
 		$this->info('Install CRUDBooster Done !');
