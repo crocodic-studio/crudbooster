@@ -5,7 +5,7 @@ A way to make a custom view of edit method is override it. This is a best way if
 ```php
 public function getEdit($id) {
   //Create an Auth
-  if(!CRUDBooster::isRead() && $this->global_privilege==FALSE || $this->button_edit==FALSE) {    
+  if(!CRUDBooster::isUpdate() && $this->global_privilege==FALSE || $this->button_edit==FALSE) {    
     CRUDBooster::redirect(CRUDBooster::adminPath(),trans("crudbooster.denied_access"));
   }
   
