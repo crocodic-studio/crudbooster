@@ -4,7 +4,7 @@
 <script type="text/javascript">
     var lang = '{{App::getLocale()}}';
     $(function() {
-        $('.datepicker').datepicker({
+        $('.input_date').datepicker({
             format: 'yyyy-mm-dd',
             @if (App::getLocale() == 'ar')
             rtl: true,
@@ -14,6 +14,6 @@
     });
 
     function showDatepicker() {
-        $('.datepicker').datepicker('show');
+        $('.input_date').datepicker('show');
     }
 </script>
