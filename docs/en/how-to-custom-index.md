@@ -9,6 +9,7 @@ public function getIndex() {
    
    //Create your own query 
    $data = [];
+   $data['page_title'] = 'Products Data';
    $data['result'] = DB::table('products')->orderby('id','desc')->paginate(10);
     
    //Create a view. Please use `cbView` method instead of view method from laravel.
