@@ -29,3 +29,4 @@ Thank you for your contribution. Create pull request but don't push to master. P
 2. Laravel DOM PDF by [Barryvdh](https://github.com/barryvdh/laravel-dompdf)
 3. Admin Theme by [AdminLTE Almsaeed Studio](https://almsaeedstudio.com/preview)
 4. Laravel Framework by [Taylor Otwell](https://github.com/laravel/laravel)
+5. Thanks To All [Contributors](https://github.com/crocodic-studio/crudbooster/graphs/contributors)
