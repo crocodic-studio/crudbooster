@@ -1,5 +1,4 @@
-# How To Chane the
-Color Of Row With Specific Condition
+# How To Change The Color Of Row With Specific Condition
 
 Some cases you need to change the color of row. For example is change the rows color that has status 'active' to be green color.
 
