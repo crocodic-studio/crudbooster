@@ -45,6 +45,8 @@ class CrudboosterInstallationCommand extends Command {
 		$this->callSilent('vendor:publish',['--tag'=>'cb_lfm','--force'=>'default']);	
 		$this->callSilent('vendor:publish',['--tag'=>'cb_localization','--force'=>'default']);	
 
+		$this->call('optimize');
+
 		$this->info('Setting The Database Configuration : ');
 		$default     = 'mysql';
 		$db_driver   = $this->choice('DB DRIVER (DEFAULT MYSQL) ? enter to skip', ['mysql', 'pgsql','sqlsrv'], $default);
