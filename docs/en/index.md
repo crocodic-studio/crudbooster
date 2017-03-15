@@ -7,7 +7,7 @@
   - [How To Join Table In Grid Data](./how-to-join-in-grid-data.md)
   - [How To Put Number Format In Grid Data Column](./how-to-put-number-format.md)
   - [How To Make A Subquery Column in Grid Data](./how-to-make-subquery.md)
-  - How To Add More Action Button In Grid Data
+  - [How To Add More Action Button In Grid Data](./how-add-more-action-button.md)
   - How To Add More Bulk Action In Grid Data
   - How To Add More Button At Top Of Grid Data
   - How To Create A Message Info At Top Of Grid Data (Bootstrap Alert)
