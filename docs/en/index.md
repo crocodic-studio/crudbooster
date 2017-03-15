@@ -10,7 +10,7 @@
   - [How To Add More Action Button In Grid Data](./how-add-more-action-button.md)
   - [How To Add More Bulk Action In Grid Data](./how-add-bulk-button.md)
   - [How To Add More Button At Top Of Grid Data](./how-add-button-top-grid-data.md)
-  - How To Create A Message Info At Top Of Grid Data (Bootstrap Alert)
+  - [How To Create A Message Info At Top Of Grid Data (Bootstrap Alert)](./how-create-message-top-grid-data.md)
   - How To Make A Custom Background Of Row With Specific Condition
   - How To Make A Simple Statistic At Top Of Grid Data
   - How To Add An Action Button And Put A Custom Function  
