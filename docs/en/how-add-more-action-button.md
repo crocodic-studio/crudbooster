@@ -23,6 +23,8 @@ Then, lets create a method to update the data status. Create a method after cbIn
 ```php
 public function getSetStatus($status,$id) {
    DB::table('products')->where('id',$id)->update(['status'=>$status]);
+   
+   //This will redirect back and gives a message
    CRUDBooster::redirect($_SERVER['HTTP_REFERER'],"The status product has been updated !","info");
 }
 ```
