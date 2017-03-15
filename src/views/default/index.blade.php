@@ -20,6 +20,10 @@
       </div>
     @endif
 
+   @if(!is_null($pre_index_html) && !empty($pre_index_html))
+       {!! $pre_index_html !!}
+   @endif
+
 
     @if(g('return_url'))
     <p><a href='{{g("return_url")}}'><i class='fa fa-chevron-circle-{{ trans('crudbooster.left') }}'></i> &nbsp; {{trans('crudbooster.form_back_to_list',['module'=>ucwords(str_replace('_',' ',g('parent_table')))])}}</a></p>
@@ -113,6 +117,9 @@
         @include("crudbooster::default.table")
       </div>
     </div>
-    
+
+   @if(!is_null($post_index_html) && !empty($post_index_html))
+       {!! $post_index_html !!}
+   @endif
 
 @endsection

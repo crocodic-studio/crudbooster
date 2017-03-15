@@ -1333,7 +1333,30 @@ class CRUDBooster  {
 	        $this->script_js = NULL;
 
 
-
+            /*
+	        | ---------------------------------------------------------------------- 
+	        | Include HTML Code before index table 
+	        | ---------------------------------------------------------------------- 
+	        | html code to display it before index table
+	        | $this->pre_index_html = "<p>test</p>";
+	        |
+	        */
+	        $this->pre_index_html = null;
+	        
+	        
+	        
+	        /*
+	        | ---------------------------------------------------------------------- 
+	        | Include HTML Code after index table 
+	        | ---------------------------------------------------------------------- 
+	        | html code to display it after index table
+	        | $this->post_index_html = "<p>test</p>";
+	        |
+	        */
+	        $this->post_index_html = null;
+	        
+	        
+	        
 	        /*
 	        | ---------------------------------------------------------------------- 
 	        | Include Javascript File 
