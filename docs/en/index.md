@@ -1,7 +1,7 @@
 # CRUDBooster Documentation 
 ## Table Of Contents
 - [How To Install/Update](./installation.md)
-- [How To Create Module (CRUD)](./how-to-create-module.md)
+- [How To Create A Module (CRUD)](./how-to-create-module.md)
 - **Grid Data Column Section**
   - [How To Add Column In Grid Data](./how-to-add-column.md)
   - [How To Join Table In Grid Data](./how-to-join-in-grid-data.md)
@@ -50,6 +50,6 @@
 - [How To Put Your Own CSS Stylesheet](./how-to-put-own-css.md)
 - [How To Change The Application Name](./how-to-change-app-name.md)
 - How To Make A Custom View Of Index Method
-- How TO Make A Custom View Of Add Method
+- How To Make A Custom View Of Add Method
 - How To Make A Custom View Of Edit Method
 - How To Make A Custom View Of Detail Method
