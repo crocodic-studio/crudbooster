@@ -1,6 +1,6 @@
 ## How To Add More Bulk Action In Grid Data
 
-Somecase you need to add a bulk button to gives a possibility set status to selected rows
+Some cases you need to add a bulk button to gives a possibility set status to selected rows
 
 ### Products Table - products
 | Field Name | Description |
