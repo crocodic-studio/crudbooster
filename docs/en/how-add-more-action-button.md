@@ -19,7 +19,7 @@ It will add **Set Active** button if a row has status 'pending', and the opposit
 
 In the `showIf` attribute, you can fill anything condition with any other operator. You can use `[field_name]` as an alias.
 
-Then, lets create a method to update the data status. Create a method after cbInit() method.
+Then, lets create a method to update the `products` status. Create a method after `cbInit()` method.
 ```php
 public function getSetStatus($status,$id) {
    DB::table('products')->where('id',$id)->update(['status'=>$status]);
