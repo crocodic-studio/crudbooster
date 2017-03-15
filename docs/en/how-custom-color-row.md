@@ -1,6 +1,6 @@
 # How To Make A Custom Color Of Row With Specific Condition
 
-Some cases you need to change the color of row. For example is change the color row that has status 'active' to be green color.
+Some cases you need to change the color of row. For example is change the rows color that has status 'active' to be green color.
 
 Open the module controller, find `$this->table_row_color` in `cbInit()` method.
 
