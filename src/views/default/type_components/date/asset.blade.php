@@ -4,7 +4,7 @@
 <script type="text/javascript">
     var lang = '{{App::getLocale()}}';
     $(function() {
-        $('.datepicker{{$name}}').datepicker({
+        $('.datepicker').datepicker({
             format: 'yyyy-mm-dd',
             @if (App::getLocale() == 'ar')
             rtl: true,
@@ -12,11 +12,8 @@
             language: lang
         });
     });
-    /*$('.form-datepicker i').click(function() {
-     console.log('i datepicker');
 
-     })*/
-    function showDatepicker{{$name}}() {
-        $('.datepicker{{$name}}').datepicker('show');
+    function showDatepicker() {
+        $('.datepicker').datepicker('show');
     }
 </script>
