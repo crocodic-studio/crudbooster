@@ -49,6 +49,6 @@
 - [How To Put Your Own CSS Stylesheet](./how-to-put-own-css.md)
 - [How To Change The Application Name](./how-to-change-app-name.md)
 - [How To Make A Custom View Of Index Method](./how-to-custom-index.md)
-- How To Make A Custom View Of Add Method
-- How To Make A Custom View Of Edit Method
-- How To Make A Custom View Of Detail Method
+- [How To Make A Custom View Of Add Method](./how-custom-view-add.md)
+- [How To Make A Custom View Of Edit Method](./how-to-custom-edit-view.md)
+- [How To Make A Custom View Of Detail Method](./how-to-custom-detail-view.md)
