@@ -193,6 +193,8 @@ return [
     'filter_lorem_ipsum'=>'Lorem ipsum',
     'filter_lorem_ipsum_dolor_sit'=>' Lorem,Ipsum,Dolor Sit',
     'filter_search'=>'Buscar',
+    'filter_from'                  => 'de',
+    'filter_to'                    => 'para',
 
     // confirmation
     'confirmation_yes'=>'Sim!',
