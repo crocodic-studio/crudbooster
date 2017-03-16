@@ -123,6 +123,33 @@ return [
     'online'               => 'Online',
     'controller_route_404' => 'Controle / Rota não encontra]',
     'home'                 => 'Inicio',
+ 
+    'Privileges_Roles'    => 'Privilégios', 
+    'Add_New_Privilege'   => 'Adicionar novo Privilégio', 
+    'List_Privilege'      => 'Listar Privilégios', 
+    'add_user'            => 'Adicionar Usuário', 
+    'List_users'          => 'Listar Uusário', 
+    'Menu_Management'     => 'Gestão de menus', 
+    'Add_New_Setting'     => 'Adicionar Nova Configuração', 
+    'Add_New_Module'      => 'Adicionar Novo Modulo', 
+    'List_Module'         => 'Listar Módulos', 
+    'Add_New_Statistic'   => 'Adicionar nova estatistica', 
+    'List_Statistic'      => 'Listas estatisticas', 
+    'Add_New_API'         => 'Adicionar nova API', 
+    'API_Generator'       => 'Gerador de API', 
+    'Statistic_Builder'   => 'Construtor de Estatisticas', 
+    'Module_Generator'    => 'Módulo Gerador', 
+    'settings'            => 'Configurações', 
+    'Users_Management'    => 'Gestão de usuários', 
+    'list_API'            => 'Listar API (Documentação)', 
+    'Generate_Screet_Key' => 'Gerar nova chave secreta', 
+    'Add_New_Email'       => 'Adicionar novo e-mail', 
+    'List_Email_Template' => 'Listar modelos de e-mail', 
+    'Email_Templates'     => 'Modelos de e-mail', 
+    'Log_User_Access'     => 'Histórico de acesso', 
+    'SUPERADMIN'          => 'SUPER-ADMNISTRADOR', 
+
+    'click_here'                => 'Clique aqui',    
 
     /*
      * esse trecho serve para indicar sobre a orientação no html, assim como:
