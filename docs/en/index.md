@@ -1,24 +1,24 @@
 # CRUDBooster Documentation 
 ## Table Of Contents
 - [How To Install/Update](./installation.md)
-- [How To Create Module (CRUD)](./how-to-create-module.md)
+- [How To Create A Module (CRUD)](./how-to-create-module.md)
 - **Grid Data Column Section**
   - [How To Add Column In Grid Data](./how-to-add-column.md)
   - [How To Join Table In Grid Data](./how-to-join-in-grid-data.md)
   - [How To Put Number Format In Grid Data Column](./how-to-put-number-format.md)
   - [How To Make A Subquery Column in Grid Data](./how-to-make-subquery.md)
-  - How To Add More Action Button In Grid Data
-  - How To Add More Bulk Action In Grid Data
-  - How To Add More Button At Top Of Grid Data
-  - How To Create A Message Info At Top Of Grid Data (Bootstrap Alert)
-  - How To Make A Custom Background Of Row With Specific Condition
-  - How To Make A Simple Statistic At Top Of Grid Data
-  - How To Add An Action Button And Put A Custom Function  
+  - [How To Add More Action Button In Grid Data](./how-add-more-action-button.md)
+  - [How To Add More Bulk Action In Grid Data](./how-add-bulk-button.md)
+  - [How To Add More Button At Top Of Grid Data](./how-add-button-top-grid-data.md)
+  - [How To Create A Message Info At Top Of Grid Data (Bootstrap Alert)](./how-create-message-top-grid-data.md)
+  - [How To Change Color Of Row With Specific Condition](./how-custom-color-row.md)
+  - [How To Make A Simple Statistic At Top Of Grid Data](./how-make-simple-statistic.md)
 - **Form Section**
   - [How To Make A Child Form (Master - Detail)](./how-to-make-a-child-form.md)
   - [How To Make A Custom Form Input Type](./form-custom.md)
   - [How To Integrate Google Maps When Input Address](./form-googlemaps.md)
   - [How To Upload A File With File Manager](./form-filemanager.md)
+  - [How To Make The Graded Select Boxes (Parent Select -> Child Select -> Etc..)](./how-make-graded-select-box.md)
   - **Form Input Type**
     - [checkbox](./form-checkbox.md)
     - [child](./how-to-make-a-child-form.md)
@@ -46,10 +46,10 @@
 - [How To Implement An One To Many Relationship To Form (E.g : Product <- Category)](./how-to-one-to-many.md)
 - [How To Put A Custom Condition At Grid Data Query](./how-to-put-custom-condition-grid-data.md)
 - [How To Inject A Post Data In Create/Update/Delete Data Process](./how-to-inject-postdata.md)
-- How To Put Your Own Javascript
-- How To Put Your Own CSS Stylesheet
-- How To Change The Application Name
-- How To Make A Custom View Of Index Method
-- How TO Make A Custom View Of Add Method
-- How To Make A Custom View Of Edit Method
-- How To Make A Custom View Of Detail Method
+- [How To Put Your Own Javascript](./how-to-put-your-own-javascript.md)
+- [How To Put Your Own CSS Stylesheet](./how-to-put-own-css.md)
+- [How To Change The Application Name](./how-to-change-app-name.md)
+- [How To Make A Custom View Of Index Method](./how-to-custom-index.md)
+- [How To Make A Custom View Of Add Method](./how-custom-view-add.md)
+- [How To Make A Custom View Of Edit Method](./how-to-custom-edit-view.md)
+- [How To Make A Custom View Of Detail Method](./how-to-custom-detail-view.md)

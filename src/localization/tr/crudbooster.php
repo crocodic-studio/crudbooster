@@ -1,6 +1,6 @@
 <?php
 return [
-    'email_footer'               =>'Bu e-posta adresine herhangi bir e-posta cevap vermeyin. Bu e-posta sistemimiz tarafından otomatik olarak gönderilir. ',
+    'email_footer'               => 'Bu e-posta adresine herhangi bir e-posta cevap vermeyin. Bu e-posta sistemimiz tarafından otomatik olarak gönderilir. ',
     'login_message'              => 'senin oturumu başlatmak için giriş yapın',
     'text_forgot_password'       => 'Şifreni mi unuttun?',
     'page_title_login'           => 'Giriş Paneli',
@@ -107,7 +107,7 @@ return [
     'button_sign_in'         => 'Giriş',
     'button_selected_action' => 'Toplu İşlem',
     'button_download_file'   => 'Dosyayı indir',
-    'button_reset'=>'Sıfırla',
+    'button_reset'           => 'Sıfırla',
 
     'export_dialog_title'            => "Dışa Aktar",
     'export_dialog_filename'         => 'Dosya Adı',
@@ -165,7 +165,7 @@ return [
     'Log_User_Access'     => 'Kullanıcı Günlük Erişimi',
     'SUPERADMIN'          => 'SUPERADMIN',
 
-    'click_here'                => 'Buraya Tıklayınız',    
+    'click_here' => 'Buraya Tıklayınız',
 
     /*
      * this is for html direction to use in html and css classes like :
@@ -173,49 +173,51 @@ return [
      * to make it easy to use the the view for rtl langs .
      * unless your language use right-to-left direction , you should keep it as it is :
      */
-    'right' => 'right',
-    'left'  => 'left',
+    'right'      => 'right',
+    'left'       => 'left',
 
     'all_rights_reserved' => 'Tüm Hakları Saklıdır',
     'copyright'           => 'Copyright',
     'powered_by'          => 'Powered by',
 
-    'notification_you_have'      => '',
+    'notification_you_have'     => '',
     'notification_notification' => 'bildirimin var',
-    'notification_new'           => 'Yeni bildirimin var!',
+    'notification_new'          => 'Yeni bildirimin var!',
 
-    'login_register_style' => 'Kayıt Sayfası Stili',
-    'email_setting'        => 'Email Ayarları',
-    'application_setting'  => 'Uygulama Ayarları',
+    'login_register_style'         => 'Kayıt Sayfası Stili',
+    'email_setting'                => 'Email Ayarları',
+    'application_setting'          => 'Uygulama Ayarları',
 
     // table filter & sort 
-    'filter_select_operator_type' => 'Karşılaştırma Türü Seçiniz',
-    'filter_ascending' => 'ARTAN',
-    'filter_descending' => 'AZALAN',
-    'filter_equal_to'=> '=(Eşittir)',
-    'filter_like'=> 'Benzer',
-    'filter_not_like'=>'Benzer Değil',
-    'filter_greater_than_or_equal'=>'>>= (Büyük veya Eşittir)',
-    'filter_less_than_or_equal'=>'<= (Küçük veya Eşittir)',
-    'filter_less_than'=>'< (Küçüktür)',
-    'filter_greater_than'=>'> (Büyüktür)',
-    'filter_not_equal_to'=>'!= (Eşit Değil)',
-    'filter_in'=>'İçeriyorsa',
-    'filter_not_in'=>'İçermiyorsa',
-    'filter_between'=>'Arasında',
-    'filter_sort_ascending'=>'Artan Sıralama',
-    'filter_sort_descending'=>'Azalan Sıralama',    
-    'filter_eg'=>'örnek ',
-    'filter_lorem_ipsum'=>'Lorem ipsum',
-    'filter_lorem_ipsum_dolor_sit'=>'Lorem,Ipsum,Dolor Sit',
-    'filter_search'=>'Ara',
+    'filter_select_operator_type'  => 'Karşılaştırma Türü Seçiniz',
+    'filter_ascending'             => 'ARTAN',
+    'filter_descending'            => 'AZALAN',
+    'filter_equal_to'              => '=(Eşittir)',
+    'filter_like'                  => 'Benzer',
+    'filter_not_like'              => 'Benzer Değil',
+    'filter_greater_than_or_equal' => '>>= (Büyük veya Eşittir)',
+    'filter_less_than_or_equal'    => '<= (Küçük veya Eşittir)',
+    'filter_less_than'             => '< (Küçüktür)',
+    'filter_greater_than'          => '> (Büyüktür)',
+    'filter_not_equal_to'          => '!= (Eşit Değil)',
+    'filter_in'                    => 'İçeriyorsa',
+    'filter_not_in'                => 'İçermiyorsa',
+    'filter_between'               => 'Arasında',
+    'filter_sort_ascending'        => 'Artan Sıralama',
+    'filter_sort_descending'       => 'Azalan Sıralama',
+    'filter_eg'                    => 'örnek ',
+    'filter_lorem_ipsum'           => 'Lorem ipsum',
+    'filter_lorem_ipsum_dolor_sit' => 'Lorem,Ipsum,Dolor Sit',
+    'filter_search'                => 'Ara',
+    'filter_from'                  => 'from',
+    'filter_to'                    => 'Için',
 
     // confirmation
-    'confirmation_yes'=>'Evet',
-    'confirmation_no'=>'Hayır',
+    'confirmation_yes'             => 'Evet',
+    'confirmation_no'              => 'Hayır',
 
     //filemanager
-    'chose_an_image' =>'Resim Seçiniz',
-    'chose_an_file' =>'Dosya Seçiniz'
+    'chose_an_image'               => 'Resim Seçiniz',
+    'chose_an_file'                => 'Dosya Seçiniz',
 
 ];

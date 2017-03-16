@@ -35,3 +35,6 @@ public function hook_before_delete($id) {
 }
 ```
 This method will be called once delete button is clicked.
+
+## What's Next
+- [Back To Index](./index.md)

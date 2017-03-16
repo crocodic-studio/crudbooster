@@ -57,6 +57,8 @@ class CBController extends Controller {
 
 	public $index_statistic       = array();
 	public $index_additional_view = array();
+	public $pre_index_html        = null;
+	public $post_index_html       = null;
 	public $load_js               = array();
 	public $load_css              = array();
 	public $script_js             = NULL;
@@ -104,6 +106,8 @@ class CBController extends Controller {
 		$this->data['index_statistic']       = $this->index_statistic;
 		$this->data['index_additional_view'] = $this->index_additional_view;
 		$this->data['table_row_color']       = $this->table_row_color;
+		$this->data['pre_index_html']        = $this->pre_index_html;
+		$this->data['post_index_html']       = $this->post_index_html;
 		$this->data['load_js']               = $this->load_js;
 		$this->data['load_css']              = $this->load_css;
 		$this->data['script_js']             = $this->script_js;
