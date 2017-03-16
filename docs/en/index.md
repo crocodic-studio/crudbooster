@@ -18,7 +18,7 @@
   - [How To Make A Custom Form Input Type](./form-custom.md)
   - [How To Integrate Google Maps When Input Address](./form-googlemaps.md)
   - [How To Upload A File With File Manager](./form-filemanager.md)
-  - [How To Make The Graded Select Boxes (Parent Select -> Child Select -> Etc..](./how-make-graded-select-box.md)
+  - [How To Make The Graded Select Boxes (Parent Select -> Child Select -> Etc..)](./how-make-graded-select-box.md)
   - **Form Input Type**
     - [checkbox](./form-checkbox.md)
     - [child](./how-to-make-a-child-form.md)
