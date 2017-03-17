@@ -740,8 +740,7 @@ class CRUDBooster  {
 		        }
 	        }else{
 	        	try{	        		
-		        	$tables = DB::select("SELECT CONCAT(TABLE_SCHEMA,'.',TABLE_NAME) 
-		        		FROM INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = '".$db_database."'");		        	
+		        	$tables = DB::select("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = '".$db_database."'");		        	
 	        	}catch(\Exception $e) {
 	        		$tables = [];
 	        	}
