@@ -3,7 +3,7 @@
 | Field Name | Data Type |
 | ---------- | --------- |
 | id | int(PK) |
-| crated_at | timestamp | 
+| created_at | timestamp | 
 | name | varchar(255) |
 | price | double |
 
@@ -11,14 +11,14 @@
 | Field Name | Data Type |
 | ---------- | --------- |
 | id | int(PK) |
-| crated_at | timestamp | 
+| created_at | timestamp | 
 | name | varchar(255) |
 
 ## Table Master : orders
 | Field Name | Data Type |
 | ---------- | --------- |
 | id | int(PK) |
-| crated_at | timestamp | 
+| created_at | timestamp | 
 | customers_id | int(11) |
 | order_number | varchar(25) |
 
