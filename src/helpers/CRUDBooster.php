@@ -594,7 +594,7 @@ class CRUDBooster  {
 			$f = explode('.', $field);
 
 			if(count($f) == 1) {
-				return array("table"=>$f[0], "database"=>env('DB_DATABASE'));
+				return array("table"=>$f[0], "database"=>config('crudbooster.MAIN_DB_DATABASE'));
 			} elseif(count($f) == 2) {
 				return array("database"=>$f[0], "table"=>$f[1]);
 			}elseif (count($f) == 3) {
@@ -728,11 +728,11 @@ class CRUDBooster  {
 	        $tables = array();
 	        $multiple_db = config('crudbooster.MULTIPLE_DATABASE_MODULE');
 	        $multiple_db = ($multiple_db)?$multiple_db:array();
-	        $db_database = env('DB_DATABASE');
+	        $db_database = config('crudbooster.MAIN_DB_DATABASE');
 
 	        if($multiple_db) {
 	        	try {	            
-	        		$multiple_db[] = env('DB_DATABASE');
+	        		$multiple_db[] = config('crudbooster.MAIN_DB_DATABASE');
 	        		$query_table_schema = implode("','",$multiple_db);
 			    	$tables = DB::select("SELECT CONCAT(TABLE_SCHEMA,'.',TABLE_NAME) FROM INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA != 'mysql' AND TABLE_SCHEMA != 'performance_schema' AND TABLE_SCHEMA != 'information_schema' AND TABLE_SCHEMA != 'phpmyadmin' AND TABLE_SCHEMA IN ('$query_table_schema')");				    				
 		        }catch(\Exception $e) {
@@ -740,8 +740,7 @@ class CRUDBooster  {
 		        }
 	        }else{
 	        	try{	        		
-		        	$tables = DB::select("SELECT CONCAT(TABLE_SCHEMA,'.',TABLE_NAME) 
-		        		FROM INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = '".$db_database."'");		        	
+		        	$tables = DB::select("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = '".$db_database."'");		        	
 	        	}catch(\Exception $e) {
 	        		$tables = [];
 	        	}
@@ -985,12 +984,12 @@ class CRUDBooster  {
 		public static function generateController($table,$name=NULL) {  
 	        
 	        $exception          = ['id','created_at','updated_at','deleted_at'];
-	        $image_candidate    = explode(',',env('IMAGE_FIELDS_CANDIDATE','image,picture,photo,photos,foto,gambar,thumbnail'));
-	        $password_candidate = explode(',',env('PASSWORD_FIELDS_CANDIDATE','password,pass,pwd,passwrd,sandi,pin'));
-	        $phone_candidate    = explode(',',env('PHONE_FIELDS_CANDIDATE','phone,telp,hp,notelp,no_telp,no_phone,phone_number'));
-	        $email_candidate    = explode(',',env('EMAIL_FIELDS_CANDIDATE','email,mail,email_address,mail_address'));
-	        $name_candidate     = explode(',',env('NAME_FIELDS_CANDIDATE','name,nama,person_name,person,fullname,full_name,nickname,nick,nick_name'));
-	        $url_candidate      = explode(',',env("URL_FIELDS_CANDIDATE",'url,link'));
+	        $image_candidate    = explode(',',config('crudbooster.IMAGE_FIELDS_CANDIDATE'));
+	        $password_candidate = explode(',',config('crudbooster.PASSWORD_FIELDS_CANDIDATE'));
+	        $phone_candidate    = explode(',',config('crudbooster.PHONE_FIELDS_CANDIDATE'));
+	        $email_candidate    = explode(',',config('crudbooster.EMAIL_FIELDS_CANDIDATE'));
+	        $name_candidate     = explode(',',config('crudbooster.NAME_FIELDS_CANDIDATE'));
+	        $url_candidate      = explode(',',config("crudbooster.URL_FIELDS_CANDIDATE"));
 
 
 	        $controllername = ucwords(str_replace('_',' ',$table));        
@@ -1240,6 +1239,7 @@ class CRUDBooster  {
 	        | ----------------------------------------------------------------------     
 			| @label          = Label of action 
 			| @path           = Path of sub module
+			| @foreign_key 	  = foreign key of sub table/module
 			| @button_color   = Bootstrap Class (primary,success,warning,danger)
 			| @button_icon    = Font Awesome Class  
 			| @parent_columns = Sparate with comma, e.g : name,created_at

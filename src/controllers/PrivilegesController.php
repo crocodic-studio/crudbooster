@@ -174,6 +174,8 @@ class PrivilegesController extends CBController {
 
 
 		if($priv) {
+
+			DB::table('cms_menus')->where('id_cms_privileges',$id)->delete();
 						
 			foreach($priv as $id_modul => $data) {
 				$arrs = array();
