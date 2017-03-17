@@ -1239,6 +1239,7 @@ class CRUDBooster  {
 	        | ----------------------------------------------------------------------     
 			| @label          = Label of action 
 			| @path           = Path of sub module
+			| @foreign_key 	  = foreign key of sub table/module
 			| @button_color   = Bootstrap Class (primary,success,warning,danger)
 			| @button_icon    = Font Awesome Class  
 			| @parent_columns = Sparate with comma, e.g : name,created_at
