@@ -415,6 +415,13 @@ class CRUDBooster  {
 		    }
 		}
 
+		public static function getSortingFilter($field) {
+		    $filter = Request::get('filter_column');
+		    if($filter[$field]) {
+		        return $filter[$field]['sorting'];
+		    }
+		}
+
 		public static function getTypeFilter($field) {
 		    $filter = Request::get('filter_column');
 		    if($filter[$field]) {
