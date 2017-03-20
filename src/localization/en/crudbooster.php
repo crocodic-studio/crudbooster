@@ -195,7 +195,7 @@ return [
     'filter_equal_to'              => '=(Equal to)',
     'filter_like'                  => 'LIKE',
     'filter_not_like'              => 'NOT LIKE',
-    'filter_greater_than_or_equal' => '>>= (Greater Than or Equal)',
+    'filter_greater_than_or_equal' => '>= (Greater Than or Equal)',
     'filter_less_than_or_equal'    => '<= (Less Than or Equal)',
     'filter_less_than'             => '< (Less Than)',
     'filter_greater_than'          => '> (Greater Than)',

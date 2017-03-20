@@ -318,7 +318,7 @@ class CBController extends Controller {
 
 					if($value=='' || $type=='') continue;
 
-					if($type == 'asc' || $type == 'desc' || $type == 'between') continue;
+					if($type == 'between') continue;
 
 					switch($type) {
 						default:
@@ -345,11 +345,16 @@ class CBController extends Controller {
 			foreach($filter_column as $key=>$fc) {
 				$value = @$fc['value'];
 				$type  = @$fc['type'];
+				$sorting = @$fc['sorting'];
 
-				if($type == 'asc' || $type == 'desc') {
-					if($key && $type) $result->orderby($key,$type);
-					$filter_is_orderby = true;
-				}elseif ($type=='between') {
+				if($sorting!='') {
+					if($key) {
+						$result->orderby($key,$sorting);
+						$filter_is_orderby = true;
+					}
+				}
+
+				if ($type=='between') {
 					if($key && $value) $result->whereBetween($key,$value);
 				}else{
 					continue;
@@ -943,7 +948,8 @@ class CBController extends Controller {
 
 		$this->hook_before_add($this->arr);
 
-		$this->arr[$this->primary_key] = $id = CRUDBooster::newId($this->table);			
+		$this->arr[$this->primary_key] = $id = CRUDBooster::newId($this->table);
+		$this->arr=array_filter($this->arr); // null array fix 
 		DB::table($this->table)->insert($this->arr);
 
 		$this->hook_after_add($this->arr[$this->primary_key]);
@@ -1077,7 +1083,7 @@ class CBController extends Controller {
 		}
 
 		$this->hook_before_edit($this->arr,$id);
-
+		$this->arr=array_filter($this->arr); // null array fix 
 		DB::table($this->table)->where($this->primary_key,$id)->update($this->arr);
 
 		$this->hook_after_edit($id);

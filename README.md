@@ -24,6 +24,9 @@ CRUDBooster is a Laravel CRUD Generator. With a new concept of scaffolding, very
 - Responsive Template By AdminLTE
 - Many more...
 
+## Flow Diagram Of CRUDBooster
+![image](https://cloud.githubusercontent.com/assets/6733315/24070665/78aba9ee-0bf4-11e7-82dd-96dde90e8c67.png)
+
 ## DOCUMENTATION
 [Documentation in English](./docs/en/index.md)
 
