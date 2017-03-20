@@ -1083,7 +1083,7 @@ class CBController extends Controller {
 		}
 
 		$this->hook_before_edit($this->arr,$id);
-		$this->arr=array_filter($this->arr); // null array fix 
+		//$this->arr=array_filter($this->arr); // null array fix 
 		DB::table($this->table)->where($this->primary_key,$id)->update($this->arr);
 
 		$this->hook_after_edit($id);
