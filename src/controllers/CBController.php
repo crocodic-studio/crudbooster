@@ -151,10 +151,14 @@ class CBController extends Controller {
 
 		if(Request::get('parent_table')) {
 			$data['parent_table'] = DB::table(Request::get('parent_table'))->where('id',Request::get('parent_id'))->first();
-			if(CRUDBooster::isColumnExists($this->table,'id_'.g('parent_table'))) {
-				$data['parent_field'] = $parent_field = 'id_'.g('parent_table');
-			}else {
-				$data['parent_field'] = $parent_field = g('parent_table').'_id';
+			if(Request::get('foreign_key')) {
+				$data['parent_field'] = Request::get('foreign_key');
+			}else{
+				if(CRUDBooster::isColumnExists($this->table,'id_'.g('parent_table'))) {
+					$data['parent_field'] = $parent_field = 'id_'.g('parent_table');
+				}else {
+					$data['parent_field'] = $parent_field = g('parent_table').'_id';
+				}	
 			}
 
 			if($parent_field) {
