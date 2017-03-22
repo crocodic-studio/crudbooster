@@ -30,20 +30,22 @@
     		$('#iframe-modal-{{$name}}').attr('src',url_{{$name}});
 		}
 		$('#modal-datamodal-{{$name}}').modal('show');
-	}
+	} 
 	function hideModal{{$name}}() {
 		$('#modal-datamodal-{{$name}}').modal('hide');
 	}
-	function selectData{{$name}}(id,label) {
-		$('#{{$name}} .input-label').val(label);
-		$('#{{$name}} .input-id').val(id);
-		hideModal{{$name}}();
-	}
 	function selectAdditionalData{{$name}}(select_to_json) {
 		$.each(select_to_json,function(key,val) {
-			console.log('#'+key+ ' = '+v);
-			$('#'+key).val(v).trigger('change');			
+			console.log('#'+key+ ' = '+val);
+			if(key == 'datamodal_id') {
+				$('#{{$name}} .input-id').val(val);
+			}
+			if(key == 'datamodal_label') {
+				$('#{{$name}} .input-label').val(val);
+			}
+			$('#'+key).val(val).trigger('change');			
 		})
+		hideModal{{$name}}();
 	}
 </script>
 

@@ -69,18 +69,21 @@
 								    		$('#modal-datamodal-{{$name_column}}').modal('show');
 								    	}
 								    	function hideModal{{$name_column}}() {
-								    		$('#modal-datamodal-{{$name_column}}').modal('hide');
-								    	}
-								    	function selectData{{$name_column}}(id,label) {
-								    		$('#{{$name_column}} .input-label').val(label);
-								    		$('#{{$name_column}} .input-id').val(id);
-								    		hideModal{{$name_column}}();
-								    	}
+											$('#modal-datamodal-{{$name_column}}').modal('hide');
+										}
+				
 								    	function selectAdditionalData{{$name_column}}(select_to_json) {
-											$.each(select_to_json,function(key,v) {
-												console.log('#{{$name}}'+key+ ' = '+v);
-												$('#{{$name}}'+key).val(v).trigger('change');
+											$.each(select_to_json,function(key,val) {
+												console.log('#'+key+ ' = '+val);
+												if(key == 'datamodal_id') {
+													$('#{{$name_column}} .input-id').val(val);
+												}
+												if(key == 'datamodal_label') {
+													$('#{{$name_column}} .input-label').val(val);
+												}
+												$('#{{$name}}'+key).val(val).trigger('change');			
 											})
+											hideModal{{$name_column}}();
 										}
 								    </script>
 
