@@ -219,5 +219,13 @@ return [
     //filemanager
     'chose_an_image'               => 'Choose an image ',
     'chose_an_file'                => 'Choose an file ',
+    
+    //action confirmation
+    'confirmation_title'            => 'Confirmation',
+    'confirmation_text'             => 'Are you sure want to do this action?',
+    'confirmButtonText'             => 'Yes',
+
+    
+
 
 ];
