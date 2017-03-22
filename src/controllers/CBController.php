@@ -414,7 +414,8 @@ class CBController extends Controller {
 					'label'=>$s['label'],
 					'icon'=>$s['button_icon'],
 					'url'=>CRUDBooster::adminPath($s['path']).'?parent_table='.$table_parent.'&parent_columns='.$s['parent_columns'].'&parent_id=[id]&return_url='.urlencode(Request::fullUrl()).'&foreign_key='.$s['foreign_key'].'&label='.urlencode($s['label']),
-					'color'=>$s['button_color']
+					'color'=>$s['button_color'],
+                                        'showIf'=>$s['showIf']
 				];
 			}
 		}

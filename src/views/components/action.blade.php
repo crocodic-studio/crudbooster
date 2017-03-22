@@ -3,11 +3,29 @@
     foreach($row as $key=>$val) {
       $a['url'] = str_replace("[".$key."]",$val,$a['url']);
     }
+    
+    $confirm_box = '';
+    if(isset($a['usepopupbox']) && !empty($a['usepopupbox']) && $a['usepopupbox'])
+    {
+        $confirm_box = '
+        swal({   
+            title: "'.$a['popup_title'].'",
+            text: "'.$a['popup_text'].'",
+            type: "'.$a['popup_type'].'",
+            showCancelButton: '.$a['popup_showCancelButton'].',
+            confirmButtonColor: "'.$a['popup_confirmButtonColor'].'",
+            confirmButtonText: "'.$a['popup_confirmButtonText'].'",
+            closeOnConfirm: '.$a['popup_closeOnConfirm'].', }, 
+            function(){  location.href="'.$a['url'].'"});        
+
+        ';
+    }
 
     $label = $a['label'];
     $url = $a['url'];
     $icon = $a['icon'];
     $color = $a['color']?:'primary';
+    $usepopupbox = $a['usepopupbox'];
 
     if(isset($a['showIf'])) {
 
@@ -15,14 +33,19 @@
       
       foreach($row as $key=>$val) {
         $query = str_replace("[".$key."]",'"'.$val.'"',$query);
-      }              
+      }
+      
+      if(isset($usepopupbox) && !empty($usepopupbox))
+      {
+          $url = "javascript:;";
+      }
 
       @eval("if($query) {
-          echo \"<a class='btn btn-xs btn-\$color' title='\$label' href='\$url'><i class='\$icon'></i> $label</a>&nbsp;\";
+          echo \"<a class='btn btn-xs btn-\$color' title='\$label' onclick='\$confirm_box' href='\$url'><i class='\$icon'></i> $label</a>&nbsp;\";
       }");           
 
     }else{
-      echo "<a class='btn btn-xs btn-$color' title='$label' href='$url'><i class='$icon'></i> $label</a>&nbsp;";              
+      echo "<a class='btn btn-xs btn-$color' title='$label' onclick='$confirm_box' href='$url'><i class='$icon'></i> $label</a>&nbsp;";              
     }
   ?>          
 @endforeach
