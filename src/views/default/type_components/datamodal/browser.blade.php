@@ -26,10 +26,13 @@
 				echo "<td><a href='".asset($row->$col)."' class='fancybox'><img src='".asset($row->$col)."' width='50px' height='30px'/></a></td>";
 			}else{
 				echo "<td>".str_limit(strip_tags($row->$col),50)."</td>";
-			}
+			}						
+		?>		
+		@endforeach
+		<?php 
 			$select_data_result = [];
 			$select_data_result['datamodal_id'] = $row->id;
-			$select_data_result['datamodal_label'] = $row->$columns[1];
+			$select_data_result['datamodal_label'] = $row->{$columns[1]}?:$row->id;
 			$select_data = Request::get('select_to');
 			if($select_data) {				
 				$select_data = explode(',',$select_data);
@@ -41,9 +44,8 @@
 						$select_data_result[$target_field_name] = $row->$field_name;
 					}
 				}				
-			}			
-		?>		
-		@endforeach
+			}
+		?>
 		<td><a class='btn btn-primary' href='javascript:void(0)' onclick='parent.selectAdditionalData{{$name}}({!! json_encode($select_data_result) !!})'><i class='fa fa-check-circle'></i> Select</a></td>
 	</tr>
 	@endforeach
