@@ -2,10 +2,10 @@
 							<label class='control-label col-sm-2'>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>							
 							<div class="{{$col_width?:'col-sm-10'}}">
 					
-							@if(isset($form['dataenum']))
+							@if($form['dataenum']!='')
 								<?php 
-									$value = explode(";",$value);
-									array_walk($value, 'trim');
+									@$value = explode(";",$value);
+									@array_walk($value, 'trim');
 									$dataenum = $form['dataenum'];
 									$dataenum = (is_array($dataenum))?$dataenum:explode(";",$dataenum);
 								?>
@@ -17,7 +17,7 @@
 										}else{
 											$val = $label = $d;
 										}
-										$checked = (in_array($val, $value))?"checked":"";									
+										$checked = ($value && in_array($val, $value))?"checked":"";									
 									?>
 									<div class="checkbox {{$disabled}}">
 									  <label>
@@ -55,30 +55,60 @@
 
 										$selects_data = $selects_data->orderby($datatable_field,"asc")->get();
 
-										if($form['relationship_table']) {											
-											@$valueserial = unserialize($value);
-											$value = [];
-											if($valueserial) {
-												foreach($valueserial as $a) {
-													$value[] = $a['label'];
-												}
-											}
+										if($form['relationship_table']) {			
+											$foreignKey = CRUDBooster::getForeignKey($table,$form['relationship_table']);	
+											$foreignKey2 = CRUDBooster::getForeignKey($datatable_tab,$form['relationship_table']);																																
+
+											$value = DB::table($form['relationship_table'])->where($form['relationship_table'].'.'.$foreignKey,$id);										
+											$value = $value->pluck($foreignKey2)->toArray();											
 											
+											foreach($selects_data as $d) {																									
+												$checked = (is_array($value) && in_array($d->id, $value))?"checked":"";										
+												echo "
+												<div data-val='$val' class='checkbox $disabled'>
+												  <label>
+												    <input type='checkbox' $disabled $checked name='".$name."[]' value='".$d->id."'> ".$d->{$datatable_field}."								    
+												  </label>
+												</div>";
+											}
 										}else{
-											$value = explode(';',$value);
+											@$value = explode(';',$value);
+
+											foreach($selects_data as $d) {											
+												$val = $d->{$datatable_field};			
+												$checked = (is_array($value) && in_array($val, $value))?"checked":"";						
+												if($val == '' || !$d->id) continue;
+
+												echo "
+												<div data-val='$val' class='checkbox $disabled'>
+												  <label>
+												    <input type='checkbox' $disabled $checked name='".$name."[]' value='".$d->id."'> ".$val." 								    
+												  </label>
+												</div>";
+											}
 										}
 										
-										foreach($selects_data as $d) {											
-											$val = $d->{$datatable_field};			
-											$checked = (in_array($val, $value))?"checked":"";										
-											echo "
-											<div data-val='$val' class='checkbox $disabled'>
-											  <label>
-											    <input type='checkbox' $disabled $checked name='".$name."[]' value='".$d->id."'> ".$d->{$datatable_field}."								    
-											  </label>
-											</div>";
+										
+									endif;
+									if($form['dataquery']){
+									
+												$query = DB::select(DB::raw($form['dataquery']));
+												@$value = explode(';',$value);
+												if($query) {
+													foreach($query as $q) {
+														$val = $q->value;			
+														$checked = (is_array($value) && in_array($val, $value))?"checked":"";						
+														//if($val == '' || !$d->id) continue;
+																	echo "
+												<div data-val='$val' class='checkbox $disabled'>
+												  <label>
+												    <input type='checkbox' $disabled $checked name='".$name."[]' value='$q->value'> ".$q->label." 								    
+												  </label>
+												</div>";
+													}
+												}
 										}
-									endif
+									
 								?>
 							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
 							<p class='help-block'>{{ @$form['help'] }}</p>
