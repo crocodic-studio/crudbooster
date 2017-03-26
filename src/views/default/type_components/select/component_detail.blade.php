@@ -17,4 +17,7 @@
 			}
 		}					
 	}
+	if($form['dataenum']) {
+		echo $value;
+	}
 ?>

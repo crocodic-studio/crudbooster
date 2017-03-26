@@ -8,20 +8,20 @@ use Image;
 use File;
 use Request;
 
-class UploadsController extends Controller {
+class ThumbnailController extends Controller {
 
 	public function getFile($folder, $filename) {
 		$path = storage_path() . DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $filename;
 
 	    if(!Storage::exists($folder.DIRECTORY_SEPARATOR.$filename)) abort(404);
 
-	    $w = Request::get('w');
-	    $h = Request::get('h');
-	    $h = ($h)?:$w;
+	    $w = Request::get('w')?:config('crudbooster.DEFAULT_THUMBNAIL_WIDTH',300);
+	    $h = Request::get('h')?:$w;
+	    
 	    $is_download = Request::get('download');
 
 	    $extension = strtolower(File::extension($path));
-	    $images_ext = array('jpg','jpeg','png','gif','bmp');
+	    $images_ext = config('crudbooster.IMAGE_EXTENSIONS',['jpg','jpeg','png','gif','bmp']);
 
 	    if(in_array($extension, $images_ext)) {	  	    	
 

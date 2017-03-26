@@ -1,39 +1,3 @@
-<?php 
-  $classname = 'App\Http\Controllers\\'.$form['controller'];
-  $sub       = new $classname();
-  $sub->cbLoader();        
-  $subtable  = $sub->table;
-  $columns   = $sub->columns_table;     
-  $fk        = CRUDBooster::getForeignKey($table,$subtable);  
-  $fk_id     = ($row)?$row->id:0; 
-  if($row) {
-          
-    $subquery = DB::table($subtable)->select($subtable.'.id');
-    $subquery->where($subtable.'.'.$fk,$fk_id);
-    foreach ($columns as $key => $value) {
-      if(strpos($value['name'], ' as ')!==FALSE) {
-        $subquery->addselect(DB::raw($value['name']));
-        continue;
-      }
-
-      if($value['join']) {
-        $join_exp     = explode(',', $value['join']);
-        $join_table  = $join_exp[0];
-        $join_column = $join_exp[1];            
-        $join_alias  = str_replace(".", "_", $join_table);
-        $subquery->leftjoin($join_table.' as '.$join_alias,$join_alias.'.id','=',$subtable.'.'.$value['name']);
-        $subquery->addselect($join_alias.'.'.$join_column.' as '.$value['name'].'_label');
-
-      }else{            
-        $subquery->addselect($subtable.'.'.$value['name']);
-      }
-    }
-    
-    $subquery = $subquery->get();           
-    }else{
-    $subquery          = CRUDBooster::getTemporary($subtable,[$fk=>$fk_id]);                  
-    }
-?>
 
 <tr><td colspan='2'>
 
@@ -42,67 +6,101 @@
     <i class='fa fa-bars'></i> {{$form['label']}}      
   </div> 
   <div class="panel-body">
-    <table id='table-{{$form["name"]}}' class='table table-striped datatables-simple'>
-      <thead>
-        <tr>
-          @foreach($columns as $col)
-            <?php if($col['name'] == $fk || $col['visible']===FALSE) continue;?>
-            <th>{{$col['label']}}</th>
-          @endforeach               
-        </tr>
-      </thead>
-      <tbody>
-        @foreach($subquery as $s)
-          <tr>
-            @foreach($columns as $col)
-              <?php 
-                if($col['name'] == $fk || $col['visible']===FALSE) continue;
+      <table id='table-{{$name}}' class='table table-striped table-bordered'>
+          <thead>
+            <tr>
+              @foreach($form['columns'] as $col)            
+                <th>{{$col['label']}}</th>
+              @endforeach   
                 
-                $value = $s->$col['name'];
-                if(strpos($col['name'], ' as ')!==FALSE) {
-                  $field = substr($col['name'], strpos($col['name'], ' as ')+4);                  
-                  $value = $s->$field;
-                } 
-                if($col['join']) {
-                  $value = $s->{$col['name'].'_label'};
-                }
-              ?>
+            </tr>
+          </thead>
+          <tbody>
 
-              @if($col['image'])
-                @if($value)
-                  <td><a rel='img-{{$name}}' class='fancybox' href='{{ asset($value) }}'><img class='thumbnail' src="{{ asset($value) }}" width='40px' height='40px'/></a></td>
-                @else
-                  <td>-</td>
-                @endif
-              @elseif($col['download'])
-                @if($value)
-                  <td><a target="_blank" href='{{ asset($value) }}'>Download File</a></td>
-                @else
-                  <td>
-                    -
-                  </td>
-                @endif
-              @else
-                @if($col['callback_php'])
-                          <td>
-                            <?php 
-                            if($col['callback_php']) {
-                              foreach($s as $k=>$v) {
-                                  $col['callback_php'] = str_replace("[".$k."]",$v,$col['callback_php']);
-                              }
-                              @eval("echo ".$col['callback_php'].";");
-                            }
-                            ?>
-                          </td>
-                        @else
-                        <td>{{ trim(strip_tags($value)) }}</td>
-                        @endif                
-              @endif
-            @endforeach
-          </tr>
-        @endforeach
-      </tbody>
-      </table>
+            <?php 
+              $columns_tbody = [];
+              $data_child = DB::table($form['table'])
+              ->where($form['foreign_key'],$id);
+              foreach($form['columns'] as $i=>$c) {
+                $data_child->addselect($form['table'].'.'.$c['name']);
+
+                if($c['type'] == 'datamodal') {
+                  $datamodal_title = explode(',',$c['datamodal_columns'])[0];
+                  $datamodal_table = $c['datamodal_table'];
+                  $data_child->join($c['datamodal_table'],$c['datamodal_table'].'.id','=',$c['name']);
+                  $data_child->addselect($c['datamodal_table'].'.'.$datamodal_title.' as '.$datamodal_table.'_'.$datamodal_title);
+                }elseif ($c['type'] == 'select') {
+                  if($c['datatable']) {
+                    $join_table = explode(',',$c['datatable'])[0];
+                    $join_field = explode(',',$c['datatable'])[1];
+                    $data_child->join($join_table,$join_table.'.id','=',$c['name']);
+                    $data_child->addselect($join_table.'.'.$join_field.' as '.$join_table.'_'.$join_field);                   
+                  }
+                }               
+                
+              }
+
+              $data_child = $data_child->orderby($form['table'].'.id','desc')->get();
+              foreach($data_child as $d):             
+            ?>
+            <tr>
+              @foreach($form['columns'] as $col)
+                <td class="{{$col['name']}}">
+                <?php 
+                  if($col['type'] == 'select') {
+                    if($col['datatable']) {
+                      $join_table = explode(',',$col['datatable'])[0];
+                      $join_field = explode(',',$col['datatable'])[1];
+                      echo "<span class='td-label'>";
+                      echo $d->{$join_table.'_'.$join_field};
+                      echo "</span>";
+                      echo "<input type='hidden' name='".$name."-".$col['name']."[]' value='".$d->{$col['name']}."'/>";
+                    }
+                    if($col['dataenum']) {
+                      echo "<span class='td-label'>";
+                      echo $d->{$col['name']};
+                      echo "</span>";
+                      echo "<input type='hidden' name='".$name."-".$col['name']."[]' value='".$d->{$col['name']}."'/>";
+                    }
+                  }elseif ($col['type']=='datamodal') {
+                    $datamodal_title = explode(',',$col['datamodal_columns'])[0];
+                    $datamodal_table = $col['datamodal_table'];
+                    echo "<span class='td-label'>";
+                    echo $d->{$datamodal_table.'_'.$datamodal_title};
+                    echo "</span>";
+                    echo "<input type='hidden' name='".$name."-".$col['name']."[]' value='".$d->{$col['name']}."'/>";
+                  }elseif ($col['type']=='upload') {
+                    $filename = basename( $d->{$col['name']} );
+                    if($col['upload_type']=='image') {
+                      echo "<a href='".asset( $d->{$col['name']} )."' class='fancybox'><img data-label='$filename' src='".asset( $d->{$col['name']} )."' width='50px' height='50px'/></a>";
+                      echo "<input type='hidden' name='".$name."-".$col['name']."[]' value='".$d->{ $col['name'] }."'/>";
+                    }else{
+                      echo "<a data-label='$filename' href='".asset( $d->{$col['name']} )."'>$filename</a>";
+                      echo "<input type='hidden' name='".$name."-".$col['name']."[]' value='".$d->{ $col['name'] }."'/>";
+                    }                 
+                  }else{
+                    echo "<span class='td-label'>";
+                    echo $d->{$col['name']};
+                    echo "</span>";
+                    echo "<input type='hidden' name='".$name."-".$col['name']."[]' value='".$d->{$col['name']}."'/>";
+                  }
+                ?>
+                </td>
+              @endforeach   
+         
+            </tr>
+
+            <?php endforeach;?>
+
+            @if(count($data_child)==0)
+            <tr class="trNull">
+              <td colspan="{{count($form['columns'])+1}}" align="center">{{trans('crudbooster.table_data_not_found')}}</td>
+            </tr>
+            @endif
+          </tbody>
+          </table>
+
+
   </div>
 </div>
 

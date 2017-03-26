@@ -24,8 +24,8 @@ Route::group(['middleware'=>['api','\crocodicstudio\crudbooster\middlewares\CBAu
 /* ROUTER FOR UPLOADS */
 Route::group(['middleware'=>['web'],'namespace'=>$namespace],function() {		
 	Route::get('api-documentation', ['uses'=>'ApiCustomController@apiDocumentation','as'=>'apiDocumentation']);	
-	Route::get('download-documentation-postman', ['uses'=>'ApiCustomController@getDownloadPostman','as'=>'downloadDocumentationPostman']);	
-	Route::get('uploads/{folder}/{filename}', ['as'=>'getUploads','uses'=>'UploadsController@getFile']);
+	Route::get('download-documentation-postman', ['uses'=>'ApiCustomController@getDownloadPostman','as'=>'downloadDocumentationPostman']);		
+	Route::get('thumbnail/{folder}/{filename}', ['uses'=>'ThumbnailController@getFile','as'=>'thumbnailController']);		
 });
 
 

@@ -58,6 +58,7 @@
             padding:0 0 0 0;
         }
         .form-group > label:first-child {display: block}
+        
     </style>
 </head>
 <body class="<?php echo (Session::get('theme_color'))?:'skin-blue'?>">
