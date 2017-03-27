@@ -49,7 +49,7 @@ class CrudboosterInstallationCommand extends Command {
 			
 			$this->info('Migrating database...');				
 			$this->call('migrate',['--seed'=>true]);				
-			$this->call('config:cache');		
+			$this->call('config:clear');		
 			$this->call('optimize');
 			
 			$this->info('Install CRUDBooster Is Done !');

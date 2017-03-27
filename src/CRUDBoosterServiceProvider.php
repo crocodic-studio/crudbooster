@@ -17,18 +17,29 @@ class CRUDBoosterServiceProvider extends ServiceProvider
     public function boot()
     {        
 
-        //Create symlink for uploads path
-        if(!file_exists(public_path('uploads'))) {            
-            app('files')->link(storage_path('app'), public_path('uploads'));
-        }
-
         //Create vendor folder at public
         if(!file_exists(public_path('vendor'))) {
             mkdir(public_path('vendor'));
         }
 
+        //Create symlink for uploads path
+        if(file_exists(public_path('uploads'))) {          
+            if(readlink(public_path('uploads')) == public_path('uploads')) {                                                                      
+                rrmdir(public_path('uploads'));
+                app('files')->link(storage_path('app'), public_path('uploads'));
+            }              
+        }else{
+            app('files')->link(storage_path('app'), public_path('uploads'));
+        }
+        
         //Crate symlink for assets
-        if(!file_exists(public_path('vendor/crudbooster'))) {
+        if(file_exists(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'))) {                      
+            if(readlink(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster')) == public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster')) {                
+                //Is Directory                                               
+                rrmdir(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'));
+                app('files')->link(__DIR__.'/assets',public_path('vendor/crudbooster'));
+            }            
+        }else{            
             app('files')->link(__DIR__.'/assets',public_path('vendor/crudbooster'));
         }
 
