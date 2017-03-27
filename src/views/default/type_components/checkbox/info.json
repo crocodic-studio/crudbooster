@@ -11,7 +11,8 @@
 		},
 		"requiredOne": {
 			"dataenum":"value1;value2",
-			"datatable":"table_name,column_name"
+			"datatable":"table_name,column_name",
+			"dataquery":"string sql query. Response should label & value"
 		},
 		"required": {
 						

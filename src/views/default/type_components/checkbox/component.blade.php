@@ -87,9 +87,28 @@
 												</div>";
 											}
 										}
-										
-										
-									endif
+									
+									endif;
+									if($form['dataquery']){
+									
+												$query = DB::select(DB::raw($form['dataquery']));
+												@$value = explode(';',$value);
+												if($query) {
+													foreach($query as $q) {
+														$val = $q->value;			
+														$checked = (is_array($value) && in_array($val, $value))?"checked":"";						
+														//if($val == '' || !$d->id) continue;
+																	echo "
+												<div data-val='$val' class='checkbox $disabled'>
+												  <label>
+												    <input type='checkbox' $disabled $checked name='".$name."[]' value='$q->value'> ".$q->label." 								    
+												  </label>
+												</div>";
+													}
+												}
+										}
+									
+
 								?>
 							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
 							<p class='help-block'>{{ @$form['help'] }}</p>
