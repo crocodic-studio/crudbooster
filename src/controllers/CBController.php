@@ -151,10 +151,14 @@ class CBController extends Controller {
 
 		if(Request::get('parent_table')) {
 			$data['parent_table'] = DB::table(Request::get('parent_table'))->where('id',Request::get('parent_id'))->first();
-			if(CRUDBooster::isColumnExists($this->table,'id_'.g('parent_table'))) {
-				$data['parent_field'] = $parent_field = 'id_'.g('parent_table');
-			}else {
-				$data['parent_field'] = $parent_field = g('parent_table').'_id';
+			if(Request::get('foreign_key')) {
+				$data['parent_field'] = Request::get('foreign_key');
+			}else{
+				if(CRUDBooster::isColumnExists($this->table,'id_'.g('parent_table'))) {
+					$data['parent_field'] = $parent_field = 'id_'.g('parent_table');
+				}else {
+					$data['parent_field'] = $parent_field = g('parent_table').'_id';
+				}	
 			}
 
 			if($parent_field) {
@@ -949,10 +953,8 @@ class CBController extends Controller {
 		$this->hook_before_add($this->arr);
 
 		$this->arr[$this->primary_key] = $id = CRUDBooster::newId($this->table);
-		$this->arr=array_filter($this->arr); // null array fix 
-		DB::table($this->table)->insert($this->arr);
-
-		$this->hook_after_add($this->arr[$this->primary_key]);
+		// $this->arr=array_filter($this->arr); // null array fix = failed
+		DB::table($this->table)->insert($this->arr);		
 
 
 		//Looping Data Input Again After Insert
@@ -1027,6 +1029,9 @@ class CBController extends Controller {
 		}
 
 
+		$this->hook_after_add($this->arr[$this->primary_key]);
+
+
 		$this->return_url = ($this->return_url)?$this->return_url:Request::get('return_url');
 
 		//insert log
@@ -1083,10 +1088,8 @@ class CBController extends Controller {
 		}
 
 		$this->hook_before_edit($this->arr,$id);
-		$this->arr=array_filter($this->arr); // null array fix 
-		DB::table($this->table)->where($this->primary_key,$id)->update($this->arr);
-
-		$this->hook_after_edit($id);
+		//$this->arr=array_filter($this->arr); // null array fix 
+		DB::table($this->table)->where($this->primary_key,$id)->update($this->arr);		
 
 		//Looping Data Input Again After Insert
 		foreach($this->data_inputan as $ro) {
@@ -1173,6 +1176,8 @@ class CBController extends Controller {
 
 
 		}
+
+		$this->hook_after_edit($id);
 
 
 		$this->return_url = ($this->return_url)?$this->return_url:Request::get('return_url');
