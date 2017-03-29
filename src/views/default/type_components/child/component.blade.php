@@ -378,7 +378,7 @@
 										@elseif($c['type']=='upload')
 											@if($c['upload_type']=='image')
 											trRow += "<td class='{{$c['name']}}'>"+
-											"<a class='fancybox' href='{{asset('/')}}"+$('#{{$name.$c["name"]}} .input-id').val()+"'><img data-label='"+$('#{{$name.$c["name"]}} .input-label').val()+"' src='{{asset('/')}}"+$('#{{$name.$c["name"]}} .input-id').val()+"' width='50px' height='50px'/></a>"+
+											"<a data-lightbox='roadtrip' href='{{asset('/')}}"+$('#{{$name.$c["name"]}} .input-id').val()+"'><img data-label='"+$('#{{$name.$c["name"]}} .input-label').val()+"' src='{{asset('/')}}"+$('#{{$name.$c["name"]}} .input-id').val()+"' width='50px' height='50px'/></a>"+
 											"<input type='hidden' name='{{$name}}-{{$c['name']}}[]' value='"+$('#{{$name.$c["name"]}} .input-id').val()+"'/>"+
 											"</td>";
 											@else
@@ -488,7 +488,7 @@
 									}elseif ($col['type']=='upload') {
 										$filename = basename( $d->{$col['name']} );
 										if($col['upload_type']=='image') {
-											echo "<a href='".asset( $d->{$col['name']} )."' class='fancybox'><img data-label='$filename' src='".asset( $d->{$col['name']} )."' width='50px' height='50px'/></a>";
+											echo "<a href='".asset( $d->{$col['name']} )."' data-lightbox='roadtrip'><img data-label='$filename' src='".asset( $d->{$col['name']} )."' width='50px' height='50px'/></a>";
 											echo "<input type='hidden' name='".$name."-".$col['name']."[]' value='".$d->{ $col['name'] }."'/>";
 										}else{
 											echo "<a data-label='$filename' href='".asset( $d->{$col['name']} )."'>$filename</a>";

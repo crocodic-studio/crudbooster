@@ -12,7 +12,7 @@
 						$images_type = array('jpg','png','gif','jpeg','bmp','tiff');																																				
 						if(in_array($ext, $images_type)):
 						?>
-							<p><a class='fancybox' href='{{$url}}'><img style='max-width:160px' title="Image For {{$form['label']}}" src='{{$url}}'/></a></p>
+							<p><a data-lightbox='roadtrip' href='{{$url}}'><img style='max-width:160px' title="Image For {{$form['label']}}" src='{{$url}}'/></a></p>
 						<?php else:?>
 							<p><a href='{{$url}}'>{{trans("crudbooster.button_download_file")}}</a></p>
 						<?php endif;
