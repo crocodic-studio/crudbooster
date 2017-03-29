@@ -46,3 +46,35 @@ function g($name) {
 }
 }
 
+if(!function_exists('min_var_export')) {
+	function min_var_export($input) {
+	    if(is_array($input)) {
+	        $buffer = [];
+	        foreach($input as $key => $value)
+	            $buffer[] = var_export($key, true)."=>".min_var_export($value);
+	        return "[".implode(",",$buffer)."]";
+	    } else
+	        return var_export($input, true);
+	}
+}
+
+if(!function_exists('rrmdir')) {
+	/*
+	* http://stackoverflow.com/questions/3338123/how-do-i-recursively-delete-a-directory-and-its-entire-contents-files-sub-dir
+	*/
+	function rrmdir($dir) { 
+	   if (is_dir($dir)) { 
+	     $objects = scandir($dir); 
+	     foreach ($objects as $object) { 
+	       if ($object != "." && $object != "..") { 
+	         if (is_dir($dir."/".$object))
+	           rrmdir($dir."/".$object);
+	         else
+	           unlink($dir."/".$object); 
+	       } 
+	     }
+	     rmdir($dir); 
+	   } 
+	 }
+}
+

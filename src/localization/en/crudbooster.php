@@ -158,14 +158,14 @@ return [
     'settings'            => 'Settings',
     'Users_Management'    => 'Users Management',
     'list_API'            => 'List API (Documentation)',
-    'Generate_Screet_Key' => 'Generate Screet Key',
+    'Generate_Screet_Key' => 'Generate Secret Key',
     'Add_New_Email'       => 'Add New Email',
     'List_Email_Template' => 'List Email Template',
     'Email_Templates'     => 'Email Templates',
     'Log_User_Access'     => 'Log User Access',
     'SUPERADMIN'          => 'SUPERADMIN',
 
-    'click_here'                => 'Click here',    
+    'click_here' => 'Click here',
 
     /*
      * this is for html direction to use in html and css classes like :
@@ -173,49 +173,51 @@ return [
      * to make it easy to use the the view for rtl langs .
      * unless your language use right-to-left direction , you should keep it as it is :
      */
-    'right' => 'right',
-    'left'  => 'left',
+    'right'      => 'right',
+    'left'       => 'left',
 
     'all_rights_reserved' => 'All Rights Reserved',
     'copyright'           => 'Copyright',
     'powered_by'          => 'Powered by',
 
-    'notification_you_have'      => 'You Have',
+    'notification_you_have'     => 'You Have',
     'notification_notification' => 'Notifications',
-    'notification_new'           => 'You have a new notification !',
+    'notification_new'          => 'You have a new notification !',
 
-    'login_register_style' => 'Login Register Style',
-    'email_setting'        => 'Email Setting',
-    'application_setting'  => 'Application Setting',
+    'login_register_style'         => 'Login Register Style',
+    'email_setting'                => 'Email Setting',
+    'application_setting'          => 'Application Setting',
 
     // table filter & sort 
-    'filter_select_operator_type' => 'Select Operator Type',
-    'filter_ascending' => 'ASCENDING',
-    'filter_descending' => 'DESCENDING',
-    'filter_equal_to'=> '=(Equal to)',
-    'filter_like'=> 'LIKE',
-    'filter_not_like'=>'NOT LIKE',
-    'filter_greater_than_or_equal'=>'>>= (Greater Than or Equal)',
-    'filter_less_than_or_equal'=>'<= (Less Than or Equal)',
-    'filter_less_than'=>'< (Less Than)',
-    'filter_greater_than'=>'> (Greater Than)',
-    'filter_not_equal_to'=>'!= (Not Equal to)',
-    'filter_in'=>'IN',
-    'filter_not_in'=>'NOT IN',
-    'filter_between'=>'BETWEEN',
-    'filter_sort_ascending'=>'Sort ascending',
-    'filter_sort_descending'=>'Sort Descending',    
-    'filter_eg'=>'e.g',
-    'filter_lorem_ipsum'=>'Lorem ipsum',
-    'filter_lorem_ipsum_dolor_sit'=>' Lorem,Ipsum,Dolor Sit',
-    'filter_search'=>'Search',
+    'filter_select_operator_type'  => 'Select Operator Type',
+    'filter_ascending'             => 'ASCENDING',
+    'filter_descending'            => 'DESCENDING',
+    'filter_equal_to'              => '=(Equal to)',
+    'filter_like'                  => 'LIKE',
+    'filter_not_like'              => 'NOT LIKE',
+    'filter_greater_than_or_equal' => '>= (Greater Than or Equal)',
+    'filter_less_than_or_equal'    => '<= (Less Than or Equal)',
+    'filter_less_than'             => '< (Less Than)',
+    'filter_greater_than'          => '> (Greater Than)',
+    'filter_not_equal_to'          => '!= (Not Equal to)',
+    'filter_in'                    => 'IN',
+    'filter_not_in'                => 'NOT IN',
+    'filter_between'               => 'BETWEEN',
+    'filter_sort_ascending'        => 'Sort ascending',
+    'filter_sort_descending'       => 'Sort Descending',
+    'filter_eg'                    => 'e.g',
+    'filter_lorem_ipsum'           => 'Lorem ipsum',
+    'filter_lorem_ipsum_dolor_sit' => ' Lorem,Ipsum,Dolor Sit',
+    'filter_search'                => 'Search',
+    'filter_from'                  => 'from',
+    'filter_to'                    => 'to',
 
     // confirmation
-    'confirmation_yes'=>'Yes!',
-    'confirmation_no'=>'No',
+    'confirmation_yes'             => 'Yes!',
+    'confirmation_no'              => 'No',
 
     //filemanager
-    'chose_an_image' =>'Choose an image ',
-    'chose_an_file' =>'Choose an file '
+    'chose_an_image'               => 'Choose an image ',
+    'chose_an_file'                => 'Choose an file ',
 
 ];

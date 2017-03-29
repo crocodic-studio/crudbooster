@@ -66,10 +66,16 @@
                 $value = nl2br($value);
               }
 
-    if(!empty($col['callback_php'])) {
-      $col['callback_php'] = str_replace('%field%',$value,$col['callback_php']);
-      @eval("\$value = ".$col['callback_php'].";");
+    if(Request::input('fileformat') == 'pdf') {
+      if(!empty($col['callback_php'])) {
+        
+        foreach($row as $k=>$v) {
+            $col['callback_php'] = str_replace("[".$k."]",$v,$col['callback_php']);
+        }
+        @eval("\$value = ".$col['callback_php'].";");
+      }
     }
+    
 
       echo "<td>".$value."</td>";
     }

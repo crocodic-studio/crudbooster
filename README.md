@@ -10,16 +10,31 @@
 
 [<img src="http://crudbooster.com/CrudBooster_Banner.png"/>](http://crudbooster.com) 
 
-CRUDBooster is Laravel Framework that modified to bring a lot of features to develop a web application so simply. One of the main features is Smart CRUD Generator, so CRUDBooster will create a module automatically included Create, Read, Update, Delete standard function. And CRUDBooster is not usual CRUD Generator,you will get a lot of new experience with a new concept. CRUD Booster is dedicated to those who already understand the basic laravel. We do not recommend for those of you who have never used laravel altogether.
+CRUDBooster is a Laravel CRUD Generator. With a new concept of scaffolding, very easy for the beginner and professional. It's easy to use, easy to custom, and very flexible. Don't limit your mind, CRUDBooster gives us a true flexibility to develop an app. You can utilize its built in CRUD Generator or even you just need for your master data only.
 
-## Getting Started & Documentation
-[http://crudbooster.com/doc/5.3/intro](http://crudbooster.com/doc/5.3/intro)
+### FEATURES : 
+- CRUD Generator With GUI
+- Rich HTML input types
+- API Generator
+- API Documentation Generator
+- Export & Import Data In Each Module
+- Advanced Filter & Sorter
+- Graphic / Statistic Designer
+- Multiple Privileges
+- Responsive Template By AdminLTE
+- Many more...
+
+## Flow Diagram Of CRUDBooster
+![image](https://cloud.githubusercontent.com/assets/6733315/24070665/78aba9ee-0bf4-11e7-82dd-96dde90e8c67.png)
+
+## DOCUMENTATION
+[Documentation in English](./docs/en/index.md)
 
 ## YOUTUBE CHANNEL
 https://www.youtube.com/channel/UCgOJR3khWEykIBBR8vAGtcA
 
 ## SUPPORT AND CONTRIBUTION
-Thank you for your contribution. Create pull request but don't push to master. Pull to currently branch version.
+Thank you for your contribution. Please create pull request or issue.
 
 ## DONATION
 <a href='https://pledgie.com/campaigns/33366'><img alt='Click here to lend your support to: CRUDBooster is Laravel CRUD Generator and make a donation at pledgie.com !' src='https://pledgie.com/campaigns/33366.png?skin_name=chrome' border='0' ></a>
@@ -29,3 +44,7 @@ Thank you for your contribution. Create pull request but don't push to master. P
 2. Laravel DOM PDF by [Barryvdh](https://github.com/barryvdh/laravel-dompdf)
 3. Admin Theme by [AdminLTE Almsaeed Studio](https://almsaeedstudio.com/preview)
 4. Laravel Framework by [Taylor Otwell](https://github.com/laravel/laravel)
+5. Thanks To All [Contributors](https://github.com/crocodic-studio/crudbooster/graphs/contributors)
+
+## LICENSE 
+CRUDBooster is under [MIT License](https://opensource.org/licenses/MIT)

@@ -4,7 +4,7 @@
 
 <ul class="nav nav-tabs">
         <li ><a href="{{ CRUDBooster::mainpath() }}"><i class='fa fa-file'></i> API Documentation</a></li>
-        <li class="active"><a href="{{ CRUDBooster::mainpath('screet-key') }}"><i class='fa fa-key'></i> API Screet Key</a></li>
+        <li class="active"><a href="{{ CRUDBooster::mainpath('screet-key') }}"><i class='fa fa-key'></i> API Secret Key</a></li>
         <li><a href="{{ CRUDBooster::mainpath('generator') }}"><i class='fa fa-cog'></i> API Generator</a></li>        
       </ul>
 
@@ -13,7 +13,7 @@
         <div class='box-body'>  
 
 
-<p><a title='Generate API Key' class='btn btn-primary' href='javascript:void(0)' onclick='generate_screet_key()'><i class='fa fa-key'></i> Generate Screet Key</a></p>
+<p><a title='Generate API Key' class='btn btn-primary' href='javascript:void(0)' onclick='generate_screet_key()'><i class='fa fa-key'></i> Generate Secret Key</a></p>
 
 <table id='table-apikey' class='table table-striped table-bordered'>
 	<thead><tr><th width="3%">No</th><th>Screet Key</th><th width="10%">Hit</th><th width="10%">Status</th><th width="15%">-</th></tr></thead>
@@ -37,7 +37,7 @@
 		</tr>
 		@endforeach
 		@if(count($apikeys)==0)
-		<tr class='no-screetkey'><td colspan='5' align="center">There is no screet key found, <a href='javascript:void(0)' onclick='generate_screet_key()'>Click here to generate one</a></td></tr>
+		<tr class='no-screetkey'><td colspan='5' align="center">There is no secret key found, <a href='javascript:void(0)' onclick='generate_screet_key()'>Click here to generate one</a></td></tr>
 		@endif
 	</tbody>
 </table>

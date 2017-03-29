@@ -202,7 +202,12 @@ class Cms_settingsSeeder extends Seeder {
         ];
 
         foreach($data as $row) {
-            if(DB::table('cms_settings')->where('name',$d['name'])->count()) {
+            $count = DB::table('cms_settings')->where('name',$row['name'])->count();
+            if($count) {
+                if($count > 1) {
+                    $newsId = DB::table('cms_settings')->where('name',$row['name'])->orderby('id','asc')->take(1)->first();
+                    DB::table('cms_settings')->where('name',$row['name'])->where('id','!=',$newsId->id)->delete();
+                }                
                 continue;
             }
             $row['id'] = DB::table('cms_settings')->max('id') + 1;

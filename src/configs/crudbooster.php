@@ -22,5 +22,18 @@ return [
 	
 	'UPLOAD_TYPES'              =>'jpg,png,jpeg,gif,bmp,pdf,xls,xlsx,doc,docx,txt,zip,rar,7z',
 
+	'DEFAULT_THUMBNAIL_WIDTH' 	=>300,
+
+	'IMAGE_EXTENSIONS'			=>'jpg,png,jpeg,gif,bmp',
+
+	'MAIN_DB_DATABASE' 			=>env('DB_DATABASE'), //Very useful if you use config:cache
+
 	'MULTIPLE_DATABASE_MODULE' 	=>[],
+
+	/* 
+	* NOTE : 
+	* As a default, CRUDBooster making a cache for the configuration with command `php artisan config:cache`. It means any changes that you've made,
+	* would not make an effect, until you run `php artisan config:cache` again.
+	*
+	*/
 ];

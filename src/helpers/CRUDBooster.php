@@ -31,103 +31,10 @@ class CRUDBooster  {
 
 			if(DB::table($table)->insert($data)) return $data['id'];
 			else return false;
-		}
-
-		public static function getTemporary($table,$where=[]) {
-			$temp = Cache::get('insert_temp_'.self::myId())?:array();			
-			$result = [];
-			foreach($temp as $i=>$t) {
-				if($t['table']==$table) {
-					$row = $t['data'];
-					if($where) {
-						$is_where = 0;
-						foreach($where as $k=>$v) {
-							if($row[$k] == $v) {
-								$is_where += 1;
-							}
-						}
-						if($is_where) {
-							$result[$i] = (object) $row;
-						}						
-					}else{						
-						$result[$i] = (object) $row;
-					}								
-				}
-			}
-
-			$i = 0;
-			foreach($result as $key=>$val) {
-				foreach($val as $k=>$v) {
-					if(self::isForeignKey($k)) {			
-						$getTableForeignKey = self::getTableForeignKey($k);								
-						$result[$i]->{$k.'_label'} = "<em>".ucwords($getTableForeignKey)."</em>";
-					}
-				}
-				$i++;
-			}	
-
-			return $result;
-		}
-
-		public static function firstTemporary($table,$id) {
-			$temp = Cache::get('insert_temp_'.self::myId())?:array();
-			foreach($temp as $t) {
-				if($t['data']['id']==$id) {
-					return (object) $t['data'];
-				}
-			}
-		}
-
-		public static function newIdTemporary() {
-			$temp = Cache::get('insert_temp_'.self::myId())?:array();
-			$newId = count($temp) + 1;			
-			return $newId;
-		}
-
-		public static function insertTemporary($table,$data=[]) {
-			$temp = Cache::get('insert_temp_'.self::myId())?:array();
-			$temp[] = ['table'=>$table,'data'=>$data];
-			Cache::put('insert_temp_'.self::myId(),$temp,3600);				
-			return true; 
-		}
-
-		public static function updateTemporary($table,$where=[],$data=[]) {
-			$temp = self::getTemporary($table,$where);
-			$temp_raw = Cache::get('insert_temp_'.self::myId())?:array();
-			foreach($temp as $i=>$t) {
-				$row = (array) $t;
-				foreach($data as $k=>$v) {
-					$row[$k] = $v;
-				}
-				$temp_raw[$i]['data'] = $row;
-			}
-			Cache::put('insert_temp_'.self::myId(),$temp_raw,3600);
-			return true;
-		}
-
-		public static function clearTemporary($table) {
-			$temp = Cache::get('insert_temp_'.self::myId())?:array();
-			foreach($temp as $i => $t) {
-				if($t['table'] == $table) {
-					unset($temp[$i]);
-				}
-			}
-			Cache::put('insert_temp_'.self::myId(),$temp,3600);
-			return true;
-		}
-
-		public static function deleteTemporary($table,$id) {
-			$temp = Cache::get('insert_temp_'.self::myId())?:array();
-			foreach($temp as $i => $t) {
-				if($t['table'] == $table && $t['data']['id']== $id) {
-					unset($temp[$i]);
-				}
-			}
-			Cache::put('insert_temp_'.self::myId(),$temp,3600);
-			return true;
-		}
+		}	
 
 		public static function first($table,$id) {
+			$table = self::parseSqlTable($table)['table'];
 			if(is_int($id)) {
 				return DB::table($table)->where('id',$id)->first();
 			}elseif (is_array($id)) {
@@ -140,6 +47,8 @@ class CRUDBooster  {
 		}
 
 		public static function get($table,$string_conditions=NULL,$orderby=NULL,$limit=NULL,$skip=NULL) {
+			$table = self::parseSqlTable($table);
+			$table = $table['table'];
 			$query = DB::table($table);
 			if($string_conditions) $query->whereraw($string_conditions);
 			if($orderby) $query->orderbyraw($orderby);
@@ -506,6 +415,13 @@ class CRUDBooster  {
 		    }
 		}
 
+		public static function getSortingFilter($field) {
+		    $filter = Request::get('filter_column');
+		    if($filter[$field]) {
+		        return $filter[$field]['sorting'];
+		    }
+		}
+
 		public static function getTypeFilter($field) {
 		    $filter = Request::get('filter_column');
 		    if($filter[$field]) {
@@ -524,11 +440,11 @@ class CRUDBooster  {
 
 		public static function timeAgo($datetime_to,$datetime_from=NULL, $full = false) {
 		    $datetime_from = ($datetime_from)?:date('Y-m-d H:i:s');
-		    $now = new DateTime;
+		    $now = new \DateTime;
 		    if($datetime_from!='') {
-		        $now = new DateTime($datetime_from);
+		        $now = new \DateTime($datetime_from);
 		    }
-		    $ago = new DateTime($datetime_to);
+		    $ago = new \DateTime($datetime_to);
 		    $diff = $now->diff($ago);
 
 		    $diff->w = floor($diff->d / 7);
@@ -681,14 +597,16 @@ class CRUDBooster  {
 		}
 
 		public static function parseSqlTable($field) {
+
 			$f = explode('.', $field);
 
 			if(count($f) == 1) {
-				return array("table"=>$f[0], "database"=>env('DB_DATABASE'));
+				return array("table"=>$f[0], "database"=>config('crudbooster.MAIN_DB_DATABASE'));
 			} elseif(count($f) == 2) {
 				return array("database"=>$f[0], "table"=>$f[1]);
+			}elseif (count($f) == 3) {
+				return array("table"=>$f[0],"schema"=>$f[1],"table"=>$f[2]);
 			}
-
 			return false;
 		}
 
@@ -705,26 +623,31 @@ class CRUDBooster  {
 		}
 
 		public static function isColumnExists($table,$field) {
-			if(Cache::has('isColumnExists_'.$table.'_'.$field)) {
-				return Cache::get('isColumnExists_'.$table.'_'.$field);
-			}
 			$table = CRUDBooster::parseSqlTable($table);
+
+			if(Cache::has('isColumnExists_'.$table['table'].'_'.$field)) {
+				return Cache::get('isColumnExists_'.$table['table'].'_'.$field);
+			}			
 
 			$result = DB::select('SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :database AND TABLE_NAME = :table AND COLUMN_NAME = :field', ['database'=>$table['database'], 'table'=>$table['table'], 'field'=>$field]);
 
 			if(count($result) > 0) {
-				Cache::forever('isColumnExists_'.$table.'_'.$field,true);
+				Cache::forever('isColumnExists_'.$table['table'].'_'.$field,true);
 				return true;
 			}else{
-				Cache::forever('isColumnExists_'.$table.'_'.$field,false);
+				Cache::forever('isColumnExists_'.$table['table'].'_'.$field,false);
 				return false;
 			}
+
+			
 		}
 
 		public static function getForeignKey($parent_table,$child_table) {
-			if(self::isColumnExists($child_table,'id_'.$parent_table)) {
+			$parent_table = CRUDBooster::parseSqlTable($parent_table)['table'];
+			$child_table = CRUDBooster::parseSqlTable($child_table)['table'];
+			if(self::isColumnExists($child_table,'id_'.$parent_table)) {				
 				return 'id_'.$parent_table;
-			}else{
+			}else{				
 				return $parent_table.'_id';
 			}
 		}
@@ -812,22 +735,24 @@ class CRUDBooster  {
 	        $tables = array();
 	        $multiple_db = config('crudbooster.MULTIPLE_DATABASE_MODULE');
 	        $multiple_db = ($multiple_db)?$multiple_db:array();
+	        $db_database = config('crudbooster.MAIN_DB_DATABASE');
 
 	        if($multiple_db) {
 	        	try {	            
-	        		$multiple_db[] = env('DB_DATABASE');
+	        		$multiple_db[] = config('crudbooster.MAIN_DB_DATABASE');
 	        		$query_table_schema = implode("','",$multiple_db);
 			    	$tables = DB::select("SELECT CONCAT(TABLE_SCHEMA,'.',TABLE_NAME) FROM INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA != 'mysql' AND TABLE_SCHEMA != 'performance_schema' AND TABLE_SCHEMA != 'information_schema' AND TABLE_SCHEMA != 'phpmyadmin' AND TABLE_SCHEMA IN ('$query_table_schema')");				    				
 		        }catch(\Exception $e) {
-			    	$tables = array();
+			    	$tables = [];
 		        }
 	        }else{
 	        	try{	        		
-		        	$tables = DB::select("SELECT CONCAT(TABLE_SCHEMA,'.',TABLE_NAME) FROM INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = '".env('DB_DATABASE')."'");
+		        	$tables = DB::select("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = '".$db_database."'");		        	
 	        	}catch(\Exception $e) {
-	        		$tables = array();
+	        		$tables = [];
 	        	}
 	        }	        
+	        
 
 	        return $tables;
 	    }
@@ -1066,12 +991,12 @@ class CRUDBooster  {
 		public static function generateController($table,$name=NULL) {  
 	        
 	        $exception          = ['id','created_at','updated_at','deleted_at'];
-	        $image_candidate    = explode(',',env('IMAGE_FIELDS_CANDIDATE','image,picture,photo,photos,foto,gambar,thumbnail'));
-	        $password_candidate = explode(',',env('PASSWORD_FIELDS_CANDIDATE','password,pass,pwd,passwrd,sandi,pin'));
-	        $phone_candidate    = explode(',',env('PHONE_FIELDS_CANDIDATE','phone,telp,hp,notelp,no_telp,no_phone,phone_number'));
-	        $email_candidate    = explode(',',env('EMAIL_FIELDS_CANDIDATE','email,mail,email_address,mail_address'));
-	        $name_candidate     = explode(',',env('NAME_FIELDS_CANDIDATE','name,nama,person_name,person,fullname,full_name,nickname,nick,nick_name'));
-	        $url_candidate      = explode(',',env("URL_FIELDS_CANDIDATE",'url,link'));
+	        $image_candidate    = explode(',',config('crudbooster.IMAGE_FIELDS_CANDIDATE'));
+	        $password_candidate = explode(',',config('crudbooster.PASSWORD_FIELDS_CANDIDATE'));
+	        $phone_candidate    = explode(',',config('crudbooster.PHONE_FIELDS_CANDIDATE'));
+	        $email_candidate    = explode(',',config('crudbooster.EMAIL_FIELDS_CANDIDATE'));
+	        $name_candidate     = explode(',',config('crudbooster.NAME_FIELDS_CANDIDATE'));
+	        $url_candidate      = explode(',',config("crudbooster.URL_FIELDS_CANDIDATE"));
 
 
 	        $controllername = ucwords(str_replace('_',' ',$table));        
@@ -1168,7 +1093,7 @@ class CRUDBooster  {
 	        $php .= "\n\t\t\t# END COLUMNS DO NOT REMOVE THIS LINE";
 
 	        $php .= "\n\t\t\t# START FORM DO NOT REMOVE THIS LINE";
-	        $php .= "\n\t\t".'$this->form = array();'."\n";
+	        $php .= "\n\t\t".'$this->form = [];'."\n";
 
 	        foreach($coloms as $c) {
 	            $attribute    = array();
@@ -1291,9 +1216,11 @@ class CRUDBooster  {
 	            $validation = implode('|',$validation);
 
 	            $php .= "\t\t";
-	            $php .= '$this->form[] = array("label"=>"'.$label.'","name"=>"'.$field.'","type"=>"'.$type.'","required"=>TRUE';
+	            $php .= '$this->form[] = ["label"=>"'.$label.'","name"=>"'.$field.'","type"=>"'.$type.'","required"=>TRUE';
 	            
-	            if($validation) $php .= ',"validation"=>"'.$validation.'"';            
+	            if($validation) {
+	            	$php .= ',"validation"=>"'.$validation.'"';            
+	            }
 
 	            if($attribute) {
 	                foreach($attribute as $key=>$val) {
@@ -1306,7 +1233,7 @@ class CRUDBooster  {
 	                }
 	            }
 
-	            $php .= ");\n";            
+	            $php .= "];\n";            
 	        }
 
 	        $php .= "\n\t\t\t# END FORM DO NOT REMOVE THIS LINE";
@@ -1319,6 +1246,7 @@ class CRUDBooster  {
 	        | ----------------------------------------------------------------------     
 			| @label          = Label of action 
 			| @path           = Path of sub module
+			| @foreign_key 	  = foreign key of sub table/module
 			| @button_color   = Bootstrap Class (primary,success,warning,danger)
 			| @button_icon    = Font Awesome Class  
 			| @parent_columns = Sparate with comma, e.g : name,created_at
@@ -1412,7 +1340,30 @@ class CRUDBooster  {
 	        $this->script_js = NULL;
 
 
-
+            /*
+	        | ---------------------------------------------------------------------- 
+	        | Include HTML Code before index table 
+	        | ---------------------------------------------------------------------- 
+	        | html code to display it before index table
+	        | $this->pre_index_html = "<p>test</p>";
+	        |
+	        */
+	        $this->pre_index_html = null;
+	        
+	        
+	        
+	        /*
+	        | ---------------------------------------------------------------------- 
+	        | Include HTML Code after index table 
+	        | ---------------------------------------------------------------------- 
+	        | html code to display it after index table
+	        | $this->post_index_html = "<p>test</p>";
+	        |
+	        */
+	        $this->post_index_html = null;
+	        
+	        
+	        
 	        /*
 	        | ---------------------------------------------------------------------- 
 	        | Include Javascript File 

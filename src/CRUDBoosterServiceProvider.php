@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\ServiceProvider;
+use crocodicstudio\crudbooster\commands\CrudboosterInstallationCommand;
+use crocodicstudio\crudbooster\commands\CrudboosterUpdateCommand;
+use Illuminate\Foundation\AliasLoader;
 
 class CRUDBoosterServiceProvider extends ServiceProvider
 {
@@ -10,15 +13,45 @@ class CRUDBoosterServiceProvider extends ServiceProvider
      *
      * @return void
      */
+
     public function boot()
     {        
-        $this->loadViewsFrom(__DIR__.'/views', 'crudbooster');
 
-        $this->publishes([  __DIR__.'/configs/crudbooster.php' => config_path('crudbooster.php')],'cb_config');                
+        //Create vendor folder at public
+        if(!file_exists(public_path('vendor'))) {
+            mkdir(public_path('vendor'));
+        }
+
+        //Create symlink for uploads path
+        if(file_exists(public_path('uploads'))) {          
+            if(readlink(public_path('uploads')) == public_path('uploads')) {                                                                      
+                rrmdir(public_path('uploads'));
+                app('files')->link(storage_path('app'), public_path('uploads'));
+            }              
+        }else{
+            app('files')->link(storage_path('app'), public_path('uploads'));
+        }
         
-        $this->publishes([__DIR__.'/localization' => resource_path('lang')], 'cb_localization'); 
+        //Crate symlink for assets
+        if(file_exists(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'))) {                      
+            if(readlink(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster')) == public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster')) {                
+                //Is Directory                                               
+                rrmdir(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'));
+                app('files')->link(__DIR__.'/assets',public_path('vendor/crudbooster'));
+            }            
+        }else{            
+            app('files')->link(__DIR__.'/assets',public_path('vendor/crudbooster'));
+        }
 
-        $this->publishes([__DIR__.'/assets' => public_path('vendor/crudbooster')], 'cb_public');             
+        $this->loadViewsFrom(__DIR__.'/views', 'crudbooster');
+            
+        if(file_exists(config_path('crudbooster.php'))) {            
+            $this->mergeConfigFrom(__DIR__.'/configs/crudbooster.php','crudbooster');  
+        }else{
+            $this->publishes([__DIR__.'/configs/crudbooster.php' => config_path('crudbooster.php')],'cb_config');            
+        }
+        
+        $this->publishes([__DIR__.'/localization' => resource_path('lang')], 'cb_localization');                 
 
         $this->publishes([__DIR__.'/database' => base_path('database')],'cb_migration');
 
@@ -34,11 +67,11 @@ class CRUDBoosterServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__.'/laravel-filemanager/src/config/lfm.php' => config_path('lfm.php'),
-        ],'cb_lfm_config');        
+        ],'cb_lfm');        
 
         $this->publishes([
             __DIR__.'/laravel-filemanager/src/views/script.blade.php' => resource_path('views/vendor/laravel-filemanager/script.blade.php'),
-        ],'cb_lfm_config');
+        ],'cb_lfm');
 
         $this->publishes([
             __DIR__.'/userfiles/views/vendor/crudbooster/type_components/readme.txt' => resource_path('views/vendor/crudbooster/type_components/readme.txt'),
@@ -52,8 +85,14 @@ class CRUDBoosterServiceProvider extends ServiceProvider
             $this->publishes([__DIR__.'/userfiles/controllers/AdminCmsUsersController.php' => app_path('Http/Controllers/AdminCmsUsersController.php')],'cb_user_controller');
         }
 
-        @unlink(base_path('database/migrations/2014_10_12_000000_create_users_table.php'));
-        @unlink(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'));
+
+        /* Removing the default user and password reset, it makes you ambigous when using CRUDBooster */
+        if(file_exists(base_path('database/migrations/2014_10_12_000000_create_users_table.php'))) {        
+            @unlink(base_path('database/migrations/2014_10_12_000000_create_users_table.php'));
+        }
+        if(file_exists(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'))) {            
+            @unlink(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'));
+        }
                     
         require __DIR__.'/validations/validation.php';        
         require __DIR__.'/routes.php';    
@@ -72,7 +111,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
      */
     public function register()
     {                                   
-        require __DIR__.'/helpers/Helper.php';      
+        require __DIR__.'/helpers/Helper.php';              
         
         $this->app->singleton('crudbooster', function ()
         {
@@ -82,5 +121,34 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->commands([
             commands\Mailqueues::class            
         ]);
+
+        $this->registerCrudboosterCommand();
+
+        $this->commands('crudboosterinstall');
+        $this->commands('crudboosterupdate');
+
+
+        $this->app->register('Barryvdh\DomPDF\ServiceProvider');
+        $this->app->register('Maatwebsite\Excel\ExcelServiceProvider');
+        $this->app->register('Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider');
+        $this->app->register('Intervention\Image\ImageServiceProvider');
+
+        $loader = AliasLoader::getInstance();
+        $loader->alias('PDF', 'Barryvdh\DomPDF\Facade');
+        $loader->alias('Excel', 'Maatwebsite\Excel\Facades\Excel');
+        $loader->alias('Image', 'Intervention\Image\Facades\Image');
+        $loader->alias('CRUDBooster', 'crocodicstudio\crudbooster\helpers\CRUDBooster');
+    }
+
+
+    private function registerCrudboosterCommand()
+    {
+        $this->app->singleton('crudboosterinstall',function() {
+            return new CrudboosterInstallationCommand;
+        });
+
+        $this->app->singleton('crudboosterupdate',function() {
+            return new CrudboosterUpdateCommand;
+        });        
     }
 }

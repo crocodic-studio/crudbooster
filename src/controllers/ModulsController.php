@@ -238,41 +238,18 @@ class ModulsController extends CBController {
 			if($controller && Request::get('create_menu')) {
 				$parent_menu_sort = DB::table('cms_menus')->where('parent_id',0)->max('sorting')+1;
 				$parent_menu_id = DB::table('cms_menus')->max('id')+1;
+
 				DB::table('cms_menus')->insert([
 					'id'                =>$parent_menu_id,
 					'created_at'        =>date('Y-m-d H:i:s'),
 					'name'              =>$name,
 					'icon'              =>$icon,
-					'path'              =>'#',
-					'type'				=>'URL External',
-					'is_active'         =>1,
-					'id_cms_privileges' =>CRUDBooster::myPrivilegeId(),
-					'sorting'           =>$parent_menu_sort,
-					'parent_id'         =>0
-					]);
-				DB::table('cms_menus')->insert([
-					'id'                =>DB::table('cms_menus')->max('id')+1,
-					'created_at'        =>date('Y-m-d H:i:s'),
-					'name'              =>trans("crudbooster.text_default_add_new_module",['module'=>$name]),
-					'icon'              =>'fa fa-plus',
-					'path' 				=>$controller.'GetAdd',
-					'type'				=>'Route',
-					'is_active'         =>1,
-					'id_cms_privileges' =>CRUDBooster::myPrivilegeId(),
-					'sorting'           =>1,
-					'parent_id'         =>$parent_menu_id
-					]);
-				DB::table('cms_menus')->insert([
-					'id'                =>DB::table('cms_menus')->max('id')+1,
-					'created_at'        =>date('Y-m-d H:i:s'),
-					'name'              =>trans("crudbooster.text_default_list_module",['module'=>$name]),
-					'icon'              =>'fa fa-bars',
 					'path'				=>$controller.'GetIndex',
 					'type'				=>'Route',
 					'is_active'         =>1,
 					'id_cms_privileges' =>CRUDBooster::myPrivilegeId(),
-					'sorting'           =>2,
-					'parent_id'         =>$parent_menu_id
+					'sorting'           =>$parent_menu_sort,
+					'parent_id'         =>0
 					]);
 			}			
 
@@ -446,17 +423,26 @@ class ModulsController extends CBController {
 		$script_form = [];
 		foreach($label as $l) {
 			
-			if($l!='') {
-				$form = $option[$i];
-				if(!is_array($form)) {
-					$form = array();
-				}
+			if($l!='') {				
+				
+				$form = array();
 				$form['label'] = $l;
 				$form['name'] = $name[$i];
 				$form['type'] = $type[$i];
 				$form['validation'] = $validation[$i];
 				$form['width'] = $width[$i];
-				$script_form[$i] = "\t\t\t".'$this->form[] = '.var_export($form, true).";";
+				if($option[$i]) {					
+					$form = array_merge($form,$option[$i]);				
+				}
+				
+				foreach($form as $k=>$f) {
+					if($f == '') {
+						unset($form[$k]);
+					}					
+				}
+
+
+				$script_form[$i] = "\t\t\t".'$this->form[] = '.min_var_export($form).";";
 			}
 			
 			$i++;
@@ -467,13 +453,42 @@ class ModulsController extends CBController {
 		$raw        = explode("# START FORM DO NOT REMOVE THIS LINE",$raw);
 		$rraw       = explode("# END FORM DO NOT REMOVE THIS LINE",$raw[1]);
 
-		$file_controller = trim($raw[0])."\n\n";
+		$top_script = trim($raw[0]);
+		$current_scaffolding_form = trim($rraw[0]);	
+		$bottom_script = trim($rraw[1]);	
+
+		//IF FOUND OLD, THEN CLEAR IT
+		if(strpos($bottom_script, '# OLD START FORM')!==FALSE) {			
+			$line_end_count = strlen('# OLD END FORM');
+			$line_start_old = strpos($bottom_script, '# OLD START FORM');
+			$line_end_old = strpos($bottom_script, '# OLD END FORM') + $line_end_count;
+			$get_string = substr($bottom_script, $line_start_old, $line_end_old);
+			$bottom_script = str_replace($get_string, '', $bottom_script);
+		}
+
+		//ARRANGE THE FULL SCRIPT
+		$file_controller = $top_script."\n\n";
 		$file_controller .= "\t\t\t# START FORM DO NOT REMOVE THIS LINE\n";
 		$file_controller .= "\t\t\t".'$this->form = [];'."\n";
 		$file_controller .= $scripts."\n";
 		$file_controller .= "\t\t\t# END FORM DO NOT REMOVE THIS LINE\n\n";
-		$file_controller .= "\t\t\t".trim($rraw[1]);
+
+		//CREATE A BACKUP SCAFFOLDING TO OLD TAG
+		if($current_scaffolding_form) {
+			$current_scaffolding_form = preg_split("/\\r\\n|\\r|\\n/", $current_scaffolding_form);
+			foreach($current_scaffolding_form as &$c) {
+				$c = "\t\t\t//".trim($c);
+			}
+			$current_scaffolding_form = implode("\n",$current_scaffolding_form);
+
+			$file_controller .= "\t\t\t# OLD START FORM\n";
+			$file_controller .= $current_scaffolding_form."\n";
+			$file_controller .= "\t\t\t# OLD END FORM\n\n";
+		}
 		
+		$file_controller .= "\t\t\t".trim($bottom_script);
+		
+		//CREATE FILE CONTROLLER
 		file_put_contents(app_path('Http/Controllers/'.$row->controller.'.php'), $file_controller);
 
 		return redirect(Route("ModulsControllerGetStep4",["id"=>$id]));
@@ -504,7 +519,7 @@ class ModulsController extends CBController {
 		}
 
 		return view('crudbooster::module_generator.step4',$data);
-	}
+	}	
 
 	public function postStepFinish() {
 		$this->cbLoader();
