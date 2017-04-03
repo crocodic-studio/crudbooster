@@ -369,7 +369,7 @@
 
                           <div class='col-sm-2'>
                               <select class='form-control' name='filter_column[{{$col["field_with"]}}][sorting]'>
-                                  <option value=''>** Sorting</option>
+                                  <option value=''>{{trans("crudbooster.filter_sorting")}}</option>
                                   <option {{ (CRUDBooster::getSortingFilter($col["field_with"]) == 'asc')?"selected":"" }} value='asc'>{{trans("crudbooster.filter_ascending")}}</option>
                                   <option {{ (CRUDBooster::getSortingFilter($col["field_with"]) == 'desc')?"selected":"" }} value='desc'>{{trans("crudbooster.filter_descending")}}</option>
                               </select>

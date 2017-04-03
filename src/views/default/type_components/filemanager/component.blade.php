@@ -22,14 +22,14 @@
 			    	<input id="thumbnail-{{$name}}" class="form-control" type="hidden" value='{{$value}}' name="{{$name}}">
 				    @if(@$form['filemanager_type'] == 'file')
 			          	@if($value) <div style='margin-top:15px'><a id='holder-{{$name}}' href='{{asset($value)}}' target='_blank' title='Download File {{ basename($value)}}'><i class='fa fa-download'></i> Download {{ basename($value)}}</a> 
-			          	&nbsp;<a class='btn btn-danger btn-delete btn-xs' onclick='swal({   title: "Are you sure?",   text: "You will not be able to undo this action!",   type: "warning",   showCancelButton: true,   confirmButtonColor: "#DD6B55",   confirmButtonText: "Yes, delete !",   closeOnConfirm: false }, function(){  location.href="{{url($mainpath."/delete-filemanager?file=".$row->{$name}."&id=".$row->id."&column=".$name)}}" });' href='javascript:void(0)' title='Delete this file'><i class='fa fa-ban'></i></a>
+			          	&nbsp;<a class='btn btn-danger btn-delete btn-xs' onclick='swal({   title: "{{trans("crudbooster.delete_title_confirm")}}",   text: "{{trans("crudbooster.delete_description_confirm")}}",   type: "warning",   showCancelButton: true,   confirmButtonColor: "#DD6B55",   confirmButtonText: "{{trans("crudbooster.confirmation_yes")}}",   closeOnConfirm: false }, function(){  location.href="{{url($mainpath."/delete-filemanager?file=".$row->{$name}."&id=".$row->id."&column=".$name)}}" });' href='javascript:void(0)' title='{{trans("crudbooster.general_delete")}}'><i class='fa fa-ban'></i></a>
 			          	</div>@endif
 			        @else
 			          	<p><a data-lightbox="roadtrip" href="{{ ($value)?asset($value):'' }}"><img id='holder-{{$name}}' {{ ($value)?'src='.asset($value):'' }} style="margin-top:15px;max-height:100px;"></a></p>
 			        @endif
 
 			        @if(!$readonly || !$disabled)
-					<p><a class='btn btn-danger btn-delete btn-sm' onclick="if(!confirm('{{trans("crudbooster.delete_title_confirm")}}')) return false" href='{{url(CRUDBooster::mainpath("update-single?table=$table&column=$name&value=&id=$id"))}}'><i class='fa fa-ban'></i> Delete </a></p>
+					<p><a class='btn btn-danger btn-delete btn-sm' onclick="if(!confirm('{{trans("crudbooster.delete_title_confirm")}}')) return false" href='{{url(CRUDBooster::mainpath("update-single?table=$table&column=$name&value=&id=$id"))}}'><i class='fa fa-ban'></i> {{trans("crudbooster.general_delete")}} </a></p>
 					@endif
 				@endif
 			    

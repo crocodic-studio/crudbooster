@@ -211,6 +211,7 @@ return [
     'filter_search'                => 'Search',
     'filter_from'                  => 'from',
     'filter_to'                    => 'to',
+    'filter_sorting'               => '** Sorting',
 
     // confirmation
     'confirmation_yes'             => 'Yes!',
@@ -219,5 +220,22 @@ return [
     //filemanager
     'chose_an_image'               => 'Choose an image ',
     'chose_an_file'                => 'Choose an file ',
+
+    // Common 
+    'general_delete'               => 'Delete',
+    'max_file_size'                =>'Your file size is too big !.',
+    'opps'                         =>'Opps!.',
+    'browse_file'                  =>'Browse File',
+    'complete_form_error'           =>'Please complete the form !',
+    'settings_save_succes'         =>' Your setting has been saved !',
+    'email'                        =>'E-mail',
+
+    // child table
+    'child_table_detail'           => 'Table Data',
+    'child_table_add'              => 'Add Table',
+    'child_reset_form'             => 'Reset Form',
+    'child_broswer_data'           => 'Broswer Data',
+    'child_form_title'             =>'Form',
+    'child_save_changes'           =>'Update',
 
 ];

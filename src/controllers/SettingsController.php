@@ -131,7 +131,7 @@ class SettingsController extends CBController {
 
 			Cache::forget('setting_'.$set->name);
 		}
-		return redirect()->back()->with(['message'=>'Your setting has been saved !','message_type'=>'success']);
+		return redirect()->back()->with(['message'=>trans('settings_save_succes'),'message_type'=>'success']);
 	}
 
 	function hook_before_add(&$arr) {

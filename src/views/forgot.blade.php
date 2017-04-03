@@ -55,12 +55,12 @@
         <form action="{{ route('postForgot') }}" method="post">
 		  <input type="hidden" name="_token" value="{{ csrf_token() }}" />
           <div class="form-group has-feedback">
-            <input type="email" class="form-control" name='email' required placeholder="Email Address"/>
+            <input type="email" class="form-control" name='email' required placeholder="{{trans("crudbooster.email")}}"/>
             <span class="glyphicon glyphicon-user form-control-feedback"></span>
           </div>
           <div class="row">
             <div class="col-xs-8">    
-              {{trans("crudbooster.forgot_text_try_again")}} <a href='{{route("getLogin")}}'>Click here</a>                          
+              {{trans("crudbooster.forgot_text_try_again")}} <a href='{{route("getLogin")}}'>{{trans("crudbooster.click_here")}}</a>                          
             </div><!-- /.col -->
             <div class="col-xs-4">
               <button type="submit" class="btn btn-primary btn-block btn-flat">{{trans("crudbooster.button_submit")}}</button>
