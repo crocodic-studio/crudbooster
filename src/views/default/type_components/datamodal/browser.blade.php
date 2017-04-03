@@ -23,7 +23,7 @@
 			$img_extension = ['jpg','jpeg','png','gif','bmp'];
 			$ext = pathinfo($row->$col, PATHINFO_EXTENSION);
 			if($ext && in_array($ext, $img_extension)) {
-				echo "<td><a href='".asset($row->$col)."' class='fancybox'><img src='".asset($row->$col)."' width='50px' height='30px'/></a></td>";
+				echo "<td><a href='".asset($row->$col)."' data-lightbox='roadtrip'><img src='".asset($row->$col)."' width='50px' height='30px'/></a></td>";
 			}else{
 				echo "<td>".str_limit(strip_tags($row->$col),50)."</td>";
 			}						

@@ -45,7 +45,7 @@
       $pic = (strpos($value,'http://')!==FALSE)?$value:asset($value);
       $pic_small = $pic;
       if(Request::input('fileformat')=='pdf') {
-        echo "<td><a class='fancybox' rel='group_{{$table}}' title='$col[label]: $title' href='".$pic."'><img class='img-circle' width='40px' height='40px' src='".$pic_small."'/></a></td>";
+        echo "<td><a data-lightbox='roadtrip' rel='group_{{$table}}' title='$col[label]: $title' href='".$pic."'><img class='img-circle' width='40px' height='40px' src='".$pic_small."'/></a></td>";
       }else{
         echo "<td>$pic</td>";
       }

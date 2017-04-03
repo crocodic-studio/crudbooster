@@ -13,6 +13,17 @@
 		->toArray();	
 		$value = DB::table($datatable_tab)->select($datatable_field)->whereIn('id',$ids)->pluck($datatable_field)->toArray();
 				
+	}else if($form['dataquery']) {
+		$dataquery = $form['dataquery'];
+		$query = DB::select(DB::raw($dataquery));	
+		if($query) {
+			foreach($query as $q) {
+				if($q->value == $value) {
+					echo $q->label;
+					break;
+				}
+			}
+		}					
 	}else{
 		$value = explode(";",$value);
 	}	

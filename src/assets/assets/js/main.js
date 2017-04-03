@@ -57,7 +57,7 @@
 			        : jQuery("<p>").append(this.eq(0).clone()).html();
 			};
 
-			$(".fancybox").fancybox();
+
 
 			$.ajaxSetup({
 				headers: {
