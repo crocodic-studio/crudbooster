@@ -239,7 +239,7 @@ class PrivilegesController extends CBController {
 
 		DB::table($this->table)->where($this->primary_key,$id)->delete();
 		DB::table("cms_privileges_roles")->where("id_cms_privileges",$row->id)->delete();
-		DB::table('cms_menus')->where('id_cms_privileges',$id)->deleteE();
+		DB::table('cms_menus')->where('id_cms_privileges',$id)->delete();
 		CRUDBooster::redirect(CRUDBooster::mainpath(),trans("crudbooster.alert_delete_data_success"),'success');		
 	}
 
