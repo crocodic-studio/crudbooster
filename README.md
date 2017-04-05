@@ -34,7 +34,7 @@ CRUDBooster is a Laravel CRUD Generator. With a new concept of scaffolding, very
 [CRUDBooster Channel](https://www.youtube.com/channel/UCgOJR3khWEykIBBR8vAGtcA)
 
 ## Support
-All issues, bugs or help are in one place, in [CRUDBoster Issues](https://github.com/crocodic-studio/crudbooster/issues). To request help or report a problem, centralize everything in the [CRUDBoster Issues](https://github.com/crocodic-studio/crudbooster/issues). Siga as diretrizes da sessão "Utilizando o CRUDBoster Issues".
+All issues, bugs or help are in one place, in [CRUDBoster Issues](https://github.com/crocodic-studio/crudbooster/issues). To request help or report a problem, centralize everything in the [CRUDBoster Issues](https://github.com/crocodic-studio/crudbooster/issues). Follow the guidelines in the "Using CRUDBooster Issues Page" session.
 
 ## Contribution
 
