@@ -32,4 +32,7 @@ public function hook_query_index(&$query) {
 ```
 
 ## What's Next
+- [How To Inject A Post Data In Create/Update/Delete Data Process](./how-to-inject-postdata.md)
+
+## Table Of Contents
 - [Back To Index](./index.md)

@@ -29,4 +29,7 @@ $this->form[] = ['label'=>'Address','name'=>'address','type'=>'googlemaps','lati
 
 
 ## What's Next
+- [hidden](./form-hidden.md)
+
+## Table Of Contents
 - [Back To Index](./index.md)

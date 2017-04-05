@@ -8,4 +8,7 @@ $this->form[] = ["label"=>"Label Name","name"=>"custom_field","type"=>"custom","
 ```
 
 ## What's Next
+- [datamodal](./form-datamodal.md)
+
+## Table Of Contents
 - [Back To Index](./index.md)

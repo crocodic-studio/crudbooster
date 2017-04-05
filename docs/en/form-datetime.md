@@ -6,4 +6,7 @@ Showing datepicker and time in the input type
 $this->form[] = ['label'=>'DateTime Event','name'=>'datetime','type'=>'datetime'];
 ```
 ## What's Next
+- [email](./form-email.md)
+
+## Table Of Contents
 - [Back To Index](./index.md)

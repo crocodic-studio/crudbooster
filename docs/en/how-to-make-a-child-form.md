@@ -64,5 +64,7 @@ $this->form[] = ['label'=>'Orders Detail','name'=>'orders_detail','type'=>'child
 | datamodal | datamodal_table,datamodal_columns,datamodal_select_to,datamodal_where,datamodal_size |
 
 ## What's Next
+- [How To Make The Graded Select Boxes (Parent Select -> Child Select -> Etc..)](./how-make-graded-select-box.md)
+
+## Table Of Contents
 - [Back To Index](./index.md)
-- [How To Make A Datamodal Input Type](./form-datamodal.md)

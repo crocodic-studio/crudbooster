@@ -14,5 +14,7 @@ $this->form[] = ['label'=>'Product Name','name'=>'products_id','type'=>'datamoda
 | datamodal_size | E.g : `large` or `default` | popup size |
 
 ## What's Next
-- [Back To Index](./index.md)
+- [date](./form-date.md)
 
+## Table Of Contents
+- [Back To Index](./index.md)

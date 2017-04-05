@@ -14,4 +14,7 @@ $this->form[] = ['label'=>'Content','name'=>'content','type'=>'wysiwyg'];
 
 
 ## What's Next
+- [How To Make A Graded Module (Parent Module -> Sub Module -> Sub Module)](./how-to-make-graded-module.md)
+
+## Table Of Contents
 - [Back To Index](./index.md)

@@ -34,4 +34,7 @@ $this->sub_module[] = ['label'=>'Photos','path'=>'photos','parent_columns'=>'nam
 | button_icon | Specify the icon. You can find out at Font Awesome |
 
 ## What's Next
+- [How To Implement A Many To Many Relationship To Form (E.g : Film -> R <- Actors)](./how-to-many-to-many.md)
+
+## Table Of Contents
 - [Back To Index](./index.md)

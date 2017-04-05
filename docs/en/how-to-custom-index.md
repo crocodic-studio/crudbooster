@@ -59,4 +59,7 @@ Create your own view in `/resources/views/your_custom_view_index.blade.php'
 ```
 
 ## What's Next
+- [How To Make A Custom View Of Add Method](./how-custom-view-add.md)
+
+## Table Of Contents
 - [Back To Index](./index.md)

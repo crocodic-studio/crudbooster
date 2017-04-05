@@ -7,4 +7,7 @@ $this->form[] = ['label'=>'Full Name','name'=>'full_name','type'=>'text'];
 ```
 
 ## What's Next
+- [textarea](./form-textarea.md)
+
+## Table Of Contents
 - [Back To Index](./index.md)

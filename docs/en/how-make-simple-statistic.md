@@ -8,4 +8,7 @@ $this->index_statistic[] = ['label'=>'Total Data','count'=>DB::table('products')
 ```
 
 ## What's Next
+- [How To Make A Child Form (Master - Detail)](./how-to-make-a-child-form.md)
+
+## Table Of Contents
 - [Back To Index](./index.md)

@@ -5,4 +5,7 @@
 3. Save.
 
 ## What's Next
+- [How To Make A Custom View Of Index Method](./how-to-custom-index.md)
+
+## Table Of Contents
 - [Back To Index](./index.md)

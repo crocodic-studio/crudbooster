@@ -37,4 +37,7 @@ public function hook_before_delete($id) {
 This method will be called once delete button is clicked.
 
 ## What's Next
+- [How To Put Your Own Javascript](./how-to-put-your-own-javascript.md)
+
+## Table Of Contents
 - [Back To Index](./index.md)

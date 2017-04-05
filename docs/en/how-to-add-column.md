@@ -12,5 +12,8 @@ $this->col[] = ['label'=>'Title','name'=>'title'];
 |label  | label of column |
 |name   | name for field name |
 
-## Whats Next
+## What's Next
+- [How To Join Table In Grid Data](./how-to-join-in-grid-data.md)
+
+## Table Of Contents
 - [Back To Index](./index.md)

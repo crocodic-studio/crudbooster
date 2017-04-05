@@ -17,7 +17,8 @@ $this->form[] = ['label'=>'Document','name'=>'document','type'=>'upload','valida
 $this->form[] = ['label'=>'Document','name'=>'document','type'=>'upload','validation'=>'image|max:1000'];
 ```
 
-
-
 ## What's Next
+- [wysiwyg](./form-wysiwyg.md)
+
+## Table Of Contents
 - [Back To Index](./index.md)

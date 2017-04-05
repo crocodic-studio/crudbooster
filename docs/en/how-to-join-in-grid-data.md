@@ -22,4 +22,7 @@ $this->col[] = ["label"=>"Category","name"=>"categories_id","join"=>"categories,
 ```
 
 ## What's Next
+- [How To Put Number Format In Grid Data Column](./how-to-put-number-format.md)
+
+## Table Of Contents
 - [Back To Index](./index.md)
