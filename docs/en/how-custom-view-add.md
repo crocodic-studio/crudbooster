@@ -43,3 +43,8 @@ Then, create your own `add view`
   </div>
 @endsection
 ```
+## What's Next
+- [How To Make A Custom View Of Edit Method](./how-to-custom-edit-view.md)
+
+## Table Of Contents
+- [Back To Index](./index.md)

@@ -30,4 +30,7 @@ $this->col[] = ['label'=>'Category','name'=>'categories_id','join'=>'categories,
 ```
 
 ## What's Next
-- [Back To Index](.index.md)
+- [How To Put A Custom Condition At Grid Data Query](./how-to-put-custom-condition-grid-data.md)
+
+## Table Of Contents
+- [Back To Index](./index.md)

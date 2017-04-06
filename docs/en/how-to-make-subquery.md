@@ -22,4 +22,7 @@ $this->col[] = ["label"=>"Total Favorite","name"=>"(select count(favorite.id) fr
 ```
 
 ## What's Next
+- [How To Add More Action Button In Grid Data](./how-add-more-action-button.md)
+
+## Table Of Contents
 - [Back To Index](./index.md)

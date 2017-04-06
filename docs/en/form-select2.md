@@ -31,6 +31,8 @@ $this->form[] = ['label'=>'Category','name'=>'categories_id','type'=>'select2','
 ```
 Add `datatable_format` attribute and fill it with a format. Specify the field name wich you want to show. You may specify the field more than one. Sparate it with a comma. If there is a word in addition to the field name, you must put a single quote in the prefix and suffix to its word. (See the example).
 
-
 ## What's Next
+- [text](./form-text.md)
+
+## Table Of Contents
 - [Back To Index](./index.md)

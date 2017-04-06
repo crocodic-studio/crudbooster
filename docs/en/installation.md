@@ -52,4 +52,7 @@ $ php artisan crudbooster:update
 - default password : 123456
 
 ## What's Next
+- [How To Create A Module (CRUD)](./how-to-create-module.md)
+
+## Table Of Contents
 - [Back To Index](./index.md)

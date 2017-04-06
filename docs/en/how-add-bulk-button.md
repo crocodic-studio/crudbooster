@@ -29,4 +29,7 @@ public function actionButtonSelected($id_selected,$button_name) {
 ```
 
 ## What's Next
+- [How To Add More Button At Top Of Grid Data](./how-add-button-top-grid-data.md)
+
+## Table Of Contents
 - [Back To Index](./index.md)

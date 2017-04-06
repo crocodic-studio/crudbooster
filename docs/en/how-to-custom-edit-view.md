@@ -46,4 +46,7 @@ Then, create your own `add view`
 ```
 
 ## What's Next
+- [How To Make A Custom View Of Detail Method](./how-to-custom-detail-view.md)
+
+## Table Of Contents
 - [Back To Index](./index.md)
