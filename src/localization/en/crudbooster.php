@@ -55,6 +55,7 @@ return [
 
     'alert_delete_selected'         => 'Are you sure want to delete all selected data ?',
     'alert_delete_selected_success' => 'Delete selected success !',
+    'alert_bulk_action_button'      => 'Are you sure want to',    
     'alert_action'                  => 'You have :action successfully !',
     'alert_add_data_success'        => 'The data has been added !',
     'alert_add_data_failed'         => 'Failed to save the data !',

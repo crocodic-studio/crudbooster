@@ -17,9 +17,22 @@
                       $('.selected-action ul li a').click(function() {
                         var name = $(this).data('name');
                         $('#form-table input[name="button_name"]').val(name);
-                        if(confirm("{{trans("crudbooster.alert_delete_selected")}}")) {                            
-                          $('#form-table').submit();
-                        }
+                        var title = $(this).attr('title');
+
+                        swal({
+                          title: "{{trans("crudbooster.confirmation_title")}}",
+                          text: "{{trans("crudbooster.alert_bulk_action_button")}} "+title+" ?",
+                          type: "warning",
+                          showCancelButton: true,
+                          confirmButtonColor: "#008D4C",
+                          confirmButtonText: "{{trans('crudbooster.confirmation_yes')}}",
+                          closeOnConfirm: false,
+                          showLoaderOnConfirm:true
+                        },
+                        function(){
+                          $('#form-table').submit();                          
+                        });
+
                       })
 
                       $('table tbody tr .button_action a').click(function(e) {
@@ -162,11 +175,11 @@
                 
                 if(toggle_advanced_report_boolean==1) {
                   $("#advanced_export").slideDown();
-                  $(this).html("<i class='fa fa-minus-square-o'></i> Show Advanced Export");
+                  $(this).html("<i class='fa fa-minus-square-o'></i> {{trans('crudbooster.export_dialog_show_advanced')}}");
                   toggle_advanced_report_boolean = 0;
                 }else{
                   $("#advanced_export").slideUp();
-                  $(this).html("<i class='fa fa-plus-square-o'></i> Show Advanced Export");
+                  $(this).html("<i class='fa fa-plus-square-o'></i> {{trans('crudbooster.export_dialog_show_advanced')}}");
                   toggle_advanced_report_boolean = 1;
                 }   
                 
@@ -290,8 +303,7 @@
               })
               $(".filter-value-between").each(function() {
                 var v = $(this).val();
-                if(v != '') {
-                  // $(this).parents('.row-filter-combo').find('.filter-value').hide();
+                if(v != '') {                  
                   $(this).prop('disabled',false);
                 }
               })

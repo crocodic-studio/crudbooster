@@ -51,6 +51,7 @@
     <div class="box">
       <div class="box-header">  
         <div class="pull-{{ trans('crudbooster.left') }}">
+          @if( ($button_delete && CRUDBooster::isDelete()) || $button_selected)
           <div class="selected-action" style="display:inline-block;position:relative;">
               <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class='fa fa-check-square-o'></i> {{trans("crudbooster.button_selected_action")}}
                 <span class="fa fa-caret-down"></span></button>                              
@@ -65,8 +66,9 @@
                   @endforeach
                 @endif
 
-              </ul>
-          </div>
+              </ul><!--end-dropdown-menu-->
+          </div><!--end-selected-action-->
+          @endif
         </div>
         <div class="box-tools pull-{{ trans('crudbooster.right') }}" style="padding-top:5px">
           
