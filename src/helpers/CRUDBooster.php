@@ -742,31 +742,27 @@ class CRUDBooster  {
         	}
 	    }
 
-		public static function urlFilterColumn($key,$type,$value='') {
+		public static function changeFilterColumnURI($key,$type,$value='',$singleSorting=true) {
 	        $params = Request::all();
-	        $mainpath = trim(self::mainpath(),'/');
-	        
-	        foreach($params as $a=>&$par) {            
-	            if($a == 'filter_column') {
-	                foreach($par as $b=>$v) {                    
-	                    if($v['type'] == 'asc' || $v['type'] == 'desc') {
-	                        unset($params[$a][$b]);
-	                        break;
-	                    }
-	                }
-	            }
-	        }
+	        $mainpath = trim(self::mainpath(),'/');	        
 
-	        if(count($params['filter_column']) == 0) unset($params['filter_column']);        
-	      
+	        if($params['filter_column']) {
+	        	foreach($params['filter_column'] as $k=>$filter) {
+		        	foreach($filter as $t=>$val) {
+		        		if($t=='sorting') {
+	        				unset($params['filter_column'][$k]['sorting']);
+	        			}
+		        	}
+		        }
+	        }
+	        
+	        
+	        $params['filter_column'][$key][$type] = $value;
+	        
 	        if(isset($params)) {        
-	            $params['filter_column'][$key]['type'] = $type;
-	            if($value) {
-	                $params['filter_column'][$key]['value'] = $value;
-	            }
-	            return $mainpath.'?'.urldecode(http_build_query($params));
+	            return $mainpath.'?'.http_build_query($params);
 	        }else{
-	            return $mainpath.'?filter_column['.$key.'][type]='.$value;
+	            return $mainpath.'?filter_column['.$key.']['.$type.']='.$value;
 	        }     
 	    }
 
