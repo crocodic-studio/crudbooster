@@ -1,5 +1,4 @@
 
-
 		@if($form['datatable'])
 
 			@if($form['relationship_table'])
@@ -9,7 +8,7 @@
 					})
 				</script>
 			@else
-				@if($form['datatable_ajax'] === true)
+				@if($form['datatable_ajax'] == true)
 
 				<?php 							
 					$datatable = @$form['datatable'];
@@ -134,53 +133,64 @@
 					@endforeach
 				@endif
 
-				@if($form['datatable'] && $form['relationship_table'])
-					<?php 
-						$select_table = explode(',',$form['datatable'])[0];
-						$select_title = explode(',',$form['datatable'])[1];
-						$select_where = $form['datatable_where'];
-						$result = DB::table($select_table)->select('id',$select_title);
-						if($select_where) {
-							$result->whereraw($select_where);
-						}
-						$result = $result->orderby($select_title,'asc')->get();
+				@if($form['datatable'])
+					@if($form['relationship_table'])
+						<?php 
+							$select_table = explode(',',$form['datatable'])[0];
+							$select_title = explode(',',$form['datatable'])[1];
+							$select_where = $form['datatable_where'];
+							$result = DB::table($select_table)->select('id',$select_title);
+							if($select_where) {
+								$result->whereraw($select_where);
+							}
+							$result = $result->orderby($select_title,'asc')->get();
 
 
-						$foreignKey = CRUDBooster::getForeignKey($table,$form['relationship_table']);	
-						$foreignKey2 = CRUDBooster::getForeignKey($select_table,$form['relationship_table']);																																
-						$value = DB::table($form['relationship_table'])->where($foreignKey,$id);										
-						$value = $value->pluck($foreignKey2)->toArray();
+							$foreignKey = CRUDBooster::getForeignKey($table,$form['relationship_table']);	
+							$foreignKey2 = CRUDBooster::getForeignKey($select_table,$form['relationship_table']);																																
+							$value = DB::table($form['relationship_table'])->where($foreignKey,$id);										
+							$value = $value->pluck($foreignKey2)->toArray();
 
-						foreach($result as $r) {
-							$option_label = $r->{$select_title};
-							$option_value = $r->id;
-							$selected = (is_array($value) && in_array($r->id, $value))?"selected":"";	
-							echo "<option $selected value='$option_value'>$option_label</option>";
-						}
-					?>
-				@elseif($form['datatable'] && $form['datatable_ajax'])
-					<option value=''>{{trans('crudbooster.text_prefix_option')}} {{$form['label']}}</option>
-					<?php 
-						$select_table = explode(',',$form['datatable'])[0];
-						$select_title = explode(',',$form['datatable'])[1];
-						$select_where = $form['datatable_where'];
-						$result = DB::table($select_table)->select('id',$select_title);
-						if($select_where) {
-							$result->whereraw($select_where);
-						}
-						$result = $result->orderby($select_title,'asc')->get();
+							foreach($result as $r) {
+								$option_label = $r->{$select_title};
+								$option_value = $r->id;
+								$selected = (is_array($value) && in_array($r->id, $value))?"selected":"";	
+								echo "<option $selected value='$option_value'>$option_label</option>";
+							}
+						?>
+					@else
+						@if($form['datatable_ajax'] == false)
+							<option value=''>{{trans('crudbooster.text_prefix_option')}} {{$form['label']}}</option>
+							<?php 
+								$select_table = explode(',',$form['datatable'])[0];
+								$select_title = explode(',',$form['datatable'])[1];
+								$select_where = $form['datatable_where'];
+								$select_table_pk = CRUDBooster::findPrimaryKey($select_table);
+								$result = DB::table($select_table)->select($select_table_pk,$select_title);
+								if($select_where) {
+									$result->whereraw($select_where);
+								}
+								$result = $result->orderby($select_title,'asc')->get();
 
-						foreach($result as $r) {
-							$option_label = $r->{$select_title};
-							$option_value = $r->id;
-							$selected = ($option_value == $value)?"selected":"";
-							echo "<option $selected value='$option_value'>$option_label</option>";
-						}
-					?>
+								foreach($result as $r) {
+									$option_label = $r->{$select_title};
+									$option_value = $r->$select_table_pk;
+									$selected = ($option_value == $value)?"selected":"";
+									echo "<option $selected value='$option_value'>$option_label</option>";
+								}
+							?>
+						<!--end-datatable-ajax-->
+						@endif 
 
+					<!--end-relationship-table-->
+					@endif 
+
+				<!--end-datatable-->
 				@endif
 			</select>
-			<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
+			<div class="text-danger">
+				{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}
+			</div><!--end-text-danger-->
 			<p class='help-block'>{{ @$form['help'] }}</p>
 
 			</div>

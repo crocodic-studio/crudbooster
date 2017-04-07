@@ -93,6 +93,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $loader->alias('Excel', 'Maatwebsite\Excel\Facades\Excel');
         $loader->alias('Image', 'Intervention\Image\Facades\Image');
         $loader->alias('CRUDBooster', 'crocodicstudio\crudbooster\helpers\CRUDBooster');
+        $loader->alias('CB', 'crocodicstudio\crudbooster\helpers\CB');
     }
 
 

@@ -13,7 +13,10 @@
 			"datatable_where":"string where condition",
 			"datatable_format":"sql concat alike. e.g : id,' - ',title",			
 			"datatable_exception":"string value exception",
-			"datatable_ajax":"1 or 0"
+			"datatable_ajax":{
+				"type":"radio",
+				"enum":["true","false"]
+			}	
 		}
 									
 	}

@@ -596,9 +596,9 @@ class CRUDBooster  {
 		    }
 		}
 
-		public static function parseSqlTable($field) {
+		public static function parseSqlTable($table) {
 
-			$f = explode('.', $field);
+			$f = explode('.', $table);
 
 			if(count($f) == 1) {
 				return array("table"=>$f[0], "database"=>config('crudbooster.MAIN_DB_DATABASE'));
@@ -611,34 +611,63 @@ class CRUDBooster  {
 		}
 
 		public static function putCache($section,$cache_name,$cache_value) {
-			Cache::section($section)->forever($cache_name,$cache_value);
+			if(Cache::has($section)) {
+				$cache_open = Cache::get($section);
+			}else{
+				Cache::forever($section,array());
+				$cache_open = Cache::get($section);
+			}		
+			$cache_open[$cache_name] = $cache_value;
+			Cache::forever($section,$cache_open);
 			return true;
 		}
 
 		public static function getCache($section,$cache_name) {
-			return Cache::section($section)->get($cache_name);
+			if(Cache::has($section)) {
+				$cache_open = Cache::get($section);
+				return $cache_open[$cache_name];
+			}else{
+				return false;
+			}			
 		}
 
 		public static function flushCache($section) {
-			return Cache::section($section)->flush();
+			if(Cache::forget($section)) {
+				return true;
+			}else{
+				return false;
+			}
 		}
 
 		public static function forgetCache($section,$cache_name) {
-			return Cache::section($section)->forget($cache_name);
+			if(Cache::has($section)) {
+				$open = Cache::get($section);
+				unset($open[$cache_name]);
+				Cache::forever($section,$open);
+				return true;
+			}else{
+				return false;
+			}
 		}
 
 		public static function findPrimaryKey($table) {
+			if(!$table) throw new \Exception("\$table is undefined", 1);
+			
 			if(self::getCache('table_'.$table,'primary_key')) {
 				return self::getCache('table_'.$table,'primary_key');
-			}
-			
+			}			
 			$table = CRUDBooster::parseSqlTable($table);
-			$keys = DB::select('SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :database AND TABLE_NAME = :table AND COLUMN_KEY = \'PRI\'', ['database'=>$table['database'], 'table'=>$table['table']]);
+
+			if(!$table['table']) throw new \Exception("parseSqlTable can't determine the table");							
+			$query = "select * from information_schema.COLUMNS where TABLE_SCHEMA = '$table[database]' and TABLE_NAME = '$table[table]' and COLUMN_KEY = 'PRI'";
+			$keys = DB::select($query);
 			$primary_key = $keys[0]->COLUMN_NAME;
 			if($primary_key) {				
 				self::putCache('table_'.$table,'primary_key',$primary_key);
-			}
-			return $keys[0]->COLUMN_NAME;
+				return $primary_key;
+			}else{
+				return 'id';
+			}			
 		}
 
 		public static function newId($table) {
