@@ -1082,6 +1082,7 @@ class CRUDBooster  {
 			$button_filter       = 'TRUE';
 			$button_export       = 'FALSE';
 			$button_import       = 'FALSE';
+			$button_bulk_action	 = 'TRUE';
 			$global_privilege    = 'FALSE';
 	                
 	$php = '
@@ -1096,7 +1097,7 @@ class CRUDBooster  {
 
 	    public function cbInit() {
 	    	# START CONFIGURATION DO NOT REMOVE THIS LINE
-			$this->table               = "'.$table.'";	        
+			$this->table 			   = "'.$table.'";	        
 			$this->title_field         = "'.$name_col.'";
 			$this->limit               = 20;
 			$this->orderby             = "id,desc";
@@ -1110,7 +1111,8 @@ class CRUDBooster  {
 			$this->button_show         = '.$button_show.';
 			$this->button_filter       = '.$button_filter.';        
 			$this->button_export       = '.$button_export.';	        
-			$this->button_import       = '.$button_import.';	
+			$this->button_import       = '.$button_import.';
+			$this->button_bulk_action  = '.$button_bulk_action.';	
 			# END CONFIGURATION DO NOT REMOVE THIS LINE						      
 
 			# START COLUMNS DO NOT REMOVE THIS LINE

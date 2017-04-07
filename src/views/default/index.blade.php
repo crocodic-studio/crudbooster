@@ -50,8 +50,8 @@
  
     <div class="box">
       <div class="box-header">  
-        <div class="pull-{{ trans('crudbooster.left') }}">
-          @if( ($button_delete && CRUDBooster::isDelete()) || $button_selected)
+        @if($button_bulk_action && ( ($button_delete && CRUDBooster::isDelete()) || $button_selected) )
+        <div class="pull-{{ trans('crudbooster.left') }}">          
           <div class="selected-action" style="display:inline-block;position:relative;">
               <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class='fa fa-check-square-o'></i> {{trans("crudbooster.button_selected_action")}}
                 <span class="fa fa-caret-down"></span></button>                              
@@ -67,10 +67,10 @@
                 @endif
 
               </ul><!--end-dropdown-menu-->
-          </div><!--end-selected-action-->
-          @endif
-        </div>
-        <div class="box-tools pull-{{ trans('crudbooster.right') }}" style="padding-top:5px">
+          </div><!--end-selected-action-->        
+        </div><!--end-pull-left-->
+        @endif
+        <div class="box-tools pull-{{ trans('crudbooster.right') }}" style="padding-top:5px;">
           
               @if($button_filter)
               <a style="margin-top:-23px" href="javascript:void(0)" id='btn_advanced_filter' data-url-parameter='{{$build_query}}' title='{{trans('crudbooster.filter_dialog_title')}}' class="btn btn-sm btn-default {{(Request::get('filter_column'))?'active':''}}">                               
@@ -113,7 +113,11 @@
                 </select>                              
               </div>
             </form>
+
         </div> 
+
+        <br style="clear:both"/>
+
       </div>
       <div class="box-body table-responsive no-padding">
         @include("crudbooster::default.table")
