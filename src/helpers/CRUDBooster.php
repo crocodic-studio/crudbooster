@@ -9,7 +9,7 @@ use DB;
 use Route;
 use Validator;
 
-class CRUDBooster  {
+class CRUDBooster  {		
 
 		public static function getSetting($name){	
 			if(Cache::has('setting_'.$name)) {
@@ -596,9 +596,9 @@ class CRUDBooster  {
 		    }
 		}
 
-		public static function parseSqlTable($field) {
+		public static function parseSqlTable($table) {
 
-			$f = explode('.', $field);
+			$f = explode('.', $table);
 
 			if(count($f) == 1) {
 				return array("table"=>$f[0], "database"=>config('crudbooster.MAIN_DB_DATABASE'));
@@ -610,32 +610,91 @@ class CRUDBooster  {
 			return false;
 		}
 
+		public static function putCache($section,$cache_name,$cache_value) {
+			if(Cache::has($section)) {
+				$cache_open = Cache::get($section);
+			}else{
+				Cache::forever($section,array());
+				$cache_open = Cache::get($section);
+			}		
+			$cache_open[$cache_name] = $cache_value;
+			Cache::forever($section,$cache_open);
+			return true;
+		}
+
+		public static function getCache($section,$cache_name) {
+
+			if(Cache::has($section)) {
+				$cache_open = Cache::get($section);				
+				return $cache_open[$cache_name];
+			}else{				
+				return false;
+			}			
+		}
+
+		public static function flushCache($section) {
+			if(Cache::forget($section)) {
+				return true;
+			}else{
+				return false;
+			}
+		}
+
+		public static function forgetCache($section,$cache_name) {
+			if(Cache::has($section)) {
+				$open = Cache::get($section);
+				unset($open[$cache_name]);
+				Cache::forever($section,$open);
+				return true;
+			}else{
+				return false;
+			}
+		}
+
 		public static function findPrimaryKey($table) {
+			if(!$table) throw new \Exception("\$table is undefined", 1);
+			
+			if(self::getCache('table_'.$table,'primary_key')) {
+				return self::getCache('table_'.$table,'primary_key');
+			}			
 			$table = CRUDBooster::parseSqlTable($table);
-			$keys = DB::select('SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :database AND TABLE_NAME = :table AND COLUMN_KEY = \'PRI\'', ['database'=>$table['database'], 'table'=>$table['table']]);
-			return $keys[0]->COLUMN_NAME;
+
+			if(!$table['table']) throw new \Exception("parseSqlTable can't determine the table");							
+			$query = "select * from information_schema.COLUMNS where TABLE_SCHEMA = '$table[database]' and TABLE_NAME = '$table[table]' and COLUMN_KEY = 'PRI'";
+			$keys = DB::select($query);
+			$primary_key = $keys[0]->COLUMN_NAME;
+			if($primary_key) {				
+				self::putCache('table_'.$table,'primary_key',$primary_key);
+				return $primary_key;
+			}else{
+				return 'id';
+			}			
 		}
 
 		public static function newId($table) {
 			$key = CRUDBooster::findPrimaryKey($table);
-			$id = DB::select('SELECT MAX('.trim(DB::connection()->getPdo()->quote($key), "'").') as max FROM '.trim(DB::connection()->getPdo()->quote($table), "'"));
-			return $id[0]->max + 1;
+			$id = DB::table($table)->max($key)+1;
+			return $id;
 		}
 
 		public static function isColumnExists($table,$field) {
+
+			if(!$table) throw new Exception("\$table is empty !", 1);
+			if(!$field) throw new Exception("\$field is empty !", 1);						
+
 			$table = CRUDBooster::parseSqlTable($table);
 
-			if(Cache::has('isColumnExists_'.$table['table'].'_'.$field)) {
-				return Cache::get('isColumnExists_'.$table['table'].'_'.$field);
-			}			
+			if(self::getCache('table_'.$table,'column_'.$field)) {
+				return self::getCache('table_'.$table,'column_'.$field);
+			}
 
 			$result = DB::select('SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :database AND TABLE_NAME = :table AND COLUMN_NAME = :field', ['database'=>$table['database'], 'table'=>$table['table'], 'field'=>$field]);
 
-			if(count($result) > 0) {
-				Cache::forever('isColumnExists_'.$table['table'].'_'.$field,true);
+			if(count($result) > 0) {				
+				self::putCache('table_'.$table,'column_'.$field,1);
 				return true;
 			}else{
-				Cache::forever('isColumnExists_'.$table['table'].'_'.$field,false);
+				self::putCache('table_'.$table,'column_'.$field,0);
 				return false;
 			}
 
@@ -688,31 +747,27 @@ class CRUDBooster  {
         	}
 	    }
 
-		public static function urlFilterColumn($key,$type,$value='') {
+		public static function changeFilterColumnURI($key,$type,$value='',$singleSorting=true) {
 	        $params = Request::all();
-	        $mainpath = trim(self::mainpath(),'/');
-	        
-	        foreach($params as $a=>&$par) {            
-	            if($a == 'filter_column') {
-	                foreach($par as $b=>$v) {                    
-	                    if($v['type'] == 'asc' || $v['type'] == 'desc') {
-	                        unset($params[$a][$b]);
-	                        break;
-	                    }
-	                }
-	            }
-	        }
+	        $mainpath = trim(self::mainpath(),'/');	        
 
-	        if(count($params['filter_column']) == 0) unset($params['filter_column']);        
-	      
+	        if($params['filter_column']) {
+	        	foreach($params['filter_column'] as $k=>$filter) {
+		        	foreach($filter as $t=>$val) {
+		        		if($t=='sorting') {
+	        				unset($params['filter_column'][$k]['sorting']);
+	        			}
+		        	}
+		        }
+	        }
+	        
+	        
+	        $params['filter_column'][$key][$type] = $value;
+	        
 	        if(isset($params)) {        
-	            $params['filter_column'][$key]['type'] = $type;
-	            if($value) {
-	                $params['filter_column'][$key]['value'] = $value;
-	            }
-	            return $mainpath.'?'.urldecode(http_build_query($params));
+	            return $mainpath.'?'.http_build_query($params);
 	        }else{
-	            return $mainpath.'?filter_column['.$key.'][type]='.$value;
+	            return $mainpath.'?filter_column['.$key.']['.$type.']='.$value;
 	        }     
 	    }
 
@@ -1028,6 +1083,7 @@ class CRUDBooster  {
 			$button_filter       = 'TRUE';
 			$button_export       = 'FALSE';
 			$button_import       = 'FALSE';
+			$button_bulk_action	 = 'TRUE';
 			$global_privilege    = 'FALSE';
 	                
 	$php = '
@@ -1042,7 +1098,7 @@ class CRUDBooster  {
 
 	    public function cbInit() {
 	    	# START CONFIGURATION DO NOT REMOVE THIS LINE
-			$this->table               = "'.$table.'";	        
+			$this->table 			   = "'.$table.'";	        
 			$this->title_field         = "'.$name_col.'";
 			$this->limit               = 20;
 			$this->orderby             = "id,desc";
@@ -1056,7 +1112,8 @@ class CRUDBooster  {
 			$this->button_show         = '.$button_show.';
 			$this->button_filter       = '.$button_filter.';        
 			$this->button_export       = '.$button_export.';	        
-			$this->button_import       = '.$button_import.';	
+			$this->button_import       = '.$button_import.';
+			$this->button_bulk_action  = '.$button_bulk_action.';	
 			# END CONFIGURATION DO NOT REMOVE THIS LINE						      
 
 			# START COLUMNS DO NOT REMOVE THIS LINE

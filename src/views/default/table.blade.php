@@ -17,9 +17,22 @@
                       $('.selected-action ul li a').click(function() {
                         var name = $(this).data('name');
                         $('#form-table input[name="button_name"]').val(name);
-                        if(confirm("{{trans("crudbooster.alert_delete_selected")}}")) {                            
-                          $('#form-table').submit();
-                        }
+                        var title = $(this).attr('title');
+
+                        swal({
+                          title: "{{trans("crudbooster.confirmation_title")}}",
+                          text: "{{trans("crudbooster.alert_bulk_action_button")}} "+title+" ?",
+                          type: "warning",
+                          showCancelButton: true,
+                          confirmButtonColor: "#008D4C",
+                          confirmButtonText: "{{trans('crudbooster.confirmation_yes')}}",
+                          closeOnConfirm: false,
+                          showLoaderOnConfirm:true
+                        },
+                        function(){
+                          $('#form-table').submit();                          
+                        });
+
                       })
 
                       $('table tbody tr .button_action a').click(function(e) {
@@ -48,22 +61,22 @@
                             $mainpath = trim(CRUDBooster::mainpath(),'/').$build_query;
                             echo "<th width='$width'>";
                             if(isset($sort_column[$field])) {
-                              switch($sort_column[$field]['type']) {                                
+                              switch($sort_column[$field]['sorting']) {                                
                                 case 'asc': 
-                                  $url = CRUDBooster::urlFilterColumn($field,'desc');
+                                  $url = CRUDBooster::changeFilterColumnURI($field,'sorting','desc');
                                   echo "<a href='$url' title='Click to sort descending'>$colname &nbsp; <i class='fa fa-sort-desc'></i></a>";
                                   break;
                                 case 'desc':
-                                  $url = CRUDBooster::urlFilterColumn($field,'asc');
+                                  $url = CRUDBooster::changeFilterColumnURI($field,'sorting','asc');
                                   echo "<a href='$url' title='Click to sort ascending'>$colname &nbsp; <i class='fa fa-sort-asc'></i></a>";
                                   break;
                                 default:
-                                  $url = CRUDBooster::urlFilterColumn($field,'asc');
+                                  $url = CRUDBooster::changeFilterColumnURI($field,'sorting','asc');
                                   echo "<a href='$url' title='Click to sort ascending'>$colname &nbsp; <i class='fa fa-sort'></i></a>";
                                   break;      
                               }
                             }else{     
-                                  $url = CRUDBooster::urlFilterColumn($field,'asc');                         
+                                  $url = CRUDBooster::changeFilterColumnURI($field,'sorting','asc');                         
                                   echo "<a href='$url' title='Click to sort ascending'>$colname &nbsp; <i class='fa fa-sort'></i></a>";                                  
                             }
                             
@@ -162,11 +175,11 @@
                 
                 if(toggle_advanced_report_boolean==1) {
                   $("#advanced_export").slideDown();
-                  $(this).html("<i class='fa fa-minus-square-o'></i> Show Advanced Export");
+                  $(this).html("<i class='fa fa-minus-square-o'></i> {{trans('crudbooster.export_dialog_show_advanced')}}");
                   toggle_advanced_report_boolean = 0;
                 }else{
                   $("#advanced_export").slideUp();
-                  $(this).html("<i class='fa fa-plus-square-o'></i> Show Advanced Export");
+                  $(this).html("<i class='fa fa-plus-square-o'></i> {{trans('crudbooster.export_dialog_show_advanced')}}");
                   toggle_advanced_report_boolean = 1;
                 }   
                 
@@ -191,94 +204,59 @@
                 $('#advanced_filter_modal').modal('show');
               })
 
-              $(".filter-combo").change(function() {
-                console.log('Filter combo detected');
+              $(".filter-combo").change(function() {                
                 var n = $(this).val();
                 var p = $(this).parents('.row-filter-combo');
                 var type_data = $(this).attr('data-type');
                 var filter_value = p.find('.filter-value');
 
+                p.find('.between-group').hide();
+                p.find('.between-group').find('input').prop('disabled',true);
+                filter_value.val('').show().focus();
                 switch(n) {
                   default:
-                    filter_value.removeAttr('placeholder').val('').prop('disabled',true);
-                    
-                    filter_value.val('').show().focus();
-                    p.find('.between-group').hide();
-
-                    p.find('.filter-value-between').val('').prop('disabled',true);
+                    filter_value.removeAttr('placeholder').val('').prop('disabled',true);                                                            
+                    p.find('.between-group').find('input').prop('disabled',true);
                   break;
                   case 'like':
-                  case 'not like':
-                    filter_value.val('').show().focus();  
-                    p.find('.between-group').hide();
-                    
+                  case 'not like':                                                              
                     filter_value.attr('placeholder','{{trans("crudbooster.filter_eg")}} : {{trans("crudbooster.filter_lorem_ipsum")}}').prop('disabled',false);
                   break;
-                  case 'asc':
-                    filter_value.val('').show().focus();
-                    p.find('.between-group').hide();
-
+                  case 'asc':                                        
                     filter_value.prop('disabled',true).attr('placeholder','{{trans("crudbooster.filter_sort_ascending")}}');
                   break;
-                  case 'desc':
-                    filter_value.val('').show().focus();
-                    p.find('.between-group').hide();
-
+                  case 'desc':                                        
                     filter_value.prop('disabled',true).attr('placeholder','{{trans("crudbooster.filter_sort_descending")}}');
                   break;
-                  case '=':
-                    filter_value.val('').show().focus();
-                    p.find('.between-group').hide();
-
+                  case '=':                                        
                     filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : {{trans("crudbooster.filter_lorem_ipsum")}}');
                   break;
-                  case '>=':        
-                    filter_value.val('').show().focus();
-                    p.find('.between-group').hide();
-
+                  case '>=':                                                
                     filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : 1000');
                   break;
-                  case '<=':        
-                    filter_value.val('').show().focus();
-                    p.find('.between-group').hide();
-
+                  case '<=':                                                
                     filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : 1000');
                   break;
-                  case '>':       
-                    filter_value.val('').show().focus();
-                    p.find('.between-group').hide();
-
+                  case '>':                                               
                     filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : 1000');
                   break;
-                  case '<':       
-                    filter_value.val('').show().focus();
-                    p.find('.between-group').hide();
-
+                  case '<':                                               
                     filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : 1000'); 
                   break; 
-                  case '!=':
-                    filter_value.val('').show().focus();
-                    p.find('.between-group').hide();
-
+                  case '!=':                                        
                     filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : {{trans("crudbooster.filter_lorem_ipsum")}}');
                   break;
-                  case 'in':
-                    filter_value.val('').show().focus();
-                    p.find('.between-group').hide();
-
+                  case 'in':                                        
                     filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : {{trans("crudbooster.filter_lorem_ipsum_dolor_sit")}}');
                   break;
-                  case 'not in':
-                    filter_value.val('').show().focus();
-                    p.find('.between-group').hide();
-
+                  case 'not in':                                        
                     filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : {{trans("crudbooster.filter_lorem_ipsum_dolor_sit")}}');
                   break;
                   case 'between':       
                     filter_value.val('').hide();
+                    p.find('.between-group input').prop('disabled',false);
                     p.find('.between-group').show().focus();
-                    p.find('.filter-value-between').prop('disabled',false);
-                    
+                    p.find('.filter-value-between').prop('disabled',false);                    
                   break;
                 }
               })
@@ -288,13 +266,7 @@
                 var v = $(this).val();
                 if(v != '') $(this).prop('disabled',false);
               })
-              $(".filter-value-between").each(function() {
-                var v = $(this).val();
-                if(v != '') {
-                  // $(this).parents('.row-filter-combo').find('.filter-value').hide();
-                  $(this).prop('disabled',false);
-                }
-              })
+ 
             })
             </script>
             <!-- MODAL FOR SORTING DATA-->
@@ -306,10 +278,8 @@
                     <span aria-hidden="true">×</span></button>
                     <h4 class="modal-title"><i class='fa fa-filter'></i> {{trans("crudbooster.filter_dialog_title")}}</h4>
                   </div>
-                  <form method='get' action=''>
-                    <input type="hidden" name="lasturl" value="{{Request::get('lasturl')?:Request::fullUrl()}}">
-                    <div class="modal-body">
-                      
+                  <form method='get' action=''>                    
+                    <div class="modal-body">                      
                       <?php foreach($columns as $key => $col):?>
                         <?php if( isset($col['image']) || isset($col['download']) || $col['visible']===FALSE) continue;?>   
 
@@ -348,7 +318,10 @@
                               <div class='col-sm-6'>
                                 <div class='input-group'>
                                   <span class="input-group-addon">From:</span>
-                                  <input type='text' class='filter-value-between form-control {{ (in_array($col["type_data"],["date","time","datetime","timestamp"]))?"datepicker":"" }}' readonly placeholder='{{$col["label"]}} {{trans("crudbooster.filter_from")}}' name='filter_column[{{$col["field_with"]}}][value][]' value='<?php
+                                  <input 
+                                  {{ (CRUDBooster::getTypeFilter($col["field_with"]) != 'between')?"disabled":"" }}
+                                  type='text' 
+                                  class='filter-value-between form-control {{ (in_array($col["type_data"],["date","time","datetime","timestamp"]))?"datepicker":"" }}' readonly placeholder='{{$col["label"]}} {{trans("crudbooster.filter_from")}}' name='filter_column[{{$col["field_with"]}}][value][]' value='<?php
                                   $value = CRUDBooster::getValueFilter($col["field_with"]); 
                                   echo (CRUDBooster::getTypeFilter($col["field_with"])=='between')?$value[0]:"";
                                   ?>'>
@@ -357,7 +330,10 @@
                               <div class='col-sm-6'>
                                 <div class='input-group'>
                                   <span class="input-group-addon">To:</span>
-                                  <input type='text' class='filter-value-between form-control {{ (in_array($col["type_data"],["date","time","datetime","timestamp"]))?"datepicker":"" }}' readonly placeholder='{{$col["label"]}} {{trans("crudbooster.filter_to")}}' name='filter_column[{{$col["field_with"]}}][value][]' value='<?php
+                                  <input 
+                                  {{ (CRUDBooster::getTypeFilter($col["field_with"]) != 'between')?"disabled":"" }}
+                                  type='text' 
+                                  class='filter-value-between form-control {{ (in_array($col["type_data"],["date","time","datetime","timestamp"]))?"datepicker":"" }}' readonly placeholder='{{$col["label"]}} {{trans("crudbooster.filter_to")}}' name='filter_column[{{$col["field_with"]}}][value][]' value='<?php
                                   $value = CRUDBooster::getValueFilter($col["field_with"]); 
                                   echo (CRUDBooster::getTypeFilter($col["field_with"])=='between')?$value[1]:"";
                                   ?>'>
@@ -386,6 +362,7 @@
                       <button class="btn btn-default btn-reset" type="reset" onclick='location.href="{{Request::get("lasturl")}}"' >{{trans("crudbooster.button_reset")}}</button>
                       <button class="btn btn-primary btn-submit" type="submit">{{trans("crudbooster.button_submit")}}</button>
                     </div>
+                    <input type="hidden" name="lasturl" value="{{Request::get('lasturl')?:Request::fullUrl()}}">
                   </form>
                 </div>
                 <!-- /.modal-content -->

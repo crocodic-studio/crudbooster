@@ -11,6 +11,7 @@ return [
     'text_view_all_notification' => 'View All',
     'label_button_profile'       => "Profile",
     'filter_dialog_title'        => 'Advanced Sort & Filter',
+    'there_is_no_option'        => 'There is no any options setting for this inputType',
 
     'text_enter_the_password'     => 'Enter your password to retrieve your session',
     'text_or_sign_in'             => 'Or sign in as a different user',
@@ -54,6 +55,7 @@ return [
 
     'alert_delete_selected'         => 'Are you sure want to delete all selected data ?',
     'alert_delete_selected_success' => 'Delete selected success !',
+    'alert_bulk_action_button'      => 'Are you sure want to',    
     'alert_action'                  => 'You have :action successfully !',
     'alert_add_data_success'        => 'The data has been added !',
     'alert_add_data_failed'         => 'Failed to save the data !',
@@ -219,5 +221,13 @@ return [
     //filemanager
     'chose_an_image'               => 'Choose an image ',
     'chose_an_file'                => 'Choose an file ',
+    
+    //action confirmation
+    'confirmation_title'            => 'Confirmation',
+    'confirmation_text'             => 'Are you sure want to do this action?',
+    'confirmButtonText'             => 'Yes',
+
+    
+
 
 ];

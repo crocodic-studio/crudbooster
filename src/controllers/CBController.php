@@ -46,6 +46,7 @@ class CBController extends Controller {
 	public $button_show         = TRUE;
 	public $button_addmore      = TRUE;
 	public $button_table_action = TRUE;
+	public $button_bulk_action	= TRUE;
 	public $button_add          = TRUE;
 	public $button_delete       = TRUE;
 	public $button_cancel       = TRUE;
@@ -100,6 +101,7 @@ class CBController extends Controller {
 		$this->data['button_cancel']         = $this->button_cancel;
 		$this->data['button_save']           = $this->button_save;
 		$this->data['button_table_action']   = $this->button_table_action;
+		$this->data['button_bulk_action']    = $this->button_bulk_action;
 		$this->data['button_import']         = $this->button_import;
 		$this->data['button_action_width']   = $this->button_action_width;
 		$this->data['button_selected']       = $this->button_selected;
@@ -414,7 +416,8 @@ class CBController extends Controller {
 					'label'=>$s['label'],
 					'icon'=>$s['button_icon'],
 					'url'=>CRUDBooster::adminPath($s['path']).'?parent_table='.$table_parent.'&parent_columns='.$s['parent_columns'].'&parent_id=[id]&return_url='.urlencode(Request::fullUrl()).'&foreign_key='.$s['foreign_key'].'&label='.urlencode($s['label']),
-					'color'=>$s['button_color']
+					'color'=>$s['button_color'],
+                                        'showIf'=>$s['showIf']
 				];
 			}
 		}

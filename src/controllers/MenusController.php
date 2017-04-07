@@ -72,8 +72,11 @@ use CRUDBooster;
 				}
 
 				$('input[name=type]').click(function() {
+					var default_placeholder_path = 'NameController@methodName';
 					var n = $(this).val();
 					var isCheck = $(this).prop('checked');
+					console.log('Click the module type '+n);
+					$('input[name=path]').attr('placeholder',default_placeholder_path);
 					if(n == 'Module') {
 						$('#form-group-path').hide();
 						$('#form-group-statistic_slug').hide();
@@ -92,6 +95,24 @@ use CRUDBooster;
 						$('#statistic_slug').prop('required',true);
 						$('#form-group-statistic_slug label .text-danger').remove();
 						$('#form-group-statistic_slug label').append('<span class=\"text-danger\" title=\"This field is required\">*</span>');
+					}else if (n == 'URL') {
+						$('input[name=path]').attr('placeholder','Please enter your URL');
+
+						$('#path').prop('required',true);
+						$('#form-group-path label .text-danger').remove();
+						$('#form-group-path label').append('<span class=\"text-danger\" title=\"This field is required\">*</span>');
+
+						$('#form-group-path').show();
+						$('#form-group-module_slug,#form-group-statistic_slug').hide();
+					}else if (n == 'Route') {
+						$('input[name=path]').attr('placeholder','Please enter the Route');
+
+						$('#path').prop('required',true);
+						$('#form-group-path label .text-danger').remove();
+						$('#form-group-path label').append('<span class=\"text-danger\" title=\"This field is required\">*</span>');
+
+						$('#form-group-path').show();
+						$('#form-group-module_slug,#form-group-statistic_slug').hide();					
 					}else {
 						$('#module_slug,#statistic_slug').prop('required',false);
 						
