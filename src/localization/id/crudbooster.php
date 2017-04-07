@@ -191,14 +191,14 @@ return [
     'application_setting'          => 'Pengaturan Aplikasi',
 
     // table filter & sort 
-    'filter_select_operator_type'  => 'Pilih pembanding',
+    'filter_select_operator_type'  => 'Operator',
     'filter_ascending'             => 'Kecil -> Besar',
     'filter_descending'            => 'Besar <- Kecil',
     'filter_equal_to'              => 'Sama dengan',
     'filter_like'                  => 'Seperti',
     'filter_not_like'              => 'Tidak Seperti',
-    'filter_greater_than_or_equal' => 'Lebih besar dari sama',
-    'filter_less_than_or_equal'    => 'Kurang dari sama',
+    'filter_greater_than_or_equal' => 'Lebih besar dan sama',
+    'filter_less_than_or_equal'    => 'Kurang dari dan sama',
     'filter_less_than'             => 'Kurang dari',
     'filter_greater_than'          => 'Lebih besar dari',
     'filter_not_equal_to'          => 'Tidak sama',
