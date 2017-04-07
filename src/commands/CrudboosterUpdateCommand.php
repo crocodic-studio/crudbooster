@@ -1,5 +1,5 @@
 <?php namespace crocodicstudio\crudbooster\commands;
-
+ 
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Inspiring;
 use Symfony\Component\Console\Input\InputOption;

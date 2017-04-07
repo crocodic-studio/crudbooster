@@ -3,11 +3,39 @@
     foreach($row as $key=>$val) {
       $a['url'] = str_replace("[".$key."]",$val,$a['url']);
     }
+    
+    $confirm_box = '';
+    if(isset($a['confirmation']) && !empty($a['confirmation']) && $a['confirmation'])
+    {
+        
+        $a['confirmation_title'] = !empty($a['confirmation_title']) ? $a['confirmation_title'] : trans('crudbooster.confirmation_title');
+        $a['confirmation_text'] = !empty($a['confirmation_text']) ? $a['confirmation_text'] : trans('crudbooster.confirmation_text');
+        $a['confirmation_type'] = !empty($a['confirmation_type']) ? $a['confirmation_type'] : 'warning';
+        $a['confirmation_showCancelButton'] = empty($a['confirmation_showCancelButton']) ? 'true' : 'false';
+        $a['confirmation_confirmButtonColor'] = !empty($a['confirmation_confirmButtonColor']) ? $a['confirmation_confirmButtonColor'] : '#DD6B55';
+        $a['confirmation_confirmButtonText'] = !empty($a['confirmation_confirmButtonText']) ? $a['confirmation_confirmButtonText'] : trans('crudbooster.confirmButtonText');;
+        $a['confirmation_closeOnConfirm'] = empty($a['confirmation_closeOnConfirm']) ? 'true' : 'false';
+                
+        $confirm_box = '
+        swal({   
+            title: "'.$a['confirmation_title'].'",
+            text: "'.$a['confirmation_text'].'",
+            type: "'.$a['confirmation_type'].'",
+            showCancelButton: '.$a['confirmation_showCancelButton'].',
+            confirmButtonColor: "'.$a['confirmation_confirmButtonColor'].'",
+            confirmButtonText: "'.$a['confirmation_confirmButtonText'].'",
+            closeOnConfirm: '.$a['confirmation_closeOnConfirm'].', }, 
+            function(){  location.href="'.$a['url'].'"});        
+
+        ';
+
+    }
 
     $label = $a['label'];
     $url = $a['url'];
     $icon = $a['icon'];
     $color = $a['color']?:'primary';
+    $confirmation = $a['confirmation'];
 
     if(isset($a['showIf'])) {
 
@@ -15,14 +43,19 @@
       
       foreach($row as $key=>$val) {
         $query = str_replace("[".$key."]",'"'.$val.'"',$query);
-      }              
+      }
+      
+      if(isset($confirmation) && !empty($confirmation))
+      {
+          $url = "javascript:;";
+      }
 
       @eval("if($query) {
-          echo \"<a class='btn btn-xs btn-\$color' title='\$label' href='\$url'><i class='\$icon'></i> $label</a>&nbsp;\";
+          echo \"<a class='btn btn-xs btn-\$color' title='\$label' onclick='\$confirm_box' href='\$url'><i class='\$icon'></i> $label</a>&nbsp;\";
       }");           
 
     }else{
-      echo "<a class='btn btn-xs btn-$color' title='$label' href='$url'><i class='$icon'></i> $label</a>&nbsp;";              
+      echo "<a class='btn btn-xs btn-$color' title='$label' onclick='$confirm_box' href='$url'><i class='$icon'></i> $label</a>&nbsp;";              
     }
   ?>          
 @endforeach
