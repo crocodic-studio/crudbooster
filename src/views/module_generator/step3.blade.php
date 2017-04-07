@@ -436,7 +436,7 @@
         			</select>
         			</td>
         			<td>        			
-        				<a class='btn btn-primary btn-options' href='#'><i class='fa fa-cog'></i> Options</a>	
+        				<a class='btn btn-primary btn-options' href='javascript:;'><i class='fa fa-cog'></i> Options</a>	
         				<div class='option_area' style="display: none">
         					<?php 
 

@@ -610,9 +610,34 @@ class CRUDBooster  {
 			return false;
 		}
 
+		public static function putCache($section,$cache_name,$cache_value) {
+			Cache::section($section)->forever($cache_name,$cache_value);
+			return true;
+		}
+
+		public static function getCache($section,$cache_name) {
+			return Cache::section($section)->get($cache_name);
+		}
+
+		public static function flushCache($section) {
+			return Cache::section($section)->flush();
+		}
+
+		public static function forgetCache($section,$cache_name) {
+			return Cache::section($section)->forget($cache_name);
+		}
+
 		public static function findPrimaryKey($table) {
+			if(self::getCache('table_'.$table,'primary_key')) {
+				return self::getCache('table_'.$table,'primary_key');
+			}
+			
 			$table = CRUDBooster::parseSqlTable($table);
 			$keys = DB::select('SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :database AND TABLE_NAME = :table AND COLUMN_KEY = \'PRI\'', ['database'=>$table['database'], 'table'=>$table['table']]);
+			$primary_key = $keys[0]->COLUMN_NAME;
+			if($primary_key) {				
+				self::putCache('table_'.$table,'primary_key',$primary_key);
+			}
 			return $keys[0]->COLUMN_NAME;
 		}
 

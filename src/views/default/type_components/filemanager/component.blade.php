@@ -5,16 +5,17 @@
 
 				@if($value=='')
 				<div class="input-group">	
+					<input id="thumbnail-{{$name}}" class="form-control" type="text" readonly value='{{$value}}' name="{{$name}}">
 			      <span class="input-group-btn">
 			        <a id="lfm-{{$name}}" data-input="thumbnail-{{$name}}" data-preview="holder-{{$name}}" class="btn btn-primary">
 			          @if(@$form['filemanager_type'] == 'file')
 			          	<i class="fa fa-file-o"></i> {{trans("crudbooster.chose_an_file")}}
 			          @else
-			          	<i class='fa fa-picture-o'></i>{{trans("crudbooster.chose_an_image")}}
+			          	<i class='fa fa-picture-o'></i> {{trans("crudbooster.chose_an_image")}}
 			          @endif
 			        </a>
 			      </span>
-			      <input id="thumbnail-{{$name}}" class="form-control" type="text" readonly value='{{$value}}' name="{{$name}}">
+			      
 			    </div>
 			    @endif
 			    

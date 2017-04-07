@@ -16,43 +16,10 @@ class CRUDBoosterServiceProvider extends ServiceProvider
 
     public function boot()
     {        
-
-        //Create vendor folder at public
-        if(!file_exists(public_path('vendor'))) {
-            mkdir(public_path('vendor'));
-        }
-
-        //Create symlink for uploads path
-        if(file_exists(public_path('uploads'))) {          
-            if(readlink(public_path('uploads')) == public_path('uploads')) {                                                                      
-                rrmdir(public_path('uploads'));
-                app('files')->link(storage_path('app'), public_path('uploads'));
-            }              
-        }else{
-            app('files')->link(storage_path('app'), public_path('uploads'));
-        }
-        
-        //Crate symlink for assets
-        if(file_exists(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'))) {                      
-            if(readlink(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster')) == public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster')) {                
-                //Is Directory                                               
-                rrmdir(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'));
-                app('files')->link(__DIR__.'/assets',public_path('vendor/crudbooster'));
-            }            
-        }else{            
-            app('files')->link(__DIR__.'/assets',public_path('vendor/crudbooster'));
-        }
-
+                                
         $this->loadViewsFrom(__DIR__.'/views', 'crudbooster');
-            
-        if(file_exists(config_path('crudbooster.php'))) {            
-            $this->mergeConfigFrom(__DIR__.'/configs/crudbooster.php','crudbooster');  
-        }else{
-            $this->publishes([__DIR__.'/configs/crudbooster.php' => config_path('crudbooster.php')],'cb_config');            
-        }
-        
+        $this->publishes([__DIR__.'/configs/crudbooster.php' => config_path('crudbooster.php')],'cb_config');            
         $this->publishes([__DIR__.'/localization' => resource_path('lang')], 'cb_localization');                 
-
         $this->publishes([__DIR__.'/database' => base_path('database')],'cb_migration');
 
 
@@ -84,24 +51,10 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         if(!file_exists(app_path('Http/Controllers/AdminCmsUsersController.php'))) {
             $this->publishes([__DIR__.'/userfiles/controllers/AdminCmsUsersController.php' => app_path('Http/Controllers/AdminCmsUsersController.php')],'cb_user_controller');
         }
-
-
-        /* Removing the default user and password reset, it makes you ambigous when using CRUDBooster */
-        if(file_exists(base_path('database/migrations/2014_10_12_000000_create_users_table.php'))) {        
-            @unlink(base_path('database/migrations/2014_10_12_000000_create_users_table.php'));
-        }
-        if(file_exists(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'))) {            
-            @unlink(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'));
-        }
+        
                     
         require __DIR__.'/validations/validation.php';        
-        require __DIR__.'/routes.php';    
-            
-        $this->app->booted(function () {
-            $schedule = $this->app->make(\Illuminate\Console\Scheduling\Schedule::class);
-            $schedule->command('mailqueues')->cron("* * * * * *");
-        });    
-        
+        require __DIR__.'/routes.php';                        
     }
 
     /**
@@ -111,7 +64,9 @@ class CRUDBoosterServiceProvider extends ServiceProvider
      */
     public function register()
     {                                   
-        require __DIR__.'/helpers/Helper.php';              
+        require __DIR__.'/helpers/Helper.php';      
+
+        $this->mergeConfigFrom(__DIR__.'/configs/crudbooster.php','crudbooster');        
         
         $this->app->singleton('crudbooster', function ()
         {
