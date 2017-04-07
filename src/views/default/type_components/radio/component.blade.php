@@ -60,44 +60,25 @@
 										}															
 
 										//Because we use join statement, we need to select specified field to avoid ambigous
-
 										$select_field = end($tables).'.'.$datatable_field;
 										$select_field_alias = end($tables).'_'.$datatable_field;
-
 										$selects_data->addselect($select_field.' as '.$select_field_alias);				
-
 										$selects_data = $selects_data->orderby(end($tables).'.'.$datatable_field,"asc")->get();
+													
+										foreach($selects_data as $d) {											
+											$val = $d->{$select_field_alias};									
+											if($val == '' || !$d->id) continue;
 
-										if($form['relationship_table']) {			
-											$foreignKey = CRUDBooster::getForeignKey($table,$form['relationship_table']);	
-											$foreignKey2 = CRUDBooster::getForeignKey($datatable_tab,$form['relationship_table']);																																
+											$checked = ($value == $d->id)?"checked":"";
 
-											$value = DB::table($form['relationship_table'])->where($form['relationship_table'].'.'.$foreignKey,$id);										
-											$value = $value->pluck($foreignKey2)->toArray();											
-											
-											foreach($selects_data as $d) {																									
-												$checked = (is_array($value) && in_array($d->id, $value))?"checked":"";										
-												
-											}
+											echo "
+											<div data-val='$val' class='input-radio-wrapper $disabled'>
+											  <label class='radio-inline'>
+											    <input type='radio' $disabled $checked name='".$name."' value='".$d->id."'> ".$val." 								    
+											  </label>
+											</div>";												
 										}
 										
-										else{
-											//No Relationship Table it means only from datatable											
-
-											foreach($selects_data as $d) {											
-												$val = $d->{$select_field_alias};									
-												if($val == '' || !$d->id) continue;
-
-												$checked = ($value == $d->id)?"checked":"";
-
-												echo "
-												<div data-val='$val' class='input-radio-wrapper $disabled'>
-												  <label class='radio-inline'>
-												    <input type='radio' $disabled $checked name='".$name."' value='".$d->id."'> ".$val." 								    
-												  </label>
-												</div>";												
-											}
-										}
 									endif;
 										if($form['dataquery']){
 												$query = DB::select(DB::raw($form['dataquery']));
