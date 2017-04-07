@@ -9,7 +9,7 @@ use DB;
 use Route;
 use Validator;
 
-class CRUDBooster  {
+class CRUDBooster  {		
 
 		public static function getSetting($name){	
 			if(Cache::has('setting_'.$name)) {
@@ -623,10 +623,11 @@ class CRUDBooster  {
 		}
 
 		public static function getCache($section,$cache_name) {
+
 			if(Cache::has($section)) {
-				$cache_open = Cache::get($section);
+				$cache_open = Cache::get($section);				
 				return $cache_open[$cache_name];
-			}else{
+			}else{				
 				return false;
 			}			
 		}
@@ -672,24 +673,28 @@ class CRUDBooster  {
 
 		public static function newId($table) {
 			$key = CRUDBooster::findPrimaryKey($table);
-			$id = DB::select('SELECT MAX('.trim(DB::connection()->getPdo()->quote($key), "'").') as max FROM '.trim(DB::connection()->getPdo()->quote($table), "'"));
-			return $id[0]->max + 1;
+			$id = DB::table($table)->max($key)+1;
+			return $id;
 		}
 
 		public static function isColumnExists($table,$field) {
+
+			if(!$table) throw new Exception("\$table is empty !", 1);
+			if(!$field) throw new Exception("\$field is empty !", 1);						
+
 			$table = CRUDBooster::parseSqlTable($table);
 
-			if(Cache::has('isColumnExists_'.$table['table'].'_'.$field)) {
-				return Cache::get('isColumnExists_'.$table['table'].'_'.$field);
-			}			
+			if(self::getCache('table_'.$table,'column_'.$field)) {
+				return self::getCache('table_'.$table,'column_'.$field);
+			}
 
 			$result = DB::select('SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :database AND TABLE_NAME = :table AND COLUMN_NAME = :field', ['database'=>$table['database'], 'table'=>$table['table'], 'field'=>$field]);
 
-			if(count($result) > 0) {
-				Cache::forever('isColumnExists_'.$table['table'].'_'.$field,true);
+			if(count($result) > 0) {				
+				self::putCache('table_'.$table,'column_'.$field,1);
 				return true;
 			}else{
-				Cache::forever('isColumnExists_'.$table['table'].'_'.$field,false);
+				self::putCache('table_'.$table,'column_'.$field,0);
 				return false;
 			}
 
