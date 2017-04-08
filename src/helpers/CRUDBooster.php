@@ -747,11 +747,11 @@ class CRUDBooster  {
         	}
 	    }
 
-		public static function changeFilterColumnURI($key,$type,$value='',$singleSorting=true) {
+		public static function urlFilterColumn($key,$type,$value='',$singleSorting=true) {
 	        $params = Request::all();
 	        $mainpath = trim(self::mainpath(),'/');	        
 
-	        if($params['filter_column']) {
+	        if($params['filter_column'] && $singleSorting) {
 	        	foreach($params['filter_column'] as $k=>$filter) {
 		        	foreach($filter as $t=>$val) {
 		        		if($t=='sorting') {
