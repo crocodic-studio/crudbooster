@@ -63,20 +63,20 @@
                             if(isset($sort_column[$field])) {
                               switch($sort_column[$field]['sorting']) {                                
                                 case 'asc': 
-                                  $url = CRUDBooster::changeFilterColumnURI($field,'sorting','desc');
+                                  $url = CRUDBooster::urlFilterColumn($field,'sorting','desc');
                                   echo "<a href='$url' title='Click to sort descending'>$colname &nbsp; <i class='fa fa-sort-desc'></i></a>";
                                   break;
                                 case 'desc':
-                                  $url = CRUDBooster::changeFilterColumnURI($field,'sorting','asc');
+                                  $url = CRUDBooster::urlFilterColumn($field,'sorting','asc');
                                   echo "<a href='$url' title='Click to sort ascending'>$colname &nbsp; <i class='fa fa-sort-asc'></i></a>";
                                   break;
                                 default:
-                                  $url = CRUDBooster::changeFilterColumnURI($field,'sorting','asc');
+                                  $url = CRUDBooster::urlFilterColumn($field,'sorting','asc');
                                   echo "<a href='$url' title='Click to sort ascending'>$colname &nbsp; <i class='fa fa-sort'></i></a>";
                                   break;      
                               }
                             }else{     
-                                  $url = CRUDBooster::changeFilterColumnURI($field,'sorting','asc');                         
+                                  $url = CRUDBooster::urlFilterColumn($field,'sorting','asc');                         
                                   echo "<a href='$url' title='Click to sort ascending'>$colname &nbsp; <i class='fa fa-sort'></i></a>";                                  
                             }
                             
