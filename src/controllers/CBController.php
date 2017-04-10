@@ -205,6 +205,8 @@ class CBController extends Controller {
 		foreach($columns_table as $index => $coltab) {
 
 			$join = @$coltab['join'];
+			$join_where = @$coltab['join_where'];
+			$join_id = @$coltab['join_id'];
 			$field = @$coltab['name'];
 			$join_table_temp[] = $table;
 
@@ -248,7 +250,7 @@ class CBController extends Controller {
 				}
 				$join_table_temp[] = $join_table;
 
-				$result->leftjoin($join_table.' as '.$join_alias,$join_alias.'.id','=',$table.'.'.$field);
+				$result->leftjoin($join_table.' as '.$join_alias,$join_alias.(($join_id)? '.'.$join_id:'.id'),'=',DB::raw($table.'.'.$field. (($join_where) ? ' AND '.$join_where.' ':'') ) );
 				$result->addselect($join_alias.'.'.$join_column.' as '.$join_alias.'_'.$join_column);
 
 				$join_table_columns = CRUDBooster::getTableColumns($join_table);
