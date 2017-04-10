@@ -195,12 +195,30 @@ return [
     'filter_search'                => 'Buscar',
     'filter_from'                  => 'de',
     'filter_to'                    => 'para',
-
+    'filter_sorting'               => '** Sorting',
     // confirmation
     'confirmation_yes'=>'Sim!',
     'confirmation_no'=>'Não',
 
     //filemanager
     'chose_an_image' =>'Escolha uma imagem ',
-    'chose_an_file' =>'Escolha um arquivo '
+    'chose_an_file' =>'Escolha um arquivo ',
+
+
+    // Common 
+    'general_delete'               => 'Delete',
+    'max_file_size'                =>'Your file size is too big !.',
+    'opps'                         =>'Opps!.',
+    'browse_file'                  =>'Browse File',
+    'complete_form_error'           =>'Please complete the form !',
+    'settings_save_succes'         =>' Your setting has been saved !',
+    'email'                        =>'E-mail',
+
+    // child table
+    'child_table_detail'           => 'Table Data',
+    'child_table_add'              => 'Add Table',
+    'child_reset_form'             => 'Reset Form',
+    'child_broswer_data'           => 'Broswer Data',
+    'child_form_title'             =>'Form',
+    'child_save_changes'           =>'Update',
 ];

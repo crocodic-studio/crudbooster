@@ -22,7 +22,7 @@
 					endif; 
 				?>
 				@if(!$readonly || !$disabled)
-				<p><a class='btn btn-danger btn-delete btn-sm' onclick="if(!confirm('{{trans("crudbooster.delete_title_confirm")}}')) return false" href='{{url(CRUDBooster::mainpath("delete-image?image=".$value."&id=".$row->id."&column=".$name."&temporary=".$is_temporary))}}'><i class='fa fa-ban'></i> Delete </a></p>
+				<p><a class='btn btn-danger btn-delete btn-sm' onclick="if(!confirm('{{trans("crudbooster.delete_title_confirm")}}')) return false" href='{{url(CRUDBooster::mainpath("delete-image?image=".$value."&id=".$row->id."&column=".$name."&temporary=".$is_temporary))}}'><i class='fa fa-ban'></i>{{trans("crudbooster.general_delete")}} </a></p>
 				@endif
 			@endif	
 			@if(!$value)

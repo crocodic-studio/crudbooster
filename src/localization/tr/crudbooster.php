@@ -1,12 +1,12 @@
 <?php
 return [
     'email_footer'               => 'Bu e-posta adresine herhangi bir e-posta cevap vermeyin. Bu e-posta sistemimiz tarafından otomatik olarak gönderilir. ',
-    'login_message'              => 'senin oturumu başlatmak için giriş yapın',
+    'login_message'              => 'Oturumu başlatmak için giriş yapın',
     'text_forgot_password'       => 'Şifreni mi unuttun?',
     'page_title_login'           => 'Giriş Paneli',
     'page_title_forgot'          => 'Şifremi Unuttum',
-    'forgot_message'             => 'Enter your email address, to request password',
-    "forgot_text_try_again"      => "Tekrar giriş yapınız ?",
+    'forgot_message'             => 'Şifrenizi öğrenme için lütfen email adresinizi giriniz.',
+    "forgot_text_try_again"      => "Tekrar giriş için ",
     'text_no_notification'       => "Bildiriminiz yok",
     'text_view_all_notification' => 'Tümünü Göster',
     'label_button_profile'       => "Profil",
@@ -17,16 +17,16 @@ return [
     'text_default_add_new_module' => 'Yeni Ekle :module',
     'text_default_list_module'    => 'Listele :module',
     'text_default_help_password'  => 'En az 5 karakter. Eğer şifreyi değiştirmediyseniz boş bırakın.',
-    'text_default_help_upload'    => 'Desteklenen soya türleri : JPG, JPEG, PNG, GIF, BMP',
+    'text_default_help_upload'    => 'Desteklenen dosya türleri : JPG, JPEG, PNG, GIF, BMP',
     'text_default_help_number'    => 'Sadece numara girin',
     'text_default_help_email'     => 'Lütfen geçerli bir e-posta adresini girin',
-    'text_default_help_text'      => 'Sadece tek harf girebilirsiniz',
+    'text_default_help_text'      => 'Sadece harf girebilirsiniz',
     'text_default_help_url'       => 'Lütfen geçerli bir URL girin',
     'text_dashboard'              => 'Pano',
     'text_prefix_option'          => '** Lütfen seçiniz ',
     'text_loading'                => 'Yükleniyor lütfen bekleyiniz...',
 
-    'message_after_logout'    => 'Teşekkür Ederim, Sonra Görüşürüz !',
+    'message_after_logout'    => 'Güle Güle , Sonra Görüşürüz !',
     'message_forgot_password' => 'E-postanıza yeni şifre gönderdik, gelen kutusu veya spam kutunuzu kontrol edin !',
 
     'page_not_found'      => 'Haydaa! Sayfa bulunamadı.',
@@ -165,7 +165,7 @@ return [
     'Log_User_Access'     => 'Kullanıcı Günlük Erişimi',
     'SUPERADMIN'          => 'SUPERADMIN',
 
-    'click_here' => 'Buraya Tıklayınız',
+    'click_here' => 'Tıklayınız',
 
     /*
      * this is for html direction to use in html and css classes like :
@@ -211,6 +211,7 @@ return [
     'filter_search'                => 'Ara',
     'filter_from'                  => 'from',
     'filter_to'                    => 'Için',
+    'filter_sorting'               => 'Sırala',
 
     // confirmation
     'confirmation_yes'             => 'Evet',
@@ -219,5 +220,24 @@ return [
     //filemanager
     'chose_an_image'               => 'Resim Seçiniz',
     'chose_an_file'                => 'Dosya Seçiniz',
+
+    // Common 
+    'general_delete'               => 'Sil',
+    'max_file_size'                =>'Dosya boyutu büyük',
+    'opps'                         =>'Evyah.',
+    'browse_file'                  =>'Dosya Seçiniz ',
+    'complete_form_error'           =>'Lütfen Formu Doldurun ! ',
+    'settings_save_succes'         =>'Ayarlanız kaydedildi! Your setting has been saved !',
+    'email'                        =>'E-posta',
+
+    // child table
+    'child_table_detail'           => 'Veriler',
+    'child_table_add'              => 'Ekle',
+    'child_reset_form'             => 'Sıfırla',
+    'child_broswer_data'           => 'Verilere Gözat',
+    'child_form_title'             =>'Form',
+    'child_save_changes'           =>'Güncelle',
+ 
+    
 
 ];

@@ -27,7 +27,8 @@
 
 	}else if($form['dataquery']) {
 		$dataquery = $form['dataquery'];
-		$query = DB::select(DB::raw($dataquery));	
+		$query = DB::select(DB::raw($dataquery));
+			
 		if($query) {
 			foreach($query as $q) {
 				if($q->value == $value) {
@@ -41,7 +42,10 @@
 		$value = explode(";",$value);
 	}	
 
+if(!isset($value)){
 	foreach($value as $v) {
 		echo "<span class='badge'>$v</span> ";
 	}	
+}
+	
 ?>

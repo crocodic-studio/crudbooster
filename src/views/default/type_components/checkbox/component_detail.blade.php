@@ -27,8 +27,9 @@
 	}else{
 		$value = explode(";",$value);
 	}	
-
+if(!isset(value)){
 	foreach($value as $v) {
 		echo "<span class='badge'>$v</span> ";
-	}	
+	}
+}
 ?>
