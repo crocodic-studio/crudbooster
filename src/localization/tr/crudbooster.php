@@ -236,4 +236,11 @@ return [
     'privileges_module_list_read'   =>'Okuma',
     'privileges_module_list_update' =>'Güncelleme',
     'privileges_module_list_delete' =>'Silme',
+
+     //datamodal 
+    'datamodal_select'              =>'Seç',
+    'datamodal_search_and_enter'    =>'Aramak için yazın ve enter tuşuna basın..',
+    'datamodal_enter_to_search'     =>'Aramak için Enter tuşuna basınız',
+    'datamodal_browse_data'         =>'Gözat' ,
+
 ];

@@ -245,4 +245,10 @@ return [
     'privileges_module_list_update' =>'Update',
     'privileges_module_list_delete' =>'Delete',
 
+    //datamodal 
+    'datamodal_select'=>'Select',
+    'datamodal_search_and_enter'=>'Search and enter...',
+    'datamodal_enter_to_search'=>'Enter to search',
+    'datamodal_browse_data'=>'Browse Data' ,
+    
 ];
