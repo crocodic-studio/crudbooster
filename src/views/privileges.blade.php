@@ -21,24 +21,24 @@
 				<input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <div class="box-body">
 					<div class='form-group'>
-						<label>Privilege Name</label>
+						<label>{{trans('crudbooster.privileges_name')}}</label>
 						<input type='text' class='form-control' name='name' required value='{{ @$row->name }}'/>
 						<div class="text-danger">{{ $errors->first('name') }}</div>
 					</div>
 
 					<div class='form-group'>
-						<label>Set as Superadmin</label><br/>
+						<label>{{trans('crudbooster.set_as_superadmin')}}</label><br/>
 						<div id='set_as_superadmin' class='radio inline'>
-							<label><input required {{ (@$row->is_superadmin==1)?'checked':'' }} type='radio' name='is_superadmin' value='1'/> Yes</label> &nbsp;&nbsp;
-							<label><input {{ (@$row->is_superadmin==0)?'checked':'' }} type='radio' name='is_superadmin' value='0'/> No</label>
+							<label><input required {{ (@$row->is_superadmin==1)?'checked':'' }} type='radio' name='is_superadmin' value='1'/> {{trans('crudbooster.confirmation_yes')}}</label> &nbsp;&nbsp;
+							<label><input {{ (@$row->is_superadmin==0)?'checked':'' }} type='radio' name='is_superadmin' value='0'/> {{trans('crudbooster.confirmation_no')}}</label>
 						</div>
 						<div class="text-danger">{{ $errors->first('is_superadmin') }}</div>
 					</div>
 
 					<div class='form-group'>
-						<label>Theme Color</label>
+						<label>{{trans('crudbooster.chose_theme_color')}}</label>
 						<select name='theme_color' class='form-control' required>
-							<option value=''>** Choose Backend Theme Color</option>
+							<option value=''>{{trans('crudbooster.chose_theme_color_select')}}</option>
 							<?php 
 								$skins = array('skin-blue','skin-blue-light','skin-yellow','skin-yellow-light','skin-green','skin-green-light','skin-purple','skin-purple-light','skin-red','skin-red-light','skin-black','skin-black-light');
 								foreach($skins as $skin):
@@ -69,7 +69,7 @@
 					</div>
 	
 					<div id='privileges_configuration' class='form-group'>
-						<label>Privileges Configuration</label>
+						<label>{{trans('crudbooster.privileges_configuration')}}</label>
 						<script>
 							$(function() {
 								$("#is_visible").click(function() {
@@ -106,7 +106,7 @@
 						<table class='table table-striped table-hover table-bordered'>
 							<thead>
 								<tr class='active'>
-									<th width='3%'>No.</th><th width='60%'>Module's Name</th><th>&nbsp;</th><th>View</th><th>Create</th><th>Read</th><th>Update</th><th>Delete</th>
+									<th width='3%'>{{trans('crudbooster.privileges_module_list_no')}}</th><th width='60%'>{{trans('crudbooster.privileges_module_list_mod_names')}}</th><th>&nbsp;</th><th>{{trans('crudbooster.privileges_module_list_view')}}</th><th>{{trans('crudbooster.privileges_module_list_create')}}</th><th>{{trans('crudbooster.privileges_module_list_read')}}</th><th>{{trans('crudbooster.privileges_module_list_update')}}</th><th>{{trans('crudbooster.privileges_module_list_delete')}}</th>
 								</tr>
 								<tr class='info'>
 									<th>&nbsp;</th>

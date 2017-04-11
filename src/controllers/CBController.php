@@ -205,6 +205,8 @@ class CBController extends Controller {
 		foreach($columns_table as $index => $coltab) {
 
 			$join = @$coltab['join'];
+			$join_where = @$coltab['join_where'];
+			$join_id = @$coltab['join_id'];
 			$field = @$coltab['name'];
 			$join_table_temp[] = $table;
 
@@ -248,7 +250,7 @@ class CBController extends Controller {
 				}
 				$join_table_temp[] = $join_table;
 
-				$result->leftjoin($join_table.' as '.$join_alias,$join_alias.'.id','=',$table.'.'.$field);
+				$result->leftjoin($join_table.' as '.$join_alias,$join_alias.(($join_id)? '.'.$join_id:'.id'),'=',DB::raw($table.'.'.$field. (($join_where) ? ' AND '.$join_where.' ':'') ) );
 				$result->addselect($join_alias.'.'.$join_column.' as '.$join_alias.'_'.$join_column);
 
 				$join_table_columns = CRUDBooster::getTableColumns($join_table);
@@ -892,20 +894,39 @@ class CBController extends Controller {
 				}
 			}
 
+			if($ro['type']=='select' || $ro['type']=='select2') {
+				if($ro['datatable']) {
+					if($inputdata=='') {
+						$this->arr[$name] = 0;
+					}
+				}				
+			}
+
 
 			if(@$ro['type']=='upload') {				
 				if (Request::hasFile($name))
 				{
 					$file = Request::file($name);
 					$ext  = $file->getClientOriginalExtension();
+					$filename = str_slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
 
 					//Create Directory Monthly
 					Storage::makeDirectory(date('Y-m'));
 
-					//Move file to storage
-					$filename = md5(str_random(5)).'.'.$ext;					
+					//Move file to storage								
 					$file_path = storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m'));
-					
+
+					if($ro['upload_encrypt']==true) {
+						$filename = md5(str_random(5)).'.'.$ext;
+					}else{
+						if(count(glob($file_path.'/'.$filename))>0)
+						{
+							$filename = $filename.'_'.count(glob($file_path."/$filename*.$ext")).'.'.$ext;					     
+						}else{
+							$filename = $filename.'.'.$ext;
+						}
+					}
+										
 					if($file->move($file_path,$filename)) {
 						$this->arr[$name] = 'uploads/'.date('Y-m').'/'.$filename;
 					}
