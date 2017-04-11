@@ -908,7 +908,7 @@ class CBController extends Controller {
 				{
 					$file = Request::file($name);
 					$ext  = $file->getClientOriginalExtension();
-					$filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+					$filename = str_slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
 
 					//Create Directory Monthly
 					Storage::makeDirectory(date('Y-m'));
@@ -916,12 +916,14 @@ class CBController extends Controller {
 					//Move file to storage								
 					$file_path = storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m'));
 
-					if($ro['upload_encrypt']) {
+					if($ro['upload_encrypt']==true) {
 						$filename = md5(str_random(5)).'.'.$ext;
 					}else{
 						if(count(glob($file_path.'/'.$filename))>0)
 						{
 							$filename = $filename.'_'.count(glob($file_path."/$filename*.$ext")).'.'.$ext;					     
+						}else{
+							$filename = $filename.'.'.$ext;
 						}
 					}
 										
