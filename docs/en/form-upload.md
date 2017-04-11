@@ -3,7 +3,7 @@ Showing an upload input type
 
 ### Code Sample
 ```php
-$this->form[] = ['label'=>'Document','name'=>'document','type'=>'upload'];
+$this->form[] = ['label'=>'Document','name'=>'document','type'=>'upload','upload_encrypt'=>false];
 ```
 
 ### Upload With Image Validation
