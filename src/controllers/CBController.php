@@ -894,20 +894,37 @@ class CBController extends Controller {
 				}
 			}
 
+			if($ro['type']=='select' || $ro['type']=='select2') {
+				if($ro['datatable']) {
+					if($inputdata=='') {
+						$this->arr[$name] = 0;
+					}
+				}				
+			}
+
 
 			if(@$ro['type']=='upload') {				
 				if (Request::hasFile($name))
 				{
 					$file = Request::file($name);
 					$ext  = $file->getClientOriginalExtension();
+					$filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
 
 					//Create Directory Monthly
 					Storage::makeDirectory(date('Y-m'));
 
-					//Move file to storage
-					$filename = md5(str_random(5)).'.'.$ext;					
+					//Move file to storage								
 					$file_path = storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m'));
-					
+
+					if($ro['upload_encrypt']) {
+						$filename = md5(str_random(5)).'.'.$ext;
+					}else{
+						if(count(glob($file_path.'/'.$filename))>0)
+						{
+							$filename = $filename.'_'.count(glob($file_path."/$filename*.$ext")).'.'.$ext;					     
+						}
+					}
+										
 					if($file->move($file_path,$filename)) {
 						$this->arr[$name] = 'uploads/'.date('Y-m').'/'.$filename;
 					}
