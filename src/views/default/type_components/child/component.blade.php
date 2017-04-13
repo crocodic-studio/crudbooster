@@ -26,7 +26,9 @@
 							<?php $name_column = $name.$col['name'];?>
 							<div class='form-group'>
 								@if($col['type']!='hidden')
-								<label class="control-label col-sm-2">{{$col['label']}}</label>
+								<label class="control-label col-sm-2">{{$col['label']}}
+								@if(!empty($col['required'])) <span class="text-danger" title="This field is required">*</span> @endif
+								</label>
 								@endif
 								<div class="col-sm-10">
 									@if($col['type']=='text')
