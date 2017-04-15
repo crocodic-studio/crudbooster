@@ -18,7 +18,7 @@
   - [How To Make The Graded Select Boxes (Parent Select -> Child Select -> Etc..)](./how-make-graded-select-box.md)
   - **Form Input Type**
     - [checkbox](./form-checkbox.md)
-    - [custom](./form-custom.md)
+    - [custom form](./form-custom.md)
     - [datamodal](./form-datamodal.md)
     - [date](./form-date.md)
     - [datetime](./form-datetime.md)
