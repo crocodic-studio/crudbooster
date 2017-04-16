@@ -51,6 +51,9 @@
                       <?php if($button_bulk_action):?>           
                       <th width='3%'><input type='checkbox' id='checkall'/></th>
                       <?php endif;?>
+                      <?php if($show_numbering):?>
+                      <th width="1%">{{ trans('crudbooster.no') }}</th>
+                      <?php endif;?>
                       <?php                       
                         foreach($columns as $col) {
                             if($col['visible']===FALSE) continue;
@@ -97,7 +100,9 @@
                     <tbody>
                       @if(count($result)==0)
                       <tr class='warning'>
-                          <?php if($button_bulk_action):?>
+                          <?php if($button_bulk_action && $show_numbering):?>
+                          <td colspan='{{count($columns)+3}}' align="center">
+                          <?php elseif( ($button_bulk_action && !$show_numbering) || (!$button_bulk_action && $show_numbering) ):?>
                           <td colspan='{{count($columns)+2}}' align="center">
                           <?php else:?>
                           <td colspan='{{count($columns)+1}}' align="center">
