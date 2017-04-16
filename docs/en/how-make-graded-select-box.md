@@ -23,7 +23,7 @@ $this->form[] = ['label'=>'City','type'=>'select','name'=>'cities_id','datatable
 So you need to add `parent_select` attribute and fill it with name of previous select **name**.
 
 ## What's Next
-- [checkbox](./form-checkbox.md)
+- [Form Input Type: checkbox](./form-checkbox.md)
 
 ## Table Of Contents
 - [Back To Index](./index.md)
