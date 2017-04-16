@@ -632,12 +632,8 @@ class CRUDBooster  {
 			}			
 		}
 
-		public static function flushCache($section) {
-			if(Cache::forget($section)) {
-				return true;
-			}else{
-				return false;
-			}
+		public static function flushCache() {
+			Cache::flush();
 		}
 
 		public static function forgetCache($section,$cache_name) {

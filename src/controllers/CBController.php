@@ -980,17 +980,15 @@ class CBController extends Controller {
 		$this->validation();
 		$this->input_assignment();		
 
-		if (CRUDBooster::isColumnExists($this->table, 'created_at'))
+		if(Schema::hasColumn($this->table, 'created_at'))
 		{
 		    $this->arr['created_at'] = date('Y-m-d H:i:s');
 		}
 
 		$this->hook_before_add($this->arr);
 
-		$this->arr[$this->primary_key] = $id = CRUDBooster::newId($this->table);
-		// $this->arr=array_filter($this->arr); // null array fix = failed
+		$this->arr[$this->primary_key] = $id = CRUDBooster::newId($this->table);		
 		DB::table($this->table)->insert($this->arr);		
-
 
 		//Looping Data Input Again After Insert
 		foreach($this->data_inputan as $ro) {
@@ -1117,13 +1115,12 @@ class CBController extends Controller {
 		$this->validation();
 		$this->input_assignment($id);				
 
-		if (CRUDBooster::isColumnExists($this->table, 'updated_at'))
+		if (Schema::hasColumn($this->table, 'updated_at'))
 		{
 		    $this->arr['updated_at'] = date('Y-m-d H:i:s');
 		}
 
-		$this->hook_before_edit($this->arr,$id);
-		//$this->arr=array_filter($this->arr); // null array fix 
+		$this->hook_before_edit($this->arr,$id);		
 		DB::table($this->table)->where($this->primary_key,$id)->update($this->arr);		
 
 		//Looping Data Input Again After Insert
