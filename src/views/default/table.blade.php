@@ -145,8 +145,15 @@
 
 
                     <tfoot>
-                    <tr>                      
+                    <tr>           
+                      <?php if($button_bulk_action):?>           
                       <th>&nbsp;</th>
+                      <?php endif;?>
+
+                      <?php if($show_numbering):?>           
+                      <th>&nbsp;</th>
+                      <?php endif;?>
+
                       <?php                       
                         foreach($columns as $col) {
                             if($col['visible']===FALSE) continue;
