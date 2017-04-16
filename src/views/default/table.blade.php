@@ -47,8 +47,10 @@
                   <input type='hidden' name='_token' value='{{csrf_token()}}'/>
                   <table id='table_dashboard' class="table table-hover table-striped table-bordered">
                     <thead>
-                    <tr class="active">                      
+                    <tr class="active">           
+                      <?php if($button_bulk_action):?>           
                       <th width='3%'><input type='checkbox' id='checkall'/></th>
+                      <?php endif;?>
                       <?php                       
                         foreach($columns as $col) {
                             if($col['visible']===FALSE) continue;
@@ -95,7 +97,14 @@
                     <tbody>
                       @if(count($result)==0)
                       <tr class='warning'>
-                          <td colspan='{{count($columns)+2}}' align="center"><i class='fa fa-search'></i> {{trans("crudbooster.table_data_not_found")}}</td>
+                          <?php if($button_bulk_action):?>
+                          <td colspan='{{count($columns)+2}}' align="center">
+                          <?php else:?>
+                          <td colspan='{{count($columns)+1}}' align="center">
+                          <?php endif;?>
+                          
+                          <i class='fa fa-search'></i> {{trans("crudbooster.table_data_not_found")}}
+                          </td>
                       </tr>
                       @endif
 

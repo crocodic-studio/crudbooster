@@ -70,7 +70,7 @@
           </div><!--end-selected-action-->        
         </div><!--end-pull-left-->
         @endif
-        <div class="box-tools pull-{{ trans('crudbooster.right') }}" style="padding-top:5px;">
+        <div class="box-tools pull-{{ trans('crudbooster.right') }}" style="position: relative;margin-top: -5px">
           
               @if($button_filter)
               <a style="margin-top:-23px" href="javascript:void(0)" id='btn_advanced_filter' data-url-parameter='{{$build_query}}' title='{{trans('crudbooster.filter_dialog_title')}}' class="btn btn-sm btn-default {{(Request::get('filter_column'))?'active':''}}">                               

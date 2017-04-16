@@ -431,7 +431,9 @@ class CBController extends Controller {
 		foreach($data['result'] as $row) {
 			$html_content = array();
 
-			$html_content[] = "<input type='checkbox' class='checkbox' name='checkbox[]' value='$row->id'/>";
+			if($this->button_bulk_action) {				
+				$html_content[] = "<input type='checkbox' class='checkbox' name='checkbox[]' value='$row->id'/>";
+			}
 
 			foreach($columns_table as $col) {
 		          if($col['visible']===FALSE) continue;		          
