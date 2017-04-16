@@ -63,10 +63,12 @@ use CRUDBooster;
 					$('#form-group-module_slug label').append('<span class=\"text-danger\" title=\"This field is required\">*</span>');
 				}else if(type_menu == 'Statistic') {
 					$('#form-group-statistic_slug').show();
+					$('#module_slug').prop('required',false);
 					$('#form-group-module_slug,#form-group-path').hide();
 					$('#statistic_slug').prop('required',true);
 					$('#form-group-statistic_slug label').append('<span class=\"text-danger\" title=\"This field is required\">*</span>');
 				}else{
+					$('#module_slug').prop('required',false);
 					$('#form-group-module_slug,#form-group-statistic_slug').hide();
 					$('#form-group-path').show();
 				}
@@ -76,6 +78,7 @@ use CRUDBooster;
 					var n = $(this).val();
 					var isCheck = $(this).prop('checked');
 					console.log('Click the module type '+n);
+					$('#module_slug').prop('required',false);
 					$('input[name=path]').attr('placeholder',default_placeholder_path);
 					if(n == 'Module') {
 						$('#form-group-path').hide();
