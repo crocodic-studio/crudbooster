@@ -59,6 +59,9 @@
                     
                 @endforeach
             </select>
+            <div class="help-block">
+                Do not use cms_* as prefix on your tables name
+            </div>
         </div>
         <div class="form-group">
             <label for="">Module Name</label>
