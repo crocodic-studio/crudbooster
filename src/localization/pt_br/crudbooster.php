@@ -215,6 +215,7 @@ return [
     'privileges_super_admin'        =>'Super Admin',
     'privileges_standart_user'      =>'Usuário Padrão',
     'privileges_ID'                 =>'ID',
+
     'set_as_superadmin'             =>'Configurar como Superadmin',
     'chose_theme_color_select'      =>'** Escolha a cor de fundo do tema',
     'chose_theme_color'             =>' Cor do Tema',
@@ -226,4 +227,11 @@ return [
     'privileges_module_list_read'   =>'Ler',
     'privileges_module_list_update' =>'Atualizar',
     'privileges_module_list_delete' =>'Excluir',
+
+     //datamodal 
+    'datamodal_select'=>'Select',
+    'datamodal_search_and_enter'=>'Search and enter...',
+    'datamodal_enter_to_search'=>'Enter to search',
+    'datamodal_browse_data'=>'Browse Data' ,
+
 ];
