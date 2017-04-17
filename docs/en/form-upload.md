@@ -3,7 +3,7 @@ Showing an upload input type
 
 ### Code Sample
 ```php
-$this->form[] = ['label'=>'Document','name'=>'document','type'=>'upload'];
+$this->form[] = ['label'=>'Document','name'=>'document','type'=>'upload','upload_encrypt'=>false];
 ```
 
 ### Upload With Image Validation
@@ -18,7 +18,7 @@ $this->form[] = ['label'=>'Document','name'=>'document','type'=>'upload','valida
 ```
 
 ## What's Next
-- [wysiwyg](./form-wysiwyg.md)
+- [Form Input Type: wysiwyg](./form-wysiwyg.md)
 
 ## Table Of Contents
 - [Back To Index](./index.md)

@@ -89,6 +89,9 @@ class CrudboosterUpdateCommand extends Command {
 		$this->info('Updating database...');
 		$this->callSilent('migrate',['--seed'=>true]);
 
+		$this->info('Clearing Cache...');
+		Cache::flush();
+
 		$this->info('Clearing config cache...');
 		$this->call('config:clear');	
 

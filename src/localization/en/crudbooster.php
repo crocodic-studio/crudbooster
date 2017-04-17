@@ -12,6 +12,7 @@ return [
     'label_button_profile'       => "Profile",
     'filter_dialog_title'        => 'Advanced Sort & Filter',
     'there_is_no_option'        => 'There is no any options setting for this inputType',
+    'no'                          => 'No.',
 
     'text_enter_the_password'     => 'Enter your password to retrieve your session',
     'text_or_sign_in'             => 'Or sign in as a different user',

@@ -203,27 +203,35 @@ return [
     //filemanager
     'chose_an_image' =>'Escolha uma imagem ',
     'chose_an_file' =>'Escolha um arquivo ',
+    
+    //action confirmation
+    'confirmation_title'            => 'Confirmação',
+    'confirmation_text'             => 'Tem certeza de que quer fazer isso?',
+    'confirmButtonText'             => 'Sim',
 
-        // privilege
-    'privileges_name'               =>'Privilege Name',
+    
+     // privilege
+    'privileges_name'               =>'Nome do Privilégio',
     'privileges_super_admin'        =>'Super Admin',
-    'privileges_standart_user'      =>'Standart user',
+    'privileges_standart_user'      =>'Usuário Padrão',
     'privileges_ID'                 =>'ID',
-    'set_as_superadmin'             =>'Set as Superadmin',
-    'chose_theme_color_select'      =>'** Choose Backend Theme Color',
-    'chose_theme_color'             =>' Theme Color',
-    'privileges_configuration'      =>'Privileges Configuration',
-    'privileges_module_list_no'     =>'No.',
-    'privileges_module_list_mod_names'=>'Module\'s Name',
-    'privileges_module_list_view'   =>'View',
-    'privileges_module_list_create' =>'Create',
-    'privileges_module_list_read'   =>'Read',
-    'privileges_module_list_update' =>'Update',
-    'privileges_module_list_delete' =>'Delete',
+
+    'set_as_superadmin'             =>'Configurar como Superadmin',
+    'chose_theme_color_select'      =>'** Escolha a cor de fundo do tema',
+    'chose_theme_color'             =>' Cor do Tema',
+    'privileges_configuration'      =>'Configuração de Privilégios',
+    'privileges_module_list_no'     =>'Não.',
+    'privileges_module_list_mod_names'=>'Nome dos Módulos',
+    'privileges_module_list_view'   =>'Visualizar',
+    'privileges_module_list_create' =>'Criar',
+    'privileges_module_list_read'   =>'Ler',
+    'privileges_module_list_update' =>'Atualizar',
+    'privileges_module_list_delete' =>'Excluir',
 
      //datamodal 
     'datamodal_select'=>'Select',
     'datamodal_search_and_enter'=>'Search and enter...',
     'datamodal_enter_to_search'=>'Enter to search',
     'datamodal_browse_data'=>'Browse Data' ,
+
 ];
