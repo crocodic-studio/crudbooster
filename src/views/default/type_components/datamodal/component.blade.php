@@ -14,8 +14,8 @@
       <input type="text" class="form-control input-label {{$form['required']?"required":""}}" value="{{$datamodal_value}}" readonly>
       <span class="input-group-btn">
         <button class="btn btn-primary" onclick="showModal{{$name}}()" type="button"><i class='fa fa-search'></i> {{trans('crudbooster.datamodal_browse_data')}}</button>
-			<?php if(strlen($form['datamodal_module_name'])>1){ ?>	
-        <a class="btn btn-info"  href="../../{{$form['datamodal_module_name']}}" target="_blank"><i class='fa fa-edit'></i> {{$form['label']}}</a>
+			<?php if(strlen($form['datamodal_module_path'])>1){ ?>	
+        <a class="btn btn-info"  href="{{CRUDBooster::adminPath()}}/{{$form['datamodal_module_path']}}" target="_blank"><i class='fa fa-edit'></i> {{$form['label']}}</a>
 			<?php } ?>
       </span>
     </div><!-- /input-group -->
