@@ -2,14 +2,23 @@
 
 CRUDBooster is CRUD Generator for laravel, with the most important features web application development. It's easy, flexible, and powerful.
 
-## System Requirement 
-- LARAVEL 5.3.x or higher
-- PHP >= 5.6.x
-- Mcrypt PHP Extension
-- OpenSSL PHP Extension
-- Mbstring PHP Extension
-- Tokenizer PHP Extension
-- FileInfo PHP Extension
+## System Requirement and Basic Technical Knowledge
+- Web Server as:
+  - Apache 2.4.x or higher with rewrite engine on (mod_rewrite)  
+  - Nginx 1.11.x or higher
+- Database that laravel supports, actually can be:
+  - MySQL
+  - Postgres
+  - SQLite
+  - SQL Server
+- Composer
+- Laravel 5.3.x or higher
+- Php 5.6.x or higher and the extensions:
+  - Mcrypt
+  - OpenSSL
+  - Mbstring
+  - Tokenizer
+  - FileInfo
 
 ## Installation
 1. Open the terminal, navigate to your project directory.
@@ -52,4 +61,7 @@ $ php artisan crudbooster:update
 - default password : 123456
 
 ## What's Next
+- [How To Create A Module (CRUD)](./how-to-create-module.md)
+
+## Table Of Contents
 - [Back To Index](./index.md)

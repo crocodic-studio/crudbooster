@@ -12,17 +12,30 @@
 		->pluck($foreignKey2)
 		->toArray();	
 		$value = DB::table($datatable_tab)->select($datatable_field)->whereIn('id',$ids)->pluck($datatable_field)->toArray();
-				
+
+	}else if ($form['datatable']) {
+
+		$datatable = explode(',', $form['datatable']);
+		$table = $datatable[0];
+		$field = $datatable[1];	
+		$r = CRUDBooster::first($table,['id'=>$value])->$field;	
+		if($r) {
+			$value = [$r];
+		}else{
+			$value = [];
+		}
+
 	}else if($form['dataquery']) {
 		$dataquery = $form['dataquery'];
 		$query = DB::select(DB::raw($dataquery));	
 		if($query) {
 			foreach($query as $q) {
 				if($q->value == $value) {
-					echo $q->label;
+					$value = [$q->label];
 					break;
 				}
 			}
+			if(!$value) $value = [];
 		}					
 	}else{
 		$value = explode(";",$value);

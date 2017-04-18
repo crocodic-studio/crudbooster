@@ -36,6 +36,7 @@ class CBController extends Controller {
 	public $date_candidate     = NULL;
 	public $limit              = 20;
 	public $global_privilege   = FALSE;
+	public $show_numbering	   = FALSE;
 
 	public $alert                 = array();
 	public $index_button          = array();
@@ -46,6 +47,7 @@ class CBController extends Controller {
 	public $button_show         = TRUE;
 	public $button_addmore      = TRUE;
 	public $button_table_action = TRUE;
+	public $button_bulk_action	= TRUE;
 	public $button_add          = TRUE;
 	public $button_delete       = TRUE;
 	public $button_cancel       = TRUE;
@@ -89,6 +91,7 @@ class CBController extends Controller {
 		$this->data['appname']               = CRUDBooster::getSetting('appname');
 		$this->data['alerts']                = $this->alert;
 		$this->data['index_button']          = $this->index_button;
+		$this->data['show_numbering']	     = $this->show_numbering;
 		$this->data['button_detail']         = $this->button_detail;
 		$this->data['button_edit']           = $this->button_edit;
 		$this->data['button_show']           = $this->button_show;
@@ -100,6 +103,7 @@ class CBController extends Controller {
 		$this->data['button_cancel']         = $this->button_cancel;
 		$this->data['button_save']           = $this->button_save;
 		$this->data['button_table_action']   = $this->button_table_action;
+		$this->data['button_bulk_action']    = $this->button_bulk_action;
 		$this->data['button_import']         = $this->button_import;
 		$this->data['button_action_width']   = $this->button_action_width;
 		$this->data['button_selected']       = $this->button_selected;
@@ -203,6 +207,8 @@ class CBController extends Controller {
 		foreach($columns_table as $index => $coltab) {
 
 			$join = @$coltab['join'];
+			$join_where = @$coltab['join_where'];
+			$join_id = @$coltab['join_id'];
 			$field = @$coltab['name'];
 			$join_table_temp[] = $table;
 
@@ -246,7 +252,7 @@ class CBController extends Controller {
 				}
 				$join_table_temp[] = $join_table;
 
-				$result->leftjoin($join_table.' as '.$join_alias,$join_alias.'.id','=',$table.'.'.$field);
+				$result->leftjoin($join_table.' as '.$join_alias,$join_alias.(($join_id)? '.'.$join_id:'.id'),'=',DB::raw($table.'.'.$field. (($join_where) ? ' AND '.$join_where.' ':'') ) );
 				$result->addselect($join_alias.'.'.$join_column.' as '.$join_alias.'_'.$join_column);
 
 				$join_table_columns = CRUDBooster::getTableColumns($join_table);
@@ -414,7 +420,8 @@ class CBController extends Controller {
 					'label'=>$s['label'],
 					'icon'=>$s['button_icon'],
 					'url'=>CRUDBooster::adminPath($s['path']).'?parent_table='.$table_parent.'&parent_columns='.$s['parent_columns'].'&parent_id=[id]&return_url='.urlencode(Request::fullUrl()).'&foreign_key='.$s['foreign_key'].'&label='.urlencode($s['label']),
-					'color'=>$s['button_color']
+					'color'=>$s['button_color'],
+                                        'showIf'=>$s['showIf']
 				];
 			}
 		}
@@ -423,10 +430,19 @@ class CBController extends Controller {
 		$orig_mainpath = $this->data['mainpath'];
 		$title_field   = $this->title_field;
 		$html_contents = array();
+		$page = (Request::get('page'))?Request::get('page'):1; 
+		$number = ($page-1)*$limit+1; 
 		foreach($data['result'] as $row) {
 			$html_content = array();
 
-			$html_content[] = "<input type='checkbox' class='checkbox' name='checkbox[]' value='$row->id'/>";
+			if($this->button_bulk_action) {				
+				$html_content[] = "<input type='checkbox' class='checkbox' name='checkbox[]' value='$row->id'/>";
+			}
+
+			if($this->show_numbering) {
+				$html_content[] = $number.'. ';
+				$number++;
+			}
 
 			foreach($columns_table as $col) {
 		          if($col['visible']===FALSE) continue;		          
@@ -889,20 +905,39 @@ class CBController extends Controller {
 				}
 			}
 
+			if($ro['type']=='select' || $ro['type']=='select2') {
+				if($ro['datatable']) {
+					if($inputdata=='') {
+						$this->arr[$name] = 0;
+					}
+				}				
+			}
+
 
 			if(@$ro['type']=='upload') {				
 				if (Request::hasFile($name))
 				{
 					$file = Request::file($name);
 					$ext  = $file->getClientOriginalExtension();
+					$filename = str_slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
 
 					//Create Directory Monthly
 					Storage::makeDirectory(date('Y-m'));
 
-					//Move file to storage
-					$filename = md5(str_random(5)).'.'.$ext;					
+					//Move file to storage								
 					$file_path = storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m'));
-					
+
+					if($ro['upload_encrypt']==true) {
+						$filename = md5(str_random(5)).'.'.$ext;
+					}else{
+						if(count(glob($file_path.'/'.$filename))>0)
+						{
+							$filename = $filename.'_'.count(glob($file_path."/$filename*.$ext")).'.'.$ext;					     
+						}else{
+							$filename = $filename.'.'.$ext;
+						}
+					}
+										
 					if($file->move($file_path,$filename)) {
 						$this->arr[$name] = 'uploads/'.date('Y-m').'/'.$filename;
 					}
@@ -945,17 +980,15 @@ class CBController extends Controller {
 		$this->validation();
 		$this->input_assignment();		
 
-		if (CRUDBooster::isColumnExists($this->table, 'created_at'))
+		if(Schema::hasColumn($this->table, 'created_at'))
 		{
 		    $this->arr['created_at'] = date('Y-m-d H:i:s');
 		}
 
 		$this->hook_before_add($this->arr);
 
-		$this->arr[$this->primary_key] = $id = CRUDBooster::newId($this->table);
-		// $this->arr=array_filter($this->arr); // null array fix = failed
+		$this->arr[$this->primary_key] = $id = CRUDBooster::newId($this->table);		
 		DB::table($this->table)->insert($this->arr);		
-
 
 		//Looping Data Input Again After Insert
 		foreach($this->data_inputan as $ro) {
@@ -1082,13 +1115,12 @@ class CBController extends Controller {
 		$this->validation();
 		$this->input_assignment($id);				
 
-		if (CRUDBooster::isColumnExists($this->table, 'updated_at'))
+		if (Schema::hasColumn($this->table, 'updated_at'))
 		{
 		    $this->arr['updated_at'] = date('Y-m-d H:i:s');
 		}
 
-		$this->hook_before_edit($this->arr,$id);
-		//$this->arr=array_filter($this->arr); // null array fix 
+		$this->hook_before_edit($this->arr,$id);		
 		DB::table($this->table)->where($this->primary_key,$id)->update($this->arr);		
 
 		//Looping Data Input Again After Insert

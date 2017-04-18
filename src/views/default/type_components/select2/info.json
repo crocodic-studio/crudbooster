@@ -12,7 +12,8 @@
 			"relationship_table":"table relation for many to many. datatable attr is required",
 			"datatable_where":"string where condition",
 			"datatable_format":"sql concat alike. e.g : id,' - ',title",			
-			"datatable_exception":"string value exception"
+			"datatable_exception":"string value exception",
+			"datatable_ajax":"true or false"	
 		}
 									
 	}

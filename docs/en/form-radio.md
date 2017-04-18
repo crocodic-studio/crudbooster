@@ -14,4 +14,7 @@ $this->form[] = ['label'=>'Platform','name'=>'platform','type'=>'radio','dataenu
 If you want to custom the value of radio button, then put `|` as a sparator between the value and label.
 
 ## What's Next
+- [Form Input Type: select](./form-select.md)
+
+## Table Of Contents
 - [Back To Index](./index.md)

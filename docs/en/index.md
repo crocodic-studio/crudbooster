@@ -15,14 +15,10 @@
   - [How To Make A Simple Statistic At Top Of Grid Data](./how-make-simple-statistic.md)
 - **Form Section**
   - [How To Make A Child Form (Master - Detail)](./how-to-make-a-child-form.md)
-  - [How To Make A Custom Form Input Type](./form-custom.md)
-  - [How To Integrate Google Maps When Input Address](./form-googlemaps.md)
-  - [How To Upload A File With File Manager](./form-filemanager.md)
   - [How To Make The Graded Select Boxes (Parent Select -> Child Select -> Etc..)](./how-make-graded-select-box.md)
   - **Form Input Type**
     - [checkbox](./form-checkbox.md)
-    - [child](./how-to-make-a-child-form.md)
-    - [custom](./form-custom.md)
+    - [custom form](./form-custom.md)
     - [datamodal](./form-datamodal.md)
     - [date](./form-date.md)
     - [datetime](./form-datetime.md)
