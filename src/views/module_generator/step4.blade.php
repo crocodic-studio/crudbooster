@@ -82,6 +82,18 @@
 
 					<div class="col-sm-12">
 					<div class="form-group">
+						<label>Show Bulk Action Button</label>
+						<label class='radio-inline'>
+							<input {{($cb_button_bulk_action)?"checked":""}} type='radio' name='button_bulk_action' value='true'/> TRUE
+						</label>
+						<label class='radio-inline'>
+							<input {{(!$cb_button_bulk_action)?"checked":""}} type='radio' name='button_bulk_action' value='false'/> FALSE
+						</label>
+					</div>
+					</div>
+
+					<div class="col-sm-12">
+					<div class="form-group">
 						<label>Button Action Style</label>
 						<label class='radio-inline'>
 							<input {{($cb_button_action_style=='button_icon')?"checked":""}} type='radio' name='button_action_style' value='button_icon'/> Icon
@@ -98,6 +110,16 @@
 					</div>
 					</div>
 
+					
+
+					
+
+				</div>
+			</div>
+
+			<div class="col-sm-3">
+				<div class="row">
+
 					<div class="col-sm-12">
 					<div class="form-group">
 						<label>Show Button Add</label>
@@ -109,16 +131,6 @@
 						</label>
 					</div>
 					</div>
-
-					
-
-				</div>
-			</div>
-
-			<div class="col-sm-3">
-				<div class="row">
-
-					
 
 					<div class="col-sm-12">
 					<div class="form-group">
@@ -157,17 +169,7 @@
 					</div>
 					</div>
 
-					<div class="col-sm-12">
-					<div class="form-group">
-						<label>Show Button Show Data</label>
-						<label class='radio-inline'>
-							<input {{($cb_button_show)?"checked":""}} type='radio' name='button_show' value='true'/> TRUE
-						</label>
-						<label class='radio-inline'>
-							<input {{(!$cb_button_show)?"checked":""}} type='radio' name='button_show' value='false'/> FALSE
-						</label>
-					</div>
-					</div>
+					
 
 					
 
@@ -180,6 +182,19 @@
 
 			<div class="col-sm-4">
 				<div class="row">
+
+					<div class="col-sm-12">
+					<div class="form-group">
+						<label>Show Button Show Data</label>
+						<label class='radio-inline'>
+							<input {{($cb_button_show)?"checked":""}} type='radio' name='button_show' value='true'/> TRUE
+						</label>
+						<label class='radio-inline'>
+							<input {{(!$cb_button_show)?"checked":""}} type='radio' name='button_show' value='false'/> FALSE
+						</label>
+					</div>
+					</div>
+				
 					<div class="col-sm-12">
 					<div class="form-group">
 						<label>Show Button Filter & Sorting</label>

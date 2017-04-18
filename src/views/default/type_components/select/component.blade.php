@@ -28,10 +28,8 @@
 				}								
 			})
 
-			@if($value)
-				$('#{{$form['parent_select']}}').trigger('change');
-				$("#{{$form['name']}}").trigger('change');
-			@endif
+			$('#{{$form['parent_select']}}').trigger('change');
+			$("#{{$form['name']}}").trigger('change');
 		})
 	</script>
 	@endif

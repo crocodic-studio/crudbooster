@@ -13,4 +13,7 @@ $this->table_row_color[] = ['condition'=>"[status] == 'active'","color"=>"succes
 `color` attribute : you can use : success, warning, info, danger, primary
 
 ## What's Next
+- [How To Make A Simple Statistic At Top Of Grid Data](./how-make-simple-statistic.md)
+
+## Table Of Contents
 - [Back To Index](./index.md)

@@ -166,33 +166,33 @@ return [
 
     'notification_you_have'     => 'você tem',
     'notification_notification' => 'Notificações',
-    'notification_new'           => 'Você tem uma nova notificação!',
+    'notification_new'          => 'Você tem uma nova notificação!',
 
     'login_register_style' => 'Login Register Style',
     'email_setting'        => 'Configurações de E-mail',
     'application_setting'  => 'Configurações do Aplicativo',
 
      // table filter & sort 
-    'filter_select_operator_type' => 'Selecione o operador',
-    'filter_ascending' => 'ASCENDENTE',
-    'filter_descending' => 'DESCENDENTE',
-    'filter_equal_to'=> '=(Igual a)',
-    'filter_like'=> 'LIKE',
-    'filter_not_like'=>'NOT LIKE',
-    'filter_greater_than_or_equal'=>'>>= (Maior que, ou igual)',
-    'filter_less_than_or_equal'=>'<= (Menor que, ou igual)',
-    'filter_less_than'=>'< (Menor que)',
-    'filter_greater_than'=>'> (Maior que)',
-    'filter_not_equal_to'=>'!= (Diferente de)',
-    'filter_in'=>'IN',
-    'filter_not_in'=>'NOT IN',
-    'filter_between'=>'BETWEEN',
-    'filter_sort_ascending'=>'Ordernação ascendente',
-    'filter_sort_descending'=>'Ordernação descendente',    
-    'filter_eg'=>'ex.',
-    'filter_lorem_ipsum'=>'Lorem ipsum',
-    'filter_lorem_ipsum_dolor_sit'=>' Lorem,Ipsum,Dolor Sit',
-    'filter_search'=>'Buscar',
+    'filter_select_operator_type'  => 'Selecione o operador',
+    'filter_ascending'             => 'ASCENDENTE',
+    'filter_descending'            => 'DESCENDENTE',
+    'filter_equal_to'              => '=(Igual a)',
+    'filter_like'                  => 'LIKE',
+    'filter_not_like'              => 'NOT LIKE',
+    'filter_greater_than_or_equal' => '>>= (Maior que, ou igual)',
+    'filter_less_than_or_equal'    => '<= (Menor que, ou igual)',
+    'filter_less_than'             => '< (Menor que)',
+    'filter_greater_than'          => '> (Maior que)',
+    'filter_not_equal_to'          => '!= (Diferente de)',
+    'filter_in'                    => 'IN',
+    'filter_not_in'                => 'NOT IN',
+    'filter_between'               => 'BETWEEN',
+    'filter_sort_ascending'        => 'Ordernação ascendente',
+    'filter_sort_descending'       => 'Ordernação descendente',    
+    'filter_eg'                    => 'ex.',
+    'filter_lorem_ipsum'           => 'Lorem ipsum',
+    'filter_lorem_ipsum_dolor_sit' => ' Lorem,Ipsum,Dolor Sit',
+    'filter_search'                => 'Buscar',
     'filter_from'                  => 'de',
     'filter_to'                    => 'para',
 
@@ -202,5 +202,36 @@ return [
 
     //filemanager
     'chose_an_image' =>'Escolha uma imagem ',
-    'chose_an_file' =>'Escolha um arquivo '
+    'chose_an_file' =>'Escolha um arquivo ',
+    
+    //action confirmation
+    'confirmation_title'            => 'Confirmação',
+    'confirmation_text'             => 'Tem certeza de que quer fazer isso?',
+    'confirmButtonText'             => 'Sim',
+
+    
+     // privilege
+    'privileges_name'               =>'Nome do Privilégio',
+    'privileges_super_admin'        =>'Super Admin',
+    'privileges_standart_user'      =>'Usuário Padrão',
+    'privileges_ID'                 =>'ID',
+
+    'set_as_superadmin'             =>'Configurar como Superadmin',
+    'chose_theme_color_select'      =>'** Escolha a cor de fundo do tema',
+    'chose_theme_color'             =>' Cor do Tema',
+    'privileges_configuration'      =>'Configuração de Privilégios',
+    'privileges_module_list_no'     =>'Não.',
+    'privileges_module_list_mod_names'=>'Nome dos Módulos',
+    'privileges_module_list_view'   =>'Visualizar',
+    'privileges_module_list_create' =>'Criar',
+    'privileges_module_list_read'   =>'Ler',
+    'privileges_module_list_update' =>'Atualizar',
+    'privileges_module_list_delete' =>'Excluir',
+
+     //datamodal 
+    'datamodal_select'=>'Select',
+    'datamodal_search_and_enter'=>'Search and enter...',
+    'datamodal_enter_to_search'=>'Enter to search',
+    'datamodal_browse_data'=>'Browse Data' ,
+
 ];

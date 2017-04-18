@@ -9,4 +9,7 @@ By putting `min` attribute, it will make a minimal amount of the number
 and also by putting `max` attribute, it will make a maximal amount of the number
 
 ## What's Next
+- [Form Input Type: password](./form-password.md)
+
+## Table Of Contents
 - [Back To Index](./index.md)

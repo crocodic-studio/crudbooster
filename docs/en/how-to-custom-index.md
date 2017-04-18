@@ -20,7 +20,7 @@ public function getIndex() {
 Create your own view in `/resources/views/your_custom_view_index.blade.php'
 ```php
 <!-- First you need to extend the CB layout -->
-@extends('crudbooster::admin_template');
+@extends('crudbooster::admin_template')
 @section('content')
 <!-- Your custom  HTML goes here -->
 <table class='table table-striped table-bordered'>
@@ -59,4 +59,7 @@ Create your own view in `/resources/views/your_custom_view_index.blade.php'
 ```
 
 ## What's Next
+- [How To Make A Custom View Of Add Method](./how-custom-view-add.md)
+
+## Table Of Contents
 - [Back To Index](./index.md)

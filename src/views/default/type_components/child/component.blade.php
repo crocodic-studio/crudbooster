@@ -25,7 +25,11 @@
 							@foreach($form['columns'] as $col)	
 							<?php $name_column = $name.$col['name'];?>
 							<div class='form-group'>
-								<label class="control-label col-sm-2">{{$col['label']}}</label>
+								@if($col['type']!='hidden')
+								<label class="control-label col-sm-2">{{$col['label']}}
+								@if(!empty($col['required'])) <span class="text-danger" title="This field is required">*</span> @endif
+								</label>
+								@endif
 								<div class="col-sm-10">
 									@if($col['type']=='text')
 									<input id='{{$name_column}}' type='text' {{ ($col['max'])?"maxlength='$col[max]'":"" }} name='{{$col["name"]}}' class='form-control {{$col['required']?"required":""}}' 										
@@ -255,6 +259,8 @@
 											}											
 										?>										
 									</select>
+									@elseif($col['type']=='hidden')
+										<input type="{{$col['type']}}" id="{{$name.$col["name"]}}" name="{{$name.$col["name"]}}" value="{{$col["value"]}}">
 									@endif
 
 									@if($col['help']) 

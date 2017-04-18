@@ -12,4 +12,10 @@ $this->form[] = ['label'=>'Photo','name'=>'photo','type'=>'filemanager','fileman
 ```
 
 ## What's Next
+- [How To Make The Graded Select Boxes (Parent Select -> Child Select -> Etc..)](./how-make-graded-select-box.md)
+
+## What's Next
+- [Form Input Type: googlemaps](./form-googlemaps.md)
+
+## Table Of Contents
 - [Back To Index](./index.md)
