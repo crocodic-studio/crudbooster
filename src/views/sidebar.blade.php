@@ -71,8 +71,15 @@
                             <?php
                             $groupSetting = DB::table('cms_settings')->groupby('group_setting')->pluck('group_setting');
                             foreach($groupSetting as $gs):
+                               $title = $gs;
+                               $translate  = DB::table('cms_settings')->where('group_setting','=',$gs)->where('translate_group_setting','<>','')->first();
+                               if(count($translate)==1) {
+                                 $translate = json_decode($translate->translate_group_setting);
+                                 $translate = (array) $translate;
+                                 $title = $translate[\App::getLocale()]->{singular};
+                               }
                             ?>
-                            <li class="<?=($gs == Request::get('group'))?'active':''?>"><a href='{{route("SettingsControllerGetShow")}}?group={{urlencode($gs)}}&m=0'><i class='fa fa-wrench'></i> {{$gs}}</a></li>
+                            <li class="<?=($gs == Request::get('group'))?'active':''?>"><a href='{{route("SettingsControllerGetShow")}}?group={{urlencode($gs)}}&m=0'><i class='fa fa-wrench'></i> {{$title}}</a></li>
                             <?php endforeach;?>
                         </ul>
                     </li>
