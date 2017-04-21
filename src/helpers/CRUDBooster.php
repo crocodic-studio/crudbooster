@@ -865,7 +865,7 @@ class CRUDBooster  {
 	            $user_agent = Request::header('User-Agent');
 	            $time       = Request::header('X-Authorization-Time'); 
 
-	            $keys = DB::table('cms_apikey')->where('status','active')->lists('screetkey');
+	            $keys = DB::table('cms_apikey')->where('status','active')->pluck('screetkey');
 	            $server_token = array();
 	            $server_token_screet = array();
 	            foreach($keys as $key) {
