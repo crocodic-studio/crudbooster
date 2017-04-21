@@ -47,62 +47,12 @@
 							<?php endforeach;?>
 						</select>
 						<div class="text-danger">{{ $errors->first('theme_color') }}</div>			
-						<script type="text/javascript">
-							$(function() {
-								$("select[name=theme_color]").change(function() {
-									var n = $(this).val();
-									$("body").attr("class",n);
-								})
-
-								$('#set_as_superadmin input').click(function() {
-									var n = $(this).val();
-									if(n == '1') {
-										$('#privileges_configuration').hide();
-									}else{
-										$('#privileges_configuration').show();
-									}
-								})
-
-								$('#set_as_superadmin input:checked').trigger('click');
-							})
-						</script>								
+													
 					</div>
 	
 					<div id='privileges_configuration' class='form-group'>
 						<label>{{trans('crudbooster.privileges_configuration')}}</label>
-						<script>
-							$(function() {
-								$("#is_visible").click(function() {
-									var is_ch = $(this).prop('checked');
-									console.log('is checked create '+is_ch);
-									$(".is_visible").prop("checked",is_ch);
-									console.log('Create all');
-								})
-								$("#is_create").click(function() {
-									var is_ch = $(this).prop('checked');
-									console.log('is checked create '+is_ch);
-									$(".is_create").prop("checked",is_ch);
-									console.log('Create all');
-								})
-								$("#is_read").click(function() {
-									var is_ch = $(this).is(':checked');
-									$(".is_read").prop("checked",is_ch);
-								})
-								$("#is_edit").click(function() {
-									var is_ch = $(this).is(':checked');
-									$(".is_edit").prop("checked",is_ch);
-								})
-								$("#is_delete").click(function() {
-									var is_ch = $(this).is(':checked');
-									$(".is_delete").prop("checked",is_ch);
-								})
-								$(".select_horizontal").click(function() {
-									var p = $(this).parents('tr');
-									var is_ch = $(this).is(':checked');
-									p.find("input[type=checkbox]").prop("checked",is_ch);
-								})
-							})
-						</script>
+
 						<table class='table table-striped table-hover table-bordered'>
 							<thead>
 								<tr class='active'>
@@ -150,3 +100,61 @@
 
     </div><!-- /.row -->
 @endsection
+
+@push('javascript')
+	
+	<script type="text/javascript">
+		$(function() {
+
+			$("select[name=theme_color]").change(function() {
+				var n = $(this).val();
+				$("body").attr("class",n);
+			})
+
+			$('#set_as_superadmin input').click(function() {
+				var n = $(this).val();
+				if(n == '1') {
+					$('#privileges_configuration').hide();
+				}else{
+					$('#privileges_configuration').show();
+				}
+			})
+
+			$('#set_as_superadmin input:checked').trigger('click');
+			
+			$("#is_visible").click(function() {
+				var is_ch = $(this).prop('checked');
+				console.log('is checked create '+is_ch);
+				$(".is_visible").prop("checked",is_ch);
+				console.log('Create all');
+			})
+			$("#is_create").click(function() {
+				var is_ch = $(this).prop('checked');
+				console.log('is checked create '+is_ch);
+				$(".is_create").prop("checked",is_ch);
+				console.log('Create all');
+			})
+			$("#is_read").click(function() {
+				var is_ch = $(this).is(':checked');
+				$(".is_read").prop("checked",is_ch);
+			})
+			$("#is_edit").click(function() {
+				var is_ch = $(this).is(':checked');
+				$(".is_edit").prop("checked",is_ch);
+			})
+			$("#is_delete").click(function() {
+				var is_ch = $(this).is(':checked');
+				$(".is_delete").prop("checked",is_ch);
+			})
+			$(".select_horizontal").click(function() {
+				var p = $(this).parents('tr');
+				var is_ch = $(this).is(':checked');
+				p.find("input[type=checkbox]").prop("checked",is_ch);
+			})
+
+			
+		})
+
+	</script>
+
+@endpush

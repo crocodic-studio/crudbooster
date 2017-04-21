@@ -39,8 +39,3 @@
 				<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
 				</div>
 			</div>
-			@if(@$form['filemanager_type'])
-			<script type="text/javascript">$('#lfm-{{$name}}').filemanager('file','{{url("/")}}');</script>
-			@else
-			<script type="text/javascript">$('#lfm-{{$name}}').filemanager('images','{{url("/")}}');</script>
-			@endif

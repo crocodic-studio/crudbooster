@@ -2,11 +2,17 @@
 		@if($form['datatable'])
 
 			@if($form['relationship_table'])
-				<script type="text/javascript">
-					$(function() {
-						$('#{{$name}}').select2();
-					})
-				</script>
+				
+				@push('javascript')
+			
+					<script type="text/javascript">
+						$(function() {
+							$('#{{$name}}').select2();
+						})
+					</script>
+				
+				@endpush
+				
 			@else
 				@if($form['datatable_ajax'] == true)
 
@@ -27,81 +33,96 @@
 					@$table3   = $raw[4];
 					@$column3  = $raw[5];
 				?>
-				<script>				
-					$(function() {
-						$('#{{$name}}').select2({								  							  
-						  placeholder: {
-							    id: '-1', 
-							    text: '{{trans('crudbooster.text_prefix_option')}} {{$form['label']}}'
-							},
-						  allowClear: true,
-						  ajax: {								  	
-						    url: '{!! $url !!}',								    
-						    delay: 250,								   								    
-						    data: function (params) {
-						      var query = {
-								q: params.term,
-								format: "{{$format}}",
-								table1: "{{$table1}}",
-								column1: "{{$column1}}",
-								table2: "{{$table2}}",
-								column2: "{{$column2}}",
-								table3: "{{$table3}}",
-								column3: "{{$column3}}",
-								where: "{!! addslashes($where) !!}"
-						      }
-						      return query;
-						    },
-						    processResults: function (data) {
-						      return {
-						        results: data.items
-						      };
-						    }								    								    
-						  },
-						  escapeMarkup: function (markup) { return markup; }, 							        							    
-						  minimumInputLength: 1,
-					      @if($value)
-						  initSelection: function(element, callback) {
-					            var id = $(element).val()?$(element).val():"{{$value}}";
-					            if(id!=='') {
-					                $.ajax('{{$url}}', {
-					                    data: {
-					                    	id: id, 
-					                    	format: "{{$format}}",
-					                    	table1: "{{$table1}}",
-											column1: "{{$column1}}",
-											table2: "{{$table2}}",
-											column2: "{{$column2}}",
-											table3: "{{$table3}}",
-											column3: "{{$column3}}"
-										},
-					                    dataType: "json"
-					                }).done(function(data) {							                	
-					                    callback(data.items[0]);	
-					                    $('#<?php echo $name?>').html("<option value='"+data.items[0].id+"' selected >"+data.items[0].text+"</option>");			                	
-					                });
-					            }
-					      }
 				
-					      @endif							      
-						});
-
-					})
-				</script>
-				@else
-					<script type="text/javascript">
+				@push('javascript')
+					<script>				
 						$(function() {
-							$('#{{$name}}').select2();
+							$('#{{$name}}').select2({								  							  
+							  placeholder: {
+									id: '-1', 
+									text: '{{trans('crudbooster.text_prefix_option')}} {{$form['label']}}'
+								},
+							  allowClear: true,
+							  ajax: {								  	
+								url: '{!! $url !!}',								    
+								delay: 250,								   								    
+								data: function (params) {
+								  var query = {
+									q: params.term,
+									format: "{{$format}}",
+									table1: "{{$table1}}",
+									column1: "{{$column1}}",
+									table2: "{{$table2}}",
+									column2: "{{$column2}}",
+									table3: "{{$table3}}",
+									column3: "{{$column3}}",
+									where: "{!! addslashes($where) !!}"
+								  }
+								  return query;
+								},
+								processResults: function (data) {
+								  return {
+									results: data.items
+								  };
+								}								    								    
+							  },
+							  escapeMarkup: function (markup) { return markup; }, 							        							    
+							  minimumInputLength: 1,
+							  @if($value)
+							  initSelection: function(element, callback) {
+									var id = $(element).val()?$(element).val():"{{$value}}";
+									if(id!=='') {
+										$.ajax('{{$url}}', {
+											data: {
+												id: id, 
+												format: "{{$format}}",
+												table1: "{{$table1}}",
+												column1: "{{$column1}}",
+												table2: "{{$table2}}",
+												column2: "{{$column2}}",
+												table3: "{{$table3}}",
+												column3: "{{$column3}}"
+											},
+											dataType: "json"
+										}).done(function(data) {							                	
+											callback(data.items[0]);	
+											$('#<?php echo $name?>').html("<option value='"+data.items[0].id+"' selected >"+data.items[0].text+"</option>");			                	
+										});
+									}
+							  }
+					
+							  @endif							      
+							});
+
 						})
 					</script>
+				@endpush
+				
+				@else
+					
+					@push('javascript')
+			
+						<script type="text/javascript">
+							$(function() {
+								$('#{{$name}}').select2();
+							})
+						</script>
+				
+					@endpush
+					
 				@endif
 			@endif
 		@else
-			<script type="text/javascript">
-				$(function() {
-					$('#{{$name}}').select2();
-				})
-			</script>
+			
+			@push('javascript')
+			
+				<script type="text/javascript">
+					$(function() {
+						$('#{{$name}}').select2();
+					})
+				</script>
+		
+			@endpush
 
 		@endif
 

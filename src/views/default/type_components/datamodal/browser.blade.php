@@ -1,23 +1,20 @@
 @include('crudbooster::admin_template_plugins')
-
+<!-- Include Admin CSS files -->
+@yield('admin_template_plugins_css')
 <?php 
 	$name = Request::get('name_column');
-	$coloms_alias =  explode(',','ID,'.Request::get('columns_name_alies'));
-	if(count($coloms_alias)<2){
-		$coloms_alias=$columns ;
-	}
 ?>
 <form method='get' action="">
 {!! CRUDBooster::getUrlParameters(['q']) !!}
-<input type="text" placeholder="{{trans('crudbooster.datamodal_search_and_enter')}}" name="q" title="{{trans('crudbooster.datamodal_enter_to_search')}}" value="{{Request::get('q')}}" class="form-control">
+<input type="text" placeholder="Search and enter..." name="q" title="Enter to search" value="{{Request::get('q')}}" class="form-control">
 </form>
 
 <table id='table_dashboard' class='table table-striped table-bordered table-condensed' style="margin-bottom: 0px">
 <thead>	
-	@foreach($coloms_alias as $col)
-	<th>{{ $col }}</th>
+	@foreach($columns as $col)
+	<th>{{ strtoupper($col) }}</th>
 	@endforeach
-	<th width="5%">{{trans('crudbooster.datamodal_select')}}</th>
+	<th width="5%">SELECT</th>
 </thead>
 <tbody>
 	@foreach($result as $row)
@@ -50,7 +47,7 @@
 				}				
 			}
 		?>
-		<td><a class='btn btn-primary' href='javascript:void(0)' onclick='parent.selectAdditionalData{{$name}}({!! json_encode($select_data_result) !!})'><i class='fa fa-check-circle'></i> {{trans('crudbooster.datamodal_select')}}</a></td>
+		<td><a class='btn btn-primary' href='javascript:void(0)' onclick='parent.selectAdditionalData{{$name}}({!! json_encode($select_data_result) !!})'><i class='fa fa-check-circle'></i> Select</a></td>
 	</tr>
 	@endforeach
 </tbody>

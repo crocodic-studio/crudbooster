@@ -1,31 +1,18 @@
-@extends("crudbooster::admin_template")
+@extends('crudbooster::admin_template')
+
+@push('css')
+
+	<link rel="stylesheet" href="{{asset('vendor/crudbooster/assets/select2/dist/css/select2.min.css')}}">
+	
+	<style>
+		.select2-container--default .select2-selection--single {border-radius: 0 !important}
+		.select2-container .select2-selection--single {height: 35px}
+	</style>
+
+@endpush
+
+
 @section("content")
-<link rel='stylesheet' href='<?php echo asset("vendor/crudbooster/assets/select2/dist/css/select2.min.css")?>'/>
-<script src='<?php echo asset("vendor/crudbooster/assets/select2/dist/js/select2.full.min.js")?>'></script>
-<style>
-	.select2-container--default .select2-selection--single {border-radius: 0px !important}
-	.select2-container .select2-selection--single {height: 35px}
-</style>
-<script>
-    $(function() {
-        $('.select2').select2();
-        
-    })
-    $(function() {
-        $('select[name=table]').change(function() {
-            var v = $(this).val().replace(".", "_");
-            $.get("{{CRUDBooster::mainpath('check-slug')}}/"+v,function(resp) {
-                if(resp.total==0) {
-                    $('input[name=path]').val(v);
-                }    else{
-                    v = v+resp.lastid;
-                    $('input[name=path]').val(v);
-                }
-            })
-            
-        })	
-    })
-</script>
 
 <ul class="nav nav-tabs">
   @if($id)
@@ -70,9 +57,10 @@
                 
         <div class="form-group">
             <label for="">Icon</label>
-            <select name="icon" id="icon" required class="select2 form-control">
+            <select name="icon" id='list-icon' required class="select2 form-control">
                 @foreach($fontawesome as $f)
-                    <option {{($row->icon == 'fa fa-'.$f)?"selected":""}} value="fa fa-{{$f}}">{{$f}}</option>
+					<option value='fa fa-{{$f}}' {{ ($row->icon == "fa fa-$f")?"selected":"" }} data-label='{{$f}}'>{{$f}}</option>
+                    
                 @endforeach
             </select>
         </div>
@@ -96,3 +84,47 @@
 
 
 @endsection
+
+@push('javascript')
+
+	<script src="{{asset('vendor/crudbooster/assets/select2/dist/js/select2.full.min.js')}}"></script>
+	
+	<script>
+
+		$(function() {
+			$('select[name=table]').change(function() {
+				var v = $(this).val().replace(".", "_");
+				$.get("{{CRUDBooster::mainpath('check-slug')}}/"+v,function(resp) {
+					if(resp.total==0) {
+						$('input[name=path]').val(v);
+					}    else{
+						v = v+resp.lastid;
+						$('input[name=path]').val(v);
+					}
+				})
+				
+			})	
+		})
+		
+		$(function() {
+
+		  function format(icon) {          
+			  var originalOption = icon.element;
+			  var label = $(originalOption).text();
+			  var val = $(originalOption).val();
+			  if(!val) return label;
+			  var $resp = $('<span><i style="margin-top:5px" class="pull-right ' + $(originalOption).val() + '"></i> ' + $(originalOption).data('label') + '</span>');
+			  return $resp;
+		  }
+
+		  $('#list-icon').select2({
+			  width: "100%",
+			  templateResult: format,
+			  templateSelection: format
+		  });
+
+	  })  
+		
+	</script>
+	
+@endpush
