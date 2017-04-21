@@ -98,7 +98,8 @@ class CrudboosterInstallationCommand extends Command {
 			$this->callSilent('vendor:publish',['--tag'=>'cb_localization','--force'=>true]);		
 			
 			$this->info('Migrating database...');				
-			$this->call('migrate',['--seed'=>true]);				
+			$this->call('migrate');
+			$this->call('db:seed',['--class' => 'CBSeeder']);			
 			$this->call('config:clear');		
 			$this->call('optimize');
 			
