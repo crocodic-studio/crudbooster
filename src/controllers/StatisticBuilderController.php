@@ -171,7 +171,13 @@
 	    	return response()->json(['status'=>true]);
 	    }
 
-	    public function getDeleteComponent($id) {
+	    public function getDeleteComponent($id)
+	    {
+	    	if(!CRUDBooster::isSuperadmin()) {
+			CRUDBooster::insertLog(trans("crudbooster.log_try_view",['name'=>'Delete Component','module'=>'Statistic']));
+			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
+		}
+		    
 	    	DB::table('cms_statistic_components')->where('componentID',$id)->delete();
 	    	return response()->json(['status'=>true]);
 	    }
