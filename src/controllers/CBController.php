@@ -24,6 +24,7 @@ class CBController extends Controller {
 	public $columns_table;
 	public $module_name;
 	public $table;
+	public $table_where;
 	public $title_field;
 	public $primary_key        = 'id';
 	public $arr                = array();
@@ -87,6 +88,7 @@ class CBController extends Controller {
 		$this->data['hide_form'] 			 = $this->hide_form;
 		$this->data['addaction']             = ($this->show_addaction)?$this->addaction:NULL;
 		$this->data['table']                 = $this->table;
+		$this->data['table_where']           = $this->table_where;		
 		$this->data['title_field']           = $this->title_field;
 		$this->data['appname']               = CRUDBooster::getSetting('appname');
 		$this->data['alerts']                = $this->alert;
@@ -314,6 +316,11 @@ class CBController extends Controller {
 			foreach(Request::get('where') as $k=>$v) {
 				$result->where($table.'.'.$k,$v);
 			}
+		}
+
+		if(isset($this->table_where)){
+			$col_where=explode(";", $this->table_where);
+			$result->where($table.'.'.$col_where[0],$col_where[1]);
 		}
 
 		$filter_is_orderby = false;
@@ -986,8 +993,12 @@ class CBController extends Controller {
 		}
 
 		$this->hook_before_add($this->arr);
+		$this->arr[$this->primary_key] = $id = CRUDBooster::newId($this->table);
 
-		$this->arr[$this->primary_key] = $id = CRUDBooster::newId($this->table);		
+		if(strlen($this->table_where)>1){	
+			$this->arr[explode(";",$this->table_where)[0]] = explode(";",$this->table_where)[1]	;
+		}
+
 		DB::table($this->table)->insert($this->arr);		
 
 		//Looping Data Input Again After Insert
