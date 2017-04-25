@@ -65,7 +65,7 @@
         </div>
         <div class="form-group">
             <label for="">Table condition( SQL WHERE exp: master_code;999 )</label>                   
-           <input type="text" class="form-control" required name="where" value="{{$row->table_where}}" >
+           <input type="text" class="form-control"  name="where" value="{{$row->table_where}}" >
         </div>
         <div class="form-group">
             <label for="">Module Name</label>
