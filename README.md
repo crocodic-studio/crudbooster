@@ -1,4 +1,4 @@
-# CRUDBOOSTER 5.3 - Laravel CRUD Generator
+# CRUDBOOSTER - Laravel CRUD Generator
 [![Latest Stable Version](https://poser.pugx.org/crocodicstudio/crudbooster/v/stable)](https://packagist.org/packages/crocodicstudio/crudbooster)
 [![Total Downloads](https://poser.pugx.org/crocodicstudio/crudbooster/downloads)](https://packagist.org/packages/crocodicstudio/crudbooster)
 [![Latest Unstable Version](https://poser.pugx.org/crocodicstudio/crudbooster/v/unstable)](https://packagist.org/packages/crocodicstudio/crudbooster)
@@ -68,14 +68,19 @@ Do you have any doubt? Are you having some difficulty? Did you find a translatio
 
 To post you should detail the most about what happened. Specify in detail:
 
-- operating system (name, version and architecture)
-- server (name, version and architecture)
-- browser (name, version and architecture)
+- Operating system (name, version and architecture)
+- Web server (name, version and architecture)
+- Browser (name, version and architecture)
 - CRUDBooster version
-- what is the problem?
-- how should it happen? what was the expected behavior?
-- tell how to reproduce the problem step by step
-- if possible, take screenshots or send snippets of code
+- Laravel version
+- What is the problem?
+- How should it happen? What was the expected behavior?
+- Tell how to reproduce the problem step by step
+- If possible, take screenshots or send snippets of code
+
+No one is obligated to understand you. Then explain your problem with clarity, detail and precision. Make yourself understandable. Once the problem is resolved, remember to thank those who helped and close the issue. 
+
+If there is no interaction for a long period of time, it will be assumed that it has been resolved or that it is irrelevant, and may be closed without notice. Feel free to reopen it if you think it is really necessary.
 
 ## Donation
 <a href='https://pledgie.com/campaigns/33366'><img alt='Click here to lend your support to: CRUDBooster is Laravel CRUD Generator and make a donation at pledgie.com !' src='https://pledgie.com/campaigns/33366.png?skin_name=chrome' border='0' ></a>
