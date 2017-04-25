@@ -15,10 +15,12 @@ class AddTableCmsPrivileges extends Migration {
 		Schema::create('cms_privileges', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->timestamps();
+
 			$table->string('name')->nullable();
 			$table->boolean('is_superadmin')->nullable();
 			$table->string('theme_color')->nullable();
+			
+			$table->timestamps();
 		});
 	}
 
