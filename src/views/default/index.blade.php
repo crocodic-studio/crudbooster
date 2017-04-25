@@ -62,7 +62,7 @@
 
                 @if($button_selected)
                   @foreach($button_selected as $button)
-                    <li><a href="javascript:void(0)" data-name='{{$button["name"]}}' title='{{$button["label"]}}''><i class="fa fa-{{$button['icon']}}"></i> {{$button['label']}}</a></li>
+                    <li><a href="javascript:void(0)" data-name='{{$button["name"]}}' title='{{$button["label"]}}'><i class="fa fa-{{$button['icon']}}"></i> {{$button['label']}}</a></li>
                   @endforeach
                 @endif
 
