@@ -12,7 +12,7 @@
 		},
 		"optional": {			
 			"datamodal_where":"string where condition",		
-			"datamodal_module_name":"Module name",	
+			"datamodal_module_path":"Module name",	
 			"datamodal_columns_alias_name":"Column name Alias , sparate with comma ex: 'Name Surname','Age' ",			
 			"style":"string inline stylesheet",
 			"help":"string help-block"
