@@ -318,7 +318,7 @@ class CBController extends Controller {
 			}
 		}
 
-		if(isset($this->table_where)){
+		if(strlen($this->table_where)>1){
 			$col_where=explode(";", $this->table_where);
 			$result->where($table.'.'.$col_where[0],$col_where[1]);
 		}
