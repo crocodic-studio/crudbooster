@@ -5,6 +5,7 @@ use Illuminate\Console\Command;
 use Illuminate\Foundation\Inspiring;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Process\Process;
 use DB;
 use Cache;
 use Request;
@@ -98,6 +99,11 @@ class CrudboosterInstallationCommand extends Command
 			$this->callSilent('vendor:publish',['--tag'=>'cb_migration','--force'=>true]);
 			$this->callSilent('vendor:publish',['--tag'=>'cb_lfm','--force'=>true]);
 			$this->callSilent('vendor:publish',['--tag'=>'cb_localization','--force'=>true]);	
+
+			$this->info('Dumping the autoloaded files and reloading all new files...');
+			$composer = $this->findComposer();
+	        $process = new Process($composer.' dumpautoload');
+	        $process->setWorkingDirectory(base_path())->run();
 
 			$this->info('Migrating database...');				
 			$this->call('migrate');
@@ -225,5 +231,18 @@ class CrudboosterInstallationCommand extends Command
 		}
 		$this->info('--');
 	}
+
+	/**
+     * Get the composer command for the environment.
+     *
+     * @return string
+     */
+    protected function findComposer()
+    {
+        if (file_exists(getcwd().'/composer.phar')) {
+            return '"'.PHP_BINARY.'" '.getcwd().'/composer.phar';
+        }
+        return 'composer';
+    }
 
 }
