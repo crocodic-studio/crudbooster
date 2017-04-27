@@ -1,4 +1,6 @@
-<?php namespace crocodicstudio\crudbooster\commands;
+<?php 
+
+namespace Crocodicstudio\Crudbooster\Commands;
  
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Inspiring;
@@ -10,7 +12,8 @@ use Request;
 use CRUDBooster;
 use App;
 
-class CrudboosterUpdateCommand extends Command {
+class CrudboosterUpdateCommand extends Command
+{
 
 	/**
 	 * The console command name.
@@ -73,11 +76,11 @@ class CrudboosterUpdateCommand extends Command {
                 //Is Directory         
                 $this->info('Clear existing public/vendor/crudbooster instead of create a symlink...');                                      
                 rrmdir(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'));
-                app('files')->link(__DIR__.'/../assets',public_path('vendor/crudbooster'));
+                app('files')->link(__DIR__.'/../publishable/assets',public_path('vendor/crudbooster'));
             }            
         }else{            
         	$this->info('Creating a public/vendor/crudbooster symlink...');  
-            app('files')->link(__DIR__.'/../assets',public_path('vendor/crudbooster'));
+            app('files')->link(__DIR__.'/../publishable/assets',public_path('vendor/crudbooster'));
         }  
 
 		$this->info('Publishing CRUDBooster needs file...');
@@ -112,13 +115,15 @@ class CrudboosterUpdateCommand extends Command {
 		$this->info('====================================================================');
 	}
 
-	private function footer($success=true) {
+	private function footer($success=true)
+	{
 		$this->info('--');
 		$this->info('Homepage : http://www.crudbooster.com');
 		$this->info('Github : https://github.com/crocodic-studio/crudbooster');
-		$this->info('Documentation : https://github.com/crocodic-studio/crudbooster/blob/master/docs/en/index.md');				
+		$this->info('Documentation : https://github.com/crocodic-studio/crudbooster/blob/master/docs/en/index.md');
+
 		$this->info('====================================================================');
-		if($success==true) {			
+		if($success==true) {
 			$this->info('------------------- :===: Completed !! :===: ------------------------');
 		}else{
 			$this->info('------------------- :===: Failed !!    :===: ------------------------');
@@ -126,12 +131,11 @@ class CrudboosterUpdateCommand extends Command {
 		exit;
 	}
 
-
-	private function checkRequirements() {
+	private function checkRequirements()
+	{
 		$this->info('System Requirements Checking:');
 		$system_failed = 0;
 		$laravel = app();
-		
 
 		if($laravel::VERSION >= 5.3) {
 			$this->info('Laravel Version (>= 5.3.*): [Good]');
@@ -147,14 +151,14 @@ class CrudboosterUpdateCommand extends Command {
 			$system_failed++;
 		}
 
-		if(extension_loaded('mbstring')) { 
+		if(extension_loaded('mbstring')) {
 			$this->info('Mbstring extension: [Good]');			
 		}else{
 			$this->info('Mbstring extension: [Bad]');
 			$system_failed++;
 		}
 
-		if(extension_loaded('openssl')) { 
+		if(extension_loaded('openssl')) {
 			$this->info('OpenSSL extension: [Good]');
 		}else{
 			$this->info('OpenSSL extension: [Bad]');
@@ -189,8 +193,8 @@ class CrudboosterUpdateCommand extends Command {
 			$system_failed++;
 		}
 
-		if(extension_loaded('fileinfo')) { 
-			$this->info('PHP Fileinfo extension: [Good]');			
+		if(extension_loaded('fileinfo')) {
+			$this->info('PHP Fileinfo extension: [Good]');		
 		}else{
 			$this->info('PHP Fileinfo extension: [Bad]');
 			$system_failed++;
@@ -205,7 +209,7 @@ class CrudboosterUpdateCommand extends Command {
 
 		if($system_failed!=0) {
 			$this->info('Sorry unfortunately your system is not meet with our requirements !');
-			$this->footer(false);			
+			$this->footer(false);		
 		}
 		$this->info('--');
 	}

@@ -1,5 +1,5 @@
 <?php 
-namespace crocodicstudio\crudbooster\helpers;
+namespace Crocodicstudio\Crudbooster\Helpers;
 
 use Session;
 use Request;

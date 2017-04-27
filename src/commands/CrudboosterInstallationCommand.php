@@ -1,4 +1,5 @@
-<?php namespace crocodicstudio\crudbooster\commands;
+<?php 
+namespace Crocodicstudio\Crudbooster\Commands;
  
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Inspiring;
@@ -10,7 +11,8 @@ use Request;
 use CRUDBooster;
 use App;
 
-class CrudboosterInstallationCommand extends Command {
+class CrudboosterInstallationCommand extends Command
+{
 
 	/**
 	 * The console command name.
@@ -33,23 +35,23 @@ class CrudboosterInstallationCommand extends Command {
 	 */
 	public function handle()
 	{
-		
+
 		$this->header();
 
 		$this->checkRequirements();
-		
+
 		$this->info('Installing: ');
 		/* Removing the default user and password reset, it makes you ambigous when using CRUDBooster */
-        $this->info('I remove some default migration files from laravel...');  
-        if(file_exists(base_path('database/migrations/2014_10_12_000000_create_users_table.php'))) {        
+        $this->info('I remove some default migration files from laravel...');
+        if(file_exists(base_path('database/migrations/2014_10_12_000000_create_users_table.php'))) {
             @unlink(base_path('database/migrations/2014_10_12_000000_create_users_table.php'));
         }
-        if(file_exists(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'))) {            
+        if(file_exists(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'))) {
             @unlink(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'));
         }
 
         //Create vendor folder at public
-        $this->info('Checking public/vendor directory...');  
+        $this->info('Checking public/vendor directory...');
         if(!file_exists(public_path('vendor'))) {
             mkdir(public_path('vendor'),0777);
         }else{
@@ -60,49 +62,49 @@ class CrudboosterInstallationCommand extends Command {
         	}
         }
 
-
         //Create symlink for uploads path
-        $this->info('Checking public/uploads symlink...');  
-        if(file_exists(public_path('uploads'))) {          
-            if(readlink(public_path('uploads')) == public_path('uploads')) {   
-            	$this->info('Remove the existing uploads dir, and create a symlink for it...');                                                                     
+        $this->info('Checking public/uploads symlink...');
+        if(file_exists(public_path('uploads'))) {
+            if(readlink(public_path('uploads')) == public_path('uploads')) {
+            	$this->info('Remove the existing uploads dir, and create a symlink for it...');
+
                 rrmdir(public_path('uploads'));
                 app('files')->link(storage_path('app'), public_path('uploads'));
-            }              
+            }
         }else{
-        	$this->info('Creating public/uploads symlink...');  
+        	$this->info('Creating public/uploads symlink...');
             app('files')->link(storage_path('app'), public_path('uploads'));
         }
 
-
         //Crate symlink for assets
-        $this->info('Checking public/vendor/crudbooster symlink...');  
-        if(file_exists(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'))) {                      
-            if(readlink(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster')) == public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster')) {                
-                //Is Directory                  
-                $this->info('Removing public/vendor/crudbooster dir, instead of creating a symlink...');                               
+        $this->info('Checking public/vendor/crudbooster symlink...');
+        if(file_exists(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'))) {
+            if(readlink(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster')) == public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster')) {
+                //Is Directory
+                $this->info('Removing public/vendor/crudbooster dir, instead of creating a symlink...');
+
                 rrmdir(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'));
-                app('files')->link(__DIR__.'/../assets',public_path('vendor/crudbooster'));
-            }            
-        }else{            
-        	$this->info('Creating public/vendor/crudbooster symlink...');  
-            app('files')->link(__DIR__.'/../assets',public_path('vendor/crudbooster'));
+                app('files')->link(__DIR__.'/../publishable/assets',public_path('vendor/crudbooster'));
+            }
+        }else{
+        	$this->info('Creating public/vendor/crudbooster symlink...');
+            app('files')->link(__DIR__.'/../publishable/assets',public_path('vendor/crudbooster'));
         }
 
 		if($this->confirm('Do you have setting the database configuration at .env ?')) {
 
 			$this->info('Publishing CRUDBooster needs file...');
-			$this->callSilent('vendor:publish');	
+			$this->callSilent('vendor:publish');
 			$this->callSilent('vendor:publish',['--tag'=>'cb_migration','--force'=>true]);
-			$this->callSilent('vendor:publish',['--tag'=>'cb_lfm','--force'=>true]);	
-			$this->callSilent('vendor:publish',['--tag'=>'cb_localization','--force'=>true]);		
-			
+			$this->callSilent('vendor:publish',['--tag'=>'cb_lfm','--force'=>true]);
+			$this->callSilent('vendor:publish',['--tag'=>'cb_localization','--force'=>true]);	
+
 			$this->info('Migrating database...');				
 			$this->call('migrate');
-			$this->call('db:seed',['--class' => 'CBSeeder']);			
-			$this->call('config:clear');		
+			$this->call('db:seed',['--class' => 'CBSeeder']);
+			$this->call('config:clear');
 			$this->call('optimize');
-			
+
 			$this->info('Installing CRUDBooster Is Completed ! Thank You :)');
 		}else{
 			$this->info('Setup Aborted !');
@@ -125,13 +127,15 @@ class CrudboosterInstallationCommand extends Command {
 		$this->info('====================================================================');
 	}
 
-	private function footer($success=true) {
+	private function footer($success=true)
+	{
 		$this->info('--');
 		$this->info('Homepage : http://www.crudbooster.com');
 		$this->info('Github : https://github.com/crocodic-studio/crudbooster');
-		$this->info('Documentation : https://github.com/crocodic-studio/crudbooster/blob/master/docs/en/index.md');				
+		$this->info('Documentation : https://github.com/crocodic-studio/crudbooster/blob/master/docs/en/index.md');			
+
 		$this->info('====================================================================');
-		if($success==true) {			
+		if($success==true) {
 			$this->info('------------------- :===: Completed !! :===: ------------------------');
 		}else{
 			$this->info('------------------- :===: Failed !!    :===: ------------------------');
@@ -139,13 +143,12 @@ class CrudboosterInstallationCommand extends Command {
 		exit;
 	}
 
-
-	private function checkRequirements() {
+	private function checkRequirements()
+	{
 		$this->info('System Requirements Checking:');
 		$system_failed = 0;
 		$laravel = app();
 		
-
 		if($laravel::VERSION >= 5.3) {
 			$this->info('Laravel Version (>= 5.3.*): [Good]');
 		}else{
@@ -160,14 +163,14 @@ class CrudboosterInstallationCommand extends Command {
 			$system_failed++;
 		}
 
-		if(extension_loaded('mbstring')) { 
-			$this->info('Mbstring extension: [Good]');			
+		if(extension_loaded('mbstring')) {
+			$this->info('Mbstring extension: [Good]');
 		}else{
 			$this->info('Mbstring extension: [Bad]');
 			$system_failed++;
 		}
 
-		if(extension_loaded('openssl')) { 
+		if(extension_loaded('openssl')) {
 			$this->info('OpenSSL extension: [Good]');
 		}else{
 			$this->info('OpenSSL extension: [Bad]');
@@ -202,8 +205,8 @@ class CrudboosterInstallationCommand extends Command {
 			$system_failed++;
 		}
 
-		if(extension_loaded('fileinfo')) { 
-			$this->info('PHP Fileinfo extension: [Good]');			
+		if(extension_loaded('fileinfo')) {
+			$this->info('PHP Fileinfo extension: [Good]');	
 		}else{
 			$this->info('PHP Fileinfo extension: [Bad]');
 			$system_failed++;
@@ -218,7 +221,7 @@ class CrudboosterInstallationCommand extends Command {
 
 		if($system_failed!=0) {
 			$this->info('Sorry unfortunately your system is not meet with our requirements !');
-			$this->footer(false);			
+			$this->footer(false);
 		}
 		$this->info('--');
 	}

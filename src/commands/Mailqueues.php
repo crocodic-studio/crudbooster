@@ -1,4 +1,5 @@
-<?php namespace crocodicstudio\crudbooster\commands;
+<?php
+namespace Crocodicstudio\Crudbooster\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Inspiring;
@@ -32,8 +33,7 @@ class Mailqueues extends Command {
 	 */
 	public function handle()
 	{
-		
-		
+
 		$now           = date('Y-m-d H:i:s');
 
 		$this->comment('Mail Queues Started '.$now);
@@ -46,13 +46,13 @@ class Mailqueues extends Command {
 		Cache::put('last_email_sent',date('Y-m-d H:i:s'));
 		
 		foreach($queues as $q) {
-			if (filter_var($q->email_recipient, FILTER_VALIDATE_EMAIL) !== false) {				
+			if (filter_var($q->email_recipient, FILTER_VALIDATE_EMAIL) !== false) {
 				CRUDBooster::sendEmailQueue($queue);
 				$this->comment('Email send -> '.$q->subject);
 			}
 			DB::table('mailqueues')->where('id',$q->id)->delete();
 		}
-		
+
 	}
 
 }

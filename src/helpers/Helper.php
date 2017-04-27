@@ -14,15 +14,14 @@ if(!function_exists('extract_unit')) {
 	Credits: Bit Repository
 	URL: http://www.bitrepository.com/extract-content-between-two-delimiters-with-php.html
 	*/
-	function extract_unit($string, $start, $end)
-	{
-	$pos = stripos($string, $start);
-	$str = substr($string, $pos);
-	$str_two = substr($str, strlen($start));
-	$second_pos = stripos($str_two, $end);
-	$str_three = substr($str_two, 0, $second_pos);
-	$unit = trim($str_three); // remove whitespaces
-	return $unit;
+	function extract_unit($string, $start, $end){
+		$pos = stripos($string, $start);
+		$str = substr($string, $pos);
+		$str_two = substr($str, strlen($start));
+		$second_pos = stripos($str_two, $end);
+		$str_three = substr($str_two, 0, $second_pos);
+		$unit = trim($str_three); // remove whitespaces
+		return $unit;
 	}
 }
 
@@ -41,9 +40,9 @@ if(!function_exists('now')) {
 |
 */
 if(!function_exists('g')) {
-function g($name) {
-    return Request::get($name);
-}
+	function g($name) {
+		return Request::get($name);
+	}
 }
 
 if(!function_exists('min_var_export')) {
