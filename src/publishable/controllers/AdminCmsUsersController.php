@@ -6,7 +6,7 @@ use Request;
 use DB;
 use CRUDbooster;
 
-class AdminCmsUsersController extends Crocodicstudio\Crudbooster\Http\Controllers\CBController
+class AdminCmsUsersController extends \Crocodicstudio\Crudbooster\Http\Controllers\CBController
 {
 
 	public function cbInit()
