@@ -60,7 +60,7 @@
           </div>
           <div class="row">
             <div class="col-xs-8">    
-              {{trans("crudbooster.forgot_text_try_again")}} <a href='{{route("getLogin")}}'>Click here</a>                          
+              {{trans("crudbooster.forgot_text_try_again")}} <a href='{{route("getLogin")}}'>{{trans("crudbooster.click_here")}}</a>                          
             </div><!-- /.col -->
             <div class="col-xs-4">
               <button type="submit" class="btn btn-primary btn-block btn-flat">{{trans("crudbooster.button_submit")}}</button>
