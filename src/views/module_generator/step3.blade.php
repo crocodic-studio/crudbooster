@@ -212,17 +212,53 @@
 
             	t.parent('tr').find('.option_area').empty();                
 
-	            $.getJSON("{{CRUDBooster::mainpath('type-info')}}/"+v,function(data) {
+	            $.getJSON("{{CRUDBooster::mainpath('type-info')}}/"+v,function(data) {                    
+
+                    if(data.alert) {
+                        t.parent('tr').find('.option_area').prepend("<div class='alert alert-warning'><strong>IMPORTANT</strong><br/>"+data.alert+"</div>");
+                    }
 	            	                    
 	        		if(data.attribute.required) {
                         $.each(data.attribute.required,function(key,val) {
-                        t.parent('tr').find('.option_area').append(
-                            "<div class='form-group'>"+
-                                "<label>"+key+"</label>"+
-                                "<input class='form-control required' name='option["+tr_index+"]["+key+"]' placeholder='"+val+"' type='text'/>"+
-                            "</div>"
-                            );                                  
-                        });
+
+                        var form_group_html = '';
+
+                        if(val instanceof Object) {
+                            form_group_html += "<div class='form-group'><label>"+key+"</label>";
+
+                            if(val.type) {                                
+                                if(val.type == 'radio') {
+                                    $.each(val.enum,function(i,o) {
+                                        form_group_html +="<input type='radio' name='option["+tr_index+"]["+key+"]' value='"+o+"'/> "+o+" &nbsp;&nbsp;";
+                                    })
+                                }else{
+                                    if(val.type == 'array') {
+
+                                        form_group_html +="<input class='form-control required' name='option["+tr_index+"]["+key+"]' placeholder='"+val.placeholder+"' type='text'/>";
+                                        form_group_html +="<input name='option["+tr_index+"]["+key+"_type]' value='array' type='hidden'/>";
+
+                                    }else{
+
+                                        form_group_html +="<input class='form-control required' name='option["+tr_index+"]["+key+"]' placeholder='"+val.placeholder+"' type='text'/>";
+                                    }
+                                }
+                            }else{
+                                form_group_html +="<input class='form-control required' name='option["+tr_index+"]["+key+"]' placeholder='"+val+"' type='text'/>";
+                            }                            
+
+                            form_group_html +="</div>";                                
+                        }else{
+                             form_group_html +=
+                                "<div class='form-group'>"+
+                                    "<label>"+key+"</label>"+
+                                    "<input class='form-control required' name='option["+tr_index+"]["+key+"]' placeholder='"+val+"' type='text'/>"+
+                                "</div>"
+                                ;                                                          
+                        }  
+
+                        t.parent('tr').find('.option_area').append(form_group_html);
+
+                        });                     
                     }
                     
                     if(data.attribute.requiredOne) {
@@ -400,28 +436,58 @@
         			</select>
         			</td>
         			<td>        			
-        				<a class='btn btn-primary btn-options' href='#'><i class='fa fa-cog'></i> Options</a>	
+        				<a class='btn btn-primary btn-options' href='javascript:;'><i class='fa fa-cog'></i> Options</a>	
         				<div class='option_area' style="display: none">
         					<?php 
 
                                 $type = $form["type"]?:"text";
         						$types = base_path('vendor/crocodicstudio/crudbooster/src/views/default/type_components/'.$type.'/info.json');
         						$types = file_get_contents($types);
-        						$types = json_decode($types);        						
+        						$types = json_decode($types);     
+
         						if($types):
         					?>
+
+                            @if($types->alert)
+                                <div class="alert alert-warning">
+                                    {!! $types->alert !!}
+                                </div>
+                            @endif                                                     
 
         					<?php 
         						if($types->attribute->required):
         						foreach($types->attribute->required as $key=>$val):
         							@$value = $form[$key];
-		
+		                            if(is_object($val)):  
+
+                                        if($val->type && $val->type=='radio'):                                  
         					?>
-	        					<div class="form-group">
-	        						<label>{{$key}}</label>
-										<input type="text" name="option[{{$index}}][{{$key}}]" placeholder="{{$val}}" value="{{$value}}" class="form-control">
-	        					</div>
+                                            <div class="form-group">
+                                                <label>{{$key}}</label>
+                                                @foreach($val->enum as $enum)
+                                                    <input type="radio" name="option[{{$index}}][{{$key}}]" {{ ($enum == $value)?"checked":"" }} value="{{$enum}}"> {{$enum}}
+                                                @endforeach
+                                                
+                                            </div>
+
+                                        <?php else:?>
+
+            	        					<div class="form-group">
+            	        						<label>{{$key}}</label>
+            								    <input type="text" name="option[{{$index}}][{{$key}}]" placeholder="{{$val->placeholder}}" value="{{$value}}" class="form-control">
+            	        					</div>
+                                        <?php endif;?>
+                                    <?php else:?>
+
+                                    <div class="form-group">
+                                        <label>{{$key}}</label>
+                                        <input type="text" name="option[{{$index}}][{{$key}}]" placeholder="{{$val}}" value="{{$value}}" class="form-control">
+                                    </div>
+
+                                    <?php endif;?>
         					<?php endforeach; endif;?>
+
+
 
         					<?php 
         						if($types->attribute->requiredOne):
@@ -450,6 +516,7 @@
 								</div>
         					<?php endforeach; endif;?>
 
+     
         					<?php endif;?>
         				</div>        				        				
         			</td>   

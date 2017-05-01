@@ -1,3 +1,4 @@
+	<?php $default = !empty($form['default']) ? $form['default'] : trans('crudbooster.text_prefix_option') ." ". $form['label'];?>
 	@if($form['parent_select'])
 	<script type="text/javascript">
 		$(function() {			
@@ -15,7 +16,7 @@
 					$current.html("<option value=''>{{trans('crudbooster.text_loading')}} {{$form['label']}}");
 					$.get("{{CRUDBooster::mainpath('data-table')}}?table="+table+"&label="+label+"&fk_name="+fk_name+"&fk_value="+fk_value,function(response) {
 						if(response) {
-							$current.html("<option value=''>{{trans('crudbooster.text_prefix_option')}} {{$form['label']}}");
+							$current.html("<option value=''>{{$default}}");
 							$.each(response,function(i,obj) {
 								var selected = (value && value == obj.select_value)?"selected":"";
 								$("<option "+selected+" value='"+obj.select_value+"'>"+obj.select_label+"</option>").appendTo("#{{$form['name']}}");
@@ -24,14 +25,12 @@
 						}						
 					});
 				}else{
-					$current.html("<option value=''>{{trans('crudbooster.text_prefix_option')}} {{$form['label']}}");
+					$current.html("<option value=''>{{$default}}");
 				}								
 			})
 
-			@if($value)
-				$('#{{$form['parent_select']}}').trigger('change');
-				$("#{{$form['name']}}").trigger('change');
-			@endif
+			$('#{{$form['parent_select']}}').trigger('change');
+			$("#{{$form['name']}}").trigger('change');
 		})
 	</script>
 	@endif
@@ -40,7 +39,7 @@
 
 		<div class="{{$col_width?:'col-sm-10'}}">									
 		<select class='form-control' id="{{$name}}" data-value='{{$value}}' {{$required}} {!!$placeholder!!} {{$readonly}} {{$disabled}} name="{{$name}}">
-			<option value=''>{{trans('crudbooster.text_prefix_option')}} {{$form['label']}}</option>
+			<option value=''>{{$default}}</option>
 			<?php 	
 				if(!$form['parent_select']) {
 					if(@$form['dataquery']):

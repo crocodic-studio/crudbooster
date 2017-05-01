@@ -13,9 +13,6 @@ class CreateNullableCmsApicustom extends Migration
     public function up()
     {
         Schema::table('cms_apicustom', function (Blueprint $table) {
-            //
-            $table->dateTime('created_at')->nullable()->change();
-            $table->dateTime('updated_at')->nullable()->change();
             $table->string('permalink')->nullable()->change();
             $table->string('tabel')->nullable()->change();
             $table->string('aksi')->nullable()->change();

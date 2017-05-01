@@ -57,7 +57,7 @@
 			        : jQuery("<p>").append(this.eq(0).clone()).html();
 			};
 
-			$(".fancybox").fancybox();
+
 
 			$.ajaxSetup({
 				headers: {
@@ -115,7 +115,7 @@
 
       $.get(NOTIFICATION_JSON,function(resp) {
           if(resp.total > total_notification) {
-            send_notification('You have a new notification !',NOTIFICATION_INDEX);            
+            send_notification(NOTIFICATION_NEW,NOTIFICATION_INDEX);
           }
 
           $('.notifications-menu #notification_count').text(resp.total);
@@ -126,7 +126,7 @@
           }          
 
           $('.notifications-menu #list_notifications .menu').empty();
-          $('.notifications-menu .header').text('You have '+resp.total+' notifications');
+		  $('.notifications-menu .header').text(NOTIFICATION_YOU_HAVE +' '+resp.total+' '+ NOTIFICATION_NOTIFICATIONS);
           var htm = '';
           $.each(resp.items,function(i,obj) {
               htm += '<li><a href="'+ADMIN_PATH+'/notifications/read/'+obj.id+'?m=0"><i class="'+obj.icon+'"></i> '+obj.content+'</a></li>';

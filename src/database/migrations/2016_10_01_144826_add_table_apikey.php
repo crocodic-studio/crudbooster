@@ -14,10 +14,12 @@ class AddTableApikey extends Migration
     {
         Schema::create('cms_apikey', function (Blueprint $table) {
             $table->increments('id');
-            $table->timestamps();
+
             $table->string('screetkey')->nullable();
             $table->integer('hit')->nullable();
-            $table->string('status',25)->default('active');            
+            $table->string('status',25)->default('active');
+
+			$table->timestamps();
         });
     }
 

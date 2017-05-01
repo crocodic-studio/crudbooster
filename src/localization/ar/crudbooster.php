@@ -107,7 +107,7 @@ return [
     'button_sign_in'         => 'تسجيل الدخول',
     'button_selected_action' => 'الاجراء الجماعي',
     'button_download_file'   => 'تنزيل الملف',
-
+    'button_reset'           => 'اعادة تعيين',
 
     'export_dialog_title'            => "تصدير البيانات",
     'export_dialog_filename'         => 'اسم الملف',
@@ -164,4 +164,82 @@ return [
     'Email_Templates'     => 'قوالب البريد الإلكتروني',
     'Log_User_Access'     => 'سجلات النظام',
     'SUPERADMIN'          => 'مدير النظام ',
+
+    'click_here' => 'اضغط هنا ',
+
+    /*
+     * this is for html direction to use in html and css classes like :
+     * pull-left , pull-right , text-right ...
+     * to make it easy to use the the view for rtl langs .
+     * unless your language use right-to-left direction , you should keep it as it is :
+     */
+    'right'      => 'left',
+    'left'       => 'right',
+
+    'all_rights_reserved' => 'كافة الحقوق محفوظة',
+    'copyright'           => 'حقوق النسخ',
+    'powered_by'          => 'انشئ بواسطة',
+
+    'notification_you_have'     => 'لديك',
+    'notification_notification' => 'تنبيهات',
+    'notification_new'          => 'لديك تنبيه جديد',
+
+    'login_register_style'         => 'شاشة الدخول والتسجيل',
+    'email_setting'                => 'اعدادات البريد',
+    'application_setting'          => 'اعدادات عامة',
+
+    // table filter & sort
+    'filter_select_operator_type'  => 'اختر نوع العملية',
+    'filter_ascending'             => 'تصاعدي',
+    'filter_descending'            => 'تنازلي',
+    'filter_equal_to'              => '=(يساوي لـ)',
+    'filter_like'                  => 'مثل',
+    'filter_not_like'              => 'ليس مثل',
+    'filter_greater_than_or_equal' => '>>= (اكبر من او يساوي)',
+    'filter_less_than_or_equal'    => '<= (اصغر من او يساوي)',
+    'filter_less_than'             => '< (اقل من)',
+    'filter_greater_than'          => '> (اكبر من)',
+    'filter_not_equal_to'          => '!= (لا يساوي لـ)',
+    'filter_in'                    => 'ضمن',
+    'filter_not_in'                => 'ليس ضمن',
+    'filter_between'               => 'بين',
+    'filter_sort_ascending'        => 'فرز تصاعدي',
+    'filter_sort_descending'       => 'فرز تنازلي',
+    'filter_eg'                    => 'مثال',
+    'filter_lorem_ipsum'           => 'ابجدي',
+    'filter_lorem_ipsum_dolor_sit' => ' Lorem,Ipsum,Dolor Sit',
+    'filter_search'                => 'بحث',
+    'filter_from'                  => 'من',
+    'filter_to'                    => 'إلى',
+
+    // confirmation
+    'confirmation_yes'             => 'نعم!',
+    'confirmation_no'              => 'لا',
+
+    //filemanager
+    'chose_an_image'               => 'اختر صورة ',
+    'chose_an_file'                => 'اختر ملف ',
+
+        // privilege
+    'privileges_name'               =>'Privilege Name',
+    'privileges_super_admin'        =>'Super Admin',
+    'privileges_standart_user'      =>'Standart user',
+    'privileges_ID'                 =>'ID',
+    'set_as_superadmin'             =>'Set as Superadmin',
+    'chose_theme_color_select'      =>'** Choose Backend Theme Color',
+    'chose_theme_color'             =>' Theme Color',
+    'privileges_configuration'      =>'Privileges Configuration',
+    'privileges_module_list_no'     =>'No.',
+    'privileges_module_list_mod_names'=>'Module\'s Name',
+    'privileges_module_list_view'   =>'View',
+    'privileges_module_list_create' =>'Create',
+    'privileges_module_list_read'   =>'Read',
+    'privileges_module_list_update' =>'Update',
+    'privileges_module_list_delete' =>'Delete',
+
+     //datamodal 
+    'datamodal_select'=>'Select',
+    'datamodal_search_and_enter'=>'Search and enter...',
+    'datamodal_enter_to_search'=>'Enter to search',
+    'datamodal_browse_data'=>'Browse Data' ,
 ];

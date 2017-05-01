@@ -3,7 +3,7 @@
     <!-- Font Awesome Icons -->
     <link href="{{asset("vendor/crudbooster/assets/adminlte/font-awesome/css")}}/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <!-- Ionicons -->
-    <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css" />
       	    
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script> 
@@ -33,8 +33,8 @@
   	<link rel="stylesheet" href="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/timepicker/bootstrap-timepicker.min.css') }}">  	  	
 	<script src="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/timepicker/bootstrap-timepicker.min.js') }}"></script>
 
-	<link rel='stylesheet' href='{{ asset("vendor/crudbooster/assets/fancy//source/jquery.fancybox.css") }}'/>
-	<script src="{{ asset('vendor/crudbooster/assets/fancy/source/jquery.fancybox.pack.js') }}"></script> 	
+	<link rel='stylesheet' href='{{ asset("vendor/crudbooster/assets/lightbox/dist/css/lightbox.css") }}'/>
+	<script src="{{ asset('vendor/crudbooster/assets/lightbox/dist/js/lightbox.min.js') }}"></script> 	
 
 	<!--SWEET ALERT-->
 	<script src="{{asset('vendor/crudbooster/assets/sweetalert/dist/sweetalert.min.js')}}"></script> 
@@ -53,7 +53,11 @@
 		var APP_NAME            = "{{CRUDBooster::getSetting('appname')}}";		
 		var ADMIN_PATH          = '{{url(config("crudbooster.ADMIN_PATH")) }}';
 		var NOTIFICATION_JSON   = "{{route('NotificationsControllerGetLatestJson')}}";
-		var NOTIFICATION_INDEX  = "{{route('NotificationsControllerGetIndex')}}";		
+		var NOTIFICATION_INDEX  = "{{route('NotificationsControllerGetIndex')}}";
+
+		var NOTIFICATION_YOU_HAVE      = "{{trans('crudbooster.notification_you_have')}}";
+		var NOTIFICATION_NOTIFICATIONS = "{{trans('crudbooster.notification_notification')}}";
+		var NOTIFICATION_NEW           = "{{trans('crudbooster.notification_new')}}";
 
 		$(function() {
 			$('.datatables-simple').DataTable();

@@ -2,12 +2,11 @@
 	"title":"Google Maps",
 	"type":"googlemaps",
 	"attribute":{
-		"required":{
-			"latitude":"string column of latitude",
-			"longitude":"string column of longitude"
+		"required":{			
 		},
 		"optional":{
-			"address":"string column of address"	
+			"latitude":"latitude field",
+			"longitude":"longitude field"	
 		}
 		
 		

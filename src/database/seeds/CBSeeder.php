@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
+class CBSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -55,7 +55,7 @@ class Cms_settingsSeeder extends Seeder {
             'label'=>'Login Background Color',
             'content'=>NULL,
             'content_input_type'=>'text',
-            'group_setting'=>'Login Register Style',
+            'group_setting'=>trans('crudbooster.login_register_style'),
             'dataenum'=>NULL,
             'helper'=>'Input hexacode'],
         [
@@ -64,7 +64,7 @@ class Cms_settingsSeeder extends Seeder {
             'label'=>'Login Font Color',
             'content'=>NULL,
             'content_input_type'=>'text',
-            'group_setting'=>'Login Register Style',
+            'group_setting'=>trans('crudbooster.login_register_style'),
             'dataenum'=>NULL,
             'helper'=>'Input hexacode'],
         [
@@ -73,7 +73,7 @@ class Cms_settingsSeeder extends Seeder {
             'label'=>'Login Background Image',
             'content'=>NULL,
             'content_input_type'=>'upload_image',
-            'group_setting'=>'Login Register Style',
+            'group_setting'=>trans('crudbooster.login_register_style'),
             'dataenum'=>NULL,
             'helper'=>NULL],
 
@@ -85,7 +85,7 @@ class Cms_settingsSeeder extends Seeder {
             'label'=>'Email Sender',            
             'content'=>'support@crudbooster.com',
             'content_input_type'=>'text',
-            'group_setting'=>'Email Setting',
+            'group_setting'=>trans('crudbooster.email_setting'),
             'dataenum'=>NULL,
             'helper'=>NULL],
         [
@@ -94,7 +94,7 @@ class Cms_settingsSeeder extends Seeder {
             'label'=>'Mail Driver',
             'content'=>'mail',
             'content_input_type'=>'select',
-            'group_setting'=>'Email Setting',
+            'group_setting'=>trans('crudbooster.email_setting'),
             'dataenum'=>'smtp,mail,sendmail',
             'helper'=>NULL],
         [
@@ -103,7 +103,7 @@ class Cms_settingsSeeder extends Seeder {
             'label'=>'SMTP Host',
             'content'=>'',
             'content_input_type'=>'text',
-            'group_setting'=>'Email Setting',
+            'group_setting'=>trans('crudbooster.email_setting'),
             'dataenum'=>NULL,
             'helper'=>NULL],
         [
@@ -112,7 +112,7 @@ class Cms_settingsSeeder extends Seeder {
             'label'=>'SMTP Port',
             'content'=>'25',
             'content_input_type'=>'text',
-            'group_setting'=>'Email Setting',
+            'group_setting'=>trans('crudbooster.email_setting'),
             'dataenum'=>NULL,
             'helper'=>'default 25'],
         [
@@ -121,7 +121,7 @@ class Cms_settingsSeeder extends Seeder {
             'label'=>'SMTP Username',
             'content'=>'',
             'content_input_type'=>'text',
-            'group_setting'=>'Email Setting',
+            'group_setting'=>trans('crudbooster.email_setting'),
             'dataenum'=>NULL,
             'helper'=>NULL],
         [
@@ -130,7 +130,7 @@ class Cms_settingsSeeder extends Seeder {
             'label'=>'SMTP Password',
             'content'=>'',
             'content_input_type'=>'text',
-            'group_setting'=>'Email Setting',
+            'group_setting'=>trans('crudbooster.email_setting'),
             'dataenum'=>NULL,
             'helper'=>NULL],
 
@@ -140,7 +140,7 @@ class Cms_settingsSeeder extends Seeder {
             'created_at'=>date('Y-m-d H:i:s'),
             'name'=>'appname',
             'label'=>'Application Name',
-            'group_setting'=>'Application Setting',
+            'group_setting'=>trans('crudbooster.application_setting'),
             'content'=>'CRUDBooster',
             'content_input_type'=>'text',
             'dataenum'=>NULL,
@@ -149,7 +149,7 @@ class Cms_settingsSeeder extends Seeder {
             'created_at'=>date('Y-m-d H:i:s'),
             'name'=>'default_paper_size',
             'label'=>'Default Paper Print Size',
-            'group_setting'=>'Application Setting',
+            'group_setting'=>trans('crudbooster.application_setting'),
             'content'=>'Legal',
             'content_input_type'=>'text',
             'dataenum'=>NULL,
@@ -160,7 +160,7 @@ class Cms_settingsSeeder extends Seeder {
             'label'=>'Logo',
             'content'=>'',
             'content_input_type'=>'upload_image',
-            'group_setting'=>'Application Setting',
+            'group_setting'=>trans('crudbooster.application_setting'),
             'dataenum'=>NULL,
             'helper'=>NULL],
         [
@@ -169,7 +169,7 @@ class Cms_settingsSeeder extends Seeder {
             'label'=>'Favicon',
             'content'=>'',
             'content_input_type'=>'upload_image',
-            'group_setting'=>'Application Setting',
+            'group_setting'=>trans('crudbooster.application_setting'),
             'dataenum'=>NULL,
             'helper'=>NULL],
         [
@@ -178,7 +178,7 @@ class Cms_settingsSeeder extends Seeder {
             'label'=>'API Debug Mode',
             'content'=>'true',
             'content_input_type'=>'select',
-            'group_setting'=>'Application Setting',
+            'group_setting'=>trans('crudbooster.application_setting'),
             'dataenum'=>'true,false',
             'helper'=>NULL],        
         [
@@ -187,7 +187,7 @@ class Cms_settingsSeeder extends Seeder {
             'label'=>'Google API Key',
             'content'=>'',
             'content_input_type'=>'text',
-            'group_setting'=>'Application Setting',
+            'group_setting'=>trans('crudbooster.application_setting'),
             'dataenum'=>NULL,
             'helper'=>NULL],
         [
@@ -196,13 +196,18 @@ class Cms_settingsSeeder extends Seeder {
             'label'=>'Google FCM Key',
             'content'=>'',
             'content_input_type'=>'text',
-            'group_setting'=>'Application Setting',
+            'group_setting'=>trans('crudbooster.application_setting'),
             'dataenum'=>NULL,
             'helper'=>NULL]
         ];
 
         foreach($data as $row) {
-            if(DB::table('cms_settings')->where('name',$d['name'])->count()) {
+            $count = DB::table('cms_settings')->where('name',$row['name'])->count();
+            if($count) {
+                if($count > 1) {
+                    $newsId = DB::table('cms_settings')->where('name',$row['name'])->orderby('id','asc')->take(1)->first();
+                    DB::table('cms_settings')->where('name',$row['name'])->where('id','!=',$newsId->id)->delete();
+                }                
                 continue;
             }
             $row['id'] = DB::table('cms_settings')->max('id') + 1;

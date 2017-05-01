@@ -34,19 +34,17 @@ class AdminCmsUsersController extends \crocodicstudio\crudbooster\controllers\CB
 		$this->form[] = array("label"=>"Privilege","name"=>"id_cms_privileges","type"=>"select","datatable"=>"cms_privileges,name",'required'=>true);						
 		$this->form[] = array("label"=>"Password","name"=>"password","type"=>"password","help"=>"Please leave empty if not change");
 		# END FORM DO NOT REMOVE THIS LINE
-
-		if(CRUDBooster::getCurrentMethod() == 'getProfile') {
-			$this->button_addmore = FALSE;
-			$this->button_cancel  = FALSE;
-			$this->button_show    = FALSE;			
-			$this->button_add     = FALSE;
-			$this->button_delete  = FALSE;	
-			$this->hide_form      = ['id_cms_privileges'];		
-		}		
 				
 	}
 
-	public function getProfile() {				
+	public function getProfile() {			
+
+		$this->button_addmore = FALSE;
+		$this->button_cancel  = FALSE;
+		$this->button_show    = FALSE;			
+		$this->button_add     = FALSE;
+		$this->button_delete  = FALSE;	
+		$this->hide_form 	  = ['id_cms_privileges'];
 
 		$data['page_title'] = trans("crudbooster.label_button_profile");
 		$data['row']        = CRUDBooster::first('cms_users',CRUDBooster::myId());

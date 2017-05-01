@@ -27,6 +27,7 @@ class PrivilegesController extends CBController {
 		$this->button_export = false;
 		$this->button_action_style = 'button_icon';	
 		$this->button_detail = false;
+		$this->button_bulk_action = false;
 
 		$this->col   = array();
 		$this->col[] = array("label"=>"ID","name"=>"id");
@@ -98,6 +99,26 @@ class PrivilegesController extends CBController {
 				$arrs['id_cms_privileges'] = $id;
 				$arrs['id_cms_moduls'] = $id_modul;			
 				DB::table("cms_privileges_roles")->insert($arrs);
+
+
+				$module = DB::table('cms_moduls')->where('id',$id_modul)->first();
+				
+				if($arrs['is_visible']==1) {		
+				//Insert To Menu
+				$menu = [];
+				$menu['name'] = $module->name;
+				$menu['type'] = 'Route';
+				$menu['path'] = $module->controller.'GetIndex';
+				$menu['color'] = 'normal';
+				$menu['icon'] = $module->icon;
+				$menu['parent_id'] = 0;
+				$menu['is_active'] = 1;
+				$menu['is_dashboard'] = 0;
+				$menu['id_cms_privileges'] = $id;
+				$menu['sorting'] = DB::table('cms_menus')->where('id_cms_privileges',$id)->max('sorting')+1;
+				$menu['created_at'] = date('Y_m-d H:i:s');
+				DB::table('cms_menus')->insert($menu);
+				}
 			}	
 		}
 		
@@ -149,8 +170,14 @@ class PrivilegesController extends CBController {
 		DB::table($this->table)->where($this->primary_key,$id)->update($this->arr);
 						
 		$priv = Request::input("privileges");
+		
+		DB::table("cms_privileges_roles")->where("id_cms_privileges",$id)->delete();
+
+
 		if($priv) {
-			DB::table("cms_privileges_roles")->where("id_cms_privileges",$id)->delete();
+
+			DB::table('cms_menus')->where('id_cms_privileges',$id)->delete();
+						
 			foreach($priv as $id_modul => $data) {
 				$arrs = array();
 				$arrs['id'] = DB::table('cms_privileges_roles')->max('id') + 1;
@@ -162,6 +189,26 @@ class PrivilegesController extends CBController {
 				$arrs['id_cms_privileges'] = $id;
 				$arrs['id_cms_moduls'] = $id_modul;			
 				DB::table("cms_privileges_roles")->insert($arrs);
+
+				$module = DB::table('cms_moduls')->where('id',$id_modul)->first();				
+				
+				if($arrs['is_visible']==1) {				
+					//Insert To Menu
+					$menu = [];
+					$menu['name'] = $module->name;
+					$menu['type'] = 'Route';
+					$menu['path'] = $module->controller.'GetIndex';
+					$menu['color'] = 'normal';
+					$menu['icon'] = $module->icon;
+					$menu['parent_id'] = 0;
+					$menu['is_active'] = 1;
+					$menu['is_dashboard'] = 0;
+					$menu['id_cms_privileges'] = $id;
+					$menu['sorting'] = DB::table('cms_menus')->where('id_cms_privileges',$id)->max('sorting')+1;
+					$menu['created_at'] = date('Y_m-d H:i:s');
+					DB::table('cms_menus')->insert($menu);
+				}
+				
 			}
 		}
 
@@ -193,6 +240,7 @@ class PrivilegesController extends CBController {
 
 		DB::table($this->table)->where($this->primary_key,$id)->delete();
 		DB::table("cms_privileges_roles")->where("id_cms_privileges",$row->id)->delete();
+		DB::table('cms_menus')->where('id_cms_privileges',$id)->delete();
 		CRUDBooster::redirect(CRUDBooster::mainpath(),trans("crudbooster.alert_delete_data_success"),'success');		
 	}
 

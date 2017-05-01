@@ -45,7 +45,7 @@
       $pic = (strpos($value,'http://')!==FALSE)?$value:asset($value);
       $pic_small = $pic;
       if(Request::input('fileformat')=='pdf') {
-        echo "<td><a class='fancybox' rel='group_{{$table}}' title='$col[label]: $title' href='".$pic."'><img class='img-circle' width='40px' height='40px' src='".$pic_small."'/></a></td>";
+        echo "<td><a data-lightbox='roadtrip' rel='group_{{$table}}' title='$col[label]: $title' href='".$pic."'><img class='img-circle' width='40px' height='40px' src='".$pic_small."'/></a></td>";
       }else{
         echo "<td>$pic</td>";
       }
@@ -66,10 +66,16 @@
                 $value = nl2br($value);
               }
 
-    if(!empty($col['callback_php'])) {
-      $col['callback_php'] = str_replace('%field%',$value,$col['callback_php']);
-      @eval("\$value = ".$col['callback_php'].";");
+    if(Request::input('fileformat') == 'pdf') {
+      if(!empty($col['callback_php'])) {
+        
+        foreach($row as $k=>$v) {
+            $col['callback_php'] = str_replace("[".$k."]",$v,$col['callback_php']);
+        }
+        @eval("\$value = ".$col['callback_php'].";");
+      }
     }
+    
 
       echo "<td>".$value."</td>";
     }

@@ -1,1 +1,1 @@
-{{ $value }}
+<a href='mailto:{{ $value }}' target="_blank">{{$value}}</a>

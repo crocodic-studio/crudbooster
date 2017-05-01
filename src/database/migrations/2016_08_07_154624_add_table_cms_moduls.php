@@ -15,14 +15,16 @@ class AddTableCmsModuls extends Migration {
 		Schema::create('cms_moduls', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->timestamps();
+
 			$table->string('name')->nullable();
 			$table->string('icon')->nullable();
 			$table->string('path')->nullable();
 			$table->string('table_name')->nullable();
 			$table->string('controller')->nullable();
-			$table->boolean('is_protected')->default(0);			
-			$table->boolean('is_active')->default(0);			
+			$table->boolean('is_protected')->default(0);
+			$table->boolean('is_active')->default(0);
+			
+			$table->timestamps();
 		});
 	}
 
