@@ -916,6 +916,18 @@ class CBController extends Controller {
 				}
 			}
 
+			//multitext colomn 
+			if($ro['type']=='multitext') {
+				$name = str_slug($ro['name'],'');
+				$multitext="";
+
+				for($i=0;$i<=count($this->arr[$name])-1;$i++) {
+					$multitext .= $this->arr[$name][$i]."|";
+				}	
+				$multitext=substr($multitext,0,strlen($multitext)-1);
+				$this->arr[$name]=$multitext;
+			}
+			
 			if($ro['type']=='googlemaps') {
 				if($ro['latitude'] && $ro['longitude']) {
 					$latitude_name = $ro['latitude'];
@@ -1007,8 +1019,10 @@ class CBController extends Controller {
 
 		$this->hook_before_add($this->arr);
 
+
 		$this->arr[$this->primary_key] = $id = CRUDBooster::newId($this->table);		
 		DB::table($this->table)->insert($this->arr);		
+
 
 		//Looping Data Input Again After Insert
 		foreach($this->data_inputan as $ro) {
@@ -1079,6 +1093,9 @@ class CBController extends Controller {
 				$childtable = CRUDBooster::parseSqlTable($ro['table'])['table'];
 				DB::table($childtable)->insert($child_array);
 			}
+
+
+			
 		}
 
 
@@ -1139,6 +1156,7 @@ class CBController extends Controller {
 		{
 		    $this->arr['updated_at'] = date('Y-m-d H:i:s');
 		}
+		
 
 		$this->hook_before_edit($this->arr,$id);		
 		DB::table($this->table)->where($this->primary_key,$id)->update($this->arr);		
