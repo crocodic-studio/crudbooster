@@ -61,7 +61,11 @@
             </select>
             <div class="help-block">
                 Do not use cms_* as prefix on your tables name
-            </div>
+           </div>
+        </div>
+        <div class="form-group">
+            <label for="">Table condition( SQL WHERE exp: master_code;999 )</label>                   
+           <input type="text" class="form-control"  name="where" value="{{$row->table_where}}" >
         </div>
         <div class="form-group">
             <label for="">Module Name</label>

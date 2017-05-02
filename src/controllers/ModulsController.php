@@ -35,6 +35,7 @@ class ModulsController extends CBController {
 		$this->col   = array();		
 		$this->col[] = array("label"=>"Name","name"=>"name");
 		$this->col[] = array("label"=>"Table","name"=>"table_name");		
+		$this->col[] = array("label"=>"Where","name"=>"table_where");		
 		$this->col[] = array("label"=>"Path","name"=>"path"); 		
 		$this->col[] = array("label"=>"Controller","name"=>"controller");
 		$this->col[] = array("label"=>"Protected","name"=>"is_protected","visible"=>false);
@@ -221,6 +222,8 @@ class ModulsController extends CBController {
 		$table_name = Request::get('table');
 		$icon       = Request::get('icon');
 		$path       = Request::get('path');
+		$table_where= Request::get('where');
+
 
 		if(!Request::get('id')) {
 
@@ -232,8 +235,8 @@ class ModulsController extends CBController {
 			$created_at = now();
 			$id = DB::table($this->table)->max('id') + 1;
 
-			$controller = CRUDBooster::generateController($table_name,$path);
-			DB::table($this->table)->insert(compact("controller","name","table_name","icon","path","created_at","id"));
+			$controller = CRUDBooster::generateController($table_name,$path,$table_where);
+			DB::table($this->table)->insert(compact("controller","name","table_name","table_where","icon","path","created_at","id"));
 
 			//Insert Menu
 			if($controller && Request::get('create_menu')) {
@@ -277,7 +280,7 @@ class ModulsController extends CBController {
 			return redirect(Route("ModulsControllerGetStep2",["id"=>$id]));
 		}else{
 			$id = Request::get('id');
-			DB::table($this->table)->where('id',$id)->update(compact("name","table_name","icon","path"));	
+			DB::table($this->table)->where('id',$id)->update(compact("name","table_name","table_where","icon","path"));	
 
 			$row = DB::table('cms_moduls')->where('id',$id)->first();
 			
@@ -508,6 +511,8 @@ class ModulsController extends CBController {
 
 		$row = DB::table('cms_moduls')->where('id',$id)->first();
 
+
+
 		$data = [];
 		$data['id'] = $id;
 		if(file_exists(app_path('Http/Controllers/'.$row->controller.'.php'))) {
@@ -523,6 +528,7 @@ class ModulsController extends CBController {
 	}	
 
 	public function postStepFinish() {
+		
 		$this->cbLoader();
 		$id = Request::input('id');
 		$row = DB::table('cms_moduls')->where('id',$id)->first();
@@ -530,10 +536,12 @@ class ModulsController extends CBController {
 		$post = Request::all();
 
 		$post['table'] = $row->table_name;
+		$post['table_where'] = $row->table_where;
 
 		$script_config = [];
 		$exception = ['_token','id','submit'];
 		$i = 0;
+		
 		foreach($post as $key=>$val) {
 			if(in_array($key, $exception)) continue;		
 

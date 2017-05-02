@@ -1039,7 +1039,7 @@ class CRUDBooster  {
 		        file_put_contents($path.'Api'.$controller_name.'Controller.php', $php);
 		}
 
-		public static function generateController($table,$name=NULL) {  
+		public static function generateController($table,$name=NULL,$table_where=NULL) {  
 	        
 	        $exception          = ['id','created_at','updated_at','deleted_at'];
 	        $image_candidate    = explode(',',config('crudbooster.IMAGE_FIELDS_CANDIDATE'));
@@ -1067,6 +1067,7 @@ class CRUDBooster  {
 	        }
 	        
 	        $coloms   = CRUDBooster::getTableColumns($table);
+		   
 	        $name_col = CRUDBooster::getNameTable($coloms);
 
 			$button_table_action = 'TRUE';
@@ -1081,7 +1082,7 @@ class CRUDBooster  {
 			$button_import       = 'FALSE';
 			$button_bulk_action	 = 'TRUE';
 			$global_privilege    = 'FALSE';
-	                
+		    
 	$php = '
 <?php namespace App\Http\Controllers;
 
@@ -1095,6 +1096,7 @@ class CRUDBooster  {
 	    public function cbInit() {
 	    	# START CONFIGURATION DO NOT REMOVE THIS LINE
 			$this->table 			   = "'.$table.'";	        
+			$this->table_where 		   = "'.$table_where.'";	        
 			$this->title_field         = "'.$name_col.'";
 			$this->limit               = 20;
 			$this->orderby             = "id,desc";
