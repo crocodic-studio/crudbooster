@@ -346,6 +346,9 @@ class CBController extends Controller {
 								if($key && $value) $w->whereIn($key,$value);
 							}
 						break;
+						case 'empty':							
+							$w->whereNull($key)->orWhere($key,'');	
+						break;
 					}
 
 
