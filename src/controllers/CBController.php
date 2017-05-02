@@ -776,31 +776,41 @@ class CBController extends Controller {
 
 
 			if(@$di['validation']) {
+
 				$exp = explode('|',$di['validation']);
-				foreach($exp as &$e) {
+				if (count($exp)) {
+					foreach ($exp as &$validationItem) {
+						if (substr($validationItem, 0,6) == 'unique') {
+							$parseUnique = explode(',',str_replace('unique:','',$validationItem));
+							$uniqueTable = ($parseUnique[0])?:$this->table;
+							$uniqueColumn = ($parseUnique[1])?:$name;
+							$uniqueIgnoreId = ($parseUnique[2])?:(($id)?:'');
 
-					if(strpos($e, 'unique:') !== FALSE) {
-						$e = str_replace('unique:','',$e);
-						$e_raw = explode(',',$e);
+							//Make sure table name
+							$uniqueTable = CB::parseSqlTable($uniqueTable)['table'];
 
-						@$e_table = $e_raw[0];
+							//Rebuild unique rule
+							$uniqueRebuild = [];
+							$uniqueRebuild[] = $uniqueTable;
+							$uniqueRebuild[] = $uniqueColumn;
+							if ($uniqueIgnoreId) {							
+								$uniqueRebuild[] = $uniqueIgnoreId;
+							}
 
-						if($e_table) {
-							$e_table = CRUDBooster::parseSqlTable($e_table)['table'];
+							//Check whether deleted_at exists or not
+							if (CB::isColumnExists($uniqueTable,'deleted_at')) {
+								$uniqueRebuild[] = CB::findPrimaryKey($uniqueTable);
+								$uniqueRebuild[] = 'deleted_at';
+								$uniqueRebuild[] = 'NULL';							
+							}							
+							$uniqueRebuild = array_filter($uniqueRebuild);
+							$validationItem = 'unique:'.implode(',',$uniqueRebuild);
 						}
-
-						@$e_column = $e_raw[1]?:$di['name'];
-						@$e_id_ignore = $e_raw[2]?:$id;
-
-						$e = 'unique:'.$e_table.','.$e_column.','.$e_id_ignore;
-
-						if(CRUDBooster::isColumnExists($e_table,'deleted_at')) {
-							$e .= ",id,deleted_at,NULL";
-						}
-
 					}
-
+				} else {
+					$exp = array();
 				}
+
 
 				$validation = implode('|',$exp);
 
