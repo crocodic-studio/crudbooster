@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\PDF;
 use Illuminate\Support\Facades\Excel;
 use CRUDBooster;
 
-class ModulsController extends CBController
+class CBModulesController extends CBController
 {
 
 	public function cbInit()
@@ -145,7 +145,7 @@ class ModulsController extends CBController
 			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
 		}
 
-		return redirect()->route("ModulsControllerGetStep1");
+		return redirect()->route("CBModulesControllerGetStep1");
 	}
 
 	public function getStep1($id=0)
@@ -285,7 +285,7 @@ class ModulsController extends CBController
 														->get();
 
 			Session::put('admin_privileges_roles',$roles);
-			return redirect(Route("ModulsControllerGetStep2",["id"=>$id]));
+			return redirect(Route("CBModulesControllerGetStep2",["id"=>$id]));
 
 		} else {
 
@@ -304,7 +304,7 @@ class ModulsController extends CBController
 				// return redirect()->back()->with(['message'=>'Sorry, is not possible to edit the module with Module Generator Tool. Prefix and or Suffix tag is missing !','message_type'=>'warning']);
 			}
 
-			return redirect(Route("ModulsControllerGetStep2",["id"=>$id]));
+			return redirect(Route("CBModulesControllerGetStep2",["id"=>$id]));
 		}
 	}
 
@@ -381,7 +381,7 @@ class ModulsController extends CBController
 
 		file_put_contents(app_path('Http/Controllers/'.$row->controller.'.php'), $file_controller);
 
-		return redirect(Route("ModulsControllerGetStep3",["id"=>$id]));
+		return redirect(Route("CBModulesControllerGetStep3",["id"=>$id]));
 	}
 
 	public function getStep3($id)
@@ -507,7 +507,7 @@ class ModulsController extends CBController
 		//CREATE FILE CONTROLLER
 		file_put_contents(app_path('Http/Controllers/'.$row->controller.'.php'), $file_controller);
 
-		return redirect(Route("ModulsControllerGetStep4",["id"=>$id]));
+		return redirect(Route("CBModulesControllerGetStep4",["id"=>$id]));
 		
 	}
 
@@ -581,7 +581,7 @@ class ModulsController extends CBController
 
 		file_put_contents(app_path('Http/Controllers/'.$row->controller.'.php'), $file_controller);
 
-		return redirect()->route('ModulsControllerGetIndex')->with(['message'=>trans('crudbooster.alert_update_data_success'),'message_type'=>'success']);
+		return redirect()->route('CBModulesControllerGetIndex')->with(['message'=>trans('crudbooster.alert_update_data_success'),'message_type'=>'success']);
 	}
 	
 	public function postAddSave()

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddTableCmsNotifications extends Migration
+class AddTableCbNotifications extends Migration
 {
     /**
      * Run the migrations.
@@ -12,9 +12,9 @@ class AddTableCmsNotifications extends Migration
      */
     public function up()
     {
-        Schema::create('cms_notifications', function (Blueprint $table) {
+        Schema::create('cb_notifications', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('id_cms_users')->nullable();
+            $table->integer('users_id')->nullable();
             $table->string('content')->nullable();
             $table->string('url')->nullable();
             $table->boolean('is_read')->nullable();
@@ -30,6 +30,6 @@ class AddTableCmsNotifications extends Migration
      */
     public function down()
     {
-        Schema::drop('cms_notifications');
+        Schema::drop('cb_notifications');
     }
 }

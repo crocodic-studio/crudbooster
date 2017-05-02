@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddTableCmsEmailQueues extends Migration
+class AddTableCbEmailQueues extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,7 @@ class AddTableCmsEmailQueues extends Migration
      */
     public function up()
     {
-        Schema::create('cms_email_queues', function (Blueprint $table) {
+        Schema::create('cb_email_queues', function (Blueprint $table) {
             $table->increments('id');
             $table->dateTime('send_at')->nullable();
             $table->string('email_recipient')->nullable();
@@ -35,6 +35,6 @@ class AddTableCmsEmailQueues extends Migration
      */
     public function down()
     {
-        Schema::drop('cms_email_queues');
+        Schema::drop('cb_email_queues');
     }
 }

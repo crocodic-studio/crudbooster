@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCmsStatisticComponents extends Migration
+class AddTableStatisticComponents extends Migration
 {
     /**
      * Run the migrations.
@@ -12,10 +12,10 @@ class CreateCmsStatisticComponents extends Migration
      */
     public function up()
     {
-        Schema::create('cms_statistic_components', function (Blueprint $table) {
+        Schema::create('cb_statistic_components', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('id_cms_statistics')->nullable();
-            $table->string('componentID')->nullable();
+            $table->integer('cb_statistics_id')->nullable();
+            $table->string('component_id')->nullable();
             $table->string('component_name')->nullable();
             $table->string('area_name',55)->nullable();
             $table->integer('sorting')->nullable();
@@ -33,6 +33,6 @@ class CreateCmsStatisticComponents extends Migration
      */
     public function down()
     {
-        Schema::drop('cms_statistic_components');
+        Schema::drop('cb_statistic_components');
     }
 }

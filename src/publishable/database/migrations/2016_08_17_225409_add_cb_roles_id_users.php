@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddStatusCmsUsers extends Migration
+class AddCbRolesIdUsers extends Migration
 {
     /**
      * Run the migrations.
@@ -12,9 +12,9 @@ class AddStatusCmsUsers extends Migration
      */
     public function up()
     {
-        Schema::table('cms_users', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             //
-            $table->string('status',50)->nullable();
+            $table->integer('cb_roles_id')->nullable();
         });
     }
 
@@ -25,9 +25,9 @@ class AddStatusCmsUsers extends Migration
      */
     public function down()
     {
-        Schema::table('cms_users', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             //
-            $table->dropColumn('status');
+            $table->dropColumn('cb_roles_id');
         });
     }
 }

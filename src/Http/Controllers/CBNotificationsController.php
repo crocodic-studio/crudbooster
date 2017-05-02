@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\PDF;
 use Illuminate\Support\Facades\Excel;
 use CRUDBooster;
 
-class NotificationsController extends CBController
+class CBNotificationsController extends CBController
 {
 
     public function cbInit()

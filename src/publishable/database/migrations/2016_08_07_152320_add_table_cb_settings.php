@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddTableCmsSettings extends Migration
+class AddTableCbSettings extends Migration
 {
 
 	/**
@@ -13,13 +13,15 @@ class AddTableCmsSettings extends Migration
 	 */
 	public function up()
 	{
-		Schema::create('cms_settings', function(Blueprint $table)
+		Schema::create('cb_settings', function(Blueprint $table)
 		{
 			$table->increments('id');
+			$table->string('label')->nullable();
 			$table->string('name')->nullable();
 			$table->text('content')->nullable();
 			$table->string('content_input_type')->nullable();
 			$table->string('dataenum')->nullable();
+			$table->string('group')->nullable();
 			$table->string('helper')->nullable();
 			
 			$table->timestamps();
@@ -33,7 +35,7 @@ class AddTableCmsSettings extends Migration
 	 */
 	public function down()
 	{
-		Schema::drop('cms_settings');
+		Schema::drop('cb_settings');
 	}
 
 }

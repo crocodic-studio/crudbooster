@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddTableApikey extends Migration
+class AddTableCbApikey extends Migration
 {
     /**
      * Run the migrations.
@@ -12,9 +12,9 @@ class AddTableApikey extends Migration
      */
     public function up()
     {
-        Schema::create('cms_apikey', function (Blueprint $table) {
+        Schema::create('cb_apikey', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('screetkey')->nullable();
+            $table->string('secret_key')->nullable();
             $table->integer('hit')->nullable();
             $table->string('status',25)->default('active');
 
@@ -29,6 +29,6 @@ class AddTableApikey extends Migration
      */
     public function down()
     {
-        Schema::drop('cms_apikey');
+        Schema::drop('cb_apikey');
     }
 }

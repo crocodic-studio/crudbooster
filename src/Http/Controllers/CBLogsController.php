@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\PDF;
 use Illuminate\Support\Facades\Excel;
 
-class LogsController extends CBController
+class CBLogsController extends CBController
 {
 
 	public function cbInit()

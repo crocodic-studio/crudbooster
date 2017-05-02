@@ -17,15 +17,15 @@ class CBBackend
      */
     public function handle($request, Closure $next)
     {
-        $admin_path = config('crudbooster.ADMIN_PATH')?:'admin';
+        $adminPath = config('crudbooster.admin_path')?:'admin';
 
         if(CRUDBooster::myId()==''){
-            $url = url($admin_path.'/login');
+            $url = url($adminPath.'/login');
             return redirect($url)->with('message',trans('crudbooster.not_logged_in'));
         }
 
         if(CRUDBooster::isLocked()){
-            $url = url($admin_path.'/lock-screen');
+            $url = url($adminPath.'/lock-screen');
             return redirect($url);
         }
 

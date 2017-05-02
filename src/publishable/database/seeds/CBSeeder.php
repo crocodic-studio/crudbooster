@@ -11,42 +11,41 @@ class CBSeeder extends Seeder
      */
     public function run()
     {
-        $this->command->info('Please wait updating the data...');        
-        
-        $this->call('Cms_usersSeeder');                           
-        $this->call('Cms_modulsSeeder');                         
-        $this->call('Cms_privilegesSeeder');        
-        $this->call('Cms_privileges_rolesSeeder');       
-        $this->call('Cms_settingsSeeder');
-        $this->call('CmsEmailTemplates');
-        
+        $this->command->info('Please wait updating the data...');                
+        $this->call('CBSeederRun');        
         $this->command->info('Updating the data completed !');
     }
 }
 
-class CmsEmailTemplates extends Seeder {
+class CBSeederRun extends Seeder {
     public function run() {
-        DB::table('cms_email_templates')
+        $this->seedEmailTemplates();
+        $this->seedSettings();
+        $this->seedPermissions();
+        $this->seedRoles();
+        $this->seedModules();
+        $this->seedUsers();
+    }
+
+    private function seedEmailTemplates() 
+    {
+        DB::table('cb_email_templates')
         ->insert([
-            'id'          =>DB::table('cms_email_templates')->max('id')+1,
+            'id'          =>DB::table('cb_email_templates')->max('id')+1,
             'created_at'  =>date('Y-m-d H:i:s'),
             'name'        =>'Email Template Forgot Password Backend',
             'slug'        =>'forgot_password_backend',
             'content'     =>'<p>Hi,</p><p>Someone requested forgot password, here is your new password : </p><p>[password]</p><p><br></p><p>--</p><p>Regards,</p><p>Admin</p>',
             'description' =>'[password]',
-            'from_name'   =>'System',
-            'from_email'  =>'system@crudbooster.com',
+            'from_name'   =>'CRUDBooster',
+            'from_email'  =>'no-reply@crudbooster.com',
             'cc_email'    =>NULL            
             ]);
     }
-}
 
-class Cms_settingsSeeder extends Seeder {
-
-    public function run()
-    {        
-
-       $data = [
+    private function seedSettings() 
+    {
+        $data = [
 
         //LOGIN REGISTER STYLE
         [   
@@ -213,89 +212,68 @@ class Cms_settingsSeeder extends Seeder {
             $row['id'] = DB::table('cms_settings')->max('id') + 1;
             DB::table('cms_settings')->insert($row);
         }
-        
-    }
-}
+    } 
 
-
-
-class Cms_privileges_rolesSeeder extends Seeder {
-
-    public function run()
-    {                
-
-        if(DB::table('cms_privileges_roles')->count() == 0) {
-            $modules = DB::table('cms_moduls')->get();
+    private function seedPermissions() 
+    {
+        if(DB::table('cb_permissions')->count() == 0) {
+            $modules = DB::table('cb_modules')->get();
             $i = 1;
             foreach($modules as $module) {
 
-                $is_visible = 1;
-                $is_create  = 1;
-                $is_read    = 1;
-                $is_edit    = 1;
-                $is_delete  = 1;
+                $canVisible = 1;
+                $canCreate  = 1;
+                $canRead    = 1;
+                $canEdit    = 1;
+                $canDelete  = 1;
 
-                switch($module->table_name) {
-                    case 'cms_logs':
-                        $is_create = 0;
-                        $is_edit   = 0;
+                switch($module->table) {
+                    case 'cb_logs':
+                        $canCreate = 0;
+                        $canEdit   = 0;
                     break;
-                    case 'cms_privileges_roles':
-                        $is_visible = 0;
+                    case 'cb_permissions':
+                        $canVisible = 0;
                     break;
-                    case 'cms_apicustom':
-                        $is_visible = 0;
+                    case 'cb_api':
+                        $canVisible = 0;
                     break;
-                    case 'cms_notifications':
-                        $is_create = $is_read = $is_edit = $is_delete = 0;
+                    case 'cb_notifications':
+                        $canCreate = $canRead = $canEdit = $canDelete = 0;
                     break;
                 }
 
-                DB::table('cms_privileges_roles')->insert([
-                    'id'=>DB::table('cms_privileges_roles')->max('id')+1,
+                DB::table('cb_permissions')->insert([
+                    'id'=>DB::table('cb_permissions')->max('id')+1,
                     'created_at'=>date('Y-m-d H:i:s'),
-                    'is_visible'=>$is_visible,
-                    'is_create'=>$is_create,
-                    'is_edit'=>$is_edit,
-                    'is_delete'=>$is_delete,
-                    'is_read'=>$is_read,
-                    'id_cms_privileges'=>1,
-                    'id_cms_moduls'=>$module->id
-                    ]);
+                    'can_visible'=>$canVisible,
+                    'can_create'=>$canCreate,
+                    'can_edit'=>$canEdit,
+                    'can_delete'=>$canDelete,
+                    'can_read'=>$canRead,
+                    'cb_roles'=>1,
+                    'cb_modules'=>$module->id
+                ]);
                 $i++;
             }
         }
-        
     }
-}
 
-class Cms_privilegesSeeder extends Seeder {
-
-    public function run()
-    {        
-        
-        if(DB::table('cms_privileges')->where('name','Super Administrator')->count() == 0) {
-            DB::table('cms_privileges')->insert([    
-            'id'            =>DB::table('cms_privileges_roles')->max('id')+1,        
+    private function seedRoles() 
+    {
+        if(DB::table('cb_roles')->where('name','Super Administrator')->count() == 0) {
+            DB::table('cb_roles')->insert([    
+            'id'            =>DB::table('cb_roles')->max('id')+1,        
             'created_at'    =>date('Y-m-d H:i:s'),
             'name'          =>'Super Administrator',
             'is_superadmin' =>1,
             'theme_color'   =>'skin-red'
             ]);    
-        }        
+        }
     }
-}
 
-class Cms_modulsSeeder extends Seeder {
-
-    public function run()
+    private function seedModules()
     {        
-
-        /* 
-            1 = Public
-            2 = Setting        
-        */
-
         $data = [
         [
             
@@ -303,30 +281,30 @@ class Cms_modulsSeeder extends Seeder {
             'name'=>'Notifications',
             'icon'=>'fa fa-cog',
             'path'=>'notifications',
-            'table_name'=>'cms_notifications',
-            'controller'=>'NotificationsController',
+            'table'=>'cb_notifications',
+            'controller'=>'CBNotificationsController',
             'is_protected'=>1,                                
             'is_active'=>1
         ],
         [
             
             'created_at'=>date('Y-m-d H:i:s'),
-            'name'=>'Privileges',
+            'name'=>'Roles',
             'icon'=>'fa fa-cog',
-            'path'=>'privileges',
-            'table_name'=>'cms_privileges',
-            'controller'=>'PrivilegesController',
+            'path'=>'roles',
+            'table'=>'cb_roles',
+            'controller'=>'CBRolesController',
             'is_protected'=>1,                                
             'is_active'=>1
         ],
         [
             
             'created_at'=>date('Y-m-d H:i:s'),
-            'name'=>'Privileges Roles',
+            'name'=>'Permissions',
             'icon'=>'fa fa-cog',
-            'path'=>'privileges_roles',
-            'table_name'=>'cms_privileges_roles',
-            'controller'=>'PrivilegesRolesController',
+            'path'=>'permissions',
+            'table'=>'cb_permissions',
+            'controller'=>'CBPermissionsController',
             'is_protected'=>1,                                
             'is_active'=>1
         ],
@@ -336,8 +314,8 @@ class Cms_modulsSeeder extends Seeder {
             'name'=>'Users',
             'icon'=>'fa fa-users',
             'path'=>'users',
-            'table_name'=>'cms_users',
-            'controller'=>'AdminCmsUsersController',     
+            'table'=>'users',
+            'controller'=>'CBUsersController',     
             'is_protected'=>0,                                   
             'is_active'=>1
         ],
@@ -347,18 +325,18 @@ class Cms_modulsSeeder extends Seeder {
             'name'=>'Settings',
             'icon'=>'fa fa-cog',
             'path'=>'settings',
-            'table_name'=>'cms_settings',
-            'controller'=>'SettingsController',
+            'table'=>'cb_settings',
+            'controller'=>'CBSettingsController',
             'is_protected'=>1,                                
             'is_active'=>1
         ],[ 
             
             'created_at'=>date('Y-m-d H:i:s'),
-            'name'=>'Module Generator',
+            'name'=>'Modules',
             'icon'=>'fa fa-database',
-            'path'=>'module_generator',
-            'table_name'=>'cms_moduls',
-            'controller'=>'ModulsController',
+            'path'=>'modules',
+            'table'=>'cb_modules',
+            'controller'=>'CBModulesController',
             'is_protected'=>1,                                
             'is_active'=>1
         ],[ 
@@ -366,19 +344,19 @@ class Cms_modulsSeeder extends Seeder {
             'created_at'=>date('Y-m-d H:i:s'),
             'name'=>'Menu Management',
             'icon'=>'fa fa-bars',
-            'path'=>'menu_management',
-            'table_name'=>'cms_menus',
-            'controller'=>'MenusController',
+            'path'=>'menus',
+            'table'=>'cb_menus',
+            'controller'=>'CBMenusController',
             'is_protected'=>1,                                
             'is_active'=>1
         ],[ 
             
             'created_at'=>date('Y-m-d H:i:s'),
-            'name'=>'Email Template',
+            'name'=>'Email Templates',
             'icon'=>'fa fa-envelope-o',
             'path'=>'email_templates',
-            'table_name'=>'cms_email_templates',
-            'controller'=>'EmailTemplatesController',
+            'table'=>'cb_email_templates',
+            'controller'=>'CBEmailTemplatesController',
             'is_protected'=>1,                                
             'is_active'=>1
         ],[ 
@@ -387,18 +365,18 @@ class Cms_modulsSeeder extends Seeder {
             'name'=>'Statistic Builder',
             'icon'=>'fa fa-dashboard',
             'path'=>'statistic_builder',
-            'table_name'=>'cms_statistics',
-            'controller'=>'StatisticBuilderController',            
+            'table'=>'cb_statistics',
+            'controller'=>'CBStatisticBuilderController',            
             'is_protected'=>1,                                
             'is_active'=>1
         ],[ 
             
             'created_at'=>date('Y-m-d H:i:s'),
-            'name'=>'API Generator',
+            'name'=>'API Management',
             'icon'=>'fa fa-cloud-download',
-            'path'=>'api_generator',
-            'table_name'=>'',
-            'controller'=>'ApiCustomController',
+            'path'=>'api',
+            'table'=>'',
+            'controller'=>'CBApiController',
             'is_protected'=>1,                                
             'is_active'=>1
         ],[ 
@@ -407,8 +385,8 @@ class Cms_modulsSeeder extends Seeder {
             'name'=>'Logs',
             'icon'=>'fa fa-flag-o',
             'path'=>'logs',
-            'table_name'=>'cms_logs',
-            'controller'=>'LogsController',
+            'table'=>'cb_logs',
+            'controller'=>'CBLogsController',
             'is_protected'=>1,                                
             'is_active'=>1
         ]      
@@ -416,35 +394,27 @@ class Cms_modulsSeeder extends Seeder {
 
 
         foreach($data as $k=>$d) {
-            if(DB::table('cms_moduls')->where('name',$d['name'])->count()) {
+            if(DB::table('cb_modules')->where('name',$d['name'])->count()) {
                 unset($data[$k]);
             }
         }
 
-        DB::table('cms_moduls')->insert($data);
+        DB::table('cb_modules')->insert($data);
     }
 
-}
-
-class Cms_usersSeeder extends Seeder {
-
-    public function run()
-    {        
-        
-        if(DB::table('cms_users')->count() == 0) {
+    private function seedUsers()
+    {                
+        if(DB::table('users')->count() == 0) {
             $password = \Hash::make('123456');
-            $cms_users = DB::table('cms_users')->insert(array(
-                'id'                =>DB::table('cms_users')->max('id')+1,
+            $users = DB::table('users')->insert(array(
+                'id'                =>DB::table('users')->max('id')+1,
                 'created_at'        =>date('Y-m-d H:i:s'),
                 'name'              => 'Super Admin',                
                 'email'             => 'admin@crudbooster.com',
                 'password'          => $password,
-                'id_cms_privileges' => 1,                
+                'cb_roles_id'       => 1,                
                 'status'            =>'Active'
             ));
-        }            
-
+        }
     }
-
 }
-

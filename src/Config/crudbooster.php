@@ -1,34 +1,61 @@
 <?php
 
 return [
+	/**
+	 * Config the admin path
+	 * 
+	 * @var string
+	 */	
+	'admin_path'                =>'admin',	
+
+	/**
+	 * Config method for profile view
+	 * 
+	 * @var string
+	 */
+	'profile_get_method'		=> 'CBUsers@getProfile',
+
+	/** 
+	 * Config method for profile save
+	 * 
+	 * @var string
+	 */
+	'profile_save_method'		=> 'CBUsers@postProfile',
+
 	
-	'ADMIN_PATH'                =>'admin',
-
-	'USER_TABLE'				=>'cms_users',
+	'image_fields_candidate'    =>'image,picture,photo,photos,foto,gambar,thumbnail',
 	
-	'IMAGE_FIELDS_CANDIDATE'    =>'image,picture,photo,photos,foto,gambar,thumbnail',
+	'password_fields_candidate' =>'password,pass,pwd,passwrd,sandi,pin',
 	
-	'PASSWORD_FIELDS_CANDIDATE' =>'password,pass,pwd,passwrd,sandi,pin',
+	'date_fields_candidate'     =>'date,tanggal,tgl,created_at,updated_at,deleted_at',
+
+	'email_fields_candidate'	=>'email,mail,email_address',
+
+	'phone_fields_candidate'	=>'phone,phonenumber,phone_number,telp,hp,no_hp,no_telp',
+
+	'name_fields_candidate'		=>'name,nama,person_name,person,fullname,full_name,nickname,nick,nick_name,title,judul,content',
+
+	'url_fields_candidate'		=>'url,link',
 	
-	'DATE_FIELDS_CANDIDATE'     =>'date,tanggal,tgl,created_at,updated_at,deleted_at',
+	'upload_types'              =>'jpg,png,jpeg,gif,bmp,pdf,xls,xlsx,doc,docx,txt,zip,rar,7z',
 
-	'EMAIL_FIELDS_CANDIDATE'	=>'email,mail,email_address',
+	'default_thumbnail_width' 	=>300,
 
-	'PHONE_FIELDS_CANDIDATE'	=>'phone,phonenumber,phone_number,telp,hp,no_hp,no_telp',
+	'image_extension'			=>'jpg,png,jpeg,gif,bmp',
 
-	'NAME_FIELDS_CANDIDATE'		=>'name,nama,person_name,person,fullname,full_name,nickname,nick,nick_name,title,judul,content',
+	/**
+	 * To set the main database, get db name while config:cache enabled
+	 * 
+	 * @var string
+	 */ 
+	'main_database' 			=>env('DB_DATABASE'),
 
-	'URL_FIELDS_CANDIDATE'		=>'url,link',
-	
-	'UPLOAD_TYPES'              =>'jpg,png,jpeg,gif,bmp,pdf,xls,xlsx,doc,docx,txt,zip,rar,7z',
-
-	'DEFAULT_THUMBNAIL_WIDTH' 	=>300,
-
-	'IMAGE_EXTENSIONS'			=>'jpg,png,jpeg,gif,bmp',
-
-	'MAIN_DB_DATABASE' 			=>env('DB_DATABASE'), //Very useful if you use config:cache
-
-	'MULTIPLE_DATABASE_MODULE' 	=>[],
+	/**
+	 * Array of database if you have more than one databases
+	 * 
+	 * @var array
+	 */
+	'multiple_database' 	=>[],
 
 	/*
 	* Layout for the Admin LTE backend theme
@@ -58,7 +85,7 @@ return [
 	* Note: you cannot use both layout-boxed and fixed at the same time. Anything else can be mixed together.
 	*/
 
-	'ADMIN_LAYOUT'	=> '',
+	'admin_layout'	=> '',
 
 	/* 
 	* NOTE : 

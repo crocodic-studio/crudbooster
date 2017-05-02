@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddTableCmsPrivileges extends Migration
+class AddTableCbDashboard extends Migration
 {
 
 	/**
@@ -13,12 +13,12 @@ class AddTableCmsPrivileges extends Migration
 	 */
 	public function up()
 	{
-		Schema::create('cms_privileges', function(Blueprint $table)
+		Schema::create('cb_dashboard', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->string('name')->nullable();
-			$table->boolean('is_superadmin')->nullable();
-			$table->string('theme_color')->nullable();
+			$table->integer('cb_roles_id')->nullable();
+			$table->string('name')->nullable();			
+			$table->longtext('content')->nullable();
 			
 			$table->timestamps();
 		});
@@ -31,7 +31,7 @@ class AddTableCmsPrivileges extends Migration
 	 */
 	public function down()
 	{
-		Schema::drop('cms_privileges');
+		Schema::drop('cb_dashboard');
 	}
 
 }

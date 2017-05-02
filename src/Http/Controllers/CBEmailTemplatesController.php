@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\PDF;
 use Illuminate\Support\Facades\Excel;
 use CRUDBooster;
 
-class EmailTemplatesController extends CBController
+class CBEmailTemplatesController extends CBController
 {
 
 	public function cbInit()

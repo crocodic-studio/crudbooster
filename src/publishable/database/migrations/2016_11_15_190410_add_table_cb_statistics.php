@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddParametersApicustom extends Migration
+class AddTableCbStatistics extends Migration
 {
     /**
      * Run the migrations.
@@ -12,9 +12,12 @@ class AddParametersApicustom extends Migration
      */
     public function up()
     {
-        Schema::table('cms_apicustom', function (Blueprint $table) {
-            //
-            $table->longText('parameters')->nullable();
+        Schema::create('cb_statistics', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name')->nullable();
+            $table->string('permalink')->nullable();
+
+            $table->timestamps();
         });
     }
 
@@ -25,9 +28,6 @@ class AddParametersApicustom extends Migration
      */
     public function down()
     {
-        Schema::table('cms_apicustom', function (Blueprint $table) {
-            //
-            $table->dropColumn('parameters');
-        });
+        Schema::drop('cb_statistics');
     }
 }

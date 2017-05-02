@@ -1,6 +1,8 @@
 <?php
 namespace Crocodicstudio\Crudbooster\Http\Controllers;
 
+error_reporting(E_ALL ^ E_NOTICE);
+
 use Crocodicstudio\Crudbooster\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -14,53 +16,50 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 use CRUDBooster;
 
-class ApiController extends Controller
+class CBApiExecutionController extends Controller
 {
-	var $method_type;
-	var $permalink;
-	var $hook_api_status;
-	var $hook_api_message;
-	var $last_id_tmp = array();
+	public $methodType;
+	public $permalink;
+	public $hookApiStatus;
+	public $hookApiMessage;
+	public $lastIDTemp = array();
 
-	public function hook_before(&$postdata)
+	public function hookBefore(&$postData)
 	{
 
 	}
 
-	public function hook_after($postdata,&$result)
+	public function hookAfter($postData,&$result)
 	{
 
 	}
 
-	public function hook_query(&$query)
+	public function hookQuery(&$query)
 	{
 
 	}
 
-	public function hook_api_status($boolean)
+	public function hookApiStatus($boolean=false)
 	{
-		$this->hook_api_status = $boolean;
+		$this->hookApiStatus = $boolean;
 	}
 
-	public function hook_api_message($message)
+	public function hookApiMessage($message)
 	{
-		$this->hook_api_message = $message;
+		$this->hookApiMessage = $message;
 	}
 
-	public function execute_api()
-	{						
-		// DB::enableQueryLog();
+	public function run()
+	{								
+		$posts      = Request::all();
+		$postKeys   = array_keys($posts);
+		$postValues = array_values($posts);
 
-		$posts        = Request::all();
-		$posts_keys   = array_keys($posts);
-		$posts_values = array_values($posts);
+		$row        = CB::first('cb_api',['permalink'=>$this->permalink]);		
+		$actionType = $row_api->action_type;
+		$table      = $row_api->table;
 
-		$row_api = DB::table('cms_apicustom')->where('permalink',$this->permalink)->first();
-
-		$action_type  = $row_api->aksi;
-		$table        = $row_api->tabel;
-
-		$debug_mode_message = 'You are in debug mode !';
+		$debugMessage = 'You are in debug mode !';
 
 		/*
 		| ----------------------------------------------
@@ -68,10 +67,10 @@ class ApiController extends Controller
 		| ----------------------------------------------
 		|
 		*/
-		if ($row_api->method_type) {
-			$method_type = $row_api->method_type;
-			if ($method_type) {
-				if (!Request::isMethod($method_type)) {
+		if ($row->method_type) {
+			$methodType = $row->method_type;
+			if ($methodType) {
+				if (!Request::isMethod($methodType)) {
 					$result['api_status'] = 0;
 					$result['api_message'] = "The request method is not allowed !";
 					goto show;
@@ -85,14 +84,14 @@ class ApiController extends Controller
 		| ----------------------------------------------
 		|
 		*/
-		if (!$row_api) {
+		if (!$row) {
 			$result['api_status']  = 0;
 			$result['api_message'] = 'Sorry this API is no longer available, maybe has changed by admin, or please make sure api url is correct.';
 			goto show;
 		}
 
-		@$parameters = unserialize($row_api->parameters);
-		@$responses = unserialize($row_api->responses);
+		$params = unserialize($row->params);
+		$responses = unserialize($row->responses);
 
 		/*
 		| ----------------------------------------------
@@ -100,11 +99,11 @@ class ApiController extends Controller
 		| ----------------------------------------------
 		|
 		*/
-		if($parameters) {
-			$type_except = ['password','ref','base64_file','custom','search'];
-			$input_validator = array();
-			$data_validation = array();
-			foreach($parameters as $param) {
+		if($params) {
+			$typeException = ['password','ref','base64_file','custom','search'];
+			$inputValidator = array();
+			$dataValidator = array();
+			foreach($params as $param) {
 				$name     = $param['name'];
 				$type     = $param['type'];
 				$value    = $posts[$name];
@@ -112,60 +111,60 @@ class ApiController extends Controller
 				$required = $param['required'];
 				$config   = $param['config'];
 				$used     = $param['used'];
-				$format_validation = array();
+				$formatValidation = array();
 
 				if($used == 0) continue;
 
 				if($param['config'] && substr($param['config'], 0, 1) != '*') continue;
 
 				if($required) {
-					$format_validation[] = 'required';
+					$formatValidation[] = 'required';
 				}
 
 				if($type == 'exists') {
 					$config = explode(',', $config);
-					$table_exist = $config[0];
-					$table_exist = CRUDBooster::parseSqlTable($table_exist)['table'];
-					$field_exist = $config[1];
-					$config = ($field_exist)?$table_exist.','.$field_exist:$table_exist;
-					$format_validation[] = 'exists:'.$config;
+					$existsTable = $config[0];
+					$existsTable = CRUDBooster::parseSqlTable($existsTable)['table'];
+					$existsField = $config[1];
+					$config = ($field)?$existsTable.','.$existsField:$existsTable;
+					$formatValidation[] = 'exists:'.$config;
 				}elseif ($type == 'unique') {
 					$config = explode(',', $config);
-					$table_exist = $config[0];
-					$table_exist = CRUDBooster::parseSqlTable($table_exist)['table'];
-					$field_exist = $config[1];
-					$config = ($field_exist)?$table_exist.','.$field_exist:$table_exist;
-					$format_validation[] = 'unique:'.$config;
+					$uniqueTable = $config[0];
+					$uniqueTable = CRUDBooster::parseSqlTable($uniqueTable)['table'];
+					$uniquefield = $config[1];
+					$config = ($uniquefield)?$uniqueTable.','.$uniquefield:$uniqueTable;
+					$formatValidation[] = 'unique:'.$config;
 				}elseif ($type == 'date_format') {
-					$format_validation[] = 'date_format:'.$config;
+					$formatValidation[] = 'date_format:'.$config;
 				}elseif ($type == 'digits_between') {
-					$format_validation[] = 'digits_between:'.$config;
+					$formatValidation[] = 'digits_between:'.$config;
 				}elseif ($type == 'in') {
-					$format_validation[] = 'in:'.$config;
+					$formatValidation[] = 'in:'.$config;
 				}elseif ($type == 'mimes') {
-					$format_validation[] = 'mimes:'.$config;
+					$formatValidation[] = 'mimes:'.$config;
 				}elseif ($type == 'min') {
-					$format_validation[] = 'min:'.$config;
+					$formatValidation[] = 'min:'.$config;
 				}elseif ($type == 'max') {
-					$format_validation[] = 'max:'.$config;
+					$formatValidation[] = 'max:'.$config;
 				}elseif ($type == 'not_in') {
-					$format_validation[] = 'not_in:'.$config;
+					$formatValidation[] = 'not_in:'.$config;
 				}else{
-					if(!in_array($type, $type_except)) {
-						$format_validation[] = $type;
+					if(!in_array($type, $typeException)) {
+						$formatValidation[] = $type;
 					}
 				}
 
 				if($name == 'id') {
-					$table_exist = CRUDBooster::parseSqlTable($table)['table'];
-					$format_validation[] = 'exists:'.$table_exist.',id';
+					$existsTable = CRUDBooster::parseSqlTable($table)['table'];
+					$formatValidation[] = 'exists:'.$existsTable.',id';
 				}						
 
-				$input_validator[$name] = $value;
-				$data_validation[$name] = implode('|',$format_validation);
+				$inputValidator[$name] = $value;
+				$dataValidator[$name] = implode('|',$formatValidation);
 			}
 
-			$validator = Validator::make($input_validator,$data_validation);
+			$validator = Validator::make($inputValidator,$dataValidator);
 		    if ($validator->fails()) {
 		        $message = $validator->errors()->all();
 		        $message = implode(', ',$message);
@@ -175,27 +174,27 @@ class ApiController extends Controller
 		    }
 		}
 
-		$responses_fields = array();
-		foreach($responses as $r) {
-			if ($r['used']) $responses_fields[] = $r['name'];
+		$responseFields = array();
+		foreach($responses as $resp) {
+			if ($resp['used']) $responseFields[] = $resp['name'];
 		}
 
-		$this->hook_before($posts);
+		$this->hookBefore($posts);
 
-		$limit                    = ($posts['limit'])?:20;
-		$offset                   = ($posts['offset'])?:0;
-		$orderby                  = ($posts['orderby'])?:$table.'.id,desc';
-		$uploads_format_candidate = explode(',',config('crudbooster.UPLOAD_TYPES'));
-		$uploads_candidate        = explode(',',config('crudbooster.IMAGE_FIELDS_CANDIDATE'));
-		$password_candidate       = explode(',',config('crudbooster.PASSWORD_FIELDS_CANDIDATE'));
-		$asset					  = asset('/');
+		$limit                   = ($posts['limit'])?:20;
+		$offset                  = ($posts['offset'])?:0;
+		$orderby                 = ($posts['orderby'])?:$table.'.id,desc';
+		$uploadTypes             = explode(',',config('crudbooster.UPLOAD_TYPES'));
+		$imageFieldCandidates    = explode(',',config('crudbooster.IMAGE_FIELDS_CANDIDATE'));
+		$passwordFieldCandidates = explode(',',config('crudbooster.PASSWORD_FIELDS_CANDIDATE'));
+		$asset                   = asset('/');
 
 		unset($posts['limit']);
 		unset($posts['offset']);
 		unset($posts['orderby']);
 
-		if ($action_type == 'list' || $action_type == 'detail' || $action_type == 'delete') {
-			$name_tmp = array();
+		if ($actionType == 'list' || $actionType == 'detail' || $actionType == 'delete') {
+			$nameTemp = array();
 			$data = DB::table($table);
 			$data->skip($offset);
 			$data->take($limit);
@@ -207,7 +206,7 @@ class ApiController extends Controller
 
 				if ($used == 0 && !CRUDBooster::isForeignKey($name)) continue;
 
-				if (in_array($name, $name_tmp)) continue;
+				if (in_array($name, $nameTemp)) continue;
 
 				if ($name == 'ref_id') continue;
 
@@ -217,7 +216,7 @@ class ApiController extends Controller
 					$data->addSelect(DB::raw(
 						'('.$subquery.') as '.$name
 						));
-					$name_tmp[] = $name;
+					$nameTemp[] = $name;
 					continue;
 				}
 
@@ -225,23 +224,23 @@ class ApiController extends Controller
 					$data->addSelect($table.'.'.$name);
 				}
 
-				$name_tmp[] = $name;
+				$nameTemp[] = $name;
 				if (CRUDBooster::isForeignKey($name)) {
-					$jointable = CRUDBooster::getTableForeignKey($name);
-					$jointable_field = CRUDBooster::getTableColumns($jointable);
+					$joinTable = CRUDBooster::getTableForeignKey($name);
+					$joinTableField = CRUDBooster::getTableColumns($joinTable);
 
-					$data->leftjoin($jointable,$jointable.'.id','=',$table.'.'.$name);
-					foreach($jointable_field as $jf) {
-						$jf_alias = $jointable.'_'.$jf;
-						if (in_array($jf_alias, $responses_fields)) {
-							$data->addselect($jointable.'.'.$jf.' as '.$jf_alias);
-							$name_tmp[] = $jf_alias;
+					$data->leftjoin($joinTable,$joinTable.'.id','=',$table.'.'.$name);
+					foreach($joinTableField as $joinField) {
+						$joinFieldAs = $joinTable.'_'.$joinField;
+						if (in_array($joinFieldAs, $responseFields)) {
+							$data->addselect($joinTable.'.'.$joinField.' as '.$joinFieldAs);
+							$nameTemp[] = $joinFieldAs;
 						}
 					}
 				}
 			} //End Responses
 
-			foreach($parameters as $param) {
+			foreach($params as $param) {
 				$name     = $param['name'];
 				$type     = $param['type'];
 				$value    = $posts[$name];
@@ -254,11 +253,11 @@ class ApiController extends Controller
 				}
 
 				if ($type == 'search') {
-					$search_in = explode(',',$config);
+					$searchIN = explode(',',$config);
 
 					if ($required == '1') {
-						$data->where(function($w) use ($search_in,$value) {
-							foreach($search_in as $k=>$field) {
+						$data->where(function($w) use ($searchIN,$value) {
+							foreach($searchIN as $k=>$field) {
 								if($k==0) $w->where($field,"like","%$value%");
 								else $w->orWhere($field,"like","%$value%");
 							}
@@ -266,8 +265,8 @@ class ApiController extends Controller
 					} else {
 						if ($used) {
 							if ($value) {
-								$data->where(function($w) use ($search_in,$value) {
-									foreach($search_in as $k=>$field) {
+								$data->where(function($w) use ($searchIN,$value) {
+									foreach($searchIN as $k=>$field) {
 										if($k==0) $w->where($field,"like","%$value%");
 										else $w->orWhere($field,"like","%$value%");
 									}
@@ -282,15 +281,15 @@ class ApiController extends Controller
 				$data->where($table.'.deleted_at',NULL);
 			}
 
-			$data->where(function($w) use ($parameters,$posts,$table,$type_except) {
-				foreach($parameters as $param) {
+			$data->where(function($w) use ($params,$posts,$table,$typeException) {
+				foreach($params as $param) {
 					$name     = $param['name'];
 					$type     = $param['type'];
 					$value    = $posts[$name];
 					$used     = $param['used'];
 					$required = $param['required'];
 
-					if (in_array($type, $type_except)) {
+					if (in_array($type, $typeException)) {
 						continue;
 					}
 
@@ -319,34 +318,34 @@ class ApiController extends Controller
 			});
 
 			//IF SQL WHERE IS NOT NULL
-			if ($row_api->sql_where) {
-				$data->whereraw($row_api->sql_where);
+			if ($row->sql_where) {
+				$data->whereRaw($row->sql_where);
 			}
 
-			$this->hook_query($data);
+			$this->hookQuery($data);
 
-			if ($action_type == 'list') {
+			if ($actionType == 'list') {
 				if ($orderby) {
-					$orderby_raw = explode(',',$orderby);
-					$orderby_col = $orderby_raw[0];
-					$orderby_val = $orderby_raw[1];
+					$orderbyRaw = explode(',',$orderby);
+					$orderbyField = $orderbyRaw[0];
+					$orderbyValue = $orderbyRaw[1];
 				} else {
-					$orderby_col = $table.'.id';
-					$orderby_val = 'desc';
+					$orderbyField = $table.'.id';
+					$orderbyValue = 'desc';
 				}
 
-				$rows = $data->orderby($orderby_col,$orderby_val)->get();
+				$rows = $data->orderby($orderbyField,$orderbyValue)->get();
 
 				if ($rows) {
 
 					foreach($rows as &$row) {
 						foreach($row as $k=>$v) {
 							$ext = \File::extension($v);
-							if (in_array($ext, $uploads_format_candidate)) {
+							if (in_array($ext, $uploadTypes)) {
 								$row->$k = asset($v);
 							}
 
-							if (!in_array($k,$responses_fields)) {
+							if (!in_array($k,$responseFields)) {
 								unset($row[$k]);
 							}
 						}
@@ -355,24 +354,24 @@ class ApiController extends Controller
 					$result['api_status'] = 1;
 					$result['api_message'] = 'success';
 					if (CRUDBooster::getSetting('api_debug_mode')=='true') {
-						$result['api_authorization'] = $debug_mode_message;
+						$result['api_authorization'] = $debugMessage;
 					}		
 					$result['data'] = $rows;
 				} else {
 					$result['api_status']  = 0;
 					$result['api_message'] = 'There is no data found !';
 					if (CRUDBooster::getSetting('api_debug_mode')=='true') {
-						$result['api_authorization'] = $debug_mode_message;
+						$result['api_authorization'] = $debugMessage;
 					}
 					$result['data'] = array();
 				}
-			} elseif ($action_type == 'detail') {
+			} elseif ($actionType == 'detail') {
 
 				$rows = $data->first();
 
 				if ($rows) {
 
-					foreach($parameters as $param) {
+					foreach($params as $param) {
 						$name     = $param['name'];
 						$type     = $param['type'];
 						$value    = $posts[$name];
@@ -389,7 +388,7 @@ class ApiController extends Controller
 									$result['api_status'] = 0;
 									$result['api_message'] = 'Your password is wrong !';
 									if (CRUDBooster::getSetting('api_debug_mode')=='true') {
-										$result['api_authorization'] = $debug_mode_message;
+										$result['api_authorization'] = $debugMessage;
 									}
 									goto show;
 								}
@@ -401,7 +400,7 @@ class ApiController extends Controller
 										$result['api_status'] = 0;
 										$result['api_message'] = 'Your password is wrong !';
 										if (CRUDBooster::getSetting('api_debug_mode')=='true') {
-											$result['api_authorization'] = $debug_mode_message;
+											$result['api_authorization'] = $debugMessage;
 										}
 										goto show;
 									}
@@ -413,11 +412,11 @@ class ApiController extends Controller
 					foreach($rows as $k=>$v) {
 						$ext = \File::extension($v);
 
-						if (in_array($ext, $uploads_format_candidate)) {
+						if (in_array($ext, $uploadTypes)) {
 							$rows->$k = asset($v);
 						}
 
-						if (!in_array($k,$responses_fields)) {
+						if (!in_array($k,$responseFields)) {
 							unset($row[$k]);
 						}
 					}
@@ -426,7 +425,7 @@ class ApiController extends Controller
 					$result['api_message'] = 'success';
 
 					if (CRUDBooster::getSetting('api_debug_mode')=='true') {
-						$result['api_authorization'] = $debug_mode_message;
+						$result['api_authorization'] = $debugMessage;
 					}
 
 					$rows     = (array) $rows;
@@ -438,11 +437,11 @@ class ApiController extends Controller
 					$result['api_message'] = 'There is no data found !';
 
 					if (CRUDBooster::getSetting('api_debug_mode')=='true') {
-						$result['api_authorization'] = $debug_mode_message;
+						$result['api_authorization'] = $debugMessage;
 					}
 
 				}
-			} elseif ($action_type == 'delete') {
+			} elseif ($actionType == 'delete') {
 
 				if (CRUDBooster::isColumnExists($table,'deleted_at')) {
 					$delete = $data->update(['deleted_at'=>date('Y-m-d H:i:s')]);
@@ -453,44 +452,44 @@ class ApiController extends Controller
 				$result['api_status'] = ($delete)?1:0;
 				$result['api_message'] = ($delete)?'success':'failed';
 				if (CRUDBooster::getSetting('api_debug_mode')=='true') {
-					$result['api_authorization'] = $debug_mode_message;
+					$result['api_authorization'] = $debugMessage;
 				}
 
 			}
 
-		} elseif ($action_type == 'save_add' || $action_type == 'save_edit') {
+		} elseif ($actionType == 'save_add' || $actionType == 'save_edit') {
 
-		    $row_assign = array();
-		    foreach($input_validator as $k=>$v) {
+		    $rowAssign = array();
+		    foreach($inputValidator as $k=>$v) {
 		    	if (CRUDBooster::isColumnExists($table,$k)) {
-		    		$row_assign[$k] = $v;
+		    		$rowAssign[$k] = $v;
 		    	}
 		    }
 
-		    foreach($parameters as $param) {
+		    foreach($params as $param) {
 		    	$name = $param['name'];
 		    	$used = $param['used'];
 		    	$value = $posts[$name];
 		    	if ($used=='1' && $value=='') {
-		    		unset($row_assign[$name]);
+		    		unset($rowAssign[$name]);
 		    	}
 		    }
 
-		    if ($action_type == 'save_add') {
+		    if ($actionType == 'save_add') {
 		    	if (CRUDBooster::isColumnExists($table,'created_at')) {
-		    		$row_assign['created_at'] = date('Y-m-d H:i:s');
+		    		$rowAssign['created_at'] = date('Y-m-d H:i:s');
 		    	}
 		    } 
 
-		    if ($action_type == 'save_edit') {
+		    if ($actionType == 'save_edit') {
 		    	if (CRUDBooster::isColumnExists($table,'updated_at')) {
-		    		$row_assign['updated_at'] = date('Y-m-d H:i:s');
+		    		$rowAssign['updated_at'] = date('Y-m-d H:i:s');
 		    	}
 		    }
 
-		    $row_assign_keys = array_keys($row_assign);
+		    $rowAssignKeys = array_keys($rowAssign);
 
-		    foreach($parameters as $param) {
+		    foreach($params as $param) {
 		    	$name = $param['name'];
 		    	$value = $posts[$name];
 		    	$config = $param['config'];
@@ -498,7 +497,7 @@ class ApiController extends Controller
 		    	$required = $param['required'];
 		    	$used = $param['used'];
 
-		    	if (!in_array($name, $row_assign_keys)) {
+		    	if (!in_array($name, $rowAssignKeys)) {
 					continue;
 				}
 
@@ -519,59 +518,59 @@ class ApiController extends Controller
 						$filename = md5(str_random(5)).'.'.$ext;
 						if ($file->move(storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m')),$filename)) {
 							$v = 'uploads/'.date('Y-m').'/'.$filename;
-							$row_assign[$name] = $v;
+							$rowAssign[$name] = $v;
 						}
 					}
 		    	} elseif ($type == 'base64_file') {
-		    		$filedata = base64_decode($value);
+		    		$fileData = base64_decode($value);
 					$f = finfo_open();
-					$mime_type = finfo_buffer($f, $filedata, FILEINFO_MIME_TYPE);
-					@$mime_type = explode('/',$mime_type);
-					@$mime_type = $mime_type[1];
-					if ($mime_type) {
-						if (in_array($mime_type, $uploads_format_candidate)) {
+					$mimeType = finfo_buffer($f, $fileData, FILEINFO_MIME_TYPE);
+					@$mimeType = explode('/',$mimeType);
+					@$mimeType = $mimeType[1];
+					if ($mimeType) {
+						if (in_array($mimeType, $uploads_format_candidate)) {
 							Storage::makeDirectory(date('Y-m'));
-							$filename = md5(str_random(5)).'.'.$mime_type;
-							if (file_put_contents(storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m')).'/'.$filename, $filedata)) {
+							$filename = md5(str_random(5)).'.'.$mimeType;
+							if (file_put_contents(storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m')).'/'.$filename, $fileData)) {
 								$v = 'uploads/'.date('Y-m').'/'.$filename;
-								$row_assign[$name] = $v;
+								$rowAssign[$name] = $v;
 							}
 						}
 					}
 		    	} elseif ($type == 'password') {
-		    		$row_assign[$name] = Hash::make($value);
+		    		$rowAssign[$name] = Hash::make($value);
 		    	}
 
 		    }
 
 		    //Make sure if saving/updating data additional param included
-		    $arrkeys = array_keys($row_assign);      
+		    $arrkeys = array_keys($rowAssign);      
 		    foreach($posts as $key => $value) {
 		        if(!in_array($key, $arrkeys)) {
-		          $row_assign[$key] = $value;
+		          $rowAssign[$key] = $value;
 		        }
 		    }
 
 
-		    if ($action_type == 'save_add') {
+		    if ($actionType == 'save_add') {
 
-		    	$row_assign['id'] = CRUDBooster::newId($table);
-		    	DB::table($table)->insert($row_assign);
-		    	$result['api_status']  = ($row_assign['id'])?1:0;
-				$result['api_message'] = ($row_assign['id'])?'success':'failed';
+		    	$rowAssign['id'] = CB::newId($table);
+		    	DB::table($table)->insert($rowAssign);
+		    	$result['api_status']  = ($rowAssign['id'])?1:0;
+				$result['api_message'] = ($rowAssign['id'])?'success':'failed';
 
 				if(CRUDBooster::getSetting('api_debug_mode')=='true') {
-					$result['api_authorization'] = $debug_mode_message;
+					$result['api_authorization'] = $debugMessage;
 				}
 
-				$result['id'] = $row_assign['id'];
+				$result['id'] = $rowAssign['id'];
 
 		    } else {
 
 		    	try {
 		    		$update = DB::table($table);
 
-				    $update->where($table.'.id',$row_assign['id']);
+				    $update->where($table.'.id',$rowAssign['id']);
 
 				    if($row_api->sql_where) {
 				    	$update->whereraw($row_api->sql_where);
@@ -579,24 +578,24 @@ class ApiController extends Controller
 
 				    $this->hook_query($update);
 
-				    $update = $update->update($row_assign);
+				    $update = $update->update($rowAssign);
 					$result['api_status']  = 1;
 					$result['api_message'] = 'success';
 					if(CRUDBooster::getSetting('api_debug_mode')=='true') {
-						$result['api_authorization'] = $debug_mode_message;
+						$result['api_authorization'] = $debugMessage;
 					}
 		    	} catch (\Exception $e) {
 		    		$result['api_status']  = 0;
 					$result['api_message'] = 'failed, '.$e;
 					if(CRUDBooster::getSetting('api_debug_mode')=='true') {
-						$result['api_authorization'] = $debug_mode_message;
+						$result['api_authorization'] = $debugMessage;
 					}
 		    	}
 
 		    }
 
 		    // Update The Child Table
-		    foreach($parameters as $param) {
+		    foreach($params as $param) {
 		    	$name = $param['name'];
 		    	$value = $posts[$name];
 		    	$config = $param['config'];
@@ -613,14 +612,14 @@ class ApiController extends Controller
 
 
 		show:
-		$result['api_status']  = $this->hook_api_status?:$result['api_status'];
-		$result['api_message'] = $this->hook_api_message?:$result['api_message'];
+		$result['api_status']  = $this->hookApiStatus?:$result['api_status'];
+		$result['api_message'] = $this->hookApiMessage?:$result['api_message'];
 
 		if (CRUDBooster::getSetting('api_debug_mode')=='true') {
-			$result['api_authorization'] = $debug_mode_message;
+			$result['api_authorization'] = $debugMessage;
 		}				
 
-		$this->hook_after($posts,$result);
+		$this->hookAfter($posts,$result);
 
 		return response()->json($result);
 	}

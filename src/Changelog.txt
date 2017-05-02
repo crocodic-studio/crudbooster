@@ -1,0 +1,16 @@
+- change table name cms_privileges to cb_roles
+- change table name cms_privileges_role to cb_permissions
+- change field table cms_privileges_role for is_visible = can_visible, is_create = can_create, is_read = can_read, is_edit = can_edit, is_delete = can_delete
+- callback_php is deprecated, changed to callback with anonymouse function
+- change most CBController properties and variables to be camelCase
+- change $this->col to $this->columns
+- change $this->form to $this->inputs
+- method cbView has deprecated
+- Change Helper :: isCreate = canCreate, isRead = canRead, isEdit = canEdit, isDelete = canDelete, isView = canView
+- Helper isCRUD has deprecated
+- Change session name
+- Change Helper :: myPrivilegeId = myRoleId
+- Change table name cms_apicustom to cb_api, and change fields name
+- Rename api hook_before = hookBefore, hook_after = hookAfter, hook_query = hookQuery, hook_api_status = hookApiStatus, hook_api_message = hookApiMessage
+- Rename hook_query_index = hookQueryIndex, hook_before_add = hookBeforeAdd, hook_after_add = hookAfterAdd, hook_before_edit = hookBeforeEdit, hook_after_edit = hookAfterEdit, hook_before_delete = hookBeforeDelete, hook_after_delete = hookAfterDelete
+- Deprecated hook_row_index

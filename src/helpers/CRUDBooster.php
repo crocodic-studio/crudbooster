@@ -11,16 +11,25 @@ use Validator;
 
 class CRUDBooster
 {		
-
+	/** 
+	 * Get Setting From Database
+	 * 
+	 * @param string $param
+	 * @return mixed
+	 */	 
 	public static function getSetting($name)
 	{
 		if (Cache::has('setting_'.$name)) {
 			return Cache::get('setting_'.$name);
 		}
 
-		$query = DB::table('cms_settings')->where('name',$name)->first();
-		Cache::forever('setting_'.$name,$query->content);
-		return $query->content;
+		$row = self::first('cb_settings',['name'=>$name]);		
+		if($row) {
+			Cache::forever('setting_'.$name,$row->content);
+			return $row->content;
+		}else{
+			return false;
+		}		
 	}
 
 	public static function insert($table,$data=[])
@@ -37,12 +46,19 @@ class CRUDBooster
 		else return false;
 	}	
 
+	/**
+	 * Alias method of laravel first db query (More Simple)
+	 * 
+	 * @param string $table
+	 * @param mixed(int,array) $id
+	 * @return object
+	 */
+
 	public static function first($table,$id)
 	{
 		$table = self::parseSqlTable($table)['table'];
-		if (is_int($id)) {
-			return DB::table($table)->where('id',$id)->first();
-		} elseif (is_array($id)) {
+
+		if (is_array($id)) {
 			$first = DB::table($table);
 
 			foreach($id as $k=>$v) {
@@ -50,6 +66,8 @@ class CRUDBooster
 			}
 
 			return $first->first();
+		} else {
+			return DB::table($table)->where(self::findPrimaryKey($table),$id)->first();
 		}
 	}
 
@@ -67,27 +85,30 @@ class CRUDBooster
 
 	public static function me()
 	{
-		return DB::table(config('crudbooster.USER_TABLE'))->where('id',Session::get('admin_id'))->first();
+		$id = self::myId();
+		return self::first('cb_users',$id);
 	}
 
 	public static function myId()
 	{
-		return Session::get('admin_id');
+		return Session::get('cb_id');
 	}
 
 	public static function isSuperadmin()
 	{
-		return Session::get('admin_is_superadmin');
+		return Session::get('cb_is_superadmin');
 	}
 
 	public static function myName()
 	{
-		return Session::get('admin_name');
+		$row = self::first('cms_users',self::myId());
+		return $row->name;
 	}
 
 	public static function myPhoto()
 	{
-		return Session::get('admin_photo');
+		$row = self::first('cms_users',self::myId());
+		return $row->photo;
 	}
 
 	public static function myPrivilege()
@@ -102,19 +123,28 @@ class CRUDBooster
 		}
 	}
 
-	public static function myPrivilegeId()
+	public static function myRoleId()
 	{
-		return Session::get('admin_privileges');
+		return Session::get('cb_role_id');
 	}
 
-	public static function myPrivilegeName()
+	public static function myRoleName()
 	{
-		return Session::get('admin_privileges_name');
+		$role = self::first('cb_roles',['id'=>self::myRoleId()]);
+		return $role->name;
 	}
 
 	public static function isLocked()
 	{
-		return Session::get('admin_lock');
+		return Session::get('cb_is_locked');
+	}
+
+	public static function setLocked() {
+		Session::put('cb_is_locked',1);
+	}
+
+	public static function unsetLocked() {
+		Session::forget('cb_is_locked');	
 	}
 
 	public static function redirect($to,$message,$type='warning')
@@ -130,79 +160,62 @@ class CRUDBooster
 		}
 	}
 
-	public static function isView()
+	public static function canView()
 	{		
 		if(self::isSuperadmin()) return true;
 
 		$session = Session::get('admin_privileges_roles');
 		foreach ($session as $v) {
 			if($v->path == self::getModulePath()) {
-				return (bool) $v->is_visible;
+				return (bool) $v->canVisible;
 			}
 		}
 	}
 
-	public static function isUpdate()
+	public static function canEdit()
 	{		
 		if(self::isSuperadmin()) return true;
 
-		$session = Session::get('admin_privileges_roles');
+		$session = Session::get('cb_permissions');
 		foreach ($session as $v) {
 			if($v->path == self::getModulePath()) {
-				return (bool) $v->is_edit;
+				return (bool) $v->canEdit;
 			}
 		}
 	}
 
-	public static function isCreate()
+	public static function canCreate()
 	{	
 		if(self::isSuperadmin()) return true;
 
-		$session = Session::get('admin_privileges_roles');
+		$session = Session::get('cb_permissions');
 		foreach ($session as $v) {
 			if($v->path == self::getModulePath()) {
-				return (bool) $v->is_create;
+				return (bool) $v->canCreate;
 			}
 		}
 	}
 
-	public static function isRead()
+	public static function canRead()
 	{	
 		if(self::isSuperadmin()) return true;
 
-		$session = Session::get('admin_privileges_roles');
+		$session = Session::get('cb_permissions');
 		foreach ($session as $v) {
 			if($v->path == self::getModulePath()) {
-				return (bool) $v->is_read;
+				return (bool) $v->canRead;
 			}
 		}
 	}
 
-	public static function isDelete()
+	public static function canDelete()
 	{
 		if(self::isSuperadmin()) return true;
 
-		$session = Session::get('admin_privileges_roles');
+		$session = Session::get('cb_permissions');
 		foreach ($session as $v) {
 			if($v->path == self::getModulePath()) {
-				return (bool) $v->is_delete;
-			}
-		}
-	}
-
-	public static function isCRUD()
-	{
-		if(self::isSuperadmin()) return true;
-
-		$session = Session::get('admin_privileges_roles');
-
-		foreach ($session as $v) {
-			if($v->path == self::getModulePath()) {
-				if($v->is_visible && $v->is_create && $v->is_read && $v->is_edit && $v->is_delete) {
-					return true;
-				}else{
-					return false;
-				}
+				return (bool) $v->canDelete;
 			}
 		}
 	}
@@ -210,10 +223,10 @@ class CRUDBooster
 	public static function getCurrentModule()
 	{
 		$modulepath = self::getModulePath();
-		if (Cache::has('moduls_'.$modulepath)) {
-			return Cache::get('moduls_'.$modulepath);
+		if (Cache::has('modules_'.$modulepath)) {
+			return Cache::get('modules_'.$modulepath);
 		} else {
-			$module = DB::table('cms_moduls')->where('path',self::getModulePath())->first();
+			$module = DB::table('cb_modules')->where('path',self::getModulePath())->first();
 			return $module;
 		}
 	}
@@ -710,6 +723,10 @@ class CRUDBooster
 		}else{
 			return 'id';
 		}
+	}
+
+	public static function pk($table) {
+		return self::findPrimaryKey($table);
 	}
 
 	public static function newId($table)
