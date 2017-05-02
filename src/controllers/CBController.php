@@ -326,6 +326,11 @@ class CBController extends Controller {
 					$value = @$fc['value'];
 					$type  = @$fc['type'];
 
+					if($type == 'empty') {
+						$w->whereNull($key)->orWhere($key,'');
+						continue;
+					}
+
 					if($value=='' || $type=='') continue;
 
 					if($type == 'between') continue;
@@ -345,9 +350,6 @@ class CBController extends Controller {
 								$value = explode(',',$value);
 								if($key && $value) $w->whereIn($key,$value);
 							}
-						break;
-						case 'empty':							
-							$w->whereNull($key)->orWhere($key,'');	
 						break;
 					}
 
