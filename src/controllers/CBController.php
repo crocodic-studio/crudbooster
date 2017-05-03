@@ -742,12 +742,10 @@ class CBController extends Controller {
 		return response()->json($result);
 	}
 
-	public function validation() {
+	public function validation($id=NULL) {
 
 		$request_all = Request::all();
 		$array_input = array();
-		$id          = CRUDBooster::getCurrentId();
-		$id          = intval($id);
 		foreach($this->data_inputan as $di) {
 			$ai = array();
 			$name = $di['name'];			
@@ -1156,7 +1154,7 @@ class CBController extends Controller {
 			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
 		}
 
-		$this->validation();
+		$this->validation($id);
 		$this->input_assignment($id);				
 
 		if (Schema::hasColumn($this->table, 'updated_at'))
