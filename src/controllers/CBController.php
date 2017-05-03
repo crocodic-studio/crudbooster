@@ -1541,17 +1541,17 @@ class CBController extends Controller {
 			return redirect()->back()->with(['message_type'=>'success','message'=>$message]);
 		}
 
-        if($this->actionButtonSelected($id_selected,$button_name) === false) {
-            $message = !empty($this->alert['message']) ? $this->alert['message'] : 'Error';
-            $type = !empty($this->alert['type']) ? $this->alert['type'] : 'danger';
-        } else {
-            $action = str_replace(['-','_'],' ',$button_name);
-            $action = ucwords($action);
-            $type = 'success';
-            $message = trans("crudbooster.alert_action",['action'=>$action]);
+		$action = str_replace(['-','_'],' ',$button_name);
+		$action = ucwords($action);
+		$type = 'success';
+		$message = trans("crudbooster.alert_action",['action'=>$action]);
 
-        }
-        return redirect()->back()->with(['message_type'=>$type,'message'=>$message]);
+		if($this->actionButtonSelected($id_selected,$button_name) === false) {
+		    $message = !empty($this->alert['message']) ? $this->alert['message'] : 'Error';
+		    $type = !empty($this->alert['type']) ? $this->alert['type'] : 'danger';
+		}
+		
+		return redirect()->back()->with(['message_type'=>$type,'message'=>$message]);
 	}
 
 	public function getDeleteImage() {
