@@ -652,7 +652,7 @@ class CRUDBooster  {
 		}
 
 		public static function findPrimaryKey($table) {
-			if(!$table) throw new \Exception("\$table is undefined", 1);
+			if(!$table) return 'id';
 			
 			if(self::getCache('table_'.$table,'primary_key')) {
 				return self::getCache('table_'.$table,'primary_key');
