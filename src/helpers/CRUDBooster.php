@@ -647,6 +647,10 @@ class CRUDBooster  {
 			}
 		}
 
+		public static function pk($table) {
+			return self::findPrimaryKey($table);
+		}
+
 		public static function findPrimaryKey($table) {
 			if(!$table) throw new \Exception("\$table is undefined", 1);
 			
