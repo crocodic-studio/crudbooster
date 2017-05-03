@@ -63,7 +63,7 @@
 			$('.datatables-simple').DataTable();
 		})
 	</script>
-	<script src="{{asset('vendor/crudbooster/assets/js/main.js')}}"></script>
-	<link rel='stylesheet' href='{{asset("vendor/crudbooster/assets/css/main.css")}}'/>
+	<script src="{{asset('vendor/crudbooster/assets/js/main.js').'?r='.time()}}"></script>
+	<link rel='stylesheet' href='{{asset("vendor/crudbooster/assets/css/main.css").'?r='.time()}}'/>
 
 	
