@@ -67,11 +67,13 @@ class CrudboosterInstallationCommand extends Command {
         if(file_exists(public_path('uploads'))) {          
             $uploadPath = public_path('uploads');
         	$this->info('Upload Path: '.$uploadPath);        
-            if(is_link($uploadPath) == public_path('uploads')) {   
-            	$this->info('Remove the existing uploads dir, and create a symlink for it...');                                                                     
-                rrmdir(public_path('uploads'));
-                app('files')->link(storage_path('app'), public_path('uploads'));
-            }              
+        	if(is_link($uploadPath)) {
+	            if(readlink($uploadPath) == public_path('uploads')) {   
+	            	$this->info('Remove the existing uploads dir, and create a symlink for it...');                                                                     
+	                rrmdir(public_path('uploads'));
+	                app('files')->link(storage_path('app'), public_path('uploads'));
+	            }              
+        	}
         }else{
         	$this->info('Creating public/uploads symlink...');  
             app('files')->link(storage_path('app'), public_path('uploads'));
@@ -82,12 +84,14 @@ class CrudboosterInstallationCommand extends Command {
         $this->info('Checking public/vendor/crudbooster symlink...');  
         if(file_exists(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'))) {                      
             $vendorpath = public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster');
-            $this->info('Vendor Path: '.$vendorpath);                      	
-            if(is_link($vendorpath) == public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster')) {                
-                //Is Directory                  
-                $this->info('Removing public/vendor/crudbooster dir, instead of creating a symlink...');                               
-                rrmdir(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'));
-                app('files')->link(__DIR__.'/../assets',public_path('vendor/crudbooster'));
+            $this->info('Vendor Path: '.$vendorpath);   
+            if(is_link($vendorpath)) {                   	
+	            if(readlink($vendorpath) == public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster')) {                
+	                //Is Directory                  
+	                $this->info('Removing public/vendor/crudbooster dir, instead of creating a symlink...');                               
+	                rrmdir(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'));
+	                app('files')->link(__DIR__.'/../assets',public_path('vendor/crudbooster'));
+	            }
             }            
         }else{            
         	$this->info('Creating public/vendor/crudbooster symlink...');  
