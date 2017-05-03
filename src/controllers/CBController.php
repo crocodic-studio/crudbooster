@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\PDF;
 use Maatwebsite\Excel\Facades\Excel;
 use CRUDBooster;
+use CB;
 use Schema;
 
 class CBController extends Controller {
