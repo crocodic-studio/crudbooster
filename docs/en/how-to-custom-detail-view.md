@@ -22,7 +22,7 @@ Then, create your own `detail view`
 
 ```php
 <!-- First, extends to the CRUDBooster Layout -->
-@extends('crudbooster:admin_template')
+@extends('crudbooster::admin_template')
 @section('content')
   <!-- Your html goes here -->
   <div class='panel panel-default'>
