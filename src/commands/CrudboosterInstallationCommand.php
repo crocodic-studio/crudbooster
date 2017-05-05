@@ -67,7 +67,7 @@ class CrudboosterInstallationCommand extends Command {
         if(file_exists(public_path('uploads'))) {          
             $uploadPath = public_path('uploads');
         	$this->info('Upload Path: '.$uploadPath);        
-        	if(!is_link($uploadPath)) {
+        	if(realpath($uploadPath) == $uploadPath) {
 	            $this->info('Remove the existing uploads dir, and create a symlink for it...');                                                                     
 	                rrmdir(public_path('uploads'));
 	                app('files')->link(storage_path('app'), public_path('uploads'));              
@@ -83,7 +83,7 @@ class CrudboosterInstallationCommand extends Command {
         if(file_exists(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'))) {                      
             $vendorpath = public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster');
             $this->info('Vendor Path: '.$vendorpath);   
-            if(!is_link($vendorpath)) {                   	
+            if(realpath($vendorpath) == $vendorpath) {                   	
 	            $this->info('Removing public/vendor/crudbooster dir, instead of creating a symlink...');                               
 	                rrmdir(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'));
 	                app('files')->link(__DIR__.'/../assets',public_path('vendor/crudbooster'));
