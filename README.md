@@ -1,4 +1,4 @@
-# CRUDBOOSTER - Laravel CRUD Generator
+[![Code Climate](https://codeclimate.com/github/crocodic-studio/crudbooster/badges/gpa.svg)](https://codeclimate.com/github/crocodic-studio/crudbooster)
 [![Latest Stable Version](https://poser.pugx.org/crocodicstudio/crudbooster/v/stable)](https://packagist.org/packages/crocodicstudio/crudbooster)
 [![Total Downloads](https://poser.pugx.org/crocodicstudio/crudbooster/downloads)](https://packagist.org/packages/crocodicstudio/crudbooster)
 [![Latest Unstable Version](https://poser.pugx.org/crocodicstudio/crudbooster/v/unstable)](https://packagist.org/packages/crocodicstudio/crudbooster)

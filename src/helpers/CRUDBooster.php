@@ -647,8 +647,12 @@ class CRUDBooster  {
 			}
 		}
 
+		public static function pk($table) {
+			return self::findPrimaryKey($table);
+		}
+
 		public static function findPrimaryKey($table) {
-			if(!$table) throw new \Exception("\$table is undefined", 1);
+			if(!$table) return 'id';
 			
 			if(self::getCache('table_'.$table,'primary_key')) {
 				return self::getCache('table_'.$table,'primary_key');
@@ -865,7 +869,7 @@ class CRUDBooster  {
 	            $user_agent = Request::header('User-Agent');
 	            $time       = Request::header('X-Authorization-Time'); 
 
-	            $keys = DB::table('cms_apikey')->where('status','active')->lists('screetkey');
+	            $keys = DB::table('cms_apikey')->where('status','active')->pluck('screetkey');
 	            $server_token = array();
 	            $server_token_screet = array();
 	            foreach($keys as $key) {

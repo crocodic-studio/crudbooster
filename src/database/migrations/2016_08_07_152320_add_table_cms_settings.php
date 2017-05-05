@@ -15,12 +15,14 @@ class AddTableCmsSettings extends Migration {
 		Schema::create('cms_settings', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->timestamps();
+			
 			$table->string('name')->nullable();
 			$table->text('content')->nullable();
 			$table->string('content_input_type')->nullable();
 			$table->string('dataenum')->nullable();
 			$table->string('helper')->nullable();
+			
+			$table->timestamps();
 		});
 	}
 
