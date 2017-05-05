@@ -74,6 +74,11 @@
         }
         @eval("\$value = ".$col['callback_php'].";");
       }
+
+      //New method for callback
+      if(isset($col['callback'])) {
+        $value = call_user_func($col['callback'],$row);
+      }
     }
     
 

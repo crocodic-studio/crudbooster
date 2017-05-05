@@ -15,7 +15,7 @@ class AddTableCmsApicustom extends Migration {
 		Schema::create('cms_apicustom', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->timestamps();
+
 			$table->string('permalink')->nullable();
 			$table->string('tabel')->nullable();
 			$table->string('aksi')->nullable();
@@ -26,6 +26,8 @@ class AddTableCmsApicustom extends Migration {
 			$table->string('nama')->nullable();
 			$table->string('keterangan')->nullable();
 			$table->string('parameter')->nullable();
+			
+			$table->timestamps();
 		});
 	}
 

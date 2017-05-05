@@ -1,6 +1,6 @@
 {
 	"title":"Text Input",
-	"type":"text",
+	"type":"multitext",
 	"attribute":{
 		
 		"optional": {
@@ -9,7 +9,8 @@
 		"placeholder":"string placeholder",
 		"readonly":"boolean",
 		"disabled":"boolean",
-		"value":"string"
+		"value":"string",
+		"max_fields":"string"	
 		}
 		
 	}

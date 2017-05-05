@@ -5,7 +5,8 @@
 - **Grid Data Column Section**
   - [How To Add Column In Grid Data](./how-to-add-column.md)
   - [How To Join Table In Grid Data](./how-to-join-in-grid-data.md)
-  - [How To Put Number Format In Grid Data Column](./how-to-put-number-format.md)
+  - [How To Put Number Format In Grid Data Column (callback_php)](./how-to-put-number-format.md)
+  - [How To Put Number Format In Grid Data Column (callback)](./how-to-put-number-format-callback.md)
   - [How To Make A Subquery Column in Grid Data](./how-to-make-subquery.md)
   - [How To Add More Action Button In Grid Data](./how-add-more-action-button.md)
   - [How To Add More Bulk Action In Grid Data](./how-add-bulk-button.md)

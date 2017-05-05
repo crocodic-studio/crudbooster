@@ -60,7 +60,7 @@
           </div>
           <div class="row">
             <div class="col-xs-8">    
-              {{trans("crudbooster.forgot_text_try_again")}} <a href='{{route("getLogin")}}'>Click here</a>                          
+              {{trans("crudbooster.forgot_text_try_again")}} <a href='{{route("getLogin")}}'>{{trans("crudbooster.click_here")}}</a>                          
             </div><!-- /.col -->
             <div class="col-xs-4">
               <button type="submit" class="btn btn-primary btn-block btn-flat">{{trans("crudbooster.button_submit")}}</button>
@@ -75,7 +75,7 @@
     </div><!-- /.login-box -->
 
     <!-- jQuery 2.1.3 -->
-    <script src="{{asset('vendor/crudbooster/assets/adminlte/plugins/jQuery/jQuery-2.1.3.min.js')}}"></script>
+    <script src="{{asset('vendor/crudbooster/assets/adminlte/plugins/jQuery/jQuery-2.1.4.min.js')}}"></script>
     <!-- Bootstrap 3.3.2 JS -->
     <script src="{{asset('vendor/crudbooster/assets/adminlte/bootstrap/js/bootstrap.min.js')}}" type="text/javascript"></script>
 

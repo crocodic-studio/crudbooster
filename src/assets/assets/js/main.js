@@ -45,12 +45,6 @@
 
 		$(function() {		
 
-			$('.inputMoney').priceFormat({
-				prefix: '',
-				centsLimit:0,
-			    clearPrefix: true
-			});	
-
 			jQuery.fn.outerHTML = function(s) {
 			    return s
 			        ? this.before(s).remove()

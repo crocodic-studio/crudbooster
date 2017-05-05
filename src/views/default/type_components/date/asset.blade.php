@@ -11,9 +11,11 @@
             @endif
             language: lang
         });
+        
+        $('.open-datetimepicker').click(function() {
+			  $(this).next('.input_date').datepicker('show');
+		});
+        
     });
 
-    function showDatepicker() {
-        $('.input_date').datepicker('show');
-    }
 </script>

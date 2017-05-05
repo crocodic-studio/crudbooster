@@ -37,8 +37,15 @@
 										/>
 									@elseif($col['type']=='radio')
 										<?php 
-											if($col['dataenum']):												
-											foreach($col['dataenum'] as $e=>$enum):
+											if($col['dataenum']):
+                                            $dataenum = $col['dataenum'];
+                                            if(strpos($dataenum, ';') !== false) {
+                                                $dataenum = explode(";", $dataenum);
+                                            } else {
+                                                $dataenum = [$dataenum];
+                                            }
+                                            array_walk($dataenum, 'trim');
+											foreach($dataenum as $e=>$enum):
 												$enum = explode('|',$enum);
 												if(count($enum)==2) {
 													$radio_value = $enum[0];

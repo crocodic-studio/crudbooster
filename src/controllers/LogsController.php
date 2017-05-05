@@ -19,12 +19,13 @@ class LogsController extends CBController {
 	public function cbInit() {		
 		$this->table         = 'cms_logs';
 		$this->primary_key   = 'id';
-		$this->title_field   = "ipaddress";	
+		$this->title_field   = "ipaddress";
+		$this->button_bulk_action = true;
 		$this->button_export = false;
 		$this->button_import = false;
 		$this->button_add    = false;
 		$this->button_edit   = false;
-		$this->button_delete = false;			
+		$this->button_delete = true;			
 
 		$this->col = array();
 		$this->col[] = array("label"=>"Time Access","name"=>"created_at");

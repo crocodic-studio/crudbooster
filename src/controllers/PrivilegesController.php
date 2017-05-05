@@ -164,51 +164,72 @@ class PrivilegesController extends CBController {
 			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));			
 		}
 
-		$this->validation($request);
-		$this->input_assignment($request,$id);
+		$this->validation($id);
+		$this->input_assignment($id);		
 
 		DB::table($this->table)->where($this->primary_key,$id)->update($this->arr);
-						
+										
 		$priv = Request::input("privileges");
-		
-		DB::table("cms_privileges_roles")->where("id_cms_privileges",$id)->delete();
-
-
 		if($priv) {
-
-			DB::table('cms_menus')->where('id_cms_privileges',$id)->delete();
 						
 			foreach($priv as $id_modul => $data) {
-				$arrs = array();
-				$arrs['id'] = DB::table('cms_privileges_roles')->max('id') + 1;
-				$arrs['is_visible'] = @$data['is_visible']?:0;
-				$arrs['is_create'] = @$data['is_create']?:0;
-				$arrs['is_read'] = @$data['is_read']?:0;
-				$arrs['is_edit'] = @$data['is_edit']?:0;
-				$arrs['is_delete'] = @$data['is_delete']?:0;
-				$arrs['id_cms_privileges'] = $id;
-				$arrs['id_cms_moduls'] = $id_modul;			
-				DB::table("cms_privileges_roles")->insert($arrs);
+				//Check Menu
+				$module = DB::table('cms_moduls')->where('id',$id_modul)->first();
+				$currentPermission = DB::table('cms_privileges_roles')
+				->where('id_cms_moduls',$id_modul)
+				->where('id_cms_privileges',$id)
+				->first();
 
-				$module = DB::table('cms_moduls')->where('id',$id_modul)->first();				
-				
-				if($arrs['is_visible']==1) {				
-					//Insert To Menu
-					$menu = [];
-					$menu['name'] = $module->name;
-					$menu['type'] = 'Route';
-					$menu['path'] = $module->controller.'GetIndex';
-					$menu['color'] = 'normal';
-					$menu['icon'] = $module->icon;
-					$menu['parent_id'] = 0;
-					$menu['is_active'] = 1;
-					$menu['is_dashboard'] = 0;
-					$menu['id_cms_privileges'] = $id;
-					$menu['sorting'] = DB::table('cms_menus')->where('id_cms_privileges',$id)->max('sorting')+1;
-					$menu['created_at'] = date('Y_m-d H:i:s');
-					DB::table('cms_menus')->insert($menu);
+				if($currentPermission) {
+					$arrs = [];
+					$arrs['is_visible'] = @$data['is_visible']?:0;
+					$arrs['is_create'] = @$data['is_create']?:0;
+					$arrs['is_read'] = @$data['is_read']?:0;
+					$arrs['is_edit'] = @$data['is_edit']?:0;
+					$arrs['is_delete'] = @$data['is_delete']?:0;
+					DB::table('cms_privileges_roles')
+					->where('id',$currentPermission->id)
+					->update($arrs);
+				}else{
+					$arrs = [];
+					$arrs['id'] = DB::table('cms_privileges_roles')->max('id') + 1;
+					$arrs['is_visible'] = @$data['is_visible']?:0;
+					$arrs['is_create'] = @$data['is_create']?:0;
+					$arrs['is_read'] = @$data['is_read']?:0;
+					$arrs['is_edit'] = @$data['is_edit']?:0;
+					$arrs['is_delete'] = @$data['is_delete']?:0;
+					$arrs['id_cms_privileges'] = $id;
+					$arrs['id_cms_moduls'] = $id_modul;			
+					DB::table("cms_privileges_roles")->insert($arrs);
 				}
-				
+
+				if(DB::table('cms_menus')
+					->where('path',$module->controller.'GetIndex')
+					->where('id_cms_privileges',$id)->count()==0) {
+					if($arrs['is_visible']==1) {				
+						//Insert To Menu
+						$menu = [];
+						$menu['name'] = $module->name;
+						$menu['type'] = 'Route';
+						$menu['path'] = $module->controller.'GetIndex';
+						$menu['color'] = 'normal';
+						$menu['icon'] = $module->icon;
+						$menu['parent_id'] = 0;
+						$menu['is_active'] = 1;
+						$menu['is_dashboard'] = 0;
+						$menu['id_cms_privileges'] = $id;
+						$menu['sorting'] = DB::table('cms_menus')->where('id_cms_privileges',$id)->max('sorting')+1;
+						$menu['created_at'] = date('Y_m-d H:i:s');
+						DB::table('cms_menus')->insert($menu);
+					}
+				}else{
+					if($arrs['is_visible']==0) {
+						DB::table('cms_menus')
+						->where('path',$module->controller.'GetIndex')
+						->where('id_cms_privileges',$id)
+						->delete();
+					}
+				}																				
 			}
 		}
 

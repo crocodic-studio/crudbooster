@@ -125,7 +125,7 @@
                                                 echo "<div class='help-block'>File support only doc,docx,xls,xlsx,ppt,pptx,pdf,zip,rar, Max 20 MB</div>";
                                                 break;
                                             case 'datepicker':
-                                                echo "<input type='text' class='datepicker form-control' name='$s->name'/>";
+                                                echo "<input type='text' class='datepicker form-control' name='$s->name' value='$value'/>";
                                                 break;
                                             case 'radio':
                                                 if($dataenum):

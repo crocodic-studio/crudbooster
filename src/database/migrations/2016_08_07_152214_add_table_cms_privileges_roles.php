@@ -15,7 +15,7 @@ class AddTableCmsPrivilegesRoles extends Migration {
 		Schema::create('cms_privileges_roles', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->timestamps();
+			
 			$table->boolean('is_visible')->nullable();
 			$table->boolean('is_create')->nullable();
 			$table->boolean('is_read')->nullable();
@@ -23,6 +23,8 @@ class AddTableCmsPrivilegesRoles extends Migration {
 			$table->boolean('is_delete')->nullable();
 			$table->integer('id_cms_privileges')->nullable();
 			$table->integer('id_cms_moduls')->nullable();
+			
+			$table->timestamps();
 		});
 	}
 
