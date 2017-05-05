@@ -2,7 +2,7 @@
 
 <?php 
 	$name = Request::get('name_column');
-	$coloms_alias =  explode(',','ID,'.Request::get('columns_name_alies'));
+	$coloms_alias =  explode(',','ID,'.Request::get('columns_name_alias'));
 	if(count($coloms_alias)<2){
 		$coloms_alias=$columns ;
 	}
