@@ -82,8 +82,10 @@ class CBController extends Controller {
 
 		$this->checkHideForm();
 
+		$this->primary_key 					 = CB::pk($this->table);
 		$this->columns_table                 = $this->col;
 		$this->data_inputan                  = $this->form;
+		$this->data['pk']				     = $this->primary_key;
 		$this->data['forms']                 = $this->data_inputan;
 		$this->data['hide_form'] 			 = $this->hide_form;
 		$this->data['addaction']             = ($this->show_addaction)?$this->addaction:NULL;
