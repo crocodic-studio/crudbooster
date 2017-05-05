@@ -164,8 +164,8 @@ class PrivilegesController extends CBController {
 			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));			
 		}
 
-		$this->validation($request);
-		$this->input_assignment($request,$id);
+		$this->validation($id);
+		$this->input_assignment($id);		
 
 		DB::table($this->table)->where($this->primary_key,$id)->update($this->arr);
 										
@@ -178,7 +178,7 @@ class PrivilegesController extends CBController {
 				$currentPermission = DB::table('cms_privileges_roles')
 				->where('id_cms_moduls',$id_modul)
 				->where('id_cms_privileges',$id)
-				->row();
+				->first();
 
 				if($currentPermission) {
 					$arrs = [];
@@ -189,7 +189,7 @@ class PrivilegesController extends CBController {
 					$arrs['is_delete'] = @$data['is_delete']?:0;
 					DB::table('cms_privileges_roles')
 					->where('id',$currentPermission->id)
-					->update();
+					->update($arrs);
 				}else{
 					$arrs = [];
 					$arrs['id'] = DB::table('cms_privileges_roles')->max('id') + 1;
