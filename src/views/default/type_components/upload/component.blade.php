@@ -12,7 +12,7 @@
 						$images_type = array('jpg','png','gif','jpeg','bmp','tiff');																																				
 						if(in_array($ext, $images_type)):
 						?>
-							<p><a class='fancybox' href='{{$url}}'><img style='max-width:160px' title="Image For {{$form['label']}}" src='{{$url}}'/></a></p>
+							<p><a data-lightbox='roadtrip' href='{{$url}}'><img style='max-width:160px' title="Image For {{$form['label']}}" src='{{$url}}'/></a></p>
 						<?php else:?>
 							<p><a href='{{$url}}'>{{trans("crudbooster.button_download_file")}}</a></p>
 						<?php endif;
@@ -22,7 +22,7 @@
 					endif; 
 				?>
 				@if(!$readonly || !$disabled)
-				<p><a class='btn btn-danger btn-delete btn-sm' onclick="if(!confirm('{{trans("crudbooster.delete_title_confirm")}}')) return false" href='{{url(CRUDBooster::mainpath("delete-image?image=".$value."&id=".$row->id."&column=".$name."&temporary=".$is_temporary))}}'><i class='fa fa-ban'></i> Delete </a></p>
+				<p><a class='btn btn-danger btn-delete btn-sm' onclick="if(!confirm('{{trans("crudbooster.delete_title_confirm")}}')) return false" href='{{url(CRUDBooster::mainpath("delete-image?image=".$value."&id=".$row->id."&column=".$name))}}'><i class='fa fa-ban'></i> {{trans('crudbooster.text_delete')}} </a></p>
 				@endif
 			@endif	
 			@if(!$value)

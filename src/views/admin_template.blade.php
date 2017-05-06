@@ -61,7 +61,7 @@
         
     </style>
 </head>
-<body class="<?php echo (Session::get('theme_color'))?:'skin-blue'?>">
+<body class="@php echo (Session::get('theme_color'))?:'skin-blue'; echo config('crudbooster.ADMIN_LAYOUT') @endphp">
 <div id='app' class="wrapper">    
 
     <!-- Header -->
@@ -98,13 +98,13 @@
             @endif
 
               
-            @if($button_export)
+            @if($button_export && CRUDBooster::getCurrentMethod() == 'getIndex')
             <a href="javascript:void(0)" id='btn_export_data' data-url-parameter='{{$build_query}}' title='Export Data' class="btn btn-sm btn-primary btn-export-data">
               <i class="fa fa-upload"></i> {{trans("crudbooster.button_export")}}
             </a>
             @endif
 
-            @if($button_import)
+            @if($button_import && CRUDBooster::getCurrentMethod() == 'getIndex')
             <a href="{{ CRUDBooster::mainpath('import-data') }}" id='btn_import_data' data-url-parameter='{{$build_query}}' title='Import Data' class="btn btn-sm btn-primary btn-import-data">
               <i class="fa fa-download"></i> {{trans("crudbooster.button_import")}}
             </a>

@@ -27,6 +27,7 @@ class ModulsController extends CBController {
 		$this->button_import       = false;
 		$this->button_filter       = false;
 		$this->button_detail       = false;
+		$this->button_bulk_action  = false;
 		$this->button_action_style = 'button_icon';
 		$this->orderby 			   = ['is_protected'=>'asc','name'=>'asc'];
 
@@ -431,7 +432,9 @@ class ModulsController extends CBController {
 				$form['type'] = $type[$i];
 				$form['validation'] = $validation[$i];
 				$form['width'] = $width[$i];
-				$form = array_merge($form,$option[$i]);				
+				if($option[$i]) {					
+					$form = array_merge($form,$option[$i]);				
+				}
 				
 				foreach($form as $k=>$f) {
 					if($f == '') {

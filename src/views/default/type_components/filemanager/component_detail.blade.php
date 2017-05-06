@@ -4,7 +4,7 @@
 		{{ basename($value) }}
 	</a>
 	@else
-	<a class="fancybox" href="{{asset($value)}}">
+	<a data-lightbox="roadtrip" href="{{asset($value)}}">
 	<img src="{{asset($value)}}" style="max-width: 150px">	
 	</a>
 	@endif

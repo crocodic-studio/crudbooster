@@ -20,6 +20,10 @@
       </div>
     @endif
 
+   @if(!is_null($pre_index_html) && !empty($pre_index_html))
+       {!! $pre_index_html !!}
+   @endif
+
 
     @if(g('return_url'))
     <p><a href='{{g("return_url")}}'><i class='fa fa-chevron-circle-{{ trans('crudbooster.left') }}'></i> &nbsp; {{trans('crudbooster.form_back_to_list',['module'=>ucwords(str_replace('_',' ',g('parent_table')))])}}</a></p>
@@ -31,7 +35,7 @@
         <table class='table table-bordered'>
           <tbody>
             <tr class='active'>
-              <td colspan="2"><strong><i class='fa fa-bars'></i> {{ ucwords(str_replace('_',' ',g('parent_table'))) }}</strong></td>
+              <td colspan="2"><strong><i class='fa fa-bars'></i> {{ ucwords(urldecode(g('label'))) }}</strong></td>
             </tr>
             @foreach(explode(',',urldecode(g('parent_columns'))) as $c)
             <tr>
@@ -46,7 +50,8 @@
  
     <div class="box">
       <div class="box-header">  
-        <div class="pull-{{ trans('crudbooster.left') }}">
+        @if($button_bulk_action && ( ($button_delete && CRUDBooster::isDelete()) || $button_selected) )
+        <div class="pull-{{ trans('crudbooster.left') }}">          
           <div class="selected-action" style="display:inline-block;position:relative;">
               <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class='fa fa-check-square-o'></i> {{trans("crudbooster.button_selected_action")}}
                 <span class="fa fa-caret-down"></span></button>                              
@@ -57,14 +62,15 @@
 
                 @if($button_selected)
                   @foreach($button_selected as $button)
-                    <li><a href="javascript:void(0)" data-name='{{$button["name"]}}' title='{{$button["label"]}}''><i class="fa fa-{{$button['icon']}}"></i> {{$button['label']}}</a></li>
+                    <li><a href="javascript:void(0)" data-name='{{$button["name"]}}' title='{{$button["label"]}}'><i class="fa fa-{{$button['icon']}}"></i> {{$button['label']}}</a></li>
                   @endforeach
                 @endif
 
-              </ul>
-          </div>
-        </div>
-        <div class="box-tools pull-{{ trans('crudbooster.right') }}" style="padding-top:5px">
+              </ul><!--end-dropdown-menu-->
+          </div><!--end-selected-action-->        
+        </div><!--end-pull-left-->
+        @endif
+        <div class="box-tools pull-{{ trans('crudbooster.right') }}" style="position: relative;margin-top: -5px;margin-right: -10px">
           
               @if($button_filter)
               <a style="margin-top:-23px" href="javascript:void(0)" id='btn_advanced_filter' data-url-parameter='{{$build_query}}' title='{{trans('crudbooster.filter_dialog_title')}}' class="btn btn-sm btn-default {{(Request::get('filter_column'))?'active':''}}">                               
@@ -107,12 +113,19 @@
                 </select>                              
               </div>
             </form>
+
         </div> 
+
+        <br style="clear:both"/>
+
       </div>
       <div class="box-body table-responsive no-padding">
         @include("crudbooster::default.table")
       </div>
     </div>
-    
+
+   @if(!is_null($post_index_html) && !empty($post_index_html))
+       {!! $post_index_html !!}
+   @endif
 
 @endsection

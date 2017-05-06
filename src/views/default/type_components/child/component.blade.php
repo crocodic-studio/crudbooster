@@ -21,11 +21,15 @@
 				<div class='col-sm-10'>
 					<div class="panel panel-default">
 						<div class="panel-heading"><i class="fa fa-pencil-square-o"></i> Form</div>
-						<div class="panel-body">
+						<div class="panel-body child-form-area">
 							@foreach($form['columns'] as $col)	
 							<?php $name_column = $name.$col['name'];?>
 							<div class='form-group'>
-								<label class="control-label col-sm-2">{{$col['label']}}</label>
+								@if($col['type']!='hidden')
+								<label class="control-label col-sm-2">{{$col['label']}}
+								@if(!empty($col['required'])) <span class="text-danger" title="This field is required">*</span> @endif
+								</label>
+								@endif
 								<div class="col-sm-10">
 									@if($col['type']=='text')
 									<input id='{{$name_column}}' type='text' {{ ($col['max'])?"maxlength='$col[max]'":"" }} name='{{$col["name"]}}' class='form-control {{$col['required']?"required":""}}' 										
@@ -33,8 +37,15 @@
 										/>
 									@elseif($col['type']=='radio')
 										<?php 
-											if($col['dataenum']):												
-											foreach($col['dataenum'] as $e=>$enum):
+											if($col['dataenum']):
+                                            $dataenum = $col['dataenum'];
+                                            if(strpos($dataenum, ';') !== false) {
+                                                $dataenum = explode(";", $dataenum);
+                                            } else {
+                                                $dataenum = [$dataenum];
+                                            }
+                                            array_walk($dataenum, 'trim');
+											foreach($dataenum as $e=>$enum):
 												$enum = explode('|',$enum);
 												if(count($enum)==2) {
 													$radio_value = $enum[0];
@@ -59,7 +70,7 @@
 								    </div><!-- /input-group -->
 
 								    <script type="text/javascript">
-								    	var url_{{$name_column}} = "{{CRUDBooster::mainpath('modal-data')}}?table={{$col['datamodal_table']}}&columns=id,{{$col['datamodal_columns']}}&name_column={{$name_column}}&where={{urlencode($col['datamodal_where'])}}";
+								    	var url_{{$name_column}} = "{{CRUDBooster::mainpath('modal-data')}}?table={{$col['datamodal_table']}}&columns=id,{{$col['datamodal_columns']}}&name_column={{$name_column}}&where={{urlencode($col['datamodal_where'])}}&select_to={{ urlencode($col['datamodal_select_to']) }}";
 								    	var url_is_setted_{{$name_column}} = false;
 								    	function showModal{{$name_column}}() {
 								    		if(url_is_setted_{{$name_column}} == false) {								    			
@@ -69,13 +80,22 @@
 								    		$('#modal-datamodal-{{$name_column}}').modal('show');
 								    	}
 								    	function hideModal{{$name_column}}() {
-								    		$('#modal-datamodal-{{$name_column}}').modal('hide');
-								    	}
-								    	function selectData{{$name_column}}(id,label) {
-								    		$('#{{$name_column}} .input-label').val(label);
-								    		$('#{{$name_column}} .input-id').val(id);
-								    		hideModal{{$name_column}}();
-								    	}
+											$('#modal-datamodal-{{$name_column}}').modal('hide');
+										}
+				
+								    	function selectAdditionalData{{$name_column}}(select_to_json) {
+											$.each(select_to_json,function(key,val) {
+												console.log('#'+key+ ' = '+val);
+												if(key == 'datamodal_id') {
+													$('#{{$name_column}} .input-id').val(val);
+												}
+												if(key == 'datamodal_label') {
+													$('#{{$name_column}} .input-label').val(val);
+												}
+												$('#{{$name}}'+key).val(val).trigger('change');			
+											})
+											hideModal{{$name_column}}();
+										}
 								    </script>
 
 									<div id='modal-datamodal-{{$name_column}}' class="modal" tabindex="-1" role="dialog">
@@ -246,6 +266,8 @@
 											}											
 										?>										
 									</select>
+									@elseif($col['type']=='hidden')
+										<input type="{{$col['type']}}" id="{{$name.$col["name"]}}" name="{{$name.$col["name"]}}" value="{{$col["value"]}}">
 									@endif
 
 									@if($col['help']) 
@@ -369,7 +391,7 @@
 										@elseif($c['type']=='upload')
 											@if($c['upload_type']=='image')
 											trRow += "<td class='{{$c['name']}}'>"+
-											"<a class='fancybox' href='{{asset('/')}}"+$('#{{$name.$c["name"]}} .input-id').val()+"'><img data-label='"+$('#{{$name.$c["name"]}} .input-label').val()+"' src='{{asset('/')}}"+$('#{{$name.$c["name"]}} .input-id').val()+"' width='50px' height='50px'/></a>"+
+											"<a data-lightbox='roadtrip' href='{{asset('/')}}"+$('#{{$name.$c["name"]}} .input-id').val()+"'><img data-label='"+$('#{{$name.$c["name"]}} .input-label').val()+"' src='{{asset('/')}}"+$('#{{$name.$c["name"]}} .input-id').val()+"' width='50px' height='50px'/></a>"+
 											"<input type='hidden' name='{{$name}}-{{$c['name']}}[]' value='"+$('#{{$name.$c["name"]}} .input-id').val()+"'/>"+
 											"</td>";
 											@else
@@ -479,7 +501,7 @@
 									}elseif ($col['type']=='upload') {
 										$filename = basename( $d->{$col['name']} );
 										if($col['upload_type']=='image') {
-											echo "<a href='".asset( $d->{$col['name']} )."' class='fancybox'><img data-label='$filename' src='".asset( $d->{$col['name']} )."' width='50px' height='50px'/></a>";
+											echo "<a href='".asset( $d->{$col['name']} )."' data-lightbox='roadtrip'><img data-label='$filename' src='".asset( $d->{$col['name']} )."' width='50px' height='50px'/></a>";
 											echo "<input type='hidden' name='".$name."-".$col['name']."[]' value='".$d->{ $col['name'] }."'/>";
 										}else{
 											echo "<a data-label='$filename' href='".asset( $d->{$col['name']} )."'>$filename</a>";

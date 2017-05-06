@@ -1,6 +1,6 @@
 {
     "name": "crocodicstudio/crudbooster",
-    "description": "CRUDBooster Laravel CRUD Generator. One Control, Powerfull, Mobile API Optimization",
+    "description": "CRUDBooster Is A New Way Laravel CRUD Generator. It's easy, fleksible, and powerful.",
     "type": "project",
     "license": "MIT",
     "keywords":[
@@ -18,10 +18,10 @@
     "minimum-stability": "dev",
     "require": {
         "php":">=5.6",
-        "barryvdh/laravel-dompdf": "0.7.*",
+        "barryvdh/laravel-dompdf": "0.8.*",
         "doctrine/dbal": "~2.3",        
         "maatwebsite/excel": "~2.1.0",                
-        "unisharp/laravel-filemanager": "1.6.*",
+        "unisharp/laravel-filemanager": "1.7.*",
         "intervention/imagecache":"2.*"
     },
     "autoload": {
