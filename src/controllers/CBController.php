@@ -809,6 +809,8 @@ class CBController extends Controller {
 							$uniqueRebuild[] = $uniqueColumn;
 							if ($uniqueIgnoreId) {							
 								$uniqueRebuild[] = $uniqueIgnoreId;
+							} else {
+								$uniqueRebuild[] = 'NULL';
 							}
 
 							//Check whether deleted_at exists or not
