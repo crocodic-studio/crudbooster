@@ -793,7 +793,7 @@ class CBController extends Controller {
 
 				$exp = explode('|',$di['validation']);
 				if (count($exp)) {
-					foreach ($exp as &$validationItem) {
+					foreach ($exp as $validationItem) {
 						if (substr($validationItem, 0,6) == 'unique') {
 							$parseUnique = explode(',',str_replace('unique:','',$validationItem));
 							$uniqueTable = ($parseUnique[0])?:$this->table;
