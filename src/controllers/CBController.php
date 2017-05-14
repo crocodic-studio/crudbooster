@@ -902,7 +902,11 @@ class CBController extends Controller {
 				if($inputdata!='') {
 					$this->arr[$name] = $inputdata;
 				}else{
-					$this->arr[$name] = "";
+					if(CB::isColumnNULL($this->table,$name)) {
+						continue;
+					}else{						
+						$this->arr[$name] = "";
+					}
 				}
 			}
 
