@@ -796,6 +796,25 @@ class CBController extends Controller {
 			}
 
 
+			if($di['type']=='child') {
+				$slug_name = str_slug($di['label'], '');
+				foreach ($di['columns'] as $child_col) {
+					if( isset($child_col['validation']) )
+					{
+						//https://laracasts.com/discuss/channels/general-discussion/array-validation-is-not-working/
+						if( strpos( $child_col['validation'], 'required' ) !== false )
+						{
+							$array_input[$slug_name.'-'.$child_col['name']] = 'required';
+
+							str_replace('required', '', $child_col['validation']);
+						}
+
+						$array_input[$slug_name.'-'.$child_col['name'].'.*'] = $child_col['validation'];
+					}
+				}
+			}
+
+
 			if(@$di['validation']) {
 
 				$exp = explode('|',$di['validation']);
