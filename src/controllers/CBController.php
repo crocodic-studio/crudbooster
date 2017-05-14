@@ -601,11 +601,18 @@ class CBController extends Controller {
 	public function getDataTable() {
 		$table = Request::get('table');
 		$label = Request::get('label');
+		$datatableWhere = urldecode(Request::get('datatable_where'));
 		$foreign_key_name = Request::get('fk_name');
 		$foreign_key_value = Request::get('fk_value');
 		if($table && $label && $foreign_key_name && $foreign_key_value) {
-			$query = DB::table($table)->select('id as select_value',$label.' as select_label')->where($foreign_key_name,$foreign_key_value)->orderby($label,'asc')->get();
-			return response()->json($query);
+			$query = DB::table($table);
+			if($datatableWhere) {
+				$query->whereRaw($datatableWhere);
+			}
+			$query->select('id as select_value',$label.' as select_label');
+			$query->where($foreign_key_name,$foreign_key_value);
+			$query->orderby($label,'asc');
+			return response()->json($query->get());
 		}else{
 			return response()->json([]);
 		}
