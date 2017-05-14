@@ -165,8 +165,12 @@
 								$select_table = explode(',',$form['datatable'])[0];
 								$select_title = explode(',',$form['datatable'])[1];
 								$select_where = $form['datatable_where'];
+								$datatable_format = $form['datatable_format'];
 								$select_table_pk = CRUDBooster::findPrimaryKey($select_table);
 								$result = DB::table($select_table)->select($select_table_pk,$select_title);
+								if($datatable_format) {
+									$result->addSelect(DB::raw("CONCAT(".$datatable_format.") as $select_title"));
+								}
 								if($select_where) {
 									$result->whereraw($select_where);
 								}

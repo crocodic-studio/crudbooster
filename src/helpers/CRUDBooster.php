@@ -928,15 +928,23 @@ class CRUDBooster  {
 	        return true;
 	    }
 
-		public static function sendFCM($regid,$data){
+		public static function sendFCM($regID=[],$data){
 	        if(!$data['title'] || !$data['content']) return 'title , content null !';
 
 	        $apikey = CRUDBooster::getSetting('google_fcm_key');
 	        $url   	= 'https://fcm.googleapis.com/fcm/send';
 	        $fields = array(
-	          'registration_ids' => $regid,
-	          'data' => $data
-	        );
+			  'registration_ids' => $regID,
+			  'data' => $data,
+		      'content_available'=>true,
+		      'notification'=>array(
+		            'sound'=>'default',
+		            'badge'=>0,
+		            'title'=>trim(strip_tags($data['title'])),
+		            'body'=>trim(strip_tags($data['content']))
+		        ),
+		      'priority'=>'high'
+			);
 	        $headers = array(
 	          'Authorization:key=' . $apikey,
 	          'Content-Type:application/json'
