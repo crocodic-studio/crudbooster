@@ -316,6 +316,7 @@
 
 								function resetForm{{$name}}() {
 									$('#panel-form-{{$name}}').find("input[type=text],input[type=number],select,textarea").val('');
+									$('#panel-form-{{$name}}').find(".select2").val('').trigger('change');
 								}
 
 								function deleteRow{{$name}}(t) {
