@@ -1,11 +1,13 @@
 <?php 
 	$name = str_slug($form['label'],'');
 ?>
+@push('bottom')
 <script type="text/javascript">
 	$(function() {
 		$('#form-group-{{$name}} .select2').select2();		
 	})
 </script>
+@endpush
 <div class='form-group {{$header_group_class}}' id='form-group-{{$name}}'>								
 	
 	@if($form['columns'])						
@@ -69,6 +71,7 @@
 								      </span>
 								    </div><!-- /input-group -->
 
+								    @push('bottom')
 								    <script type="text/javascript">
 								    	var url_{{$name_column}} = "{{CRUDBooster::mainpath('modal-data')}}?table={{$col['datamodal_table']}}&columns=id,{{$col['datamodal_columns']}}&name_column={{$name_column}}&where={{urlencode($col['datamodal_where'])}}&select_to={{ urlencode($col['datamodal_select_to']) }}&columns_name_alias={{urlencode($col['datamodal_columns_alias'])}}";
 								    	var url_is_setted_{{$name_column}} = false;
@@ -97,6 +100,7 @@
 											hideModal{{$name_column}}();
 										}
 								    </script>
+								    @endpush
 
 									<div id='modal-datamodal-{{$name_column}}' class="modal" tabindex="-1" role="dialog">
 									  <div class="modal-dialog {{ $col['datamodal_size']=='large'?'modal-lg':'' }} " role="document">
@@ -133,6 +137,7 @@
 								    </div>
 
 								    <input type="file" id='fake-upload-{{$name_column}}' style="display: none">
+								    @push('bottom')
 								    <script type="text/javascript">
 								    	var file;
 										var filename;
@@ -237,6 +242,7 @@
 										}
 
 								    </script>
+								    @endpush
 
 									@elseif($col['type']=='select')
 									<select id='{{$name_column}}' name='{{$col["name"]}}' class='form-control select2 {{$col['required']?"required":""}}' 										
@@ -298,6 +304,7 @@
 										$formula = str_replace("[".$c['name']."]","\$('#".$name.$c['name']."').val()",$formula);
 									}									
 								?>
+								@push('bottom')
 								<script type="text/javascript">
 									function {{ $formula_function_name }}() {
 										var v = {!! $formula !!};
@@ -307,10 +314,12 @@
 										{!! $script_onchange !!}
 									})									
 								</script>
+								@endpush
 							@endif
 
 							@endforeach
 
+							@push('bottom')
 							<script type="text/javascript">
 								var currentRow = null;
 
@@ -426,6 +435,7 @@
 									$('#btn-reset-form-{{$name}}').click();									
 								}
 							</script>
+							@endpush
 						</div>
 						<div class="panel-footer" align="right">
 							<input type='button' class='btn btn-default' id="btn-reset-form-{{$name}}" onclick="resetForm{{$name}}()" value='Reset Form'/>

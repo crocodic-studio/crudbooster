@@ -2,11 +2,13 @@
 		@if($form['datatable'])
 
 			@if($form['relationship_table'])
+				@push('bottom')
 				<script type="text/javascript">
 					$(function() {
 						$('#{{$name}}').select2();
 					})
 				</script>
+				@endpush
 			@else
 				@if($form['datatable_ajax'] == true)
 
@@ -27,6 +29,8 @@
 					@$table3   = $raw[4];
 					@$column3  = $raw[5];
 				?>
+
+				@push('bottom')
 				<script>				
 					$(function() {
 						$('#{{$name}}').select2({								  							  
@@ -88,20 +92,27 @@
 
 					})
 				</script>
+				@endpush
+
 				@else
+					@push('bottom')
 					<script type="text/javascript">
 						$(function() {
 							$('#{{$name}}').select2();
 						})
 					</script>
+					@endpush
 				@endif
 			@endif
 		@else
+
+			@push('bottom')
 			<script type="text/javascript">
 				$(function() {
 					$('#{{$name}}').select2();
 				})
 			</script>
+			@endpush
 
 		@endif
 

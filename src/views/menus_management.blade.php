@@ -1,5 +1,7 @@
 @extends('crudbooster::admin_template')
 @section('content')	 
+        
+        @push('head')
          <style type="text/css">
            body.dragging, body.dragging * {
               cursor: move !important;
@@ -52,6 +54,28 @@
               /** Define arrowhead **/
             }
          </style>
+         @endpush
+
+         @push('bottom')
+         <script type="text/javascript">
+          $(function() {
+              function format(icon) {          
+                  var originalOption = icon.element;
+                  var label = $(originalOption).text();
+                  var val = $(originalOption).val();
+                  if(!val) return label;
+                  var $resp = $('<span><i style="margin-top:5px" class="pull-right ' + $(originalOption).val() + '"></i> ' + $(originalOption).data('label') + '</span>');
+                  return $resp;
+              }
+              $('#list-icon').select2({
+                  width: "100%",
+                  templateResult: format,
+                  templateSelection: format
+              });
+          })  
+        </script>
+        @endpush
+         @push('bottom')
          <script src='{{asset("vendor/crudbooster/assets/jquery-sortable-min.js")}}'></script>
          <script type="text/javascript">
            $(function  () {
@@ -100,6 +124,7 @@
 
           });
          </script>
+         @endpush
 
          <div class='row'>
             <div class='col-sm-12'>

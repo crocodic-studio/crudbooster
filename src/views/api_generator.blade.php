@@ -2,13 +2,17 @@
 
 @section('content')   
 
+@push('head')
 <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css" rel="stylesheet">
+@endpush
+@push('bottom')
 <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js"></script>
 <script type="text/javascript">
   $(document).ready(function() {
     $('.wysiwyg').summernote();
   })
 </script>
+@endpush
 
 <ul class="nav nav-tabs">
         <li><a href="{{ CRUDBooster::mainpath() }}"><i class='fa fa-file'></i> API Documentation</a></li>
@@ -18,7 +22,8 @@
 
       <div class='box'>
         
-        <div class='box-body'>    
+        <div class='box-body'>  
+        @push('bottom')  
     <script>
         $(function() {
           jQuery.fn.selectText = function(){
@@ -551,12 +556,16 @@
             }
            
         </script>
+        @endpush
+
+        @push('head')
     <style>
     .selected_text {cursor:pointer;} 
     .selected_text:hover {color:#76a400} 
     tfoot td {background:#eeeeee}
     .tr-response {cursor: pointer}    
     </style>
+    @endpush
 
 
 

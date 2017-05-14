@@ -1,6 +1,9 @@
+@push('bottom')
 <script src="https://maps.googleapis.com/maps/api/js?key={{CRUDBooster::getSetting('google_api_key')}}&libraries=places"
 async defer></script>
+@endpush
 
+@push('head')
 <style>
   .map {
     height: 400px;
@@ -50,3 +53,4 @@ async defer></script>
     font-weight: 300;
   }
 </style>
+@endpush

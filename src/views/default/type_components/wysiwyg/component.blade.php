@@ -1,3 +1,4 @@
+@push('bottom')
 <script type="text/javascript">
 								$(document).ready(function() {
 								  $('#textarea_{{$name}}').summernote({
@@ -29,6 +30,7 @@
 									}
 								})
 							</script>
+							@endpush
 							<div class='form-group' id='form-group-{{$name}}' style="{{@$form['style']}}">
 								<label class='control-label col-sm-2'>{{$form['label']}}</label>
 

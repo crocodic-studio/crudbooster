@@ -1,5 +1,7 @@
 	<?php $default = !empty($form['default']) ? $form['default'] : trans('crudbooster.text_prefix_option') ." ". $form['label'];?>
 	@if($form['parent_select'])
+
+	@push('bottom')
 	<script type="text/javascript">
 		$(function() {			
 			$('#{{$form['parent_select']}}').change(function() {
@@ -34,6 +36,8 @@
 			$("#{{$form['name']}}").trigger('change');
 		})
 	</script>
+	@endpush
+	
 	@endif
 	<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
 		<label class='control-label col-sm-2'>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>			

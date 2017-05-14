@@ -40,7 +40,7 @@
     <script src="{{asset('vendor/crudbooster/assets/sweetalert/dist/sweetalert.min.js')}}"></script> 
     <link rel="stylesheet" type="text/css" href="{{asset('vendor/crudbooster/assets/sweetalert/dist/sweetalert.css')}}">
 
-    
+    @stack('head')
 </head>
 <body class="<?php echo (Session::get('theme_color'))?:'skin-blue'?> old-transition layout-top-nav fixed">
 <div id='app' class="wrapper">    
@@ -173,5 +173,7 @@
       user experience -->
       <!-- SlimScroll 1.3.0 -->
         <script src="{{ asset('vendor/crudbooster/assets/adminlte/plugins/slimScroll/jquery.slimscroll.min.js')}}"></script>
+
+        @stack('bottom')
 </body>
 </html>

@@ -25,7 +25,7 @@
 </div><!-- /.modal -->
 
 
-							
+@push('bottom')							
 <script type="text/javascript">
 function showModalMap{{$name}}() {
 	$('#googlemaps-modal-{{$name}}').modal('show');
@@ -58,4 +58,5 @@ function initMap{{$name}}() {
 		$('#googlemaps-modal-{{$name}} .modal-body').html("<div align='center'>Sorry the map is not found !</div>");
 	@endif						    
 } 
-</script>		        					    
+</script>		
+@endpush        					    

@@ -1,3 +1,4 @@
+@push('bottom')
 <script>
 	$(function() {
 		$('.inputMoney').priceFormat({
@@ -8,3 +9,4 @@
 		});
 	});
 </script>
+@endpush

@@ -25,6 +25,7 @@
 	</div>
 </div>
 
+@push('bottom')
 <script type="text/javascript">
 	var url_{{$name}} = "{{CRUDBooster::mainpath('modal-data')}}?table={{$form['datamodal_table']}}&columns=id,{{$form['datamodal_columns']}}&name_column={{$name}}&where={{urlencode($form['datamodal_where'])}}&select_to={{ urlencode($form['datamodal_select_to']) }}&columns_name_alias={{ urlencode($form['datamodal_columns_alias']) }}";
 
@@ -50,6 +51,7 @@
 	}
 </script>
 
+
 <div id='modal-datamodal-{{$name}}' class="modal" tabindex="-1" role="dialog">
   <div class="modal-dialog {{ $form['datamodal_size']=='large'?'modal-lg':'' }} " role="document">
     <div class="modal-content">
@@ -64,3 +66,5 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+@endpush

@@ -4,8 +4,7 @@
 			<div class="{{$col_width?:'col-sm-10'}}">
 			@if($value)
 				<?php 
-					$file = str_replace('uploads/','',$value);
-					$is_temporary = (Request::get('temporary'))?:0;
+					$file = str_replace('uploads/','',$value);					
 					if(Storage::exists($file)):								
 						$url         = asset($value);
 						@$ext         = strtolower(end(explode('.',$value)));

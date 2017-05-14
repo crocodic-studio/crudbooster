@@ -59,6 +59,7 @@
 
 						    </div>
 						</div>
+						@push('bottom')
                 		<script type="text/javascript">
                 		  
 
@@ -271,4 +272,5 @@
 					        setupClickListener('changetype-geocode', ['geocode']);
 					      }
 					      
-					    </script>		        					    
+					    </script>		
+					    @endpush        					    

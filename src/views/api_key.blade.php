@@ -42,6 +42,7 @@
 	</tbody>
 </table>
 
+@push('bottom')
 <script>
 	var lastno = <?=$no?>;
     function generate_screet_key() {    	
@@ -71,6 +72,7 @@
     	})
     }
 </script>
+@endpush
 
     </div><!--END BODY-->
 </div><!--END BOX-->

@@ -1,3 +1,4 @@
+            @push('bottom')
             <script type="text/javascript">
                   $(document).ready(function() {                      
                       var $window = $(window);                      
@@ -40,7 +41,7 @@
                       })
                   });
                 </script>
-
+                @endpush
                                             
                   <form id='form-table' method='post' action='{{CRUDBooster::mainpath("action-selected")}}'>
                   <input type='hidden' name='button_name' value=''/>
@@ -181,6 +182,7 @@
 
 
             @if($columns)
+            @push('bottom')
             <script>
             $(function(){
               $('.btn-filter-data').click(function() {
@@ -290,6 +292,7 @@
  
             })
             </script>
+            
             <!-- MODAL FOR SORTING DATA-->
             <div class="modal fade" tabindex="-1" role="dialog" id='advanced_filter_modal'>
               <div class="modal-dialog modal-lg">
@@ -508,5 +511,5 @@
                 <!-- /.modal-content -->
               </div>
             </div>
-
+            @endpush
             @endif
