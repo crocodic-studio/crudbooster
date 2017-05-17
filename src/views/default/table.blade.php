@@ -341,24 +341,24 @@
 
                             <div class='row between-group' style="{{ (CRUDBooster::getTypeFilter($col["field_with"]) == 'between')?"display:block":"display:none" }}">
                               <div class='col-sm-6'>
-                                <div class='input-group'>
-                                  <span class="input-group-addon">From:</span>
+                                <div class='input-group {{ ($col["type_data"] == "time")?"bootstrap-timepicker":"" }}'>
+                                  <span class="input-group-addon">{{trans("crudbooster.filter_from")}}:</span>
                                   <input 
                                   {{ (CRUDBooster::getTypeFilter($col["field_with"]) != 'between')?"disabled":"" }}
                                   type='text' 
-                                  class='filter-value-between form-control {{ (in_array($col["type_data"],["date","time","datetime","timestamp"]))?"datepicker":"" }}' readonly placeholder='{{$col["label"]}} {{trans("crudbooster.filter_from")}}' name='filter_column[{{$col["field_with"]}}][value][]' value='<?php
+                                  class='filter-value-between form-control {{ (in_array($col["type_data"],["date","datetime","timestamp"]))?"datepicker":"timepicker" }}' readonly placeholder='{{$col["label"]}} {{trans("crudbooster.filter_from")}}' name='filter_column[{{$col["field_with"]}}][value][]' value='<?php
                                   $value = CRUDBooster::getValueFilter($col["field_with"]); 
                                   echo (CRUDBooster::getTypeFilter($col["field_with"])=='between')?$value[0]:"";
                                   ?>'>
                                 </div>
                               </div>
                               <div class='col-sm-6'>
-                                <div class='input-group'>
-                                  <span class="input-group-addon">To:</span>
+                                <div class='input-group {{ ($col["type_data"] == "time")?"bootstrap-timepicker":"" }}'>
+                                  <span class="input-group-addon">{{trans("crudbooster.filter_to")}}:</span>
                                   <input 
                                   {{ (CRUDBooster::getTypeFilter($col["field_with"]) != 'between')?"disabled":"" }}
                                   type='text' 
-                                  class='filter-value-between form-control {{ (in_array($col["type_data"],["date","time","datetime","timestamp"]))?"datepicker":"" }}' readonly placeholder='{{$col["label"]}} {{trans("crudbooster.filter_to")}}' name='filter_column[{{$col["field_with"]}}][value][]' value='<?php
+                                  class='filter-value-between form-control {{ (in_array($col["type_data"],["date","datetime","timestamp"]))?"datepicker":"timepicker" }}' readonly placeholder='{{$col["label"]}} {{trans("crudbooster.filter_to")}}' name='filter_column[{{$col["field_with"]}}][value][]' value='<?php
                                   $value = CRUDBooster::getValueFilter($col["field_with"]); 
                                   echo (CRUDBooster::getTypeFilter($col["field_with"])=='between')?$value[1]:"";
                                   ?>'>
