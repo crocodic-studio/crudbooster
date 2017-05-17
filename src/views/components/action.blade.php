@@ -32,22 +32,23 @@
     }
 
     $label = $a['label'];
-    $url = $a['url'];
     $icon = $a['icon'];
     $color = $a['color']?:'primary';
     $confirmation = $a['confirmation'];
 
+      
+    $url = $a['url'];
+    if(isset($confirmation) && !empty($confirmation))
+    {
+        $url = "javascript:;";
+    }
+    
     if(isset($a['showIf'])) {
 
       $query = $a['showIf'];
       
       foreach($row as $key=>$val) {
         $query = str_replace("[".$key."]",'"'.$val.'"',$query);
-      }
-      
-      if(isset($confirmation) && !empty($confirmation))
-      {
-          $url = "javascript:;";
       }
 
       @eval("if($query) {
