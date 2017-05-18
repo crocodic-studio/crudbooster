@@ -955,7 +955,7 @@ class CBController extends Controller {
 
 			//multitext colomn 
 			if($ro['type']=='multitext') {
-				$name = str_slug($ro['name'],'');
+				$name = $ro['name'];
 				$multitext="";
 
 				for($i=0;$i<=count($this->arr[$name])-1;$i++) {
