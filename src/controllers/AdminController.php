@@ -49,7 +49,12 @@ class AdminController extends CBController {
 	}	
 
 	public function getLogin()
-	{											
+	{							
+
+		if(CRUDBooster::myId()) {
+			return redirect()->action('\crocodicstudio\crudbooster\controllers\AdminController@getIndex');
+		}
+
 		return view('crudbooster::login');
 	}
  
@@ -104,7 +109,11 @@ class AdminController extends CBController {
 		}		
 	}
 
-	public function getForgot() {		
+	public function getForgot() {	
+		if(CRUDBooster::myId()) {
+			return redirect()->action('\crocodicstudio\crudbooster\controllers\AdminController@getIndex');
+		}
+			
 		return view('crudbooster::forgot');
 	}
 
