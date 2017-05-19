@@ -40,7 +40,11 @@
 				</div>
 			</div>
 			@if(@$form['filemanager_type'])
-			<script type="text/javascript">$('#lfm-{{$name}}').filemanager('file','{{url("/")}}');</script>
+				@push('bottom')
+				<script type="text/javascript">$('#lfm-{{$name}}').filemanager('file','{{url("/")}}');</script>
+				@endpush
 			@else
-			<script type="text/javascript">$('#lfm-{{$name}}').filemanager('images','{{url("/")}}');</script>
+				@push('bottom')
+				<script type="text/javascript">$('#lfm-{{$name}}').filemanager('images','{{url("/")}}');</script>
+				@endpush
 			@endif

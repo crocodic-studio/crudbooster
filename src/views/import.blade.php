@@ -37,6 +37,7 @@
                       </div>
                     </div>                    
 
+                    @push('bottom')
                     <script type="text/javascript">
                       $(function() {
                         var total = {{ intval(Session::get('total_data_import')) }};
@@ -71,6 +72,7 @@
                       })
 
                     </script>
+                    @endpush
 
                 </div><!-- /.box-body -->
         
@@ -118,11 +120,13 @@
                                   * Just ignoring the column where you are not sure the data is suit with the column or not.<br/>
                                   * Warning !, Unfortunately at this time, the system can't import column that contains image or photo url.
                               </div>
+                              @push('head')
                               <style type="text/css">
                                 th, td {
                                     white-space: nowrap;
                                 }                                
                               </style>
+                              @endpush
                               <table class='table table-bordered' style="width:130%">
                                   <thead>
                                       <tr class='success'>
@@ -160,6 +164,7 @@
 
                         </div><!-- /.box-body -->
 
+                        @push('bottom')
                         <script type="text/javascript">
                           $(function(){    
                               var total_selected_column = 0;                      
@@ -185,6 +190,7 @@
                               }
                           }
                         </script>
+                        @endpush
                 
                         <div class="box-footer">  
                           <div class='pull-right'>                            

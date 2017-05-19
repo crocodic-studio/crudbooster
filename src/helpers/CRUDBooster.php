@@ -386,6 +386,23 @@ class CRUDBooster  {
 			}
 		}
 
+		public static function isColumnNULL($table,$field) {
+			if(Cache::has('field_isNull_'.$table.'_'.$field)) {
+				return Cache::get('field_isNull_'.$table.'_'.$field);
+			}
+
+			try{
+                //MySQL & SQL Server
+                $isNULL = DB::select(DB::raw("select IS_NULLABLE from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='$table' and COLUMN_NAME = '$field'"))[0]->IS_NULLABLE;            
+                $isNULL = ($isNULL=='YES')?TRUE:FALSE;
+                Cache::forever('field_isNull_'.$table.'_'.$field,$isNULL);
+            }catch(\Exception $e) {
+            	$isNULL = false;
+            	Cache::forever('field_isNull_'.$table.'_'.$field,$isNULL);
+            }
+            return $isNULL;
+		}
+
 		public static function getFieldType($table,$field) {
 		    if(Cache::has('field_type_'.$table.'_'.$field)) {
 		        return Cache::get('field_type_'.$table.'_'.$field);
@@ -928,15 +945,23 @@ class CRUDBooster  {
 	        return true;
 	    }
 
-		public static function sendFCM($regid,$data){
+		public static function sendFCM($regID=[],$data){
 	        if(!$data['title'] || !$data['content']) return 'title , content null !';
 
 	        $apikey = CRUDBooster::getSetting('google_fcm_key');
 	        $url   	= 'https://fcm.googleapis.com/fcm/send';
 	        $fields = array(
-	          'registration_ids' => $regid,
-	          'data' => $data
-	        );
+			  'registration_ids' => $regID,
+			  'data' => $data,
+		      'content_available'=>true,
+		      'notification'=>array(
+		            'sound'=>'default',
+		            'badge'=>0,
+		            'title'=>trim(strip_tags($data['title'])),
+		            'body'=>trim(strip_tags($data['content']))
+		        ),
+		      'priority'=>'high'
+			);
 	        $headers = array(
 	          'Authorization:key=' . $apikey,
 	          'Content-Type:application/json'

@@ -11,14 +11,17 @@
       <div class='box'>
         
         <div class='box-body'>
-      
+          
+            @push('head')
             <style>
             .table-api tbody tr td a {
               color: #db0e00;
               font-family: arial;
             }
             </style> 
+            @endpush
             
+            @push('bottom')
             <script>
             $(function() {
               $(".link_name_api").click(function() {
@@ -44,6 +47,7 @@
               });
             }
             </script> 
+            @endpush
                
           <div class='form-group'>
               <label>API BASE URL</label>

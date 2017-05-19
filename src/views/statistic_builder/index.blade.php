@@ -1,4 +1,5 @@
-	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">    
+	@push('bottom')
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">    
     <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
 
@@ -25,6 +26,8 @@
             })
         })
     </script>
+    @endpush
+    @push('head')
     <style type="text/css">
         .control-sidebar ul {
             padding:0 0 0 0;
@@ -60,7 +63,9 @@
             background: #333333;          
         }
     </style>
+    @endpush
 
+    @push('bottom')
 	<!-- ADDITION FUNCTION FOR BUTTON -->
 	<script type="text/javascript">
         var id_cms_statistics = '{{$id_cms_statistics}}';
@@ -78,8 +83,10 @@
 
 	</script>
 	<!--END HERE-->
+    @endpush
 
 
+    @push('head')
 	<!-- jQuery UI 1.11.4 -->
     <style type="text/css">
         .sort-highlight {
@@ -153,8 +160,11 @@
         	transform: translate(-50%, -50%);        	      
         }
     </style>
-    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    @endpush
+
+    @push('bottom')
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>    
     <script type="text/javascript">
     $(function() {             	       
 
@@ -309,6 +319,7 @@
             })
         })
     </script>
+    @endpush
 
     <div id='modal-statistic' class="modal fade" tabindex="-1" role="dialog">
 	  <div class="modal-dialog" role="document">

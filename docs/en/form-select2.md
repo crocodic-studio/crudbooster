@@ -31,6 +31,17 @@ $this->form[] = ['label'=>'Category','name'=>'categories_id','type'=>'select2','
 ```
 Add `datatable_format` attribute and fill it with a format. Specify the field name wich you want to show. You may specify the field more than one. Sparate it with a comma. If there is a word in addition to the field name, you must put a single quote in the prefix and suffix to its word. (See the example).
 
+### Attribute Available
+| Name     | Type    | Mandatory | Example |
+| -------- | ------- | ---------- |----------- |
+| dataenum | string  | requiredOne |android;web;ios |
+| datatable | string | requiredOne |tableName,fieldNameToShow |
+| relationship_table | optional | string | relationManyToManyTableName | 
+| datatable_ajax | boolean | optional | default: false |
+| datatable_where | string | optional | status != 'active' |
+| datatable_format | string | optional | id,' - ',name |
+
+
 ## What's Next
 - [Form Input Type: text](./form-text.md)
 

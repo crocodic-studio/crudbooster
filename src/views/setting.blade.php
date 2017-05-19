@@ -1,5 +1,6 @@
 @extends('crudbooster::admin_template')
 @section('content')	 
+            @push('bottom')
             <script src="{{asset('vendor/laravel-filemanager/js/lfm.js')}}"></script>
             <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
             <script>
@@ -48,6 +49,7 @@
                 tinymce.init(editor_config);
 
               </script>
+              @endpush
 
               <div style="width:750px;margin:0 auto ">
                               

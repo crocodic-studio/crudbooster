@@ -601,11 +601,18 @@ class CBController extends Controller {
 	public function getDataTable() {
 		$table = Request::get('table');
 		$label = Request::get('label');
+		$datatableWhere = urldecode(Request::get('datatable_where'));
 		$foreign_key_name = Request::get('fk_name');
 		$foreign_key_value = Request::get('fk_value');
 		if($table && $label && $foreign_key_name && $foreign_key_value) {
-			$query = DB::table($table)->select('id as select_value',$label.' as select_label')->where($foreign_key_name,$foreign_key_value)->orderby($label,'asc')->get();
-			return response()->json($query);
+			$query = DB::table($table);
+			if($datatableWhere) {
+				$query->whereRaw($datatableWhere);
+			}
+			$query->select('id as select_value',$label.' as select_label');
+			$query->where($foreign_key_name,$foreign_key_value);
+			$query->orderby($label,'asc');
+			return response()->json($query->get());
 		}else{
 			return response()->json([]);
 		}
@@ -789,6 +796,25 @@ class CBController extends Controller {
 			}
 
 
+			if($di['type']=='child') {
+				$slug_name = str_slug($di['label'], '');
+				foreach ($di['columns'] as $child_col) {
+					if( isset($child_col['validation']) )
+					{
+						//https://laracasts.com/discuss/channels/general-discussion/array-validation-is-not-working/
+						if( strpos( $child_col['validation'], 'required' ) !== false )
+						{
+							$array_input[$slug_name.'-'.$child_col['name']] = 'required';
+
+							str_replace('required', '', $child_col['validation']);
+						}
+
+						$array_input[$slug_name.'-'.$child_col['name'].'.*'] = $child_col['validation'];
+					}
+				}
+			}
+
+
 			if(@$di['validation']) {
 
 				$exp = explode('|',$di['validation']);
@@ -895,7 +921,11 @@ class CBController extends Controller {
 				if($inputdata!='') {
 					$this->arr[$name] = $inputdata;
 				}else{
-					$this->arr[$name] = "";
+					if(CB::isColumnNULL($this->table,$name) && $ro['type']!='upload') {
+						continue;
+					}else{						
+						$this->arr[$name] = "";
+					}
 				}
 			}
 
@@ -925,7 +955,7 @@ class CBController extends Controller {
 
 			//multitext colomn 
 			if($ro['type']=='multitext') {
-				$name = str_slug($ro['name'],'');
+				$name = $ro['name'];
 				$multitext="";
 
 				for($i=0;$i<=count($this->arr[$name])-1;$i++) {

@@ -48,6 +48,11 @@ foreach($forms as $form) {
 			@eval("\$value = ".$form['callback_php'].";");
 		}
 
+
+		if(isset($form['callback'])) {
+			$value = call_user_func($form['callback'],$row);
+		}
+
 		if($join && @$row) {
 			$join_arr = explode(',', $join);
 			array_walk($join_arr, 'trim');

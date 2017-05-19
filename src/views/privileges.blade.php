@@ -47,6 +47,7 @@
 							<?php endforeach;?>
 						</select>
 						<div class="text-danger">{{ $errors->first('theme_color') }}</div>			
+						@push('bottom')
 						<script type="text/javascript">
 							$(function() {
 								$("select[name=theme_color]").change(function() {
@@ -65,11 +66,13 @@
 
 								$('#set_as_superadmin input:checked').trigger('click');
 							})
-						</script>								
+						</script>	
+						@endpush							
 					</div>
 	
 					<div id='privileges_configuration' class='form-group'>
 						<label>{{trans('crudbooster.privileges_configuration')}}</label>
+						@push('bottom')
 						<script>
 							$(function() {
 								$("#is_visible").click(function() {
@@ -103,6 +106,7 @@
 								})
 							})
 						</script>
+						@endpush
 						<table class='table table-striped table-hover table-bordered'>
 							<thead>
 								<tr class='active'>
