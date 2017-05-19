@@ -22,7 +22,7 @@
 			<div class='row'>
 				<div class='col-sm-10'>
 					<div class="panel panel-default">
-						<div class="panel-heading"><i class="fa fa-pencil-square-o"></i> Form</div>
+						<div class="panel-heading"><i class="fa fa-pencil-square-o"></i> {{trans('crudbooster.child_form')}}</div>
 						<div class="panel-body child-form-area">
 							@foreach($form['columns'] as $col)	
 							<?php $name_column = $name.$col['name'];?>
@@ -67,7 +67,7 @@
 									  <input type="hidden" class="input-id">
 								      <input type="text" class="form-control input-label {{$col['required']?"required":""}}" readonly>
 								      <span class="input-group-btn">
-								        <button class="btn btn-primary" onclick="showModal{{$name_column}}()" type="button"><i class='fa fa-search'></i> Browse Data</button>
+								        <button class="btn btn-primary" onclick="showModal{{$name_column}}()" type="button"><i class='fa fa-search'></i> {{trans('crudbooster.datamodal_browse_data')}}</button>
 								      </span>
 								    </div><!-- /input-group -->
 
@@ -107,7 +107,7 @@
 									    <div class="modal-content">
 									      <div class="modal-header">
 									        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-									        <h4 class="modal-title"><i class='fa fa-search'></i> Browse Data {{$col['label']}}</h4>
+									        <h4 class="modal-title"><i class='fa fa-search'></i> {{trans('crudbooster.datamodal_browse_data')}} {{$col['label']}}</h4>
 									      </div>
 									      <div class="modal-body">
 									        <iframe id='iframe-modal-{{$name_column}}' style="border:0;height: 430px;width: 100%" src=""></iframe>
@@ -128,7 +128,7 @@
 									  <input type="hidden" class="input-id">
 								      <input type="text" class="form-control input-label {{$col['required']?"required":""}}" readonly>
 								      <span class="input-group-btn">
-								        <button class="btn btn-primary" id="btn-upload-{{$name_column}}" onclick="showFakeUpload{{$name_column}}()" type="button"><i class='fa fa-search'></i> Browse File</button>
+								        <button class="btn btn-primary" id="btn-upload-{{$name_column}}" onclick="showFakeUpload{{$name_column}}()" type="button"><i class='fa fa-search'></i> {{trans('crudbooster.datamodal_browse_data')}}</button>
 								      </span>
 								    </div><!-- /input-group -->
 
@@ -431,15 +431,15 @@
 										currentRow.replaceWith(trRow);
 										currentRow = null;
 									}
-									$('#btn-add-table-{{$name}}').val('Add To Table');
+									$('#btn-add-table-{{$name}}').val('{{trans('crudbooster.button_add_to_table')}}');
 									$('#btn-reset-form-{{$name}}').click();									
 								}
 							</script>
 							@endpush
 						</div>
 						<div class="panel-footer" align="right">
-							<input type='button' class='btn btn-default' id="btn-reset-form-{{$name}}" onclick="resetForm{{$name}}()" value='Reset Form'/>
-							<input type='button' id='btn-add-table-{{$name}}' class='btn btn-primary' onclick="addToTable{{$name}}()" value='Add To Table'/>
+							<input type='button' class='btn btn-default' id="btn-reset-form-{{$name}}" onclick="resetForm{{$name}}()" value='{{trans('crudbooster.button_reset')}}'/>
+							<input type='button' id='btn-add-table-{{$name}}' class='btn btn-primary' onclick="addToTable{{$name}}()" value='{{trans('crudbooster.button_add_to_table')}}'/>
 						</div>
 					</div>
 				</div>
@@ -447,7 +447,7 @@
 
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<i class='fa fa-table'></i> Table Detail
+					<i class='fa fa-table'></i> {{trans('crudbooster.child_table_detail')}}
 				</div>
 				<div class="panel-body no-padding table-responsive"  style="max-height: 400px;overflow: auto;">
 					<table id='table-{{$name}}' class='table table-striped table-bordered'>
