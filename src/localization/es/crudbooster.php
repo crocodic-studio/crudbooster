@@ -106,6 +106,7 @@ return [
 	'button_selected_action' =>'Acciones Masivas',
 	'button_download_file'   =>'Descargar Fichero',
 	'button_reset'           =>'Resetear',
+	'button_add_to_table'    =>'Agregar a la Tabla',
 		
 
 	'export_dialog_title'            =>"Exportar Datos",
@@ -230,15 +231,14 @@ return [
     'datamodal_select'=>'Seleccionar',
     'datamodal_search_and_enter'=>'Buscar y enter...',
     'datamodal_enter_to_search'=>'Enter para buscar',
-    'datamodal_browse_data'=>'Escojer Dato' ,
-
-    'datamodal_select'=>'Select',
-    'datamodal_search_and_enter'=>'Search and enter...',
-    'datamodal_enter_to_search'=>'Enter to search',
-    'datamodal_browse_data'=>'Browse Data' ,
+    'datamodal_browse_data'=>'Escojer Dato',
 
 	//action confirmation
     'confirmation_title' => 'Confirmación',
     'confirmation_text' => '¿Está seguro que desea realizar esta acción?',
+
+    //child
+    'child_form'		=> 'Fromulario',
+    'child_table_detail' 	=> 'Tabla de Detalles',
 
 ];
