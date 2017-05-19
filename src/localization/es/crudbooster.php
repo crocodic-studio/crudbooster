@@ -230,4 +230,8 @@ return [
     'datamodal_search_and_enter'=>'Search and enter...',
     'datamodal_enter_to_search'=>'Enter to search',
     'datamodal_browse_data'=>'Browse Data' ,
+
+	//action confirmation
+    'confirmation_title' => 'Confirmación',
+    'confirmation_text' => '¿Está seguro que desea realizar esta acción?',
 ];
