@@ -32,7 +32,7 @@ $this->sub_module[] = ['label'=>'Photos','path'=>'photos','parent_columns'=>'nam
 | foreign_key | Specify the Foreign Key Field of photos table |
 | button_color | Specify the color of button (primary,warning,success,info) |
 | button_icon | Specify the icon. You can find out at Font Awesome |
-
+| custom_parent_id | Specify the id field. 
 ## What's Next
 - [How To Implement A Many To Many Relationship To Form (E.g : Film -> R <- Actors)](./how-to-many-to-many.md)
 
