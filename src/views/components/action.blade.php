@@ -13,7 +13,8 @@
         $a['confirmation_type'] = !empty($a['confirmation_type']) ? $a['confirmation_type'] : 'warning';
         $a['confirmation_showCancelButton'] = empty($a['confirmation_showCancelButton']) ? 'true' : 'false';
         $a['confirmation_confirmButtonColor'] = !empty($a['confirmation_confirmButtonColor']) ? $a['confirmation_confirmButtonColor'] : '#DD6B55';
-        $a['confirmation_confirmButtonText'] = !empty($a['confirmation_confirmButtonText']) ? $a['confirmation_confirmButtonText'] : trans('crudbooster.confirmButtonText');;
+        $a['confirmation_confirmButtonText'] = !empty($a['confirmation_confirmButtonText']) ? $a['confirmation_confirmButtonText'] : trans('crudbooster.confirmation_yes');;
+        $a['confirmation_cancelButtonText'] = !empty($a['confirmation_cancelButtonText']) ? $a['confirmation_cancelButtonText'] : trans('crudbooster.confirmation_no');;
         $a['confirmation_closeOnConfirm'] = empty($a['confirmation_closeOnConfirm']) ? 'true' : 'false';
                 
         $confirm_box = '
@@ -24,6 +25,7 @@
             showCancelButton: '.$a['confirmation_showCancelButton'].',
             confirmButtonColor: "'.$a['confirmation_confirmButtonColor'].'",
             confirmButtonText: "'.$a['confirmation_confirmButtonText'].'",
+            cancelButtonText: "'.$a['confirmation_cancelButtonText'].'",
             closeOnConfirm: '.$a['confirmation_closeOnConfirm'].', }, 
             function(){  location.href="'.$a['url'].'"});        
 
@@ -32,10 +34,16 @@
     }
 
     $label = $a['label'];
-    $url = $a['url'];
     $icon = $a['icon'];
     $color = $a['color']?:'primary';
     $confirmation = $a['confirmation'];
+
+      
+    $url = $a['url'];
+    if(isset($confirmation) && !empty($confirmation))
+    {
+        $url = "javascript:;";
+    }
 
     if(isset($a['showIf'])) {
 
@@ -43,11 +51,6 @@
       
       foreach($row as $key=>$val) {
         $query = str_replace("[".$key."]",'"'.$val.'"',$query);
-      }
-      
-      if(isset($confirmation) && !empty($confirmation))
-      {
-          $url = "javascript:;";
       }
 
       @eval("if($query) {

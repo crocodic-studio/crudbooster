@@ -226,8 +226,19 @@ return [
     'privileges_module_list_delete' =>'Eliminar',
 	
 	 //datamodal 
+
     'datamodal_select'=>'Seleccionar',
     'datamodal_search_and_enter'=>'Buscar y enter...',
     'datamodal_enter_to_search'=>'Enter para buscar',
     'datamodal_browse_data'=>'Escojer Dato' ,
+
+    'datamodal_select'=>'Select',
+    'datamodal_search_and_enter'=>'Search and enter...',
+    'datamodal_enter_to_search'=>'Enter to search',
+    'datamodal_browse_data'=>'Browse Data' ,
+
+	//action confirmation
+    'confirmation_title' => 'Confirmación',
+    'confirmation_text' => '¿Está seguro que desea realizar esta acción?',
+
 ];

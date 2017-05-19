@@ -13,11 +13,13 @@ Open your module controller. Find `$this->addaction` in `cbInit()` method.
 
 ```php
 $this->addaction[] = ['label'=>'Set Active','url'=>CRUDBooster::mainpath('set-status/active/[id]'),'icon'=>'fa fa-check','color'=>'success','showIf'=>"[status] == 'pending'"];
-$this->addaction[] = ['label'=>'Set Pending','url'=>CRUDBooster::mainpath('set-status/pending/[id]'),'icon'=>'fa fa-ban','color'=>'warning','showIf'=>"[status] == 'active'"];
+$this->addaction[] = ['label'=>'Set Pending','url'=>CRUDBooster::mainpath('set-status/pending/[id]'),'icon'=>'fa fa-ban','color'=>'warning','showIf'=>"[status] == 'active'", 'confirmation' => true];
 ```
 It will add **Set Active** button if a row has status 'pending', and the opposite, it will add **Set Pending** if a row has status 'active'
 
 In the `showIf` attribute, you can fill anything condition with any other operator. You can use `[field_name]` as an alias.
+
+If the `confirmation` attribute is set to 'true', a confirm dialogue will show before the action takes place.
 
 Then, lets create a method to update the `products` status. Create a method after `cbInit()` method.
 ```php
