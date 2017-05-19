@@ -238,7 +238,7 @@ return [
     'confirmation_text' => '¿Está seguro que desea realizar esta acción?',
 
     //child
-    'child_form'		=> 'Fromulario',
+    'child_form'		=> 'Formulario',
     'child_table_detail' 	=> 'Tabla de Detalles',
 
 ];
