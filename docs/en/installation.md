@@ -46,7 +46,7 @@ $ php artisan crudbooster:install
 ## Update
 - Open the terminal, navigate to your project directory.
 ```php
-$ composer require crocodicstudio/crudbooster=5.3.2.*
+$ composer require crocodicstudio/crudbooster=5.4.0.*
 ```
 - Run the following command at the terminal
 ```php
