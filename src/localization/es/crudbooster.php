@@ -46,7 +46,7 @@ return [
 	'log_update'              =>'Actualizar información :name en :module',
 	'log_delete'              =>'Eliminar información :name en :module',
 	'log_delete_image'        =>'Eliminar la imagen de :name en :module',
-	'log_login'				  =>':Login con Email desde la Dirección IP :ip',
+	'log_login'				  =>'Ingreso de :email desde la Dirección IP :ip',
 	'log_forgot'		      =>'Alguien con la dirección IP :ip solicitó su contraseña por email a :email',
 	'log_logout'		      =>':email se desconectó',
 	'alert_delete_selected'         =>'¿Seguro que quieres eliminar todos los elementos seleccionados?',
