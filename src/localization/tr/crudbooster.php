@@ -1,16 +1,18 @@
 <?php
 return [
     'email_footer'               => 'Bu e-posta adresine herhangi bir e-posta cevap vermeyin. Bu e-posta sistemimiz tarafından otomatik olarak gönderilir. ',
-    'login_message'              => 'senin oturumu başlatmak için giriş yapın',
+    'login_message'              => 'Oturumu başlatmak için giriş yapın',
     'text_forgot_password'       => 'Şifreni mi unuttun?',
     'page_title_login'           => 'Giriş Paneli',
     'page_title_forgot'          => 'Şifremi Unuttum',
-    'forgot_message'             => 'Enter your email address, to request password',
+    'forgot_message'             => 'Parola isteğinde bulunmak için e-posta adresinizi girin',
     "forgot_text_try_again"      => "Tekrar giriş yapınız ?",
     'text_no_notification'       => "Bildiriminiz yok",
     'text_view_all_notification' => 'Tümünü Göster',
     'label_button_profile'       => "Profil",
     'filter_dialog_title'        => 'Gelişmiş Filtreleme & Sıralama',
+    'there_is_no_option'         => 'Bu girdi türü için herhangi bir seçenek ayarı yok',
+    'no'                         => 'Hayır.',
 
     'text_enter_the_password'     => 'Oturum açmak için parolanızı girin',
     'text_or_sign_in'             => 'Ya da farklı bir kullanıcı olarak oturum',
@@ -23,6 +25,7 @@ return [
     'text_default_help_text'      => 'Sadece tek harf girebilirsiniz',
     'text_default_help_url'       => 'Lütfen geçerli bir URL girin',
     'text_dashboard'              => 'Pano',
+    'text_delete'                 => 'Sil',
     'text_prefix_option'          => '** Lütfen seçiniz ',
     'text_loading'                => 'Yükleniyor lütfen bekleyiniz...',
 
@@ -54,6 +57,7 @@ return [
 
     'alert_delete_selected'         => 'Seçilen tüm verileri silmek istiyor musun ?',
     'alert_delete_selected_success' => 'Seçilenler silindi !',
+    'alert_bulk_action_button'      => 'Emin misin',
     'alert_action'                  => ':action Başarılı !',
     'alert_add_data_success'        => 'Veri eklendi !',
     'alert_add_data_failed'         => 'Veri ekleme başarısız !',
@@ -220,6 +224,11 @@ return [
     'chose_an_image'               => 'Resim Seçiniz',
     'chose_an_file'                => 'Dosya Seçiniz',
 
+    //action confirmation
+    'confirmation_title'            => 'Onaylama',
+    'confirmation_text'             => 'Bu işlemi yapmak istediğinizden emin misiniz?',
+    'confirmButtonText'             => 'Evet',
+    
     // privilege
     'privileges_name'               =>'Yetki ismi',
     'set_as_superadmin'             =>'Süper Yönetici olarak ayarla',
