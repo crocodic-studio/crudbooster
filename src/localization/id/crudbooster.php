@@ -110,6 +110,7 @@ return [
     'button_selected_action' => 'Aksi Massal',
     'button_download_file'   => 'Unduh file',
     'button_reset'           => 'Ulangi',
+	'button_add_to_table'    =>'Add To Table',
 
     'export_dialog_title'            => "Ekspor Data",
     'export_dialog_filename'         => 'Nama File',
@@ -249,4 +250,8 @@ return [
     'datamodal_search_and_enter'=>'Search and enter...',
     'datamodal_enter_to_search'=>'Enter to search',
     'datamodal_browse_data'=>'Browse Data' ,
+
+    //child
+    'child_form'		 => 'From',
+    'child_table_detail' => 'Table Details',
 ];
