@@ -431,7 +431,7 @@ class CBController extends Controller {
 				];
 			}
 		}
-		$
+		
 		$mainpath      = CRUDBooster::mainpath();
 		$orig_mainpath = $this->data['mainpath'];
 		$title_field   = $this->title_field;
