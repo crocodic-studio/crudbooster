@@ -4,7 +4,7 @@
 	@push('bottom')
 	<script type="text/javascript">
 		$(function() {			
-			$('#{{$form['parent_select']}}').change(function() {
+			$('#{{$form['parent_select']}}, input:radio[name={{$form['parent_select']}}]').change(function() {
 				var $current = $("#{{$form['name']}}");
 				var parent_id = $(this).val();
 				var fk_name = "{{$form['parent_select']}}";
