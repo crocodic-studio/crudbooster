@@ -203,6 +203,7 @@ return [
     'filter_search'                => 'Buscar',
     'filter_from'                  => 'Desde',
     'filter_to'                    => 'Hasta',
+    'filter_sorting'               => 'Sorting',
     // confirmation
     'confirmation_yes'             => '¡Sí!',
     'confirmation_no'              => 'No',
