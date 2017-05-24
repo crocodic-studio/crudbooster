@@ -216,7 +216,7 @@ return [
     'filter_search'                => 'Ara',
     'filter_from'                  => 'from',
     'filter_to'                    => 'Için',
-
+    'filter_sorting'               => 'Sıralama',
     // confirmation
     'confirmation_yes'             => 'Evet',
     'confirmation_no'              => 'Hayır',
