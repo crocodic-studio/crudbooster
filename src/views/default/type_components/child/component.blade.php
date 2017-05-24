@@ -431,7 +431,7 @@
 										currentRow.replaceWith(trRow);
 										currentRow = null;
 									}
-									$('#btn-add-table-{{$name}}').val('{{trans("crudbooster.add_to_table")}}');
+									$('#btn-add-table-{{$name}}').val('{{trans("crudbooster.button_add_to_table")}}');
 									$('#btn-reset-form-{{$name}}').click();									
 								}
 							</script>
@@ -439,7 +439,7 @@
 						</div>
 						<div class="panel-footer" align="right">
 							<input type='button' class='btn btn-default' id="btn-reset-form-{{$name}}" onclick="resetForm{{$name}}()" value='{{trans("crudbooster.button_reset")}}'/>
-							<input type='button' id='btn-add-table-{{$name}}' class='btn btn-primary' onclick="addToTable{{$name}}()" value='{{trans("crudbooster.add_to_table")}}'/>
+							<input type='button' id='btn-add-table-{{$name}}' class='btn btn-primary' onclick="addToTable{{$name}}()" value='{{trans("crudbooster.button_add_to_table")}}'/>
 						</div>
 					</div>
 				</div>
