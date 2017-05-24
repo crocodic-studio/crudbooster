@@ -214,7 +214,7 @@ return [
     'filter_search'                => 'Cari',
     'filter_from'                  => 'Dari',
     'filter_to'                    => 'Ke',
-
+    'filter_sorting'               => 'Sorting',
     // confirmation
     'confirmation_yes'             => 'Ya',
     'confirmation_no'              => 'Tidak',
