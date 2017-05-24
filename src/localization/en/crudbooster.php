@@ -217,7 +217,8 @@ return [
     'filter_search'                => 'Search',
     'filter_from'                  => 'from',
     'filter_to'                    => 'to',
-
+    'filter_sorting'               => 'Sorting',
+    
     // confirmation
     'confirmation_yes'             => 'Yes!',
     'confirmation_no'              => 'No',
