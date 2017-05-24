@@ -212,7 +212,7 @@ return [
     'filter_search'                => 'بحث',
     'filter_from'                  => 'من',
     'filter_to'                    => 'إلى',
-
+    'filter_sorting'               => 'Sorting',
     // confirmation
     'confirmation_yes'             => 'نعم!',
     'confirmation_no'              => 'لا',
