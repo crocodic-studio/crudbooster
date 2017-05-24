@@ -197,7 +197,7 @@ return [
     'filter_search'                => 'Buscar',
     'filter_from'                  => 'de',
     'filter_to'                    => 'para',
-
+    'filter_sorting'               => 'Sorting',
     // confirmation
     'confirmation_yes'=>'Sim!',
     'confirmation_no'=>'Não',
