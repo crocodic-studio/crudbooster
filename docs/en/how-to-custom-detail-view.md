@@ -42,7 +42,7 @@ Then, create your own `detail view`
 ```
 
 ## What's Next
-- [Helpers](./helpers.md)md)
+- [Helpers](./helpers.md)
 
 ## Table Of Contents
 - [Back To Index](./index.md)
