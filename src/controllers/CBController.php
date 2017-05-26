@@ -215,11 +215,12 @@ class CBController extends Controller {
 
 			if(strpos($field, ' as ')!==FALSE) {
 				$field = substr($field, strpos($field, ' as ')+4);
+				$field_with = (array_key_exists('join', $coltab))?str_replace(",",".",$coltab['join']):$field;
 				$result->addselect(DB::raw($coltab['name']));
 				$columns_table[$index]['type_data']   = 'varchar';
 				$columns_table[$index]['field']       = $field;
 				$columns_table[$index]['field_raw']   = $field;
-				$columns_table[$index]['field_with']  = $field;
+				$columns_table[$index]['field_with']  = $field_with;
 				$columns_table[$index]['is_subquery'] = true;
 				continue;
 			}
