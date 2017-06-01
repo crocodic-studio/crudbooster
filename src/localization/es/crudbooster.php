@@ -46,7 +46,7 @@ return [
 	'log_update'              =>'Actualizar información :name en :module',
 	'log_delete'              =>'Eliminar información :name en :module',
 	'log_delete_image'        =>'Eliminar la imagen de :name en :module',
-	'log_login'				  =>':Login con Email desde la Dirección IP :ip',
+	'log_login'				  =>'Ingreso de :email desde la Dirección IP :ip',
 	'log_forgot'		      =>'Alguien con la dirección IP :ip solicitó su contraseña por email a :email',
 	'log_logout'		      =>':email se desconectó',
 	'alert_delete_selected'         =>'¿Seguro que quieres eliminar todos los elementos seleccionados?',
@@ -106,6 +106,7 @@ return [
 	'button_selected_action' =>'Acciones Masivas',
 	'button_download_file'   =>'Descargar Fichero',
 	'button_reset'           =>'Resetear',
+	'button_add_to_table'    =>'Agregar a la Tabla',
 		
 
 	'export_dialog_title'            =>"Exportar Datos",
@@ -230,15 +231,14 @@ return [
     'datamodal_select'=>'Seleccionar',
     'datamodal_search_and_enter'=>'Buscar y enter...',
     'datamodal_enter_to_search'=>'Enter para buscar',
-    'datamodal_browse_data'=>'Escojer Dato' ,
-
-    'datamodal_select'=>'Select',
-    'datamodal_search_and_enter'=>'Search and enter...',
-    'datamodal_enter_to_search'=>'Enter to search',
-    'datamodal_browse_data'=>'Browse Data' ,
+    'datamodal_browse_data'=>'Escojer Dato',
 
 	//action confirmation
     'confirmation_title' => 'Confirmación',
     'confirmation_text' => '¿Está seguro que desea realizar esta acción?',
+
+    //child
+    'child_form'		=> 'Formulario',
+    'child_table_detail' 	=> 'Tabla de Detalles',
 
 ];

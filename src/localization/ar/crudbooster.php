@@ -108,6 +108,7 @@ return [
     'button_selected_action' => 'الاجراء الجماعي',
     'button_download_file'   => 'تنزيل الملف',
     'button_reset'           => 'اعادة تعيين',
+	'button_add_to_table'    =>'Add To Table',
 
     'export_dialog_title'            => "تصدير البيانات",
     'export_dialog_filename'         => 'اسم الملف',
@@ -242,4 +243,8 @@ return [
     'datamodal_search_and_enter'=>'Search and enter...',
     'datamodal_enter_to_search'=>'Enter to search',
     'datamodal_browse_data'=>'Browse Data' ,
+
+    //child
+    'child_form'		 => 'From',
+    'child_table_detail' => 'Table Details',
 ];

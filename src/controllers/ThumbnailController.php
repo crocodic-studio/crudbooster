@@ -22,6 +22,7 @@ class ThumbnailController extends Controller {
 
 	    $extension = strtolower(File::extension($path));
 	    $images_ext = config('crudbooster.IMAGE_EXTENSIONS',['jpg','jpeg','png','gif','bmp']);
+	    $images_ext = explode(',',$images_ext);	  
 
 	    if(in_array($extension, $images_ext)) {	  	    	
 

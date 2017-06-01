@@ -425,13 +425,13 @@ class CBController extends Controller {
 				$addaction[] = [
 					'label'=>$s['label'],
 					'icon'=>$s['button_icon'],
-					'url'=>CRUDBooster::adminPath($s['path']).'?parent_table='.$table_parent.'&parent_columns='.$s['parent_columns'].'&parent_id=[id]&return_url='.urlencode(Request::fullUrl()).'&foreign_key='.$s['foreign_key'].'&label='.urlencode($s['label']),
+					'url'=>CRUDBooster::adminPath($s['path']).'?parent_table='.$table_parent.'&parent_columns='.$s['parent_columns'].'&parent_id=['.(!isset($s['custom_parent_id']) ? "id": $s['custom_parent_id']).']&return_url='.urlencode(Request::fullUrl()).'&foreign_key='.$s['foreign_key'].'&label='.urlencode($s['label']),
 					'color'=>$s['button_color'],
                                         'showIf'=>$s['showIf']
 				];
 			}
 		}
-		$
+		
 		$mainpath      = CRUDBooster::mainpath();
 		$orig_mainpath = $this->data['mainpath'];
 		$title_field   = $this->title_field;
@@ -460,7 +460,7 @@ class CBController extends Controller {
 
 		          if(isset($col['image'])) {
 			            if($value=='') {			              
-			              $value = "<a  data-lightbox='roadtrip' rel='group_{{$table}}' title='$label: $title' href='http://placehold.it/50x50&text=NO+IMAGE'><img width='40px' height='40px' src='http://placehold.it/50x50&text=NO+IMAGE'/></a>";
+			              $value = "<a  data-lightbox='roadtrip' rel='group_{{$table}}' title='$label: $title' href='".asset('vendor/crudbooster/avatar.jpg')."'><img width='40px' height='40px' src='".asset('vendor/crudbooster/avatar.jpg')."'/></a>";
 			            }else{
 							$pic = (strpos($value,'http://')!==FALSE)?$value:asset($value);				            
 				            $value = "<a data-lightbox='roadtrip'  rel='group_{{$table}}' title='$label: $title' href='".$pic."'><img width='40px' height='40px' src='".$pic."'/></a>";
@@ -1552,6 +1552,10 @@ class CBController extends Controller {
 		$this->cbLoader();
 		$id_selected = Request::input('checkbox');
 		$button_name = Request::input('button_name');
+
+		if(!$id_selected) {
+			CRUDBooster::redirect($_SERVER['HTTP_REFERER'],'Please select at least one data!','warning');
+		}
 
 		if($button_name == 'delete') {
 			if(!CRUDBooster::isDelete()) {
