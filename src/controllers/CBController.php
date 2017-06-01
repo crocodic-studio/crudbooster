@@ -388,6 +388,7 @@ class CBController extends Controller {
 					foreach($this->orderby as $k=>$v) {
 						if(strpos($k, '.')!==FALSE) {
 							$orderby_table = explode(".",$k)[0];
+							$k = explode(".",$k)[1];
 						}else{
 							$orderby_table = $table;
 						}
