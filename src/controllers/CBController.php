@@ -1553,6 +1553,10 @@ class CBController extends Controller {
 		$id_selected = Request::input('checkbox');
 		$button_name = Request::input('button_name');
 
+		if(!$id_selected) {
+			CRUDBooster::redirect($_SERVER['HTTP_REFERER'],'Please select at least one data!','warning');
+		}
+
 		if($button_name == 'delete') {
 			if(!CRUDBooster::isDelete()) {
 				CRUDBooster::insertLog(trans("crudbooster.log_try_delete_selected",['module'=>CRUDBooster::getCurrentModule()->name]));
