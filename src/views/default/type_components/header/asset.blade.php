@@ -1,3 +1,5 @@
+
+@push('head')
 <style type="text/css">
 					.form-divider {
 						padding:10px 0px 10px 0px;
@@ -8,6 +10,8 @@
 						cursor: pointer;
 					}
 </style>
+@endpush
+@push('bottom')
 <script type="text/javascript">
 	$(function() {
 		if (typeof event_header_click === 'undefined') {	
@@ -43,3 +47,4 @@
 		
 	})						
 </script>
+@endpush

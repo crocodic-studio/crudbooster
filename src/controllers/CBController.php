@@ -425,13 +425,13 @@ class CBController extends Controller {
 				$addaction[] = [
 					'label'=>$s['label'],
 					'icon'=>$s['button_icon'],
-					'url'=>CRUDBooster::adminPath($s['path']).'?parent_table='.$table_parent.'&parent_columns='.$s['parent_columns'].'&parent_id=[id]&return_url='.urlencode(Request::fullUrl()).'&foreign_key='.$s['foreign_key'].'&label='.urlencode($s['label']),
+					'url'=>CRUDBooster::adminPath($s['path']).'?parent_table='.$table_parent.'&parent_columns='.$s['parent_columns'].'&parent_id=['.(!isset($s['custom_parent_id']) ? "id": $s['custom_parent_id']).']&return_url='.urlencode(Request::fullUrl()).'&foreign_key='.$s['foreign_key'].'&label='.urlencode($s['label']),
 					'color'=>$s['button_color'],
                                         'showIf'=>$s['showIf']
 				];
 			}
 		}
-		$
+		
 		$mainpath      = CRUDBooster::mainpath();
 		$orig_mainpath = $this->data['mainpath'];
 		$title_field   = $this->title_field;
@@ -460,7 +460,7 @@ class CBController extends Controller {
 
 		          if(isset($col['image'])) {
 			            if($value=='') {			              
-			              $value = "<a  data-lightbox='roadtrip' rel='group_{{$table}}' title='$label: $title' href='http://placehold.it/50x50&text=NO+IMAGE'><img width='40px' height='40px' src='http://placehold.it/50x50&text=NO+IMAGE'/></a>";
+			              $value = "<a  data-lightbox='roadtrip' rel='group_{{$table}}' title='$label: $title' href='".asset('vendor/crudbooster/avatar.jpg')."'><img width='40px' height='40px' src='".asset('vendor/crudbooster/avatar.jpg')."'/></a>";
 			            }else{
 							$pic = (strpos($value,'http://')!==FALSE)?$value:asset($value);				            
 				            $value = "<a data-lightbox='roadtrip'  rel='group_{{$table}}' title='$label: $title' href='".$pic."'><img width='40px' height='40px' src='".$pic."'/></a>";
@@ -601,11 +601,18 @@ class CBController extends Controller {
 	public function getDataTable() {
 		$table = Request::get('table');
 		$label = Request::get('label');
+		$datatableWhere = urldecode(Request::get('datatable_where'));
 		$foreign_key_name = Request::get('fk_name');
 		$foreign_key_value = Request::get('fk_value');
 		if($table && $label && $foreign_key_name && $foreign_key_value) {
-			$query = DB::table($table)->select('id as select_value',$label.' as select_label')->where($foreign_key_name,$foreign_key_value)->orderby($label,'asc')->get();
-			return response()->json($query);
+			$query = DB::table($table);
+			if($datatableWhere) {
+				$query->whereRaw($datatableWhere);
+			}
+			$query->select('id as select_value',$label.' as select_label');
+			$query->where($foreign_key_name,$foreign_key_value);
+			$query->orderby($label,'asc');
+			return response()->json($query->get());
 		}else{
 			return response()->json([]);
 		}
@@ -789,6 +796,25 @@ class CBController extends Controller {
 			}
 
 
+			if($di['type']=='child') {
+				$slug_name = str_slug($di['label'], '');
+				foreach ($di['columns'] as $child_col) {
+					if( isset($child_col['validation']) )
+					{
+						//https://laracasts.com/discuss/channels/general-discussion/array-validation-is-not-working/
+						if( strpos( $child_col['validation'], 'required' ) !== false )
+						{
+							$array_input[$slug_name.'-'.$child_col['name']] = 'required';
+
+							str_replace('required', '', $child_col['validation']);
+						}
+
+						$array_input[$slug_name.'-'.$child_col['name'].'.*'] = $child_col['validation'];
+					}
+				}
+			}
+
+
 			if(@$di['validation']) {
 
 				$exp = explode('|',$di['validation']);
@@ -895,7 +921,11 @@ class CBController extends Controller {
 				if($inputdata!='') {
 					$this->arr[$name] = $inputdata;
 				}else{
-					$this->arr[$name] = "";
+					if(CB::isColumnNULL($this->table,$name) && $ro['type']!='upload') {
+						continue;
+					}else{						
+						$this->arr[$name] = "";
+					}
 				}
 			}
 
@@ -925,7 +955,7 @@ class CBController extends Controller {
 
 			//multitext colomn 
 			if($ro['type']=='multitext') {
-				$name = str_slug($ro['name'],'');
+				$name = $ro['name'];
 				$multitext="";
 
 				for($i=0;$i<=count($this->arr[$name])-1;$i++) {
@@ -1522,6 +1552,10 @@ class CBController extends Controller {
 		$this->cbLoader();
 		$id_selected = Request::input('checkbox');
 		$button_name = Request::input('button_name');
+
+		if(!$id_selected) {
+			CRUDBooster::redirect($_SERVER['HTTP_REFERER'],'Please select at least one data!','warning');
+		}
 
 		if($button_name == 'delete') {
 			if(!CRUDBooster::isDelete()) {

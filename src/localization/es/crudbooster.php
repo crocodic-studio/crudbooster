@@ -46,7 +46,7 @@ return [
 	'log_update'              =>'Actualizar información :name en :module',
 	'log_delete'              =>'Eliminar información :name en :module',
 	'log_delete_image'        =>'Eliminar la imagen de :name en :module',
-	'log_login'				  =>':Login con Email desde la Dirección IP :ip',
+	'log_login'				  =>'Ingreso de :email desde la Dirección IP :ip',
 	'log_forgot'		      =>'Alguien con la dirección IP :ip solicitó su contraseña por email a :email',
 	'log_logout'		      =>':email se desconectó',
 	'alert_delete_selected'         =>'¿Seguro que quieres eliminar todos los elementos seleccionados?',
@@ -106,6 +106,7 @@ return [
 	'button_selected_action' =>'Acciones Masivas',
 	'button_download_file'   =>'Descargar Fichero',
 	'button_reset'           =>'Resetear',
+	'button_add_to_table'    =>'Agregar a la Tabla',
 		
 
 	'export_dialog_title'            =>"Exportar Datos",
@@ -190,8 +191,8 @@ return [
     'filter_less_than'             => '< (Menor que)',
     'filter_greater_than'          => '> (Mayor que)',
     'filter_not_equal_to'          => '!= (Deferente de)',
-    'filter_in'                    => 'Dentro de',
-    'filter_not_in'                => 'No lo contiene',
+    'filter_in'                    => 'Incluye',
+    'filter_not_in'                => 'No Incluye',
     'filter_between'               => 'Entre',
     'filter_sort_ascending'        => 'Ordenar Ascendentemente',
     'filter_sort_descending'       => 'Ordenar Descendentemente',
@@ -199,8 +200,8 @@ return [
     'filter_lorem_ipsum'           => 'Lorem ipsum',
     'filter_lorem_ipsum_dolor_sit' => ' Lorem, Ipsum, Dolor Sit',
     'filter_search'                => 'Buscar',
-    'filter_from'                  => 'desde',
-    'filter_to'                    => 'hasta',
+    'filter_from'                  => 'Desde',
+    'filter_to'                    => 'Hasta',
     // confirmation
     'confirmation_yes'             => '¡Sí!',
     'confirmation_no'              => 'No',
@@ -209,25 +210,35 @@ return [
     'chose_an_file'                => 'Elige un fichero ',
 
 	    // privilege
-    'privileges_name'               =>'Privilege Name',
+    'privileges_name'               =>'Nombre del Privilegio',
     'privileges_super_admin'        =>'Super Admin',
-    'privileges_standart_user'      =>'Standart user',
+    'privileges_standart_user'      =>'Usuario Estándar',
     'privileges_ID'                 =>'ID',
-    'set_as_superadmin'             =>'Set as Superadmin',
-    'chose_theme_color_select'      =>'** Choose Backend Theme Color',
-    'chose_theme_color'             =>' Theme Color',
-    'privileges_configuration'      =>'Privileges Configuration',
+    'set_as_superadmin'             =>'Establecer como Superadmin',
+    'chose_theme_color_select'      =>'** Escoger color del tema',
+    'chose_theme_color'             =>' Color del Tema',
+    'privileges_configuration'      =>'Configuración de Privilegios',
     'privileges_module_list_no'     =>'No.',
-    'privileges_module_list_mod_names'=>'Module\'s Name',
-    'privileges_module_list_view'   =>'View',
-    'privileges_module_list_create' =>'Create',
-    'privileges_module_list_read'   =>'Read',
-    'privileges_module_list_update' =>'Update',
-    'privileges_module_list_delete' =>'Delete',
+    'privileges_module_list_mod_names'=>'Módulos',
+    'privileges_module_list_view'   =>'Ver',
+    'privileges_module_list_create' =>'Crear',
+    'privileges_module_list_read'   =>'Leer',
+    'privileges_module_list_update' =>'Actualizar',
+    'privileges_module_list_delete' =>'Eliminar',
 	
 	 //datamodal 
-    'datamodal_select'=>'Select',
-    'datamodal_search_and_enter'=>'Search and enter...',
-    'datamodal_enter_to_search'=>'Enter to search',
-    'datamodal_browse_data'=>'Browse Data' ,
+
+    'datamodal_select'=>'Seleccionar',
+    'datamodal_search_and_enter'=>'Buscar y enter...',
+    'datamodal_enter_to_search'=>'Enter para buscar',
+    'datamodal_browse_data'=>'Escojer Dato',
+
+	//action confirmation
+    'confirmation_title' => 'Confirmación',
+    'confirmation_text' => '¿Está seguro que desea realizar esta acción?',
+
+    //child
+    'child_form'		=> 'Formulario',
+    'child_table_detail' 	=> 'Tabla de Detalles',
+
 ];

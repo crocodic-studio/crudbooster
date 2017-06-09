@@ -1,11 +1,13 @@
 <?php 
 	$name = str_slug($form['label'],'');
 ?>
+@push('bottom')
 <script type="text/javascript">
 	$(function() {
 		$('#form-group-{{$name}} .select2').select2();		
 	})
 </script>
+@endpush
 <div class='form-group {{$header_group_class}}' id='form-group-{{$name}}'>								
 	
 	@if($form['columns'])						
@@ -20,7 +22,7 @@
 			<div class='row'>
 				<div class='col-sm-10'>
 					<div class="panel panel-default">
-						<div class="panel-heading"><i class="fa fa-pencil-square-o"></i> Form</div>
+						<div class="panel-heading"><i class="fa fa-pencil-square-o"></i> {{trans('crudbooster.child_form')}}</div>
 						<div class="panel-body child-form-area">
 							@foreach($form['columns'] as $col)	
 							<?php $name_column = $name.$col['name'];?>
@@ -55,7 +57,7 @@
 												}
 										?>
 										<label class="radio-inline">
-										  <input type="radio" name="{{$col['name']}}" class='{{ ($e==0 && $col['required'])?"required":""}} {{$name_column}}'  value="{{$radio_value}}"> {{$radio_label}} 
+										  <input type="radio" name="{{$col['name']}}" class='{{ ($e==0 && $col['required'])?"required":""}} {{$name_column}}'  value="{{$radio_value}}" {{ ($col['value']==$radio_value)?'checked':'' }}> {{$radio_label}} 
 										</label>
 										<?php endforeach;?>
 										<?php endif;?>
@@ -65,10 +67,11 @@
 									  <input type="hidden" class="input-id">
 								      <input type="text" class="form-control input-label {{$col['required']?"required":""}}" readonly>
 								      <span class="input-group-btn">
-								        <button class="btn btn-primary" onclick="showModal{{$name_column}}()" type="button"><i class='fa fa-search'></i> Browse Data</button>
+								        <button class="btn btn-primary" onclick="showModal{{$name_column}}()" type="button"><i class='fa fa-search'></i> {{trans('crudbooster.datamodal_browse_data')}}</button>
 								      </span>
 								    </div><!-- /input-group -->
 
+								    @push('bottom')
 								    <script type="text/javascript">
 								    	var url_{{$name_column}} = "{{CRUDBooster::mainpath('modal-data')}}?table={{$col['datamodal_table']}}&columns=id,{{$col['datamodal_columns']}}&name_column={{$name_column}}&where={{urlencode($col['datamodal_where'])}}&select_to={{ urlencode($col['datamodal_select_to']) }}&columns_name_alias={{urlencode($col['datamodal_columns_alias'])}}";
 								    	var url_is_setted_{{$name_column}} = false;
@@ -97,13 +100,14 @@
 											hideModal{{$name_column}}();
 										}
 								    </script>
+								    @endpush
 
 									<div id='modal-datamodal-{{$name_column}}' class="modal" tabindex="-1" role="dialog">
 									  <div class="modal-dialog {{ $col['datamodal_size']=='large'?'modal-lg':'' }} " role="document">
 									    <div class="modal-content">
 									      <div class="modal-header">
 									        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-									        <h4 class="modal-title"><i class='fa fa-search'></i> Browse Data {{$col['label']}}</h4>
+									        <h4 class="modal-title"><i class='fa fa-search'></i> {{trans('crudbooster.datamodal_browse_data')}} {{$col['label']}}</h4>
 									      </div>
 									      <div class="modal-body">
 									        <iframe id='iframe-modal-{{$name_column}}' style="border:0;height: 430px;width: 100%" src=""></iframe>
@@ -124,7 +128,7 @@
 									  <input type="hidden" class="input-id">
 								      <input type="text" class="form-control input-label {{$col['required']?"required":""}}" readonly>
 								      <span class="input-group-btn">
-								        <button class="btn btn-primary" id="btn-upload-{{$name_column}}" onclick="showFakeUpload{{$name_column}}()" type="button"><i class='fa fa-search'></i> Browse File</button>
+								        <button class="btn btn-primary" id="btn-upload-{{$name_column}}" onclick="showFakeUpload{{$name_column}}()" type="button"><i class='fa fa-search'></i> {{trans('crudbooster.datamodal_browse_data')}}</button>
 								      </span>
 								    </div><!-- /input-group -->
 
@@ -133,6 +137,7 @@
 								    </div>
 
 								    <input type="file" id='fake-upload-{{$name_column}}' style="display: none">
+								    @push('bottom')
 								    <script type="text/javascript">
 								    	var file;
 										var filename;
@@ -237,6 +242,7 @@
 										}
 
 								    </script>
+								    @endpush
 
 									@elseif($col['type']=='select')
 									<select id='{{$name_column}}' name='{{$col["name"]}}' class='form-control select2 {{$col['required']?"required":""}}' 										
@@ -247,7 +253,11 @@
 											if($col['datatable']) {
 												$tableJoin = explode(',',$col['datatable'])[0];
 												$titleField = explode(',',$col['datatable'])[1];
-												$data = CRUDBooster::get($tableJoin,NULL,"$titleField ASC");
+												if(!$col['datatable_where']) {													
+													$data = CRUDBooster::get($tableJoin,NULL,"$titleField ASC");
+												}else{
+													$data = CRUDBooster::get($tableJoin,$col['datatable_where'],"$titleField ASC");
+												}
 												foreach($data as $d) {
 													echo "<option value='$d->id'>".$d->$titleField."</option>";
 												}
@@ -294,6 +304,7 @@
 										$formula = str_replace("[".$c['name']."]","\$('#".$name.$c['name']."').val()",$formula);
 									}									
 								?>
+								@push('bottom')
 								<script type="text/javascript">
 									function {{ $formula_function_name }}() {
 										var v = {!! $formula !!};
@@ -303,15 +314,18 @@
 										{!! $script_onchange !!}
 									})									
 								</script>
+								@endpush
 							@endif
 
 							@endforeach
 
+							@push('bottom')
 							<script type="text/javascript">
 								var currentRow = null;
 
 								function resetForm{{$name}}() {
 									$('#panel-form-{{$name}}').find("input[type=text],input[type=number],select,textarea").val('');
+									$('#panel-form-{{$name}}').find(".select2").val('').trigger('change');
 								}
 
 								function deleteRow{{$name}}(t) {
@@ -417,14 +431,15 @@
 										currentRow.replaceWith(trRow);
 										currentRow = null;
 									}
-									$('#btn-add-table-{{$name}}').val('Add To Table');
+									$('#btn-add-table-{{$name}}').val('{{trans('crudbooster.button_add_to_table')}}');
 									$('#btn-reset-form-{{$name}}').click();									
 								}
 							</script>
+							@endpush
 						</div>
 						<div class="panel-footer" align="right">
-							<input type='button' class='btn btn-default' id="btn-reset-form-{{$name}}" onclick="resetForm{{$name}}()" value='Reset Form'/>
-							<input type='button' id='btn-add-table-{{$name}}' class='btn btn-primary' onclick="addToTable{{$name}}()" value='Add To Table'/>
+							<input type='button' class='btn btn-default' id="btn-reset-form-{{$name}}" onclick="resetForm{{$name}}()" value='{{trans('crudbooster.button_reset')}}'/>
+							<input type='button' id='btn-add-table-{{$name}}' class='btn btn-primary' onclick="addToTable{{$name}}()" value='{{trans('crudbooster.button_add_to_table')}}'/>
 						</div>
 					</div>
 				</div>
@@ -432,7 +447,7 @@
 
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<i class='fa fa-table'></i> Table Detail
+					<i class='fa fa-table'></i> {{trans('crudbooster.child_table_detail')}}
 				</div>
 				<div class="panel-body no-padding table-responsive"  style="max-height: 400px;overflow: auto;">
 					<table id='table-{{$name}}' class='table table-striped table-bordered'>

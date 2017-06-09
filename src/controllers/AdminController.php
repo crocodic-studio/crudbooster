@@ -49,7 +49,12 @@ class AdminController extends CBController {
 	}	
 
 	public function getLogin()
-	{											
+	{							
+
+		if(CRUDBooster::myId()) {
+			return redirect()->action('\crocodicstudio\crudbooster\controllers\AdminController@getIndex');
+		}
+
 		return view('crudbooster::login');
 	}
  
@@ -81,7 +86,7 @@ class AdminController extends CBController {
 			->select('cms_moduls.name','cms_moduls.path','is_visible','is_create','is_read','is_edit','is_delete')
 			->get();
 			
-			$photo = ($users->photo)?asset($users->photo):'https://www.gravatar.com/avatar/'.md5($users->email).'?s=100';
+			$photo = ($users->photo)?asset($users->photo):asset('vendor/crudbooster/avatar.jpg');
 			Session::put('admin_id',$users->id);			
 			Session::put('admin_is_superadmin',$priv->is_superadmin);
 			Session::put('admin_name',$users->name);	
@@ -104,7 +109,11 @@ class AdminController extends CBController {
 		}		
 	}
 
-	public function getForgot() {		
+	public function getForgot() {	
+		if(CRUDBooster::myId()) {
+			return redirect()->action('\crocodicstudio\crudbooster\controllers\AdminController@getIndex');
+		}
+			
 		return view('crudbooster::forgot');
 	}
 

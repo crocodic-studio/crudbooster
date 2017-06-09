@@ -11,6 +11,8 @@
 	<p class='help-block'>{{ @$form['help'] }}</p>
 
 	</div>
+
+	@push('bottom')
 	<script>
 	$(document).ready(function() {
 	var max_fields_{{$name}}  	= "{{ @$form['max_fields'] }}";
@@ -43,4 +45,5 @@
 	 Load();
 	});
 	</script>
+	@endpush
 </div>

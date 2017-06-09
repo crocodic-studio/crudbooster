@@ -11,7 +11,7 @@
 	
 	<div id='{{$name}}' class="input-group">
 	  <input type="hidden" name="{{$name}}" class="input-id" value="{{$value}}">
-      <input type="text" class="form-control input-label {{$form['required']?"required":""}}" value="{{$datamodal_value}}" readonly>
+      <input type="text" class="form-control input-label {{$required?"required":""}}" {{$required?"required":""}} value="{{$datamodal_value}}" readonly>
       <span class="input-group-btn">
         <button class="btn btn-primary" onclick="showModal{{$name}}()" type="button"><i class='fa fa-search'></i> {{trans('crudbooster.datamodal_browse_data')}}</button>
 			<?php if(strlen($form['datamodal_module_path'])>1){ ?>	
@@ -25,6 +25,7 @@
 	</div>
 </div>
 
+@push('bottom')
 <script type="text/javascript">
 	var url_{{$name}} = "{{CRUDBooster::mainpath('modal-data')}}?table={{$form['datamodal_table']}}&columns=id,{{$form['datamodal_columns']}}&name_column={{$name}}&where={{urlencode($form['datamodal_where'])}}&select_to={{ urlencode($form['datamodal_select_to']) }}&columns_name_alias={{ urlencode($form['datamodal_columns_alias']) }}";
 
@@ -50,6 +51,7 @@
 	}
 </script>
 
+
 <div id='modal-datamodal-{{$name}}' class="modal" tabindex="-1" role="dialog">
   <div class="modal-dialog {{ $form['datamodal_size']=='large'?'modal-lg':'' }} " role="document">
     <div class="modal-content">
@@ -64,3 +66,5 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+@endpush

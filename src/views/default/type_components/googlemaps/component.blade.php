@@ -59,6 +59,7 @@
 
 						    </div>
 						</div>
+						@push('bottom')
                 		<script type="text/javascript">
                 		  
 
@@ -123,45 +124,14 @@
 
 					        @if(!$row->$form['latitude'] && !$row->$form['longitude'])
 
-					        if (navigator.geolocation) {
-					          navigator.geolocation.getCurrentPosition(function(position) {
-
-					          	latitude_temp_{{$name}} = position.coords.latitude;
-					          	longitude_temp_{{$name}} = position.coords.longitude;
-
+					        	latitude_temp_{{$name}} = 0;
+					          	longitude_temp_{{$name}} = 0;
 					            var pos = {
-					              lat: position.coords.latitude,
-					              lng: position.coords.longitude
+					              lat: latitude_temp_{{$name}},
+					              lng: longitude_temp_{{$name}}
 					            };
-
-					            geocoder.geocode({
-								    latLng: pos
-								  }, function(responses) {
-								    if (responses && responses.length > 0) {
-								      address = responses[0].formatted_address;
-								    } else {
-								      address = 'Cannot determine address at this location.';
-								    }
-
-								    $('#current-location-span-{{$name}}').text(address);
-								   									  	
-						            map.setCenter(pos);
-								    
-								   	marker_default_location.setPosition(pos);
-
-								   	address_temp_{{$name}} = address;
-
-								   	infoWindow.close();
-								  	infoWindow.setContent(address);
-					          		infoWindow.open(map, marker_default_location);	
-								});
-					            
-					          }, function() {
-					            console.log('GPS not found !');
-					          });
-					        } else {					          
-					          console.log('GPS not found !');
-					        }
+					            map.setCenter(pos);					            					            					      
+					            map.setZoom(1);
 
 					        @else 
 					        	var pos = {
@@ -271,4 +241,5 @@
 					        setupClickListener('changetype-geocode', ['geocode']);
 					      }
 					      
-					    </script>		        					    
+					    </script>		
+					    @endpush        					    
