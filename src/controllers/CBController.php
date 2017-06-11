@@ -215,11 +215,12 @@ class CBController extends Controller {
 
 			if(strpos($field, ' as ')!==FALSE) {
 				$field = substr($field, strpos($field, ' as ')+4);
+				$field_with = (array_key_exists('join', $coltab))?str_replace(",",".",$coltab['join']):$field;
 				$result->addselect(DB::raw($coltab['name']));
 				$columns_table[$index]['type_data']   = 'varchar';
 				$columns_table[$index]['field']       = $field;
 				$columns_table[$index]['field_raw']   = $field;
-				$columns_table[$index]['field_with']  = $field;
+				$columns_table[$index]['field_with']  = $field_with;
 				$columns_table[$index]['is_subquery'] = true;
 				continue;
 			}
@@ -387,6 +388,7 @@ class CBController extends Controller {
 					foreach($this->orderby as $k=>$v) {
 						if(strpos($k, '.')!==FALSE) {
 							$orderby_table = explode(".",$k)[0];
+							$k = explode(".",$k)[1];
 						}else{
 							$orderby_table = $table;
 						}
@@ -425,7 +427,7 @@ class CBController extends Controller {
 				$addaction[] = [
 					'label'=>$s['label'],
 					'icon'=>$s['button_icon'],
-					'url'=>CRUDBooster::adminPath($s['path']).'?parent_table='.$table_parent.'&parent_columns='.$s['parent_columns'].'&parent_id=['.(!isset($s['custom_parent_id']) ? "id": $s['custom_parent_id']).']&return_url='.urlencode(Request::fullUrl()).'&foreign_key='.$s['foreign_key'].'&label='.urlencode($s['label']),
+					'url'=>CRUDBooster::adminPath($s['path']).'?parent_table='.$table_parent.'&parent_columns='.$s['parent_columns'].'&parent_columns_alias='.$s['parent_columns_alias'].'&parent_id=['.(!isset($s['custom_parent_id']) ? "id": $s['custom_parent_id']).']&return_url='.urlencode(Request::fullUrl()).'&foreign_key='.$s['foreign_key'].'&label='.urlencode($s['label']),
 					'color'=>$s['button_color'],
                                         'showIf'=>$s['showIf']
 				];

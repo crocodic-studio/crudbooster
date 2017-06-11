@@ -112,7 +112,7 @@ return [
     'button_selected_action' => 'Toplu İşlem',
     'button_download_file'   => 'Dosyayı indir',
     'button_reset'           => 'Sıfırla',
-	'button_add_to_table'    =>'Add To Table',
+    'button_add_to_table'    => 'Ekle',
 
     'export_dialog_title'            => "Dışa Aktar",
     'export_dialog_filename'         => 'Dosya Adı',
@@ -216,7 +216,7 @@ return [
     'filter_search'                => 'Ara',
     'filter_from'                  => 'from',
     'filter_to'                    => 'Için',
-
+    'filter_sorting'               => 'Sıralama',
     // confirmation
     'confirmation_yes'             => 'Evet',
     'confirmation_no'              => 'Hayır',
@@ -252,9 +252,15 @@ return [
     'datamodal_search_and_enter'    =>'Aramak için yazın ve enter tuşuna basın..',
     'datamodal_enter_to_search'     =>'Aramak için Enter tuşuna basınız',
     'datamodal_browse_data'         =>'Gözat' ,
+    'datamodal_browse_file'         =>'Dosyaya Gözat' ,
 
-    //child
-    'child_form'		 => 'From',
-    'child_table_detail' => 'Table Details',
+    //child 
+    'table_detail'             =>'Tablo ',
+    'your_file_size_is_too_big'=>'Dosya boyutu büyük.',
+    'save_changes'             =>'Değişikleri Kaydet',
+    'please_complete_the_form' =>'Lütfen formu doldurun !',
+    'this_field_is_required'   =>'Bu alan zorunludur',
+    'text_form'                => 'Form',
+    "your_file_extension_is_not_allowed "=>"izin verilmeyen dosya türü !",
 
 ];
