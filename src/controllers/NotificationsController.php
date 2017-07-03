@@ -44,9 +44,9 @@ class NotificationsController extends CBController {
      
     }
 
-	function hook_query_index(&$query) {
-		$query->where('id_cms_users',CRUDBooster::myId());
-	}
+    public function hook_query_index(&$query) {
+        $query->where('id_cms_users',CRUDBooster::myId());
+    }
 
     public function getLatestJson() {
         
