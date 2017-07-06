@@ -49,7 +49,6 @@
 		}
 		echo "<div id='content-$componentID'></div>";
 ?>
-	@push('bottom')
 		<script>
 			$(function() {
 				$('#content-$componentID').html(\"<i class='fa fa-spin fa-spinner'></i> Please wait loading...\");
@@ -58,8 +57,7 @@
 				});
 			})
 		</script>
-	@endpush
-<?php 
+<?php
 	}else{
 		echo $value;
 	}
