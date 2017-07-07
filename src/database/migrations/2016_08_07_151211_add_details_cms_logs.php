@@ -13,7 +13,7 @@ class AddDetailsCmsLogs extends Migration {
 	{
 		Schema::table('cms_logs', function (Blueprint $table) {
 			//
-			$table->text('details')->nullable();
+			$table->text('details')->nullable()->after('details');
 		});
 	}
 
