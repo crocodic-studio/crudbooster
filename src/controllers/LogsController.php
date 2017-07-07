@@ -40,6 +40,6 @@ class LogsController extends CBController
 		$this->form[] = ["label" => "URL", "name" => "url", "readonly" => true];
 		$this->form[] = ["label"     => "User", "name"      => "id_cms_users", "type"      => "select", "datatable" => "cms_users,name", "readonly"  => true,];
 		$this->form[] = ["label" => "Description", "name" => "description", "readonly" => true];
-		$this->form[] = ["label" => "Differences", "name" => "table", 'type' => 'custom'];
+		$this->form[] = ["label" => "Details", "name" => "Details", 'type' => 'custom'];
 	}
 }
