@@ -11,7 +11,7 @@
 
 [<img src="http://crudbooster.com/CrudBooster_Banner.png"/>](http://crudbooster.com) 
 
-CRUDBooster is a Laravel CRUD Generator. With a new concept of scaffolding, very easy for the beginner and professional. It's easy to use, easy to custom, and very flexible. Don't limit your mind, CRUDBooster gives us a true flexibility to develop an app. You can utilize its built in CRUD Generator or even you just need for your master data only.
+CRUDBooster is a Laravel CRUD Generator. With a new concept of scaffolding, very easy for the beginner and professional. It's easy to use, easy to custom, and very flexible. Don't limit your mind, CRUDBooster gives us a true flexibility to develop an app. You can utilize its built in CRUD Generator or even you just need for your master data only. (LARAVEL KNOWLEDGE IS A MUST)
 
 ## Features 
 - CRUD Generator With GUI
@@ -36,6 +36,9 @@ CRUDBooster is a Laravel CRUD Generator. With a new concept of scaffolding, very
 
 ## Support
 All issues, bugs or help are in one place, in [CRUDBoster Issues](https://github.com/crocodic-studio/crudbooster/issues). To request help or report a problem, centralize everything in the [CRUDBoster Issues](https://github.com/crocodic-studio/crudbooster/issues). Follow the guidelines in the "Using CRUDBooster Issues Page" session.
+
+## Important Note To Developer
+Dear Developer, you are not end new user, to use CRUDBooster, **Laravel knowledge** is a must!, CRUDBooster is just an additional package **Laravel Framework** to help use more efficient in development. If you dont have a laravel knowledge, so nightmare will come to you :D. We can't help you as you want in every issues especially basic issues of web development instead you can find out in internet (stackoverflow or any other)
 
 ## Contribution
 
