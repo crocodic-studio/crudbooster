@@ -991,27 +991,21 @@ class CBController extends Controller {
 					$file = Request::file($name);
 					$ext  = $file->getClientOriginalExtension();
 					$filename = str_slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
+					$filesize = $file->getClientSize() / 1024;
+					$file_path = 'uploads/'.CB::myId().'/'.date('Y-m');					
 
-					//Create Directory Monthly
-					Storage::makeDirectory(date('Y-m'));
-
-					//Move file to storage								
-					$file_path = storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m'));
+					//Create Directory Monthly						
+					Storage::makeDirectory($file_path);		
 
 					if($ro['upload_encrypt']==true) {
 						$filename = md5(str_random(5)).'.'.$ext;
 					}else{
-						if(count(glob($file_path.'/'.$filename))>0)
-						{
-							$filename = $filename.'_'.count(glob($file_path."/$filename*.$ext")).'.'.$ext;					     
-						}else{
-							$filename = $filename.'.'.$ext;
-						}
+						$filename = str_slug($filename,'_').'.'.$ext;
 					}
-										
-					if($file->move($file_path,$filename)) {
-						$this->arr[$name] = 'uploads/'.date('Y-m').'/'.$filename;
-					}
+
+					Storage::putFileAs($file_path,$file,$filename);		
+
+					$this->arr[$name] = $file_path.'/'.$filename;
 				}
 
 				if(!$this->arr[$name]) {
@@ -1020,8 +1014,8 @@ class CBController extends Controller {
 			}
 
 			if(@$ro['type']=='filemanager') {
-				$url = str_replace(asset('/'),'',$this->arr[$name]);
-				$url = str_replace("//","/",$url);
+				$filename = str_replace('/'.config('lfm.prefix').'/'.config('lfm.files_folder_name').'/','',$this->arr[$name]);				
+				$url = 'uploads/'.$filename;
 				$this->arr[$name] = $url;
 			}
 		}		
@@ -1318,7 +1312,6 @@ class CBController extends Controller {
 			CRUDBooster::insertLog(trans("crudbooster.log_try_delete",['name'=>$row->{$this->title_field},'module'=>CRUDBooster::getCurrentModule()->name]));
 			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
 		}
-
 
 		//insert log
 		CRUDBooster::insertLog(trans("crudbooster.log_delete",['name'=>$row->{$this->title_field},'module'=>CRUDBooster::getCurrentModule()->name]));
@@ -1623,19 +1616,31 @@ class CBController extends Controller {
 	public function postUploadSummernote() {
 		$this->cbLoader();
 		$name = 'userfile';
+		$uploadTypes = explode(',',config('crudbooster.UPLOAD_TYPES'));
+		$uploadMaxSize = config('crudbooster.UPLOAD_MAX_SIZE')?:5000;
+
 		if (Request::hasFile($name))
 		{
 			$file = Request::file($name);
 			$ext  = $file->getClientOriginalExtension();
+			$filesize = $file->getClientSize() / 1024;
+			$filePath = 'uploads/'.CB::myId().'/'.date('Y-m');
 
-			//Create Directory Monthly
-			Storage::makeDirectory(date('Y-m'));
+			if($filesize > $uploadMaxSize) {
+				if(in_array($ext, $uploadTypes)) {
+					//Create Directory Monthly
+					Storage::makeDirectory($filePath);
 
-			//Move file to storage
-			$filename = md5(str_random(5)).'.'.$ext;
-			if($file->move(storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m')),$filename)) {
-				echo asset('uploads/'.date('Y-m').'/'.$filename);
-			}
+					//Move file to storage
+					$filename = md5(str_random(5)).'.'.$ext;					
+					Storage::putFileAs($filePath,$file,$filename);	
+					echo asset($filePath.'/'.$filename);
+				}else{
+					echo "The filetype is not allowed!";
+				}
+			}else{
+				echo "The filesize is too large!";
+			}					
 		}
 	}
 
@@ -1646,14 +1651,23 @@ class CBController extends Controller {
 		{
 			$file = Request::file($name);
 			$ext  = $file->getClientOriginalExtension();
+			$filesize = $file->getClientSize() / 1024;
+			$filePath = 'uploads/'.CB::myId().'/'.date('Y-m');
 
-			//Create Directory Monthly
-			Storage::makeDirectory(date('Y-m'));
+			if($filesize > $uploadMaxSize) {
+				if(in_array($ext, $uploadTypes)) {
+					//Create Directory Monthly
+					Storage::makeDirectory(date('Y-m'));
 
-			//Move file to storage
-			$filename = md5(str_random(5)).'.'.$ext;
-			if($file->move(storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m')),$filename)) {
-				echo 'uploads/'.date('Y-m').'/'.$filename;
+					//Move file to storage
+					$filename = md5(str_random(5)).'.'.$ext;					
+					Storage::putFileAs($filePath,$file,$filename);	
+					echo $filePath.'/'.$filename;
+				}else{
+					echo "The filetype is not allowed!";
+				}
+			}else{
+				echo "The filesize is too large!";
 			}
 		}
 	}
