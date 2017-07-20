@@ -54,13 +54,15 @@ class NotificationsController extends CBController {
             ->where('id_cms_users',0)
             ->orWhere('id_cms_users',CRUDBooster::myId())
             ->orderby('id','desc')
-            ->where('is_read',0)
-            ->whereNull('deleted_at')
-            ->take(25)->get();            
+            ->where('is_read',0)            
+            ->take(25);
+        if(\Schema::hasColumn('cms_notifications','deleted_at')) {
+            $rows->whereNull('deleted_at');
+        }          
         
-        $total = count($rows);
+        $total = count($rows->get());
 
-        return response()->json(['items'=>$rows,'total'=>$total]);
+        return response()->json(['items'=>$rows->get(),'total'=>$total]);
     }
 
     public function getRead($id) {

@@ -282,6 +282,7 @@ class CRUDBooster  {
 		  		}
 		  				  		
 		  		$menu->url = $url;
+		  		$menu->url_path = trim(str_replace(url('/'),'',$url),"/");
 
 		  		$child = DB::table('cms_menus')
 		  		->where('is_dashboard',0)
@@ -317,6 +318,7 @@ class CRUDBooster  {
 		  				}		  								  		
 
 				  		$c->url = $url;
+				  		$c->url_path = trim(str_replace(url('/'),'',$url),"/");
 		  			}
 
 		  			$menu->children = $child;
