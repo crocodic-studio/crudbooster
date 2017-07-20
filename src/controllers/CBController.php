@@ -1358,9 +1358,8 @@ class CBController extends Controller {
 		$data['page_title']      = 'Import Data '.$module->name;
 
 		if(Request::get('file') && !Request::get('import')) {
-			$file = base64_decode(Request::get('file'));
-			$file = trim(str_replace('uploads','app',$file),'/');
-			$file = storage_path($file);
+			$file = base64_decode(Request::get('file'));			
+			$file = storage_path('app/'.$file);
 			$rows = Excel::load($file,function($reader) {
 			})->get();
 
@@ -1416,9 +1415,8 @@ class CBController extends Controller {
 		$table_columns = DB::getSchemaBuilder()->getColumnListing($this->table);
 
 
-		$file = base64_decode(Request::get('file'));
-		$file = trim(str_replace('uploads','app',$file),'/');
-		$file = storage_path($file);
+		$file = base64_decode(Request::get('file'));			
+		$file = storage_path('app/'.$file);
 
 		$rows = Excel::load($file,function($reader) {
 		})->get();
@@ -1528,13 +1526,14 @@ class CBController extends Controller {
 		    }
 
 			//Create Directory Monthly
-			Storage::makeDirectory(date('Y-m'));
+			$filePath = 'uploads/'.CB::myId().'/'.date('Y-m');
+			Storage::makeDirectory($filePath);
 
 			//Move file to storage
 			$filename = md5(str_random(5)).'.'.$ext;
 			$url_filename = '';
-			if($file->move(storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m')),$filename)) {
-				$url_filename = 'uploads/'.date('Y-m').'/'.$filename;
+			if(Storage::putFileAs($filePath,$file,$filename)) {
+				$url_filename = $filePath.'/'.$filename;
 			}
 			$url = CRUDBooster::mainpath('import-data').'?file='.base64_encode($url_filename);
 			return redirect($url);
