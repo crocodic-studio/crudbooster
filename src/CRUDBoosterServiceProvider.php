@@ -23,20 +23,6 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->publishes([__DIR__.'/localization' => resource_path('lang')], 'cb_localization');                 
         $this->publishes([__DIR__.'/database' => base_path('database')],'cb_migration');
 
-
-        /* Integrate LFM to CRUDBooster */
-        $this->publishes([
-            __DIR__.'/laravel-filemanager/public' => public_path('vendor/laravel-filemanager'),
-        ],'cb_lfm');        
-
-        $this->publishes([
-            __DIR__.'/laravel-filemanager/src/config/lfm.php' => config_path('lfm.php'),
-        ],'cb_lfm');        
-
-        $this->publishes([
-            __DIR__.'/laravel-filemanager/src/views/script.blade.php' => resource_path('views/vendor/laravel-filemanager/script.blade.php'),
-        ],'cb_lfm');
-
         $this->publishes([
             __DIR__.'/userfiles/views/vendor/crudbooster/type_components/readme.txt' => resource_path('views/vendor/crudbooster/type_components/readme.txt'),
         ],'cb_type_components');
@@ -114,16 +100,17 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         }
 
         //Create symlink for uploads path        
-        if(file_exists(public_path('uploads'))) {              
-            $uploadPath = public_path('uploads');                        
-            if(realpath($uploadPath) == $uploadPath) {                            
-                // rrmdir(public_path('uploads'));
-                rename(public_path('uploads'),'uploads.old.'.str_random(5));
-                app('files')->link(storage_path('app'), public_path('uploads'));   
-            }           
-        }else{            
-            app('files')->link(storage_path('app'), public_path('uploads'));
-        }      
+        //Deprecated for a while, because uploads now handled by FileController.php
+        // if(file_exists(public_path('uploads'))) {              
+        //     $uploadPath = public_path('uploads');                        
+        //     if(realpath($uploadPath) == $uploadPath) {                            
+        //         // rrmdir(public_path('uploads'));
+        //         rename(public_path('uploads'),'uploads.old.'.str_random(5));
+        //         app('files')->link(storage_path('app'), public_path('uploads'));   
+        //     }           
+        // }else{            
+        //     app('files')->link(storage_path('app'), public_path('uploads'));
+        // }      
         
         //Crate symlink for assets        
         if(file_exists(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'))) { 
