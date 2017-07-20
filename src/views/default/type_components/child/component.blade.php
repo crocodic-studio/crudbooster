@@ -34,7 +34,7 @@
 								@endif
 								<div class="col-sm-10">
 									@if($col['type']=='text')
-									<input id='{{$name_column}}' type='text' {{ ($col['max'])?"maxlength='$col[max]'":"" }} name='{{$col["name"]}}' class='form-control {{$col['required']?"required":""}}' 										
+									<input id='{{$name_column}}' type='text' {{ ($col['max'])?"maxlength='$col[max]'":"" }} name='child-{{$col["name"]}}' class='form-control {{$col['required']?"required":""}}' 										
 										{{($col['readonly']===true)?"readonly":""}} 
 										/>
 									@elseif($col['type']=='radio')
@@ -57,7 +57,7 @@
 												}
 										?>
 										<label class="radio-inline">
-										  <input type="radio" name="{{$col['name']}}" class='{{ ($e==0 && $col['required'])?"required":""}} {{$name_column}}'  value="{{$radio_value}}"> {{$radio_label}} 
+										  <input type="radio" name="child-{{$col['name']}}" class='{{ ($e==0 && $col['required'])?"required":""}} {{$name_column}}'  value="{{$radio_value}}"> {{$radio_label}} 
 										</label>
 										<?php endforeach;?>
 										<?php endif;?>
@@ -118,11 +118,11 @@
 									</div><!-- /.modal -->
 
 									@elseif($col['type']=='number')
-									<input id='{{$name_column}}' type='number' {{ ($col['min'])?"min='$col[min]'":"" }} {{ ($col['max'])?"max='$col[max]'":"" }} name='{{$col["name"]}}' class='form-control {{$col['required']?"required":""}}' 										
+									<input id='{{$name_column}}' type='number' {{ ($col['min'])?"min='$col[min]'":"" }} {{ ($col['max'])?"max='$col[max]'":"" }} name='child-{{$col["name"]}}' class='form-control {{$col['required']?"required":""}}' 										
 										{{($col['readonly']===true)?"readonly":""}} 
 										/>
 									@elseif($col['type']=='textarea')		
-									<textarea id='{{$name_column}}' name='{{$col["name"]}}' class='form-control {{$col['required']?"required":""}}' {{($col['readonly']===true)?"readonly":""}} ></textarea>
+									<textarea id='{{$name_column}}' name='child-{{$col["name"]}}' class='form-control {{$col['required']?"required":""}}' {{($col['readonly']===true)?"readonly":""}} ></textarea>
 									@elseif($col['type']=='upload')
 									<div id='{{$name_column}}' class="input-group">
 									  <input type="hidden" class="input-id">
@@ -245,7 +245,7 @@
 								    @endpush
 
 									@elseif($col['type']=='select')
-									<select id='{{$name_column}}' name='{{$col["name"]}}' class='form-control select2 {{$col['required']?"required":""}}' 										
+									<select id='{{$name_column}}' name='child-{{$col["name"]}}' class='form-control select2 {{$col['required']?"required":""}}' 										
 										{{($col['readonly']===true)?"readonly":""}} 
 										>
 										<option value=''>{{trans('crudbooster.text_prefix_option')}} {{$col['label']}}</option>
@@ -277,7 +277,7 @@
 										?>										
 									</select>
 									@elseif($col['type']=='hidden')
-										<input type="{{$col['type']}}" id="{{$name.$col["name"]}}" name="{{$name.$col["name"]}}" value="{{$col["value"]}}">
+										<input type="{{$col['type']}}" id="{{$name.$col["name"]}}" name="child-{{$name.$col["name"]}}" value="{{$col["value"]}}">
 									@endif
 
 									@if($col['help']) 
