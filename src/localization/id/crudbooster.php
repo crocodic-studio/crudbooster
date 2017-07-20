@@ -142,7 +142,8 @@ return [
     'online'               => 'Online',
     'controller_route_404' => 'Controller / Route tidak tersedia',
     'home'                 => 'Halaman Awal',
-
+    'Notificactions'	  => 'Notifications',
+    'Privileges'    	  => 'Privileges',
     'Privileges_Roles'    => 'Detil Hak Akses',
     'Add_New_Privilege'   => 'Tambah Hak Akses',
     'List_Privilege'      => 'Daftar Hak Akses',

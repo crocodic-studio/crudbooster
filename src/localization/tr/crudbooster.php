@@ -144,7 +144,8 @@ return [
     'online'               => 'Çevrimiçi',
     'controller_route_404' => 'Controller / Route Sayfa bulunamadı',
     'home'                 => 'Anasayfa',
-
+    'Notificactions'	  => 'Notifications',
+    'Privileges'    	  => 'Privileges',
     'Privileges_Roles'    => 'Yetki Rolleri',
     'Add_New_Privilege'   => 'Rol Ekle',
     'List_Privilege'      => 'Roller',

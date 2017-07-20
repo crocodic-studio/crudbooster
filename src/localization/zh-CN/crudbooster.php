@@ -143,7 +143,8 @@ return [
     'online'               => '在线',
     'controller_route_404' => '页面不存在',
     'home'                 => '首页',
-
+    'Notificactions'	  => 'Notifications',
+    'Privileges'    	  => 'Privileges',
     'Privileges_Roles'    => '角色权限',
     'Add_New_Privilege'   => '新增角色',
     'List_Privilege'      => '角色列表',

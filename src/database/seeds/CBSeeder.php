@@ -300,7 +300,7 @@ class Cms_modulsSeeder extends Seeder {
         [
             
             'created_at'=>date('Y-m-d H:i:s'),
-            'name'=>'Notifications',
+            'name'=>trans('crudbooster.Notifications'),
             'icon'=>'fa fa-cog',
             'path'=>'notifications',
             'table_name'=>'cms_notifications',
@@ -311,7 +311,7 @@ class Cms_modulsSeeder extends Seeder {
         [
             
             'created_at'=>date('Y-m-d H:i:s'),
-            'name'=>'Privileges',
+            'name'=>trans('crudbooster.Privileges'),
             'icon'=>'fa fa-cog',
             'path'=>'privileges',
             'table_name'=>'cms_privileges',
@@ -322,7 +322,7 @@ class Cms_modulsSeeder extends Seeder {
         [
             
             'created_at'=>date('Y-m-d H:i:s'),
-            'name'=>'Privileges Roles',
+            'name'=>trans('crudbooster.Privileges_Roles'),
             'icon'=>'fa fa-cog',
             'path'=>'privileges_roles',
             'table_name'=>'cms_privileges_roles',
@@ -333,7 +333,7 @@ class Cms_modulsSeeder extends Seeder {
         [   
             
             'created_at'=>date('Y-m-d H:i:s'),
-            'name'=>'Users',
+            'name'=>trans('crudbooster.Users_Management'),
             'icon'=>'fa fa-users',
             'path'=>'users',
             'table_name'=>'cms_users',
@@ -344,7 +344,7 @@ class Cms_modulsSeeder extends Seeder {
         [   
             
             'created_at'=>date('Y-m-d H:i:s'),
-            'name'=>'Settings',
+            'name'=>trans('crudbooster.settings'),
             'icon'=>'fa fa-cog',
             'path'=>'settings',
             'table_name'=>'cms_settings',
@@ -354,7 +354,7 @@ class Cms_modulsSeeder extends Seeder {
         ],[ 
             
             'created_at'=>date('Y-m-d H:i:s'),
-            'name'=>'Module Generator',
+            'name'=>trans('crudbooster.Module_Generator'),
             'icon'=>'fa fa-database',
             'path'=>'module_generator',
             'table_name'=>'cms_moduls',
@@ -364,7 +364,7 @@ class Cms_modulsSeeder extends Seeder {
         ],[ 
             
             'created_at'=>date('Y-m-d H:i:s'),
-            'name'=>'Menu Management',
+            'name'=>trans('crudbooster.Menu_Management'),
             'icon'=>'fa fa-bars',
             'path'=>'menu_management',
             'table_name'=>'cms_menus',
@@ -374,7 +374,7 @@ class Cms_modulsSeeder extends Seeder {
         ],[ 
             
             'created_at'=>date('Y-m-d H:i:s'),
-            'name'=>'Email Template',
+            'name'=>trans('crudbooster.Email_Templates'),
             'icon'=>'fa fa-envelope-o',
             'path'=>'email_templates',
             'table_name'=>'cms_email_templates',
@@ -384,7 +384,7 @@ class Cms_modulsSeeder extends Seeder {
         ],[ 
             
             'created_at'=>date('Y-m-d H:i:s'),
-            'name'=>'Statistic Builder',
+            'name'=>trans('crudbooster.Statistic_Builder'),
             'icon'=>'fa fa-dashboard',
             'path'=>'statistic_builder',
             'table_name'=>'cms_statistics',
@@ -394,7 +394,7 @@ class Cms_modulsSeeder extends Seeder {
         ],[ 
             
             'created_at'=>date('Y-m-d H:i:s'),
-            'name'=>'API Generator',
+            'name'=>trans('crudbooster.API_Generator'),
             'icon'=>'fa fa-cloud-download',
             'path'=>'api_generator',
             'table_name'=>'',
@@ -404,14 +404,14 @@ class Cms_modulsSeeder extends Seeder {
         ],[ 
             
             'created_at'=>date('Y-m-d H:i:s'),
-            'name'=>'Logs',
+            'name'=>trans('crudbooster.Log_User_Access'),
             'icon'=>'fa fa-flag-o',
             'path'=>'logs',
             'table_name'=>'cms_logs',
             'controller'=>'LogsController',
             'is_protected'=>1,                                
             'is_active'=>1
-        ]      
+        ]       
             ];
 
 
