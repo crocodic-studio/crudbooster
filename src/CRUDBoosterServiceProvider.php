@@ -26,10 +26,6 @@ class CRUDBoosterServiceProvider extends ServiceProvider
 
         /* Integrate LFM to CRUDBooster */
         $this->publishes([
-            __DIR__.'/laravel-filemanager' => base_path('vendor/unisharp/laravel-filemanager'),
-        ],'cb_lfm');
-
-        $this->publishes([
             __DIR__.'/laravel-filemanager/public' => public_path('vendor/laravel-filemanager'),
         ],'cb_lfm');        
 

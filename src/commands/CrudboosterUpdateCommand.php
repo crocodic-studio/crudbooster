@@ -38,7 +38,19 @@ class CrudboosterUpdateCommand extends Command {
 		$this->header();
 		$this->checkRequirements();
 
-		$this->info('Updating: ');						 
+		$this->info('Updating: ');	
+
+		$configLFM = config_path('lfm.php');
+		$configLFM = file_get_contents($configLFM);
+		$configLFMModified = str_replace("['web','auth']","['web','\crocodicstudio\crudbooster\middlewares\CBBackend']",$configLFM);
+		$configLFMModified = str_replace('Unisharp\Laravelfilemanager\Handlers\ConfigHandler::class','function() {return Session::get("admin_id");}',$configLFMModified);
+		$configLFMModified = str_replace("'alphanumeric_filename' => false","'alphanumeric_filename' => true",$configLFMModified);
+		$configLFMModified = str_replace("'alphanumeric_directory' => false","'alphanumeric_directory' => true",$configLFMModified);
+		$configLFMModified = str_replace("'alphanumeric_directory' => false","'alphanumeric_directory' => true",$configLFMModified);
+		$configLFMModified = str_replace("'base_directory' => 'public'","'base_directory' => 'storage/app'",$configLFMModified);
+		$configLFMModified = str_replace("'images_folder_name' => 'photos'","'images_folder_name' => 'uploads'",$configLFMModified);
+		$configLFMModified = str_replace("'files_folder_name'  => 'files'","'files_folder_name'  => 'uploads'",$configLFMModified);
+		file_put_contents(config_path('lfm.php'), $configLFMModified);					 
 
 		$this->info('Publishing CRUDBooster needs file...');
 		$this->callSilent('vendor:publish');		
