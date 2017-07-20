@@ -38,54 +38,7 @@ class CrudboosterUpdateCommand extends Command {
 		$this->header();
 		$this->checkRequirements();
 
-		$this->info('Updating: ');
-				
-		//Create vendor folder at public
-		$this->info('Checking public/vendor directory...');
-        if(!file_exists(public_path('vendor'))) {
-        	$this->info('Creating public/vendor directory...');
-            mkdir(public_path('vendor'),0777);
-        }else{
-        	if(!is_writable(public_path('vendor'))) {
-        		$this->info('Setup aborted !');
-        		$this->info('Please set public/vendor directory to writable 0777');
-        		return false;
-        	}
-        }
-
-        //Create symlink for uploads path
-        $this->info('Checking public/uploads directory...');
-        if(file_exists(public_path('uploads'))) {  
-        	$this->info('Uploads directory is exists');
-        	$uploadPath = public_path('uploads');
-        	$this->info('Upload Path: '.$uploadPath);  
-        	
-        	if(realpath($uploadPath) == $uploadPath) {        	  
-	            $this->info('Removing public/uploads directory & create a symlink...');
-                rrmdir(public_path('uploads'));
-                app('files')->link(storage_path('app'), public_path('uploads'));   
-            }           
-        }else{
-        	$this->info('Creating a symlink for public/uploads directory...');
-            app('files')->link(storage_path('app'), public_path('uploads'));
-        }      
-        
-
-        //Crate symlink for assets
-        $this->info('Checking public/vendor/crudbooster directory...');
-        if(file_exists(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'))) { 
-
-            $vendorpath = public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster');            
-            
-            if(realpath($vendorpath) == $vendorpath) {                     	
-	           $this->info('Clear existing public/vendor/crudbooster, and create a symlink for it...');                                  
-                rrmdir(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'));
-                app('files')->link(__DIR__.'/../assets',public_path('vendor/crudbooster'));     
-            }        
-        }else{            
-        	$this->info('Creating a public/vendor/crudbooster symlink...');  
-            app('files')->link(__DIR__.'/../assets',public_path('vendor/crudbooster'));
-        }  
+		$this->info('Updating: ');						 
 
 		$this->info('Publishing CRUDBooster needs file...');
 		$this->callSilent('vendor:publish');		
