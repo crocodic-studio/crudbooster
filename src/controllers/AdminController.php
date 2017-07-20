@@ -12,15 +12,8 @@ use CRUDBooster;
 class AdminController extends CBController {	
 
 	function getIndex() {
-
-		$dashboard = CRUDBooster::sidebarDashboard();		
-		if($dashboard && $dashboard->url) {
-			return redirect($dashboard->url);
-		}
-
 		$data = array();			
-		$data['page_title']       = '<strong>Dashboard</strong>';		
-		$data['page_menu']        = Route::getCurrentRoute()->getActionName();		
+		$data['page_title']       = '<strong>Dashboard</strong>';				
 		return view('crudbooster::home',$data);
 	}
 
@@ -42,7 +35,7 @@ class AdminController extends CBController {
 
 		if(\Hash::check($password,$users->password)) {
 			Session::put('admin_lock',0);	
-			return redirect()->route('AdminControllerGetIndex'); 
+			return redirect(CRUDBooster::adminPath());
 		}else{
 			echo "<script>alert('".trans('crudbooster.alert_password_wrong')."');history.go(-1);</script>";				
 		}
@@ -52,7 +45,7 @@ class AdminController extends CBController {
 	{							
 
 		if(CRUDBooster::myId()) {
-			return redirect()->action('\crocodicstudio\crudbooster\controllers\AdminController@getIndex');
+			return redirect(CRUDBooster::adminPath());
 		}
 
 		return view('crudbooster::login');
@@ -103,7 +96,7 @@ class AdminController extends CBController {
 			$cb_hook_session = new \App\Http\Controllers\CBHook;
 			$cb_hook_session->afterLogin();
 
-			return redirect()->route('AdminControllerGetIndex'); 
+			return redirect(CRUDBooster::adminPath());
 		}else{
 			return redirect()->route('getLogin')->with('message', trans('crudbooster.alert_password_wrong'));			
 		}		
@@ -111,7 +104,7 @@ class AdminController extends CBController {
 
 	public function getForgot() {	
 		if(CRUDBooster::myId()) {
-			return redirect()->action('\crocodicstudio\crudbooster\controllers\AdminController@getIndex');
+			return redirect(CRUDBooster::adminPath());
 		}
 			
 		return view('crudbooster::forgot');
