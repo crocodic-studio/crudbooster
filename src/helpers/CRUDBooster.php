@@ -22,7 +22,9 @@ class CRUDBooster  {
 		}
 
 		public static function insert($table,$data=[]) {
-			$data['id'] = DB::table($table)->max('id') + 1;
+			if(\Config::get('database.default')!='sqlsrv'){
+				$data['id'] = DB::table($table)->max('id') + 1;
+			}
 			if(!$data['created_at']) {
 				if(Schema::hasColumn($table,'created_at')) {
 					$data['created_at'] = date('Y-m-d H:i:s');
@@ -677,7 +679,14 @@ class CRUDBooster  {
 			$table = CRUDBooster::parseSqlTable($table);
 
 			if(!$table['table']) throw new \Exception("parseSqlTable can't determine the table");							
-			$query = "select * from information_schema.COLUMNS where TABLE_SCHEMA = '$table[database]' and TABLE_NAME = '$table[table]' and COLUMN_KEY = 'PRI'";
+			if(\Config::get('database.default')=='sqlsrv'){
+				//sql server
+				$query = "SELECT Col.Column_Name from INFORMATION_SCHEMA.TABLE_CONSTRAINTS Tab, INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE Col WHERE Col.Constraint_Name = Tab.Constraint_Name AND Col.Table_Name = Tab.Table_Name AND Constraint_Type = 'PRIMARY KEY' AND Col.Table_Name = '$table[table]'";
+			}	
+			else{			
+				//mysql server
+				$query = "select * from information_schema.COLUMNS where TABLE_SCHEMA = 'dbo' and TABLE_NAME = '$table[table]' and COLUMN_KEY = 'PRI'";
+			}
 			$keys = DB::select($query);
 			$primary_key = $keys[0]->COLUMN_NAME;
 			if($primary_key) {				
