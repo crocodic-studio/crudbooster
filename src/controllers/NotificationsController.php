@@ -44,6 +44,10 @@ class NotificationsController extends CBController {
      
     }
 
+    public function hook_query_index(&$query) {
+        $query->where('id_cms_users',CRUDBooster::myId());
+    }
+
     public function getLatestJson() {
         
         $rows = DB::table('cms_notifications')
@@ -51,6 +55,7 @@ class NotificationsController extends CBController {
             ->orWhere('id_cms_users',CRUDBooster::myId())
             ->orderby('id','desc')
             ->where('is_read',0)
+            ->whereNull('deleted_at')
             ->take(25)->get();            
         
         $total = count($rows);
