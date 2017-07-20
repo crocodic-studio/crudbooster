@@ -35,14 +35,15 @@ class CRUDBooster  {
 
 		public static function first($table,$id) {
 			$table = self::parseSqlTable($table)['table'];
-			if(is_int($id)) {
-				return DB::table($table)->where('id',$id)->first();
-			}elseif (is_array($id)) {
+			if(is_array($id)) {
 				$first = DB::table($table);
 				foreach($id as $k=>$v) {
 					$first->where($k,$v);
 				}
 				return $first->first();
+			}else{
+				$pk = self::pk($table);
+				return DB::table($table)->where($pk,$id)->first();
 			}
 		}
 
@@ -339,7 +340,8 @@ class CRUDBooster  {
 		}		
 
 		private static function getModulePath() {
-			return Request::segment(2);
+			$adminPathSegments = count(explode('/',config('crudbooster.ADMIN_PATH')));
+            return Request::segment(1 + $adminPathSegments);
 		}
 
 		public static function mainpath($path=NULL) {
