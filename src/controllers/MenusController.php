@@ -150,7 +150,8 @@ use CRUDBooster;
 			$this->col[] = array("label"=>"Is Active","name"=>"is_active" );
 			$this->col[] = array("label"=>"Privileges","name"=>"id_cms_privileges","join"=>"cms_privileges,name");
 
-			$this->form   = array();
+			$this->form   = array();			
+			$this->form[] = array("label"=>"Privileges","name"=>"cms_menus_privileges","type"=>"select2","select2_multiple"=>true,"datatable"=>"cms_privileges,name","relationship_table"=>"cms_menus_privileges","required"=>TRUE);
 			$this->form[] = array("label"=>"Name","name"=>"name","type"=>"text","required"=>TRUE,"validation"=>"required|min:3|max:255|alpha_spaces","placeholder"=>"You can only enter the letter only");
 			$this->form[] = array("label"=>"Type","name"=>"type","type"=>"radio","required"=>TRUE,'dataenum'=>['Module','Statistic','URL','Controller & Method','Route'],'value'=>'Module');			
 
@@ -188,11 +189,10 @@ use CRUDBooster;
 	  	$id_cms_privileges = ($id_cms_privileges)?:CRUDBooster::myPrivilegeId();
 
 
-	  	$menu_active = DB::table('cms_menus')
-	  	->where('id_cms_privileges',$id_cms_privileges)
+	  	$menu_active = DB::table('cms_menus')	  		  	
 	  	->where('parent_id',0)
 	  	->where('is_active',1)
-	  	->orderby('sorting','asc')
+	  	->orderby('sorting','asc')	 	  	
 	  	->get();
 
 	  	foreach($menu_active as &$menu) {
@@ -202,8 +202,7 @@ use CRUDBooster;
 	  		}
 	  	}
 
-	  	$menu_inactive = DB::table('cms_menus')
-	  	->where('id_cms_privileges',$id_cms_privileges)
+	  	$menu_inactive = DB::table('cms_menus')	  	
 	  	->where('parent_id',0)
 	  	->where('is_active',0)
 	  	->orderby('sorting','asc')

@@ -382,7 +382,7 @@ class ApiController extends Controller {
 							if($type == 'password') {
 								if(!Hash::check($value,$rows->{$name})) {
 									$result['api_status'] = 0;
-									$result['api_message'] = 'Your password is wrong !';
+									$result['api_message'] = 'Your password is wrong !';									
 									if(CRUDBooster::getSetting('api_debug_mode')=='true') {
 										$result['api_authorization'] = $debug_mode_message;
 									}					
@@ -478,6 +478,7 @@ class ApiController extends Controller {
 		    }
 
 		    $row_assign_keys = array_keys($row_assign);
+		    $fieldHash = null;
 
 		    foreach($parameters as $param) {
 		    	$name = $param['name'];
@@ -500,14 +501,15 @@ class ApiController extends Controller {
 					{			
 						$file = Request::file($name);					
 						$ext  = $file->getClientOriginalExtension();
+						$filePath = 'uploads/'.CRUDBooster::myId().'/'.date('Y-m');
 
 						//Create Directory Monthly 
-						Storage::makeDirectory(date('Y-m'));						
+						Storage::makeDirectory($filePath);						
 
 						//Move file to storage
 						$filename = md5(str_random(5)).'.'.$ext;
-						if($file->move(storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m')),$filename)) {						
-							$v = 'uploads/'.date('Y-m').'/'.$filename;
+						if(Storage::putFileAs($filePath,$file,$filename)) {						
+							$v = $filePath.'/'.$filename;
 							$row_assign[$name] = $v;
 						}					  
 					}	
@@ -519,16 +521,17 @@ class ApiController extends Controller {
 					@$mime_type = $mime_type[1];
 					if($mime_type) {
 						if(in_array($mime_type, $uploads_format_candidate)) {
-							Storage::makeDirectory(date('Y-m'));
+							$filePath = 'uploads/'.CRUDBooster::myId().'/'.date('Y-m');
+							Storage::makeDirectory($filePath);
 							$filename = md5(str_random(5)).'.'.$mime_type;
-							if(file_put_contents(storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m')).'/'.$filename, $filedata)) {
-								$v = 'uploads/'.date('Y-m').'/'.$filename;
+							if(Storage::put($filePath.'/'.$filename,$filedata)) {								
+								$v = $filePath.'/'.$filename;
 								$row_assign[$name] = $v;
 							}
 						}
 					}
 		    	}elseif ($type == 'password') {
-		    		$row_assign[$name] = Hash::make($value);
+		    		$row_assign[$name] = Hash::make(g($name));		    		
 		    	}
 		    	
 		    }
@@ -547,7 +550,7 @@ class ApiController extends Controller {
 		    	$row_assign['id'] = CRUDBooster::newId($table);
 		    	DB::table($table)->insert($row_assign);
 		    	$result['api_status']  = ($row_assign['id'])?1:0;
-				$result['api_message'] = ($row_assign['id'])?'success':'failed';
+				$result['api_message'] = ($row_assign['id'])?'success':'failed';				
 				if(CRUDBooster::getSetting('api_debug_mode')=='true') {
 					$result['api_authorization'] = $debug_mode_message;
 				}
@@ -556,9 +559,9 @@ class ApiController extends Controller {
 		    }else{
 
 		    	try{
+		    		$pk = CRUDBooster::pk($table);
 		    		$update = DB::table($table);
-
-				    $update->where($table.'.id',$row_assign['id']);
+				    $update->where($table.'.'.$pk,$row_assign['id']);
 
 				    if($row_api->sql_where) {
 				    	$update->whereraw($row_api->sql_where);

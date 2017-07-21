@@ -24,6 +24,8 @@ return [
 
 	'DEFAULT_THUMBNAIL_WIDTH' 	=>300,
 
+	'DEFEAULT_UPLOAD_MAX_SIZE'	=>1000, //in KB
+
 	'IMAGE_EXTENSIONS'			=>'jpg,png,jpeg,gif,bmp',
 
 	'MAIN_DB_DATABASE' 			=>env('DB_DATABASE'), //Very useful if you use config:cache
