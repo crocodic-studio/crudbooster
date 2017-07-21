@@ -41,10 +41,10 @@
 			</div>
 			@if(@$form['filemanager_type'])
 				@push('bottom')
-				<script type="text/javascript">$('#lfm-{{$name}}').filemanager('file','{{url("/")}}');</script>
+				<script type="text/javascript">$('#lfm-{{$name}}').filemanager('file',{prefix: "{{url(config('lfm.prefix'))}}"});</script>
 				@endpush
 			@else
 				@push('bottom')
-				<script type="text/javascript">$('#lfm-{{$name}}').filemanager('images','{{url("/")}}');</script>
+				<script type="text/javascript">$('#lfm-{{$name}}').filemanager('images',{prefix: "{{url(config('lfm.prefix'))}}"});</script>
 				@endpush
 			@endif

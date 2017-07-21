@@ -124,23 +124,7 @@
 
           });
          </script>
-         @endpush
-
-         <div class='row'>
-            <div class='col-sm-12'>
-
-              <form method='get' action='' id='form-privilege'>
-                <div class='form-group'>
-                <label class='label-control'>Selected Privilege <a href='#' title='Select the privilege you wish for the menu'>(?)</a></label>
-                <select class='form-control' onChange="$('#form-privilege').submit()" name='id_cms_privileges'>                  
-                    @foreach($privileges as $p)
-                      <option value='{{$p->id}}' {{($id_cms_privileges == $p->id)?"selected":""}}>{{$p->name}}</option>
-                    @endforeach
-                </select>
-                </div>
-              </form>
-            </div>
-         </div>         
+         @endpush                
 
          <div class='row'>
               <div class="col-sm-5">
@@ -152,12 +136,28 @@
                   <div class="panel-body clearfix">
                     <ul class='draggable-menu draggable-menu-active'>
                       @foreach($menu_active as $menu)
-                        <li data-id='{{$menu->id}}' data-name='{{$menu->name}}'><div class='{{$menu->is_dashboard?"is-dashboard":""}}' title="{{$menu->is_dashboard?'This is setted as Dashboard':''}}">
-                        <i class='{{($menu->is_dashboard)?"icon-is-dashboard fa fa-dashboard":$menu->icon}}'></i> {{$menu->name}} <span class='pull-right'><a class='fa fa-pencil' title='Edit' href='{{route("MenusControllerGetEdit",["id"=>$menu->id])}}?return_url={{urlencode(Request::fullUrl())}}'></a>&nbsp;&nbsp;<a title='Delete' class='fa fa-trash' onclick='{{CRUDBooster::deleteConfirm(route("MenusControllerGetDelete",["id"=>$menu->id]))}}' href='javascript:void(0)'></a></span></div>
+                      @php
+                        $privileges = DB::table('cms_menus_privileges')
+                        ->join('cms_privileges','cms_privileges.id','=','cms_menus_privileges.id_cms_privileges')
+                        ->where('id_cms_menus',$menu->id)->pluck('cms_privileges.name')->toArray();
+                      @endphp
+                        <li data-id='{{$menu->id}}' data-name='{{$menu->name}}'>
+                        <div class='{{$menu->is_dashboard?"is-dashboard":""}}' title="{{$menu->is_dashboard?'This is setted as Dashboard':''}}">
+                        <i class='{{($menu->is_dashboard)?"icon-is-dashboard fa fa-dashboard":$menu->icon}}'></i> {{$menu->name}} <span class='pull-right'><a class='fa fa-pencil' title='Edit' href='{{route("MenusControllerGetEdit",["id"=>$menu->id])}}?return_url={{urlencode(Request::fullUrl())}}'></a>&nbsp;&nbsp;<a title='Delete' class='fa fa-trash' onclick='{{CRUDBooster::deleteConfirm(route("MenusControllerGetDelete",["id"=>$menu->id]))}}' href='javascript:void(0)'></a></span>
+                        <br/><em class="text-muted"><small><i class="fa fa-users"></i> &nbsp; {{implode(', ',$privileges)}}</small></em>
+                        </div>
                           <ul>
                             @if($menu->children)
                               @foreach($menu->children as $child)
-                                <li data-id='{{$child->id}}' data-name='{{$child->name}}'><div class='{{$child->is_dashboard?"is-dashboard":""}}' title="{{$child->is_dashboard?'This is setted as Dashboard':''}}"><i class='{{($child->is_dashboard)?"icon-is-dashboard fa fa-dashboard":$child->icon}}'></i> {{$child->name}} <span class='pull-right'><a class='fa fa-pencil' title='Edit' href='{{route("MenusControllerGetEdit",["id"=>$child->id])}}?return_url={{urlencode(Request::fullUrl())}}'></a>&nbsp;&nbsp;<a title="Delete" class='fa fa-trash' onclick='{{CRUDBooster::deleteConfirm(route("MenusControllerGetDelete",["id"=>$child->id]))}}' href='javascript:void(0)'></a></span></div></li>
+                              @php
+                                $privileges = DB::table('cms_menus_privileges')
+                                ->join('cms_privileges','cms_privileges.id','=','cms_menus_privileges.id_cms_privileges')
+                                ->where('id_cms_menus',$child->id)->pluck('cms_privileges.name')->toArray();
+                              @endphp
+                                <li data-id='{{$child->id}}' data-name='{{$child->name}}'>
+                                <div class='{{$child->is_dashboard?"is-dashboard":""}}' title="{{$child->is_dashboard?'This is setted as Dashboard':''}}"><i class='{{($child->is_dashboard)?"icon-is-dashboard fa fa-dashboard":$child->icon}}'></i> {{$child->name}} <span class='pull-right'><a class='fa fa-pencil' title='Edit' href='{{route("MenusControllerGetEdit",["id"=>$child->id])}}?return_url={{urlencode(Request::fullUrl())}}'></a>&nbsp;&nbsp;<a title="Delete" class='fa fa-trash' onclick='{{CRUDBooster::deleteConfirm(route("MenusControllerGetDelete",["id"=>$child->id]))}}' href='javascript:void(0)'></a></span>
+                                <br/><em class="text-muted"><small><i class="fa fa-users"></i> &nbsp; {{implode(', ',$privileges)}}</small></em>
+                                </div></li>
                               @endforeach
                             @endif
                           </ul>

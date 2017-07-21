@@ -48,58 +48,28 @@ class CrudboosterInstallationCommand extends Command {
         if(file_exists(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'))) {            
             @unlink(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'));
         }
+             
 
-        //Create vendor folder at public
-        $this->info('Checking public/vendor directory...');  
-        if(!file_exists(public_path('vendor'))) {
-            mkdir(public_path('vendor'),0777);
-        }else{
-        	if(!is_writable(public_path('vendor'))) {
-        		$this->info('Setup aborted !');
-        		$this->info('Please set public/vendor directory to writable 0777');
-        		return false;
-        	}
-        }
-
-
-        //Create symlink for uploads path
-        $this->info('Checking public/uploads symlink...');  
-        if(file_exists(public_path('uploads'))) {          
-            $uploadPath = public_path('uploads');
-        	$this->info('Upload Path: '.$uploadPath);        
-        	if(realpath($uploadPath) == $uploadPath) {
-	            $this->info('Remove the existing uploads dir, and create a symlink for it...');                                                                     
-	                rrmdir(public_path('uploads'));
-	                app('files')->link(storage_path('app'), public_path('uploads'));              
-        	}
-        }else{
-        	$this->info('Creating public/uploads symlink...');  
-            app('files')->link(storage_path('app'), public_path('uploads'));
-        }
-
-
-        //Crate symlink for assets
-        $this->info('Checking public/vendor/crudbooster symlink...');  
-        if(file_exists(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'))) {                      
-            $vendorpath = public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster');
-            $this->info('Vendor Path: '.$vendorpath);   
-            if(realpath($vendorpath) == $vendorpath) {                   	
-	            $this->info('Removing public/vendor/crudbooster dir, instead of creating a symlink...');                               
-	                rrmdir(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'));
-	                app('files')->link(__DIR__.'/../assets',public_path('vendor/crudbooster'));
-            }            
-        }else{            
-        	$this->info('Creating public/vendor/crudbooster symlink...');  
-            app('files')->link(__DIR__.'/../assets',public_path('vendor/crudbooster'));
-        }
-
-		if($this->confirm('Do you have setting the database configuration at .env ?')) {
+		if($this->confirm('Do you have setting the database configuration at .env ?')) {			
 
 			$this->info('Publishing CRUDBooster needs file...');
 			$this->callSilent('vendor:publish');	
 			$this->callSilent('vendor:publish',['--tag'=>'cb_migration','--force'=>true]);
 			$this->callSilent('vendor:publish',['--tag'=>'cb_lfm','--force'=>true]);	
 			$this->callSilent('vendor:publish',['--tag'=>'cb_localization','--force'=>true]);		
+
+			$configLFM = config_path('lfm.php');
+			$configLFM = file_get_contents($configLFM);
+			$configLFMModified = str_replace("['web','auth']","['web','\crocodicstudio\crudbooster\middlewares\CBBackend']",$configLFM);
+			$configLFMModified = str_replace('Unisharp\Laravelfilemanager\Handlers\ConfigHandler::class','function() {return Session::get("admin_id");}',$configLFMModified);
+			$configLFMModified = str_replace('auth()->user()->id','Session::get("admin_id")',$configLFMModified);
+			$configLFMModified = str_replace("'alphanumeric_filename' => false","'alphanumeric_filename' => true",$configLFMModified);
+			$configLFMModified = str_replace("'alphanumeric_directory' => false","'alphanumeric_directory' => true",$configLFMModified);
+			$configLFMModified = str_replace("'alphanumeric_directory' => false","'alphanumeric_directory' => true",$configLFMModified);
+			$configLFMModified = str_replace("'base_directory' => 'public'","'base_directory' => 'storage/app'",$configLFMModified);
+			$configLFMModified = str_replace("'images_folder_name' => 'photos'","'images_folder_name' => 'uploads'",$configLFMModified);
+			$configLFMModified = str_replace("'files_folder_name'  => 'files'","'files_folder_name'  => 'uploads'",$configLFMModified);
+			file_put_contents(config_path('lfm.php'), $configLFMModified);
 			
 			$this->info('Dumping the autoloaded files and reloading all new files...');
 			$composer = $this->findComposer();

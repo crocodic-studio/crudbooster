@@ -8,6 +8,8 @@
 			@if(CRUDBooster::getCurrentMethod() != 'getProfile')
 	        <p><a href='{{CRUDBooster::mainpath()}}'>{{trans("crudbooster.form_back_to_list",['module'=>CRUDBooster::getCurrentModule()->name])}}</a></p>      
 	        @endif
+
+	        
 		
             <!-- Box -->
             <div class="box box-primary">
@@ -20,6 +22,9 @@
 				<form method='post' action='{{ (@$row->id)?route("PrivilegesControllerPostEditSave")."/$row->id":route("PrivilegesControllerPostAddSave") }}'>
 				<input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <div class="box-body">
+                	<div class="alert alert-info">
+			        	<strong>Note:</strong> To show the menu you have to create a menu at Menu Management
+			        </div>
 					<div class='form-group'>
 						<label>{{trans('crudbooster.privileges_name')}}</label>
 						<input type='text' class='form-control' name='name' required value='{{ @$row->name }}'/>

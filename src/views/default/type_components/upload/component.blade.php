@@ -3,13 +3,12 @@
 
 			<div class="{{$col_width?:'col-sm-10'}}">
 			@if($value)
-				<?php 
-					$file = str_replace('uploads/','',$value);					
-					if(Storage::exists($file)):								
-						$url         = asset($value);
-						@$ext         = strtolower(end(explode('.',$value)));
+				<?php 					
+					if(Storage::exists($value)):								
+						$url         = asset($value);						
+						$ext 		= pathinfo($url, PATHINFO_EXTENSION);
 						$images_type = array('jpg','png','gif','jpeg','bmp','tiff');																																				
-						if(in_array($ext, $images_type)):
+						if(in_array(strtolower($ext), $images_type)):
 						?>
 							<p><a data-lightbox='roadtrip' href='{{$url}}'><img style='max-width:160px' title="Image For {{$form['label']}}" src='{{$url}}'/></a></p>
 						<?php else:?>

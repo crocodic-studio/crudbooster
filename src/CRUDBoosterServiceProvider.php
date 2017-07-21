@@ -5,6 +5,7 @@ use Illuminate\Support\ServiceProvider;
 use crocodicstudio\crudbooster\commands\CrudboosterInstallationCommand;
 use crocodicstudio\crudbooster\commands\CrudboosterUpdateCommand;
 use Illuminate\Foundation\AliasLoader;
+use App;
 
 class CRUDBoosterServiceProvider extends ServiceProvider
 {
@@ -22,24 +23,6 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->publishes([__DIR__.'/localization' => resource_path('lang')], 'cb_localization');                 
         $this->publishes([__DIR__.'/database' => base_path('database')],'cb_migration');
 
-
-        /* Integrate LFM to CRUDBooster */
-        $this->publishes([
-            __DIR__.'/laravel-filemanager' => base_path('vendor/unisharp/laravel-filemanager'),
-        ],'cb_lfm');
-
-        $this->publishes([
-            __DIR__.'/laravel-filemanager/public' => public_path('vendor/laravel-filemanager'),
-        ],'cb_lfm');        
-
-        $this->publishes([
-            __DIR__.'/laravel-filemanager/src/config/lfm.php' => config_path('lfm.php'),
-        ],'cb_lfm');        
-
-        $this->publishes([
-            __DIR__.'/laravel-filemanager/src/views/script.blade.php' => resource_path('views/vendor/laravel-filemanager/script.blade.php'),
-        ],'cb_lfm');
-
         $this->publishes([
             __DIR__.'/userfiles/views/vendor/crudbooster/type_components/readme.txt' => resource_path('views/vendor/crudbooster/type_components/readme.txt'),
         ],'cb_type_components');
@@ -51,7 +34,9 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         if(!file_exists(app_path('Http/Controllers/AdminCmsUsersController.php'))) {
             $this->publishes([__DIR__.'/userfiles/controllers/AdminCmsUsersController.php' => app_path('Http/Controllers/AdminCmsUsersController.php')],'cb_user_controller');
         }
-        
+
+        /* Symlink Fixed If Missing */
+        $this->symlinkFixed();
                     
         require __DIR__.'/validations/validation.php';        
         require __DIR__.'/routes.php';                        
@@ -106,5 +91,37 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->app->singleton('crudboosterupdate',function() {
             return new CrudboosterUpdateCommand;
         });        
+    }
+
+    private function symlinkFixed() {
+        //Create vendor folder at public        
+        if(!file_exists(public_path('vendor'))) {            
+            mkdir(public_path('vendor'),0777);
+        }
+
+        //Create symlink for uploads path        
+        //Deprecated for a while, because uploads now handled by FileController.php
+        // if(file_exists(public_path('uploads'))) {              
+        //     $uploadPath = public_path('uploads');                        
+        //     if(realpath($uploadPath) == $uploadPath) {                            
+        //         // rrmdir(public_path('uploads'));
+        //         rename(public_path('uploads'),'uploads.old.'.str_random(5));
+        //         app('files')->link(storage_path('app'), public_path('uploads'));   
+        //     }           
+        // }else{            
+        //     app('files')->link(storage_path('app'), public_path('uploads'));
+        // }      
+        
+        //Crate symlink for assets        
+        if(file_exists(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'))) { 
+            $vendorpath = public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster');                        
+            if(realpath($vendorpath) == $vendorpath) {                                     
+                // rrmdir(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'));
+                rename(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'),'crudbooster.old.'.str_random(5));
+                app('files')->link(__DIR__.'/assets',public_path('vendor/crudbooster'));     
+            }        
+        }else{                        
+            app('files')->link(__DIR__.'/assets',public_path('vendor/crudbooster'));
+        }
     }
 }
