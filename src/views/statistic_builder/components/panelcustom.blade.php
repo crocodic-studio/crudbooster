@@ -49,17 +49,15 @@
 		}
 		echo "<div id='content-$componentID'></div>";
 ?>
-	
 		<script>
 			$(function() {
-				$('#content-{{$componentID}}').html("<i class='fa fa-spin fa-spinner'></i> Please wait loading...");
-				$.get('{{$url}}',function(response) {
-					$('#content-{{$componentID}}').html(response);
+				$('#content-$componentID').html(\"<i class='fa fa-spin fa-spinner'></i> Please wait loading...\");
+				$.get('$url',function(response) {
+					$('#content-$componentID').html(response);
 				});
 			})
 		</script>
-	
-<?php 
+<?php
 	}else{
 		echo $value;
 	}

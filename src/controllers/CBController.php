@@ -1291,7 +1291,8 @@ class CBController extends Controller {
 		$this->return_url = ($this->return_url)?$this->return_url:Request::get('return_url');
 
 		//insert log
-		CRUDBooster::insertLog(trans("crudbooster.log_update",['name'=>$this->arr[$this->title_field],'module'=>CRUDBooster::getCurrentModule()->name]));
+		$old_values = json_decode(json_encode($row),true);
+		CRUDBooster::insertLog(trans("crudbooster.log_update",['name'=>$this->arr[$this->title_field],'module'=>CRUDBooster::getCurrentModule()->name]), $this->displayDiff($old_values, $this->arr));
 
 		if($this->return_url) {
 			CRUDBooster::redirect($this->return_url,trans("crudbooster.alert_update_data_success"),'success');
@@ -1302,6 +1303,28 @@ class CBController extends Controller {
 				CRUDBooster::redirect(CRUDBooster::mainpath(),trans("crudbooster.alert_update_data_success"),'success');
 			}
 		}
+	}
+
+	public function getDiff($old_values, $new_values)
+	{
+		unset($old_values['id']);
+		unset($old_values['created_at']);
+		unset($old_values['updated_at']);
+		unset($new_values['created_at']);
+		unset($new_values['updated_at']);
+		return array_diff($old_values, $new_values);
+	}
+
+	public function displayDiff($old_values, $new_values)
+	{
+		$diff  = $this->getDiff($old_values, $new_values);
+		$table = '<table class="table table-striped"><thead><tr><th>Key</th><th>Old Value</th><th>New Value</th></thead><tbody>';
+		foreach ($diff as $key => $value) {
+			$table .= "<tr><td>$key</td><td>$old_values[$key]</td><td>$new_values[$key]</td></tr>";
+		}
+		$table .= '</tbody></table>';
+
+		return $table;
 	}
 
 	public function getDelete($id) {
