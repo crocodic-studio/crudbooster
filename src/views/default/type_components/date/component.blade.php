@@ -4,7 +4,7 @@
 							<div class="{{$col_width?:'col-sm-10'}}">
 							<div class="input-group">  								
 								<span class="input-group-addon open-datetimepicker"><a><i class='fa fa-calendar '></i></a></span>
-								<input type='text' title="{{$form['label']}}" readonly {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control notfocus input_date' name="{{$name}}" id="{{$name}}" value='{{$value}}'/>						
+								<input type='text' title="{{$form['label']}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control notfocus input_date' name="{{$name}}" id="{{$name}}" value='{{$value}}'/>						
 							</div>
 							<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
 							<p class='help-block'>{{ @$form['help'] }}</p>
