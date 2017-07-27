@@ -140,7 +140,7 @@ return [
     'online'               => 'متصل',
     'controller_route_404' => 'لم يتم العثور على الرابط المطلوب',
     'home'                 => 'الرئيسية',
-    'Notificactions'	  => 'Notifications',
+    'Notifications' 	  => 'Notifications',
     'Privileges'    	  => 'Privileges',
     'Privileges_Roles'    => 'صلاحيات الوصول',
     'Add_New_Privilege'   => 'اضافة صلاحية',
