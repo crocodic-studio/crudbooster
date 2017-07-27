@@ -1291,7 +1291,8 @@ class CBController extends Controller {
 		$this->return_url = ($this->return_url)?$this->return_url:Request::get('return_url');
 
 		//insert log
-		CRUDBooster::insertLog(trans("crudbooster.log_update",['name'=>$this->arr[$this->title_field],'module'=>CRUDBooster::getCurrentModule()->name]));
+		$old_values = json_decode(json_encode($row),true);
+		CRUDBooster::insertLog(trans("crudbooster.log_update",['name'=>$this->arr[$this->title_field],'module'=>CRUDBooster::getCurrentModule()->name]), LogsController::displayDiff($old_values, $this->arr));
 
 		if($this->return_url) {
 			CRUDBooster::redirect($this->return_url,trans("crudbooster.alert_update_data_success"),'success');
