@@ -25,7 +25,6 @@
 					}
 				}else{
 					if(add_field) {
-						console.log(add_field);
 						datatableWhere = "{{$add_field}} = " + add_field; 
 					}
 				}
@@ -52,6 +51,7 @@
 			})
 
 			$('#{{$parent}}').trigger('change');
+			$("input[name='{{$parent}}']:checked").trigger("change");
 			$("#{{$form['name']}}").trigger('change');
 		})
 	</script>
