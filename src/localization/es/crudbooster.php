@@ -138,7 +138,7 @@ return [
     'online'               => 'En línea',
     'controller_route_404' => 'Controlador o Ruta no encontrado(a).',
     'home'                 => 'Principal',
-    'Notificactions'	  => 'Notificaciones',
+    'Notifications'	  	=> 'Notificaciones',
     'Privileges'    	  => 'Privilegios',
     'Privileges_Roles'    => 'Privilegios & Roles',
     'Add_New_Privilege'   => 'Añadir Nuevo Privilegio',
@@ -235,26 +235,21 @@ return [
     'datamodal_select'=>'Seleccionar',
     'datamodal_search_and_enter'=>'Buscar y enter...',
     'datamodal_enter_to_search'=>'Enter para buscar',
-    'datamodal_browse_data'=>'Escojer Dato' ,
-
-    'datamodal_select'=>'Select',
-    'datamodal_search_and_enter'=>'Search and enter...',
-    'datamodal_enter_to_search'=>'Enter to search',
-    'datamodal_browse_data'=>'Browse Data' ,
+    'datamodal_browse_data'=>'Escoger Dato',
 
 	//action confirmation
     'confirmation_title' => 'Confirmación',
     'confirmation_text' => '¿Está seguro que desea realizar esta acción?',
 
-    'datamodal_browse_file'=>'Browse File' ,
+    'datamodal_browse_file'=>'Escoger Archivo' ,
     
 
     //child 
-    'table_detail'             =>'Table Detail',
-    'your_file_size_is_too_big'=>'Your file size is too big',
-    'save_changes'             =>'Save Changes',
-    'please_complete_the_form' =>'Please complete the form !',
-    'this_field_is_required'   =>'This field is required',
-    'text_form'                => 'Form',
-     "your_file_extension_is_not_allowed "=>"Your file extension is not allowed !",
+    'table_detail'             =>'Tabla de Detalles',
+    'your_file_size_is_too_big'=>'El tamaño del archivo es demasiado grande',
+    'save_changes'             =>'Guardar Cambios',
+    'please_complete_the_form' =>'Por favor, complete el formulario!',
+    'this_field_is_required'   =>'Este campo es requerido',
+    'text_form'                => 'Formulario',
+     "your_file_extension_is_not_allowed "=>"La extensión del archivo no es permitida!",
 ];

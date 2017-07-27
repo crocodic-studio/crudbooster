@@ -125,7 +125,7 @@ return [
     'online'               => 'Online',
     'controller_route_404' => 'Controle / Rota não encontra]',
     'home'                 => 'Inicio',
-    'Notificactions'	  => 'Notifications',
+    'Notifications' 	  => 'Notifications',
     'Privileges'    	  => 'Privileges', 
     'Privileges_Roles'    => 'Privilégios', 
     'Add_New_Privilege'   => 'Adicionar novo Privilégio', 
