@@ -1,23 +1,42 @@
 	<?php $default = !empty($form['default']) ? $form['default'] : trans('crudbooster.text_prefix_option') ." ". $form['label'];?>
 	@if($form['parent_select'])
-
+	<?php
+		$parent_select 	= (count(explode(",",$form['parent_select'])) > 1)?explode(",",$form['parent_select']):$form['parent_select'];
+		$parent 		= is_array($parent_select)?$parent_select[0]:$parent_select;
+		$add_field	 	= is_array($parent_select)?$parent_select[1]:'';
+	?>
 	@push('bottom')
 	<script type="text/javascript">
 		$(function() {			
-			$('#{{$form['parent_select']}}, input:radio[name={{$form['parent_select']}}]').change(function() {
+			$('#{{$parent}}, input:radio[name={{$parent}}]').change(function() {
 				var $current = $("#{{$form['name']}}");
 				var parent_id = $(this).val();
-				var fk_name = "{{$form['parent_select']}}";
+				var fk_name = "{{$parent}}";
 				var fk_value = $(this).val();
 				var datatable = "{{$form['datatable']}}".split(',');
+				@if(!empty($add_field))
+				var add_field = ($("#{{$add_field}}").val())?$("#{{$add_field}}").val():"";
+				@endif
 				var datatableWhere = "{{$form['datatable_where']}}";
+				@if(!empty($add_field))
+				if(datatableWhere) {
+					if(add_field) {
+						datatableWhere = datatableWhere + " and {{$add_field}} = " + add_field; 
+					}
+				}else{
+					if(add_field) {
+						console.log(add_field);
+						datatableWhere = "{{$add_field}} = " + add_field; 
+					}
+				}
+				@endif
 				var table = datatable[0].trim('');
 				var label = datatable[1].trim('');
 				var value = "{{$value}}";				
 
-				if(fk_value!='') {					
+				if(fk_value!='') {				
 					$current.html("<option value=''>{{trans('crudbooster.text_loading')}} {{$form['label']}}");
-					$.get("{{CRUDBooster::mainpath('data-table')}}?table="+table+"&label="+label+"&fk_name="+fk_name+"&fk_value="+fk_value+"datatable_where="+encodeURI(datatableWhere),function(response) {
+					$.get("{{CRUDBooster::mainpath('data-table')}}?table="+table+"&label="+label+"&fk_name="+fk_name+"&fk_value="+fk_value+"&datatable_where="+encodeURI(datatableWhere),function(response) {
 						if(response) {
 							$current.html("<option value=''>{{$default}}");
 							$.each(response,function(i,obj) {
@@ -32,7 +51,7 @@
 				}								
 			})
 
-			$('#{{$form['parent_select']}}').trigger('change');
+			$('#{{$parent}}').trigger('change');
 			$("#{{$form['name']}}").trigger('change');
 		})
 	</script>
