@@ -113,17 +113,20 @@ class SettingsController extends CBController {
 				}
 
 
-				$file = Request::file($name);					
-				$ext  = $file->getClientOriginalExtension();
+				$file = Request::file($name);
+                                $ext  = $file->getClientOriginalExtension();
 
-				//Create Directory Monthly 
-				Storage::makeDirectory('uploads/'.date('Y-m'));
+                                //Create Directory Monthly
+                                $directory = 'uploads/'.date('Y-m');
+                                Storage::makeDirectory($directory);
 
-				//Move file to storage
-				$filename = md5(str_random(5)).'.'.$ext;
-				if($file->move(storage_path('app'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.date('Y-m')),$filename)) {						
-					$content = '/uploads/'.date('Y-m').'/'.$filename;
-				}					  
+                                //Move file to storage
+                                $filename = md5(str_random(5)).'.'.$ext;
+                                $storeFile = Storage::putFileAs($directory,$file,$filename);
+                                if($storeFile) {
+                                        $content = $directory.'/'.$filename;
+                                }
+					  
 			}
 
 
