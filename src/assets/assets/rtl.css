@@ -9,30 +9,41 @@
     url(fonts/DroidNaskh-Regular.ttf) format('truetype');
 }
 
-
+/*main font*/
 body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, .main-header .logo {
     font-family: "Droid Arabic Naskh";
 }
 
+/*add some padding to the menu*/
 .sidebar-menu>li {
     position: relative;
     margin: 0;
     padding-right: 10px;
 }
 
+/*set the breadcrumb to the left*/
 .content-header > .breadcrumb {
     float: left !important;
     right: auto;
     left: 10px;
 }
-@media (max-width: 414px) and (max-width: 414px) {
-    .content-header > .breadcrumb {
-        float: none !important;
-    }
+
+/*dashboard icons*/
+.small-box .icon, .box-header > .box-tools {
+    left: 10px;
+    right: auto;
 }
 
+/*fix for som inputs positions*/
 .checkbox input[type=checkbox], .checkbox-inline input[type=checkbox], .radio input[type=radio], .radio-inline input[type=radio] {
     position: static !important;
     margin-right: 0;
     margin-left: 10px;
+}
+
+/*in small screens set the breadcrumb in the middle*/
+@media (max-width: 414px) and (max-width: 414px) {
+    .content-header > .breadcrumb {
+        float: none !important;
+    }
 }
