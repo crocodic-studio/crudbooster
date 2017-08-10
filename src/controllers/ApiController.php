@@ -19,7 +19,8 @@ class ApiController extends Controller {
 	var $permalink;
 	var $hook_api_status;
 	var $hook_api_message;	
-	var $last_id_tmp       = array();
+	var $discard_api = false;
+	var $last_id_tmp = array();
 	
 
 	public function hook_before(&$postdata) {
@@ -27,6 +28,10 @@ class ApiController extends Controller {
 	}
 	public function hook_after($postdata,&$result) {
 		
+	}
+
+	public function hook_discard_api(&$postdata) {
+
 	}
 
 	public function hook_query(&$query) {
@@ -54,6 +59,19 @@ class ApiController extends Controller {
 		$table                    = $row_api->tabel;
 
 		$debug_mode_message = 'You are in debug mode !';
+
+		/* 
+		| ----------------------------------------------
+		| Do some custome pre-checking for posted data, if failed discard API execution
+		| ----------------------------------------------
+		|
+		*/
+		$this->hook_discard_api($posts);
+		if($this->discard_api) { // hook have to return true
+			$result['api_status']  = 0;
+			$result['api_message'] = "Failed to execute API !";
+			goto show;
+		}
 
 		/* 
 		| ----------------------------------------------
