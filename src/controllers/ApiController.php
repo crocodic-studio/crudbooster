@@ -19,7 +19,7 @@ class ApiController extends Controller {
 	var $permalink;
 	var $hook_api_status;
 	var $hook_api_message;	
-	var $discard_api = false;
+	var $validate = false;
 	var $last_id_tmp = array();
 	
 
@@ -30,7 +30,7 @@ class ApiController extends Controller {
 		
 	}
 
-	public function hook_discard_api(&$postdata) {
+	public function hook_validate(&$postdata) {
 
 	}
 
@@ -66,8 +66,8 @@ class ApiController extends Controller {
 		| ----------------------------------------------
 		|
 		*/
-		$this->hook_discard_api($posts);
-		if($this->discard_api) { // hook have to return true
+		$this->hook_validate($posts);
+		if($this->validate) { // hook have to return true
 			$result['api_status']  = 0;
 			$result['api_message'] = "Failed to execute API !";
 			goto show;
