@@ -60,6 +60,21 @@
 	    	return view('crudbooster::statistic_builder.show',compact('page_title','id_cms_statistics'));
 	    }
 
+	    public function getDashboard() {
+	    	$this->cbLoader();
+
+	    	$menus = DB::table('cms_menus')->where('is_dashboard',1)
+	    	->where('type','Statistic')
+	    	->first();
+
+	    	$slug = str_replace("statistic_builder/show/","",$menus->path);
+
+			$row               = CRUDBooster::first($this->table,['slug'=>$slug]);
+			$id_cms_statistics = $row->id;
+			$page_title        = $row->name;	    				
+	    	return view('crudbooster::statistic_builder.show',compact('page_title','id_cms_statistics'));
+	    }
+
 	    public function getShow($slug) {
 	    	$this->cbLoader();
 			$row               = CRUDBooster::first($this->table,['slug'=>$slug]);
@@ -89,8 +104,8 @@
 	    	return response()->json(['components'=>$rows]);
 	    }
 	    public function getViewComponent($componentID) {
-	    	$component = CRUDBooster::first('cms_statistic_components',['componentID'=>$componentID]);	
-
+	    	
+	    	$component = DB::table('cms_statistic_components')->where('componentID',$componentID)->first();
 	    	$command = 'layout';	    	
 	    	$layout = view('crudbooster::statistic_builder.components.'.$component->component_name,compact('command','componentID'))->render();
 

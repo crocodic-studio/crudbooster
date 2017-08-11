@@ -98,7 +98,7 @@
 		?>
 		<div id="chartContainer-{{$componentID}}" style="height: 250px;"></div>
 		
-		@push('bottom')
+		
 		<script type="text/javascript">
 		
 		$(function() {
@@ -118,7 +118,6 @@
 			});				
 		})				
 		</script>
-		@endpush
 	@else
 
 		{!! $value !!}

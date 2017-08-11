@@ -429,6 +429,7 @@ class ApiController extends Controller {
 							$value = $param['config'];
 						}
 
+
 						if ( $required ) {
 							if ( $type == 'password' ) {
 								if ( ! Hash::check( $value, $rows->{$name} ) ) {
@@ -541,6 +542,7 @@ class ApiController extends Controller {
 				$used     = $param['used'];
 
 				if ( ! in_array( $name, $row_assign_keys ) ) {
+
 					continue;
 				}
 
@@ -552,68 +554,70 @@ class ApiController extends Controller {
 					if ( Request::hasFile( $name ) ) {
 						$file = Request::file( $name );
 						$ext  = $file->getClientOriginalExtension();
+						$filePath = 'uploads/'.CRUDBooster::myId().'/'.date('Y-m');
 
 						//Create Directory Monthly 
-						Storage::makeDirectory( date( 'Y-m' ) );
+						Storage::makeDirectory($filePath);						
 
 						//Move file to storage
-						$filename = md5( str_random( 5 ) ) . '.' . $ext;
-						if ( $file->move( storage_path( 'app' . DIRECTORY_SEPARATOR . date( 'Y-m' ) ), $filename ) ) {
-							$v                   = 'uploads/' . date( 'Y-m' ) . '/' . $filename;
-							$row_assign[ $name ] = $v;
-						}
-					}
-				} elseif ( $type == 'base64_file' ) {
-					$filedata  = base64_decode( $value );
-					$f         = finfo_open();
-					$mime_type = finfo_buffer( $f, $filedata, FILEINFO_MIME_TYPE );
-					@$mime_type = explode( '/', $mime_type );
+						$filename = md5(str_random(5)).'.'.$ext;
+						if(Storage::putFileAs($filePath,$file,$filename)) {						
+							$v = $filePath.'/'.$filename;
+							$row_assign[$name] = $v;
+						}					  
+					}	
+		    	}elseif ($type == 'base64_file') {
+		    		$filedata = base64_decode($value);
+					$f = finfo_open();
+					$mime_type = finfo_buffer($f, $filedata, FILEINFO_MIME_TYPE);
+					@$mime_type = explode('/',$mime_type);
 					@$mime_type = $mime_type[1];
-					if ( $mime_type ) {
-						if ( in_array( $mime_type, $uploads_format_candidate ) ) {
-							Storage::makeDirectory( date( 'Y-m' ) );
-							$filename = md5( str_random( 5 ) ) . '.' . $mime_type;
-							if ( file_put_contents( storage_path( 'app' . DIRECTORY_SEPARATOR . date( 'Y-m' ) ) . '/' . $filename,
-								$filedata ) ) {
-								$v                   = 'uploads/' . date( 'Y-m' ) . '/' . $filename;
-								$row_assign[ $name ] = $v;
+					if($mime_type) {
+						if(in_array($mime_type, $uploads_format_candidate)) {
+							$filePath = 'uploads/'.CRUDBooster::myId().'/'.date('Y-m');
+							Storage::makeDirectory($filePath);
+							$filename = md5(str_random(5)).'.'.$mime_type;
+							if(Storage::put($filePath.'/'.$filename,$filedata)) {								
+								$v = $filePath.'/'.$filename;
+								$row_assign[$name] = $v;
 							}
 						}
 					}
-				} elseif ( $type == 'password' ) {
-					$row_assign[ $name ] = Hash::make( $value );
-				}
+		    	}elseif ($type == 'password') {
+		    		$row_assign[$name] = Hash::make(g($name));		    		
+		    	}
+		    	
+		    }
 
-			}
-
-			//Make sure if saving/updating data additional param included
-			$arrkeys = array_keys( $row_assign );
-			foreach ( $posts as $key => $value ) {
-				if ( ! in_array( $key, $arrkeys ) ) {
-					$row_assign[ $key ] = $value;
-				}
-			}
+		    //Make sure if saving/updating data additional param included
+		    $arrkeys = array_keys($row_assign);      
+		    foreach($posts as $key => $value) {
+		        if(!in_array($key, $arrkeys)) {
+		          $row_assign[$key] = $value;
+		        }
+		    }
 
 
-			if ( $action_type == 'save_add' ) {
-
-				$row_assign['id'] = CRUDBooster::newId( $table );
-				DB::table( $table )->insert( $row_assign );
-				$result['api_status']  = ( $row_assign['id'] ) ? 1 : 0;
-				$result['api_message'] = ( $row_assign['id'] ) ? 'success' : 'failed';
-				if ( CRUDBooster::getSetting( 'api_debug_mode' ) == 'true' ) {
+		    if($action_type == 'save_add') {
+		    	
+		    	$row_assign['id'] = CRUDBooster::newId($table);
+		    	DB::table($table)->insert($row_assign);
+		    	$result['api_status']  = ($row_assign['id'])?1:0;
+				$result['api_message'] = ($row_assign['id'])?'success':'failed';				
+				if(CRUDBooster::getSetting('api_debug_mode')=='true') {
+       
 					$result['api_authorization'] = $debug_mode_message;
 				}
 				$result['id'] = $row_assign['id'];
 
 			} else {
 
-				try {
-					$update = DB::table( $table );
-
-					$update->where( $table . '.id', $row_assign['id'] );
-
-					if ( $row_api->sql_where ) {
+		    	try{
+		    		$pk = CRUDBooster::pk($table);
+		    		$update = DB::table($table);
+				    $update->where($table.'.'.$pk,$row_assign['id']);
+            
+            if ( $row_api->sql_where ) {
 						$update->whereraw( $row_api->sql_where );
 					}
 

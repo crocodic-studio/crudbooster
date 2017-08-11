@@ -104,7 +104,8 @@ class ModulsController extends CBController {
 	}	
 
 	function hook_query_index(&$query) {
-		$query->where('is_protected',0);	
+		$query->where('is_protected',0);
+		$query->whereNotIn('cms_moduls.controller',['AdminCmsUsersController']);	
 	}
 
 	function hook_before_delete($id) {
@@ -238,10 +239,9 @@ class ModulsController extends CBController {
 			//Insert Menu
 			if($controller && Request::get('create_menu')) {
 				$parent_menu_sort = DB::table('cms_menus')->where('parent_id',0)->max('sorting')+1;
-				$parent_menu_id = DB::table('cms_menus')->max('id')+1;
-
-				DB::table('cms_menus')->insert([
-					'id'                =>$parent_menu_id,
+				
+				$id_cms_menus = DB::table('cms_menus')->insertGetId([
+					
 					'created_at'        =>date('Y-m-d H:i:s'),
 					'name'              =>$name,
 					'icon'              =>$icon,
@@ -252,6 +252,7 @@ class ModulsController extends CBController {
 					'sorting'           =>$parent_menu_sort,
 					'parent_id'         =>0
 					]);
+				DB::table('cms_menus_privileges')->insert(['id_cms_menus'=>$id_cms_menus,'id_cms_privileges'=>CRUDBooster::myPrivilegeId()]);
 			}			
 
 			$user_id_privileges = CRUDBooster::myPrivilegeId();

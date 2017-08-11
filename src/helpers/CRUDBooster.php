@@ -35,14 +35,15 @@ class CRUDBooster  {
 
 		public static function first($table,$id) {
 			$table = self::parseSqlTable($table)['table'];
-			if(is_int($id)) {
-				return DB::table($table)->where('id',$id)->first();
-			}elseif (is_array($id)) {
+			if(is_array($id)) {
 				$first = DB::table($table);
 				foreach($id as $k=>$v) {
 					$first->where($k,$v);
 				}
 				return $first->first();
+			}else{
+				$pk = self::pk($table);
+				return DB::table($table)->where($pk,$id)->first();
 			}
 		}
 
@@ -217,7 +218,7 @@ class CRUDBooster  {
 		public static function sidebarDashboard() {			
 
 			$menu = DB::table('cms_menus')
-		  	->where('id_cms_privileges',self::myPrivilegeId())
+		  	->whereRaw("cms_menus.id IN (select id_cms_menus from cms_menus_privileges where id_cms_privileges = '".self::myPrivilegeId()."')")
 		  	->where('is_dashboard',1)
 		  	->where('is_active',1)		  	
 		  	->first();		  	
@@ -246,7 +247,7 @@ class CRUDBooster  {
 
 		public static function sidebarMenu() {
 			$menu_active = DB::table('cms_menus')
-		  	->where('id_cms_privileges',self::myPrivilegeId())
+		  	->whereRaw("cms_menus.id IN (select id_cms_menus from cms_menus_privileges where id_cms_privileges = '".self::myPrivilegeId()."')")
 		  	->where('parent_id',0)
 		  	->where('is_active',1)
 		  	->where('is_dashboard',0)
@@ -281,6 +282,7 @@ class CRUDBooster  {
 		  		}
 		  				  		
 		  		$menu->url = $url;
+		  		$menu->url_path = trim(str_replace(url('/'),'',$url),"/");
 
 		  		$child = DB::table('cms_menus')
 		  		->where('is_dashboard',0)
@@ -316,6 +318,7 @@ class CRUDBooster  {
 		  				}		  								  		
 
 				  		$c->url = $url;
+				  		$c->url_path = trim(str_replace(url('/'),'',$url),"/");
 		  			}
 
 		  			$menu->children = $child;
@@ -339,7 +342,8 @@ class CRUDBooster  {
 		}		
 
 		private static function getModulePath() {
-			return Request::segment(2);
+			$adminPathSegments = count(explode('/',config('crudbooster.ADMIN_PATH')));
+            return Request::segment(1 + $adminPathSegments);
 		}
 
 		public static function mainpath($path=NULL) {
@@ -788,14 +792,15 @@ class CRUDBooster  {
 	        }     
 	    }
 
-		public static function insertLog($description) {
+		public static function insertLog($description, $details = '') {
 	        $a                 = array();
 	        $a['created_at']   = date('Y-m-d H:i:s');
 	        $a['ipaddress']    = $_SERVER['REMOTE_ADDR'];
 	        $a['useragent']    = $_SERVER['HTTP_USER_AGENT'];
 	        $a['url']          = Request::url();
 	        $a['description']  = $description;
-	        $a['id_cms_users'] = self::myId();
+			$a['details']        = $details;
+			$a['id_cms_users'] = self::myId();
 	        DB::table('cms_logs')->insert($a);    
 	    }
 
