@@ -700,8 +700,8 @@
 
                         <div class='form-group'>
                             <label>SQL Where Query (Optional)</label>
-                            <textarea name='sql_where' rows='3' class='form-control' placeholder="status = '[paramStatus]'">{{$row->sql_where}}</textarea>
-                            <div class='help-block'>Use [paramName] to get the parameter value. e.g : [id]</div>
+                            <textarea name='sql_where' rows='3' class='form-control' placeholder="status = [paramStatus]">{{$row->sql_where}}</textarea>
+                            <div class='help-block'>Use [paramName] to get the parameter value. e.g : [id] or [email]. Do not use quotes or HTML entities.<br>Password parameters <strong>cannot</strong> be used.</div>
                         </div>    
 
                         <div class='form-group'>
