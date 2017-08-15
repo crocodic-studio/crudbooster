@@ -70,7 +70,8 @@ return [
 	'alert_validation_error'		=>'Rellena el formulario correctamente : :error',
 
 	'add_data_page_title'    => 'Añadir :module',
-	'edit_data_page_title'   => 'Editar :module',
+	'edit_data_page_title'   => 'Editar :module',    'button_add_to_table'    =>'Agregar a la Tabla',
+
 	'detail_data_page_title' => 'Detalles :module',
 
 	'default_module_description'=>'Listado',
@@ -107,7 +108,7 @@ return [
 	'button_download_file'   =>'Descargar Fichero',
 	'button_reset'           =>'Resetear',
 	'button_add_to_table'    =>'Agregar a la Tabla',
-		
+	
 
 	'export_dialog_title'            =>"Exportar Datos",
 	'export_dialog_filename'         =>'Nombre Fichero',
@@ -137,7 +138,9 @@ return [
     'online'               => 'En línea',
     'controller_route_404' => 'Controlador o Ruta no encontrado(a).',
     'home'                 => 'Principal',
-    'Privileges_Roles'    => 'Privilegios de los Roles',
+    'Notificactions'	  => 'Notificaciones',
+    'Privileges'    	  => 'Privilegios',
+    'Privileges_Roles'    => 'Privilegios & Roles',
     'Add_New_Privilege'   => 'Añadir Nuevo Privilegio',
     'List_Privilege'      => 'Ver Privilegios',
     'add_user'            => 'Añadir Usuario',
@@ -202,6 +205,7 @@ return [
     'filter_search'                => 'Buscar',
     'filter_from'                  => 'Desde',
     'filter_to'                    => 'Hasta',
+    'filter_sorting'               => 'Sorting',
     // confirmation
     'confirmation_yes'             => '¡Sí!',
     'confirmation_no'              => 'No',
@@ -231,14 +235,26 @@ return [
     'datamodal_select'=>'Seleccionar',
     'datamodal_search_and_enter'=>'Buscar y enter...',
     'datamodal_enter_to_search'=>'Enter para buscar',
-    'datamodal_browse_data'=>'Escojer Dato',
+    'datamodal_browse_data'=>'Escojer Dato' ,
+
+    'datamodal_select'=>'Select',
+    'datamodal_search_and_enter'=>'Search and enter...',
+    'datamodal_enter_to_search'=>'Enter to search',
+    'datamodal_browse_data'=>'Browse Data' ,
 
 	//action confirmation
     'confirmation_title' => 'Confirmación',
     'confirmation_text' => '¿Está seguro que desea realizar esta acción?',
 
-    //child
-    'child_form'		=> 'Formulario',
-    'child_table_detail' 	=> 'Tabla de Detalles',
+    'datamodal_browse_file'=>'Browse File' ,
+    
 
+    //child 
+    'table_detail'             =>'Table Detail',
+    'your_file_size_is_too_big'=>'Your file size is too big',
+    'save_changes'             =>'Save Changes',
+    'please_complete_the_form' =>'Please complete the form !',
+    'this_field_is_required'   =>'This field is required',
+    'text_form'                => 'Form',
+     "your_file_extension_is_not_allowed "=>"Your file extension is not allowed !",
 ];

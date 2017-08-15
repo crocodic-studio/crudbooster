@@ -108,7 +108,7 @@ return [
     'button_selected_action' => 'الاجراء الجماعي',
     'button_download_file'   => 'تنزيل الملف',
     'button_reset'           => 'اعادة تعيين',
-	'button_add_to_table'    =>'Add To Table',
+    'button_add_to_table'    =>'Add To Table',
 
     'export_dialog_title'            => "تصدير البيانات",
     'export_dialog_filename'         => 'اسم الملف',
@@ -140,7 +140,8 @@ return [
     'online'               => 'متصل',
     'controller_route_404' => 'لم يتم العثور على الرابط المطلوب',
     'home'                 => 'الرئيسية',
-
+    'Notificactions'	  => 'Notifications',
+    'Privileges'    	  => 'Privileges',
     'Privileges_Roles'    => 'صلاحيات الوصول',
     'Add_New_Privilege'   => 'اضافة صلاحية',
     'List_Privilege'      => 'عرض الصلاحيات',
@@ -212,7 +213,7 @@ return [
     'filter_search'                => 'بحث',
     'filter_from'                  => 'من',
     'filter_to'                    => 'إلى',
-
+    'filter_sorting'               => 'Sorting',
     // confirmation
     'confirmation_yes'             => 'نعم!',
     'confirmation_no'              => 'لا',
@@ -243,8 +244,15 @@ return [
     'datamodal_search_and_enter'=>'Search and enter...',
     'datamodal_enter_to_search'=>'Enter to search',
     'datamodal_browse_data'=>'Browse Data' ,
+    'datamodal_browse_file'=>'Browse File' ,
+    
 
-    //child
-    'child_form'		 => 'From',
-    'child_table_detail' => 'Table Details',
+    //child 
+    'table_detail'             =>'Table Detail',
+    'your_file_size_is_too_big'=>'Your file size is too big',
+    'save_changes'             =>'Save Changes',
+    'please_complete_the_form' =>'Please complete the form !',
+    'this_field_is_required'   =>'This field is required',
+    'text_form'                => 'Form',
+     "your_file_extension_is_not_allowed "=>"Your file extension is not allowed !",
 ];

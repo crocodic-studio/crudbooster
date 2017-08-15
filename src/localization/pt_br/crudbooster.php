@@ -95,7 +95,8 @@ return [
     'button_selected_action'         => 'Ações em massa',
     'button_download_file'           => 'Download',
     'button_reset'                   => 'Reset',
-	'button_add_to_table'    =>'Add To Table',
+    'button_add_to_table'            =>'Add To Table',
+
     'export_dialog_title'            => "Exportar dados",
     'export_dialog_filename'         => 'Nome do arquivo',
     'export_dialog_help_filename'    => 'VocẼ pode renomear o arquivo de acordo com sua vontade',
@@ -124,7 +125,8 @@ return [
     'online'               => 'Online',
     'controller_route_404' => 'Controle / Rota não encontra]',
     'home'                 => 'Inicio',
- 
+    'Notificactions'	  => 'Notifications',
+    'Privileges'    	  => 'Privileges', 
     'Privileges_Roles'    => 'Privilégios', 
     'Add_New_Privilege'   => 'Adicionar novo Privilégio', 
     'List_Privilege'      => 'Listar Privilégios', 
@@ -196,7 +198,7 @@ return [
     'filter_search'                => 'Buscar',
     'filter_from'                  => 'de',
     'filter_to'                    => 'para',
-
+    'filter_sorting'               => 'Sorting',
     // confirmation
     'confirmation_yes'=>'Sim!',
     'confirmation_no'=>'Não',
@@ -234,9 +236,15 @@ return [
     'datamodal_search_and_enter'=>'Search and enter...',
     'datamodal_enter_to_search'=>'Enter to search',
     'datamodal_browse_data'=>'Browse Data' ,
+    'datamodal_browse_file'=>'Browse File' ,
+    
 
-    //child
-    'child_form'		 => 'From',
-    'child_table_detail' => 'Table Details',
-
+    //child 
+    'table_detail'             =>'Table Detail',
+    'your_file_size_is_too_big'=>'Your file size is too big',
+    'save_changes'             =>'Save Changes',
+    'please_complete_the_form' =>'Please complete the form !',
+    'this_field_is_required'   =>'This field is required',
+    'text_form'                => 'Form',
+     "your_file_extension_is_not_allowed "=>"Your file extension is not allowed !",
 ];

@@ -219,7 +219,7 @@ class PrivilegeSeeder extends Seeder {
             'name'          =>'Super Administrator',
             'is_superadmin' =>1,
             'theme_color'   =>'skin-red'
-            ]);   
+			]);
 
             $password = \Hash::make('123456');
             $cms_users = DB::table('cms_users')->insert(array(                                

@@ -39,7 +39,13 @@
             </tr>
             @foreach(explode(',',urldecode(g('parent_columns'))) as $c)
             <tr>
-              <td width="25%"><strong>{{ ucwords(str_replace('_',' ',$c)) }}</strong></td><td>: {{ $parent_table->$c }}</td>
+              <td width="25%"><strong>
+               @if(urldecode(g('parent_columns_alias')))
+              {{explode(',',urldecode(g('parent_columns_alias')))[$loop->index]}}
+              @else
+              {{  ucwords(str_replace('_',' ',$c)) }}
+               @endif
+              </strong></td><td> {{ $parent_table->$c }}</td>
             </tr>
             @endforeach            
           </tbody>
