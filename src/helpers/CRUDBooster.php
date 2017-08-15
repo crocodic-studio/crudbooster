@@ -709,17 +709,13 @@ class CRUDBooster  {
 				return self::getCache('table_'.$table,'column_'.$field);
 			}
 
-			$result = DB::select('SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :database AND TABLE_NAME = :table AND COLUMN_NAME = :field', ['database'=>$table['database'], 'table'=>$table['table'], 'field'=>$field]);
-
-			if(count($result) > 0) {				
+			if(Schema::hasColumn($table,$field)) {
 				self::putCache('table_'.$table,'column_'.$field,1);
 				return true;
 			}else{
 				self::putCache('table_'.$table,'column_'.$field,0);
 				return false;
-			}
-
-			
+			}		
 		}
 
 		public static function getForeignKey($parent_table,$child_table) {

@@ -423,7 +423,12 @@
                       input_subquery = "-<input type='hidden' name='responses_subquery[]' value='"+obj.subquery+"'/>";
                       delete_btn = "<a class='btn btn-danger' href='javascript:void(0)' onclick='deleteResponse(this)'><i class='fa fa-ban'></i></a>";
                     }else{
-                      input_subquery = obj.subquery+"<input type='hidden' name='responses_subquery[]' value='"+obj.subquery+"'/>";
+                      if(obj.subquery) {
+                        var subquery = obj.subquery;
+                      }else{
+                        var subquery = '';
+                      }
+                      input_subquery = subquery+"<input type='hidden' name='responses_subquery[]' value='"+subquery+"'/>";
                       delete_btn = "<a class='btn btn-danger' href='javascript:void(0)' onclick='deleteResponse(this)'><i class='fa fa-ban'></i></a>";
                     }                    
 

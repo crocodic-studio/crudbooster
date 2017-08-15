@@ -225,7 +225,7 @@ class ApiController extends Controller {
 					continue;
 				}
 
-				if ( $subquery ) {
+				if ( $subquery && $subquery!='null') {
 					$data->addSelect( DB::raw(
 						'(' . $subquery . ') as ' . $name
 					) );
