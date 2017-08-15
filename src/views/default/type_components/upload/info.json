@@ -1,14 +1,10 @@
 {
 	"title":"Upload Input",
 	"type":"upload",
-	"attribute":{
-		"optional":{
-			"style":"string inline stylesheet",
-		"help":"string help-block",		
-		"readonly":"boolean",
-		"disabled":"boolean"	
-		}
-		
-
-	}
+	"options":[
+		{"label":"Specific Directory","name":"directory","type":"text","required":0,"help":"The file will be saved in storage/app/uploads/[Directory]"},
+		{"label":"Encrypt Filename","name":"encrypt","type":"boolean","required":0},
+		{"label":"Max File Size","name":"max_filesize","type":"number","help":"File size in KB","required":1},
+		{"label":"File Type Allowed","name":"allowed_filetype","type":"text","required":0,"help":"Sparate with comma, e.g: jpg,png,gif"}
+	]
 }

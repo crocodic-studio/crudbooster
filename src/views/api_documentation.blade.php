@@ -3,9 +3,11 @@
 @section('content')   
 
 <ul class="nav nav-tabs">
-        <li class="active"><a href="{{ CRUDBooster::mainpath() }}"><i class='fa fa-file'></i> API Documentation</a></li>
-        <li><a href="{{ CRUDBooster::mainpath('screet-key') }}"><i class='fa fa-key'></i> API Secret Key</a></li>
+        <li class="active"><a href="{{ CRUDBooster::mainpath() }}"><i class='fa fa-file'></i> List API</a></li>
+        
         <li><a href="{{ CRUDBooster::mainpath('generator') }}"><i class='fa fa-cog'></i> API Generator</a></li>        
+        <li><a href="{{ CRUDBooster::mainpath('screet-key') }}"><i class='fa fa-key'></i> API Secret Key</a></li>
+        <li><a href="{{ url('api/doc')}}" target="_blank"><i class='fa fa-book'></i> API Documentation</a></li>        
       </ul>
 
       <div class='box'>
@@ -36,7 +38,7 @@
               })
             })
             function deleteApi(id) {
-              var url = "{{url(config('crudbooster.ADMIN_PATH').'/api_generator/delete-api')}}/"+id;
+              var url = "{{url(config('crudbooster.ADMIN_PATH').'/api-generator/delete-api')}}/"+id;
               swal({   title: "Are you sure?",   text: "You will not be able to recover this data!",   type: "warning",   showCancelButton: true,   confirmButtonColor: "#DD6B55",   confirmButtonText: "Yes, delete it!",   closeOnConfirm: false }, function(){   
                   $.get(url,function(resp) {
                     if(resp.status == 1) {
@@ -48,19 +50,7 @@
             }
             </script> 
             @endpush
-               
-          <div class='form-group'>
-              <label>API BASE URL</label>
-              <input type='text' readonly class='form-control' title='Hanya klik dan otomatis copy to clipboard (kecuali Safari)' onClick="this.setSelectionRange(0, this.value.length); document.execCommand('copy');" value='{{url('api')}}'/>
-          </div>
-          <div class='form-group'>
-              <label>How To Use</label><br/>
-              SCREETKEY : ABCDEF123456 <br/>
-              TIME : UNIX CURRENT TIME  <br/>                        
-              <label>Header :</label><br/>                          
-                X-Authorization-Token : md5( SCREETKEY + TIME + USER_AGENT )<br/>
-                X-Authorization-Time  : TIME                          
-          </div>
+                         
           <table class='table table-striped table-api table-bordered'>
               <thead>
                   <tr class='info'><th width='2%'>No</th><th>API Name
@@ -70,6 +60,11 @@
                   </th></tr>
               </thead> 
               <tbody>
+                  @if(count($apis)==0)
+                  <tr>
+                    <td colspan="2" align="center">There is no api yet</td>
+                  </tr>
+                  @endif
                   <?php $no = 0;?>
                   @foreach($apis as $api)
                   <?php 
@@ -82,7 +77,7 @@
                                       <a href='javascript:void(0)' title='API {{$ac->nama}}' style='color:#009fe3' class='link_name_api'><?=$api->nama;?></a> &nbsp; 
                                       <sup>
                                         <a title='Delete this API' onclick="deleteApi({{$api->id}})" href="javascript:void(0)"><i class='fa fa-trash'></i></a>
-                                        &nbsp; <a title='Edit This API' href="{{url(config('crudbooster.ADMIN_PATH').'/api_generator/edit-api').'/'.$api->id}}"><i class='fa fa-pencil'></i></a> 
+                                        &nbsp; <a title='Edit This API' href="{{url(config('crudbooster.ADMIN_PATH').'/api-generator/edit-api').'/'.$api->id}}"><i class='fa fa-pencil'></i></a> 
                                       </sup>
                                       <div class='detail_api' style='display:none'>
                                           <table class='table table-bordered'>
@@ -116,7 +111,7 @@
                                                     @endif
                                                   @endforeach 
                                                   @if($i == 0)
-                                                  <tr><td colspan='4' align="center"><i class='fa fa-search'></i> There is no parameter</td></tr>
+                                                  <tr><td colspan='5' align="center"><i class='fa fa-search'></i> There is no parameter</td></tr>
                                                   @endif                                                 
                                               </tbody>
                                             </table>

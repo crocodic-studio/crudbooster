@@ -1,13 +1,7 @@
 {
 	"title":"Json Editor",
 	"type":"json",
-	"attribute":{
-		"optional": {
-			"placeholder":"string placeholder",
-			"schema":{
-				"type":"textarea",
-				"placeholder":"your json schema"
-			}
-		}		
-	}
+	"options":[
+		{"label":"JSON Schema","name":"schema","required":1,"type":"textarea","help":"Doc : http://jeremydorn.com/json-editor/"}
+	]
 }

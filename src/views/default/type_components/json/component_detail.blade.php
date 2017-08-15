@@ -16,7 +16,7 @@ $(document).ready(function() {
 		  disable_edit_json : true,
 		  disable_properties : true,
 		  startval : <?=json_encode(json_decode($value, false))?>,
-		  schema : <?=json_encode(json_decode($form["schema"], false))?>
+		  schema : <?=json_encode(json_decode($form["options"]["schema"], false))?>
 		});
 		editor.disable();
 });

@@ -1,5 +1,5 @@
 @extends('crudbooster::admin_template')
-@section('content')	 
+@section('content')  
         
         @push('head')
          <style type="text/css">
@@ -112,7 +112,7 @@
                   $('#inactive_text').remove();
                 }
 
-                $.post("{{route('MenusControllerPostSaveMenu')}}",{menus:jsonString,isActive:isActive},function(resp) {
+                $.post("{{route('AdminMenusControllerPostSaveMenu')}}",{menus:jsonString,isActive:isActive},function(resp) {
                   $('#menu-saved-info').fadeIn('fast').delay(1000).fadeOut('fast');
                 });
            
@@ -124,23 +124,7 @@
 
           });
          </script>
-         @endpush
-
-         <div class='row'>
-            <div class='col-sm-12'>
-
-              <form method='get' action='' id='form-privilege'>
-                <div class='form-group'>
-                <label class='label-control'>Selected Privilege <a href='#' title='Select the privilege you wish for the menu'>(?)</a></label>
-                <select class='form-control' onChange="$('#form-privilege').submit()" name='id_cms_privileges'>                  
-                    @foreach($privileges as $p)
-                      <option value='{{$p->id}}' {{($id_cms_privileges == $p->id)?"selected":""}}>{{$p->name}}</option>
-                    @endforeach
-                </select>
-                </div>
-              </form>
-            </div>
-         </div>         
+         @endpush     
 
          <div class='row'>
               <div class="col-sm-5">
@@ -153,11 +137,11 @@
                     <ul class='draggable-menu draggable-menu-active'>
                       @foreach($menu_active as $menu)
                         <li data-id='{{$menu->id}}' data-name='{{$menu->name}}'><div class='{{$menu->is_dashboard?"is-dashboard":""}}' title="{{$menu->is_dashboard?'This is setted as Dashboard':''}}">
-                        <i class='{{($menu->is_dashboard)?"icon-is-dashboard fa fa-dashboard":$menu->icon}}'></i> {{$menu->name}} <span class='pull-right'><a class='fa fa-pencil' title='Edit' href='{{route("MenusControllerGetEdit",["id"=>$menu->id])}}?return_url={{urlencode(Request::fullUrl())}}'></a>&nbsp;&nbsp;<a title='Delete' class='fa fa-trash' onclick='{{CRUDBooster::deleteConfirm(route("MenusControllerGetDelete",["id"=>$menu->id]))}}' href='javascript:void(0)'></a></span></div>
+                        <i class='{{($menu->is_dashboard)?"icon-is-dashboard fa fa-dashboard":$menu->icon}}'></i> {{$menu->name}} <span class='pull-right'><a class='fa fa-pencil' title='Edit' href='{{route("AdminMenusControllerGetEdit",["id"=>$menu->id])}}?return_url={{urlencode(Request::fullUrl())}}'></a>&nbsp;&nbsp;<a title='Delete' class='fa fa-trash' onclick='{{CRUDBooster::deleteConfirm(route("AdminMenusControllerGetDelete",["id"=>$menu->id]))}}' href='javascript:void(0)'></a></span></div>
                           <ul>
                             @if($menu->children)
                               @foreach($menu->children as $child)
-                                <li data-id='{{$child->id}}' data-name='{{$child->name}}'><div class='{{$child->is_dashboard?"is-dashboard":""}}' title="{{$child->is_dashboard?'This is setted as Dashboard':''}}"><i class='{{($child->is_dashboard)?"icon-is-dashboard fa fa-dashboard":$child->icon}}'></i> {{$child->name}} <span class='pull-right'><a class='fa fa-pencil' title='Edit' href='{{route("MenusControllerGetEdit",["id"=>$child->id])}}?return_url={{urlencode(Request::fullUrl())}}'></a>&nbsp;&nbsp;<a title="Delete" class='fa fa-trash' onclick='{{CRUDBooster::deleteConfirm(route("MenusControllerGetDelete",["id"=>$child->id]))}}' href='javascript:void(0)'></a></span></div></li>
+                                <li data-id='{{$child->id}}' data-name='{{$child->name}}'><div class='{{$child->is_dashboard?"is-dashboard":""}}' title="{{$child->is_dashboard?'This is setted as Dashboard':''}}"><i class='{{($child->is_dashboard)?"icon-is-dashboard fa fa-dashboard":$child->icon}}'></i> {{$child->name}} <span class='pull-right'><a class='fa fa-pencil' title='Edit' href='{{route("AdminMenusControllerGetEdit",["id"=>$child->id])}}?return_url={{urlencode(Request::fullUrl())}}'></a>&nbsp;&nbsp;<a title="Delete" class='fa fa-trash' onclick='{{CRUDBooster::deleteConfirm(route("AdminMenusControllerGetDelete",["id"=>$child->id]))}}' href='javascript:void(0)'></a></span></div></li>
                               @endforeach
                             @endif
                           </ul>
@@ -177,11 +161,11 @@
                   <div class="panel-body clearfix">
                     <ul class='draggable-menu draggable-menu-inactive'>
                        @foreach($menu_inactive as $menu)
-                        <li data-id='{{$menu->id}}' data-name='{{$menu->name}}'><div><i class='{{$menu->icon}}'></i> {{$menu->name}} <span class='pull-right'><a class='fa fa-pencil' title='Edit' href='{{route("MenusControllerGetEdit",["id"=>$menu->id])}}?return_url={{urlencode(Request::fullUrl())}}'></a>&nbsp;&nbsp;<a title='Delete' class='fa fa-trash' onclick='{{CRUDBooster::deleteConfirm(route("MenusControllerGetDelete",["id"=>$menu->id]))}}' href='javascript:void(0)'></a></span></div>
+                        <li data-id='{{$menu->id}}' data-name='{{$menu->name}}'><div><i class='{{$menu->icon}}'></i> {{$menu->name}} <span class='pull-right'><a class='fa fa-pencil' title='Edit' href='{{route("AdminMenusControllerGetEdit",["id"=>$menu->id])}}?return_url={{urlencode(Request::fullUrl())}}'></a>&nbsp;&nbsp;<a title='Delete' class='fa fa-trash' onclick='{{CRUDBooster::deleteConfirm(route("AdminMenusControllerGetDelete",["id"=>$menu->id]))}}' href='javascript:void(0)'></a></span></div>
                           <ul>
                             @if($menu->children)
                               @foreach($menu->children as $child)
-                                <li data-id='{{$child->id}}' data-name='{{$child->name}}'><div><i class='{{$child->icon}}'></i> {{$child->name}} <span class='pull-right'><a class='fa fa-pencil' title='Edit' href='{{route("MenusControllerGetEdit",["id"=>$child->id])}}?return_url={{urlencode(Request::fullUrl())}}'></a>&nbsp;&nbsp;<a title="Delete" class='fa fa-trash' onclick='{{CRUDBooster::deleteConfirm(route("MenusControllerGetDelete",["id"=>$child->id]))}}' href='javascript:void(0)'></a></span></div></li>
+                                <li data-id='{{$child->id}}' data-name='{{$child->name}}'><div><i class='{{$child->icon}}'></i> {{$child->name}} <span class='pull-right'><a class='fa fa-pencil' title='Edit' href='{{route("AdminMenusControllerGetEdit",["id"=>$child->id])}}?return_url={{urlencode(Request::fullUrl())}}'></a>&nbsp;&nbsp;<a title="Delete" class='fa fa-trash' onclick='{{CRUDBooster::deleteConfirm(route("AdminMenusControllerGetDelete",["id"=>$child->id]))}}' href='javascript:void(0)'></a></span></div></li>
                               @endforeach
                             @endif
                           </ul>

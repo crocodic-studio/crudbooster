@@ -35,14 +35,15 @@ class CRUDBooster  {
 
 		public static function first($table,$id) {
 			$table = self::parseSqlTable($table)['table'];
-			if(is_int($id)) {
-				return DB::table($table)->where('id',$id)->first();
-			}elseif (is_array($id)) {
+			if(is_array($id)) {
 				$first = DB::table($table);
 				foreach($id as $k=>$v) {
 					$first->where($k,$v);
 				}
-				return $first->first();
+				return $first->first();			
+			}else{
+				$pk = self::pk($table);
+				return DB::table($table)->where($pk,$id)->first();
 			}
 		}
 
@@ -113,7 +114,7 @@ class CRUDBooster  {
 			}						
 		}
 
-		public static function isView() {		
+		public static function canView() {		
 			if(self::isSuperadmin()) return true;
 
 			$session = Session::get('admin_privileges_roles');			
@@ -124,7 +125,7 @@ class CRUDBooster  {
 			}
 		}
 
-		public static function isUpdate() {		
+		public static function canUpdate() {		
 			if(self::isSuperadmin()) return true;
 
 			$session = Session::get('admin_privileges_roles');
@@ -135,7 +136,7 @@ class CRUDBooster  {
 			}
 		}
 
-		public static function isCreate() {	
+		public static function canCreate() {	
 			if(self::isSuperadmin()) return true;		
 
 			$session = Session::get('admin_privileges_roles');
@@ -146,7 +147,7 @@ class CRUDBooster  {
 			}
 		}
 
-		public static function isRead() {	
+		public static function canRead() {	
 			if(self::isSuperadmin()) return true;
 
 			$session = Session::get('admin_privileges_roles');
@@ -157,7 +158,7 @@ class CRUDBooster  {
 			}
 		}
 
-		public static function isDelete() {		
+		public static function canDelete() {		
 			if(self::isSuperadmin()) return true;	
 
 			$session = Session::get('admin_privileges_roles');
@@ -168,7 +169,7 @@ class CRUDBooster  {
 			}
 		}
 
-		public static function isCRUD() {		
+		public static function canCRUD() {		
 			if(self::isSuperadmin()) return true;
 
 			$session = Session::get('admin_privileges_roles');
@@ -217,7 +218,7 @@ class CRUDBooster  {
 		public static function sidebarDashboard() {			
 
 			$menu = DB::table('cms_menus')
-		  	->where('id_cms_privileges',self::myPrivilegeId())
+		  	->where('cms_privileges','like','%"'.self::myPrivilegeName().'"%')
 		  	->where('is_dashboard',1)
 		  	->where('is_active',1)		  	
 		  	->first();		  	
@@ -246,7 +247,7 @@ class CRUDBooster  {
 
 		public static function sidebarMenu() {
 			$menu_active = DB::table('cms_menus')
-		  	->where('id_cms_privileges',self::myPrivilegeId())
+		  	->where('cms_privileges','like','%"'.self::myPrivilegeName().'"%')
 		  	->where('parent_id',0)
 		  	->where('is_active',1)
 		  	->where('is_dashboard',0)
@@ -281,10 +282,12 @@ class CRUDBooster  {
 		  		}
 		  				  		
 		  		$menu->url = $url;
+		  		$menu->url_path = trim(str_replace(url('/'),'',$url),"/");
 
 		  		$child = DB::table('cms_menus')
 		  		->where('is_dashboard',0)
 		  		->where('is_active',1)
+		  		->where('cms_privileges','like','%"'.self::myPrivilegeName().'"%')
 		  		->where('parent_id',$menu->id)
 		  		->select('cms_menus.*')
 		  		->orderby('sorting','asc')->get();
@@ -316,6 +319,7 @@ class CRUDBooster  {
 		  				}		  								  		
 
 				  		$c->url = $url;
+				  		$c->url_path = trim(str_replace(url('/'),'',$url),"/");
 		  			}
 
 		  			$menu->children = $child;
@@ -677,9 +681,34 @@ class CRUDBooster  {
 			$table = CRUDBooster::parseSqlTable($table);
 
 			if(!$table['table']) throw new \Exception("parseSqlTable can't determine the table");							
-			$query = "select * from information_schema.COLUMNS where TABLE_SCHEMA = '$table[database]' and TABLE_NAME = '$table[table]' and COLUMN_KEY = 'PRI'";
-			$keys = DB::select($query);
-			$primary_key = $keys[0]->COLUMN_NAME;
+			
+			if(env('DB_CONNECTION') == 'sqlsrv') {
+				try{
+					$query = "
+						SELECT Col.Column_Name,Col.Table_Name from 
+						    INFORMATION_SCHEMA.TABLE_CONSTRAINTS Tab, 
+						    INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE Col 
+						WHERE 
+						    Col.Constraint_Name = Tab.Constraint_Name
+						    AND Col.Table_Name = Tab.Table_Name
+						    AND Constraint_Type = 'PRIMARY KEY'
+							AND Col.Table_Name = '$table[table]' 
+					";
+					$keys = DB::select($query);
+					$primary_key = $keys[0]->Column_Name;	
+				}catch(\Exception $e) {
+					$primary_key = NULL;
+				}
+			}else{
+				try{
+					$query = "select * from information_schema.COLUMNS where TABLE_SCHEMA = '$table[database]' and TABLE_NAME = '$table[table]' and COLUMN_KEY = 'PRI'";
+					$keys = DB::select($query);
+					$primary_key = $keys[0]->COLUMN_NAME;	
+				}catch(\Exception $e) {
+					$primary_key = NULL;
+				}
+			}			
+			
 			if($primary_key) {				
 				self::putCache('table_'.$table,'primary_key',$primary_key);
 				return $primary_key;
@@ -1109,8 +1138,7 @@ class CRUDBooster  {
 			$button_filter       = 'TRUE';
 			$button_export       = 'FALSE';
 			$button_import       = 'FALSE';
-			$button_bulk_action	 = 'TRUE';
-			$global_privilege    = 'FALSE';
+			$button_bulk_action	 = 'TRUE';			
 	                
 	$php = '
 <?php namespace App\Http\Controllers;
@@ -1119,6 +1147,7 @@ class CRUDBooster  {
 	use Request;
 	use DB;
 	use CRUDBooster;
+	use CB;
 
 	class Admin'.$controllername.' extends \crocodicstudio\crudbooster\controllers\CBController {
 
@@ -1128,8 +1157,7 @@ class CRUDBooster  {
 			$this->title_field         = "'.$name_col.'";
 			$this->limit               = 20;
 			$this->orderby             = "'.$pk.',desc";
-			$this->show_numbering      = FALSE;
-			$this->global_privilege    = '.$global_privilege.';	        
+			$this->show_numbering      = FALSE;			      
 			$this->button_table_action = '.$button_table_action.';   
 			$this->button_action_style = "'.$button_action_style.'";     
 			$this->button_add          = '.$button_add.';
@@ -1144,9 +1172,11 @@ class CRUDBooster  {
 			# END CONFIGURATION DO NOT REMOVE THIS LINE						      
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
-	        $this->col = array();
-	';
+	        $this->col = [];
+';
 	        $coloms_col = array_slice($coloms,0,8);
+	        $joinList = [];
+
 	        foreach($coloms_col as $c) {
 	            $label = str_replace("id_","",$c);
 	            $label = ucwords(str_replace("_"," ",$label));
@@ -1158,33 +1188,43 @@ class CRUDBooster  {
 	            if(array_search($field, $password_candidate) !== FALSE) continue;
 
 	            if(substr($field,0,3)=='id_') {
-	                $jointable = str_replace('id_','',$field);
-	                $joincols = CRUDBooster::getTableColumns($jointable);
-	                $joinname = CRUDBooster::getNameTable($joincols);
-	                $php .= "\t\t".'$this->col[] = array("label"=>"'.$label.'","name"=>"'.$field.'","join"=>"'.$jointable.','.$joinname.'");'."\n";
+	                $jointable = str_replace('id_','',$field);	                
+	                
+	                if(Schema::hasTable($jointable)) {
+	                	$joincols = CRUDBooster::getTableColumns($jointable);
+	                	$joinname = CRUDBooster::getNameTable($joincols);
+	                	$php .= "\t\t\t".'$this->col[] = ["label"=>"'.$label.'","name"=>"'.$jointable.'.'.$joinname.'"];'."\n";
+	                	$jointablePK = CB::pk($jointable);
+		                $joinList[] = ['table'=>$jointable,'field1'=>$jointable.'.'.$jointablePK,'field2'=>$table.'.'.$pk];
+	                }	                
 	            }elseif(substr($field, -3) == '_id') {
-			   		$jointable = substr($field, 0, (strlen($field)-3) );		
-			   		$joincols = CRUDBooster::getTableColumns($jointable);
-	                $joinname = CRUDBooster::getNameTable($joincols);
-	            	$php .= "\t\t".'$this->col[] = array("label"=>"'.$label.'","name"=>"'.$field.'","join"=>"'.$jointable.','.$joinname.'");'."\n";
+			   		$jointable = substr($field, 0, (strlen($field)-3) );	
+			   		if(Schema::hasTable($jointable)) {			   			
+				   		$joincols = CRUDBooster::getTableColumns($jointable);
+		                $joinname = CRUDBooster::getNameTable($joincols);
+		            	$php .= "\t\t\t".'$this->col[] = ["label"=>"'.$label.'","name"=>"'.$jointable.'.'.$joinname.'"];'."\n";
+		            	$jointablePK = CB::pk($jointable);
+		            	$joinList[] = ['table'=>$jointable,'field1'=>$jointable.'.'.$jointablePK,'field2'=>$table.'.'.$pk];
+			   		}	
 	            }else{
 	                $image = '';
 	                if(in_array($field, $image_candidate)) $image = ',"image"=>true';
-	                $php .= "\t\t".'$this->col[] = array("label"=>"'.$label.'","name"=>"'.$field.'" '.$image.');'."\n";    
+	                $php .= "\t\t\t".'$this->col[] = ["label"=>"'.$label.'","name"=>"'.$field.'" '.$image.'];'."\n";    
 	            }
 	        }
 
-	        $php .= "\n\t\t\t# END COLUMNS DO NOT REMOVE THIS LINE";
+	        $php .= "\t\t\t# END COLUMNS DO NOT REMOVE THIS LINE";
 
-	        $php .= "\n\t\t\t# START FORM DO NOT REMOVE THIS LINE";
-	        $php .= "\n\t\t".'$this->form = [];'."\n";
+	        $php .= "\n\n\t\t\t# START FORM DO NOT REMOVE THIS LINE";
+	        $php .= "\n\t\t\t".'$this->form = [];';
 
-	        foreach($coloms as $c) {
+	        foreach($coloms as $i=>$c) {
 	            $attribute    = array();
 	            $validation   = array();
 	            $validation[] = 'required';            
 	            $placeholder  = '';
 	            $help         = '';
+	            $options 	  = [];
 
 	            $label = str_replace("id_","",$c);
 	            $label = ucwords(str_replace("_"," ",$label));      
@@ -1206,16 +1246,23 @@ class CRUDBooster  {
 	                case 'text':
 	                case 'longtext':
 	                $type = 'textarea';
-	                $validation[] = "string|min:5|max:5000";                
+	                $validation[] = "string|min:5";                
 	                break;
 	                case 'date':
 	                $type = 'date';
 	                $validation[] = "date";
+	                $options = [
+	                	'php_format'=>'M, d Y',
+	                	'datepicker_format'=>'M, dd YYYY'
+	                ];
 	                break;
 	                case 'datetime':
 	                case 'timestamp':
 	                $type = 'datetime';
 	                $validation[] = "date_format:Y-m-d H:i:s";
+	                $options = [
+	                	'php_format'=>'M, d Y H:i'
+	                ];
 	                break;
 	                case 'time':
 	                $type = 'time';
@@ -1230,42 +1277,58 @@ class CRUDBooster  {
 	                $type = 'number';
 	                $validation[] = 'integer|min:0';
 	                break;
-	            }
+	            }	            
 	                       
 	            if(substr($field,0,3)=='id_') {
-	                $jointable = str_replace('id_','',$field);
-	                $joincols = CRUDBooster::getTableColumns($jointable);
-	                $joinname = CRUDBooster::getNameTable($joincols);
-	                $attribute['datatable'] = $jointable.','.$joinname;
-	                $type = 'select2';
+	                $jointable = str_replace('id_','',$field);	                	                
+	                if(Schema::hasTable($jointable)) {
+	                	$joincols = CRUDBooster::getTableColumns($jointable);
+	                	$joinname = CRUDBooster::getNameTable($joincols);
+	                	$jointablePK = CB::pk($jointable);
+	                	$type = 'select2_datatable';
+	                	$options = [
+	                		"table"=>$jointable,
+	                		"field_label"=>$joinname,
+	                		"field_value"=>$jointablePK
+	                	];
+	                }	                
 	            }
 
 	            if(substr($field,-3)=='_id') {
 	                $jointable = str_replace('_id','',$field);
-	                $joincols = CRUDBooster::getTableColumns($jointable);
-	                $joinname = CRUDBooster::getNameTable($joincols);
-	                $attribute['datatable'] = $jointable.','.$joinname;
-	                $type = 'select2';
+	                if(Schema::hasTable($jointable)) {
+						$joincols    = CRUDBooster::getTableColumns($jointable);
+						$joinname    = CRUDBooster::getNameTable($joincols);
+						$jointablePK = CB::pk($jointable);
+						$type        = 'select2_datatable';
+						$options     = [
+	                		"table"=>$jointable,
+	                		"field_label"=>$joinname,
+	                		"field_value"=>$jointablePK
+	                	];
+	                }
 	            }
 
 	            if(substr($field,0,3)=='is_') {
-	                $type = 'radio';
-	                $label_field = ucwords(substr($field, 3));
-	                $validation = ['required|integer'];
-	                $attribute['dataenum'] = ['1|'.$label_field,'0|Un-'.$label_field];
+					$type        = 'radio_dataenum';
+					$label_field = ucwords(substr($field, 3));
+					$validation  = ['required|integer'];
+					$options     = [
+	                	"enum"=>["In ".$label_field,$label_field],
+	                	"value"=>[0, 1]
+	                ];
 	            }
 
 	            if(in_array($field, $password_candidate)) {
-	                $type = 'password';
-	                $validation = ['min:3','max:32'];
-	                $attribute['help'] = trans("crudbooster.text_default_help_password");                
+					$type       = 'password';
+					$validation = ['min:3','max:32'];
+					$help       = trans("crudbooster.text_default_help_password");	                
 	            }
-
 	        
 	            if(in_array($field, $image_candidate)) {
-	                $type = 'upload';                
-	                $attribute['help'] = trans('crudbooster.text_default_help_upload');	   
-	                $validation = ['required|image|max:3000'];             
+					$type       = 'upload';                
+					$help       = trans('crudbooster.text_default_help_upload');	   
+					$validation = ['required|image'];             
 	            }           
 
 	            if($field == 'latitude') {
@@ -1276,48 +1339,42 @@ class CRUDBooster  {
 	            }
 
 	            if(in_array($field, $phone_candidate)) {
-	                $type = 'number';
-	                $validation = ['required','numeric'];
-	                $attribute['placeholder'] = trans('crudbooster.text_default_help_number');
+					$type        = 'number';
+					$validation  = ['required','numeric'];
+					$placeholder = trans('crudbooster.text_default_help_number');
 	            }
 
 	            if(in_array($field, $email_candidate)) {
-	                $type = 'email';
-	                $validation[] = 'email|unique:'.$table;
-	                $attribute['placeholder'] = trans('crudbooster.text_default_help_email');
+					$type         = 'email';
+					$validation[] = 'email|unique:'.$table;
+					$placeholder  = trans('crudbooster.text_default_help_email');
 	            }
 
 	            if($type=='text' && in_array($field, $name_candidate)) {	                 
-	                $attribute['placeholder'] = trans('crudbooster.text_default_help_text');  
-	                $validation = ['required','string','min:3','max:70'];          
+					$placeholder = trans('crudbooster.text_default_help_text');  
+					$validation  = ['required','string','min:3','max:70'];          
 	            }
 
 	            if($type=='text' && in_array($field, $url_candidate)) {
-	                $validation = ['required','url'];
-	                $attribute['placeholder'] = trans('crudbooster.text_default_help_url');	                
+					$validation  = ['required','url'];
+					$placeholder = trans('crudbooster.text_default_help_url');	                
 	            }
 
 	            $validation = implode('|',$validation);
 
-	            $php .= "\t\t";
-	            $php .= '$this->form[] = ["label"=>"'.$label.'","name"=>"'.$field.'","type"=>"'.$type.'","required"=>TRUE';
-	            
-	            if($validation) {
-	            	$php .= ',"validation"=>"'.$validation.'"';            
-	            }
+	            $php .= "\n\t\t\t";
+	            $formArray = [];
+	            $formArray['label'] = $label;
+	            $formArray['name'] = $field;
+	            $formArray['type'] = $type;
+	            $formArray['options'] = $options;
+	            $formArray['required'] = true;
+	            $formArray['validation'] = $validation;
+	            $formArray['help'] = $help;
+	            $formArray['placeholder'] = $placeholder;
+	            $formArrayString = min_var_export($formArray,"\t\t\t");
+	            $php .= '$this->form[] = '.$formArrayString.';';
 
-	            if($attribute) {
-	                foreach($attribute as $key=>$val) {
-	                    if(is_bool($val)) {
-	                        $val = ($val)?"TRUE":"FALSE";
-	                    }else{
-	                        $val = '"'.$val.'"';                       
-	                    }
-	                    $php .= ',"'.$key.'"=>'.$val;
-	                }
-	            }
-
-	            $php .= "];\n";            
 	        }
 
 	        $php .= "\n\t\t\t# END FORM DO NOT REMOVE THIS LINE";
@@ -1336,7 +1393,7 @@ class CRUDBooster  {
 			| @parent_columns = Sparate with comma, e.g : name,created_at
 	        | 
 	        */
-	        $this->sub_module = array();
+	        $this->sub_module = [];
 
 
 	        /* 
@@ -1350,7 +1407,7 @@ class CRUDBooster  {
 	        | @showIf 	   = If condition when action show. Use field alias. e.g : [id] == 1
 	        | 
 	        */
-	        $this->addaction = array();
+	        $this->addaction = [];
 
 
 	        /* 
@@ -1363,7 +1420,7 @@ class CRUDBooster  {
 	        | Then about the action, you should code at actionButtonSelected method 
 	        | 
 	        */
-	        $this->button_selected = array();
+	        $this->button_selected = [];
 
 	                
 	        /* 
@@ -1374,7 +1431,7 @@ class CRUDBooster  {
 	        | @type    = warning,success,danger,info        
 	        | 
 	        */
-	        $this->alert        = array();
+	        $this->alert        = [];
 	                
 
 	        
@@ -1387,7 +1444,7 @@ class CRUDBooster  {
 	        | @icon  = Icon from Awesome.
 	        | 
 	        */
-	        $this->index_button = array();
+	        $this->index_button = [];
 
 
 
@@ -1399,7 +1456,7 @@ class CRUDBooster  {
 	        | @color = Default is none. You can use bootstrap success,info,warning,danger,primary.        
 	        | 
 	        */
-	        $this->table_row_color = array();     	          
+	        $this->table_row_color = [];     	          
 
 	        
 	        /*
@@ -1409,7 +1466,7 @@ class CRUDBooster  {
 	        | @label, @count, @icon, @color 
 	        |
 	        */
-	        $this->index_statistic = array();
+	        $this->index_statistic = [];
 
 
 
@@ -1456,7 +1513,7 @@ class CRUDBooster  {
 	        | $this->load_js[] = asset("myfile.js");
 	        |
 	        */
-	        $this->load_js = array();
+	        $this->load_js = [];
 	        
 	        
 	        
@@ -1480,7 +1537,7 @@ class CRUDBooster  {
 	        | $this->load_css[] = asset("myfile.css");
 	        |
 	        */
-	        $this->load_css = array();
+	        $this->load_css = [];
 	        
 	        
 	    }
@@ -1498,8 +1555,16 @@ class CRUDBooster  {
 	        //Your code here
 	            
 	    }
+';
 
+$joinQuery = '';
+if(count($joinList)) {
+	foreach($joinList as $j) {
+		$joinQuery .= '$query->join("'.$j['table'].'","'.$j['field1'].'","=","'.$j['field2'].'");'."\n";
+	}
+}
 
+$php .= '
 	    /*
 	    | ---------------------------------------------------------------------- 
 	    | Hook for manipulate query of index result 
@@ -1507,10 +1572,12 @@ class CRUDBooster  {
 	    | @query = current sql query 
 	    |
 	    */
-	    public function hook_query_index(&$query) {
+	    public function hookQueryIndex(&$query) {
 	        //Your code here
-	            
+	        '.$joinQuery.'
 	    }
+';
+$php .='	    
 
 	    /*
 	    | ---------------------------------------------------------------------- 
@@ -1518,7 +1585,7 @@ class CRUDBooster  {
 	    | ---------------------------------------------------------------------- 
 	    |
 	    */    
-	    public function hook_row_index($column_index,&$column_value) {	        
+	    public function hookRowIndex($column_index,&$column_value) {	        
 	    	//Your code here
 	    }
 
@@ -1529,7 +1596,7 @@ class CRUDBooster  {
 	    | @arr
 	    |
 	    */
-	    public function hook_before_add(&$postdata) {        
+	    public function hookBeforeAdd(&$postdata) {        
 	        //Your code here
 
 	    }
@@ -1541,7 +1608,7 @@ class CRUDBooster  {
 	    | @id = last insert id
 	    | 
 	    */
-	    public function hook_after_add($id) {        
+	    public function hookAfterAdd($id) {        
 	        //Your code here
 
 	    }
@@ -1554,7 +1621,7 @@ class CRUDBooster  {
 	    | @id       = current id 
 	    | 
 	    */
-	    public function hook_before_edit(&$postdata,$id) {        
+	    public function hookBeforeEdit(&$postdata,$id) {        
 	        //Your code here
 
 	    }
@@ -1566,7 +1633,7 @@ class CRUDBooster  {
 	    | @id       = current id 
 	    | 
 	    */
-	    public function hook_after_edit($id) {
+	    public function hookAfterEdit($id) {
 	        //Your code here 
 
 	    }
@@ -1578,7 +1645,7 @@ class CRUDBooster  {
 	    | @id       = current id 
 	    | 
 	    */
-	    public function hook_before_delete($id) {
+	    public function hookBeforeDelete($id) {
 	        //Your code here
 
 	    }
@@ -1590,7 +1657,7 @@ class CRUDBooster  {
 	    | @id       = current id 
 	    | 
 	    */
-	    public function hook_after_delete($id) {
+	    public function hookAfterDelete($id) {
 	        //Your code here
 
 	    }

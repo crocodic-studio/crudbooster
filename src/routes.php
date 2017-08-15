@@ -23,9 +23,9 @@ Route::group(['middleware'=>['api','\crocodicstudio\crudbooster\middlewares\CBAu
 
 /* ROUTER FOR UPLOADS */
 Route::group(['middleware'=>['web'],'namespace'=>$namespace],function() {		
-	Route::get('api-documentation', ['uses'=>'ApiCustomController@apiDocumentation','as'=>'apiDocumentation']);	
-	Route::get('download-documentation-postman', ['uses'=>'ApiCustomController@getDownloadPostman','as'=>'downloadDocumentationPostman']);		
-	Route::get('thumbnail/{folder}/{filename}', ['uses'=>'ThumbnailController@getFile','as'=>'thumbnailController']);		
+	Route::get('api/doc', ['uses'=>'AdminApiGeneratorController@apiDocumentation','as'=>'apiDocumentation']);	
+	Route::get('download-documentation-postman', ['uses'=>'AdminApiGeneratorController@getDownloadPostman','as'=>'downloadDocumentationPostman']);			
+	Route::get('uploads/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses'=>'FileController@getPreview','as'=>'fileControllerPreview']);		
 });
 
 
@@ -40,14 +40,36 @@ Route::group(['middleware'=>['web'],'prefix'=>config('crudbooster.ADMIN_PATH'),'
 	Route::get('register', ['uses'=>'AdminController@getRegister','as'=>'getRegister']);
 	Route::get('logout', ['uses'=>'AdminController@getLogout','as'=>'getLogout']);			
 	Route::post('login', ['uses'=>'AdminController@postLogin','as'=>'postLogin']);	
-	Route::get('login', ['uses'=>'AdminController@getLogin','as'=>'getLogin']);	
+	Route::get('login', ['uses'=>'AdminController@getLogin','as'=>'getLogin']);		
 	
 });
 
 
+
+
 // ROUTER FOR OWN CONTROLLER FROM CB
-Route::group(['middleware'=>['web','\crocodicstudio\crudbooster\middlewares\CBBackend'],'prefix'=>config('crudbooster.ADMIN_PATH'),'namespace'=>'App\Http\Controllers'], function () {
-				
+Route::group(['middleware'=>['web','\crocodicstudio\crudbooster\middlewares\CBBackend'],'prefix'=>config('crudbooster.ADMIN_PATH'),'namespace'=>'App\Http\Controllers'], function () {			
+		
+		if(Request::is(config('crudbooster.ADMIN_PATH'))) {
+			$menus = DB::table('cms_menus')->where('is_dashboard',1)->first();
+			if($menus) {
+				if($menus->type == 'Statistic') {
+					Route::get('/','\crocodicstudio\crudbooster\controllers\AdminStatisticBuilderController@getDashboard');
+				}elseif ($menus->type == 'Module') {
+					$module = CRUDBooster::first('cms_moduls',['path'=>$menus->path]);
+					Route::get('/',$module->controller.'@getIndex');
+				}elseif ($menus->type == 'Route') {
+					$action = str_replace("Controller","Controller@",$menus->path);
+					$action = str_replace(['Get','Post'],['get','post'],$action);
+					Route::get('/',$action);
+				}elseif ($menus->type == 'Controller & Method') {
+					Route::get('/',$menus->path);
+				}elseif ($menus->type == 'URL') {
+					redirect($menus->path);
+				}
+			}
+		}
+
 		try {
 			$moduls = DB::table('cms_moduls')
 			->where('path','!=','')
@@ -62,15 +84,23 @@ Route::group(['middleware'=>['web','\crocodicstudio\crudbooster\middlewares\CBBa
 });
 
 
+
 /* ROUTER FOR BACKEND CRUDBOOSTER */
 Route::group(['middleware'=>['web','\crocodicstudio\crudbooster\middlewares\CBBackend'],'prefix'=>config('crudbooster.ADMIN_PATH'),'namespace'=>$namespace], function () {
 
 	/* DO NOT EDIT THESE BELLOW LINES */
-	CRUDBooster::routeController('/','AdminController',$namespace='\crocodicstudio\crudbooster\controllers');	
-	CRUDBooster::routeController('api_generator','ApiCustomController',$namespace='\crocodicstudio\crudbooster\controllers');	
+	if(Request::is(config('crudbooster.ADMIN_PATH'))) {
+		$menus = DB::table('cms_menus')->where('is_dashboard',1)->first();
+		if(!$menus) {		
+			CRUDBooster::routeController('/','AdminController',$namespace='\crocodicstudio\crudbooster\controllers');	
+		}
+	}
+	
+	CRUDBooster::routeController('file-manager',$namespace='\crocodicstudio\crudbooster\controllers');
+	CRUDBooster::routeController('notifications','AdminNotificationsController',$namespace='\crocodicstudio\crudbooster\controllers');
+	CRUDBooster::routeController('users','AdminUsersController',$namespace='\crocodicstudio\crudbooster\controllers');	
 	
 	try{
-
 		$master_controller = glob(__DIR__.'/controllers/*.php');
 		foreach($master_controller as &$m) $m = str_replace('.php','',basename($m));		
 		
@@ -84,5 +114,19 @@ Route::group(['middleware'=>['web','\crocodicstudio\crudbooster\middlewares\CBBa
 	}catch(Exception $e) {
 		
 	}	
+});
+
+Route::group(['middleware'=>['web','\crocodicstudio\crudbooster\middlewares\CBSuperadmin'],'prefix'=>config('crudbooster.ADMIN_PATH'),'namespace'=>$namespace], function () {	
+	
+	CRUDBooster::routeController('privileges','AdminPrivilegesController',$namespace='\crocodicstudio\crudbooster\controllers');
+	CRUDBooster::routeController('permissions','AdminPrivilegesRolesController',$namespace='\crocodicstudio\crudbooster\controllers');	
+	CRUDBooster::routeController('settings','AdminSettingsController',$namespace='\crocodicstudio\crudbooster\controllers');
+	CRUDBooster::routeController('modules','AdminModulesController',$namespace='\crocodicstudio\crudbooster\controllers');
+	CRUDBooster::routeController('statistic-builder','AdminStatisticBuilderController',$namespace='\crocodicstudio\crudbooster\controllers');
+	CRUDBooster::routeController('file-manager','AdminFileManagerController',$namespace='\crocodicstudio\crudbooster\controllers');
+	CRUDBooster::routeController('menus','AdminMenusController',$namespace='\crocodicstudio\crudbooster\controllers');
+	CRUDBooster::routeController('email-templates','AdminEmailTemplatesController',$namespace='\crocodicstudio\crudbooster\controllers');
+	CRUDBooster::routeController('api-generator','AdminApiGeneratorController',$namespace='\crocodicstudio\crudbooster\controllers');
+	CRUDBooster::routeController('logs','AdminLogsController',$namespace='\crocodicstudio\crudbooster\controllers');
 });
 

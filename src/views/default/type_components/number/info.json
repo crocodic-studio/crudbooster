@@ -1,14 +1,7 @@
 {
 	"title":"Number Input",
 	"type":"number",
-	"attribute":{
-		"optional":{
-			"style":"string inline stylesheet",
-			"help":"string help-block",
-			"placeholder":"string placeholder",
-			"readonly":"boolean",
-			"disabled":"boolean"	
-		}
-		
-	}
+	"options":[
+		{"label":"Step","name":"step","type":"text","required":0}
+	]
 }

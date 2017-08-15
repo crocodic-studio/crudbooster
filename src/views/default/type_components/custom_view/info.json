@@ -1,0 +1,7 @@
+{
+	"title":"Custom View",
+	"type":"custom_view",
+	"options":[
+		{"label":"View Name","name":"view","type":"text","required":1}
+	]
+}

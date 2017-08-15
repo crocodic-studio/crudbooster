@@ -46,7 +46,7 @@
                
           <div class='form-group'>
               <label>API BASE URL</label>
-              <input type='text' readonly class='form-control' title='Hanya klik dan otomatis copy to clipboard (kecuali Safari)' onClick="this.setSelectionRange(0, this.value.length); document.execCommand('copy');" value='{{url('api')}}'/>
+              <input type='text' readonly class='form-control' title='Click to copy' onClick="this.setSelectionRange(0, this.value.length); document.execCommand('copy');" value='{{url('api')}}'/>
           </div>
           <div class='form-group'>
               <label>How To Use</label><br/>
@@ -107,7 +107,7 @@
                                                     @endif
                                                   @endforeach 
                                                   @if($i == 0)
-                                                  <tr><td colspan='4' align="center"><i class='fa fa-search'></i> There is no parameter</td></tr>
+                                                  <tr><td colspan='5' align="center"><i class='fa fa-search'></i> There is no parameter</td></tr>
                                                   @endif                                                 
                                               </tbody>
                                             </table>

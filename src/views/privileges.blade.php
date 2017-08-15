@@ -17,7 +17,7 @@
 			
                     </div>
                 </div>
-				<form method='post' action='{{ (@$row->id)?route("PrivilegesControllerPostEditSave")."/$row->id":route("PrivilegesControllerPostAddSave") }}'>
+				<form method='post' action='{{ (@$row->id)?route("AdminPrivilegesControllerPostEditSave")."/$row->id":route("AdminPrivilegesControllerPostAddSave") }}'>
 				<input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <div class="box-body">
 					<div class='form-group'>
@@ -143,6 +143,11 @@
 							</tbody>
 						</table>
 
+					</div>
+
+					<div class="alert alert-warning">
+						<strong>Please Note:</strong><br/>
+						Give an access view, it doesn't mean create a menu for its privilege, instead you have to create menu it self at the menu management
 					</div>
 
                 </div><!-- /.box-body -->

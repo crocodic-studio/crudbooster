@@ -24,7 +24,7 @@ $(document).ready(function() {
 		var editor = new JSONEditor(document.getElementById('{{$name}}'), {
 		  theme: 'bootstrap2',
 		  startval : <?=json_encode(json_decode($value, false))?>,
-		  schema : <?=json_encode(json_decode($form["schema"], false))?>
+		  schema : <?=json_encode(json_decode($form["options"]["schema"], false))?>
 		});
 		
 		$('[name="{{$name}}"]').parents('form').on('submit', function() {

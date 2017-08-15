@@ -46,8 +46,8 @@
 		var ASSET_URL           = "{{asset('/')}}";
 		var APP_NAME            = "{{CRUDBooster::getSetting('appname')}}";		
 		var ADMIN_PATH          = '{{url(config("crudbooster.ADMIN_PATH")) }}';
-		var NOTIFICATION_JSON   = "{{route('NotificationsControllerGetLatestJson')}}";
-		var NOTIFICATION_INDEX  = "{{route('NotificationsControllerGetIndex')}}";
+		var NOTIFICATION_JSON   = "{{route('AdminNotificationsControllerGetLatestJson')}}";
+		var NOTIFICATION_INDEX  = "{{route('AdminNotificationsControllerGetIndex')}}";
 
 		var NOTIFICATION_YOU_HAVE      = "{{trans('crudbooster.notification_you_have')}}";
 		var NOTIFICATION_NOTIFICATIONS = "{{trans('crudbooster.notification_notification')}}";

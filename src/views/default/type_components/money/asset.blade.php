@@ -3,11 +3,11 @@
 	$(function() {
 		$('.inputMoney').priceFormat({
 			prefix: '',
-			@if($form['dec_point'])
-			thousandsSeparator: '{!! $form['dec_point']?: '' !!}',
+			@if($form['options']['thousands_separator'])
+			thousandsSeparator: '{!! $form['options']['thousands_separator']?: '' !!}',
 			@endif
-			@if($form['decimals'])
-			centsLimit: {!! $form['decimals'] !!},
+			@if($form['options']['cents_limit'])
+			centsLimit: {!! $form['cents_limit'] !!},
 			@else
 			centsLimit: 0,		
 			@endif

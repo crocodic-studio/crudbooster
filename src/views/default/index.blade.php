@@ -50,13 +50,13 @@
  
     <div class="box">
       <div class="box-header">  
-        @if($button_bulk_action && ( ($button_delete && CRUDBooster::isDelete()) || $button_selected) )
+        @if($button_bulk_action && ( ($button_delete && CRUDBooster::canDelete()) || $button_selected) )
         <div class="pull-{{ trans('crudbooster.left') }}">          
           <div class="selected-action" style="display:inline-block;position:relative;">
               <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class='fa fa-check-square-o'></i> {{trans("crudbooster.button_selected_action")}}
                 <span class="fa fa-caret-down"></span></button>                              
               <ul class="dropdown-menu">    
-                @if($button_delete && CRUDBooster::isDelete())                                                                                                                                                         
+                @if($button_delete && CRUDBooster::canDelete())                                                                                                                                                         
                 <li><a href="javascript:void(0)" data-name='delete' title='{{trans('crudbooster.action_delete_selected')}}'><i class="fa fa-trash"></i> {{trans('crudbooster.action_delete_selected')}}</a></li>
                 @endif                
 

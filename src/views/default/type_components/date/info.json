@@ -1,13 +1,7 @@
 {
 	"title":"Date Input",
 	"type":"date",
-	"attribute":{
-		"optional": {
-			"style":"string inline stylesheet",
-			"help":"string help-block",
-			"placeholder":"string placeholder",
-			"readonly":"boolean",
-			"disabled":"boolean"
-		}				
-	}
+	"options":[
+		{"label":"Detail Date Format","name":"detail_format","type":"text","required":1,"help":"E.g : Y-m-d","default":"Y-m-d"}		
+	]
 }

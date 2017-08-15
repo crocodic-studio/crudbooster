@@ -15,7 +15,7 @@
 	@push('bottom')
 	<script>
 	$(document).ready(function() {
-	var max_fields_{{$name}}  	= "{{ @$form['max_fields'] }}";
+	var max_fields_{{$name}}  	= "{{ @$form['options']['max_fields'] }}";
     var max_fields_{{$name}}    = parseInt(max_fields_{{$name}}) ? max_fields_{{$name}} : 5; //maximum input boxes allowed
     var wrapper_{{$name}}       = $(".input_fields_wrap").filter(".{{$name}}"); //Fields wrapper
     var add_button_{{$name}}    = $(".add_field_button").filter(".{{$name}}"); //Add button ID

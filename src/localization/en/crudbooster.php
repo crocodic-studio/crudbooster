@@ -151,6 +151,7 @@ return [
     'add_user'            => 'Add User',
     'List_users'          => 'List Users',
     'Menu_Management'     => 'Menu Management',
+    'menu_filemanager'    => 'File Manager',
     'Add_New_Setting'     => 'Add New Setting',
     'Add_New_Module'      => 'Add New Module',
     'List_Module'         => 'List Module',

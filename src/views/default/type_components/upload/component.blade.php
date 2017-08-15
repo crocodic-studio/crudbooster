@@ -3,11 +3,10 @@
 
 			<div class="{{$col_width?:'col-sm-10'}}">
 			@if($value)
-				<?php 
-					$file = str_replace('uploads/','',$value);					
-					if(Storage::exists($file)):								
-						$url         = asset($value);
-						@$ext         = strtolower(end(explode('.',$value)));
+				<?php 					
+					if(Storage::exists($value)):								
+						$url         = asset($value);						
+						$ext 		 = strtolower(pathinfo($value,PATHINFO_EXTENSION));
 						$images_type = array('jpg','png','gif','jpeg','bmp','tiff');																																				
 						if(in_array($ext, $images_type)):
 						?>

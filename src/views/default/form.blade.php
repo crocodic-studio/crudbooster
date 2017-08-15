@@ -50,16 +50,20 @@
                                 <a href='{{CRUDBooster::mainpath("?".http_build_query(@$_GET)) }}' class='btn btn-default'><i class='fa fa-chevron-circle-left'></i> {{trans("crudbooster.button_back")}}</a>
                                 @endif
                               @endif
-                              @if(CRUDBooster::isCreate() || CRUDBooster::isUpdate())
+                              @if(CRUDBooster::canCreate() || CRUDBooster::canUpdate())
 
-                                 @if(CRUDBooster::isCreate() && $button_addmore==TRUE && $command == 'add')                                                                                                     
+                                 @if(CRUDBooster::canCreate() && $button_addmore==TRUE && $command == 'add')                                                                                                     
                                     <input type="submit" name="submit" value='{{trans("crudbooster.button_save_more")}}' class='btn btn-success'>
                                  @endif
 
                                  @if($button_save && $command != 'detail')
                                     <input type="submit" name="submit" value='{{trans("crudbooster.button_save")}}' class='btn btn-success'>
-                                 @endif
+                                 @endif                                 
                                  
+                              @endif
+                              
+                              @if(CB::getCurrentMethod() == 'getProfile')
+                                <input type="submit" name="submit" value='{{trans("crudbooster.button_save")}}' class='btn btn-success'>
                               @endif
                             </div>
                           </div>                             

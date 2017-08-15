@@ -42,25 +42,12 @@ foreach($forms as $form) {
 					$validation[$vr] = TRUE;
 				}
 			}
-		}        
-
-		if(isset($form['callback_php'])) {
-			@eval("\$value = ".$form['callback_php'].";");
 		}
-
 
 		if(isset($form['callback'])) {
 			$value = call_user_func($form['callback'],$row);
 		}
-
-		if($join && @$row) {
-			$join_arr = explode(',', $join);
-			array_walk($join_arr, 'trim');
-			$join_table = $join_arr[0];
-			$join_title = $join_arr[1];
-			$join_query_{$join_table} = DB::table($join_table)->select($join_title)->where("id",$row->{'id_'.$join_table})->first();
-			$value = @$join_query_{$join_table}->{$join_title};	                				                				
-		}
+		
 		$form['type'] = ($form['type'])?:'text';
 		$type         = @$form['type'];
 		$required     = (@$form['required'])?"required":"";

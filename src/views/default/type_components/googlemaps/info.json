@@ -1,14 +1,8 @@
 {
-	"title":"Google Maps",
+	"title":"Google Maps (Address)",
 	"type":"googlemaps",
-	"attribute":{
-		"required":{			
-		},
-		"optional":{
-			"latitude":"latitude field",
-			"longitude":"longitude field"	
-		}
-		
-		
-	}
+	"options":[
+		{"label":"Latitude Field","name":"latitude_field","type":"text","required":0},
+		{"label":"Longitude Field","name":"latitude_field","type":"text","required":0}		
+	]
 }

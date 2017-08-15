@@ -3,9 +3,10 @@
 @section('content')   
 
 <ul class="nav nav-tabs">
-        <li ><a href="{{ CRUDBooster::mainpath() }}"><i class='fa fa-file'></i> API Documentation</a></li>
-        <li class="active"><a href="{{ CRUDBooster::mainpath('screet-key') }}"><i class='fa fa-key'></i> API Secret Key</a></li>
+        <li ><a href="{{ CRUDBooster::mainpath() }}"><i class='fa fa-file'></i> List API</a></li>        
         <li><a href="{{ CRUDBooster::mainpath('generator') }}"><i class='fa fa-cog'></i> API Generator</a></li>        
+        <li class="active"><a href="{{ CRUDBooster::mainpath('screet-key') }}"><i class='fa fa-key'></i> API Secret Key</a></li>
+        <li><a href="{{ url('api/doc')}}" target="_blank"><i class='fa fa-book'></i> API Documentation</a></li>        
       </ul>
 
       <div class='box'>
@@ -46,7 +47,7 @@
 <script>
 	var lastno = <?=$no?>;
     function generate_screet_key() {    	
-    	$.get("<?php echo route('ApiCustomControllerGetGenerateScreetKey')?>",function(resp) {    
+    	$.get("<?php echo route('AdminApiGeneratorControllerGetGenerateScreetKey')?>",function(resp) {    
     		lastno += 1;                    
 	            $('#table-apikey').append("<tr><td>"+lastno+"</td><td>"+resp.key+"</td><td>0</td><td><span class='label label-success'>Active</span></td><td>"+
 	            	"<a class='btn btn-xs btn-default' href='{{CRUDBooster::mainpath("status-apikey")}}?id="+resp.id+"&status=0'>Non Active</a> <a class='btn btn-xs btn-danger' href='javascript:void(0)' onclick='deleteApi("+resp.id+")'>Delete</a> </td></tr>"

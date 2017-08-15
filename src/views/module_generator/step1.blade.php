@@ -35,10 +35,10 @@
 
 <ul class="nav nav-tabs">
   @if($id)
-  <li role="presentation" class="active"><a href="{{Route('ModulsControllerGetStep1',['id'=>$id])}}"><i class='fa fa-info'></i> Step 1 - Module Information</a></li>
-  <li role="presentation"><a href="{{Route('ModulsControllerGetStep2',['id'=>$id])}}"><i class='fa fa-table'></i> Step 2 - Table Display</a></li>
-  <li role="presentation"><a href="{{Route('ModulsControllerGetStep3',['id'=>$id])}}"><i class='fa fa-plus-square-o'></i> Step 3 - Form Display</a></li>
-  <li role="presentation"><a href="{{Route('ModulsControllerGetStep4',['id'=>$id])}}"><i class='fa fa-wrench'></i> Step 4 - Configuration</a></li>
+  <li role="presentation" class="active"><a href="{{Route('AdminModulesControllerGetStep1',['id'=>$id])}}"><i class='fa fa-info'></i> Step 1 - Module Information</a></li>
+  <li role="presentation"><a href="{{Route('AdminModulesControllerGetStep2',['id'=>$id])}}"><i class='fa fa-table'></i> Step 2 - Table Display</a></li>
+  <li role="presentation"><a href="{{Route('AdminModulesControllerGetStep3',['id'=>$id])}}"><i class='fa fa-plus-square-o'></i> Step 3 - Form Display</a></li>
+  <li role="presentation"><a href="{{Route('AdminModulesControllerGetStep4',['id'=>$id])}}"><i class='fa fa-wrench'></i> Step 4 - Configuration</a></li>
   @else
   <li role="presentation" class="active"><a href="#"><i class='fa fa-info'></i> Step 1 - Module Information</a></li>
   <li role="presentation"><a href="#"><i class='fa fa-table'></i> Step 2 - Table Display</a></li>
@@ -52,7 +52,7 @@
         <h3 class="box-title">Module Information</h3>
     </div>
     <div class="box-body">
-    <form method="post" action="{{Route('ModulsControllerPostStep2')}}">
+    <form method="post" action="{{Route('AdminModulesControllerPostStep2')}}">
         <input type="hidden" name="_token" value="{{csrf_token()}}">
         <input type="hidden" name="id" value="{{$row->id}}" >
         <div class="form-group">
@@ -93,7 +93,7 @@
             <input checked type='checkbox' name='create_menu' value='1'/> Also create menu for this module <a href='#' title='If you check this, we will create the menu for this module'>(?)</a>
         
         <div class='pull-right'>
-            <a class='btn btn-default' href='{{Route("ModulsControllerGetIndex")}}'> {{trans('crudbooster.button_back')}}</a> 
+            <a class='btn btn-default' href='{{Route("AdminModulesControllerGetIndex")}}'> {{trans('crudbooster.button_back')}}</a> 
             <input type="submit" class="btn btn-primary" value="Step 2 &raquo;">
         </div>
     </div>

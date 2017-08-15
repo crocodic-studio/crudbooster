@@ -1,13 +1,7 @@
 {
 	"title":"Date Time Input",
 	"type":"datetime",
-	"attribute":{
-		"optional": {
-		"style":"string inline stylesheet",
-		"help":"string help-block",
-		"placeholder":"string placeholder",
-		"readonly":"boolean",
-		"disabled":"boolean"
-		}
-	}
+	"options":[
+		{"label":"PHP DateTime Format","name":"php_format","type":"text","default":"Y-m-d H:i","help":"E.g : Y-m-d H:i:s","required":1}		
+	]
 }

@@ -1,16 +1,8 @@
 {
 	"title":"Money Input",
 	"type":"money",
-	"attribute":{
-		"optional": {
-			"decimals": "Sets the number of decimal points",
-			"dec_point":"Sets the separator for the decimal point",
-			"style":"string inline stylesheet",
-			"help":"string help-block",
-			"placeholder":"string placeholder",
-			"readonly":"boolean",
-			"disabled":"boolean"	
-		}
-		
-	}
+	"options":[
+		{"label":"Thousands Separator","name":"thousands_separator","type":"text","required":0},
+		{"label":"Cents Limit","name":"cents_limit","type":"text","required":0}
+	]
 }

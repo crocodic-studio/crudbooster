@@ -17,10 +17,10 @@
 @endpush
 
 <ul class="nav nav-tabs">
-  <li role="presentation"><a href="{{Route('ModulsControllerGetStep1',['id'=>$id])}}"><i class='fa fa-info'></i> Step 1 - Module Information</a></li>
-  <li role="presentation"><a href="{{Route('ModulsControllerGetStep2',['id'=>$id])}}"><i class='fa fa-table'></i> Step 2 - Table Display</a></li>
-  <li role="presentation" class="active"><a href="{{Route('ModulsControllerGetStep3',['id'=>$id])}}"><i class='fa fa-plus-square-o'></i> Step 3 - Form Display</a></li>
-  <li role="presentation"><a href="{{Route('ModulsControllerGetStep4',['id'=>$id])}}"><i class='fa fa-wrench'></i> Step 4 - Configuration</a></li>
+  <li role="presentation"><a href="{{Route('AdminModulesControllerGetStep1',['id'=>$id])}}"><i class='fa fa-info'></i> Step 1 - Module Information</a></li>
+  <li role="presentation"><a href="{{Route('AdminModulesControllerGetStep2',['id'=>$id])}}"><i class='fa fa-table'></i> Step 2 - Table Display</a></li>
+  <li role="presentation" class="active"><a href="{{Route('AdminModulesControllerGetStep3',['id'=>$id])}}"><i class='fa fa-plus-square-o'></i> Step 3 - Form Display</a></li>
+  <li role="presentation"><a href="{{Route('AdminModulesControllerGetStep4',['id'=>$id])}}"><i class='fa fa-wrench'></i> Step 4 - Configuration</a></li>
 </ul>
 @push('head')
 <style>
@@ -31,11 +31,11 @@
         position:absolute;
         top:inherit;
         left:inherit;
-        padding:0 0 0 0;
+        padding:0 0 0 0;        
         list-style-type:none;
         height:180px;
         overflow:auto;
-        z-index: 1;
+        z-index: 9999;
     }
     .sub li {
         padding:5px;
@@ -69,7 +69,7 @@
             list += "<li>"+obj+"</li>";        
         });
 
-        t.after("<ul class='sub'>"+list+"</ul>"); 
+        t.after("<ul class='sub' style='margin-top:40px'>"+list+"</ul>"); 
     }
 
     function showTypeSuggestLike(t) {
@@ -208,109 +208,23 @@
         $(document).on('click','.sub li',function() {
             var v = $(this).text();
             var t = $(this).parent('ul').parent('td');
-            var tr_index = parseInt(t.parent().index());
-            console.log(tr_index);
+            var tr_index = parseInt(t.parent().index());            
             
             var input_name = $(this).parent().parent('td').find('input[type=text]').attr('name');            
             
             if( input_name  == 'type[]' ) {
-            	$(this).parent('ul').prev('input[type=text]').val(v);            
-            	$(this).parent('ul').remove();
-
-            	t.parent('tr').find('.option_area').empty();                
-
-	            $.getJSON("{{CRUDBooster::mainpath('type-info')}}/"+v,function(data) {                    
-
-                    if(data.alert) {
-                        t.parent('tr').find('.option_area').prepend("<div class='alert alert-warning'><strong>IMPORTANT</strong><br/>"+data.alert+"</div>");
-                    }
-	            	                    
-	        		if(data.attribute.required) {
-                        $.each(data.attribute.required,function(key,val) {
-
-                        var form_group_html = '';
-
-                        if(val instanceof Object) {
-                            form_group_html += "<div class='form-group'><label>"+key+"</label>";
-
-                            if(val.type) {                                
-                                if(val.type == 'radio') {
-                                    $.each(val.enum,function(i,o) {
-                                        form_group_html +="<input type='radio' name='option["+tr_index+"]["+key+"]' value='"+o+"'/> "+o+" &nbsp;&nbsp;";
-                                    })
-                                }else{
-                                    if(val.type == 'array') {
-
-                                        form_group_html +="<input class='form-control required' name='option["+tr_index+"]["+key+"]' placeholder='"+val.placeholder+"' type='text'/>";
-                                        form_group_html +="<input name='option["+tr_index+"]["+key+"_type]' value='array' type='hidden'/>";
-
-                                    }else{
-
-                                        form_group_html +="<input class='form-control required' name='option["+tr_index+"]["+key+"]' placeholder='"+val.placeholder+"' type='text'/>";
-                                    }
-                                }
-                            }else{
-                                form_group_html +="<input class='form-control required' name='option["+tr_index+"]["+key+"]' placeholder='"+val+"' type='text'/>";
-                            }                            
-
-                            form_group_html +="</div>";                                
-                        }else{
-                             form_group_html +=
-                                "<div class='form-group'>"+
-                                    "<label>"+key+"</label>"+
-                                    "<input class='form-control required' name='option["+tr_index+"]["+key+"]' placeholder='"+val+"' type='text'/>"+
-                                "</div>"
-                                ;                                                          
-                        }  
-
-                        t.parent('tr').find('.option_area').append(form_group_html);
-
-                        });                     
-                    }
-                    
-                    if(data.attribute.requiredOne) {
-                        $.each(data.attribute.requiredOne,function(key,val) {
-                            t.parent('tr').find('.option_area').append(
-                            "<div class='form-group'>"+
-                                "<label>"+key+"</label>"+
-                                "<input class='form-control required-one'  name='option["+tr_index+"]["+key+"]' placeholder='"+val+"' type='text'/>"+
-                            "</div>"
-                            );                                  
-                        });
-                    }
-                    
-                    if(data.attribute.optional) {                        
-                        $.each(data.attribute.optional,function(key,val) {
-							if(typeof(val) == "object") {
-								if(val.type == 'textarea') {
-									t.parent('tr').find('.option_area').append(
-									"<div class='form-group'>"+
-										"<label>"+key+"</label>"+
-										"<textarea class='form-control' name='option["+tr_index+"]["+key+"]' placeholder='"+val.placeholder+"' ></textarea>"+
-									"</div>"
-									);
-								}
-							} else {
-								t.parent('tr').find('.option_area').append(
-								"<div class='form-group'>"+
-									"<label>"+key+"</label>"+
-									"<input class='form-control' name='option["+tr_index+"]["+key+"]' placeholder='"+val+"' type='text'/>"+
-								"</div>"
-								);
-							}
-                        });             
-                    }        		
-	        	})
+            	$(this).parent('ul').prev('input[type=text]').val(v).trigger('change');            
+            	$(this).parent('ul').remove();            	
 
 	        }else if ( input_name == 'validation[]') {
 	        	var currentVal = $(this).parent('ul').prev('input[type=text]').val();
 	        	if(currentVal != '') {
 	        		v = currentVal + '|' + v;
 	        	}
-	        	$(this).parent('ul').prev('input[type=text]').val(v);            
+	        	$(this).parent('ul').prev('input[type=text]').val(v).trigger('change');            
             	$(this).parent('ul').remove();
             }else{
-            	$(this).parent('ul').prev('input[type=text]').val(v);            
+            	$(this).parent('ul').prev('input[type=text]').val(v).trigger('change');            
             	$(this).parent('ul').remove();
             }            
         })         
@@ -338,66 +252,131 @@
                 tr.remove();    
             }            
         })
-        
-        var current_option_area = null;
 
-        $(document).on('click','.btn-options',function() {
-        	$('#myModal .modal-body').empty();
+        var handleOptions = null;
 
-			current_option_area = $(this).next('.option_area');        	
+        $('#modal-options .btn-save-option').click(function() {
+            
+            var name = handleOptions.parent().parent().parent().parent().find('input.name').val();
+            var close = true;
+            $('#modal-options .modal-body').find('input,select,textarea').each(function() {
+                if( $(this).prop('required') ) {
+                    if( $(this).val() == '') {
+                        $(this).parent().addClass('has-error');
+                        $(this).focus();
+                        $(this).parent().find('.help-error').show();
+                        swal("Oops","There are some inputs need to filled","warning");
+                        close = false;
+                    }
+                }
+            })
+            if(close==true) {             
+                var style = $('#modal-options input[name=style]').val();
+                var placeholder = $('#modal-options input[name=placeholder]').val();
+                var help = $('#modal-options input[name=help]').val();
+                
+                handleOptions.parent().parent().parent().find('.input-style').val(style);   
+                handleOptions.parent().parent().parent().find('.input-placeholder').val(placeholder);   
+                handleOptions.parent().parent().parent().find('.input-help').val(help);                   
 
-        	var clone = $(this).next('.option_area').clone();
-        	clone.removeAttr('style');
-        	clone.appendTo('#myModal .modal-body');
-
-        	$('#myModal').modal('show');
+                if($('#modal-options .input-options-item').length > 0) {
+                    handleOptions.parent().parent().parent().find('.input-options').empty();
+                    $('#modal-options .input-options-item').each(function() {
+                        var v = $(this).val();
+                        var n = $(this).attr('name');                        
+                        handleOptions.parent().parent().parent().find('.input-options').append("<input type='hidden' data-option-name='"+n+"' class='input-option-hidden input-"+n+"' name='"+n+"["+name+"]' value='"+v+"'/>");
+                    })    
+                }
+                
+                $('#modal-options').modal('hide');
+            }
         })
+                
 
-        $('#myModal .btn-save-option').click(function() {
+        $(document).on('click','.btn-options',function() {    
+            handleOptions = $(this);
+            var input = handleOptions.parent().parent().find('input');
+            var type = input.val();	
 
-        	//Validation
-        	var i_required = [];
-        	$('#myModal .modal-body .required').each(function() {
-        		var value = $(this).val();
-        		var name = $(this).attr('name');
-        		if(value == '') {
-        			i_required.push(name);	
-        		}        		
-        	});
+            var style = handleOptions.parent().parent().parent().find('.input-style').val();  
+            var placeholder = handleOptions.parent().parent().parent().find('.input-placeholder').val();  
+            var help = handleOptions.parent().parent().parent().find('.input-help').val();
+            
+            $('#modal-options input[name=style]').val(style);
+            $('#modal-options input[name=placeholder]').val(placeholder);
+            $('#modal-options input[name=help]').val(help);
 
-        	if(i_required.length > 0) {
-        		console.log(i_required);
-        		alert("Some these fields are required : "+i_required.join(", "));
-        		return false;
-        	}
+            $.get("{{route('AdminModulesControllerGetTypeInfo')}}/"+type,function(r) {
+                r = JSON.parse(r);
+                
+                if(r.options) {
+                    $('#modal-options .form-group-options').empty();
+                    $.each(r.options,function(i,obj) {
+                        var required = (obj.required)?"required":"";
+                        var defaultValue = (obj.default)?obj.default:"";
 
-        	//Validation
-        	var i_required_one = [];
-        	$('#myModal .modal-body .required-one').each(function() {
-        		var value = $(this).val();
-        		var name = $(this).attr('name');
-        		if(value == '') {        			
-        			i_required_one.push(name);	
-        		}
-        	})        	
+                        var v = handleOptions.parent().parent().parent().find('.input-'+obj.name).val();
+                        defaultValue = (v)?v:defaultValue;                        
 
-        	if(i_required_one.length > 0 && i_required_one.length == $('#myModal .modal-body .required-one').length) {
-        		alert("One of these fields are required : "+i_required_one.join(", "));
-        		return false;
-        	}
+                        var html = "<div class='form-group'>";
+                        html += "<label>"+obj.label+"</label>";
+                        switch(obj.type) {
+                            default:                            
+                            case 'text':
+                                html += "<input type='text' name='"+obj.name+"' class='input-options-item form-control' value='"+defaultValue+"' "+required+"/>";                                
+                            break;
+                            case 'textarea':
+                                html += "<textarea class='input-options-item form-control' name='"+obj.name+"' "+required+">"+defaultValue+"</textarea>";
+                            break;
+                            case 'array':
+                                html += "<input type='text' placeholder='Sparate with semicolon' name='"+obj.name+"' class='input-options-item form-control' value='"+defaultValue+"' "+required+"/>";                                
+                            break;                            
+                            case 'boolean':
+                                html += "<select name='"+obj.name+"' class='input-options-item form-control'>";
+                                html += "<option value='0'> No</option>";
+                                html += "<option value='1'> Yes</option>";
+                                html += "</select>";
+                            break;
+                            case 'radio':
+                            case 'select':
+                                if(obj.enum) {
+                                    html += "<select name='"+obj.name+"' class='input-options-item form-control'>";
+                                    $.each(obj.enum,function(e,b) {                                        
+                                        html += "<option value='"+b+"'>"+b+"</option>";
+                                    })    
+                                    html += "</select>";
+                                }                                
+                            break;
+                        }            
+                        if(obj.help) {
+                            html += "<div class='help-block'>"+obj.help+"</div>";                            
+                        }
+                        html += "<div class='help-block help-error' style='display:none'>Please fill out this field</div>";
+                        html += "</div>";            
+                        $('#modal-options .form-group-options').append(html);
+                    })                                    
+                }
+            })	     
 
-        	current_option_area.empty();
-        	var clone = $('#myModal .option_area').children().clone();
-        	current_option_area.html(clone);
-        	$('#myModal .modal-body').empty();
-        	$('#myModal').modal('hide');
+        	$('#modal-options').modal('show');
+        })       
+
+
+        $('.name').change(function() {
+            var name = $(this).val();
+            console.log(name+' changed');
+            $(this).parent().parent().find('.input-option-hidden').each(function() {
+                var optionName = $(this).data('option-name');
+                $(this).attr('name',name+"["+optionName+"]");
+            })
         })
 
     })
+
 </script>
 @endpush
 
-<div id="myModal" class="modal fade" tabindex="-1" role="dialog">
+<div id="modal-options" class="modal fade" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -405,7 +384,21 @@
         <h4 class="modal-title"><i class='fa fa-cog'></i> Options</h4>
       </div>
       <div class="modal-body">
-        <p>One fine body&hellip;</p>
+        <div class="form-group">
+            <label>Style</label>
+            <input type="text" name="style" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>Placeholder</label>
+            <input type="text" name="placeholder" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>Help</label>
+            <input type="text" name="help" class="form-control">
+        </div>
+        <div class="form-group-options">
+            
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -420,21 +413,46 @@
         <h3 class="box-title">Form Display</h3>
     </div>
     <div class="box-body">
-    <form method="post" autocomplete="off" action="{{Route('ModulsControllerPostStep4')}}">
+    <form method="post" autocomplete="off" action="{{Route('AdminModulesControllerPostStep4')}}">
         <input type="hidden" name="_token" value="{{csrf_token()}}">
         <input type="hidden" name="id" value="{{$id}}" >
         
         <table class='table-form table table-striped'>
         	<thead>
-        		<tr><th>Label</th><th>Name</th><th>Type</th><th>Validation</th><th width="90px">Width</th><th width="100px">Options</th><th width="180px">Action</th></tr>
+        		<tr><th width="180px">Action</th><th>Label</th><th>Name</th><th>Type</th><th>Validation</th><th width="90px">Width</th></tr>
         	</thead>
         	<tbody>
                 <?php $index = 0;?>
-        		@foreach($cb_form as $form)
+        		@foreach($forms as $form)
         		<tr>
+                    <td>
+                        <a href="javascript:void(0)" class="btn btn-info btn-plus"><i class='fa fa-plus'></i></a>
+                        <a href="javascript:void(0)" class="btn btn-danger btn-delete"><i class='fa fa-trash'></i></a>
+                        <a href="javascript:void(0)" class="btn btn-success btn-up"><i class='fa fa-arrow-up'></i></a>
+                        <a href="javascript:void(0)" class="btn btn-success btn-down"><i class='fa fa-arrow-down'></i></a>
+                    </td>
         			<td><input type='text' value='{{$form["label"]}}' placeholder="Input field label" onclick='showColumnSuggest(this)' onkeyup="showColumnSuggestLike(this)" class='form-control labels' name='label[]'/></td>
         			<td><input type='text' value='{{$form["name"]}}' placeholder="Input field name" onclick='showNameSuggest(this)' onkeyup="showNameSuggestLike(this)" class='form-control name' name='name[]'/></td>
-        			<td><input type='text' value='{{$form["type"]?:"text"}}' placeholder="Input field type" onclick='showTypeSuggest(this)' onkeyup="showTypeSuggestLike(this)" class='form-control type' name='type[]'/></td>        			
+        			<td>                        
+                        <div class="input-group">
+                          <input type='text' value='{{$form["type"]?:"text"}}' placeholder="Input field type" onclick='showTypeSuggest(this)' onkeyup="showTypeSuggestLike(this)" class='form-control type' name='type[]'/>
+                          <span class="input-group-btn">
+                            <button class="btn btn-primary btn-options" title="Options" type="button"><i class="fa fa-cog"></i></button>
+                          </span>
+                        </div><!-- /input-group -->   
+                        <input type="hidden" class="input-style" name="style[]">                                             
+                        <input type="hidden" class="input-placeholder" name="placeholder[]">                                             
+                        <input type="hidden" class="input-help" name="help[]">                                             
+                        <div class="input-options">
+                            @foreach($form['options'] as $key=>$val)
+                                @if(is_array($val))
+                                <input type="hidden" data-option-name="{{$key}}" class="input-option-hidden input-{{$key}}" name="{{$key}}[{{$form['name']}}]" value="{{implode(';',$val)}}">
+                                @else
+                                <input type="hidden" data-option-name="{{$key}}" class="input-option-hidden input-{{$key}}" name="{{$key}}[{{$form['name']}}]" value="{{$val}}">
+                                @endif
+                            @endforeach
+                        </div>
+                    </td>        			
         			<td><input type='text' value='{{$form["validation"]}}' class='form-control validation' onclick="showValidationSuggest(this)" onkeyup="showValidationSuggestLike(this)" name='validation[]' value='required' placeholder='Enter Laravel Validation'/></td>        			
         			<td>     			
         			<select class='form-control width' name='width[]'>
@@ -442,106 +460,32 @@
         					<option {{ ($form['width'] == "col-sm-$i")?"selected":"" }} value='col-sm-{{$i}}'>{{$i}}</option>
         				@endfor
         			</select>
-        			</td>
-        			<td>        			
-        				<a class='btn btn-primary btn-options' href='javascript:;'><i class='fa fa-cog'></i> Options</a>	
-        				<div class='option_area' style="display: none">
-        					<?php 
-
-                                $type = $form["type"]?:"text";
-        						$types = base_path('vendor/crocodicstudio/crudbooster/src/views/default/type_components/'.$type.'/info.json');
-        						$types = file_get_contents($types);
-        						$types = json_decode($types);     
-
-        						if($types):
-        					?>
-
-                            @if($types->alert)
-                                <div class="alert alert-warning">
-                                    {!! $types->alert !!}
-                                </div>
-                            @endif                                                     
-
-        					<?php 
-        						if($types->attribute->required):
-        						foreach($types->attribute->required as $key=>$val):
-        							@$value = $form[$key];
-		                            if(is_object($val)):  
-
-                                        if($val->type && $val->type=='radio'):                                  
-        					?>
-                                            <div class="form-group">
-                                                <label>{{$key}}</label>
-                                                @foreach($val->enum as $enum)
-                                                    <input type="radio" name="option[{{$index}}][{{$key}}]" {{ ($enum == $value)?"checked":"" }} value="{{$enum}}"> {{$enum}}
-                                                @endforeach
-                                                
-                                            </div>
-
-                                        <?php else:?>
-
-            	        					<div class="form-group">
-            	        						<label>{{$key}}</label>
-            								    <input type="text" name="option[{{$index}}][{{$key}}]" placeholder="{{$val->placeholder}}" value="{{$value}}" class="form-control">
-            	        					</div>
-                                        <?php endif;?>
-                                    <?php else:?>
-
-                                    <div class="form-group">
-                                        <label>{{$key}}</label>
-                                        <input type="text" name="option[{{$index}}][{{$key}}]" placeholder="{{$val}}" value="{{$value}}" class="form-control">
-                                    </div>
-
-                                    <?php endif;?>
-        					<?php endforeach; endif;?>
-
-
-
-        					<?php 
-        						if($types->attribute->requiredOne):
-        						foreach($types->attribute->requiredOne as $key=>$val):
-        							@$value = $form[$key];
-        					?>
-	        					<div class="form-group">
-	        						<label>{{$key}}</label>
-	        						<input type="text" name="option[{{$index}}][{{$key}}]" placeholder="{{$val}}" value="{{$value}}" class="form-control">
-	        					</div>
-        					<?php endforeach; endif;?>
-
-        					<?php 
-        						if($types->attribute->optional):
-								foreach($types->attribute->optional as $key=>$val):
-									@$value = $form[$key];
-									
-        					?>
-	        					<div class="form-group">
-	        						<label>{{$key}}</label>
-									@if(is_object($val) && property_exists($val, 'type') && $val->type == 'textarea')
-										<textarea type="text" name="option[{{$index}}][{{$key}}]" placeholder="{{$val->placeholder}}" class="form-control">{{$value}}</textarea>
-									@else
-										<input type="text" name="option[{{$index}}][{{$key}}]" placeholder="{{$val}}" value="{{$value}}" class="form-control">
-									@endif
-								</div>
-        					<?php endforeach; endif;?>
-
-     
-        					<?php endif;?>
-        				</div>        				        				
-        			</td>   
-        			<td>
-        				<a href="javascript:void(0)" class="btn btn-info btn-plus"><i class='fa fa-plus'></i></a>
-                        <a href="javascript:void(0)" class="btn btn-danger btn-delete"><i class='fa fa-trash'></i></a>
-                        <a href="javascript:void(0)" class="btn btn-success btn-up"><i class='fa fa-arrow-up'></i></a>
-                        <a href="javascript:void(0)" class="btn btn-success btn-down"><i class='fa fa-arrow-down'></i></a>
-        			</td>
+        			</td>        			
         		</tr>
                 <?php $index++;?>
         		@endforeach
 
         		<tr id='tr-sample' style="display: none">
+                    <td>
+                        <a href="javascript:void(0)" class="btn btn-info btn-plus"><i class='fa fa-plus'></i></a>
+                        <a href="javascript:void(0)" class="btn btn-danger btn-delete"><i class='fa fa-trash'></i></a>
+                        <a href="javascript:void(0)" class="btn btn-success btn-up"><i class='fa fa-arrow-up'></i></a>
+                        <a href="javascript:void(0)" class="btn btn-success btn-down"><i class='fa fa-arrow-down'></i></a>
+                    </td>
         			<td><input type='text' placeholder="Input field label" onclick='showColumnSuggest(this)' onkeyup="showColumnSuggestLike(this)" class='form-control labels' name='label[]'/></td>
         			<td><input type='text' placeholder="Input field name" onclick='showNameSuggest(this)' onkeyup="showNameSuggestLike(this)" class='form-control name' name='name[]'/></td>
-        			<td><input type='text' placeholder="Input field type" onclick='showTypeSuggest(this)' onkeyup="showTypeSuggestLike(this)" class='form-control type' name='type[]'/></td>        			
+        			<td>
+                        <div class="input-group">
+                          <input type='text' placeholder="Input field type" onclick='showTypeSuggest(this)' onkeyup="showTypeSuggestLike(this)" class='form-control type' name='type[]'/>
+                          <span class="input-group-btn">
+                            <button class="btn btn-primary btn-options" title="Options" type="button"><i class="fa fa-cog"></i></button>
+                          </span>
+                        </div><!-- /input-group -->   
+                        <input type="hidden" class="input-style" name="style[]">                                             
+                        <input type="hidden" class="input-placeholder" name="placeholder[]">                                             
+                        <input type="hidden" class="input-help" name="help[]"> 
+                        <div class="input-options"></div>
+                    </td>        			
         			<td><input type='text' class='form-control validation' onclick="showValidationSuggest(this)" onkeyup="showValidationSuggestLike(this)" name='validation[]' value='required' placeholder='Enter Laravel Validation'/></td>        			
         			<td>     			
         			<select class='form-control width' name='width[]'>
@@ -549,19 +493,8 @@
         					<option {{ ($i==9)?"selected":"" }} value='col-sm-{{$i}}'>{{$i}}</option>
         				@endfor
         			</select>
-        			</td>
-        			<td>        			
-        				<a class='btn btn-primary btn-options' href='#'><i class='fa fa-cog'></i> Options</a>	
-        				<div class='option_area' style="display: none">
-        					
-        				</div>        				        				
-        			</td>   
-        			<td>
-        				<a href="javascript:void(0)" class="btn btn-info btn-plus"><i class='fa fa-plus'></i></a>
-                        <a href="javascript:void(0)" class="btn btn-danger btn-delete"><i class='fa fa-trash'></i></a>
-                        <a href="javascript:void(0)" class="btn btn-success btn-up"><i class='fa fa-arrow-up'></i></a>
-                        <a href="javascript:void(0)" class="btn btn-success btn-down"><i class='fa fa-arrow-down'></i></a>
-        			</td>
+        			</td>  
+        			
         		</tr>
 
         		

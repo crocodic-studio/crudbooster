@@ -1,17 +1,7 @@
 {
-	"title":"Text Input",
+	"title":"Multitext Input",
 	"type":"multitext",
-	"attribute":{
-		
-		"optional": {
-			"style":"string inline stylesheet",
-		"help":"string help-block",
-		"placeholder":"string placeholder",
-		"readonly":"boolean",
-		"disabled":"boolean",
-		"value":"string",
-		"max_fields":"string"	
-		}
-		
-	}
+	"options":[
+		{"label":"Max Fields","type":"text","name":"max_fields","required":1}
+	]
 }
