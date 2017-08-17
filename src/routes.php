@@ -119,7 +119,6 @@ Route::group(['middleware'=>['web','\crocodicstudio\crudbooster\middlewares\CBBa
 Route::group(['middleware'=>['web','\crocodicstudio\crudbooster\middlewares\CBSuperadmin'],'prefix'=>config('crudbooster.ADMIN_PATH'),'namespace'=>$namespace], function () {	
 	
 	CRUDBooster::routeController('privileges','AdminPrivilegesController',$namespace='\crocodicstudio\crudbooster\controllers');
-	CRUDBooster::routeController('permissions','AdminPrivilegesRolesController',$namespace='\crocodicstudio\crudbooster\controllers');	
 	CRUDBooster::routeController('settings','AdminSettingsController',$namespace='\crocodicstudio\crudbooster\controllers');
 	CRUDBooster::routeController('modules','AdminModulesController',$namespace='\crocodicstudio\crudbooster\controllers');
 	CRUDBooster::routeController('statistic-builder','AdminStatisticBuilderController',$namespace='\crocodicstudio\crudbooster\controllers');
