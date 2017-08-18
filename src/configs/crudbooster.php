@@ -30,6 +30,8 @@ return [
 
 	'MULTIPLE_DATABASE_MODULE' 	=>[],
 
+	'USER_TABLE'				=>'cms_users',
+
 	/*
 	* Layout for the Admin LTE backend theme
 	*
