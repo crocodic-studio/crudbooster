@@ -30,7 +30,7 @@ class LogsController extends CBController {
 		$this->col = array();
 		$this->col[] = array("label"=>"Time Access","name"=>"created_at");
 		$this->col[] = array("label"=>"IP Address","name"=>"ipaddress");
-		$this->col[] = array("label"=>"User","name"=>"id_cms_users","join"=>"cms_users,name");
+        $this->col[] = array("label"=>"User","name"=>"id_cms_users","join"=>config('crudbooster.USER_TABLE').",name");
 		$this->col[] = array("label"=>"Description","name"=>"description");
 
 		$this->form = array();
@@ -38,7 +38,7 @@ class LogsController extends CBController {
 		$this->form[] = array("label"=>"IP Address","name"=>"ipaddress","readonly"=>true);
 		$this->form[] = array("label"=>"User Agent","name"=>"useragent","readonly"=>true);
 		$this->form[] = array("label"=>"URL","name"=>"url","readonly"=>true);
-		$this->form[] = array("label"=>"User","name"=>"id_cms_users","type"=>"select","datatable"=>"cms_users,name","readonly"=>true);
+        $this->form[] = array("label"=>"User","name"=>"id_cms_users","type"=>"select","datatable"=>config('crudbooster.USER_TABLE').",name","readonly"=>true);
 		$this->form[] = array("label"=>"Description","name"=>"description","readonly"=>true);
 		$this->form[] = array("label"=>"Details","name"=>"details","type"=>"custom");
 

@@ -154,7 +154,7 @@ class ModulsController extends CBController {
 			foreach ($tab as $key => $value) {	
 				$label = $value;	
 
-				if(substr($label, 0,4) == 'cms_' && $label != 'cms_users') continue;
+				if(substr($label, 0,4) == 'cms_' && $label != config('crudbooster.USER_TABLE')) continue;
 				if($label == 'migrations') continue;
 
 				$tables_list[] = $value;
