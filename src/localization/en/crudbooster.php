@@ -145,7 +145,7 @@ return [
     'online'               => 'Online',
     'controller_route_404' => 'Controller / Route Not Found',
     'home'                 => 'Home',
-    'Notificactions'	  => 'Notifications',
+    'Notifications' 	  => 'Notifications',
     'Privileges'    	  => 'Privileges',
     'Privileges_Roles'    => 'Privileges Roles',
     'Add_New_Privilege'   => 'Add New Privilege',
