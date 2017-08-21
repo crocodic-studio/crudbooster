@@ -12,7 +12,7 @@
 | CRUDBooster::isCreate() | To check an access to create, whether you are allowed or not |
 | CRUDBooster::isRead() | To check an access to read, wheter you are allowed or not |
 | CRUDBooster::isDelete() | To check an access to delete, whether you are allowed or not |
-| CRUDBooster::isCreate() | To check an access to create, whether you are allowed or not |
+| CRUDBooster::isUpdate() | To check an access to update, whether you are allowed or not |
 | CRUDBooster::mainpath($slug=NULL) | To get a module path `e.g : http://localhost/project/public/admin/module_name`|
 | CRUDBooster::adminPath($slug=NULL) | To get an Admin Path `e.g : http://localhost/project/public/admin` |
 | CRUDBooster::getCurrentMethod() | To get the currently method |
