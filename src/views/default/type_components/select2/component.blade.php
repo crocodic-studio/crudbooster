@@ -150,7 +150,9 @@
 							$select_table = explode(',',$form['datatable'])[0];
 							$select_title = explode(',',$form['datatable'])[1];
 							$select_where = $form['datatable_where'];
-							$result = DB::table($select_table)->select('id',$select_title);
+							$pk = CRUDBooster::findPrimaryKey($select_table);
+
+							$result = DB::table($select_table)->select($pk,$select_title);
 							if($select_where) {
 								$result->whereraw($select_where);
 							}
@@ -158,14 +160,15 @@
 
 
 							$foreignKey = CRUDBooster::getForeignKey($table,$form['relationship_table']);	
-							$foreignKey2 = CRUDBooster::getForeignKey($select_table,$form['relationship_table']);																																
+							$foreignKey2 = CRUDBooster::getForeignKey($select_table,$form['relationship_table']);
+							
 							$value = DB::table($form['relationship_table'])->where($foreignKey,$id);										
 							$value = $value->pluck($foreignKey2)->toArray();
 
 							foreach($result as $r) {
 								$option_label = $r->{$select_title};
 								$option_value = $r->id;
-								$selected = (is_array($value) && in_array($r->id, $value))?"selected":"";	
+								$selected = (is_array($value) && in_array($r->$pk, $value))?"selected":"";	
 								echo "<option $selected value='$option_value'>$option_label</option>";
 							}
 						?>

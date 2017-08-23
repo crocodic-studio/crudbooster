@@ -705,23 +705,23 @@ class CRUDBooster  {
 
 			$table = CRUDBooster::parseSqlTable($table);
 
-			if(self::getCache('table_'.$table,'column_'.$field)) {
-				return self::getCache('table_'.$table,'column_'.$field);
-			}
+			// if(self::getCache('table_'.$table,'column_'.$field)) {
+			// 	return self::getCache('table_'.$table,'column_'.$field);
+			// }
 
 			if(Schema::hasColumn($table,$field)) {
-				self::putCache('table_'.$table,'column_'.$field,1);
+				// self::putCache('table_'.$table,'column_'.$field,1);
 				return true;
 			}else{
-				self::putCache('table_'.$table,'column_'.$field,0);
+				// self::putCache('table_'.$table,'column_'.$field,0);
 				return false;
 			}		
 		}
-
+		
 		public static function getForeignKey($parent_table,$child_table) {
 			$parent_table = CRUDBooster::parseSqlTable($parent_table)['table'];
 			$child_table = CRUDBooster::parseSqlTable($child_table)['table'];
-			if(self::isColumnExists($child_table,'id_'.$parent_table)) {				
+			if(Schema::hasColumn($child_table,'id_'.$parent_table)) {				
 				return 'id_'.$parent_table;
 			}else{				
 				return $parent_table.'_id';
