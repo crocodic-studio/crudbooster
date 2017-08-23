@@ -22,7 +22,7 @@ return [
 	
 	'UPLOAD_TYPES'              =>'jpg,png,jpeg,gif,bmp,pdf,xls,xlsx,doc,docx,txt,zip,rar,7z',
 
-	'DEFAULT_THUMBNAIL_WIDTH' 	=>300,
+	'DEFAULT_THUMBNAIL_WIDTH' 	=>0,
 
 	'DEFEAULT_UPLOAD_MAX_SIZE'	=>1000, //in KB
 
