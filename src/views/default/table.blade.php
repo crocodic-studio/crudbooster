@@ -388,6 +388,11 @@
                       <button class="btn btn-primary btn-submit" type="submit">{{trans("crudbooster.button_submit")}}</button>
                     </div>
                     <input type="hidden" name="lasturl" value="{{Request::get('lasturl')?:Request::fullUrl()}}">
+                    <?php $parameters = Request::all(); 
+                      foreach ($parameters as $key => $value) {
+                        echo "<input type='hidden' name='".$key."' value='".$value."'>";
+                      }
+                    ?>
                   </form>
                 </div>
                 <!-- /.modal-content -->
