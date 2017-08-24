@@ -390,7 +390,9 @@
                     <input type="hidden" name="lasturl" value="{{Request::get('lasturl')?:Request::fullUrl()}}">
                     <?php $parameters = Request::all(); 
                       foreach ($parameters as $key => $value) {
-                        echo "<input type='hidden' name='".$key."' value='".$value."'>";
+                        if($key != 'limit' and $key != 'q') {
+                          echo "<input type='hidden' name='".$key."' value='".$value."'>";
+                        }
                       }
                     ?>
                   </form>
