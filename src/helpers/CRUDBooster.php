@@ -709,7 +709,7 @@ class CRUDBooster  {
 			// 	return self::getCache('table_'.$table,'column_'.$field);
 			// }
 
-			if(Schema::hasColumn($table,$field)) {
+			if(Schema::hasColumn($table['table'],$field)) {
 				// self::putCache('table_'.$table,'column_'.$field,1);
 				return true;
 			}else{
