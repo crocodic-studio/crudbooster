@@ -1720,4 +1720,9 @@ $php .='
 
 	        
 	    }
+
+        public static function denyAccess()
+        {
+            static::redirect(static::adminPath(),trans('crudbooster.denied_access'));
+        }
 }

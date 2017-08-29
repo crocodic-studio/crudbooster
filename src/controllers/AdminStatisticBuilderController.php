@@ -85,7 +85,7 @@
 
 	    	if(!CRUDBooster::isSuperadmin()) {
 				CRUDBooster::insertLog(trans("crudbooster.log_try_view",['name'=>'Builder','module'=>'Statistic']));
-				CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
+				CRUDBooster::denyAccess();
 			}
 
 	    	$page_title = 'Statistic Builder';	    		    	
@@ -162,7 +162,7 @@
 
 	    	if(!CRUDBooster::isSuperadmin()) {
 				CRUDBooster::insertLog(trans("crudbooster.log_try_view",['name'=>'Edit Component','module'=>'Statistic']));
-				CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
+				CRUDBooster::denyAccess();
 			}
 
 	    	$component_row = CRUDBooster::first('cms_statistic_components',['componentID'=>$componentID]);
@@ -187,7 +187,7 @@
 	    {
 	    	if(!CRUDBooster::isSuperadmin()) {
 			CRUDBooster::insertLog(trans("crudbooster.log_try_view",['name'=>'Delete Component','module'=>'Statistic']));
-			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
+			CRUDBooster::denyAccess();
 		}
 		    
 	    	DB::table('cms_statistic_components')->where('componentID',$id)->delete();

@@ -45,27 +45,27 @@ class CBBackend
             if($request->is($adminPath.'/'.$moduleName.'*')) {
                 if(!CRUDBooster::canView()) {
                     CRUDBooster::insertLog(trans('crudbooster.log_try_view',['module'=>$module->name]));
-                    CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
+                    CRUDBooster::denyAccess();
                 }            
             }elseif ($request->is($adminPath.'/'.$moduleName.'/add*')) {
                 if(!CRUDBooster::canCreate()) {
                     CRUDBooster::insertLog(trans('crudbooster.log_try_add',['module'=>$module->name]));
-                    CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));    
+                    CRUDBooster::denyAccess();
                 }            
             }elseif ($request->is($adminPath.'/'.$moduleName.'/edit*')) {
                 if(!CRUDBooster::canEdit()) {
                     CRUDBooster::insertLog(trans('crudbooster.log_try_edit',['module'=>$module->name]));
-                    CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
+                    CRUDBooster::denyAccess();
                 }            
             }elseif ($request->is($adminPath.'/'.$moduleName.'/delete*')) {
                 if(!CRUDBooster::canDelete()) {
                     CRUDBooster::insertLog(trans('crudbooster.log_try_delete',['module'=>$module->name]));
-                    CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
+                    CRUDBooster::denyAccess();
                 }            
             }elseif ($request->is($adminPath.'/'.$moduleName.'/detail*')) {
                 if(!CRUDBooster::canRead()) {
                     CRUDBooster::insertLog(trans('crudbooster.log_try_view',['module'=>$module->name]));
-                    CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
+                    CRUDBooster::denyAccess();
                 }            
             }
         }

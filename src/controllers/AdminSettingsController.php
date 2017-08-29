@@ -64,7 +64,7 @@ class AdminSettingsController extends CBController {
 
 		if(!CRUDBooster::isSuperadmin()) {
 			CRUDBooster::insertLog(trans("crudbooster.log_try_view",['name'=>'Setting','module'=>'Setting']));
-			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
+			CRUDBooster::denyAccess();
 		}
 
 		$data['page_title'] = urldecode(Request::get('group'));		
@@ -88,7 +88,7 @@ class AdminSettingsController extends CBController {
 
 		if(!CRUDBooster::isSuperadmin()) {
 			CRUDBooster::insertLog(trans("crudbooster.log_try_view",['name'=>'Setting','module'=>'Setting']));
-			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
+			CRUDBooster::denyAccess();
 		}
 		
 		$group = Request::get('group_setting');
