@@ -51,26 +51,30 @@ class AdminFileManagerController extends CBController {
 	public function postUpload() {		
 		$allowedExtension = explode(',',strtolower(config('crudbooster.UPLOAD_TYPES')));
 		$path = g('path')?base64_decode(g('path')):'uploads';
-		if(Request::hasFile('userfile')) {
-			$file = Request::file('userfile');
-			$filename = $file->getClientOriginalName();
-			$ext = $file->getClientOriginalExtension();	
+        $file = Request::file('userfile');
+		if(!$file) {
+		    return null;
+        }
 
-			$isAllowed = false;
-			foreach($allowedExtension as $e) {
-				if($ext == $e) {
-					$isAllowed = true;
-					break;
-				}
-			}
+        $filename = $file->getClientOriginalName();
+        $ext = $file->getClientOriginalExtension();
 
-			if($isAllowed==true) { 								
-				Storage::putFileAs($path,$file,$filename);
-				return redirect()->back()->with(['message_type'=>'success','message'=>'The file '.$filename.' has been uploaded!']);
-			}else{
-				return redirect()->back()->with(['message_type'=>'warning','message'=>'The file '.$filename.' type is not allowed!']);
-			}
-		}
+        $isAllowed = false;
+        foreach($allowedExtension as $e) {
+            if($ext == $e) {
+                $isAllowed = true;
+                break;
+            }
+        }
+
+        $flashMsg = ['message_type'=>'warning','message'=>'The file '.$filename.' type is not allowed!'];
+
+        if($isAllowed) {
+            Storage::putFileAs($path, $file, $filename);
+            $flashMsg = ['message_type'=>'success','message'=>'The file '.$filename.' has been uploaded!'];
+        }
+        return redirect()->back()->with($flashMsg);
+
 	}
 
 	public function getDeleteDirectory($dir) {
