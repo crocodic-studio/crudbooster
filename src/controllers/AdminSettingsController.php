@@ -101,13 +101,7 @@ class AdminSettingsController extends CBController {
 
 			if (Request::hasFile($name))
 			{
-                $rules = [ $name => 'image|max:10000' ];
-
-                if($set->content_input_type !== 'upload_image') {
-                    $rules = [ $name => 'mimes:doc,docx,xls,xlsx,ppt,pptx,pdf,zip,rar|max:20000' ];
-				}
-
-                CRUDBooster::valid($rules, 'view');
+                $this->validateFileType($set);
 
 				$file = Request::file($name);
 				$ext  = $file->getClientOriginalExtension();
@@ -141,6 +135,22 @@ class AdminSettingsController extends CBController {
 		/* REMOVE CACHE */
 		Cache::forget('setting_'.$row->name);
 	}
-	
+
+    /**
+     * @param $name
+     * @param $set
+     */
+    private function validateFileType($set)
+    {
+        $name = $set->name;
+        $rules = [$name => 'image|max:10000'];
+
+        if ($set->content_input_type !== 'upload_image') {
+            $rules = [$name => 'mimes:doc,docx,xls,xlsx,ppt,pptx,pdf,zip,rar|max:20000'];
+        }
+
+        CRUDBooster::valid($rules, 'view');
+    }
+
 
 }

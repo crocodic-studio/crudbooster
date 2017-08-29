@@ -29,9 +29,9 @@ class FileController extends Controller {
 	    $imageFileSize = 0;
 
 	    if(in_array($extension, $images_ext)) {
-		    $w = Request::get('w')?:config('crudbooster.DEFAULT_THUMBNAIL_WIDTH',300);
-		    $h = Request::get('h')?:$w;
-	    	$imgRaw = Image::cache(function($image) use ($fullStoragePath,$w,$h) {
+		    $w = Request::get('w', config('crudbooster.DEFAULT_THUMBNAIL_WIDTH', 300));
+		    $h = Request::get('h', $w);
+	    	$imgRaw = Image::cache(function($image) use ($fullStoragePath, $w, $h) {
 	    		$im = $image->make($fullStoragePath);
 		    	if($w) {
 		    		if(!$h) {
