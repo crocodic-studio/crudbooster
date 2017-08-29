@@ -34,6 +34,7 @@
     }
 
     $label = $a['label'];
+    $title = ($a['title'])?:$a['label'];
     $icon = $a['icon'];
     $color = $a['color']?:'primary';
     $confirmation = $a['confirmation'];
@@ -54,11 +55,11 @@
       }
 
       @eval("if($query) {
-          echo \"<a class='btn btn-xs btn-\$color' title='\$label' onclick='\$confirm_box' href='\$url'><i class='\$icon'></i> $label</a>&nbsp;\";
+          echo \"<a class='btn btn-xs btn-\$color' title='\$title' onclick='\$confirm_box' href='\$url'><i class='\$icon'></i> $label</a>&nbsp;\";
       }");           
 
     }else{
-      echo "<a class='btn btn-xs btn-$color' title='$label' onclick='$confirm_box' href='$url'><i class='$icon'></i> $label</a>&nbsp;";              
+      echo "<a class='btn btn-xs btn-$color' title='$title' onclick='$confirm_box' href='$url'><i class='$icon'></i> $label</a>&nbsp;";              
     }
   ?>          
 @endforeach
