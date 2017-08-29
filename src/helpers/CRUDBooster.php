@@ -848,7 +848,9 @@ class CRUDBooster  {
 		            $part = explode('=',$s);
 		            $name = urldecode($part[0]);      
 		            $value = urldecode($part[1]);      
-		            $inputhtml .= "<input type='hidden' name='$name' value='$value'/>";
+		            if($name) {		            	
+			            $inputhtml .= "<input type='hidden' name='$name' value='$value'/>\n";
+		            }
 		        }                                                           
 		    }
 

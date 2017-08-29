@@ -387,6 +387,7 @@
                       <button class="btn btn-default btn-reset" type="reset" onclick='location.href="{{Request::get("lasturl")}}"' >{{trans("crudbooster.button_reset")}}</button>
                       <button class="btn btn-primary btn-submit" type="submit">{{trans("crudbooster.button_submit")}}</button>
                     </div>
+                    {!! CRUDBooster::getUrlParameters(['filter_column','lasturl']) !!}
                     <input type="hidden" name="lasturl" value="{{Request::get('lasturl')?:Request::fullUrl()}}">
                   </form>
                 </div>
