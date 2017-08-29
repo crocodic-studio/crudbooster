@@ -100,16 +100,16 @@ class AdminSettingsController extends CBController {
 			$content = Request::get($set->name);
 
 			if (Request::hasFile($name))
-			{			
+			{
+                $rules = [ $name => 'image|max:10000' ];
 
-				if($set->content_input_type == 'upload_image') {
-					CRUDBooster::valid([ $name => 'image|max:10000' ],'view');
-				}else{
-					CRUDBooster::valid([ $name => 'mimes:doc,docx,xls,xlsx,ppt,pptx,pdf,zip,rar|max:20000' ], 'view');
+                if($set->content_input_type !== 'upload_image') {
+                    $rules = [ $name => 'mimes:doc,docx,xls,xlsx,ppt,pptx,pdf,zip,rar|max:20000' ];
 				}
 
+                CRUDBooster::valid($rules, 'view');
 
-				$file = Request::file($name);					
+				$file = Request::file($name);
 				$ext  = $file->getClientOriginalExtension();
 
 				//Create Directory Monthly 
