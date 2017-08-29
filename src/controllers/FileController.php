@@ -6,7 +6,7 @@ use Storage;
 use Response;
 use Image;
 use File;
-use Request;
+use Illuminate\Support\Facades\Request;
 
 class FileController extends Controller {
 
@@ -87,8 +87,8 @@ class FileController extends Controller {
 	    /**
 	    * Is the resource cached?
 	    */
-	    $h1 = \Request::server('HTTP_IF_MODIFIED_SINCE') &&  \Request::server('HTTP_IF_MODIFIED_SINCE') == $header_last_modified;
-	    $h2 =  \Request::server('HTTP_IF_NONE_MATCH') && str_replace('"', '', stripslashes( \Request::server('HTTP_IF_NONE_MATCH'))) == $header_etag;
+	    $h1 = Request::server('HTTP_IF_MODIFIED_SINCE') &&  Request::server('HTTP_IF_MODIFIED_SINCE') == $header_last_modified;
+	    $h2 =  Request::server('HTTP_IF_NONE_MATCH') && str_replace('"', '', stripslashes( Request::server('HTTP_IF_NONE_MATCH'))) == $header_etag;
 
 
 	    $headers = array_merge($headers, array(
@@ -103,7 +103,7 @@ class FileController extends Controller {
             return Response::make($imgRaw, 200, $headers);
 
     	}
-    	
+
         if(Request::get('download')) {
             return Response::download(storage_path('app/'.$fullFilePath), $filename, $headers);
         }
