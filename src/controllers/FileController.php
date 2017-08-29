@@ -11,25 +11,23 @@ use Illuminate\Support\Facades\Request;
 class FileController extends Controller {
 
 	public function getPreview($one, $two=NULL, $three=NULL, $four=NULL, $five=NULL) {
+
+	    // filters out the null values and gets the last element.
+        $filename = array_pop(array_filter([$one, $two, $three, $four, $five]));
 		
 		if($two) {			
 			$fullFilePath = 'uploads'.DIRECTORY_SEPARATOR.$one.DIRECTORY_SEPARATOR.$two;
-			$filename = $two;			
 			if($three) {
 				$fullFilePath = $fullFilePath.DIRECTORY_SEPARATOR.$three;
-				$filename = $three;
 				if($four) {
 					$fullFilePath = $fullFilePath.DIRECTORY_SEPARATOR.$four;
-					$filename = $four;
 					if($five) {
 						$fullFilePath = $fullFilePath.DIRECTORY_SEPARATOR.$five;
-						$filename = $five;
 					}
 				}			
 			}
 		}else{
 			$fullFilePath = 'uploads'.DIRECTORY_SEPARATOR.$one;
-			$filename = $one;
 		}
 		
 		$fullStoragePath = storage_path('app/'.$fullFilePath);
