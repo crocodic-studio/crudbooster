@@ -1420,57 +1420,62 @@ class CBController extends Controller {
 		$uploadTypes = explode(',',config('crudbooster.UPLOAD_TYPES'));
 		$uploadMaxSize = config('crudbooster.UPLOAD_MAX_SIZE')?:5000;
 
-		if (Request::hasFile($name))
+		if (!Request::hasFile($name))
 		{
-			$file = Request::file($name);
-			$ext  = $file->getClientOriginalExtension();
-			$filesize = $file->getClientSize() / 1024;
+		    return null;
+        }
 
-			if($filesize > $uploadMaxSize) {
-				if(in_array($ext, $uploadTypes)) {
-					//Create Directory Monthly
-					Storage::makeDirectory(date('Y-m'));
+        $file = Request::file($name);
+        $ext  = $file->getClientOriginalExtension();
+        $filesize = $file->getClientSize() / 1024;
 
-					//Move file to storage
-					$filename = md5(str_random(5)).'.'.$ext;
-					$file_path = 'uploads'.DIRECTORY_SEPARATOR.date('Y-m');
-					Storage::putFileAs($file_path,$file,$filename);	
-					echo asset('uploads/'.date('Y-m').'/'.$filename);
-				}else{
-					echo "The filetype is not allowed!";
-				}
-			}else{
-				echo "The filesize is too large!";
-			}					
-		}
+        if($filesize > $uploadMaxSize) {
+            echo "The filesize is too large!";
+            exit;
+        }
+
+        if(!in_array($ext, $uploadTypes)) {
+            echo "The filetype is not allowed!";
+            exit;
+        }
+        
+        //Create Directory Monthly
+        Storage::makeDirectory(date('Y-m'));
+        //Move file to storage
+        $filename = md5(str_random(5)).'.'.$ext;
+        $file_path = 'uploads'.DIRECTORY_SEPARATOR.date('Y-m');
+        Storage::putFileAs($file_path,$file,$filename);
+        echo asset('uploads/'.date('Y-m').'/'.$filename);
 	}
 
 	public function postUploadFile() {
 		$this->cbLoader();
 		$name = 'userfile';
-		if (Request::hasFile($name))
+		if (!Request::hasFile($name))
 		{
-			$file = Request::file($name);
-			$ext  = $file->getClientOriginalExtension();
-			$filesize = $file->getClientSize() / 1024;
+		    return null;
+        }
+        $file = Request::file($name);
+        $ext  = $file->getClientOriginalExtension();
+        $filesize = $file->getClientSize() / 1024;
+        $uploadMaxSize = config('crudbooster.UPLOAD_MAX_SIZE', 5000);
 
-			if($filesize > $uploadMaxSize) {
-				if(in_array($ext, $uploadTypes)) {
-					//Create Directory Monthly
-					Storage::makeDirectory(date('Y-m'));
+        if($filesize > $uploadMaxSize) {
+            echo "The filesize is too large!";
+            exit;
+        }
+        if(!in_array($ext, $uploadTypes)) {
+            echo "The filetype is not allowed!";
+            exit;
+        }
+        //Create Directory Monthly
+        Storage::makeDirectory(date('Y-m'));
 
-					//Move file to storage
-					$filename = md5(str_random(5)).'.'.$ext;
-					$file_path = 'uploads'.DIRECTORY_SEPARATOR.date('Y-m');
-					Storage::putFileAs($file_path,$file,$filename);	
-					echo 'uploads/'.date('Y-m').'/'.$filename;
-				}else{
-					echo "The filetype is not allowed!";
-				}
-			}else{
-				echo "The filesize is too large!";
-			}
-		}
+        //Move file to storage
+        $filename = md5(str_random(5)).'.'.$ext;
+        $file_path = 'uploads'.DIRECTORY_SEPARATOR.date('Y-m');
+        Storage::putFileAs($file_path,$file,$filename);
+        echo 'uploads/'.date('Y-m').'/'.$filename;
 	}
 
 	public function actionButtonSelected($id_selected,$button_name) {
