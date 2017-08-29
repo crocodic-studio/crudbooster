@@ -87,8 +87,8 @@ class FileController extends Controller {
 	    /**
 	    * Is the resource cached?
 	    */
-	    $h1 = isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && $_SERVER['HTTP_IF_MODIFIED_SINCE'] == $header_last_modified;
-	    $h2 = isset($_SERVER['HTTP_IF_NONE_MATCH']) && str_replace('"', '', stripslashes($_SERVER['HTTP_IF_NONE_MATCH'])) == $header_etag;
+	    $h1 = \Request::server('HTTP_IF_MODIFIED_SINCE') &&  \Request::server('HTTP_IF_MODIFIED_SINCE') == $header_last_modified;
+	    $h2 =  \Request::server('HTTP_IF_NONE_MATCH') && str_replace('"', '', stripslashes( \Request::server('HTTP_IF_NONE_MATCH'))) == $header_etag;
 
 
 	    $headers = array_merge($headers, array(
