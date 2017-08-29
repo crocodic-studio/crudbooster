@@ -12,24 +12,10 @@ class FileController extends Controller {
 
 	public function getPreview($one, $two=NULL, $three=NULL, $four=NULL, $five=NULL) {
 
-	    // filters out the null values and gets the last element.
+	    // array_filter() filters out the falsy values from array.
         $filename = array_pop(array_filter([$one, $two, $three, $four, $five]));
-		
-		if($two) {			
-			$fullFilePath = 'uploads'.DIRECTORY_SEPARATOR.$one.DIRECTORY_SEPARATOR.$two;
-			if($three) {
-				$fullFilePath = $fullFilePath.DIRECTORY_SEPARATOR.$three;
-				if($four) {
-					$fullFilePath = $fullFilePath.DIRECTORY_SEPARATOR.$four;
-					if($five) {
-						$fullFilePath = $fullFilePath.DIRECTORY_SEPARATOR.$five;
-					}
-				}			
-			}
-		}else{
-			$fullFilePath = 'uploads'.DIRECTORY_SEPARATOR.$one;
-		}
-		
+        $fullFilePath = implode(DIRECTORY_SEPARATOR, array_filter(['uploads', $one, $two, $three, $four, $five]));
+
 		$fullStoragePath = storage_path('app/'.$fullFilePath);
 		$lifetime = 31556926; // One year in seconds
 		
