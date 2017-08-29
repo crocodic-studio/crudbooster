@@ -102,12 +102,13 @@ class FileController extends Controller {
 		    }
             return Response::make($imgRaw, 200, $headers);
 
-    	}else{
-    		if(Request::get('download')) {
-    			return Response::download(storage_path('app/'.$fullFilePath), $filename, $headers);
-    		}
-            return Response::file(storage_path('app/'.$fullFilePath), $headers);
+    	}
+    	
+        if(Request::get('download')) {
+            return Response::download(storage_path('app/'.$fullFilePath), $filename, $headers);
+        }
+        return Response::file(storage_path('app/'.$fullFilePath), $headers);
 
-    	}   	    
+
 	}
 }
