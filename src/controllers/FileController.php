@@ -99,15 +99,15 @@ class FileController extends Controller {
     	if(in_array($extension, $images_ext)) {	
     		if ($h1 || $h2) {
 		        return Response::make('', 304, $headers); // File (image) is cached by the browser, so we don't have to send it again
-		    }else{		    	
-	    		return Response::make($imgRaw, 200, $headers);
 		    }
+            return Response::make($imgRaw, 200, $headers);
+
     	}else{
     		if(Request::get('download')) {
     			return Response::download(storage_path('app/'.$fullFilePath), $filename, $headers);
-    		}else{    			
-	    		return Response::file(storage_path('app/'.$fullFilePath), $headers);
     		}
+            return Response::file(storage_path('app/'.$fullFilePath), $headers);
+
     	}   	    
 	}
 }
