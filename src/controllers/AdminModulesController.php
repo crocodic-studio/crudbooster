@@ -595,8 +595,6 @@ class AdminModulesController extends CBController {
 		}
 		
 	}
-	
-	
 	 
 	public function postEditSave($id) {
 		$this->cbLoader();
@@ -626,7 +624,6 @@ class AdminModulesController extends CBController {
 		CRUDBooster::redirect(Request::server('HTTP_REFERER'),trans('crudbooster.alert_update_data_success'),'success');
 		
 	}	
-
 
 	public function getTest() {
 		$code = file_get_contents(base_path('app/Http/Controllers/AdminCustomersController.php'));
