@@ -16,13 +16,13 @@ class FileController extends Controller {
 			$fullFilePath = 'uploads'.DIRECTORY_SEPARATOR.$one.DIRECTORY_SEPARATOR.$two;
 			$filename = $two;			
 			if($three) {
-				$fullFilePath = 'uploads'.DIRECTORY_SEPARATOR.$one.DIRECTORY_SEPARATOR.$two.DIRECTORY_SEPARATOR.$three;
+				$fullFilePath = $fullFilePath.DIRECTORY_SEPARATOR.$three;
 				$filename = $three;
 				if($four) {
-					$fullFilePath = 'uploads'.DIRECTORY_SEPARATOR.$one.DIRECTORY_SEPARATOR.$two.DIRECTORY_SEPARATOR.$three.DIRECTORY_SEPARATOR.$four;
+					$fullFilePath = $fullFilePath.DIRECTORY_SEPARATOR.$four;
 					$filename = $four;
 					if($five) {
-						$fullFilePath = 'uploads'.DIRECTORY_SEPARATOR.$one.DIRECTORY_SEPARATOR.$two.DIRECTORY_SEPARATOR.$three.DIRECTORY_SEPARATOR.$four.DIRECTORY_SEPARATOR.$five;
+						$fullFilePath = $fullFilePath.DIRECTORY_SEPARATOR.$five;
 						$filename = $five;
 					}
 				}			
