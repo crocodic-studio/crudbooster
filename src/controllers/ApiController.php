@@ -123,12 +123,12 @@ class ApiController extends Controller {
 				$required = $param['required'];
 				$config   = $param['config'];
 				$used     = $param['used'];
-				$format_validation = array();
-
 				if($used == 0) continue;
-
 				if($param['config'] && substr($param['config'], 0, 1) != '*') continue;
 
+
+
+				$format_validation = array();
 				if($required) {
 					$format_validation[] = 'required';
 				}
