@@ -1105,9 +1105,11 @@ class CBController extends Controller {
 		if($this->return_url) {
 			CRUDBooster::redirect($this->return_url,trans("crudbooster.alert_update_data_success"),'success');
 		}
+
         if(Request::get('submit') == trans('crudbooster.button_save_more')) {
             CRUDBooster::redirect(CRUDBooster::mainpath('add'),trans("crudbooster.alert_update_data_success"),'success');
         }
+
         CRUDBooster::redirect(CRUDBooster::mainpath(),trans("crudbooster.alert_update_data_success"),'success');
 
 
@@ -1156,31 +1158,33 @@ class CBController extends Controller {
 		$data['page_menu']       = Route::getCurrentRoute()->getActionName();
 		$data['page_title']      = 'Import Data '.$module->name;
 
-		if(Request::get('file') && !Request::get('import')) {
-			$file = base64_decode(Request::get('file'));
-			$file = 'storage'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.$file;			
-			$rows = Excel::load($file,function($reader) {
-			})->get();
-
-			Session::put('total_data_import',count($rows));
-
-			$data_import_column = array();
-			foreach($rows as $value) {
-				$a = array();
-				foreach($value as $k=>$v) {
-					$a[] = $k;
-				}
-				if(count($a)) {
-					$data_import_column = $a;
-				}
-				break;
-			}
-
-			$table_columns = DB::getSchemaBuilder()->getColumnListing($this->table);
-
-			$data['table_columns'] = $table_columns;
-			$data['data_import_column'] = $data_import_column;
+		if(!Request::get('file') || Request::get('import')) {
+            return view('crudbooster::import',$data);
 		}
+
+        $file = base64_decode(Request::get('file'));
+        $file = 'storage'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.$file;
+        $rows = Excel::load($file,function($reader) {
+        })->get();
+
+        Session::put('total_data_import',count($rows));
+
+        $data_import_column = array();
+        foreach($rows as $value) {
+            $a = array();
+            foreach($value as $k=>$v) {
+                $a[] = $k;
+            }
+            if(count($a)) {
+                $data_import_column = $a;
+            }
+            break;
+        }
+
+        $table_columns = DB::getSchemaBuilder()->getColumnListing($this->table);
+
+        $data['table_columns'] = $table_columns;
+        $data['data_import_column'] = $data_import_column;
 
 
 		return view('crudbooster::import',$data);
@@ -1305,36 +1309,35 @@ class CBController extends Controller {
 
 	public function postDoUploadImportData() {
 		$this->cbLoader();
-		if (Request::hasFile('userfile'))
+		if (!Request::hasFile('userfile'))
 		{
-			$file = Request::file('userfile');
-			$ext  = $file->getClientOriginalExtension();
-
-
-			$validator = Validator::make([
-				'extension'=>$ext,
-				],[
-				'extension'=>'in:xls,xlsx,csv'
-				]);
-
-		    if ($validator->fails())
-		    {
-		        $message = $validator->errors()->all();
-		        return redirect()->back()->with(['message'=>implode('<br/>',$message),'message_type'=>'warning']);
-		    }
-
-			//Create Directory Monthly
-			Storage::makeDirectory('uploads/'.date('Y-m'));
-
-			//Move file to storage
-			$filename = md5(str_random(5)).'.'.$ext;					
-			Storage::putFileAs('uploads/'.date('Y-m'),$file,$filename);
-			$url_filename = 'uploads/'.date('Y-m').'/'.$filename;
-			$url = CRUDBooster::mainpath('import-data').'?file='.base64_encode($url_filename);
-			return redirect($url);
-		}else{
-			return redirect()->back();
+            return redirect()->back();
 		}
+        $file = Request::file('userfile');
+        $ext  = $file->getClientOriginalExtension();
+
+
+        $validator = Validator::make([
+            'extension'=>$ext,
+            ],[
+            'extension'=>'in:xls,xlsx,csv'
+            ]);
+
+        if ($validator->fails())
+        {
+            $message = $validator->errors()->all();
+            return redirect()->back()->with(['message'=>implode('<br/>',$message),'message_type'=>'warning']);
+        }
+
+        //Create Directory Monthly
+        Storage::makeDirectory('uploads/'.date('Y-m'));
+
+        //Move file to storage
+        $filename = md5(str_random(5)).'.'.$ext;
+        Storage::putFileAs('uploads/'.date('Y-m'),$file,$filename);
+        $url_filename = 'uploads/'.date('Y-m').'/'.$filename;
+        $url = CRUDBooster::mainpath('import-data').'?file='.base64_encode($url_filename);
+        return redirect($url);
 	}
 
 	public function postActionSelected() {
