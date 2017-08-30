@@ -227,15 +227,13 @@ class ApiController extends Controller {
 							}
 						});
 					}else{
-						if($used) {
-							if($value) {
-								$data->where(function($w) use ($search_in,$value) {
-									foreach($search_in as $k=>$field) {
-										if($k==0) $w->where($field,"like","%$value%");
-										else $w->orWhere($field,"like","%$value%");
-									}
-								});
-							}						
+						if($used && $value) {
+                            $data->where(function($w) use ($search_in,$value) {
+                                foreach($search_in as $k=>$field) {
+                                    if($k==0) $w->where($field,"like","%$value%");
+                                    else $w->orWhere($field,"like","%$value%");
+                                }
+                            });
 						}
 					}
 				}
@@ -299,7 +297,7 @@ class ApiController extends Controller {
 					$orderby_val = 'desc';
 				}
 				
-				$rows = $data->orderby($orderby_col,$orderby_val)->get();																						
+				$rows = $data->orderby($orderby_col, $orderby_val)->get();
 
 				if($rows) {
 
