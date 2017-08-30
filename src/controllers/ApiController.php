@@ -348,28 +348,22 @@ class ApiController extends Controller {
 						}
 
 						if($required) {
-							if($type == 'password') {
-								if(!Hash::check($value,$rows->{$name})) {
+							if($type == 'password' && !Hash::check($value,$rows->{$name})) {
 									$result['api_status'] = 0;
 									$result['api_message'] = 'Your password is wrong !';
 									if(CRUDBooster::getSetting('api_debug_mode')=='true') {
 										$result['api_authorization'] = $debug_mode_message;
 									}					
 									goto show;
-								}
 							}
 						}else{
-							if($used) {
-								if($value) {
-									if(!Hash::check($value,$row->{$name})) {
-										$result['api_status'] = 0;
-										$result['api_message'] = 'Your password is wrong !';
-										if(CRUDBooster::getSetting('api_debug_mode')=='true') {
-											$result['api_authorization'] = $debug_mode_message;
-										}
-										goto show;
-									}
-								}
+							if($used && $value && !Hash::check($value,$row->{$name})) {
+                                $result['api_status'] = 0;
+                                $result['api_message'] = 'Your password is wrong !';
+                                if(CRUDBooster::getSetting('api_debug_mode')=='true') {
+                                    $result['api_authorization'] = $debug_mode_message;
+                                }
+                                goto show;
 							}
 						}
 					}
@@ -655,17 +649,17 @@ class ApiController extends Controller {
         $mime_type = finfo_buffer($f, $filedata, FILEINFO_MIME_TYPE);
         @$mime_type = explode('/', $mime_type);
         @$mime_type = $mime_type[1];
-        if ($mime_type) {
-            if (in_array($mime_type, $uploads_format_candidate)) {
-                Storage::makeDirectory(date('Y-m'));
-                $filename = md5(str_random(5)) . '.' . $mime_type;
-                if (file_put_contents(storage_path('app' . DIRECTORY_SEPARATOR . date('Y-m')) . '/' . $filename,
-                    $filedata)) {
-                    $v = 'uploads/' . date('Y-m') . '/' . $filename;
-                    $row_assign[$name] = $v;
-                }
+
+        if ($mime_type && in_array($mime_type, $uploads_format_candidate)) {
+            Storage::makeDirectory(date('Y-m'));
+            $filename = md5(str_random(5)) . '.' . $mime_type;
+            if (file_put_contents(storage_path('app' . DIRECTORY_SEPARATOR . date('Y-m')) . '/' . $filename,
+                $filedata)) {
+                $v = 'uploads/' . date('Y-m') . '/' . $filename;
+                $row_assign[$name] = $v;
             }
         }
+
         return $row_assign;
     }
 }
