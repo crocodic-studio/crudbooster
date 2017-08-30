@@ -462,21 +462,7 @@ class ApiController extends Controller {
 				}
 
 		    	if($type == 'file' || $type == 'image') {
-		    		if (Request::hasFile($name))
-					{			
-						$file = Request::file($name);					
-						$ext  = $file->getClientOriginalExtension();
-
-						//Create Directory Monthly 
-						Storage::makeDirectory(date('Y-m'));						
-
-						//Move file to storage
-						$filename = md5(str_random(5)).'.'.$ext;
-						if($file->move(storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m')),$filename)) {						
-							$v = 'uploads/'.date('Y-m').'/'.$filename;
-							$row_assign[$name] = $v;
-						}					  
-					}	
+                    $row_assign = $this->handleFile($name, $row_assign);
 		    	}elseif ($type == 'base64_file') {
 		    		$filedata = base64_decode($value);
 					$f = finfo_open();
@@ -643,7 +629,33 @@ class ApiController extends Controller {
 
         return implode('|',$format_validation);
 	}
-	
+
+    /**
+     * @param $name
+     * @param $row_assign
+     * @return array
+     */
+    private function handleFile($name, $row_assign)
+    {
+        if (!Request::hasFile($name)) {
+            return ;
+        }
+        $file = Request::file($name);
+        $ext = $file->getClientOriginalExtension();
+
+        //Create Directory Monthly
+        Storage::makeDirectory(date('Y-m'));
+
+        //Move file to storage
+        $filename = md5(str_random(5)) . '.' . $ext;
+        if ($file->move(storage_path('app' . DIRECTORY_SEPARATOR . date('Y-m')), $filename)) {
+            $v = 'uploads/' . date('Y-m') . '/' . $filename;
+            $row_assign[$name] = $v;
+        }
+        return $row_assign;
+    }
+
+
 }
 
 
