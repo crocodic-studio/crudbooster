@@ -982,18 +982,15 @@ class CBController extends Controller {
 		if($this->return_url) {
 			if(Request::get('submit') == trans('crudbooster.button_save_more')) {
 				CRUDBooster::redirect(Request::server('HTTP_REFERER'),trans("crudbooster.alert_add_data_success"),'success');
-			}else{
-				CRUDBooster::redirect($this->return_url,trans("crudbooster.alert_add_data_success"),'success');
 			}
+            CRUDBooster::redirect($this->return_url,trans("crudbooster.alert_add_data_success"),'success');
 
-		}else{
-			if(Request::get('submit') == trans('crudbooster.button_save_more')) {
-				CRUDBooster::redirect(CRUDBooster::mainpath('add'),trans("crudbooster.alert_add_data_success"),'success');
-			}else{
-				CRUDBooster::redirect(CRUDBooster::mainpath(),trans("crudbooster.alert_add_data_success"),'success');
-			}
 		}
-	}
+        if(Request::get('submit') == trans('crudbooster.button_save_more')) {
+            CRUDBooster::redirect(CRUDBooster::mainpath('add'),trans("crudbooster.alert_add_data_success"),'success');
+        }
+        CRUDBooster::redirect(CRUDBooster::mainpath(),trans("crudbooster.alert_add_data_success"),'success');
+		}
 
 	public function getEdit($id){
 		$this->cbLoader();
