@@ -197,11 +197,11 @@ class AdminApiGeneratorController extends CBController {
 	public function getDeleteApiKey() {		
 
 		$id = Request::get('id');
-		if(DB::table('cms_apikey')->where('id',$id)->delete()) {
+		if(DB::table('cms_apikey')->where('id', $id)->delete()) {
 			return response()->json(['status'=>1]);
-		}else{
-			return response()->json(['status'=>0]);
 		}
+        return response()->json(['status'=>0]);
+
 	}
 
 
