@@ -214,19 +214,17 @@ class CBController extends Controller {
 				$columns_table[$index]['field_raw']  = $field;
 				$columns_table[$index]['field_with'] = $tableField.'.'.$fieldOrign;
 			}else{
+                $columns_table[$index]['type_data']	 = 'varchar';
+                $columns_table[$index]['field_with'] = NULL;
+                $columns_table[$index]['field']      = $field;
+                $columns_table[$index]['field_raw']  = $field;
+
 				if(CB::isColumnExists($table,$field)) {
 					$result->addselect($table.'.'.$field);
 					$columns_table[$index]['type_data']	 = CRUDBooster::getFieldType($table,$field);
-					$columns_table[$index]['field']      = $field;
-					$columns_table[$index]['field_raw']  = $field;
 					$columns_table[$index]['field_with'] = $table.'.'.$field;
-				}else{
-					$columns_table[$index]['type_data']	 = 'varchar';
-					$columns_table[$index]['field']      = $field;
-					$columns_table[$index]['field_raw']  = $field;
-					$columns_table[$index]['field_with'] = NULL;					
-				}				
-			}						
+				}
+			}
 		}
 
 		if(Request::get('q')) {
