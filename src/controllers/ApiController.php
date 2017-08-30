@@ -202,9 +202,7 @@ class ApiController extends Controller {
 		$password_candidate       = explode(',',config('crudbooster.PASSWORD_FIELDS_CANDIDATE'));	
 		$asset					  = asset('/');				
 		
-		unset($posts['limit']);
-		unset($posts['offset']);
-		unset($posts['orderby']);				
+		unset($posts['limit'], $posts['offset'], $posts['orderby']);
 
 		if($action_type == 'list' || $action_type == 'detail' || $action_type == 'delete') {
 			$name_tmp = array();
