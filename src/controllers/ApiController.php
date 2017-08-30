@@ -115,66 +115,18 @@ class ApiController extends Controller {
 			$type_except = ['password','ref','base64_file','custom','search'];
 			$input_validator = array();
 			$data_validation = array();
+			
 			foreach($parameters as $param) {
 				$name     = $param['name'];
-				$type     = $param['type'];
 				$value    = $posts[$name];
-				
-				$required = $param['required'];
-				$config   = $param['config'];
 				$used     = $param['used'];
+
 				if($used == 0) continue;
 				if($param['config'] && substr($param['config'], 0, 1) != '*') continue;
-
-
-
-				$format_validation = array();
-				if($required) {
-					$format_validation[] = 'required';
-				}
-				
-				if($type == 'exists') {
-					$config = explode(',', $config);
-					$table_exist = $config[0];
-					$table_exist = CRUDBooster::parseSqlTable($table_exist)['table'];
-					$field_exist = $config[1];
-					$config = ($field_exist)?$table_exist.','.$field_exist:$table_exist;
-					$format_validation[] = 'exists:'.$config;
-				}elseif ($type == 'unique') {
-					$config = explode(',', $config);
-					$table_exist = $config[0];
-					$table_exist = CRUDBooster::parseSqlTable($table_exist)['table'];
-					$field_exist = $config[1];
-					$config = ($field_exist)?$table_exist.','.$field_exist:$table_exist;
-					$format_validation[] = 'unique:'.$config;
-				}elseif ($type == 'date_format') {
-					$format_validation[] = 'date_format:'.$config;						
-				}elseif ($type == 'digits_between') {
-					$format_validation[] = 'digits_between:'.$config;						
-				}elseif ($type == 'in') {
-					$format_validation[] = 'in:'.$config;						
-				}elseif ($type == 'mimes') {
-					$format_validation[] = 'mimes:'.$config;						
-				}elseif ($type == 'min') {
-					$format_validation[] = 'min:'.$config;						
-				}elseif ($type == 'max') {
-					$format_validation[] = 'max:'.$config;						
-				}elseif ($type == 'not_in') {
-					$format_validation[] = 'not_in:'.$config;						
-				}else{
-					if(!in_array($type, $type_except)) {
-						$format_validation[] = $type;
-					}						
-				}		
-
-				if($name == 'id') {
-					$table_exist = CRUDBooster::parseSqlTable($table)['table'];
-					$format_validation[] = 'exists:'.$table_exist.',id';
-				}						
 				
 				$input_validator[$name] = $value;
-				$data_validation[$name] = implode('|',$format_validation);
-			}
+				$data_validation[$name] = $this->makeValidationRules($param, $type_except, $table);
+            }
 
 			$validator = Validator::make($input_validator,$data_validation);		    
 		    if ($validator->fails()) 
@@ -625,6 +577,71 @@ class ApiController extends Controller {
 		$this->hook_after($posts,$result);
 
 		return response()->json($result);
+	}
+
+    /**
+     * @param $param
+     * @param $type_except
+     * @param $table
+     * @return array
+     * @internal param $required
+     * @internal param $type
+     * @internal param $config
+     * @internal param $name
+     */
+    private function makeValidationRules($param, $type_except, $table)
+    {
+        $name     = $param['name'];
+        $type     = $param['type'];
+        $required = $param['required'];
+        $config   = $param['config'];
+
+        $format_validation = array();
+
+        if ($required) {
+            $format_validation[] = 'required';
+        }
+
+        if ($type == 'exists') {
+            $config = explode(',', $config);
+            $table_exist = $config[0];
+            $table_exist = CRUDBooster::parseSqlTable($table_exist)['table'];
+            $field_exist = $config[1];
+            $config = ($field_exist) ? $table_exist . ',' . $field_exist : $table_exist;
+            $format_validation[] = 'exists:' . $config;
+        } elseif ($type == 'unique') {
+            $config = explode(',', $config);
+            $table_exist = $config[0];
+            $table_exist = CRUDBooster::parseSqlTable($table_exist)['table'];
+            $field_exist = $config[1];
+            $config = ($field_exist) ? $table_exist . ',' . $field_exist : $table_exist;
+            $format_validation[] = 'unique:' . $config;
+        } elseif ($type == 'date_format') {
+            $format_validation[] = 'date_format:' . $config;
+        } elseif ($type == 'digits_between') {
+            $format_validation[] = 'digits_between:' . $config;
+        } elseif ($type == 'in') {
+            $format_validation[] = 'in:' . $config;
+        } elseif ($type == 'mimes') {
+            $format_validation[] = 'mimes:' . $config;
+        } elseif ($type == 'min') {
+            $format_validation[] = 'min:' . $config;
+        } elseif ($type == 'max') {
+            $format_validation[] = 'max:' . $config;
+        } elseif ($type == 'not_in') {
+            $format_validation[] = 'not_in:' . $config;
+        } else {
+            if (!in_array($type, $type_except)) {
+                $format_validation[] = $type;
+            }
+        }
+
+        if ($name == 'id') {
+            $table_exist = CRUDBooster::parseSqlTable($table)['table'];
+            $format_validation[] = 'exists:' . $table_exist . ',id';
+        }
+
+        return implode('|',$format_validation);
 	}
 	
 }
