@@ -468,9 +468,9 @@ class ApiController extends Controller {
 		elseif (in_array($action_type, [ 'save_add', 'save_edit'])) {
 			
 		    $row_assign = array();
-		    foreach($input_validator as $k=>$v) {
-		    	if(CRUDBooster::isColumnExists($table,$k)) {
-		    		$row_assign[$k] = $v;
+		    foreach($input_validator as $column=>$v) {
+		    	if(CRUDBooster::isColumnExists($table,$column)) {
+		    		$row_assign[$column] = $v;
 		    	}
 		    }
 
