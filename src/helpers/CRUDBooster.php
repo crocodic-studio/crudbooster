@@ -603,17 +603,17 @@ class CRUDBooster  {
 		            $result = array();      
 		            $result['api_status'] = 0;
 		            $result['api_message'] = implode(', ',$message);
-		            $res = response()->json($result,200);
-		            $res->send();
+		            response()->json($result,200)->send();
 		            exit;
-		        }else{                        
-		            $res = redirect()->back()            
-		            ->with(['message'=>implode('<br/>',$message),'message_type'=>'warning'])
-		            ->withInput();
-		            \Session::driver()->save();
-		            $res->send();
-		            exit;
-		        }        
+		        }
+
+                $res = redirect()->back()
+                ->with(['message'=>implode('<br/>',$message),'message_type'=>'warning'])
+                ->withInput();
+                \Session::driver()->save();
+                $res->send();
+                exit;
+
 		    }
 		}
 
