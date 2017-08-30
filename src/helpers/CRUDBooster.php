@@ -623,11 +623,15 @@ class CRUDBooster  {
 
 			if(count($f) == 1) {
 				return array("table"=>$f[0], "database"=>config('crudbooster.MAIN_DB_DATABASE'));
-			} elseif(count($f) == 2) {
-				return array("database"=>$f[0], "table"=>$f[1]);
-			}elseif (count($f) == 3) {
-				return array("table"=>$f[0],"schema"=>$f[1],"table"=>$f[2]);
 			}
+			if(count($f) == 2){
+				return array("database"=>$f[0], "table"=>$f[1]);
+			}
+
+			if (count($f) == 3){
+				return array("table"=>$f[0],"schema"=>$f[1],"table"=>$f[2]);
+            }
+
 			return false;
 		}
 
@@ -644,13 +648,12 @@ class CRUDBooster  {
 		}
 
 		public static function getCache($section,$cache_name) {
-
-			if(Cache::has($section)) {
-				$cache_open = Cache::get($section);				
-				return $cache_open[$cache_name];
-			}else{				
+			if(!Cache::has($section)) {
 				return false;
-			}			
+			}
+            $cache_open = Cache::get($section);
+            return $cache_open[$cache_name];
+
 		}
 
 		public static function flushCache() {
@@ -658,14 +661,14 @@ class CRUDBooster  {
 		}
 
 		public static function forgetCache($section,$cache_name) {
-			if(Cache::has($section)) {
-				$open = Cache::get($section);
-				unset($open[$cache_name]);
-				Cache::forever($section,$open);
-				return true;
-			}else{
+			if(!Cache::has($section)) {
 				return false;
 			}
+            $open = Cache::get($section);
+            unset($open[$cache_name]);
+            Cache::forever($section,$open);
+            return true;
+
 		}
 
 		public static function pk($table) {
@@ -709,12 +712,12 @@ class CRUDBooster  {
 				}
 			}			
 			
-			if($primary_key) {				
-				self::putCache('table_'.$table,'primary_key',$primary_key);
-				return $primary_key;
-			}else{
+			if(!$primary_key) {
 				return 'id';
-			}			
+			}
+            self::putCache('table_'.$table,'primary_key',$primary_key);
+            return $primary_key;
+
 		}
 
 		public static function newId($table) {
@@ -739,10 +742,11 @@ class CRUDBooster  {
 			if(count($result) > 0) {				
 				self::putCache('table_'.$table,'column_'.$field,1);
 				return true;
-			}else{
-				self::putCache('table_'.$table,'column_'.$field,0);
-				return false;
 			}
+
+            self::putCache('table_'.$table,'column_'.$field,0);
+            return false;
+
 
 			
 		}
@@ -1047,9 +1051,9 @@ class CRUDBooster  {
 		    $path2 = base_path("app/Http/Controllers/ControllerMaster/");
 		    if(file_exists($path.'Admin'.$controllername.'.php') || file_exists($path2.'Admin'.$controllername.'.php') || file_exists($path2.$controllername.'.php')) {
 		        return true;
-		    }else{
-		        return false;
 		    }
+            return false;
+
 		}
 
 		public static function generateAPI($controller_name,$table_name,$permalink,$method_type='post') {
