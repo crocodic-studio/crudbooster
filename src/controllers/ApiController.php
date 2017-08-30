@@ -483,15 +483,15 @@ class ApiController extends Controller {
 		    	}
 		    }
 
-		    if($action_type == 'save_add') {
+		    if($action_type == 'save_add' && CRUDBooster::isColumnExists($table,'created_at')) {
 		    	if(CRUDBooster::isColumnExists($table,'created_at')) {
-		    		$row_assign['created_at'] = date('Y-m-d H:i:s');
+                $row_assign['created_at'] = date('Y-m-d H:i:s');
 		    	}
-		    } 
+		    }
 
-		    if($action_type == 'save_edit') {
+		    if($action_type == 'save_edit' && CRUDBooster::isColumnExists($table,'updated_at')) {
 		    	if(CRUDBooster::isColumnExists($table,'updated_at')) {
-		    		$row_assign['updated_at'] = date('Y-m-d H:i:s');
+                $row_assign['updated_at'] = date('Y-m-d H:i:s');
 		    	}
 		    }
 
