@@ -204,7 +204,8 @@ class ApiController extends Controller {
 		
 		unset($posts['limit'], $posts['offset'], $posts['orderby']);
 
-		if($action_type == 'list' || $action_type == 'detail' || $action_type == 'delete') {
+
+		if(in_array($action_type, [ 'list', 'detail', 'delete'])) {
 			$name_tmp = array();
 			$data = DB::table($table);	 				
 			$data->skip($offset);
@@ -463,7 +464,8 @@ class ApiController extends Controller {
 
 			}
 
-		}elseif ($action_type == 'save_add' || $action_type == 'save_edit') {
+		}
+		elseif (in_array($action_type, [ 'save_add', 'save_edit'])) {
 			
 		    $row_assign = array();
 		    foreach($input_validator as $k=>$v) {
