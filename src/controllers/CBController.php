@@ -902,8 +902,7 @@ class CBController extends Controller {
 			$inputdata = Request::get($name);
 
 			//Insert Data Checkbox if Type Datatable
-			if($ro['type'] == 'checkbox') {
-				if($ro['relationship_table']) {
+			if($ro['type'] == 'checkbox' && $ro['relationship_table']) {
 					$datatable = explode(",",$ro['datatable'])[0];
 					$foreignKey2 = CRUDBooster::getForeignKey($datatable,$ro['relationship_table']);
 					$foreignKey = CRUDBooster::getForeignKey($this->table,$ro['relationship_table']);
@@ -919,13 +918,10 @@ class CBController extends Controller {
 								]);
 						}
 					}
-
-				}
 			}
 
 
-			if($ro['type'] == 'select2') {
-				if($ro['relationship_table']) {
+			if($ro['type'] == 'select2' && $ro['relationship_table']) {
 					$datatable = explode(",",$ro['datatable'])[0];
 					$foreignKey2 = CRUDBooster::getForeignKey($datatable,$ro['relationship_table']);
 					$foreignKey = CRUDBooster::getForeignKey($this->table,$ro['relationship_table']);
@@ -941,8 +937,6 @@ class CBController extends Controller {
 								]);
 						}
 					}
-
-				}
 			}
 
 			if($ro['type']=='child') {
@@ -990,7 +984,7 @@ class CBController extends Controller {
             CRUDBooster::redirect(CRUDBooster::mainpath('add'),trans("crudbooster.alert_add_data_success"),'success');
         }
         CRUDBooster::redirect(CRUDBooster::mainpath(),trans("crudbooster.alert_add_data_success"),'success');
-		}
+    }
 
 	public function getEdit($id){
 		$this->cbLoader();
