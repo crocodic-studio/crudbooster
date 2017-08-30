@@ -463,22 +463,8 @@ class ApiController extends Controller {
 
 		    	if($type == 'file' || $type == 'image') {
                     $row_assign = $this->handleFile($name, $row_assign);
-		    	}elseif ($type == 'base64_file') {
-		    		$filedata = base64_decode($value);
-					$f = finfo_open();
-					$mime_type = finfo_buffer($f, $filedata, FILEINFO_MIME_TYPE);
-					@$mime_type = explode('/',$mime_type);
-					@$mime_type = $mime_type[1];
-					if($mime_type) {
-						if(in_array($mime_type, $uploads_format_candidate)) {
-							Storage::makeDirectory(date('Y-m'));
-							$filename = md5(str_random(5)).'.'.$mime_type;
-							if(file_put_contents(storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m')).'/'.$filename, $filedata)) {
-								$v = 'uploads/'.date('Y-m').'/'.$filename;
-								$row_assign[$name] = $v;
-							}
-						}
-					}
+                }elseif ($type == 'base64_file') {
+                    $row_assign = $this->handleBase64($value, $uploads_format_candidate, $row_assign, $name);
 		    	}elseif ($type == 'password') {
 		    		$row_assign[$name] = Hash::make($value);
 		    	}
@@ -503,7 +489,7 @@ class ApiController extends Controller {
 				if(CRUDBooster::getSetting('api_debug_mode')=='true') {
 					$result['api_authorization'] = $debug_mode_message;
 				}
-				$result['id']          = $row_assign['id'];
+				$result['id'] = $row_assign['id'];
 
 		    }else{
 
@@ -655,7 +641,33 @@ class ApiController extends Controller {
         return $row_assign;
     }
 
-
+    /**
+     * @param $value
+     * @param $uploads_format_candidate
+     * @param $row_assign
+     * @param $name
+     * @return mixed
+     */
+    private function handleBase64($value, $uploads_format_candidate, $row_assign, $name)
+    {
+        $filedata = base64_decode($value);
+        $f = finfo_open();
+        $mime_type = finfo_buffer($f, $filedata, FILEINFO_MIME_TYPE);
+        @$mime_type = explode('/', $mime_type);
+        @$mime_type = $mime_type[1];
+        if ($mime_type) {
+            if (in_array($mime_type, $uploads_format_candidate)) {
+                Storage::makeDirectory(date('Y-m'));
+                $filename = md5(str_random(5)) . '.' . $mime_type;
+                if (file_put_contents(storage_path('app' . DIRECTORY_SEPARATOR . date('Y-m')) . '/' . $filename,
+                    $filedata)) {
+                    $v = 'uploads/' . date('Y-m') . '/' . $filename;
+                    $row_assign[$name] = $v;
+                }
+            }
+        }
+        return $row_assign;
+    }
 }
 
 
