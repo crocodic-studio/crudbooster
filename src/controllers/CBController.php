@@ -512,33 +512,32 @@ class CBController extends Controller {
 
 	public function getDataQuery() {
 		$key = g('query');
-		if(Cache::has($key)) {
-			$query = Cache::get($key);			
-			$fk_name = g('fk_name');
-			$fk_value = g('fk_value');
-			if(strpos(strtolower($query), 'where')!==FALSE) {
-				if(strpos(strtolower($query), 'order by')) {
-					$query = str_replace("ORDER BY","order by",$query);
-					$qraw = explode('order by',$query);
-					$query = $qraw[0]." and ".$fk_name." = '".$fk_value."' ".$qraw[1];
-				}else{
-					$query .= " and ".$fk_name." = '".$fk_value."'";
-				}			
-			}else{
-				if(strpos(strtolower($query), 'order by')) {
-					$query = str_replace("ORDER BY","order by",$query);
-					$qraw = explode('order by',$query);
-					$query = $qraw[0]." where ".$fk_name." = '".$fk_value."' ".$qraw[1];
-				}else{
-					$query .= " where ".$fk_name." = '".$fk_value."'";
-				}
-			}
+		if(!Cache::has($key)) {
+            return response()->json(['items'=>[] ]);
+		}
+        $query = Cache::get($key);
+        $fk_name = g('fk_name');
+        $fk_value = g('fk_value');
+        if(strpos(strtolower($query), 'where')!==FALSE) {
+            if(strpos(strtolower($query), 'order by')) {
+                $query = str_replace("ORDER BY","order by",$query);
+                $qraw = explode('order by',$query);
+                $query = $qraw[0]." and ".$fk_name." = '".$fk_value."' ".$qraw[1];
+            }else{
+                $query .= " and ".$fk_name." = '".$fk_value."'";
+            }
+        }else{
+            if(strpos(strtolower($query), 'order by')) {
+                $query = str_replace("ORDER BY","order by",$query);
+                $qraw = explode('order by',$query);
+                $query = $qraw[0]." where ".$fk_name." = '".$fk_value."' ".$qraw[1];
+            }else{
+                $query .= " where ".$fk_name." = '".$fk_value."'";
+            }
+        }
 
-			$query = DB::select(DB::raw($query));
-			return response()->json(['items'=>$query]);
-		}else{
-			return response()->json(['items'=>[] ]);
-		}		
+        $query = DB::select(DB::raw($query));
+        return response()->json(['items'=>$query]);
 	}
 
 	public function getDataTable() {
@@ -547,18 +546,17 @@ class CBController extends Controller {
 		$datatableWhere = urldecode(Request::get('datatable_where'));
 		$foreign_key_name = Request::get('fk_name');
 		$foreign_key_value = Request::get('fk_value');
-		if($table && $label && $foreign_key_name && $foreign_key_value) {
-			$query = DB::table($table);
-			if($datatableWhere) {
-				$query->whereRaw($datatableWhere);
-			}
-			$query->select('id as select_value',$label.' as select_label');
-			$query->where($foreign_key_name,$foreign_key_value);
-			$query->orderby($label,'asc');
-			return response()->json($query->get());
-		}else{
+		if(!$table || !$label || !$foreign_key_name || !$foreign_key_value) {
 			return response()->json([]);
 		}
+        $query = DB::table($table);
+        if($datatableWhere) {
+            $query->whereRaw($datatableWhere);
+        }
+        $query->select('id as select_value',$label.' as select_label');
+        $query->where($foreign_key_name,$foreign_key_value);
+        $query->orderby($label,'asc');
+        return response()->json($query->get());
 	}
 
 	public function getDataModalDatatable() {
@@ -766,34 +764,35 @@ class CBController extends Controller {
 				$exp = explode('|',$di['validation']);
 				if (count($exp)) {
 					foreach ($exp as &$validationItem) {
-						if (substr($validationItem, 0,6) == 'unique') {
-							$parseUnique = explode(',',str_replace('unique:','',$validationItem));
-							$uniqueTable = ($parseUnique[0])?:$this->table;
-							$uniqueColumn = ($parseUnique[1])?:$name;
-							$uniqueIgnoreId = ($parseUnique[2])?:(($id)?:'');
-
-							//Make sure table name
-							$uniqueTable = CB::parseSqlTable($uniqueTable)['table'];
-
-							//Rebuild unique rule
-							$uniqueRebuild = [];
-							$uniqueRebuild[] = $uniqueTable;
-							$uniqueRebuild[] = $uniqueColumn;
-							if ($uniqueIgnoreId) {							
-								$uniqueRebuild[] = $uniqueIgnoreId;
-							} else {
-								$uniqueRebuild[] = 'NULL';
-							}
-
-							//Check whether deleted_at exists or not
-							if (Schema::hasColumn($uniqueTable,'deleted_at')) {
-								$uniqueRebuild[] = CB::findPrimaryKey($uniqueTable);
-								$uniqueRebuild[] = 'deleted_at';
-								$uniqueRebuild[] = 'NULL';							
-							}							
-							$uniqueRebuild = array_filter($uniqueRebuild);
-							$validationItem = 'unique:'.implode(',',$uniqueRebuild);
+						if (substr($validationItem, 0,6) !== 'unique') {
+						    continue;
 						}
+                        $parseUnique = explode(',',str_replace('unique:','',$validationItem));
+                        $uniqueTable = ($parseUnique[0])?:$this->table;
+                        $uniqueColumn = ($parseUnique[1])?:$name;
+                        $uniqueIgnoreId = ($parseUnique[2])?:(($id)?:'');
+
+                        //Make sure table name
+                        $uniqueTable = CB::parseSqlTable($uniqueTable)['table'];
+
+                        //Rebuild unique rule
+                        $uniqueRebuild = [];
+                        $uniqueRebuild[] = $uniqueTable;
+                        $uniqueRebuild[] = $uniqueColumn;
+                        if ($uniqueIgnoreId) {
+                            $uniqueRebuild[] = $uniqueIgnoreId;
+                        } else {
+                            $uniqueRebuild[] = 'NULL';
+                        }
+
+                        //Check whether deleted_at exists or not
+                        if (Schema::hasColumn($uniqueTable,'deleted_at')) {
+                            $uniqueRebuild[] = CB::findPrimaryKey($uniqueTable);
+                            $uniqueRebuild[] = 'deleted_at';
+                            $uniqueRebuild[] = 'NULL';
+                        }
+                        $uniqueRebuild = array_filter($uniqueRebuild);
+                        $validationItem = 'unique:'.implode(',',$uniqueRebuild);
 					}
 				} else {
 					$exp = array();
@@ -818,12 +817,12 @@ class CBController extends Controller {
 			if(Request::ajax()) {
 				$res = response()->json(['message'=>trans('crudbooster.alert_validation_error',['error'=>implode(', ',$message_all)]),'message_type'=>'warning'])->send();
 				exit;
-			}else{
-				$res = redirect()->back()->with("errors",$message)->with(['message'=>trans('crudbooster.alert_validation_error',['error'=>implode(', ',$message_all)]),'message_type'=>'warning'])->withInput();
-				\Session::driver()->save();
-				$res->send();
-	        	exit;
 			}
+            $res = redirect()->back()->with("errors",$message)->with(['message'=>trans('crudbooster.alert_validation_error',['error'=>implode(', ',$message_all)]),'message_type'=>'warning'])->withInput();
+            \Session::driver()->save();
+            $res->send();
+            exit;
+
 
 		}
 	}
@@ -841,28 +840,27 @@ class CBController extends Controller {
 			if(!$name) continue;			
 			if($ro['exception']) continue;
 
-			if(count($hide_form)) {
-				if(in_array($name, $hide_form)) {
-					continue;
-				}
+			if(count($hide_form) && in_array($name, $hide_form)) {
+                continue;
 			}			
 
 			if(file_exists( base_path($componentPath.$type.DIRECTORY_SEPARATOR.'hookInputAssignment.php') )) {																								
 				require_once(base_path($componentPath.$type.DIRECTORY_SEPARATOR.'hookInputAssignment.php'));
 			}
 
-			if(!Request::hasFile($name)) {
-				if($inputdata!='') {
-					$this->arr[$name] = $inputdata;
-				}else{
-					if(CB::isColumnNULL($this->table,$name)) {
-						continue;
-					}else{						
-						$this->arr[$name] = "";
-					}
-				}
+			if(Request::hasFile($name)) {
+			   continue;
 			}
-			
+            if($inputdata!='') {
+                $this->arr[$name] = $inputdata;
+            }else{
+                if(CB::isColumnNULL($this->table,$name)) {
+                    continue;
+                }
+
+                $this->arr[$name] = "";
+            }
+
 		}		
 	}
 
