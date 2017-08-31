@@ -33,14 +33,14 @@ class FileController extends Controller {
 		    $h = Request::get('h', $w);
 	    	$imgRaw = Image::cache(function($image) use ($fullStoragePath, $w, $h) {
 	    		$im = $image->make($fullStoragePath);
-		    	if($w) {
-		    		if(!$h) {
-		    			$im->fit($w);
-		    		}else{
-		    			$im->fit($w,$h);
-		    		}
+		    	if(!$w) {
+		    	    return $im;
 		    	}
-		    	return $im;
+                if(!$h) {
+                    $im->fit($w);
+                }else{
+                    $im->fit($w,$h);
+                }
 	    	});
 
 	    	$imageFileSize = mb_strlen($imgRaw,'8bit')?:0;			
