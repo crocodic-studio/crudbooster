@@ -298,8 +298,6 @@ class CBController extends Controller {
 
 				if ($type=='between') {
 					if($key && $value) $result->whereBetween($key,$value);
-				}else{
-					continue;
 				}
 			}
 		}
