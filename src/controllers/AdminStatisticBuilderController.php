@@ -96,6 +96,7 @@
 
 	    	return response()->json(['components'=>$rows]);
 	    }
+
 	    public function getViewComponent($componentID) {
 	    	$component = CRUDBooster::first('cms_statistic_components',['componentID'=>$componentID]);	
 	    
@@ -105,15 +106,17 @@
 	    	$component_name = $component->component_name;
 	    	$area_name = $component->area_name;
 	    	$config = json_decode($component->config);
-	    	if($config) {
-	    		foreach($config as $key=>$value) {
-	    			if($value) {
-    					$command = 'showFunction';
-    					$value = view('crudbooster::statistic_builder.components.'.$component_name,compact('command','value','key','config','componentID'))->render();
-	    				$layout = str_replace('['.$key.']',$value,$layout);
-    				}	    			
-	    		}
-	    	}	    	
+	    	if(!$config) {
+	        	return response()->json(compact('componentID','layout'));
+	    	}
+            foreach($config as $key=>$value) {
+                if(!$value) {
+                    continue;
+                }
+                $command = 'showFunction';
+                $value = view('crudbooster::statistic_builder.components.'.$component_name,compact('command','value','key','config','componentID'))->render();
+                $layout = str_replace('['.$key.']',$value,$layout);
+            }
 
 	    	return response()->json(compact('componentID','layout'));
 	    }
