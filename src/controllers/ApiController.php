@@ -289,13 +289,13 @@ class ApiController extends Controller {
 			$this->hook_query($data);
 
 			if($action_type == 'list') {
+                $orderby_col = $table.'.id';
+                $orderby_val = 'desc';
+
 				if($orderby) {
 					$orderby_raw = explode(',',$orderby);
 					$orderby_col = $orderby_raw[0];
 					$orderby_val = $orderby_raw[1];
-				}else{
-					$orderby_col = $table.'.id';
-					$orderby_val = 'desc';
 				}
 				
 				$rows = $data->orderby($orderby_col, $orderby_val)->get();
