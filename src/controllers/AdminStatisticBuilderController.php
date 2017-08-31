@@ -82,11 +82,7 @@
 
 	    public function getBuilder($id_cms_statistics) {
 	    	$this->cbLoader();
-
-	    	if(!CRUDBooster::isSuperadmin()) {
-				CRUDBooster::insertLog(trans("crudbooster.log_try_view",['name'=>'Builder','module'=>'Statistic']));
-				CRUDBooster::denyAccess();
-			}
+            $this->allowOnlySuperAdmin('Builder');
 
 	    	$page_title = 'Statistic Builder';	    		    	
 	    	return view('crudbooster::statistic_builder.builder',compact('page_title','id_cms_statistics'));
@@ -159,11 +155,7 @@
 
 	    public function getEditComponent($componentID) {
 	    	$this->cbLoader();
-
-	    	if(!CRUDBooster::isSuperadmin()) {
-				CRUDBooster::insertLog(trans("crudbooster.log_try_view",['name'=>'Edit Component','module'=>'Statistic']));
-				CRUDBooster::denyAccess();
-			}
+            $this->allowOnlySuperAdmin('Edit Component');
 
 	    	$component_row = CRUDBooster::first('cms_statistic_components',['componentID'=>$componentID]);
 
@@ -185,11 +177,8 @@
 
 	    public function getDeleteComponent($id)
 	    {
-	    	if(!CRUDBooster::isSuperadmin()) {
-			CRUDBooster::insertLog(trans("crudbooster.log_try_view",['name'=>'Delete Component','module'=>'Statistic']));
-			CRUDBooster::denyAccess();
-		}
-		    
+            $this->allowOnlySuperAdmin('Delete Component');
+
 	    	DB::table('cms_statistic_components')->where('componentID',$id)->delete();
 	    	return response()->json(['status'=>true]);
 	    }
@@ -203,6 +192,15 @@
 	    public function hookBeforeEdit(&$postdata,$id) {
 	    	$postdata['slug'] = str_slug($postdata['name']);
 	    }
+
+        private function allowOnlySuperAdmin($name)
+        {
+            if (CRUDBooster::isSuperadmin()) {
+                return;
+            }
+            CRUDBooster::insertLog(trans("crudbooster.log_try_view", ['name' => $name, 'module' => 'Statistic']));
+            CRUDBooster::denyAccess();
+        }
 
 
 	}
