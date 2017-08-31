@@ -412,18 +412,16 @@ class CBController extends Controller {
 			        }
 
 		            $datavalue = @unserialize($value);
-					if ($datavalue !== false) {
-						if($datavalue) {
-							$prevalue = [];
-							foreach($datavalue as $d) {
-								if($d['label']) {
-									$prevalue[] = $d['label'];
-								}
-						    }
-						    if(count($prevalue)) {
-						    	$value = implode(", ",$prevalue);
-						    }
-						}
+					if ($datavalue !== false && $datavalue) {
+                        $prevalue = [];
+                        foreach($datavalue as $d) {
+                            if($d['label']) {
+                                $prevalue[] = $d['label'];
+                            }
+                        }
+                        if(count($prevalue)) {
+                            $value = implode(", ",$prevalue);
+                        }
 					}
 
 		          $html_content[] = $value;
