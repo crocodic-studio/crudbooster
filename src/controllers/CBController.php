@@ -137,13 +137,14 @@ class CBController extends Controller {
 	}
 
 	private function checkHideForm() {
-		if(count($this->hide_form)) {
-			foreach($this->form as $i=>$f) {
-				if(in_array($f['name'], $this->hide_form)) {
-					unset($this->form[$i]);
-				}
-			}
+		if(!count($this->hide_form)) {
+		    return null;
 		}
+        foreach($this->form as $i=>$f) {
+            if(in_array($f['name'], $this->hide_form)) {
+                unset($this->form[$i]);
+            }
+        }
 	}
 
 	public function getIndex() {
