@@ -161,7 +161,8 @@ class ApiController extends Controller {
 			$name_tmp = array();
 			$data = DB::table($table);	 				
 			$data->skip($offset);
-			$data->take($limit);								
+			$data->take($limit);
+
 			foreach($responses as $resp) {	
 				$name = $resp['name'];
 				$type = $resp['type'];
@@ -300,6 +301,14 @@ class ApiController extends Controller {
 				
 				$rows = $data->orderby($orderby_col, $orderby_val)->get();
 
+
+                $result['api_status']  = 0;
+                $result['api_message'] = 'There is no data found !';
+                if(CRUDBooster::getSetting('api_debug_mode')=='true') {
+                    $result['api_authorization'] = $debug_mode_message;
+                }
+                $result['data'] = array();
+
 				if($rows) {
 
 					foreach($rows as &$row) {
@@ -321,20 +330,22 @@ class ApiController extends Controller {
 						$result['api_authorization'] = $debug_mode_message;
 					}		
 					$result['data']        = $rows;
-				}else{
-					$result['api_status']  = 0;
-					$result['api_message'] = 'There is no data found !';
-					if(CRUDBooster::getSetting('api_debug_mode')=='true') {
-						$result['api_authorization'] = $debug_mode_message;
-					}				
-					$result['data']        = array();
 				}
-			}elseif ($action_type == 'detail') {
+			}
+
+			if ($action_type == 'detail') {
 							
+
+                $result['api_status']  = 0;
+                $result['api_message'] = 'There is no data found !';
+
+                if(CRUDBooster::getSetting('api_debug_mode')=='true') {
+                    $result['api_authorization'] = $debug_mode_message;
+                }
+
 				$rows = $data->first();
 
-				if($rows) {					
-
+				if($rows) {
 					foreach($parameters as $param) {
 						$name     = $param['name'];
 						$type     = $param['type'];
@@ -346,25 +357,25 @@ class ApiController extends Controller {
 							$value = $param['config'];
 						}
 
-						if($required) {
-							if($type == 'password' && !Hash::check($value,$rows->{$name})) {
-									$result['api_status'] = 0;
-									$result['api_message'] = 'Your password is wrong !';
-									if(CRUDBooster::getSetting('api_debug_mode')=='true') {
-										$result['api_authorization'] = $debug_mode_message;
-									}					
-									goto show;
-							}
-						}else{
-							if($used && $value && !Hash::check($value,$row->{$name})) {
+
+                        if($required && $type == 'password' && !Hash::check($value,$rows->{$name})) {
                                 $result['api_status'] = 0;
                                 $result['api_message'] = 'Your password is wrong !';
                                 if(CRUDBooster::getSetting('api_debug_mode')=='true') {
                                     $result['api_authorization'] = $debug_mode_message;
                                 }
                                 goto show;
-							}
-						}
+                        }
+
+                        if(!$required && $used && $value && !Hash::check($value,$row->{$name})) {
+                            $result['api_status'] = 0;
+                            $result['api_message'] = 'Your password is wrong !';
+                            if(CRUDBooster::getSetting('api_debug_mode')=='true') {
+                                $result['api_authorization'] = $debug_mode_message;
+                            }
+                            goto show;
+                        }
+
 					}
 
 
@@ -386,14 +397,10 @@ class ApiController extends Controller {
 					}
 					$rows                  = (array) $rows;
 					$result                = array_merge($result,$rows);
-				}else{
-					$result['api_status']  = 0;
-					$result['api_message'] = 'There is no data found !';	
-					if(CRUDBooster::getSetting('api_debug_mode')=='true') {
-						$result['api_authorization'] = $debug_mode_message;
-					}				
 				}
-			}elseif($action_type == 'delete') {
+			}
+
+			if($action_type == 'delete') {
 				
 				if(CRUDBooster::isColumnExists($table,'deleted_at')) {
 					$delete = $data->update(['deleted_at'=>date('Y-m-d H:i:s')]);
@@ -410,14 +417,8 @@ class ApiController extends Controller {
 			}
 
 		}
-		elseif (in_array($action_type, [ 'save_add', 'save_edit'])) {
-			
-		    $row_assign = array();
-		    foreach($input_validator as $column=>$v) {
-		    	if(CRUDBooster::isColumnExists($table,$column)) {
-		    		$row_assign[$column] = $v;
-		    	}
-		    }
+
+		if (in_array($action_type, [ 'save_add', 'save_edit'])) {
 
 		    foreach($parameters as $param) {
 		    	$name = $param['name'];
@@ -428,109 +429,10 @@ class ApiController extends Controller {
 		    	}
 		    }
 
-		    if($action_type == 'save_add' && CRUDBooster::isColumnExists($table,'created_at')) {
-                $row_assign['created_at'] = date('Y-m-d H:i:s');
-		    }
-
-		    if($action_type == 'save_edit' && CRUDBooster::isColumnExists($table,'updated_at')) {
-                $row_assign['updated_at'] = date('Y-m-d H:i:s');
-		    }
-
-		    $row_assign_keys = array_keys($row_assign);
-
-		    foreach($parameters as $param) {
-		    	$name = $param['name'];
-		    	$value = $posts[$name];
-		    	$config = $param['config'];
-		    	$type = $param['type'];
-		    	$required = $param['required'];
-		    	$used = $param['used'];
-
-		    	if(!in_array($name, $row_assign_keys)) {
-					continue;
-				}	
-
-				if(substr($param['config'], 0,1) != '*') {
-					$value = $param['config'];
-				}
-
-		    	if($type == 'file' || $type == 'image') {
-                    $row_assign = $this->handleFile($name, $row_assign);
-                }elseif ($type == 'base64_file') {
-                    $row_assign = $this->handleBase64($value, $uploads_format_candidate, $row_assign, $name);
-		    	}elseif ($type == 'password') {
-		    		$row_assign[$name] = Hash::make($value);
-		    	}
-		    	
-		    }
-
-		    //Make sure if saving/updating data additional param included
-		    $arrkeys = array_keys($row_assign);      
-		    foreach($posts as $key => $value) {
-		        if(!in_array($key, $arrkeys)) {
-		          $row_assign[$key] = $value;
-		        }
-		    }
-
-
-		    if($action_type == 'save_add') {
-		    	
-		    	$row_assign['id'] = CRUDBooster::newId($table);
-		    	DB::table($table)->insert($row_assign);
-		    	$result['api_status']  = ($row_assign['id'])?1:0;
-				$result['api_message'] = ($row_assign['id'])?'success':'failed';
-				if(CRUDBooster::getSetting('api_debug_mode')=='true') {
-					$result['api_authorization'] = $debug_mode_message;
-				}
-				$result['id'] = $row_assign['id'];
-
-		    }else{
-
-		    	try{
-		    		$update = DB::table($table);
-
-				    $update->where($table.'.id',$row_assign['id']);
-
-				    if($row_api->sql_where) {
-				    	$update->whereraw($row_api->sql_where);
-				    }			    
-				    
-				    $this->hook_query($update);
-
-				    $update = $update->update($row_assign);
-					$result['api_status']  = 1;
-					$result['api_message'] = 'success';
-					if(CRUDBooster::getSetting('api_debug_mode')=='true') {
-						$result['api_authorization'] = $debug_mode_message;
-					}
-		    	}catch(\Exception $e) {
-		    		$result['api_status']  = 0;
-					$result['api_message'] = 'failed, '.$e;
-					if(CRUDBooster::getSetting('api_debug_mode')=='true') {
-						$result['api_authorization'] = $debug_mode_message;
-					}
-		    	}
-
-		    }
-
-		    // Update The Child Table
-		    foreach($parameters as $param) {
-		    	$name = $param['name'];
-		    	$value = $posts[$name];
-		    	$config = $param['config'];
-		    	$type = $param['type'];
-		    	if($type == 'ref') {
-		    		if(CRUDBooster::isColumnExists($config,'id_'.$table)) {
-		    			DB::table($config)->where($name,$value)->update(['id_'.$table=>$lastId]);
-		    		}elseif (CRUDBooster::isColumnExists($config,$table.'_id')) {
-		    			DB::table($config)->where($name,$value)->update([$table.'_id'=>$lastId]);
-		    		}			    		
-		    	}
-		    }
 		}
 
 
-		
+
 		show:
 		$result['api_status']  = $this->hook_api_status?:$result['api_status'];
 		$result['api_message'] = $this->hook_api_message?:$result['api_message'];
