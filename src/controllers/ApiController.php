@@ -216,27 +216,28 @@ class ApiController extends Controller {
 					$data->addselect($table.'.'.$name);
 				}
 
-				if($type == 'search') {
-					$search_in = explode(',',$config);
-
-					if($required == '1') {						
-						$data->where(function($w) use ($search_in,$value) {
-							foreach($search_in as $k=>$field) {
-								if($k==0) $w->where($field,"like","%$value%");
-								else $w->orWhere($field,"like","%$value%");
-							}
-						});
-					}else{
-						if($used && $value) {
-                            $data->where(function($w) use ($search_in,$value) {
-                                foreach($search_in as $k=>$field) {
-                                    if($k==0) $w->where($field,"like","%$value%");
-                                    else $w->orWhere($field,"like","%$value%");
-                                }
-                            });
-						}
-					}
+				if($type !== 'search') {
+				    continue;
 				}
+                $search_in = explode(',',$config);
+
+                if($required == '1') {
+                    $data->where(function($w) use ($search_in,$value) {
+                        foreach($search_in as $k=>$field) {
+                            if($k==0) $w->where($field,"like","%$value%");
+                            else $w->orWhere($field,"like","%$value%");
+                        }
+                    });
+                    continue;
+                }
+                if($used && $value) {
+                    $data->where(function($w) use ($search_in,$value) {
+                        foreach($search_in as $k=>$field) {
+                            if($k==0) $w->where($field,"like","%$value%");
+                            else $w->orWhere($field,"like","%$value%");
+                        }
+                    });
+                }
 			}
 
 			if(CRUDBooster::isColumnExists($table,'deleted_at')) {
