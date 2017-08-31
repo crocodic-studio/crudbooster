@@ -289,11 +289,9 @@ class CBController extends Controller {
 				$type  = @$fc['type'];
 				$sorting = @$fc['sorting'];
 
-				if($sorting!='') {
-					if($key) {
-						$result->orderby($key,$sorting);
-						$filter_is_orderby = true;
-					}
+				if($sorting!='' && $key) {
+                    $result->orderby($key,$sorting);
+                    $filter_is_orderby = true;
 				}
 
 				if ($type=='between') {
