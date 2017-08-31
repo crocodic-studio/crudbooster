@@ -124,25 +124,21 @@
 	    public function postAddComponent() {
 	    	$this->cbLoader();
 			$component_name    = Request::get('component_name');
-			$id_cms_statistics = Request::get('id_cms_statistics');
-			$sorting           = Request::get('sorting');
-			$area 			   = Request::get('area');
-
 	    	$componentID = md5(time());
 
 	    	$command = 'layout';
-	    	$layout = view('crudbooster::statistic_builder.components.'.$component_name,compact('command','componentID'))->render();
-	    	
+
 	    	$data = [
-	    		'id_cms_statistics'=>$id_cms_statistics,
+	    		'id_cms_statistics'=> Request::get('id_cms_statistics'),
 	    		'componentID'=>$componentID,
 	    		'component_name'=>$component_name,
-	    		'area_name'=>$area,
-	    		'sorting'=>$sorting,
+	    		'area_name'=> Request::get('area'),
+	    		'sorting'=> Request::get('sorting'),
 	    		'name'=>'Untitled'
 	    	];
 	    	CRUDBooster::insert('cms_statistic_components',$data);
 
+	    	$layout = view('crudbooster::statistic_builder.components.'.$component_name,compact('command','componentID'))->render();
 	    	return response()->json(compact('layout','componentID'));
 	    }
 
