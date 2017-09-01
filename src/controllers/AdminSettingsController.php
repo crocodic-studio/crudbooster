@@ -95,19 +95,7 @@ class AdminSettingsController extends CBController {
 
 			if (Request::hasFile($name))
 			{
-                $this->validateFileType($set);
-
-				$file = Request::file($name);
-				$ext  = $file->getClientOriginalExtension();
-
-				//Create Directory Monthly 
-				Storage::makeDirectory(date('Y-m'));
-
-				//Move file to storage
-				$filename = md5(str_random(5)).'.'.$ext;
-				if($file->move(storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m')),$filename)) {						
-					$content = 'uploads/'.date('Y-m').'/'.$filename;
-				}					  
+                $content = $this->uploadFile($set);
 			}
 
 
@@ -153,5 +141,30 @@ class AdminSettingsController extends CBController {
             CRUDBooster::denyAccess();
         }
     }
+
+
+    /**
+     * @param $set
+     * @param $name
+     * @return string
+     */
+    private function uploadFile($set)
+    {
+        $this->validateFileType($set);
+
+        $file = Request::file($set->name);
+        $ext = $file->getClientOriginalExtension();
+
+        //Create Directory Monthly
+        Storage::makeDirectory(date('Y-m'));
+
+        //Move file to storage
+        $filename = md5(str_random(5)) . '.' . $ext;
+        if ($file->move(storage_path('app' . DIRECTORY_SEPARATOR . date('Y-m')), $filename)) {
+            $content = 'uploads/' . date('Y-m') . '/' . $filename;
+        }
+        return $content;
+    }
+
 
 }
