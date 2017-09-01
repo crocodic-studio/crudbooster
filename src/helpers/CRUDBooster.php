@@ -1681,6 +1681,11 @@ $php .='
 	        return 'Admin'.$controllername;
 	    }
 
+        public static function backWithMsg($msg, $type = 'success')
+        {
+            return redirect()->back()->with(['message_type' => $type, 'message' => $msg]);
+	    }
+
 		/* 
 		| --------------------------------------------------------------------------------------------------------------
 		| Alternate route for Laravel Route::controller

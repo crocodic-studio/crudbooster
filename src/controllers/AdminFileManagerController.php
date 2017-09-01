@@ -1,6 +1,7 @@
 <?php namespace crocodicstudio\crudbooster\controllers;
 
 use crocodicstudio\crudbooster\controllers\Controller;
+use CRUDBooster;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;
@@ -24,7 +25,7 @@ class AdminFileManagerController extends CBController {
 
 		$path = g('path')?base64_decode(g('path')):'';
 
-		if(strpos($path, '..')!==FALSE || $path=='.' || strpos($path, '/.') !== FALSE) {
+		if(strpos($path, '..') || $path=='.' || strpos($path, '/.') ) {
 			return redirect()->route('AdminFileManagerControllerGetIndex');
 		}					
 
@@ -44,9 +45,8 @@ class AdminFileManagerController extends CBController {
 		$name = g('name');
 		$name = str_slug($name,'_');
 		Storage::makeDirectory($path.'/'.$name);
-		return redirect()->back()
-		->with(['message'=>'Directory has been created','message_type'=>'success']);
-	} 
+        return CRUDBooster::backWithMsg('The directory has been created!');
+	}
 
 	public function postUpload() {		
 		$allowedExtension = explode(',',strtolower(config('crudbooster.UPLOAD_TYPES')));
@@ -59,27 +59,26 @@ class AdminFileManagerController extends CBController {
         $filename = $file->getClientOriginalName();
         $isAllowed = in_array($file->getClientOriginalExtension(), $allowedExtension);
 
-        $flashMsg = ['message_type'=>'warning','message'=>'The file '.$filename.' type is not allowed!'];
-
-        if($isAllowed) {
-            Storage::putFileAs($path, $file, $filename);
-            $flashMsg = ['message_type'=>'success','message'=>'The file '.$filename.' has been uploaded!'];
+        if(!$isAllowed) {
+            return CRUDBooster::backWithMsg('The file '.$filename.' type is not allowed!', 'warning');
         }
-        return redirect()->back()->with($flashMsg);
 
+        Storage::putFileAs($path, $file, $filename);
+        return CRUDBooster::backWithMsg('The file '.$filename.' has been uploaded!');
 	}
 
 	public function getDeleteDirectory($dir) {
 		$dir = base64_decode($dir);
 		Storage::deleteDirectory($dir);
-		return redirect()->back()->with(['message_type'=>'success','message'=>'The directory has been deleted!']);
+
+        return CRUDBooster::backWithMsg('The directory has been deleted!');
 	}
 
 	public function getDeleteFile($file) {
 		$file = base64_decode($file);
 		Storage::delete($file);
 
-		return redirect()->back()->with(['message_type'=>'success','message'=>'The file has been deleted!']);
+        return CRUDBooster::backWithMsg('The file has been deleted!');
 	}
 
 }
