@@ -57,15 +57,7 @@ class AdminFileManagerController extends CBController {
         }
 
         $filename = $file->getClientOriginalName();
-        $ext = $file->getClientOriginalExtension();
-
-        $isAllowed = false;
-        foreach($allowedExtension as $e) {
-            if($ext == $e) {
-                $isAllowed = true;
-                break;
-            }
-        }
+        $isAllowed = in_array($file->getClientOriginalExtension(), $allowedExtension);
 
         $flashMsg = ['message_type'=>'warning','message'=>'The file '.$filename.' type is not allowed!'];
 
