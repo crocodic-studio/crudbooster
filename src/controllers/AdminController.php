@@ -65,7 +65,7 @@ class AdminController extends CBController {
 		if ($validator->fails()) 
 		{
 			$message = $validator->errors()->all();
-			return redirect()->back()->with(['message'=>implode(', ',$message),'message_type'=>'danger']);
+            return CRUDBooster::backWithMsg(implode(', ',$message),'danger');
 		}
 
 		$email 		= Request::input("email");
@@ -123,7 +123,7 @@ class AdminController extends CBController {
 		if ($validator->fails()) 
 		{
 			$message = $validator->errors()->all();
-			return redirect()->back()->with(['message'=>implode(', ',$message),'message_type'=>'danger']);
+            return CRUDBooster::backWithMsg(implode(', ',$message), 'danger');
 		}	
 
 		$rand_string = str_random(5);

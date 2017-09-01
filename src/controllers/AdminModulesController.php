@@ -197,8 +197,8 @@ class AdminModulesController extends CBController {
 		if(!Request::get('id')) {
 
 			if(DB::table('cms_moduls')->where('path',$path)->where('deleted_at',NULL)->count()) {
-				return redirect()->back()->with(['message'=>'Sorry the slug has already exists, please choose another !','message_type'=>'warning']);
-			}			
+                return CRUDBooster::backWithMsg('Sorry the slug has already exists, please choose another !', 'warning');
+			}
 
 			$created_at = now();			
 
