@@ -35,16 +35,16 @@ class CRUDBooster  {
 
 		public static function first($table,$id) {
 			$table = self::parseSqlTable($table)['table'];
-			if(is_array($id)) {
-				$first = DB::table($table);
-				foreach($id as $k=>$v) {
-					$first->where($k,$v);
-				}
-				return $first->first();			
-			}else{
+			if(!is_array($id)) {
 				$pk = self::pk($table);
 				return DB::table($table)->where($pk,$id)->first();
 			}
+			
+            $first = DB::table($table);
+            foreach($id as $k=>$v) {
+                $first->where($k,$v);
+            }
+            return $first->first();
 		}
 
 		public static function get($table,$string_conditions=NULL,$orderby=NULL,$limit=NULL,$skip=NULL) {
