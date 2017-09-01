@@ -62,10 +62,7 @@ class AdminSettingsController extends CBController {
 	function getShow() {
 		$this->cbLoader();
 
-		if(!CRUDBooster::isSuperadmin()) {
-			CRUDBooster::insertLog(trans("crudbooster.log_try_view",['name'=>'Setting','module'=>'Setting']));
-			CRUDBooster::denyAccess();
-		}
+        $this->allowOnlySuperAdmin();
 
 		$data['page_title'] = urldecode(Request::get('group'));		
 		return view('crudbooster::setting',$data);
@@ -86,10 +83,7 @@ class AdminSettingsController extends CBController {
 
 	function postSaveSetting() {
 
-		if(!CRUDBooster::isSuperadmin()) {
-			CRUDBooster::insertLog(trans("crudbooster.log_try_view",['name'=>'Setting','module'=>'Setting']));
-			CRUDBooster::denyAccess();
-		}
+        $this->allowOnlySuperAdmin();
 		
 		$group = Request::get('group_setting');
 		$setting = DB::table('cms_settings')->where('group_setting',$group)->get();
@@ -152,5 +146,12 @@ class AdminSettingsController extends CBController {
         CRUDBooster::valid($rules, 'view');
     }
 
+    private function allowOnlySuperAdmin()
+    {
+        if (!CRUDBooster::isSuperadmin()) {
+            CRUDBooster::insertLog(trans("crudbooster.log_try_view", ['name' => 'Setting', 'module' => 'Setting']));
+            CRUDBooster::denyAccess();
+        }
+    }
 
 }
