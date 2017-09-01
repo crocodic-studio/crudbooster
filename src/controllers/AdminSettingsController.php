@@ -103,7 +103,7 @@ class AdminSettingsController extends CBController {
 
 			Cache::forget('setting_'.$set->name);
 		}
-		return redirect()->back()->with(['message'=>'Your setting has been saved !','message_type'=>'success']);
+        return CRUDBooster::backWithMsg('Your setting has been saved !');
 	}
 
 	function hook_before_add(&$arr) {

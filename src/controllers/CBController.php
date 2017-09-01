@@ -593,7 +593,7 @@ class CBController extends Controller {
 		$tablePK = CB::pk($table);
 		DB::table($table)->where($tablePK,$id)->update([$column => $value]);
 
-		return redirect()->back()->with(['message_type'=>'success','message'=>trans('crudbooster.alert_delete_data_success')]);
+        return CRUDBooster::backWithMsg(trans('crudbooster.alert_delete_data_success'));
 	}
 
 	public function postFindData() {
@@ -1308,16 +1308,12 @@ class CBController extends Controller {
         $ext  = $file->getClientOriginalExtension();
 
 
-        $validator = Validator::make([
-            'extension'=>$ext,
-            ],[
-            'extension'=>'in:xls,xlsx,csv'
-            ]);
+        $validator = Validator::make([ 'extension'=>$ext,], [ 'extension'=>'in:xls,xlsx,csv']);
 
         if ($validator->fails())
         {
-            $message = $validator->errors()->all();
-            return redirect()->back()->with(['message'=>implode('<br/>',$message),'message_type'=>'warning']);
+            $message = implode('<br/>',$validator->errors()->all());
+            return CRUDBooster::backWithMsg($message, 'warning');
         }
 
         //Create Directory Monthly
@@ -1354,8 +1350,7 @@ class CBController extends Controller {
 
 			$this->hookAfterDelete($id_selected);
 
-			$message = trans("crudbooster.alert_delete_selected_success");
-			return redirect()->back()->with(['message_type'=>'success','message'=>$message]);
+            return CRUDBooster::backWithMsg(trans("crudbooster.alert_delete_selected_success"));;
 		}
 
 		$action = str_replace(['-','_'],' ',$button_name);
@@ -1367,8 +1362,7 @@ class CBController extends Controller {
 		    $message = !empty($this->alert['message']) ? $this->alert['message'] : 'Error';
 		    $type = !empty($this->alert['type']) ? $this->alert['type'] : 'danger';
 		}
-		
-		return redirect()->back()->with(['message_type'=>$type,'message'=>$message]);
+        return CRUDBooster::backWithMsg($message, $type);
 	}
 
 	public function getDeleteImage() {
