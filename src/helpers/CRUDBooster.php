@@ -23,14 +23,14 @@ class CRUDBooster  {
 
 		public static function insert($table,$data=[]) {
 			$data['id'] = DB::table($table)->max('id') + 1;
-			if(!$data['created_at']) {
-				if(Schema::hasColumn($table,'created_at')) {
-					$data['created_at'] = date('Y-m-d H:i:s');
-				}
+			if(!$data['created_at'] && Schema::hasColumn($table,'created_at')) {
+                $data['created_at'] = date('Y-m-d H:i:s');
 			}
 
-			if(DB::table($table)->insert($data)) return $data['id'];
-			else return false;
+			if(DB::table($table)->insert($data)){
+			    return $data['id'];
+            }
+			return false;
 		}	
 
 		public static function first($table,$id) {
@@ -39,7 +39,7 @@ class CRUDBooster  {
 				$pk = self::pk($table);
 				return DB::table($table)->where($pk,$id)->first();
 			}
-			
+
             $first = DB::table($table);
             foreach($id as $k=>$v) {
                 $first->where($k,$v);
@@ -80,13 +80,14 @@ class CRUDBooster  {
 
 	    public static function myPrivilege() {
 	    	$roles = Session::get('admin_privileges_roles');		
-			if($roles) {
-				foreach($roles as $role) {
-					if($role->path == CRUDBooster::getModulePath()) {						
-						return $role;
-					}
-				}
+			if(!$roles) {
+			    return;
 			}
+            foreach($roles as $role) {
+                if($role->path == CRUDBooster::getModulePath()) {
+                    return $role;
+                }
+            }
 	    }
 
 	    public static function myPrivilegeId() {
@@ -174,13 +175,14 @@ class CRUDBooster  {
 
 			$session = Session::get('admin_privileges_roles');
 			foreach ($session as $v) {
-				if($v->path == self::getModulePath()) {
-					if($v->is_visible && $v->is_create && $v->is_read && $v->is_edit && $v->is_delete) {
-						return true;
-					}else{
-						return false;
-					}
+				if($v->path !== self::getModulePath()) {
+				    continue;
 				}
+                if($v->is_visible && $v->is_create && $v->is_read && $v->is_edit && $v->is_delete) {
+                    return true;
+                }
+                return false;
+
 			}
 		}
 
@@ -189,30 +191,27 @@ class CRUDBooster  {
 			$modulepath = self::getModulePath();
 			if(Cache::has('moduls_'.$modulepath)) {
 				return Cache::get('moduls_'.$modulepath);
-			}else{
-				$module = DB::table('cms_moduls')->where('path',self::getModulePath())->first();
-				return $module;
-			}			 
+			}
+            return DB::table('cms_moduls')->where('path',self::getModulePath())->first();
 		}
 
 		public static function getCurrentDashboardId() {
-			if(Request::get('d') != NULL) {				
-				Session::put('currentDashboardId',Request::get('d'));
-				Session::put('currentMenuId',0);
-				return Request::get('d');			
-			}else{
+			if(Request::get('d') == NULL) {
 				return Session::get('currentDashboardId');
 			}
+            Session::put('currentDashboardId',Request::get('d'));
+            Session::put('currentMenuId',0);
+            return Request::get('d');
+
 		}
 
 		public static function getCurrentMenuId() {			
-			if(Request::get('m') != NULL) {
-				Session::put('currentMenuId',Request::get('m'));
-				Session::put('currentDashboardId',0);
-				return Request::get('m');			
-			}else{
+			if(Request::get('m') == NULL) {
 				return Session::get('currentMenuId');
 			}
+            Session::put('currentMenuId',Request::get('m'));
+            Session::put('currentDashboardId',0);
+            return Request::get('m');
 		}
 
 		public static function sidebarDashboard() {			
@@ -351,16 +350,14 @@ class CRUDBooster  {
 	        $controllername = str_replace(["\crocodicstudio\crudbooster\controllers\\","App\Http\Controllers\\"],"",strtok(Route::currentRouteAction(),'@') );      
 	        $route_url = route($controllername.'GetIndex');
 	        
-	        if($path) {
-	            if(substr($path,0,1) == '?') {
-	                return trim($route_url,'/').$path;    
-	            }else{
-	                return $route_url.'/'.$path;
-	            }            
-	        }else{
-	            return trim($route_url,'/');
+	        if(!$path) {
+                return trim($route_url,'/');
 	        }
-	              
+
+            if(substr($path,0,1) == '?') {
+                return trim($route_url,'/').$path;
+            }
+            return $route_url.'/'.$path;
 	    }
 
 	    public static function adminPath($path=NULL) {
@@ -385,9 +382,9 @@ class CRUDBooster  {
 		public static function clearCache($name) {
 			if(Cache::forget($name)) {
 				return true;
-			}else{
-				return false;
 			}
+            return false;
+
 		}
 
 		public static function isColumnNULL($table,$field) {
@@ -866,25 +863,25 @@ class CRUDBooster  {
 		    @$get = $_GET;    
 		    $inputhtml = '';
 
-		    if($get) {
+		    if(!$get) {
+                return $inputhtml;
+            }
+            if(is_array($exception)) {
+                foreach($exception as $e) {
+                    unset($get[$e]);
+                }
+            }
 
-		        if(is_array($exception)) {
-		            foreach($exception as $e) {
-		                unset($get[$e]);
-		            }
-		        }        
+            $string_parameters = http_build_query($get);
+            $string_parameters_array = explode('&',$string_parameters);
+            foreach($string_parameters_array as $s) {
+                $part = explode('=',$s);
+                $name = urldecode($part[0]);
+                $value = urldecode($part[1]);
+                $inputhtml .= "<input type='hidden' name='$name' value='$value'/>";
+            }
 
-		        $string_parameters = http_build_query($get);
-		        $string_parameters_array = explode('&',$string_parameters);
-		        foreach($string_parameters_array as $s) {
-		            $part = explode('=',$s);
-		            $name = urldecode($part[0]);      
-		            $value = urldecode($part[1]);      
-		            $inputhtml .= "<input type='hidden' name='$name' value='$value'/>";
-		        }                                                           
-		    }
-
-		    return $inputhtml;                        
+            return $inputhtml;
 		}
 
 		public static function authAPI() {
@@ -929,18 +926,17 @@ class CRUDBooster  {
 	     
 	            $sender_token = Request::header('X-Authorization-Token');
 
-	            if(!Cache::has($sender_token)) {
-	                if(!in_array($sender_token, $server_token)) {           
-	                    $result['api_status']   = false;
-	                    $result['api_message']  = "THE TOKEN IS NOT MATCH WITH SERVER TOKEN";
-	                    $result['sender_token'] = $sender_token;
-	                    $result['server_token'] = $server_token;
-	                    $res = response()->json($result,200);
-	                    $res->send();
-	                    exit;
-	                }
-	            }else{
-	                if(Cache::get($sender_token) != $user_agent) {
+                if(!Cache::has($sender_token) && !in_array($sender_token, $server_token)) {
+                    $result['api_status']   = false;
+                    $result['api_message']  = "THE TOKEN IS NOT MATCH WITH SERVER TOKEN";
+                    $result['sender_token'] = $sender_token;
+                    $result['server_token'] = $server_token;
+                    $res = response()->json($result,200);
+                    $res->send();
+                    exit;
+                }
+
+                if(Cache::has($sender_token) && Cache::get($sender_token) != $user_agent) {
 	                    $result['api_status']   = false;
 	                    $result['api_message']  = "THE TOKEN IS ALREADY BUT NOT MATCH WITH YOUR DEVICE";
 	                    $result['sender_token'] = $sender_token;
@@ -948,8 +944,7 @@ class CRUDBooster  {
 	                    $res = response()->json($result,200);
 	                    $res->send();
 	                    exit;
-	                }
-	            }        
+	            }
 
 	            $id = array_search($sender_token,$server_token);
 	            $server_screet = $server_token_screet[$id];
