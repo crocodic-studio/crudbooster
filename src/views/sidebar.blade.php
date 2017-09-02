@@ -50,7 +50,6 @@
                 @endforeach
 
 
-
                 @if(CRUDBooster::isSuperadmin())
                     <li class="header">{{ trans('crudbooster.SUPERADMIN') }}</li>
                     <li class='treeview'>
