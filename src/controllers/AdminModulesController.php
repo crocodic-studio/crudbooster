@@ -197,8 +197,8 @@ class AdminModulesController extends CBController {
 		if(!Request::get('id')) {
 
 			if(DB::table('cms_moduls')->where('path',$path)->where('deleted_at',NULL)->count()) {
-				return redirect()->back()->with(['message'=>'Sorry the slug has already exists, please choose another !','message_type'=>'warning']);
-			}			
+                return CRUDBooster::backWithMsg('Sorry the slug has already exists, please choose another !', 'warning');
+			}
 
 			$created_at = now();			
 
@@ -243,25 +243,26 @@ class AdminModulesController extends CBController {
 			->get();
 			Session::put('admin_privileges_roles',$roles);
 			return redirect(Route("AdminModulesControllerGetStep2",["id"=>$id]));
-		}else{
-			$id = Request::get('id');
-			DB::table($this->table)->where('id',$id)->update(compact("name","table_name","icon","path"));	
 
-			$row = DB::table('cms_moduls')->where('id',$id)->first();
-			
-			if(file_exists(app_path('Http/Controllers/'.$row->controller.'.php'))) {
-				$response = file_get_contents(app_path('Http/Controllers/'.str_replace('.', '', $row->controller).'.php'));	
-			}else{
-				$response = file_get_contents(__DIR__.'/'.str_replace('.', '', $row->controller).'.php');	
-			}			
-
-			if(strpos($response, "# START COLUMNS") !== TRUE) {
-				// return redirect()->back()->with(['message'=>'Sorry, is not possible to edit the module with Module Generator Tool. Prefix and or Suffix tag is missing !','message_type'=>'warning']);	
-			}
-
-			
-			return redirect(Route("AdminModulesControllerGetStep2",["id"=>$id]));		
 		}
+
+        $id = Request::get('id');
+        DB::table($this->table)->where('id',$id)->update(compact("name","table_name","icon","path"));
+
+        $row = DB::table('cms_moduls')->where('id',$id)->first();
+
+        $response = file_get_contents(__DIR__.'/'.str_replace('.', '', $row->controller).'.php');
+        if(file_exists(app_path('Http/Controllers/'.$row->controller.'.php'))) {
+            $response = file_get_contents(app_path('Http/Controllers/'.str_replace('.', '', $row->controller).'.php'));
+        }
+
+        if(strpos($response, "# START COLUMNS") !== TRUE) {
+            // return redirect()->back()->with(['message'=>'Sorry, is not possible to edit the module with Module Generator Tool. Prefix and or Suffix tag is missing !','message_type'=>'warning']);
+        }
+
+
+        return redirect(Route("AdminModulesControllerGetStep2",["id"=>$id]));
+
 	}
 
 	public function postStep3() {
@@ -595,8 +596,6 @@ class AdminModulesController extends CBController {
 		}
 		
 	}
-	
-	
 	 
 	public function postEditSave($id) {
 		$this->cbLoader();
@@ -626,7 +625,6 @@ class AdminModulesController extends CBController {
 		CRUDBooster::redirect(Request::server('HTTP_REFERER'),trans('crudbooster.alert_update_data_success'),'success');
 		
 	}	
-
 
 	public function getTest() {
 		$code = file_get_contents(base_path('app/Http/Controllers/AdminCustomersController.php'));

@@ -1,6 +1,7 @@
 <?php namespace crocodicstudio\crudbooster\controllers;
 
 use crocodicstudio\crudbooster\controllers\Controller;
+use CRUDBooster;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;
@@ -24,7 +25,7 @@ class AdminFileManagerController extends CBController {
 
 		$path = g('path')?base64_decode(g('path')):'';
 
-		if(strpos($path, '..')!==FALSE || $path=='.' || strpos($path, '/.') !== FALSE) {
+		if(strpos($path, '..') || $path=='.' || strpos($path, '/.') ) {
 			return redirect()->route('AdminFileManagerControllerGetIndex');
 		}					
 
@@ -44,46 +45,40 @@ class AdminFileManagerController extends CBController {
 		$name = g('name');
 		$name = str_slug($name,'_');
 		Storage::makeDirectory($path.'/'.$name);
-		return redirect()->back()
-		->with(['message'=>'Directory has been created','message_type'=>'success']);
-	} 
+        return CRUDBooster::backWithMsg('The directory has been created!');
+	}
 
 	public function postUpload() {		
 		$allowedExtension = explode(',',strtolower(config('crudbooster.UPLOAD_TYPES')));
 		$path = g('path')?base64_decode(g('path')):'uploads';
-		if(Request::hasFile('userfile')) {
-			$file = Request::file('userfile');
-			$filename = $file->getClientOriginalName();
-			$ext = $file->getClientOriginalExtension();	
+        $file = Request::file('userfile');
+		if(!$file) {
+		    return null;
+        }
 
-			$isAllowed = false;
-			foreach($allowedExtension as $e) {
-				if($ext == $e) {
-					$isAllowed = true;
-					break;
-				}
-			}
+        $filename = $file->getClientOriginalName();
+        $isAllowed = in_array($file->getClientOriginalExtension(), $allowedExtension);
 
-			if($isAllowed==true) { 								
-				Storage::putFileAs($path,$file,$filename);
-				return redirect()->back()->with(['message_type'=>'success','message'=>'The file '.$filename.' has been uploaded!']);
-			}else{
-				return redirect()->back()->with(['message_type'=>'warning','message'=>'The file '.$filename.' type is not allowed!']);
-			}
-		}
+        if(!$isAllowed) {
+            return CRUDBooster::backWithMsg('The file '.$filename.' type is not allowed!', 'warning');
+        }
+
+        Storage::putFileAs($path, $file, $filename);
+        return CRUDBooster::backWithMsg('The file '.$filename.' has been uploaded!');
 	}
 
 	public function getDeleteDirectory($dir) {
 		$dir = base64_decode($dir);
 		Storage::deleteDirectory($dir);
-		return redirect()->back()->with(['message_type'=>'success','message'=>'The directory has been deleted!']);
+
+        return CRUDBooster::backWithMsg('The directory has been deleted!');
 	}
 
 	public function getDeleteFile($file) {
 		$file = base64_decode($file);
 		Storage::delete($file);
 
-		return redirect()->back()->with(['message_type'=>'success','message'=>'The file has been deleted!']);
+        return CRUDBooster::backWithMsg('The file has been deleted!');
 	}
 
 }

@@ -191,17 +191,17 @@ class AdminApiGeneratorController extends CBController {
 
 		DB::table('cms_apikey')->where('id',$id)->update(['status'=>$status]);
 
-		return redirect()->back()->with(['message'=>'You have been update api key status !','message_type'=>'success']);
+        return CRUDBooster::backWithMsg('You have been update api key status !');
 	}
 
 	public function getDeleteApiKey() {		
 
 		$id = Request::get('id');
-		if(DB::table('cms_apikey')->where('id',$id)->delete()) {
+		if(DB::table('cms_apikey')->where('id', $id)->delete()) {
 			return response()->json(['status'=>1]);
-		}else{
-			return response()->json(['status'=>0]);
 		}
+        return response()->json(['status'=>0]);
+
 	}
 
 
@@ -230,21 +230,19 @@ class AdminApiGeneratorController extends CBController {
 
 			$new_result[] = array('name'=>$ro,'type'=>$type_field);
 
-			if($type=='list' || $type=='detail') {
-				if(substr($ro,0,3)=='id_') {
-					$table2 = substr($ro,3);
-					$t2 = DB::getSchemaBuilder()->getColumnListing($table2);
-					foreach($t2 as $t) {
-						if($t!='id' && $t!='created_at' && $t!='updated_at' && $t!='deleted_at') {
+			if(in_array($type, ['list', 'detail']) && substr($ro,0,3)=='id_') {
+                $table2 = substr($ro,3);
+                $t2 = DB::getSchemaBuilder()->getColumnListing($table2);
+                foreach($t2 as $t) {
+                    if(in_array($t, ['id', 'created_at', 'updated_at', 'deleted_at'])) {
+                        continue;
+                    }
+                    if(substr($t, 0,3) == 'id_') continue;
 
-							if(substr($t, 0,3) == 'id_') continue;
-
-							$type_field   = CRUDBooster::getFieldType($table2,$t);
-							$t            = str_replace("_$table2","",$t);
-							$new_result[] = array('name'=>$table2.'_'.$t,'type'=>$type_field);
-						}
-					}
-				}
+                    $type_field   = CRUDBooster::getFieldType($table2,$t);
+                    $t            = str_replace("_$table2","",$t);
+                    $new_result[] = array('name'=>$table2.'_'.$t,'type'=>$type_field);
+                }
 			}
 		}		
 		
