@@ -62,10 +62,7 @@ class AdminSettingsController extends CBController {
 	function getShow() {
 		$this->cbLoader();
 
-		if(!CRUDBooster::isSuperadmin()) {
-			CRUDBooster::insertLog(trans("crudbooster.log_try_view",['name'=>'Setting','module'=>'Setting']));
-			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
-		}
+        $this->allowOnlySuperAdmin();
 
 		$data['page_title'] = urldecode(Request::get('group'));		
 		return view('crudbooster::setting',$data);
@@ -86,10 +83,7 @@ class AdminSettingsController extends CBController {
 
 	function postSaveSetting() {
 
-		if(!CRUDBooster::isSuperadmin()) {
-			CRUDBooster::insertLog(trans("crudbooster.log_try_view",['name'=>'Setting','module'=>'Setting']));
-			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
-		}
+        $this->allowOnlySuperAdmin();
 		
 		$group = Request::get('group_setting');
 		$setting = DB::table('cms_settings')->where('group_setting',$group)->get();
@@ -100,26 +94,8 @@ class AdminSettingsController extends CBController {
 			$content = Request::get($set->name);
 
 			if (Request::hasFile($name))
-			{			
-
-				if($set->content_input_type == 'upload_image') {
-					CRUDBooster::valid([ $name => 'image|max:10000' ],'view');
-				}else{
-					CRUDBooster::valid([ $name => 'mimes:doc,docx,xls,xlsx,ppt,pptx,pdf,zip,rar|max:20000' ], 'view');
-				}
-
-
-				$file = Request::file($name);					
-				$ext  = $file->getClientOriginalExtension();
-
-				//Create Directory Monthly 
-				Storage::makeDirectory(date('Y-m'));
-
-				//Move file to storage
-				$filename = md5(str_random(5)).'.'.$ext;
-				if($file->move(storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m')),$filename)) {						
-					$content = 'uploads/'.date('Y-m').'/'.$filename;
-				}					  
+			{
+                $content = $this->uploadFile($set);
 			}
 
 
@@ -127,7 +103,7 @@ class AdminSettingsController extends CBController {
 
 			Cache::forget('setting_'.$set->name);
 		}
-		return redirect()->back()->with(['message'=>'Your setting has been saved !','message_type'=>'success']);
+        return CRUDBooster::backWithMsg('Your setting has been saved !');
 	}
 
 	function hook_before_add(&$arr) {
@@ -141,6 +117,54 @@ class AdminSettingsController extends CBController {
 		/* REMOVE CACHE */
 		Cache::forget('setting_'.$row->name);
 	}
-	
+
+    /**
+     * @param $name
+     * @param $set
+     */
+    private function validateFileType($set)
+    {
+        $name = $set->name;
+        $rules = [$name => 'image|max:10000'];
+
+        if ($set->content_input_type !== 'upload_image') {
+            $rules = [$name => 'mimes:doc,docx,xls,xlsx,ppt,pptx,pdf,zip,rar|max:20000'];
+        }
+
+        CRUDBooster::valid($rules, 'view');
+    }
+
+    private function allowOnlySuperAdmin()
+    {
+        if (!CRUDBooster::isSuperadmin()) {
+            CRUDBooster::insertLog(trans("crudbooster.log_try_view", ['name' => 'Setting', 'module' => 'Setting']));
+            CRUDBooster::denyAccess();
+        }
+    }
+
+
+    /**
+     * @param $set
+     * @param $name
+     * @return string
+     */
+    private function uploadFile($set)
+    {
+        $this->validateFileType($set);
+
+        $file = Request::file($set->name);
+        $ext = $file->getClientOriginalExtension();
+
+        //Create Directory Monthly
+        Storage::makeDirectory(date('Y-m'));
+
+        //Move file to storage
+        $filename = md5(str_random(5)) . '.' . $ext;
+        if ($file->move(storage_path('app' . DIRECTORY_SEPARATOR . date('Y-m')), $filename)) {
+            $content = 'uploads/' . date('Y-m') . '/' . $filename;
+        }
+        return $content;
+    }
+
 
 }
