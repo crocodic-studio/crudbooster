@@ -58,7 +58,7 @@
                       <a class='btn btn-xs btn-warning' target="_blank" href='{{CRUDBooster::mainpath("download-postman")}}'>Export For POSTMAN <sup>Beta</sup></a>
                     </span>
                   </th></tr>
-              </thead> 
+              </thead>
               <tbody>
                   @if(count($apis)==0)
                   <tr>
@@ -67,17 +67,17 @@
                   @endif
                   <?php $no = 0;?>
                   @foreach($apis as $api)
-                  <?php 
+                  <?php
                     $parameters = ($api->parameters)?unserialize($api->parameters):array();
                     $responses  = ($api->responses)?unserialize($api->responses):array();
                   ?>
                                 <tr>
                                     <td><?= ++$no;?></td>
-                                    <td> 
-                                      <a href='javascript:void(0)' title='API {{$ac->nama}}' style='color:#009fe3' class='link_name_api'><?=$api->nama;?></a> &nbsp; 
+                                    <td>
+                                      <a href='javascript:void(0)' title='API {{$ac->nama}}' style='color:#009fe3' class='link_name_api'><?=$api->nama;?></a> &nbsp;
                                       <sup>
                                         <a title='Delete this API' onclick="deleteApi({{$api->id}})" href="javascript:void(0)"><i class='fa fa-trash'></i></a>
-                                        &nbsp; <a title='Edit This API' href="{{url(config('crudbooster.ADMIN_PATH').'/api-generator/edit-api').'/'.$api->id}}"><i class='fa fa-pencil'></i></a> 
+                                        &nbsp; <a title='Edit This API' href="{{url(config('crudbooster.ADMIN_PATH').'/api-generator/edit-api').'/'.$api->id}}"><i class='fa fa-pencil'></i></a>
                                       </sup>
                                       <div class='detail_api' style='display:none'>
                                           <table class='table table-bordered'>
@@ -90,29 +90,29 @@
                                                   <?php $i = 0;?>
                                                   @foreach($parameters as $param)
                                                     @if($param['used'])
-                                                    <?php 
+                                                    <?php
                                                     $param_exception = ['in','not_in','digits_between'];
                                                     if($param['config'] && substr($param['config'], 0, 1) != '*' && !in_array($param['type'], $param_exception)) continue;?>
                                                     <tr>
                                                       <td>{{++$i}}</td>
                                                       <td width="5%"><em>{{$param['type']}}</em></td>
-                                                      <td>{{$param['name']}}</td>    
+                                                      <td>{{$param['name']}}</td>
                                                       <td>
-                                                        
+
                                                         @if(substr($param['config'],0,1) == '*')
-                                                            <span class='text-info'>{{substr($param['config'],1)}}</span>                                
+                                                            <span class='text-info'>{{substr($param['config'],1)}}</span>
                                                         @else
                                                           {{$param['config']}}
                                                         @endif
 
-                                                      </td> 
-                                                      <td>{!! ($param['required'])?"<span class='label label-primary'>REQUIRED</span>":"<span class='label label-default'>OPTIONAL</span>"!!}</td>                   
+                                                      </td>
+                                                      <td>{!! ($param['required'])?"<span class='label label-primary'>REQUIRED</span>":"<span class='label label-default'>OPTIONAL</span>"!!}</td>
                                                     </tr>
                                                     @endif
-                                                  @endforeach 
+                                                  @endforeach
                                                   @if($i == 0)
                                                   <tr><td colspan='5' align="center"><i class='fa fa-search'></i> There is no parameter</td></tr>
-                                                  @endif                                                 
+                                                  @endif
                                               </tbody>
                                             </table>
                                           </td></tr>
@@ -123,7 +123,7 @@
                                                   <?php $i = 1;?>
                                                   <tr><td>{{$i++}}</td><td><em>integer</em></td><td>api_status</td></tr>
                                                   <tr><td>{{$i++}}</td><td><em>string</em></td><td>api_message</td></tr>
-                                                  
+
                                                   @if($api->aksi == 'list')
                                                   <tr class='active'><td>#</td><td>Array</td><td><strong>data</strong></td></tr>
                                                   @endif
@@ -134,7 +134,7 @@
                                                       <tr>
                                                         <td>{{$i++}}</td>
                                                         <td width="5%"><em>{{$resp['type']}}</em></td>
-                                                        <td>{{ ($api->aksi=='list')?'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- ':'' }} {{$resp['name']}}</td>                                                   
+                                                        <td>{{ ($api->aksi=='list')?'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- ':'' }} {{$resp['name']}}</td>
                                                       </tr>
                                                       @endif
                                                     @endforeach
@@ -153,9 +153,9 @@
                                     </td>
                                 </tr>
                 @endforeach
-                
+
               </tbody>
-          </table>                
+          </table>
 
 
 
