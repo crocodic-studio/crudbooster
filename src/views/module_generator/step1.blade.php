@@ -35,10 +35,9 @@
 
 <ul class="nav nav-tabs">
   @if($id)
-  <li role="presentation" class="active"><a href="{{Route('AdminModulesControllerGetStep1',['id'=>$id])}}"><i class='fa fa-info'></i> Step 1 - Module Information</a></li>
-  <li role="presentation"><a href="{{Route('AdminModulesControllerGetStep2',['id'=>$id])}}"><i class='fa fa-table'></i> Step 2 - Table Display</a></li>
-  <li role="presentation"><a href="{{Route('AdminModulesControllerGetStep3',['id'=>$id])}}"><i class='fa fa-plus-square-o'></i> Step 3 - Form Display</a></li>
-  <li role="presentation"><a href="{{Route('AdminModulesControllerGetStep4',['id'=>$id])}}"><i class='fa fa-wrench'></i> Step 4 - Configuration</a></li>
+
+            @include('crudbooster::module_generator.partials.nav_tabs', ['step' => ['active','','',''], 'id' => $id ])
+
   @else
   <li role="presentation" class="active"><a href="#"><i class='fa fa-info'></i> Step 1 - Module Information</a></li>
   <li role="presentation"><a href="#"><i class='fa fa-table'></i> Step 2 - Table Display</a></li>

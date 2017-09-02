@@ -1,12 +1,7 @@
 @extends("crudbooster::admin_template")
 @section("content")
 
-<ul class="nav nav-tabs">
-  <li role="presentation"><a href="{{Route('AdminModulesControllerGetStep1',['id'=>$id])}}"><i class='fa fa-info'></i> Step 1 - Module Information</a></li>
-  <li role="presentation"><a href="{{Route('AdminModulesControllerGetStep2',['id'=>$id])}}"><i class='fa fa-table'></i> Step 2 - Table Display</a></li>
-  <li role="presentation"><a href="{{Route('AdminModulesControllerGetStep3',['id'=>$id])}}"><i class='fa fa-plus-square-o'></i> Step 3 - Form Display</a></li>
-  <li role="presentation" class="active"><a href="{{Route('AdminModulesControllerGetStep4',['id'=>$id])}}"><i class='fa fa-wrench'></i> Step 4 - Configuration</a></li>
-</ul>
+	@include('crudbooster::module_generator.partials.nav_tabs', ['step' => ['','','','active'], 'id' => $id ])
 
 <div class="box box-default">
 	<div class="box-header">
