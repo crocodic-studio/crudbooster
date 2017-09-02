@@ -1,5 +1,5 @@
 	<?php 
-		$default = !empty($form['placeholder']) ? $form['placeholder'] : trans('crudbooster.text_prefix_option') ." ". $form['label'];
+		$default = !empty($form['placeholder']) ? $form['placeholder'] : cbTrans('text_prefix_option') ." ". $form['label'];
 		$query = str_random(5);
 		\Cache::forget($query);
 		\Cache::forever($query,$form['options']['query']);
@@ -15,7 +15,7 @@
 				var value     = "{{$value}}";
 
 				if(fk_value != '') {			
-					$current.html("<option value=''>{{trans('crudbooster.text_loading')}} {{$form['label']}}</option>");
+					$current.html("<option value=''>{{cbTrans('text_loading')}} {{$form['label']}}</option>");
 					$.get("{{CRUDBooster::mainpath('data-query')}}?query="+query+"&fk_name="+fk_name+"&fk_value="+fk_value,function(response) {
 						if(response.items.length>0) {
 							$current.html("<option value=''>{{$default}}</option>");

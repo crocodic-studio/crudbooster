@@ -79,14 +79,14 @@
                                         
             @if(CRUDBooster::getCurrentMethod() == 'getIndex')
             @if($button_show)
-            <a href="{{ CRUDBooster::mainpath().'?'.http_build_query(Request::all()) }}" id='btn_show_data' class="btn btn-sm btn-primary" title="{{trans('crudbooster.action_show_data')}}">
-              <i class="fa fa-table"></i> {{trans('crudbooster.action_show_data')}}
+            <a href="{{ CRUDBooster::mainpath().'?'.http_build_query(Request::all()) }}" id='btn_show_data' class="btn btn-sm btn-primary" title="{{cbTrans('action_show_data')}}">
+              <i class="fa fa-table"></i> {{cbTrans('action_show_data')}}
             </a>
             @endif
 
             @if($button_add && CRUDBooster::canCreate())                          
-            <a href="{{ CRUDBooster::mainpath('add').'?return_url='.urlencode(Request::fullUrl()).'&parent_id='.g('parent_id').'&parent_field='.$parent_field }}" id='btn_add_new_data' class="btn btn-sm btn-success" title="{{trans('crudbooster.action_add_data')}}">
-              <i class="fa fa-plus-circle"></i> {{trans('crudbooster.action_add_data')}}
+            <a href="{{ CRUDBooster::mainpath('add').'?return_url='.urlencode(Request::fullUrl()).'&parent_id='.g('parent_id').'&parent_field='.$parent_field }}" id='btn_add_new_data' class="btn btn-sm btn-success" title="{{cbTrans('action_add_data')}}">
+              <i class="fa fa-plus-circle"></i> {{cbTrans('action_add_data')}}
             </a>
             @endif                          
             @endif
@@ -94,13 +94,13 @@
               
             @if($button_export && CRUDBooster::getCurrentMethod() == 'getIndex')
             <a href="javascript:void(0)" id='btn_export_data' data-url-parameter='{{$build_query}}' title='Export Data' class="btn btn-sm btn-primary btn-export-data">
-              <i class="fa fa-upload"></i> {{trans("crudbooster.button_export")}}
+              <i class="fa fa-upload"></i> {{cbTrans("button_export")}}
             </a>
             @endif
 
             @if($button_import && CRUDBooster::getCurrentMethod() == 'getIndex')
             <a href="{{ CRUDBooster::mainpath('import-data') }}" id='btn_import_data' data-url-parameter='{{$build_query}}' title='Import Data' class="btn btn-sm btn-primary btn-import-data">
-              <i class="fa fa-download"></i> {{trans("crudbooster.button_import")}}
+              <i class="fa fa-download"></i> {{cbTrans("button_import")}}
             </a>
             @endif
 
@@ -124,7 +124,7 @@
 
 
           <ol class="breadcrumb">
-            <li><a href="{{CRUDBooster::adminPath()}}"><i class="fa fa-dashboard"></i> {{ trans('crudbooster.home') }}</a></li>
+            <li><a href="{{CRUDBooster::adminPath()}}"><i class="fa fa-dashboard"></i> {{ cbTrans('home') }}</a></li>
             <li class="active">{{$module->name}}</li>
           </ol>
           @else
@@ -148,7 +148,7 @@
 			@if (Session::get('message')!='')
 			<div class='alert alert-{{ Session::get("message_type") }}'>
 				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-				<h4><i class="icon fa fa-info"></i> {{ trans("crudbooster.alert_".Session::get("message_type")) }}</h4>
+				<h4><i class="icon fa fa-info"></i> {{ cbTrans("alert_".Session::get("message_type")) }}</h4>
 				{!!Session::get('message')!!}
 			</div>
 			@endif

@@ -65,10 +65,10 @@
 
       </div><!-- /.lockscreen-item -->
       <div class="text-center">
-        {{trans("crudbooster.text_enter_the_password")}}
+        {{cbTrans("text_enter_the_password")}}
       </div>
       <div class='text-center'>
-        <a href="{{route("getLogout")}}">{{trans('crudbooster.text_or_sign_in')}}</a>
+        <a href="{{route("getLogout")}}">{{cbTrans('text_or_sign_in')}}</a>
       </div>
       <div class='lockscreen-footer text-center'>
         Copyright &copy; {{date("Y")}}<br>

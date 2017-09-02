@@ -14,7 +14,7 @@
 	  <input type="hidden" name="{{$name}}" id='datamodal-input-value-{{$name}}' value="{{$value}}">
       <input type="text" id='datamodal-input-label-{{$name}}' class="form-control input-label {{$required?"required":""}}" {{$required?"required":""}} value="{{$datamodal_value}}" readonly>
       <span class="input-group-btn">
-        <button class="btn btn-primary" onclick="showModal{{$name}}()" type="button"><i class='fa fa-search'></i> {{trans('crudbooster.datamodal_browse_data')}}</button>			
+        <button class="btn btn-primary" onclick="showModal{{$name}}()" type="button"><i class='fa fa-search'></i> {{cbTrans('datamodal_browse_data')}}</button>
       </span>
     </div><!-- /input-group -->
 
@@ -52,7 +52,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title"><i class='fa fa-search'></i> {{trans('crudbooster.datamodal_browse_data')}} | {{$form['label']}}</h4>
+        <h4 class="modal-title"><i class='fa fa-search'></i> {{cbTrans('datamodal_browse_data')}} | {{$form['label']}}</h4>
       </div>
       <div class="modal-body">
         <iframe id='iframe-modal-{{$name}}' style="border:0;height: 430px;width: 100%" src=""></iframe>

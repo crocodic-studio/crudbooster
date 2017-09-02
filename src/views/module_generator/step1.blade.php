@@ -58,7 +58,7 @@
         <div class="form-group">
             <label for="">Table</label>                   
             <select name="table" id="table" required class="select2 form-control" value="{{$row->table_name}}">
-                <option value="">{{trans('crudbooster.text_prefix_option')}} Table</option>
+                <option value="">{{cbTrans('text_prefix_option')}} Table</option>
                 @foreach($tables_list as $table)                    
 
                     <option {{($table == $row->table_name)?"selected":""}} value="{{$table}}">{{$table}}</option>
@@ -93,7 +93,7 @@
             <input checked type='checkbox' name='create_menu' value='1'/> Also create menu for this module <a href='#' title='If you check this, we will create the menu for this module'>(?)</a>
         
         <div class='pull-right'>
-            <a class='btn btn-default' href='{{Route("AdminModulesControllerGetIndex")}}'> {{trans('crudbooster.button_back')}}</a> 
+            <a class='btn btn-default' href='{{Route("AdminModulesControllerGetIndex")}}'> {{cbTrans('button_back')}}</a>
             <input type="submit" class="btn btn-primary" value="Step 2 &raquo;">
         </div>
     </div>

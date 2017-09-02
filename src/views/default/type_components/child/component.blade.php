@@ -22,14 +22,14 @@
 			<div class='row'>
 				<div class='col-sm-10'>
 					<div class="panel panel-default">
-						<div class="panel-heading"><i class="fa fa-pencil-square-o"></i> {{trans("crudbooster.text_form")}}</div>
+						<div class="panel-heading"><i class="fa fa-pencil-square-o"></i> {{cbTrans("text_form")}}</div>
 						<div class="panel-body child-form-area">
 							@foreach($form['columns'] as $col)	
 							<?php $name_column = $name.$col['name'];?>
 							<div class='form-group'>
 								@if($col['type']!='hidden')
 								<label class="control-label col-sm-2">{{$col['label']}}
-								@if(!empty($col['required'])) <span class="text-danger" title="{{trans('crudbooster.this_field_is_required')}}">*</span> @endif
+								@if(!empty($col['required'])) <span class="text-danger" title="{{cbTrans('this_field_is_required')}}">*</span> @endif
 								</label>
 								@endif
 								<div class="col-sm-10">
@@ -67,7 +67,7 @@
 									  <input type="hidden" class="input-id">
 								      <input type="text" class="form-control input-label {{$col['required']?"required":""}}" readonly>
 								      <span class="input-group-btn">
-								        <button class="btn btn-primary" onclick="showModal{{$name_column}}()" type="button"><i class='fa fa-search'></i> {{trans('crudbooster.datamodal_browse_data')}}</button>
+								        <button class="btn btn-primary" onclick="showModal{{$name_column}}()" type="button"><i class='fa fa-search'></i> {{cbTrans('datamodal_browse_data')}}</button>
 								      </span>
 								    </div><!-- /input-group -->
 
@@ -107,7 +107,7 @@
 									    <div class="modal-content">
 									      <div class="modal-header">
 									        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-									        <h4 class="modal-title"><i class='fa fa-search'></i> {{trans('crudbooster.datamodal_browse_data')}} {{$col['label']}}</h4>
+									        <h4 class="modal-title"><i class='fa fa-search'></i> {{cbTrans('datamodal_browse_data')}} {{$col['label']}}</h4>
 									      </div>
 									      <div class="modal-body">
 									        <iframe id='iframe-modal-{{$name_column}}' style="border:0;height: 430px;width: 100%" src=""></iframe>
@@ -128,12 +128,12 @@
 									  <input type="hidden" class="input-id">
 								      <input type="text" class="form-control input-label {{$col['required']?"required":""}}" readonly>
 								      <span class="input-group-btn">
-								        <button class="btn btn-primary" id="btn-upload-{{$name_column}}" onclick="showFakeUpload{{$name_column}}()" type="button"><i class='fa fa-search'></i> {{trans('crudbooster.datamodal_browse_file')}}</button>
+								        <button class="btn btn-primary" id="btn-upload-{{$name_column}}" onclick="showFakeUpload{{$name_column}}()" type="button"><i class='fa fa-search'></i> {{cbTrans('datamodal_browse_file')}}</button>
 								      </span>
 								    </div><!-- /input-group -->
 
 								    <div id="loading-{{$name_column}}" class='text-info' style="display: none">
-								    	<i class='fa fa-spin fa-spinner'></i> {{trans('crudbooster.text_loading')}} 
+								    	<i class='fa fa-spin fa-spinner'></i> {{cbTrans('text_loading')}}
 								    </div>
 
 								    <input type="file" id='fake-upload-{{$name_column}}' style="display: none">
@@ -163,7 +163,7 @@
 										  var filesize = Math.round(parseInt(file.size)/1024);
 										  
 										  if(filesize > max_size) {
-										  	sweetAlert('{{trans("crudbooster.alert_warning")}}','{{trans("crudbooster.your_file_size_is_too_big")}}','warning');
+										  	sweetAlert('{{cbTrans("alert_warning")}}','{{cbTrans("your_file_size_is_too_big")}}','warning');
 										  	return false;
 										  }
 
@@ -175,12 +175,12 @@
 
 										  if(is_image_only) {
 										  	  if($.inArray(extension, img_extension) == -1) {
-										  	  	sweetAlert('{{trans("crudbooster.alert_warning")}}','{{trans("crudbooster.your_file_extension_is_not_allowed")}}','warning');
+										  	  	sweetAlert('{{cbTrans("alert_warning")}}','{{cbTrans("your_file_extension_is_not_allowed")}}','warning');
 												return false;    
 										  	  }
 										  }else{										  	
 											  if($.inArray(extension, available_extension) == -1) {
-												sweetAlert('{{trans("crudbooster.alert_warning")}}','{{trans("crudbooster.your_file_extension_is_not_allowed")}}!','warning');
+												sweetAlert('{{cbTrans("alert_warning")}}','{{cbTrans("your_file_extension_is_not_allowed")}}!','warning');
 												return false;    
 											  } 
 										  }
@@ -248,7 +248,7 @@
 									<select id='{{$name_column}}' name='child-{{$col["name"]}}' class='form-control select2 {{$col['required']?"required":""}}' 										
 										{{($col['readonly']===true)?"readonly":""}} 
 										>
-										<option value=''>{{trans('crudbooster.text_prefix_option')}} {{$col['label']}}</option>
+										<option value=''>{{cbTrans('text_prefix_option')}} {{$col['label']}}</option>
 										<?php 
 											if($col['datatable']) {
 												$tableJoin = explode(',',$col['datatable'])[0];
@@ -330,11 +330,11 @@
 
 								function deleteRow{{$name}}(t) {
 
-									if(confirm("{{trans('crudbooster.delete_title_confirm')}}")) {
+									if(confirm("{{cbTrans('delete_title_confirm')}}")) {
 										$(t).parent().parent().remove();
 										if( $('#table-{{$name}} tbody tr').length == 0) {
 											var colspan = $('#table-{{$name}} thead tr th').length;
-											$('#table-{{$name}} tbody').html("<tr class='trNull'><td colspan='"+colspan+"' align='center'>{{trans('crudbooster.table_data_not_found')}}</td></tr>");
+											$('#table-{{$name}} tbody').html("<tr class='trNull'><td colspan='"+colspan+"' align='center'>{{cbTrans('table_data_not_found')}}</td></tr>");
 										}
 									}									
 								}
@@ -342,7 +342,7 @@
 									var p = $(t).parent().parent(); //parentTR 
 									currentRow = p;
 									p.addClass('warning');
-									$('#btn-add-table-{{$name}}').val('{{trans("crudbooster.save_changes")}}');
+									$('#btn-add-table-{{$name}}').val('{{cbTrans("save_changes")}}');
 									@foreach($form['columns'] as $c)
 										@if($c['type']=='select')
 											$('#{{$name.$c["name"]}}').val( p.find(".{{$c['name']}} input").val() ).trigger("change");
@@ -370,7 +370,7 @@
 									$('#panel-form-{{$name}} .required').each(function() {
 										var v = $(this).val();																	
 										if(v == '') {											
-											sweetAlert("{{trans('crudbooster.alert_warning')}}","{{trans('crudbooster.please_complete_the_form')}}","warning");
+											sweetAlert("{{cbTrans('alert_warning')}}","{{cbTrans('please_complete_the_form')}}","warning");
 											is_false += 1;
 										}
 									})
@@ -431,15 +431,15 @@
 										currentRow.replaceWith(trRow);
 										currentRow = null;
 									}
-									$('#btn-add-table-{{$name}}').val('{{trans("crudbooster.button_add_to_table")}}');
+									$('#btn-add-table-{{$name}}').val('{{cbTrans("button_add_to_table")}}');
 									$('#btn-reset-form-{{$name}}').click();									
 								}
 							</script>
 							@endpush
 						</div>
 						<div class="panel-footer" align="right">
-							<input type='button' class='btn btn-default' id="btn-reset-form-{{$name}}" onclick="resetForm{{$name}}()" value='{{trans("crudbooster.button_reset")}}'/>
-							<input type='button' id='btn-add-table-{{$name}}' class='btn btn-primary' onclick="addToTable{{$name}}()" value='{{trans("crudbooster.button_add_to_table")}}'/>
+							<input type='button' class='btn btn-default' id="btn-reset-form-{{$name}}" onclick="resetForm{{$name}}()" value='{{cbTrans("button_reset")}}'/>
+							<input type='button' id='btn-add-table-{{$name}}' class='btn btn-primary' onclick="addToTable{{$name}}()" value='{{cbTrans("button_add_to_table")}}'/>
 						</div>
 					</div>
 				</div>
@@ -447,7 +447,7 @@
 
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<i class='fa fa-table'></i> {{trans('crudbooster.table_detail')}}
+					<i class='fa fa-table'></i> {{cbTrans('table_detail')}}
 				</div>
 				<div class="panel-body no-padding table-responsive"  style="max-height: 400px;overflow: auto;">
 					<table id='table-{{$name}}' class='table table-striped table-bordered'>
@@ -456,7 +456,7 @@
 							@foreach($form['columns'] as $col)						
 								<th>{{$col['label']}}</th>
 							@endforeach		
-								<th width="90px">{{trans('crudbooster.action_label')}}</th>
+								<th width="90px">{{cbTrans('action_label')}}</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -541,7 +541,7 @@
 
 						@if(count($data_child)==0)
 						<tr class="trNull">
-							<td colspan="{{count($form['columns'])+1}}" align="center">{{trans('crudbooster.table_data_not_found')}}</td>
+							<td colspan="{{count($form['columns'])+1}}" align="center">{{cbTrans('table_data_not_found')}}</td>
 						</tr>
 						@endif
 					</tbody>
