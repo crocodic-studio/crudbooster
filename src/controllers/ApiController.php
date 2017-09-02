@@ -441,7 +441,7 @@ class ApiController extends Controller {
 		$this->hook_after($posts,$result);
 
 		return response()->json($result);
-	}
+	}}
 
     /**
      * @param $param
