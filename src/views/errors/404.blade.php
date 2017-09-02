@@ -35,12 +35,12 @@
           <div class="error-page">
             <h2 class="headline text-yellow"> 404</h2>
             <div class="error-content">
-              <h3><i class="fa fa-warning text-yellow"></i> {{trans('crudbooster.page_not_found')}}</h3>
+              <h3><i class="fa fa-warning text-yellow"></i> {{cbTrans('page_not_found')}}</h3>
               <p>                
-                {{trans('crudbooster.page_not_found_text')}}
+                {{cbTrans('page_not_found_text')}}
               </p>
               <p>Tips : <br/>                
-                {{trans('crudbooster.page_not_found_tips')}}
+                {{cbTrans('page_not_found_tips')}}
               </p>
             </div><!-- /.error-content -->
           </div><!-- /.error-page -->

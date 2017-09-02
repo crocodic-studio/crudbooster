@@ -6,7 +6,7 @@
  			
 			
 			@if(CRUDBooster::getCurrentMethod() != 'getProfile')
-	        <p><a href='{{CRUDBooster::mainpath()}}'>{{trans("crudbooster.form_back_to_list",['module'=>CRUDBooster::getCurrentModule()->name])}}</a></p>      
+	        <p><a href='{{CRUDBooster::mainpath()}}'>{{cbTrans("form_back_to_list",['module'=>CRUDBooster::getCurrentModule()->name])}}</a></p>
 	        @endif
 		
             <!-- Box -->
@@ -21,24 +21,24 @@
 				<input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <div class="box-body">
 					<div class='form-group'>
-						<label>{{trans('crudbooster.privileges_name')}}</label>
+						<label>{{cbTrans('privileges_name')}}</label>
 						<input type='text' class='form-control' name='name' required value='{{ @$row->name }}'/>
 						<div class="text-danger">{{ $errors->first('name') }}</div>
 					</div>
 
 					<div class='form-group'>
-						<label>{{trans('crudbooster.set_as_superadmin')}}</label><br/>
+						<label>{{cbTrans('set_as_superadmin')}}</label><br/>
 						<div id='set_as_superadmin' class='radio inline'>
-							<label><input required {{ (@$row->is_superadmin==1)?'checked':'' }} type='radio' name='is_superadmin' value='1'/> {{trans('crudbooster.confirmation_yes')}}</label> &nbsp;&nbsp;
-							<label><input {{ (@$row->is_superadmin==0)?'checked':'' }} type='radio' name='is_superadmin' value='0'/> {{trans('crudbooster.confirmation_no')}}</label>
+							<label><input required {{ (@$row->is_superadmin==1)?'checked':'' }} type='radio' name='is_superadmin' value='1'/> {{cbTrans('confirmation_yes')}}</label> &nbsp;&nbsp;
+							<label><input {{ (@$row->is_superadmin==0)?'checked':'' }} type='radio' name='is_superadmin' value='0'/> {{cbTrans('confirmation_no')}}</label>
 						</div>
 						<div class="text-danger">{{ $errors->first('is_superadmin') }}</div>
 					</div>
 
 					<div class='form-group'>
-						<label>{{trans('crudbooster.chose_theme_color')}}</label>
+						<label>{{cbTrans('chose_theme_color')}}</label>
 						<select name='theme_color' class='form-control' required>
-							<option value=''>{{trans('crudbooster.chose_theme_color_select')}}</option>
+							<option value=''>{{cbTrans('chose_theme_color_select')}}</option>
 							<?php 
 								$skins = array('skin-blue','skin-blue-light','skin-yellow','skin-yellow-light','skin-green','skin-green-light','skin-purple','skin-purple-light','skin-red','skin-red-light','skin-black','skin-black-light');
 								foreach($skins as $skin):
@@ -71,7 +71,7 @@
 					</div>
 	
 					<div id='privileges_configuration' class='form-group'>
-						<label>{{trans('crudbooster.privileges_configuration')}}</label>
+						<label>{{cbTrans('privileges_configuration')}}</label>
 						@push('bottom')
 						<script>
 							$(function() {
@@ -110,7 +110,7 @@
 						<table class='table table-striped table-hover table-bordered'>
 							<thead>
 								<tr class='active'>
-									<th width='3%'>{{trans('crudbooster.privileges_module_list_no')}}</th><th width='60%'>{{trans('crudbooster.privileges_module_list_mod_names')}}</th><th>&nbsp;</th><th>{{trans('crudbooster.privileges_module_list_view')}}</th><th>{{trans('crudbooster.privileges_module_list_create')}}</th><th>{{trans('crudbooster.privileges_module_list_read')}}</th><th>{{trans('crudbooster.privileges_module_list_update')}}</th><th>{{trans('crudbooster.privileges_module_list_delete')}}</th>
+									<th width='3%'>{{cbTrans('privileges_module_list_no')}}</th><th width='60%'>{{cbTrans('privileges_module_list_mod_names')}}</th><th>&nbsp;</th><th>{{cbTrans('privileges_module_list_view')}}</th><th>{{cbTrans('privileges_module_list_create')}}</th><th>{{cbTrans('privileges_module_list_read')}}</th><th>{{cbTrans('privileges_module_list_update')}}</th><th>{{cbTrans('privileges_module_list_delete')}}</th>
 								</tr>
 								<tr class='info'>
 									<th>&nbsp;</th>
@@ -152,8 +152,8 @@
 
                 </div><!-- /.box-body -->
                 <div class="box-footer" align="right">
-                	<button type='button' onclick="location.href='{{CRUDBooster::mainpath()}}'" class='btn btn-default'>{{trans("crudbooster.button_cancel")}}</button>					
-					<button type='submit' class='btn btn-primary'><i class='fa fa-save'></i> {{trans("crudbooster.button_save")}}</button>
+                	<button type='button' onclick="location.href='{{CRUDBooster::mainpath()}}'" class='btn btn-default'>{{cbTrans("button_cancel")}}</button>
+					<button type='submit' class='btn btn-primary'><i class='fa fa-save'></i> {{cbTrans("button_save")}}</button>
                 </div><!-- /.box-footer-->
             </div><!-- /.box -->
 

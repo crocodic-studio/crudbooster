@@ -6,7 +6,7 @@
 						@if($form['options']['multiple']==true)
 						  multiple: true,
 						@endif
-						placeholder: "{{ ($form['placeholder'])?:trans('crudbooster.text_prefix_option')." ".$form['label'] }}",				  							  					  
+						placeholder: "{{ ($form['placeholder'])?:cbTrans('text_prefix_option')." ".$form['label'] }}",
 						allowClear: {{$form['options']['allow_clear']?'true':'false'}}
 					});					  
 				})
@@ -21,7 +21,7 @@
 			<select style='width:100%' class='form-control' id="{{$name}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} name="{{$name}}{{($form['options']['multiple']==true)?'[]':''}}" {{ ($form['options']['multiple'])?'multiple="multiple"':'' }} >					
 					
 					@if($form['options']['multiple']==false)
-						<option value=''>{{trans('crudbooster.text_prefix_option')}} {{$form['label']}}</option>
+						<option value=''>{{cbTrans('text_prefix_option')}} {{$form['label']}}</option>
 					@endif
 
 					@php 

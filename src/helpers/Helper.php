@@ -401,3 +401,11 @@ if(!function_exists('rrmdir')) {
 	 }
 }
 
+
+
+if(!function_exists('cbTrans')) {
+    function cbTrans($key) {
+        return trans('crudbooster.'.$key);
+    }
+}
+

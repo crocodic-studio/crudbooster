@@ -1,4 +1,4 @@
-	<?php $default = !empty($form['default']) ? $form['default'] : trans('crudbooster.text_prefix_option') ." ". $form['label'];?>
+	<?php $default = !empty($form['default']) ? $form['default'] : cbTrans('text_prefix_option') ." ". $form['label'];?>
 	@if($form['parent_select'])
 
 	@push('bottom')
@@ -16,7 +16,7 @@
 				var value = "{{$value}}";				
 
 				if(fk_value!='') {					
-					$current.html("<option value=''>{{trans('crudbooster.text_loading')}} {{$form['label']}}");
+					$current.html("<option value=''>{{cbTrans('text_loading')}} {{$form['label']}}");
 					$.get("{{CRUDBooster::mainpath('data-table')}}?table="+table+"&label="+label+"&fk_name="+fk_name+"&fk_value="+fk_value+"datatable_where="+encodeURI(datatableWhere),function(response) {
 						if(response) {
 							$current.html("<option value=''>{{$default}}");
