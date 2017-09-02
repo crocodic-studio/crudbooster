@@ -1,4 +1,7 @@
-<?php 
+<form class='form-horizontal' method='post' id="form" enctype="multipart/form-data" action='{{CRUDBooster::mainpath("add-save")}}'>
+	<input type="hidden" name="_token" value="{{ csrf_token() }}">
+	<input type='hidden' name='return_url' value='{{Request::fullUrl()}}'/>
+@php
 	
 //Loading Assets
 $asset_already = [];
@@ -7,13 +10,13 @@ foreach($forms as $form) {
 	$name = $form['name'];
 
 	if(in_array($type, $asset_already)) continue;
-?>
+@endphp
 	@if(file_exists(base_path('/vendor/crocodicstudio/crudbooster/src/views/default/type_components/'.$type.'/asset.blade.php')))
 		@include('crudbooster::default.type_components.'.$type.'.asset')  
 	@elseif(file_exists(resource_path('views/vendor/crudbooster/type_components/'.$type.'/asset.blade.php')))
 		@include('vendor.crudbooster.type_components.'.$type.'.asset')  
 	@endif
-<?php
+@php
 	$asset_already[] = $type;
 }
 
@@ -68,7 +71,7 @@ foreach($forms as $form) {
 			$header_group_class = ($header_group_class)?:"header-group-$index";	
 		}      
 
-		?>
+	@endphp
 		@if(file_exists(base_path('/vendor/crocodicstudio/crudbooster/src/views/default/type_components/'.$type.'/component.blade.php')))
 			@include('crudbooster::default.type_components.'.$type.'.component')
 		@elseif(file_exists(resource_path('views/vendor/crudbooster/type_components/'.$type.'/component.blade.php')))
@@ -77,4 +80,7 @@ foreach($forms as $form) {
 			<p class='text-danger'>{{$type}} is not found in type component system</p><br/>
 		@endif
 	<?php 
-	}        			                	
+	} ?>
+
+    <p align="right"><input type='submit' class='btn btn-primary' value='Add Menu'/></p>
+    </form>
