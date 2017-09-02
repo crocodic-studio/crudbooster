@@ -4,7 +4,8 @@
         <div class="modal-content">
 
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
                 <h4 class="modal-title">Create a directory</h4>
             </div>
 
@@ -15,7 +16,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Directory Name</label>
-                        <input type="text" name="name" class="form-control" required >
+                        <input type="text" name="name" class="form-control" required>
                     </div>
                 </div>
 

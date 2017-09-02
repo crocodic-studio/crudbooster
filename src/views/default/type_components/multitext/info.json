@@ -1,7 +1,12 @@
 {
-	"title":"Multitext Input",
-	"type":"multitext",
-	"options":[
-		{"label":"Max Fields","type":"text","name":"max_fields","required":1}
-	]
+  "title": "Multitext Input",
+  "type": "multitext",
+  "options": [
+    {
+      "label": "Max Fields",
+      "type": "text",
+      "name": "max_fields",
+      "required": 1
+    }
+  ]
 }

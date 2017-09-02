@@ -10,7 +10,8 @@
             </div>
 
 
-            <form enctype="multipart/form-data" method="post" action="{{route('AdminFileManagerControllerPostUpload')}}">
+            <form enctype="multipart/form-data" method="post"
+                  action="{{route('AdminFileManagerControllerPostUpload')}}">
                 <input type="hidden" name='_token' value="{{csrf_token()}}">
                 <input type="hidden" name="path" value="{{g('path')}}">
 

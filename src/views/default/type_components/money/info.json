@@ -1,8 +1,18 @@
 {
-	"title":"Money Input",
-	"type":"money",
-	"options":[
-		{"label":"Thousands Separator","name":"thousands_separator","type":"text","required":0},
-		{"label":"Cents Limit","name":"cents_limit","type":"text","required":0}
-	]
+  "title": "Money Input",
+  "type": "money",
+  "options": [
+    {
+      "label": "Thousands Separator",
+      "name": "thousands_separator",
+      "type": "text",
+      "required": 0
+    },
+    {
+      "label": "Cents Limit",
+      "name": "cents_limit",
+      "type": "text",
+      "required": 0
+    }
+  ]
 }
