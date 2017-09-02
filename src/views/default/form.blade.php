@@ -5,9 +5,9 @@
 
         @if(CRUDBooster::getCurrentMethod() != 'getProfile' && $button_cancel)
           @if(g('return_url'))
-          <p><a title='Return' href='{{g("return_url")}}'><i class='fa fa-chevron-circle-left '></i> &nbsp; {{trans("crudbooster.form_back_to_list",['module'=>CRUDBooster::getCurrentModule()->name])}}</a></p>       
+          <p><a title='Return' href='{{g("return_url")}}'><i class='fa fa-chevron-circle-left '></i> &nbsp; {{cbTrans("form_back_to_list",['module'=>CRUDBooster::getCurrentModule()->name])}}</a></p>
           @else
-          <p><a title='Main Module' href='{{CRUDBooster::mainpath()}}'><i class='fa fa-chevron-circle-left '></i> &nbsp; {{trans("crudbooster.form_back_to_list",['module'=>CRUDBooster::getCurrentModule()->name])}}</a></p>       
+          <p><a title='Main Module' href='{{CRUDBooster::mainpath()}}'><i class='fa fa-chevron-circle-left '></i> &nbsp; {{cbTrans("form_back_to_list",['module'=>CRUDBooster::getCurrentModule()->name])}}</a></p>
           @endif
         @endif
         
@@ -45,25 +45,25 @@
                             <div class="col-sm-10">
                               @if($button_cancel && CRUDBooster::getCurrentMethod() != 'getDetail')                       
                                 @if(g('return_url'))
-                                <a href='{{g("return_url")}}' class='btn btn-default'><i class='fa fa-chevron-circle-left'></i> {{trans("crudbooster.button_back")}}</a>
+                                <a href='{{g("return_url")}}' class='btn btn-default'><i class='fa fa-chevron-circle-left'></i> {{cbTrans("button_back")}}</a>
                                 @else 
-                                <a href='{{CRUDBooster::mainpath("?".http_build_query(@$_GET)) }}' class='btn btn-default'><i class='fa fa-chevron-circle-left'></i> {{trans("crudbooster.button_back")}}</a>
+                                <a href='{{CRUDBooster::mainpath("?".http_build_query(@$_GET)) }}' class='btn btn-default'><i class='fa fa-chevron-circle-left'></i> {{cbTrans("button_back")}}</a>
                                 @endif
                               @endif
                               @if(CRUDBooster::canCreate() || CRUDBooster::canUpdate())
 
                                  @if(CRUDBooster::canCreate() && $button_addmore==TRUE && $command == 'add')                                                                                                     
-                                    <input type="submit" name="submit" value='{{trans("crudbooster.button_save_more")}}' class='btn btn-success'>
+                                    <input type="submit" name="submit" value='{{cbTrans("button_save_more")}}' class='btn btn-success'>
                                  @endif
 
                                  @if($button_save && $command != 'detail')
-                                    <input type="submit" name="submit" value='{{trans("crudbooster.button_save")}}' class='btn btn-success'>
+                                    <input type="submit" name="submit" value='{{cbTrans("button_save")}}' class='btn btn-success'>
                                  @endif                                 
                                  
                               @endif
                               
                               @if(CB::getCurrentMethod() == 'getProfile')
-                                <input type="submit" name="submit" value='{{trans("crudbooster.button_save")}}' class='btn btn-success'>
+                                <input type="submit" name="submit" value='{{cbTrans("button_save")}}' class='btn btn-success'>
                               @endif
                             </div>
                           </div>                             

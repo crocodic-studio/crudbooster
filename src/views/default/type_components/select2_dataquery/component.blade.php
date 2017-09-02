@@ -6,7 +6,7 @@
 					  @if($form['options']['multiple']==true)
 					  multiple: true,
 					  @endif			
-					  placeholder: "{{ ($form['placeholder'])?:trans('crudbooster.text_prefix_option')." ".$form['label'] }}",				  							  					  
+					  placeholder: "{{ ($form['placeholder'])?:cbTrans('text_prefix_option')." ".$form['label'] }}",
 					  allowClear: {{$form['options']['allow_clear']?'true':'false'}},
 					  escapeMarkup: function (markup) { return markup; }, 							        							    					  
 					  
@@ -53,7 +53,7 @@
 
 						@if($form['options']['ajax_mode'] == false)
 							@if($form['options']['multiple']==false)
-							<option value=''>{{trans('crudbooster.text_prefix_option')}} {{$form['label']}}</option>
+							<option value=''>{{cbTrans('text_prefix_option')}} {{$form['label']}}</option>
 							@endif
 							<?php 
 																							

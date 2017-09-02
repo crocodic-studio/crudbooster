@@ -12,22 +12,22 @@
 						?>
 							<p><a data-lightbox='roadtrip' href='{{$url}}'><img style='max-width:160px' title="Image For {{$form['label']}}" src='{{$url}}'/></a></p>
 						<?php else:?>
-							<p><a href='{{$url}}'>{{trans("crudbooster.button_download_file")}}</a></p>
+							<p><a href='{{$url}}'>{{cbTrans("button_download_file")}}</a></p>
 						<?php endif;
 							echo "<input type='hidden' name='_$name' value='$value'/>";
 					else:
-						echo "<p class='text-danger'><i class='fa fa-exclamation-triangle'></i> ".trans("crudbooster.file_broken")."</p>";
+						echo "<p class='text-danger'><i class='fa fa-exclamation-triangle'></i> ".cbTrans("file_broken")."</p>";
 					endif; 
 				?>
 				@if(!$readonly || !$disabled)
-				<p><a class='btn btn-danger btn-delete btn-sm' onclick="if(!confirm('{{trans("crudbooster.delete_title_confirm")}}')) return false" href='{{url(CRUDBooster::mainpath("delete-image?image=".$value."&id=".$row->id."&column=".$name))}}'><i class='fa fa-ban'></i> {{trans('crudbooster.text_delete')}} </a></p>
+				<p><a class='btn btn-danger btn-delete btn-sm' onclick="if(!confirm('{{cbTrans("delete_title_confirm")}}')) return false" href='{{url(CRUDBooster::mainpath("delete-image?image=".$value."&id=".$row->id."&column=".$name))}}'><i class='fa fa-ban'></i> {{cbTrans('text_delete')}} </a></p>
 				@endif
 			@endif	
 			@if(!$value)
 			<input type='file' id="{{$name}}" title="{{$form['label']}}" {{$required}} {{$readonly}} {{$disabled}} class='form-control' name="{{$name}}"/>							
 			<p class='help-block'>{{ @$form['help'] }}</p>
 			@else
-			<p class='text-muted'><em>{{trans("crudbooster.notice_delete_file_upload")}}</em></p>
+			<p class='text-muted'><em>{{cbTrans("notice_delete_file_upload")}}</em></p>
 			@endif
 			<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
 

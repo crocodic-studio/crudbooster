@@ -401,3 +401,9 @@ if(!function_exists('rrmdir')) {
 	 }
 }
 
+if(!function_exists('cbTrans')) {
+    function cbTrans($key, $params = null)
+    {
+        return trans('crudbooster.'.$key, $params);
+    }
+}

@@ -13,7 +13,7 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <!-- Theme style -->
     <link href="{{asset('vendor/crudbooster/assets/adminlte/dist/css/AdminLTE.min.css')}}" rel="stylesheet" type="text/css" />
-    
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -29,7 +29,7 @@
           background-repeat: no-repeat;
           background-position: center;
           background-size: cover;
-      }      
+      }
     </style>
 
   </head>
@@ -65,10 +65,10 @@
 
       </div><!-- /.lockscreen-item -->
       <div class="text-center">
-        {{trans("crudbooster.text_enter_the_password")}}
+        {{cbTrans("text_enter_the_password")}}
       </div>
       <div class='text-center'>
-        <a href="{{route("getLogout")}}">{{trans('crudbooster.text_or_sign_in')}}</a>
+        <a href="{{route("getLogout")}}">{{cbTrans('text_or_sign_in')}}</a>
       </div>
       <div class='lockscreen-footer text-center'>
         Copyright &copy; {{date("Y")}}<br>
