@@ -1729,4 +1729,8 @@ $php .='
         {
             static::redirect(static::adminPath(),trans('crudbooster.denied_access'));
         }
+
+        public static function icon($icon){
+	        return '<i class=\'fa fa-'.$icon.'\'></i>';
+        }
 }
