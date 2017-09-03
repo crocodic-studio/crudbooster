@@ -87,6 +87,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->app->register('Maatwebsite\Excel\ExcelServiceProvider');
         $this->app->register('Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider');
         $this->app->register('Intervention\Image\ImageServiceProvider');
+        $this->app->register('Imanghafoori\Widgets\WidgetsServiceProvider');
 
         $loader = AliasLoader::getInstance();
         $loader->alias('PDF', 'Barryvdh\DomPDF\Facade');

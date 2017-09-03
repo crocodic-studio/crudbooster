@@ -4,5 +4,5 @@
         {{ cbTrans('powered_by') }} {{CRUDBooster::getSetting('appname')}}
     </div>
     <!-- Default to the left -->
-    <strong>{{ cbTrans('copyright') }} &copy; <?php echo date('Y') ?>. {{ cbTrans('all_rights_reserved') }} .</strong>
+    <strong>{{ cbTrans('copyright') }} &copy; {!! date('Y')  !!} {{ cbTrans('all_rights_reserved') }} .</strong>
 </footer>
