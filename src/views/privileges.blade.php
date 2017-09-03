@@ -24,38 +24,30 @@
                   action='{{ ($privilege->id)?route("AdminPrivilegesControllerPostEditSave")."/$privilege->id":route("AdminPrivilegesControllerPostAddSave") }}'>
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <div class="box-body">
+                    
                     <div class='form-group'>
                         <label>{{ cbTrans('privileges_name')}}</label>
                         <input type='text' class='form-control' name='name' required value='{{ $privilege->name }}'/>
                         <div class="text-danger">{{ $errors->first('name') }}</div>
                     </div>
 
+
                     <div class='form-group'>
-                        <label>{{ cbTrans('set_as_superadmin')}}</label><br/>
-                        <div id='set_as_superadmin' class='radio inline'>
-                            <label>
-                                <input required {{ ($privilege->is_superadmin==1)?'checked':'' }} type='radio' name='is_superadmin' value='1'/>
-                                {{ cbTrans('confirmation_yes')}}
-                            </label>
-                            &nbsp;&nbsp;
-                            <label>
-                                <input {{ ($privilege->is_superadmin==0)?'checked':'' }} type='radio' name='is_superadmin' value='0'/>
-                                {{ cbTrans('confirmation_no')}}
-                            </label>
-                        </div>
-                        <div class="text-danger">{{ $errors->first('is_superadmin') }}</div>
+                        @include('crudbooster::_privileges.set_super_admin')
                     </div>
 
                     <div class='form-group'>
                        @include('crudbooster::_privileges.themePicker')
                     </div>
 
+
                     <div id='privileges_configuration' class='form-group'>
                         <label>{{ cbTrans('privileges_configuration')}}</label>
-
                         @push('bottom')
                             @include('crudbooster::_privileges.bottom_js')
                         @endpush
+
+
 
                         <table class='table table-striped table-hover table-bordered'>
                             <thead>
@@ -65,6 +57,7 @@
                                     @widget('\crocodicstudio\crudbooster\widgets\PrivilegeTable', ['roleId' => $id])
                             </tbody>
                         </table>
+
 
                     </div>
                     </div>
