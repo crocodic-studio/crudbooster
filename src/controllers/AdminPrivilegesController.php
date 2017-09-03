@@ -105,16 +105,12 @@ class AdminPrivilegesController extends CBController {
 	{
 		$this->cbLoader();
 		
-		$row = DB::table($this->table)->where("id",$id)->first();		
+		$role = DB::table($this->table)->where("id",$id)->first() ?: new \stdClass();
 
-		$page_title = trans('crudbooster.edit_data_page_title',['module'=>'Privilege','name'=>$row->name]);
+		$page_title = trans('crudbooster.edit_data_page_title',['module'=>'Privilege','name'=>$role->name]);
 
-		$moduls = DB::table("cms_moduls")
-		->where('is_protected',0)
-		->select("cms_moduls.*")
-		->orderby("name","asc")->get();
 		$page_menu = Route::getCurrentRoute()->getActionName();
-		return view('crudbooster::privileges',compact('row','page_title','moduls','page_menu'));
+		return view('crudbooster::privileges',compact('role','page_title', 'page_menu', 'id'));
 	}
 	 
 	public function postEditSave($id) {
