@@ -42,7 +42,7 @@
 <script>
     var ASSET_URL = "{{asset('/')}}";
     var APP_NAME = "{{CRUDBooster::getSetting('appname')}}";
-    var ADMIN_PATH = '{{url(config("crudbooster.ADMIN_PATH")) }}';
+    var ADMIN_PATH = '{{url(cbConfig("ADMIN_PATH")) }}';
     var NOTIFICATION_JSON = "{{route('AdminNotificationsControllerGetLatestJson')}}";
     var NOTIFICATION_INDEX = "{{route('AdminNotificationsControllerGetIndex')}}";
 

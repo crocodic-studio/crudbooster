@@ -59,7 +59,7 @@ class CRUDBooster  {
 		}
 
 		public static function me() {
-			return DB::table(config('crudbooster.USER_TABLE'))->where('id',Session::get('admin_id'))->first();
+			return DB::table(cbConfig('USER_TABLE'))->where('id',Session::get('admin_id'))->first();
 		}
 
 		public static function myId() {
@@ -361,7 +361,7 @@ class CRUDBooster  {
 	    }
 
 	    public static function adminPath($path=NULL) {
-	    	return url(config('crudbooster.ADMIN_PATH').'/'.$path);
+	    	return url(cbConfig('ADMIN_PATH').'/'.$path);
 	    }
 
 	    public static function getCurrentId() {
@@ -619,7 +619,7 @@ class CRUDBooster  {
 			$f = explode('.', $table);
 
 			if(count($f) == 1) {
-				return array("table"=>$f[0], "database"=>config('crudbooster.MAIN_DB_DATABASE'));
+				return array("table"=>$f[0], "database"=>cbConfig('MAIN_DB_DATABASE'));
 			}
 			if(count($f) == 2){
 				return array("database"=>$f[0], "table"=>$f[1]);
@@ -835,13 +835,13 @@ class CRUDBooster  {
 
 	    public static function listTables() {
 	        $tables = array();
-	        $multiple_db = config('crudbooster.MULTIPLE_DATABASE_MODULE');
+	        $multiple_db = cbConfig('MULTIPLE_DATABASE_MODULE');
 	        $multiple_db = ($multiple_db)?$multiple_db:array();
-	        $db_database = config('crudbooster.MAIN_DB_DATABASE');
+	        $db_database = cbConfig('MAIN_DB_DATABASE');
 
 	        if($multiple_db) {
 	        	try {	            
-	        		$multiple_db[] = config('crudbooster.MAIN_DB_DATABASE');
+	        		$multiple_db[] = cbConfig('MAIN_DB_DATABASE');
 	        		$query_table_schema = implode("','",$multiple_db);
 			    	$tables = DB::select("SELECT CONCAT(TABLE_SCHEMA,'.',TABLE_NAME) FROM INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA != 'mysql' AND TABLE_SCHEMA != 'performance_schema' AND TABLE_SCHEMA != 'information_schema' AND TABLE_SCHEMA != 'phpmyadmin' AND TABLE_SCHEMA IN ('$query_table_schema')");				    				
 		        }catch(\Exception $e) {
@@ -1023,7 +1023,7 @@ class CRUDBooster  {
 		}
 
 		public static function getNameTable($columns) {
-		    $name_col_candidate = config('crudbooster.NAME_FIELDS_CANDIDATE');
+		    $name_col_candidate = cbConfig('NAME_FIELDS_CANDIDATE');
 		    $name_col_candidate = explode(',',$name_col_candidate);  
 		    $name_col = '';
 		    foreach($columns as $c) {
@@ -1099,12 +1099,12 @@ class CRUDBooster  {
 		public static function generateController($table,$name=NULL) {  
 	        
 	        $exception          = ['id','created_at','updated_at','deleted_at'];
-	        $image_candidate    = explode(',',config('crudbooster.IMAGE_FIELDS_CANDIDATE'));
-	        $password_candidate = explode(',',config('crudbooster.PASSWORD_FIELDS_CANDIDATE'));
-	        $phone_candidate    = explode(',',config('crudbooster.PHONE_FIELDS_CANDIDATE'));
-	        $email_candidate    = explode(',',config('crudbooster.EMAIL_FIELDS_CANDIDATE'));
-	        $name_candidate     = explode(',',config('crudbooster.NAME_FIELDS_CANDIDATE'));
-	        $url_candidate      = explode(',',config("crudbooster.URL_FIELDS_CANDIDATE"));
+	        $image_candidate    = explode(',',cbConfig('IMAGE_FIELDS_CANDIDATE'));
+	        $password_candidate = explode(',',cbConfig('PASSWORD_FIELDS_CANDIDATE'));
+	        $phone_candidate    = explode(',',cbConfig('PHONE_FIELDS_CANDIDATE'));
+	        $email_candidate    = explode(',',cbConfig('EMAIL_FIELDS_CANDIDATE'));
+	        $name_candidate     = explode(',',cbConfig('NAME_FIELDS_CANDIDATE'));
+	        $url_candidate      = explode(',',cbConfig("URL_FIELDS_CANDIDATE"));
 
 
 	        $controllername = ucwords(str_replace('_',' ',$table));        

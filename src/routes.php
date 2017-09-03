@@ -30,7 +30,7 @@ Route::group(['middleware'=>['web'],'namespace'=>$namespace],function() {
 
 
 /* ROUTER FOR WEB */
-Route::group(['middleware'=>['web'],'prefix'=>config('crudbooster.ADMIN_PATH'),'namespace'=>$namespace], function () {
+Route::group(['middleware'=>['web'],'prefix'=>cbConfig('ADMIN_PATH'),'namespace'=>$namespace], function () {
 		
 	Route::post('unlock-screen', ['uses'=>'AdminController@postUnlockScreen','as'=>'postUnlockScreen']);
 	Route::get('lock-screen', ['uses'=>'AdminController@getLockscreen','as'=>'getLockScreen']);	
@@ -48,9 +48,9 @@ Route::group(['middleware'=>['web'],'prefix'=>config('crudbooster.ADMIN_PATH'),'
 
 
 // ROUTER FOR OWN CONTROLLER FROM CB
-Route::group(['middleware'=>['web','\crocodicstudio\crudbooster\middlewares\CBBackend'],'prefix'=>config('crudbooster.ADMIN_PATH'),'namespace'=>'App\Http\Controllers'], function () {			
+Route::group(['middleware'=>['web','\crocodicstudio\crudbooster\middlewares\CBBackend'],'prefix'=>cbConfig('ADMIN_PATH'),'namespace'=>'App\Http\Controllers'], function () {
 		
-		if(Request::is(config('crudbooster.ADMIN_PATH'))) {
+		if(Request::is(cbConfig('ADMIN_PATH'))) {
 			$menus = DB::table('cms_menus')->where('is_dashboard',1)->first();
 			if($menus) {
 				if($menus->type == 'Statistic') {
@@ -86,10 +86,10 @@ Route::group(['middleware'=>['web','\crocodicstudio\crudbooster\middlewares\CBBa
 
 
 /* ROUTER FOR BACKEND CRUDBOOSTER */
-Route::group(['middleware'=>['web','\crocodicstudio\crudbooster\middlewares\CBBackend'],'prefix'=>config('crudbooster.ADMIN_PATH'),'namespace'=>$namespace], function () {
+Route::group(['middleware'=>['web','\crocodicstudio\crudbooster\middlewares\CBBackend'],'prefix'=>cbConfig('ADMIN_PATH'),'namespace'=>$namespace], function () {
 
 	/* DO NOT EDIT THESE BELLOW LINES */
-	if(Request::is(config('crudbooster.ADMIN_PATH'))) {
+	if(Request::is(cbConfig('ADMIN_PATH'))) {
 		$menus = DB::table('cms_menus')->where('is_dashboard',1)->first();
 		if(!$menus) {		
 			CRUDBooster::routeController('/','AdminController',$namespace='\crocodicstudio\crudbooster\controllers');	
@@ -116,7 +116,7 @@ Route::group(['middleware'=>['web','\crocodicstudio\crudbooster\middlewares\CBBa
 	}	
 });
 
-Route::group(['middleware'=>['web','\crocodicstudio\crudbooster\middlewares\CBSuperadmin'],'prefix'=>config('crudbooster.ADMIN_PATH'),'namespace'=>$namespace], function () {	
+Route::group(['middleware'=>['web','\crocodicstudio\crudbooster\middlewares\CBSuperadmin'],'prefix'=>cbConfig('ADMIN_PATH'),'namespace'=>$namespace], function () {
 	
 	CRUDBooster::routeController('privileges','AdminPrivilegesController',$namespace='\crocodicstudio\crudbooster\controllers');
 	CRUDBooster::routeController('settings','AdminSettingsController',$namespace='\crocodicstudio\crudbooster\controllers');

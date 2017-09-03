@@ -47,7 +47,7 @@ class AdminController extends CBController {
 	{							
 
 		if(CRUDBooster::myId()) {
-			return redirect(config('crudbooster.ADMIN_PATH'));
+			return redirect(cbConfig('ADMIN_PATH'));
 		}
 
 		return view('crudbooster::login');

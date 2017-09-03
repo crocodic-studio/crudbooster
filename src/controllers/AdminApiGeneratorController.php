@@ -221,9 +221,9 @@ class AdminApiGeneratorController extends CBController {
 
 			$type_field = CRUDBooster::getFieldType($table,$ro);
 
-			$type_field = (array_search($ro, explode(',',config('crudbooster.EMAIL_FIELDS_CANDIDATE')) )!==FALSE)?"email":$type_field;
-			$type_field = (array_search($ro, explode(',',config('crudbooster.IMAGE_FIELDS_CANDIDATE')) )!==FALSE)?"image":$type_field;
-			$type_field = (array_search($ro, explode(',',config('crudbooster.PASSWORD_FIELDS_CANDIDATE')) )!==FALSE)?"password":$type_field;
+			$type_field = (array_search($ro, explode(',',cbConfig('EMAIL_FIELDS_CANDIDATE')) )!==FALSE)?"email":$type_field;
+			$type_field = (array_search($ro, explode(',',cbConfig('IMAGE_FIELDS_CANDIDATE')) )!==FALSE)?"image":$type_field;
+			$type_field = (array_search($ro, explode(',',cbConfig('PASSWORD_FIELDS_CANDIDATE')) )!==FALSE)?"password":$type_field;
 
 			$type_field = (substr($ro, -3) == '_id')?"integer":$type_field;
 			$type_field = (substr($ro, 0, 3) == 'id_')?"integer":$type_field;

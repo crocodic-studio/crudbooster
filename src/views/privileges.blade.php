@@ -54,7 +54,7 @@
                                 @include('crudbooster::_privileges.thead')
                             </thead>
                             <tbody>
-                                    @widget('\crocodicstudio\crudbooster\widgets\PrivilegeTable', ['roleId' => $id])
+                                @widget('\crocodicstudio\crudbooster\widgets\PrivilegeTable', ['roleId' => $id])
                             </tbody>
                         </table>
 

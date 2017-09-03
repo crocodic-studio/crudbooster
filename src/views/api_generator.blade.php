@@ -121,7 +121,7 @@
                     }
 
                     no_params = 0;
-                    $.get('{{url(config("crudbooster.ADMIN_PATH"))."/api-generator/column-table"}}/' + t + '/' + type, function (resp) {
+                    $.get('{{url(cbConfig("ADMIN_PATH"))."/api-generator/column-table"}}/' + t + '/' + type, function (resp) {
                         $.each(resp, function (i, obj) {
 
                             switch (obj.type) {
@@ -182,7 +182,7 @@
                         $('textarea[name=sub_query_1]').prop('readonly', true);
                     }
 
-                    $.get('{{url(config("crudbooster.ADMIN_PATH"))."/api-generator/column-table"}}/' + t + '/' + type, function (resp) {
+                    $.get('{{url(cbConfig("ADMIN_PATH"))."/api-generator/column-table"}}/' + t + '/' + type, function (resp) {
                         var no_params = 0;
                         $('#table-parameters tbody').empty();
                         $.each(resp, function (i, obj) {

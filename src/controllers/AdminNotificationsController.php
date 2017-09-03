@@ -30,7 +30,7 @@ class AdminNotificationsController extends CBController {
         $this->button_import = false;
         $this->global_privilege = TRUE;
 
-        $read_notification_url = url(config('crudbooster.ADMIN_PATH')).'/notifications/read';
+        $read_notification_url = url(cbConfig('ADMIN_PATH')).'/notifications/read';
 
         $this->col = array();		        
 		$this->col[] = array("label"=>"Content","name"=>"content","callback_php"=>'"<a href=\"'.$read_notification_url.'/$row->id\">$row->content</a>"' );	
