@@ -217,7 +217,7 @@ class CRUDBooster  {
 		public static function sidebarDashboard() {			
 
 			$menu = DB::table('cms_menus')
-		  	->where('cms_privileges','like','%"'.self::myPrivilegeName().'"%')
+            ->where('id_cms_privileges',self::myPrivilegeId())
 		  	->where('is_dashboard',1)
 		  	->where('is_active',1)		  	
 		  	->first();		  	
@@ -246,7 +246,7 @@ class CRUDBooster  {
 
 		public static function sidebarMenu() {
 			$menu_active = DB::table('cms_menus')
-		  	->where('cms_privileges','like','%"'.self::myPrivilegeName().'"%')
+            ->where('id_cms_privileges',self::myPrivilegeId())
 		  	->where('parent_id',0)
 		  	->where('is_active',1)
 		  	->where('is_dashboard',0)
