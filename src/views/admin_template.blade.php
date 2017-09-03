@@ -82,7 +82,7 @@
 
     @stack('head')
 </head>
-<body class="@php echo (Session::get('theme_color'))?:'skin-blue'; echo ' '; echo cbConfig('ADMIN_LAYOUT'); @endphp">
+<body class="{!! Session::get('theme_color','skin-blue') !!} {!! cbConfig('ADMIN_LAYOUT') !!}">
 <div id='app' class="wrapper">
 
     <!-- Header -->

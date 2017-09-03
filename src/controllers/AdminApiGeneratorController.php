@@ -114,6 +114,7 @@ class AdminApiGeneratorController extends CBController {
 		$data['page_title'] = 'API Generator';
 		$data['page_menu']  = Route::getCurrentRoute()->getActionName();
 		$data['apikeys'] = DB::table('cms_apikey')->get();
+
 		return view('crudbooster::api_key',$data); 
 	}
 
@@ -221,9 +222,9 @@ class AdminApiGeneratorController extends CBController {
 
 			$type_field = CRUDBooster::getFieldType($table,$ro);
 
-			$type_field = (array_search($ro, explode(',',cbConfig('EMAIL_FIELDS_CANDIDATE')) )!==FALSE)?"email":$type_field;
-			$type_field = (array_search($ro, explode(',',cbConfig('IMAGE_FIELDS_CANDIDATE')) )!==FALSE)?"image":$type_field;
-			$type_field = (array_search($ro, explode(',',cbConfig('PASSWORD_FIELDS_CANDIDATE')) )!==FALSE)?"password":$type_field;
+			$type_field = (array_search($ro, explode(',',cbConfig('EMAIL_FIELDS_CANDIDATE')) ))?"email":$type_field;
+			$type_field = (array_search($ro, explode(',',cbConfig('IMAGE_FIELDS_CANDIDATE')) ))?"image":$type_field;
+			$type_field = (array_search($ro, explode(',',cbConfig('PASSWORD_FIELDS_CANDIDATE')) ))?"password":$type_field;
 
 			$type_field = (substr($ro, -3) == '_id')?"integer":$type_field;
 			$type_field = (substr($ro, 0, 3) == 'id_')?"integer":$type_field;
