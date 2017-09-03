@@ -2,7 +2,7 @@
 <header class="main-header">
 
     <!-- Logo -->
-    <a href="{{url(config('crudbooster.ADMIN_PATH'))}}" title='{{CRUDBooster::getSetting('appname')}}'
+    <a href="{{url(cbConfig('ADMIN_PATH'))}}" title='{{CRUDBooster::getSetting('appname')}}'
        class="logo">{{CRUDBooster::getSetting('appname')}}</a>
 
     <!-- Header Navbar -->

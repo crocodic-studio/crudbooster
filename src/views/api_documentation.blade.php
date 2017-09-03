@@ -38,7 +38,7 @@
                     })
                 })
                 function deleteApi(id) {
-                    var url = "{{url(config('crudbooster.ADMIN_PATH').'/api-generator/delete-api')}}/" + id;
+                    var url = "{{url(cbConfig('ADMIN_PATH').'/api-generator/delete-api')}}/" + id;
                     swal({
                         title: "Are you sure?",
                         text: "You will not be able to recover this data!",
@@ -92,7 +92,7 @@
                                 <a title='Delete this API' onclick="deleteApi({{$api->id}})"
                                    href="javascript:void(0)"><i class='fa fa-trash'></i></a>
                                 &nbsp; <a title='Edit This API'
-                                          href="{{url(config('crudbooster.ADMIN_PATH').'/api-generator/edit-api').'/'.$api->id}}"><i
+                                          href="{{url(cbConfig('ADMIN_PATH').'/api-generator/edit-api').'/'.$api->id}}"><i
                                             class='fa fa-pencil'></i></a>
                             </sup>
                             <div class='detail_api' style='display:none'>

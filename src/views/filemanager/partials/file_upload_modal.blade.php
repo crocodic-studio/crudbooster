@@ -20,7 +20,7 @@
                         <label>Filename</label>
                         <input type="file" name="userfile" class="form-control" required>
                         <div class="help-block">
-                            File type support only {{ config('crudbooster.UPLOAD_TYPES') }}
+                            File type support only {{ cbConfig('UPLOAD_TYPES') }}
                         </div>
                     </div>
                 </div>

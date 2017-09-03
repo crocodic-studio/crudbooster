@@ -426,6 +426,12 @@ if(!function_exists('cbStyleSheet')) {
     function cbStyleSheet($key)
     {
         return '<link rel="stylesheet" type="text/css" href="'.cbAsset($key).'"/>';
+    }
+}
 
+if(!function_exists('cbConfig')) {
+    function cbConfig($key)
+    {
+        return confif('crudbooster.'.$key);
     }
 }

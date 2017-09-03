@@ -196,7 +196,7 @@ $name = str_slug($form['label'], '');
                                                             filename = $('#fake-upload-{{$name_column}}').val().replace(/C:\\fakepath\\/i, '');
                                                             var extension = filename.split('.').pop().toLowerCase();
                                                             var img_extension = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
-                                                            var available_extension = "{{config('crudbooster.UPLOAD_TYPES')}}".split(",");
+                                                            var available_extension = "{{cbConfig('UPLOAD_TYPES')}}".split(",");
                                                             var is_image_only = {{ ($col['upload_type'] == 'image')?"true":"false" }};
 
                                                             if (is_image_only) {

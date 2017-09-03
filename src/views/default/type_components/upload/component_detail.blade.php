@@ -1,5 +1,5 @@
 <?php
-$imagesExtension = explode(',', config('crudbooster.IMAGE_EXTENSIONS'));
+$imagesExtension = explode(',', cbConfig('IMAGE_EXTENSIONS'));
 $ext = pathinfo($value, PATHINFO_EXTENSION);
 if(Storage::exists($value)):
 if(in_array($ext, $imagesExtension)):?>
