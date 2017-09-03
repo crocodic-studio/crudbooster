@@ -6,44 +6,38 @@
 <!-- REQUIRED JS SCRIPTS -->
 
 <!-- jQuery 2.1.3 -->
-<script src="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/jQuery/jQuery-2.1.4.min.js') }}"></script>
-
+{!! cbScript('adminlte/plugins/jQuery/jQuery-2.1.4.min.js') !!}
 <!-- Bootstrap 3.3.2 JS -->
-<script src="{{ asset ('vendor/crudbooster/assets/adminlte/bootstrap/js/bootstrap.min.js') }}"
-        type="text/javascript"></script>
-<!-- AdminLTE App -->
-<script src="{{ asset ('vendor/crudbooster/assets/adminlte/dist/js/app.js') }}" type="text/javascript"></script>
+{!! cbScript('adminlte/bootstrap/js/bootstrap.min.js') !!}
+{!! cbScript('adminlte/dist/js/app.js') !!}
+{!! cbScript('adminlte/plugins/datepicker/bootstrap-datepicker.js') !!}
 
-<!--BOOTSTRAP DATEPICKER-->
-<script src="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/datepicker/bootstrap-datepicker.js') }}"></script>
-<link rel="stylesheet" href="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/datepicker/datepicker3.css') }}">
+{!! cbStyleSheet('adminlte/plugins/datepicker/datepicker3.css') !!}
 
 <!--BOOTSTRAP DATERANGEPICKER-->
-<script src="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/daterangepicker/moment.min.js') }}"></script>
-<script src="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/daterangepicker/daterangepicker.js') }}"></script>
-<link rel="stylesheet"
-      href="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/daterangepicker/daterangepicker-bs3.css') }}">
+{!! cbScript('adminlte/plugins/daterangepicker/moment.min.js') !!}
+{!! cbScript('adminlte/plugins/daterangepicker/daterangepicker.js') !!}
+{!! cbStyleSheet('adminlte/plugins/daterangepicker/daterangepicker-bs3.css') !!}
 
 <!-- Bootstrap time Picker -->
-<link rel="stylesheet"
-      href="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/timepicker/bootstrap-timepicker.min.css') }}">
-<script src="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/timepicker/bootstrap-timepicker.min.js') }}"></script>
 
-<link rel='stylesheet' href='{{ asset("vendor/crudbooster/assets/lightbox/dist/css/lightbox.css") }}'/>
-<script src="{{ asset('vendor/crudbooster/assets/lightbox/dist/js/lightbox.min.js') }}"></script>
+{!! cbStyleSheet('adminlte/plugins/timepicker/bootstrap-timepicker.min.css') !!}
+{!! cbScript('adminlte/plugins/timepicker/bootstrap-timepicker.min.js') !!}
+
+{!! cbStyleSheet('lightbox/dist/css/lightbox.css') !!}
+{!! cbScript('lightbox/dist/js/lightbox.min.js') !!}
 
 <!--SWEET ALERT-->
-<script src="{{asset('vendor/crudbooster/assets/sweetalert/dist/sweetalert.min.js')}}"></script>
-<link rel="stylesheet" type="text/css" href="{{asset('vendor/crudbooster/assets/sweetalert/dist/sweetalert.css')}}">
+{!! cbScript('sweetalert/dist/sweetalert.min.js') !!}
+{!! cbStyleSheet('sweetalert/dist/sweetalert.css') !!}
 
 <!--MONEY FORMAT-->
 <script src="{{asset('vendor/crudbooster/jquery.price_format.2.0.min.js')}}"></script>
 
 <!--DATATABLE-->
-<link rel="stylesheet"
-      href="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/datatables/dataTables.bootstrap.css')}}">
-<script src="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/datatables/jquery.dataTables.min.js')}}"></script>
-<script src="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/datatables/dataTables.bootstrap.min.js')}}"></script>
+{!! cbStyleSheet('adminlte/plugins/datatables/dataTables.bootstrap.css') !!}
+{!! cbScript('adminlte/plugins/datatables/jquery.dataTables.min.js') !!}
+{!! cbScript('adminlte/plugins/datatables/dataTables.bootstrap.min.js') !!}
 
 <script>
     var ASSET_URL = "{{asset('/')}}";
@@ -60,6 +54,7 @@
         $('.datatables-simple').DataTable();
     })
 </script>
-<script src="{{asset('vendor/crudbooster/assets/js/main.js').'?r='.time()}}"></script>
+{!! cbScript('js/main.js?r='.time()) !!}
+
 
 	

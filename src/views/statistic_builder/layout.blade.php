@@ -11,11 +11,9 @@
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 
     <!-- Bootstrap 3.3.2 -->
-    <link href="{{ asset("vendor/crudbooster/assets/adminlte/bootstrap/css/bootstrap.min.css") }}" rel="stylesheet"
-          type="text/css"/>
+    {!! cbStyleSheet('adminlte/bootstrap/css/bootstrap.min.css') !!}
     <!-- Font Awesome Icons -->
-    <link href="{{asset("vendor/crudbooster/assets/adminlte/font-awesome/css")}}/font-awesome.min.css" rel="stylesheet"
-          type="text/css"/>
+    {!! cbStyleSheet('adminlte/font-awesome/css/font-awesome.min.css') !!}
     <!-- Ionicons -->
     <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css"/>
 
@@ -27,25 +25,22 @@
     <!-- REQUIRED JS SCRIPTS -->
 
     <!-- jQuery 2.1.3 -->
-    <script src="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/jQuery/jQuery-2.1.4.min.js') }}"></script>
+    {!! cbScript('adminlte/plugins/jQuery/jQuery-2.1.4.min.js') !!}
 
     <!-- Bootstrap 3.3.2 JS -->
-    <script src="{{ asset ('vendor/crudbooster/assets/adminlte/bootstrap/js/bootstrap.min.js') }}"
-            type="text/javascript"></script>
+    {!! cbScript('adminlte/bootstrap/js/bootstrap.min.js') !!}
+
     <!-- AdminLTE App -->
-    <script src="{{ asset ('vendor/crudbooster/assets/adminlte/dist/js/app.js') }}" type="text/javascript"></script>
+    {!! cbScript('adminlte/dist/js/app.js') !!}
 
 
     <!-- Theme style -->
-    <link href="{{ asset("vendor/crudbooster/assets/adminlte/dist/css/AdminLTE.min.css")}}" rel="stylesheet"
-          type="text/css"/>
-    <link href="{{ asset("vendor/crudbooster/assets/adminlte/dist/css/skins/_all-skins.min.css")}}" rel="stylesheet"
-          type="text/css"/>
+    {!! cbStyleSheet('adminlte/dist/css/AdminLTE.min.css') !!}
+    {!! cbStyleSheet('adminlte/dist/css/skins/_all-skins.min.css') !!}
 
     <!--SWEET ALERT-->
-    <script src="{{asset('vendor/crudbooster/assets/sweetalert/dist/sweetalert.min.js')}}"></script>
-    <link rel="stylesheet" type="text/css" href="{{asset('vendor/crudbooster/assets/sweetalert/dist/sweetalert.css')}}">
-
+    {!! cbScript('sweetalert/dist/sweetalert.min.js') !!}
+    {!! cbStyleSheet('sweetalert/dist/sweetalert.css') !!}
     @stack('head')
 </head>
 <body class="<?php echo (Session::get('theme_color')) ?: 'skin-blue'?> old-transition layout-top-nav fixed">
@@ -173,7 +168,7 @@
             Powered By {{CRUDBooster::getSetting('appname')}}
         </div>
         <!-- Default to the left -->
-        <strong>Copyright &copy; <?php echo date('Y') ?>. All rights reserved.</strong>
+        <strong>Copyright &copy; {!! date('Y') !!}. All rights reserved.</strong>
     </footer>
 
 </div><!-- ./wrapper -->
@@ -182,7 +177,7 @@
       Both of these plugins are recommended to enhance the
       user experience -->
 <!-- SlimScroll 1.3.0 -->
-<script src="{{ asset('vendor/crudbooster/assets/adminlte/plugins/slimScroll/jquery.slimscroll.min.js')}}"></script>
+{!! cbScript('adminlte/plugins/slimScroll/jquery.slimscroll.min.js') !!}
 
 @stack('bottom')
 </body>

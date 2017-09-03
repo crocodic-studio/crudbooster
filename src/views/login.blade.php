@@ -10,19 +10,18 @@
 
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <!-- Bootstrap 3.3.2 -->
-    <link href="{{asset('vendor/crudbooster/assets/adminlte/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet"
-          type="text/css"/>
+    {!! cbStyleSheet('adminlte/bootstrap/css/bootstrap.min.css') !!}
+
     <!-- Font Awesome Icons -->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"
           type="text/css"/>
     <!-- Theme style -->
-    <link href="{{asset('vendor/crudbooster/assets/adminlte/dist/css/AdminLTE.min.css')}}" rel="stylesheet"
-          type="text/css"/>
+    {!! cbStyleSheet('adminlte/dist/css/AdminLTE.min.css') !!}
 
     <!-- support rtl-->
     @if (App::getLocale() == 'ar')
         <link rel="stylesheet" href="//cdn.rawgit.com/morteza/bootstrap-rtl/v3.3.4/dist/css/bootstrap-rtl.min.css">
-        <link href="{{ asset("vendor/crudbooster/assets/rtl.css")}}" rel="stylesheet" type="text/css"/>
+        {!! cbStyleSheet('rtl.css') !!}
 @endif
 
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -32,7 +31,7 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
 
-    <link rel='stylesheet' href='{{asset("vendor/crudbooster/assets/css/main.css")}}'/>
+    {!! cbStyleSheet('css/main.css') !!}
     <style type="text/css">
         .login-page, .register-page {
             background: {{ CRUDBooster::getSetting("login_background_color")?:'#dddddd'}} url('{{ CRUDBooster::getSetting("login_background_image")?asset(CRUDBooster::getSetting("login_background_image")):asset('vendor/crudbooster/assets/bg_blur3.jpg') }}');
@@ -96,9 +95,9 @@
             </div>
 
             <div class='row'>
-                <div class='col-xs-12' align="center"><p
-                            style="padding:10px 0px 10px 0px">{{cbTrans("text_forgot_password")}} <a
-                                href='{{route("getForgot")}}'>{{cbTrans("click_here")}}</a></p></div>
+                <div class='col-xs-12' align="center">
+                    <p style="padding:10px 0px 10px 0px">{{cbTrans("text_forgot_password")}}
+                        <a href='{{route("getForgot")}}'>{{cbTrans("click_here")}}</a></p></div>
             </div>
         </form>
 
@@ -112,9 +111,8 @@
 
 
 <!-- jQuery 2.1.3 -->
-<script src="{{asset('vendor/crudbooster/assets/adminlte/plugins/jQuery/jQuery-2.1.4.min.js')}}"></script>
+{!! cbScript('adminlte/plugins/jQuery/jQuery-2.1.4.min.js') !!}
 <!-- Bootstrap 3.3.2 JS -->
-<script src="{{asset('vendor/crudbooster/assets/adminlte/bootstrap/js/bootstrap.min.js')}}"
-        type="text/javascript"></script>
+{!! cbScript('adminlte/bootstrap/js/bootstrap.min.js') !!}
 </body>
 </html>
