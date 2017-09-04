@@ -1,7 +1,7 @@
 <div class="panel-heading">
     <strong>Menu Order (Active)</strong>
     <span id='menu-saved-info' style="display:none" class='pull-right text-success'>
-                        <i class='fa fa-check'></i> Menu Saved !</span>
+                        {!! CB::icon('check') !!} Menu Saved !</span>
 </div>
 <div class="panel-body clearfix">
 <ul class='draggable-menu draggable-menu-active'>
@@ -25,8 +25,9 @@
                                  title="{{$child->is_dashboard?'This is setted as Dashboard':''}}">
                                 <i class='{{($child->is_dashboard)?"icon-is-dashboard fa fa-dashboard":$child->icon}}'></i> {{$child->name}}
                                 <span class='pull-right'>
-                                                        <a class='fa fa-pencil' title='Edit'
-                                                           href='{{route("AdminMenusControllerGetEdit",["id"=>$child->id])}}?return_url={{urlencode(Request::fullUrl())}}'></a>&nbsp;&nbsp;<a
+                                    <a class='fa fa-pencil' title='Edit'
+                                        href='{{route("AdminMenusControllerGetEdit",["id"=>$child->id])}}?return_url={{urlencode(Request::fullUrl())}}'></a>
+                                    &nbsp;&nbsp;<a
                                             title="Delete" class='fa fa-trash'
                                             onclick='{{CRUDBooster::deleteConfirm(route("AdminMenusControllerGetDelete",["id"=>$child->id]))}}'
                                             href='javascript:void(0)'>
