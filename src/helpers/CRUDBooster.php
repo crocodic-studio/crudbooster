@@ -257,21 +257,7 @@ class CRUDBooster  {
 
 		  	foreach($menu_active as &$menu) {
 
-		  		try{
-		  			switch ($menu->type) {
-			  			case 'Route':		  				  				
-			  				$url = route($menu->path);
-			  				break;
-			  			default:
-			  			case 'URL':
-			  				$url = $menu->path;
-			  				break;
-			  			case 'Controller & Method':
 		  		$url = self::menuUrl($menu);
-			  				break;
-			  			case 'Module':
-			  			case 'Statistic':
-			  				$url = self::adminPath($menu->path);
 
 		  		$menu->url = $url;
 		  		$menu->url_path = trim(str_replace(url('/'),'',$url),"/");
@@ -282,7 +268,9 @@ class CRUDBooster  {
 		  		->where('cms_privileges','like','%"'.self::myPrivilegeName().'"%')
 		  		->where('parent_id',$menu->id)
 		  		->select('cms_menus.*')
-		  		->orderby('sorting','asc')->get();
+		  		->orderby('sorting','asc')
+                ->get();
+
 		  		if(count($child)) {
 		  			foreach($child as &$c) {
                         $url = self::menuUrl($c);
@@ -298,17 +286,17 @@ class CRUDBooster  {
 		}
 
 		public static function deleteConfirm($redirectTo) {
-			echo "swal({   
-				title: \"".trans('crudbooster.delete_title_confirm')."\",   
-				text: \"".trans('crudbooster.delete_description_confirm')."\",   
-				type: \"warning\",   
+			echo 'swal({   
+				title: "'.trans('crudbooster.delete_title_confirm').'",   
+				text: "'.trans('crudbooster.delete_description_confirm').'",   
+				type: "warning",   
 				showCancelButton: true,   
-				confirmButtonColor: \"#ff0000\",   
-				confirmButtonText: \"".trans('crudbooster.confirmation_yes')."\",  
-				cancelButtonText: \"".trans('crudbooster.confirmation_no')."\",  
+				confirmButtonColor: "#ff0000",   
+				confirmButtonText: "'.trans('crudbooster.confirmation_yes').'",  
+				cancelButtonText: "'.trans('crudbooster.confirmation_no').'",  
 				closeOnConfirm: false }, 
-				function(){  location.href=\"$redirectTo\" });";
-		}		
+				function(){  location.href="$redirectTo" });';
+		}
 
 		private static function getModulePath() {
 			return Request::segment(2);
@@ -363,13 +351,12 @@ class CRUDBooster  {
 
 			try{
                 //MySQL & SQL Server
-                $isNULL = DB::select(DB::raw("select IS_NULLABLE from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='$table' and COLUMN_NAME = '$field'"))[0]->IS_NULLABLE;            
+                $isNULL = DB::select(DB::raw("select IS_NULLABLE from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='$table' and COLUMN_NAME = '$field'"))[0]->IS_NULLABLE;
                 $isNULL = ($isNULL=='YES')?TRUE:FALSE;
-                Cache::forever('field_isNull_'.$table.'_'.$field,$isNULL);
             }catch(\Exception $e) {
             	$isNULL = false;
-            	Cache::forever('field_isNull_'.$table.'_'.$field,$isNULL);
             }
+            Cache::forever('field_isNull_'.$table.'_'.$field,$isNULL);
             return $isNULL;
 		}
 
