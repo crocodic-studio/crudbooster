@@ -348,9 +348,9 @@
         @endpush
         @push('head')
         <link rel="stylesheet" type="text/css"
-              href="{{asset('vendor/crudbooster/assets/codemirror/lib/codemirror.css')}}">
+              href="{{cbAsset('codemirror/lib/codemirror.css')}}">
         <link rel="stylesheet" type="text/css"
-              href="{{asset('vendor/crudbooster/assets/codemirror/theme/blackboard.css')}}">
+              href="{{cbAsset('codemirror/theme/blackboard.css')}}">
         @endpush
 
         <div class="box box-default">
