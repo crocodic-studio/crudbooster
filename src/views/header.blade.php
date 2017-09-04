@@ -63,7 +63,7 @@
                             <p>
                                 {{ CRUDBooster::myName() }}
                                 <small>{{ CRUDBooster::myPrivilegeName() }}</small>
-                                <small><em><?php echo date('d F Y')?></em></small>
+                                <small><em>{!! date('d F Y') !!} </em></small>
                             </p>
                         </li>
 
@@ -75,7 +75,7 @@
                             </div>
                             <div class="pull-{{ cbTrans('right') }}">
                                 <a title='Lock Screen' href="{{ route('getLockScreen') }}"
-                                   class='btn btn-default btn-flat'><i class='fa fa-key'></i></a>
+                                   class='btn btn-default btn-flat'>{!! CB::icon('key') !!}</a>
                                 <a href="javascript:void(0)" onclick="swal({
                                         title: '{{cbTrans('alert_want_to_logout')}}',
                                         type:'info',
@@ -88,10 +88,12 @@
                                         }, function(){
                                         location.href = '{{ route("getLogout") }}';
 
-                                        });" title="{{cbTrans('button_logout')}}" class="btn btn-danger btn-flat"><i
-                                            class='fa fa-power-off'></i></a>
+                                        });" title="{{cbTrans('button_logout')}}" class="btn btn-danger btn-flat">
+                                    {!! CB::icon('power-off') !!}
+                                </a>
                             </div>
                         </li>
+
                     </ul>
                 </li>
             </ul>

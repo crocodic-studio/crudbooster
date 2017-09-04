@@ -31,7 +31,7 @@
 
 
     @push('bottom')
-    `@include('crudbooster::module_generator.step3.script')
+    @include('crudbooster::module_generator.step3.script')
     @endpush
 
 
