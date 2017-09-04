@@ -214,32 +214,33 @@ class CRUDBooster  {
             return Request::get('m');
 		}
 
-		public static function sidebarDashboard() {			
+		private static function menuUrl($menu){
+            $menu->is_broken = false;
+            if($menu->type == 'Route')
+                return route($menu->path);
+
+            if($menu->type == 'URL')
+               return $menu->path;
+
+            if($menu->type == 'Controller & Method')
+               return action($menu->path);
+
+            if($menu->type == 'Module' || $menu->type =='Statistic')
+               return self::adminPath($menu->path);
+
+            $menu->is_broken = true;
+            return '#';
+        }
+
+		public static function sidebarDashboard() {
 
 			$menu = DB::table('cms_menus')
             ->where('id_cms_privileges',self::myPrivilegeId())
 		  	->where('is_dashboard',1)
-		  	->where('is_active',1)		  	
-		  	->first();		  	
+		  	->where('is_active',1)
+		  	->first() ?: new \stdClass();
 
-		  	switch ($menu->type) {
-	  			case 'Route':
-	  				$url = route($menu->path);
-	  				break;
-	  			default:
-	  			case 'URL':
-	  				$url = $menu->path;
-	  				break;
-	  			case 'Controller & Method':
-	  				$url = action($menu->path);
-	  				break;
-	  			case 'Module':
-	  			case 'Statistic':
-	  				$url = self::adminPath($menu->path);
-	  				break;	  			
-	  		}
-
-	  		@$menu->url = $url;	  	  	
+	  		$menu->url = self::menuUrl($menu);
 
 	  		return $menu;
 		}
@@ -266,20 +267,12 @@ class CRUDBooster  {
 			  				$url = $menu->path;
 			  				break;
 			  			case 'Controller & Method':
-			  				$url = action($menu->path);
+		  		$url = self::menuUrl($menu);
 			  				break;
 			  			case 'Module':
 			  			case 'Statistic':
 			  				$url = self::adminPath($menu->path);
-			  				break;		  			
-			  		}
 
-			  		$menu->is_broken = false;
-		  		}catch(\Exception $e) {
-		  			$url = "#";
-		  			$menu->is_broken = true;
-		  		}
-		  				  		
 		  		$menu->url = $url;
 		  		$menu->url_path = trim(str_replace(url('/'),'',$url),"/");
 
@@ -291,32 +284,8 @@ class CRUDBooster  {
 		  		->select('cms_menus.*')
 		  		->orderby('sorting','asc')->get();
 		  		if(count($child)) {
-
-		  			foreach($child as &$c) {		  
-
-		  				try{
-		  					switch ($c->type) {
-					  			case 'Route':
-					  				$url = route($c->path);
-					  				break;
-					  			default:
-					  			case 'URL':
-					  				$url = $c->path;
-					  				break;
-					  			case 'Controller & Method':
-					  				$url = action($c->path);
-					  				break;	
-					  			case 'Module':
-					  			case 'Statistic':
-					  				$url = self::adminPath($c->path);
-					  				break;			  			
-					  		}
-					  		$c->is_broken = false;
-		  				}catch(\Exception $e) {
-		  					$url = "#";		  	
-		  					$c->is_broken = true;				
-		  				}		  								  		
-
+		  			foreach($child as &$c) {
+                        $url = self::menuUrl($c);
 				  		$c->url = $url;
 				  		$c->url_path = trim(str_replace(url('/'),'',$url),"/");
 		  			}
