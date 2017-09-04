@@ -32,9 +32,7 @@
                 </div>
 
             </div>
-            <div class="box-footer">
-                @include('crudbooster::module_generator.step4.footer')
-            </div>
+            @include('crudbooster::module_generator.step4.footer')
         </form>
     </div>
 
