@@ -107,12 +107,12 @@ class CRUDBooster  {
 			if(Request::ajax()) {
 				$resp = response()->json(['message'=>$message,'message_type'=>$type,'redirect_url'=>$to])->send();
 				exit;
-			}else{
-				$resp = redirect($to)->with(['message'=>$message,'message_type'=>$type]);
-				Session::driver()->save();
-				$resp->send();	
-				exit;
-			}						
+			}
+            $resp = redirect($to)->with(['message'=>$message,'message_type'=>$type]);
+            Session::driver()->save();
+            $resp->send();
+            exit;
+			
 		}
 
 		public static function canView() {		
