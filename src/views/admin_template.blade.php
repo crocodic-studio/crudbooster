@@ -9,9 +9,9 @@
     <link rel="shortcut icon"
           href="{{ CRUDBooster::getSetting('favicon')?asset(CRUDBooster::getSetting('favicon')):cbAsset('logo_crudbooster.png') }}">
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-    <!-- Bootstrap 3.3.2 -->
+
     {!! cbStyleSheet('adminlte/bootstrap/css/bootstrap.min.css') !!}
-    <!-- Font Awesome Icons -->
+
     {!! cbStyleSheet('adminlte/font-awesome/css/font-awesome.min.css') !!}
     <!-- Ionicons -->
     <link href="{{asset("vendor/crudbooster/ionic/css/ionicons.min.css")}}" rel="stylesheet" type="text/css"/>
@@ -22,10 +22,10 @@
     <!-- support rtl-->
     @if (App::getLocale() == 'ar')
         <link rel="stylesheet" href="//cdn.rawgit.com/morteza/bootstrap-rtl/v3.3.4/dist/css/bootstrap-rtl.min.css">
-        <link href="{{ asset("vendor/crudbooster/assets/rtl.css")}}" rel="stylesheet" type="text/css"/>
+        <link href="{{ cbAsset("rtl.css")}}" rel="stylesheet" type="text/css"/>
     @endif
 
-    <link rel='stylesheet' href='{{asset("vendor/crudbooster/assets/css/main.css").'?r='.time()}}'/>
+    <link rel='stylesheet' href='{{cbAsset("css/main.css").'?r='.time()}}'/>
 
     <!-- load css -->
     <style type="text/css">
@@ -100,7 +100,8 @@
             ?>
             @if($module)
                 <h1>
-                    <i class='{{$module->icon}}'></i> {{($page_title)?:$module->name}} &nbsp;&nbsp;
+                    <i class='{{$module->icon}}'></i>
+                    {{($page_title)?:$module->name}} &nbsp;&nbsp;
 
                     <!--START BUTTON -->
 
@@ -109,7 +110,9 @@
                             <a href="{{ CRUDBooster::mainpath().'?'.http_build_query(Request::all()) }}"
                                id='btn_show_data' class="btn btn-sm btn-primary"
                                title="{{cbTrans('action_show_data')}}">
-                                <i class="fa fa-table"></i> {{cbTrans('action_show_data')}}
+
+                                {!!  CB::icon('table') !!}
+                                {{cbTrans('action_show_data')}}
                             </a>
                         @endif
 
@@ -117,7 +120,9 @@
                             <a href="{{ CRUDBooster::mainpath('add').'?return_url='.urlencode(Request::fullUrl()).'&parent_id='.g('parent_id').'&parent_field='.$parent_field }}"
                                id='btn_add_new_data' class="btn btn-sm btn-success"
                                title="{{cbTrans('action_add_data')}}">
-                                <i class="fa fa-plus-circle"></i> {{cbTrans('action_add_data')}}
+
+                                {!!  CB::icon('plus-circle') !!}
+                                {{cbTrans('action_add_data')}}
                             </a>
                         @endif
                     @endif
@@ -126,7 +131,9 @@
                     @if($button_export && CRUDBooster::getCurrentMethod() == 'getIndex')
                         <a href="javascript:void(0)" id='btn_export_data' data-url-parameter='{{$build_query}}'
                            title='Export Data' class="btn btn-sm btn-primary btn-export-data">
-                            <i class="fa fa-upload"></i> {{cbTrans("button_export")}}
+
+                            {!!  CB::icon('upload') !!}
+                            {{cbTrans("button_export")}}
                         </a>
                     @endif
 
@@ -134,7 +141,9 @@
                         <a href="{{ CRUDBooster::mainpath('import-data') }}" id='btn_import_data'
                            data-url-parameter='{{$build_query}}' title='Import Data'
                            class="btn btn-sm btn-primary btn-import-data">
-                            <i class="fa fa-download"></i> {{cbTrans("button_import")}}
+
+                            {!!  CB::icon('download') !!}
+                            {{cbTrans("button_import")}}
                         </a>
                     @endif
 
@@ -150,7 +159,8 @@
                                @if($ib['onKeyDown']) onKeyDown='return {{$ib["onKeyDown"]}}' @endif
                                @if($ib['onLoad']) onLoad='return {{$ib["onLoad"]}}' @endif
                             >
-                                <i class='{{$ib["icon"]}}'></i> {{$ib["label"]}}
+                                <i class='{{$ib["icon"]}}'></i>
+                                {{$ib["label"]}}
                             </a>
                     @endforeach
                 @endif
@@ -159,7 +169,9 @@
 
 
                 <ol class="breadcrumb">
-                    <li><a href="{{CRUDBooster::adminPath()}}"><i class="fa fa-dashboard"></i> {{ cbTrans('home') }}</a>
+                    <li><a href="{{CRUDBooster::adminPath()}}">
+                            {!!  CB::icon('dashboard') !!}
+                            {{ cbTrans('home') }}</a>
                     </li>
                     <li class="active">{{$module->name}}</li>
                 </ol>
@@ -186,7 +198,9 @@
             @if (Session::get('message')!='')
                 <div class='alert alert-{{ Session::get("message_type") }}'>
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <h4><i class="icon fa fa-info"></i> {{ cbTrans("alert_".Session::get("message_type")) }}</h4>
+                    <h4>
+                        <i class="icon fa fa-info"></i>
+                        {{ cbTrans("alert_".Session::get("message_type")) }}</h4>
                     {!!Session::get('message')!!}
                 </div>
             @endif
