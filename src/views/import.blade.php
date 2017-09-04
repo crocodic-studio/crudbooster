@@ -96,16 +96,7 @@
 
     @if(Request::get('file') && !Request::get('import'))
 
-        <ul class='nav nav-tabs'>
-            <li style="background:#eeeeee"><a style="color:#111"
-                                              onclick="if(confirm('Are you sure want to leave ?')) location.href='{{ CRUDBooster::mainpath("import-data") }}'"
-                                              href='javascript:;'><i class='fa fa-download'></i> Upload a File
-                    &raquo;</a></li>
-            <li style="background:#ffffff" class='active'><a style="color:#111" href='#'><i class='fa fa-cogs'></i>
-                    Adjustment &raquo;</a></li>
-            <li style="background:#eeeeee"><a style="color:#111" href='#'><i class='fa fa-cloud-download'></i> Importing
-                    &raquo;</a></li>
-        </ul>
+        @include('crudbooster::_import.nav')
 
         <!-- Box -->
         <div id='box_main' class="box box-primary">
