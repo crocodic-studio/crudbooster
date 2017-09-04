@@ -97,6 +97,8 @@
             $('#modal-create-directory').modal('show');
         }
     </script>
+
+
     @include('crudbooster::filemanager.partials.create_folder_modal')
 
 
@@ -106,6 +108,7 @@
             $('#modal-upload-file').modal('show');
         }
     </script>
+
     @include('crudbooster::filemanager.partials.file_upload_modal')
 
     @endpush
