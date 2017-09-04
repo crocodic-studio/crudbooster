@@ -1,7 +1,7 @@
 @extends("crudbooster::admin_template")
 @section("content")
     @push('head')
-    <link rel='stylesheet' href='{!! asset("vendor/crudbooster/assets/select2/dist/css/select2.min.css") !!}'/>
+    {!! cbStyleSheet('select2/dist/css/select2.min.css') !!}
     <style>
         .select2-container--default .select2-selection--single {
             border-radius: 0px !important
@@ -13,14 +13,13 @@
     </style>
     @endpush
     @push('bottom')
-    <script src='{!!  asset("vendor/crudbooster/assets/select2/dist/js/select2.full.min.js") !!}'></script>
+    {!! cbScript("select2/dist/js/select2.full.min.js") !!}
     <script>
         $(function () {
             $('.select2').select2();
         })
     </script>
     @endpush
-
 
     @include('crudbooster::module_generator.partials.nav_tabs', ['step' => ['','','active',''], 'id' => $id ])
 
