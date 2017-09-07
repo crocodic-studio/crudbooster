@@ -62,10 +62,10 @@
                     </div>
                     </div>
 
-                @include('crudbooster::_privileges.alert')
+                    @include('crudbooster::_privileges.alert')
+                    @include('crudbooster::_privileges.footer')
                 </form>
-                </div>
-            @include('crudbooster::_privileges.footer')
+            </div>
         </div>
 
     </div>
