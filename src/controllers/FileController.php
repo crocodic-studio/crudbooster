@@ -24,12 +24,12 @@ class FileController extends Controller {
 	    if(!Storage::exists($fullFilePath)) abort(404);	    
 	    	    	    
 	    $extension = strtolower(File::extension($fullStoragePath));
-	    $images_ext = config('crudbooster.IMAGE_EXTENSIONS','jpg,png,gif,bmp');
+	    $images_ext = cbConfig('IMAGE_EXTENSIONS','jpg,png,gif,bmp');
 	    $images_ext = explode(',',$images_ext); 
 	    $imageFileSize = 0;
 
 	    if(in_array($extension, $images_ext)) {
-		    $w = Request::get('w', config('crudbooster.DEFAULT_THUMBNAIL_WIDTH', 300));
+		    $w = Request::get('w', cbConfig('DEFAULT_THUMBNAIL_WIDTH', 300));
 		    $h = Request::get('h', $w);
 	    	$imgRaw = Image::cache(function($image) use ($fullStoragePath, $w, $h) {
 	    		$im = $image->make($fullStoragePath);

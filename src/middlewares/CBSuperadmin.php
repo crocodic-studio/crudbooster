@@ -17,7 +17,7 @@ class CBSuperadmin
      */
     public function handle($request, Closure $next)
     {   
-        $admin_path = config('crudbooster.ADMIN_PATH', 'admin');
+        $admin_path = cbConfig('ADMIN_PATH', 'admin');
 
         if(CRUDBooster::myId()==''){
             $url = url($admin_path.'/login'); 

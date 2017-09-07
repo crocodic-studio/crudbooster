@@ -146,9 +146,9 @@ class ApiController extends Controller {
 		$limit                    = ($posts['limit'])?:20;
 		$offset                   = ($posts['offset'])?:0;
 		$orderby                  = ($posts['orderby'])?:$table.'.id,desc';		
-		$uploads_format_candidate = explode(',',config("crudbooster.UPLOAD_TYPES"));	
-		$uploads_candidate        = explode(',',config('crudbooster.IMAGE_FIELDS_CANDIDATE'));
-		$password_candidate       = explode(',',config('crudbooster.PASSWORD_FIELDS_CANDIDATE'));	
+		$uploads_format_candidate = explode(',',cbConfig("UPLOAD_TYPES"));
+		$uploads_candidate        = explode(',',cbConfig('IMAGE_FIELDS_CANDIDATE'));
+		$password_candidate       = explode(',',cbConfig('PASSWORD_FIELDS_CANDIDATE'));
 		$asset					  = asset('/');				
 		
 		unset($posts['limit'], $posts['offset'], $posts['orderby']);
@@ -258,21 +258,19 @@ class ApiController extends Controller {
 						$value = $param['config'];
 					}
 
-					if($required == '1') {						
+					if($required == '1') {
 						if(CRUDBooster::isColumnExists($table,$name)) {
 							$w->where($table.'.'.$name,$value);							
 						}else{
 							$w->having($name,'=',$value);
 						}
 					}else{
-						if($used) {
-							if($value) {
-								if(CRUDBooster::isColumnExists($table,$name)) {
-									$w->where($table.'.'.$name,$value);
-								}else{
-									$w->having($name,'=',$value);
-								}
-							}						
+						if($used && $value) {
+                            if(CRUDBooster::isColumnExists($table,$name)) {
+                                $w->where($table.'.'.$name,$value);
+                            }else{
+                                $w->having($name,'=',$value);
+                            }
 						}
 					}									
 				}

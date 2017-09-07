@@ -49,7 +49,7 @@ class AdminFileManagerController extends CBController {
 	}
 
 	public function postUpload() {		
-		$allowedExtension = explode(',',strtolower(config('crudbooster.UPLOAD_TYPES')));
+		$allowedExtension = explode(',',strtolower(cbConfig('UPLOAD_TYPES')));
 		$path = g('path')?base64_decode(g('path')):'uploads';
         $file = Request::file('userfile');
 		if(!$file) {

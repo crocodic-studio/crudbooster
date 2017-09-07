@@ -1388,8 +1388,8 @@ class CBController extends Controller {
 	public function postUploadSummernote() {
 		$this->cbLoader();
 		$name = 'userfile';
-		$uploadTypes = explode(',',config('crudbooster.UPLOAD_TYPES'));
-		$uploadMaxSize = config('crudbooster.UPLOAD_MAX_SIZE')?:5000;
+		$uploadTypes = explode(',',cbConfig('UPLOAD_TYPES'));
+		$uploadMaxSize = cbConfig('UPLOAD_MAX_SIZE')?:5000;
 
 		if (!Request::hasFile($name))
 		{
@@ -1429,7 +1429,7 @@ class CBController extends Controller {
         $file = Request::file($name);
         $ext  = $file->getClientOriginalExtension();
         $filesize = $file->getClientSize() / 1024;
-        $uploadMaxSize = config('crudbooster.UPLOAD_MAX_SIZE', 5000);
+        $uploadMaxSize = cbConfig('UPLOAD_MAX_SIZE', 5000);
 
         if($filesize > $uploadMaxSize) {
             echo "The filesize is too large!";

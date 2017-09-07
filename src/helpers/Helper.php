@@ -401,3 +401,37 @@ if(!function_exists('rrmdir')) {
 	 }
 }
 
+if(!function_exists('cbTrans')) {
+    function cbTrans($key, $params = null)
+    {
+        return trans('crudbooster.'.$key, $params);
+    }
+}
+
+if(!function_exists('cbAsset')) {
+    function cbAsset($key)
+    {
+        return asset('vendor/crudbooster/assets/'.$key);
+    }
+}
+
+if(!function_exists('cbScript')) {
+    function cbScript($key)
+    {
+        return '<script src="'.cbAsset ($key).'" type="text/javascript"></script>';
+    }
+}
+
+if(!function_exists('cbStyleSheet')) {
+    function cbStyleSheet($key)
+    {
+        return '<link rel="stylesheet" type="text/css" href="'.cbAsset($key).'"/>';
+    }
+}
+
+if(!function_exists('cbConfig')) {
+    function cbConfig($key)
+    {
+        return confif('crudbooster.'.$key);
+    }
+}
