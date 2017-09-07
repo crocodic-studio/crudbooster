@@ -18,7 +18,7 @@
     );
     ?>
     @foreach($skins as $skin)
-        <option <?=($privilege->theme_color==$skin)?"selected":""?> value='{{ $skin }}'>
+        <option {!! ($role->theme_color==$skin)?"selected":"" !!} value='{{ $skin }}'>
             {!! ucwords(str_replace('-', ' ', $skin)) !!}
         </option>
     @endforeach
