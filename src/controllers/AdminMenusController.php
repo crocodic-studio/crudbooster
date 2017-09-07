@@ -234,39 +234,13 @@ use CRUDBooster;
 
 
 	  public function getIndex() {
-	  	$this->cbLoader();	  	
-
-	  	$menu_active = DB::table('cms_menus')	  	
-	  	->where('parent_id',0)
-	  	->where('is_active',1)
-	  	->orderby('sorting','asc')
-	  	->get();
-
-	  	foreach($menu_active as &$menu) {
-	  		$child = DB::table('cms_menus')->where('is_active',1)->where('parent_id',$menu->id)->orderby('sorting','asc')->get();
-	  		if(count($child)) {
-	  			$menu->children = $child;
-	  		}
-	  	}
-
-	  	$menu_inactive = DB::table('cms_menus')	  	
-	  	->where('parent_id',0)
-	  	->where('is_active',0)
-	  	->orderby('sorting','asc')
-	  	->get();
-
-	  	foreach($menu_inactive as &$menu) {
-	  		$child = DB::table('cms_menus')->where('is_active',1)->where('parent_id',$menu->id)->orderby('sorting','asc')->get();
-	  		if(count($child)) {
-	  			$menu->children = $child;
-	  		}
-	  	}
+	  	$this->cbLoader();
 
 	  	$return_url = Request::fullUrl();
 
 	  	$page_title = 'Menu Management';
 
-	  	return view('crudbooster::menus_management',compact('menu_active','menu_inactive','privileges','return_url','page_title'));
+	  	return view('crudbooster::menus_management',compact('privileges','return_url','page_title'));
 	  }
 
 	  public function hookBeforeAdd(&$postdata) {
