@@ -56,7 +56,7 @@ class CBBackend
                 CRUDBooster::denyAccess();
         }
 
-        if ($request->is($_url.'/edit*') && !CRUDBooster::canEdit()) {
+        if ($request->is($_url.'/edit*') && !CRUDBooster::canUpdate()) {
                 CRUDBooster::insertLog(trans('crudbooster.log_try_edit',['module'=>$module->name]));
                 CRUDBooster::denyAccess();
         }
