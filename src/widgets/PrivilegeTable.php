@@ -16,6 +16,6 @@ class PrivilegeTable
                 ->first() ?: new \stdClass();
         }
 
-        return $module;
+        return $modules;
     }
 }
