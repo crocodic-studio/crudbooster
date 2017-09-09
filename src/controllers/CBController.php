@@ -892,65 +892,17 @@ class CBController extends Controller {
 
 			//Insert Data Checkbox if Type Datatable
 			if($ro['type'] == 'checkbox' && $ro['relationship_table']) {
-					$datatable = explode(",",$ro['datatable'])[0];
-					$foreignKey2 = CRUDBooster::getForeignKey($datatable,$ro['relationship_table']);
-					$foreignKey = CRUDBooster::getForeignKey($this->table,$ro['relationship_table']);
-					DB::table($ro['relationship_table'])->where($foreignKey,$id)->delete();
-
-					if($inputdata) {
-						$relationship_table_pk = CB::pk($ro['relationship_table']);
-						foreach($inputdata as $input_id) {
-							DB::table($ro['relationship_table'])->insert([
-								$relationship_table_pk=>CRUDBooster::newId($ro['relationship_table']),
-								$foreignKey=>$id,
-								$foreignKey2=>$input_id
-								]);
-						}
-					}
+                $this->_handleCheckbox($ro, $id, $inputdata);
 			}
 
 
 			if($ro['type'] == 'select2' && $ro['relationship_table']) {
-					$datatable = explode(",",$ro['datatable'])[0];
-					$foreignKey2 = CRUDBooster::getForeignKey($datatable,$ro['relationship_table']);
-					$foreignKey = CRUDBooster::getForeignKey($this->table,$ro['relationship_table']);
-					DB::table($ro['relationship_table'])->where($foreignKey,$id)->delete();
-
-					if($inputdata) {
-						foreach($inputdata as $input_id) {
-							$relationship_table_pk = CB::pk($row['relationship_table']);
-							DB::table($ro['relationship_table'])->insert([
-								$relationship_table_pk=>CRUDBooster::newId($ro['relationship_table']),
-								$foreignKey=>$id,
-								$foreignKey2=>$input_id
-								]);
-						}
-					}
+                $this->_updateRelations($ro, $id, $inputdata);
 			}
 
 			if($ro['type']=='child') {
-				$name = str_slug($ro['label'],'');
-				$columns = $ro['columns'];				
-				$count_input_data = count(Request::get($name.'-'.$columns[0]['name']))-1;
-				$child_array = [];
-
-				for($i=0;$i<=$count_input_data;$i++) {
-					$fk = $ro['foreign_key'];
-					$column_data = [];
-					$column_data[$fk] = $id;
-					foreach($columns as $col) {
-						$colname = $col['name'];
-						$column_data[$colname] = Request::get($name.'-'.$colname)[$i];
-					}
-					$child_array[] = $column_data;
-				}	
-
-				$childtable = CRUDBooster::parseSqlTable($ro['table'])['table'];
-				DB::table($childtable)->insert($child_array);
+                $this->_updateChildTable($ro, $id);
 			}
-
-
-			
 		}
 
 
@@ -1433,6 +1385,8 @@ class CBController extends Controller {
             echo "The filesize is too large!";
             exit;
         }
+        $uploadTypes = explode(',',cbConfig('UPLOAD_TYPES'));
+
         if(!in_array($ext, $uploadTypes)) {
             echo "The filetype is not allowed!";
             exit;
@@ -1473,5 +1427,83 @@ class CBController extends Controller {
 
 	public function hookAfterDelete($id) {
 	}
+
+    /**
+     * @param $row
+     * @param $id
+     * @param $inputData
+     * @param $row
+     * @return array
+     */
+    private function _updateRelations($row, $id, $inputData)
+    {
+        $dataTable = explode(",", $row['datatable'])[0];
+        $foreignKey2 = CRUDBooster::getForeignKey($dataTable, $row['relationship_table']);
+        $foreignKey = CRUDBooster::getForeignKey($this->table, $row['relationship_table']);
+        DB::table($row['relationship_table'])->where($foreignKey, $id)->delete();
+
+        if ($inputData) {
+            foreach ($inputData as $input_id) {
+                $relationship_table_pk = CB::pk($row['relationship_table']);
+                DB::table($row['relationship_table'])->insert([
+                    $relationship_table_pk => CRUDBooster::newId($row['relationship_table']),
+                    $foreignKey => $id,
+                    $foreignKey2 => $input_id
+                ]);
+            }
+        }
+    }
+
+    /**
+     * @param $ro
+     * @param $id
+     * @return string
+     */
+    private function _updateChildTable($ro, $id)
+    {
+        $name = str_slug($ro['label'], '');
+        $columns = $ro['columns'];
+        $count_input_data = count(Request::get($name . '-' . $columns[0]['name'])) - 1;
+        $child_array = [];
+
+        for ($i = 0; $i <= $count_input_data; $i++) {
+            $fk = $ro['foreign_key'];
+            $column_data = [];
+            $column_data[$fk] = $id;
+            foreach ($columns as $col) {
+                $colName = $col['name'];
+                $column_data[$colName] = Request::get($name . '-' . $colName)[$i];
+            }
+            $child_array[] = $column_data;
+        }
+
+        $childTable = CRUDBooster::parseSqlTable($ro['table'])['table'];
+        DB::table($childTable)->insert($child_array);
+        return $name;
+    }
+
+    /**
+     * @param $ro
+     * @param $id
+     * @param $inputdata
+     */
+    private function _handleCheckbox($ro, $id, $inputdata)
+    {
+        $datatable = explode(",", $ro['datatable'])[0];
+        $foreignKey2 = CRUDBooster::getForeignKey($datatable, $ro['relationship_table']);
+        $foreignKey = CRUDBooster::getForeignKey($this->table, $ro['relationship_table']);
+        DB::table($ro['relationship_table'])->where($foreignKey, $id)->delete();
+
+        if ($inputdata) {
+            $relationship_table_pk = CB::pk($ro['relationship_table']);
+            foreach ($inputdata as $input_id) {
+                DB::table($ro['relationship_table'])->insert([
+                    $relationship_table_pk => CRUDBooster::newId($ro['relationship_table']),
+                    $foreignKey => $id,
+                    $foreignKey2 => $input_id
+                ]);
+            }
+        }
+    }
 
 }
