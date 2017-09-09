@@ -358,7 +358,7 @@ class CBController extends Controller {
 		$orig_mainpath = $this->data['mainpath'];
 		$title_field   = $this->title_field;
 		$html_contents = array();
-		$page = (Request::get('page'))?Request::get('page'):1; 
+		$page = Request::get('page', 1);
 		$number = ($page-1)*$limit+1; 
 		foreach($data['result'] as $row) {
 			$html_content = array();
@@ -647,17 +647,17 @@ class CBController extends Controller {
 	public function postFindDataOld() {
 		$q        = Request::get('q');
 		$id       = Request::get('id');
-		$format   = Request::get('format');
+        $format   = Request::get('format');
 
-		$table1   = (Request::get('table1'))?:$this->table;
+		$table1   = Request::get('table1', $this->table);
 		$table1PK = CB::pk($table1);
-		$column1  = (Request::get('column1'))?:$this->title_field;
+		$column1  = Request::get('column1', $this->title_field);
 
-		@$table2  = Request::get('table2');
-		@$column2 = Request::get('column2');
+		$table2  = Request::get('table2');
+		$column2 = Request::get('column2');
 
-		@$table3  = Request::get('table3');
-		@$column3 = Request::get('column3');
+		$table3  = Request::get('table3');
+		$column3 = Request::get('column3');
 
 		$where    = Request::get('where');
 
@@ -667,7 +667,7 @@ class CBController extends Controller {
 		if($q || $id || $table1) {
 			$rows = DB::table($table1);
 			$rows->select($table1.'.*');
-			$rows->take($limit);
+			$rows->take(request('limit', 10));
 
 			if(Schema::hasColumn($table1,'deleted_at')) {
 				$rows->where($table1.'.deleted_at',NULL);
@@ -808,15 +808,12 @@ class CBController extends Controller {
 			$message_all = $message->all();
 
 			if(Request::ajax()) {
-				$res = response()->json(['message'=>trans('crudbooster.alert_validation_error',['error'=>implode(', ',$message_all)]),'message_type'=>'warning'])->send();
+				response()->json(['message'=>trans('crudbooster.alert_validation_error',['error'=>implode(', ',$message_all)]),'message_type'=>'warning'])->send();
 				exit;
 			}
-            $res = redirect()->back()->with("errors",$message)->with(['message'=>trans('crudbooster.alert_validation_error',['error'=>implode(', ',$message_all)]),'message_type'=>'warning'])->withInput();
+            redirect()->back()->with("errors",$message)->with(['message'=>trans('crudbooster.alert_validation_error',['error'=>implode(', ',$message_all)]),'message_type'=>'warning'])->withInput()->send();
             \Session::driver()->save();
-            $res->send();
             exit;
-
-
 		}
 	}
 
@@ -865,7 +862,7 @@ class CBController extends Controller {
 		$page_menu       = Route::getCurrentRoute()->getActionName();
 		$command 		 = 'add';
 
-		return view('crudbooster::default.form',compact('page_title','page_menu','command'));
+		return view('crudbooster::default.form', compact('page_title','page_menu','command'));
 	}
 
 	public function postAddSave() {
