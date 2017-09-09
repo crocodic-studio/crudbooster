@@ -647,7 +647,6 @@ class CBController extends Controller {
 	public function postFindDataOld() {
 		$q        = Request::get('q');
 		$id       = Request::get('id');
-		$limit    = Request::get('limit')?:10;
 		$format   = Request::get('format');
 
 		$table1   = (Request::get('table1'))?:$this->table;
@@ -736,8 +735,9 @@ class CBController extends Controller {
 
 		$request_all = Request::all();
 		$array_input = array();
-		$componentPath = "vendor".DIRECTORY_SEPARATOR."crocodicstudio".DIRECTORY_SEPARATOR."crudbooster".DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."views".DIRECTORY_SEPARATOR."default".DIRECTORY_SEPARATOR."type_components".DIRECTORY_SEPARATOR;
-		foreach($this->data_inputan as $di) {
+		$componentPath = implode(DIRECTORY_SEPARATOR, ["vendor","crocodicstudio","crudbooster","src","views","default","type_components",""]);
+
+        foreach($this->data_inputan as $di) {
 			$ai = array();
 			$name = $di['name'];
 			$type = $di['type'];					
@@ -822,10 +822,11 @@ class CBController extends Controller {
 
 	public function inputAssignment($id=null) {			
 
-		$hide_form = (Request::get('hide_form'))?unserialize(Request::get('hide_form')):array();			
-		$componentPath = "vendor".DIRECTORY_SEPARATOR."crocodicstudio".DIRECTORY_SEPARATOR."crudbooster".DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."views".DIRECTORY_SEPARATOR."default".DIRECTORY_SEPARATOR."type_components".DIRECTORY_SEPARATOR;
+		$hide_form = (Request::get('hide_form'))?unserialize(Request::get('hide_form')):array();
+		$componentPath = implode(DIRECTORY_SEPARATOR, ["vendor" ,"crocodicstudio" ,"crudbooster" ,"src" ,"views" ,"default" ,'type_components','']);
 
-		foreach($this->data_inputan as $ro) {
+
+        foreach($this->data_inputan as $ro) {
 			$name = $ro['name'];
 			$type = $ro['type']?:'text';
 			$inputdata = Request::get($name);
