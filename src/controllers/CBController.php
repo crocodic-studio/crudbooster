@@ -300,41 +300,9 @@ class CBController extends Controller {
 			}
 		}
 
-		if($filter_is_orderby == true) {
-			$data['result']  = $result->paginate($limit);
+        $data = $this->_prepareResults($filter_is_orderby, $result, $limit, $data, $table);
 
-		}else{
-			if($this->orderby) {
-				if(is_array($this->orderby)) {
-					foreach($this->orderby as $k=>$v) {
-						if(strpos($k, '.')!==FALSE) {
-							$orderby_table = explode(".",$k)[0];
-						}else{
-							$orderby_table = $table;
-						}
-						$result->orderby($orderby_table.'.'.$k,$v);
-					}
-				}else{
-					$this->orderby = explode(";",$this->orderby);
-					foreach($this->orderby as $o) {
-						$o = explode(",",$o);
-						$k = $o[0];
-						$v = $o[1];
-						if(strpos($k, '.')!==FALSE) {
-							$orderby_table = explode(".",$k)[0];
-						}else{
-							$orderby_table = $table;
-						}
-						$result->orderby($orderby_table.'.'.$k,$v);
-					}
-				}
-				$data['result'] = $result->paginate($limit);
-			}else{
-				$data['result'] = $result->orderby($this->table.'.'.$this->primary_key,'desc')->paginate($limit);
-			}
-		}
-
-		$data['columns'] = $columns_table;
+        $data['columns'] = $columns_table;
 
 		if($this->index_return) return $data;
 
@@ -1504,6 +1472,52 @@ class CBController extends Controller {
                 ]);
             }
         }
+    }
+
+    /**
+     * @param $filter_is_orderby
+     * @param $result
+     * @param $limit
+     * @param $data
+     * @param $table
+     * @return array
+     */
+    private function _prepareResults($filter_is_orderby, $result, $limit, $data, $table)
+    {
+        if ($filter_is_orderby == true) {
+            $data['result'] = $result->paginate($limit);
+
+        } else {
+            if ($this->orderby) {
+                if (is_array($this->orderby)) {
+                    foreach ($this->orderby as $k => $v) {
+                        if (strpos($k, '.') !== false) {
+                            $orderby_table = explode(".", $k)[0];
+                        } else {
+                            $orderby_table = $table;
+                        }
+                        $result->orderby($orderby_table . '.' . $k, $v);
+                    }
+                } else {
+                    $this->orderby = explode(";", $this->orderby);
+                    foreach ($this->orderby as $o) {
+                        $o = explode(",", $o);
+                        $k = $o[0];
+                        $v = $o[1];
+                        if (strpos($k, '.') !== false) {
+                            $orderby_table = explode(".", $k)[0];
+                        } else {
+                            $orderby_table = $table;
+                        }
+                        $result->orderby($orderby_table . '.' . $k, $v);
+                    }
+                }
+                $data['result'] = $result->paginate($limit);
+            } else {
+                $data['result'] = $result->orderby($this->table . '.' . $this->primary_key, 'desc')->paginate($limit);
+            }
+        }
+        return $data;
     }
 
 }
