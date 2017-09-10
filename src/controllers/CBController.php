@@ -232,17 +232,8 @@ class CBController extends Controller {
 		$addaction     = $this->data['addaction'];
 
 		if($this->sub_module) {
-			foreach($this->sub_module as $s) {
-				$table_parent = CRUDBooster::parseSqlTable($this->table)['table'];
-				$addaction[] = [
-					'label'=>$s['label'],
-					'icon'=>$s['button_icon'],
-					'url'=>CRUDBooster::adminPath($s['path']).'?parent_table='.$table_parent.'&parent_columns='.$s['parent_columns'].'&parent_columns_alias='.$s['parent_columns_alias'].'&parent_id=['.(!isset($s['custom_parent_id']) ? "id": $s['custom_parent_id']).']&return_url='.urlencode(Request::fullUrl()).'&foreign_key='.$s['foreign_key'].'&label='.urlencode($s['label']),
-					'color'=>$s['button_color'],
-                                        'showIf'=>$s['showIf']
-				];
-			}
-		}
+            $addaction = $this->_handleSubModules($addaction);
+        }
 		
 		$mainpath      = CRUDBooster::mainpath();
 		$orig_mainpath = $this->data['mainpath'];
@@ -1581,6 +1572,25 @@ class CBController extends Controller {
                 $result->where($table . '.' . $k, $v);
             }
         }
+    }
+
+    /**
+     * @param $addaction
+     * @return array
+     */
+    private function _handleSubModules($addaction)
+    {
+        foreach ($this->sub_module as $s) {
+            $table_parent = CRUDBooster::parseSqlTable($this->table)['table'];
+            $addaction[] = [
+                'label' => $s['label'],
+                'icon' => $s['button_icon'],
+                'url' => CRUDBooster::adminPath($s['path']) . '?parent_table=' . $table_parent . '&parent_columns=' . $s['parent_columns'] . '&parent_columns_alias=' . $s['parent_columns_alias'] . '&parent_id=[' . (!isset($s['custom_parent_id']) ? "id" : $s['custom_parent_id']) . ']&return_url=' . urlencode(Request::fullUrl()) . '&foreign_key=' . $s['foreign_key'] . '&label=' . urlencode($s['label']),
+                'color' => $s['button_color'],
+                'showIf' => $s['showIf']
+            ];
+        }
+        return $addaction;
     }
 
 }
