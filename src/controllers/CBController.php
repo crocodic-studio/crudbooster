@@ -149,23 +149,9 @@ class CBController extends Controller {
 
 	public function getIndex() {
 		$this->cbLoader();
-
+        $data = [];
 		if(Request::get('parent_table')) {
-			$parentTablePK = CB::pk(g('parent_table'));
-			$data['parent_table'] = DB::table(Request::get('parent_table'))->where($parentTablePK,Request::get('parent_id'))->first();
-			if(Request::get('foreign_key')) {
-				$data['parent_field'] = Request::get('foreign_key');
-			}else{
-				$data['parent_field'] = CB::getTableForeignKey(g('parent_table'),$this->table);	
-			}
-
-			if($parent_field) {
-				foreach($this->columns_table as $i=>$col) {
-					if($col['name'] == $parent_field) {
-						unset($this->columns_table[$i]);
-					}
-				}
-			}
+            $data = $this->_handleParentTable();
 		}
 
 		$data['table'] 	  = $this->table;
@@ -173,7 +159,7 @@ class CBController extends Controller {
 		$data['page_title']       = $module->name;
 		$data['page_description'] = trans('crudbooster.default_module_description');
 		$data['date_candidate']   = $this->date_candidate;
-		$data['limit'] = $limit   = (Request::get('limit'))?Request::get('limit'):$this->limit;
+		$data['limit'] = $limit   = Request::get('limit',$this->limit);
 
 		$tablePK = $data['table_pk'];
 		$table_columns = CB::getTableColumns($this->table);
@@ -228,76 +214,12 @@ class CBController extends Controller {
 			}
 		}
 
-		if(Request::get('q')) {
-			$result->where(function($w) use ($columns_table, $request) {
-				foreach($columns_table as $col) {
-						if(!$col['field_with']) continue;						
-						$w->orwhere($col['field_with'],"like","%".Request::get("q")."%");
-				}
-			});
-		}
-
-		if(Request::get('where')) {
-			foreach(Request::get('where') as $k=>$v) {
-				$result->where($table.'.'.$k,$v);
-			}
-		}
+        $this->_applyWhereAndQfilters($result, $columns_table, $table);
 
 		$filter_is_orderby = false;
 		if(Request::get('filter_column')) {
 
-			$filter_column = Request::get('filter_column');
-			$result->where(function($w) use ($filter_column,$fc) {
-				foreach($filter_column as $key=>$fc) {
-
-					$value = @$fc['value'];
-					$type  = @$fc['type'];
-
-					if($type == 'empty') {
-						$w->whereNull($key)->orWhere($key,'');
-						continue;
-					}
-
-					if($value=='' || $type=='') continue;
-
-					if($type == 'between') continue;
-
-					switch($type) {
-						default:
-							if($key && $type && $value) $w->where($key,$type,$value);
-						break;
-						case 'like':
-						case 'not like':
-							$value = '%'.$value.'%';
-							if($key && $type && $value) $w->where($key,$type,$value);
-						break;
-						case 'in':
-						case 'not in':
-							if($value) {
-								$value = explode(',',$value);
-								if($key && $value) $w->whereIn($key,$value);
-							}
-						break;
-					}
-
-
-				}
-			});
-
-			foreach($filter_column as $key=>$fc) {
-				$value = @$fc['value'];
-				$type  = @$fc['type'];
-				$sorting = @$fc['sorting'];
-
-				if($sorting!='' && $key) {
-                    $result->orderby($key,$sorting);
-                    $filter_is_orderby = true;
-				}
-
-				if ($type=='between') {
-					if($key && $value) $result->whereBetween($key,$value);
-				}
-			}
+            $filter_is_orderby = $this->_filterIndexRows($result);
 		}
 
         $data = $this->_prepareResults($filter_is_orderby, $result, $limit, $data, $table);
@@ -342,67 +264,18 @@ class CBController extends Controller {
 			}
 
 			foreach($columns_table as $col) {
-		          if($col['visible']===FALSE) continue;		          
+		          if(!$col['visible']) continue;
 
-		          $value = @$row->{$col['field']};
-		          $title = @$row->{$this->title_field};
-		          $label = $col['label'];
-
-		          if(isset($col['image'])) {
-			            if($value=='') {			              
-			              $value = "<a  data-lightbox='roadtrip' rel='group_{{$table}}' title='$label: $title' href='".asset('vendor/crudbooster/avatar.jpg')."'><img width='40px' height='40px' src='".asset('vendor/crudbooster/avatar.jpg')."'/></a>";
-			            }else{
-							$pic = (strpos($value,'http://')!==FALSE)?$value:asset($value);				            
-				            $value = "<a data-lightbox='roadtrip'  rel='group_{{$table}}' title='$label: $title' href='".$pic."'><img width='40px' height='40px' src='".$pic."'/></a>";
-			            }			            
-		          }
-
-		          if(@$col['download']) {
-			            $url = (strpos($value,'http://')!==FALSE)?$value:asset($value).'?download=1';
-			            if($value) {
-			            	$value = "<a class='btn btn-xs btn-primary' href='$url' target='_blank' title='Download File'><i class='fa fa-download'></i> Download</a>";
-			            }else{
-			            	$value = " - ";
-			            }
-		          }
-
-		            if($col['str_limit']) {
-		            	$value = trim(strip_tags($value));
-		            	$value = str_limit($value,$col['str_limit']);
-		            }
-
-		            if($col['nl2br']) {
-		            	$value = nl2br($value);
-		            }
-		            
-			        if(isset($col['callback'])) {
-			        	$value = call_user_func($col['callback'],$row);
-			        }
-
-		            $datavalue = @unserialize($value);
-					if ($datavalue !== false && $datavalue) {
-                        $prevalue = [];
-                        foreach($datavalue as $d) {
-                            if($d['label']) {
-                                $prevalue[] = $d['label'];
-                            }
-                        }
-                        if(count($prevalue)) {
-                            $value = implode(", ",$prevalue);
-                        }
-					}
+                $value = $this->_calculateColumnValue($col, $row, $table);
 
 		          $html_content[] = $value;
 	        } //end foreach columns_table
 
 
-	      if($this->button_table_action):
-
+	      if($this->button_table_action){
 	      		$button_action_style = $this->button_action_style;
 	      		$html_content[] = "<div class='button_action' style='text-align:right'>".view('crudbooster::components.action',compact('addaction','row','button_action_style','parent_field'))->render()."</div>";
-
-          endif;//button_table_action
-
+          }
 
           foreach($html_content as $i=>$v) {
           	$this->hookRowIndex($i,$v);
@@ -1484,40 +1357,230 @@ class CBController extends Controller {
      */
     private function _prepareResults($filter_is_orderby, $result, $limit, $data, $table)
     {
-        if ($filter_is_orderby == true) {
+        if ($filter_is_orderby !== true) {
+            $data['result'] = $result->paginate($limit);
+            return $data;
+        }
+
+        if (!$this->orderby) {
+            $data['result'] = $result->orderby($this->table . '.' . $this->primary_key, 'desc')->paginate($limit);
+            return $data;
+        }
+
+        if (is_array($this->orderby)) {
+            foreach ($this->orderby as $k => $v) {
+                if (strpos($k, '.') !== false) {
+                    $orderby_table = explode(".", $k)[0];
+                } else {
+                    $orderby_table = $table;
+                }
+                $result->orderby($orderby_table . '.' . $k, $v);
+            }
             $data['result'] = $result->paginate($limit);
 
-        } else {
-            if ($this->orderby) {
-                if (is_array($this->orderby)) {
-                    foreach ($this->orderby as $k => $v) {
-                        if (strpos($k, '.') !== false) {
-                            $orderby_table = explode(".", $k)[0];
-                        } else {
-                            $orderby_table = $table;
-                        }
-                        $result->orderby($orderby_table . '.' . $k, $v);
-                    }
-                } else {
-                    $this->orderby = explode(";", $this->orderby);
-                    foreach ($this->orderby as $o) {
-                        $o = explode(",", $o);
-                        $k = $o[0];
-                        $v = $o[1];
-                        if (strpos($k, '.') !== false) {
-                            $orderby_table = explode(".", $k)[0];
-                        } else {
-                            $orderby_table = $table;
-                        }
-                        $result->orderby($orderby_table . '.' . $k, $v);
-                    }
-                }
-                $data['result'] = $result->paginate($limit);
+            return $data;
+        }
+
+        $this->orderby = explode(";", $this->orderby);
+        foreach ($this->orderby as $o) {
+            $o = explode(",", $o);
+            $k = $o[0];
+            $v = $o[1];
+            if (strpos($k, '.') !== false) {
+                $orderby_table = explode(".", $k)[0];
             } else {
-                $data['result'] = $result->orderby($this->table . '.' . $this->primary_key, 'desc')->paginate($limit);
+                $orderby_table = $table;
+            }
+            $result->orderby($orderby_table . '.' . $k, $v);
+        }
+
+        $data['result'] = $result->paginate($limit);
+
+        return $data;
+    }
+
+    /**
+     * @param $result
+     * @return array
+     */
+    private function _filterIndexRows($result)
+    {
+        $filter_is_orderby = false;
+        $filter_column = Request::get('filter_column');
+        $result->where(function ($query) use ($filter_column) {
+            foreach ($filter_column as $key => $fc) {
+
+                $value = @$fc['value'];
+                $type = @$fc['type'];
+
+                if ($type == 'empty') {
+                    $query->whereNull($key)->orWhere($key, '');
+                    continue;
+                }
+
+                if ($value == '' || $type == '') {
+                    continue;
+                }
+
+                if ($type == 'between') {
+                    continue;
+                }
+
+                switch ($type) {
+                    default:
+                        if ($key && $type && $value) {
+                            $query->where($key, $type, $value);
+                        }
+                        break;
+                    case 'like':
+                    case 'not like':
+                        $value = '%' . $value . '%';
+                        if ($key && $type && $value) {
+                            $query->where($key, $type, $value);
+                        }
+                        break;
+                    case 'in':
+                    case 'not in':
+                        if ($value) {
+                            $value = explode(',', $value);
+                            if ($key && $value) {
+                                $query->whereIn($key, $value);
+                            }
+                        }
+                        break;
+                }
+
+
+            }
+        });
+
+        foreach ($filter_column as $key => $fc) {
+            $value = @$fc['value'];
+            $type = @$fc['type'];
+            $sorting = @$fc['sorting'];
+
+            if ($sorting != '' && $key) {
+                $result->orderby($key, $sorting);
+                $filter_is_orderby = true;
+            }
+
+            if ($type == 'between') {
+                if ($key && $value) {
+                    $result->whereBetween($key, $value);
+                }
+            }
+        }
+        return $filter_is_orderby;
+    }
+
+    /**
+     * @param $data
+     * @return array
+     */
+    private function _handleParentTable()
+    {
+        $data = [];
+        $parentTablePK = CB::pk(g('parent_table'));
+        $data['parent_table'] = DB::table(Request::get('parent_table'))->where($parentTablePK,
+            Request::get('parent_id'))->first();
+        if (Request::get('foreign_key')) {
+            $data['parent_field'] = Request::get('foreign_key');
+        } else {
+            $data['parent_field'] = CB::getTableForeignKey(g('parent_table'), $this->table);
+        }
+
+        if ($data['parent_field']) {
+            foreach ($this->columns_table as $i => $col) {
+                if ($col['name'] == $data['parent_field']) {
+                    unset($this->columns_table[$i]);
+                }
             }
         }
         return $data;
+    }
+
+    /**
+     * @param $col
+     * @param $row
+     * @param $table
+     * @return array
+     */
+    private function _calculateColumnValue($col, $row, $table)
+    {
+        $value = @$row->{$col['field']};
+        $title = @$row->{$this->title_field};
+        $label = $col['label'];
+
+        if (isset($col['image'])) {
+            if ($value == '') {
+                $value = "<a  data-lightbox='roadtrip' rel='group_{{$table}}' title='$label: $title' href='" . asset('vendor/crudbooster/avatar.jpg') . "'><img width='40px' height='40px' src='" . asset('vendor/crudbooster/avatar.jpg') . "'/></a>";
+            } else {
+                $pic = (strpos($value, 'http://') !== false) ? $value : asset($value);
+                $value = "<a data-lightbox='roadtrip'  rel='group_{{$table}}' title='$label: $title' href='" . $pic . "'><img width='40px' height='40px' src='" . $pic . "'/></a>";
+            }
+        }
+
+        if (@$col['download']) {
+            $url = (strpos($value, 'http://') !== false) ? $value : asset($value) . '?download=1';
+            if ($value) {
+                $value = "<a class='btn btn-xs btn-primary' href='$url' target='_blank' title='Download File'><i class='fa fa-download'></i> Download</a>";
+            } else {
+                $value = " - ";
+            }
+        }
+
+        if ($col['str_limit']) {
+            $value = trim(strip_tags($value));
+            $value = str_limit($value, $col['str_limit']);
+        }
+
+        if ($col['nl2br']) {
+            $value = nl2br($value);
+        }
+
+        if (isset($col['callback'])) {
+            $value = call_user_func($col['callback'], $row);
+        }
+
+        $datavalue = @unserialize($value);
+        if ($datavalue !== false && $datavalue) {
+            $prevalue = [];
+            foreach ($datavalue as $d) {
+                if ($d['label']) {
+                    $prevalue[] = $d['label'];
+                }
+            }
+            if (count($prevalue)) {
+                $value = implode(", ", $prevalue);
+            }
+        }
+        return $value;
+    }
+
+    /**
+     * @param $result
+     * @param $columns_table
+     * @param $table
+     * @return mixed
+     */
+    private function _applyWhereAndQfilters($result, $columns_table, $table)
+    {
+        if (Request::get('q')) {
+            $result->where(function ($query) use ($columns_table) {
+                foreach ($columns_table as $col) {
+                    if (!$col['field_with']) {
+                        continue;
+                    }
+                    $query->orwhere($col['field_with'], "like", "%" . Request::get("q") . "%");
+                }
+            });
+        }
+
+        if (Request::get('where')) {
+            foreach (Request::get('where') as $k => $v) {
+                $result->where($table . '.' . $k, $v);
+            }
+        }
     }
 
 }
