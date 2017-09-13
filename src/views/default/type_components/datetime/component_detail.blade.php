@@ -1,1 +1,4 @@
-{{ date("F, d Y H:i", strtotime($value)) }}
+@php
+    $format = ($form['options']['php_format'])?:"Y-m-d H:i";
+    echo date($format,strtotime($value));
+@endphp

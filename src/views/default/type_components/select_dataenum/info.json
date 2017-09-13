@@ -1,0 +1,18 @@
+{
+  "title": "Select Dataenum",
+  "type": "select_dataenum",
+  "options": [
+    {
+      "label": "Enum",
+      "name": "enum",
+      "required": 1,
+      "type": "array"
+    },
+    {
+      "label": "Value",
+      "name": "value",
+      "required": 0,
+      "type": "array"
+    }
+  ]
+}

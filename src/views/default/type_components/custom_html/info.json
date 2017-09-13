@@ -1,0 +1,12 @@
+{
+  "title": "Custom HTML",
+  "type": "custom_html",
+  "options": [
+    {
+      "label": "HTML",
+      "name": "html",
+      "type": "textarea",
+      "required": 1
+    }
+  ]
+}

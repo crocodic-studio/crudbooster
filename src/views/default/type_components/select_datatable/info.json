@@ -1,0 +1,44 @@
+{
+  "title": "Select Datatable",
+  "type": "select_datatable",
+  "options": [
+    {
+      "label": "Table",
+      "name": "table",
+      "required": 1,
+      "type": "text"
+    },
+    {
+      "label": "Field Label",
+      "name": "field_label",
+      "required": 1,
+      "type": "text"
+    },
+    {
+      "label": "Field Value",
+      "name": "field_value",
+      "required": 1,
+      "type": "text"
+    },
+    {
+      "label": "SQL Where",
+      "name": "sql_where",
+      "required": 0,
+      "type": "text"
+    },
+    {
+      "label": "SQL Order By",
+      "name": "sql_orderby",
+      "required": 0,
+      "type": "text",
+      "help": "E.g: id desc"
+    },
+    {
+      "label": "Format",
+      "name": "format",
+      "required": 0,
+      "type": "text",
+      "help": "E.g: [id] - [name]"
+    }
+  ]
+}

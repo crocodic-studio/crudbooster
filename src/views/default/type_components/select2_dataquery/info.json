@@ -1,0 +1,59 @@
+{
+  "title": "Select2 Dataquery",
+  "type": "select2_dataquery",
+  "options": [
+    {
+      "label": "Query",
+      "name": "query",
+      "type": "text",
+      "required": 1
+    },
+    {
+      "label": "Field Label",
+      "name": "field_label",
+      "type": "text",
+      "required": 1
+    },
+    {
+      "label": "Field Value",
+      "name": "field_value",
+      "type": "text",
+      "required": 1
+    },
+    {
+      "label": "Ajax Mode",
+      "name": "ajax_mode",
+      "type": "boolean",
+      "required": 0
+    },
+    {
+      "label": "Allow Clear",
+      "name": "allow_clear",
+      "type": "boolean",
+      "required": 0
+    },
+    {
+      "label": "Multiple",
+      "name": "multiple",
+      "type": "boolean",
+      "required": 0
+    },
+    {
+      "label": "Multiple Result Format",
+      "name": "multiple_result_format",
+      "type": "radio",
+      "enum": [
+        "JSON",
+        "COMMA_SEPARATOR",
+        "SEMICOLON_SEPARATOR"
+      ],
+      "required": 0
+    },
+    {
+      "label": "Format",
+      "name": "format",
+      "type": "text",
+      "required": 0
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "title": "Checkbox Datatable",
+  "type": "checkbox_datatable",
+  "options": [
+    {
+      "label": "Table Name",
+      "type": "text",
+      "name": "table",
+      "required": 1
+    },
+    {
+      "label": "Field Label",
+      "type": "text",
+      "name": "field_label",
+      "required": 1
+    },
+    {
+      "label": "Field Value",
+      "type": "text",
+      "name": "field_value",
+      "required": 1
+    },
+    {
+      "label": "SQL Where",
+      "type": "text",
+      "name": "sql_where",
+      "required": 0
+    },
+    {
+      "label": "SQL Orderby",
+      "type": "text",
+      "name": "sql_orderby",
+      "required": 0
+    }
+  ]
+}

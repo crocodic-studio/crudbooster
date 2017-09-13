@@ -1,0 +1,71 @@
+{
+  "title": "Select2 Datatable",
+  "type": "select2_datatable",
+  "options": [
+    {
+      "label": "Table",
+      "name": "table",
+      "type": "text",
+      "required": 1
+    },
+    {
+      "label": "Field Label",
+      "name": "field_label",
+      "type": "text",
+      "required": 1
+    },
+    {
+      "label": "Field Value",
+      "name": "field_value",
+      "type": "text",
+      "required": 1
+    },
+    {
+      "label": "SQL Where",
+      "name": "sql_where",
+      "type": "text",
+      "required": 0
+    },
+    {
+      "label": "SQL Orderby",
+      "name": "sql_orderby",
+      "type": "text",
+      "required": 0
+    },
+    {
+      "label": "Format",
+      "name": "format",
+      "type": "text",
+      "required": 0
+    },
+    {
+      "label": "Ajax Mode",
+      "name": "ajax_mode",
+      "type": "boolean",
+      "required": 0
+    },
+    {
+      "label": "Allow Clear",
+      "name": "allow_clear",
+      "type": "boolean",
+      "required": 0
+    },
+    {
+      "label": "Multiple",
+      "name": "multiple",
+      "type": "boolean",
+      "required": 0
+    },
+    {
+      "label": "Multiple Result Format",
+      "name": "multiple_result_format",
+      "type": "radio",
+      "enum": [
+        "JSON",
+        "COMMA_SEPARATOR",
+        "SEMICOLON_SEPARATOR"
+      ],
+      "required": 0
+    }
+  ]
+}

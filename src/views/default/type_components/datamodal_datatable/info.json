@@ -1,0 +1,73 @@
+{
+  "title": "Datamodal DataTable",
+  "type": "datamodal_datatable",
+  "options": [
+    {
+      "label": "Table Name",
+      "name": "table",
+      "type": "text",
+      "required": 1
+    },
+    {
+      "label": "SQL Where",
+      "name": "sql_where",
+      "type": "text",
+      "required": 0
+    },
+    {
+      "label": "SQL OrderBy",
+      "name": "sql_orderby",
+      "type": "text",
+      "required": 0
+    },
+    {
+      "label": "Limit Data",
+      "name": "limit",
+      "type": "text",
+      "required": 0
+    },
+    {
+      "label": "Columns",
+      "name": "columns",
+      "type": "text",
+      "required": 1,
+      "help": "Separate with comma"
+    },
+    {
+      "label": "Columns Alias",
+      "name": "columns_alias",
+      "type": "text",
+      "required": 1,
+      "help": "Separate with comma"
+    },
+    {
+      "label": "Column as Label",
+      "name": "column_label",
+      "type": "text",
+      "required": 1
+    },
+    {
+      "label": "Column as Value",
+      "name": "column_value",
+      "type": "text",
+      "required": 1
+    },
+    {
+      "label": "Size",
+      "name": "size",
+      "type": "radio",
+      "required": 1,
+      "enum": [
+        "large",
+        "small"
+      ]
+    },
+    {
+      "label": "onSelect Callback (JS)",
+      "name": "onselect_callback",
+      "type": "textarea",
+      "required": 0,
+      "help": "You can execute another command by using javascript lang. You can use DOM #datamodal-input-label-{name}, #datamodal-input-value-{name}"
+    }
+  ]
+}
