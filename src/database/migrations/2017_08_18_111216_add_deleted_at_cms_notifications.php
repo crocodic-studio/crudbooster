@@ -13,8 +13,7 @@ class AddDeletedAtCmsNotifications extends Migration
      */
     public function up()
     {
-        Schema::table('cms_notifications', function(Blueprint $table)
-        {
+        Schema::table('cms_notifications', function (Blueprint $table) {
             $table->softDeletes();
         });
     }
@@ -26,8 +25,7 @@ class AddDeletedAtCmsNotifications extends Migration
      */
     public function down()
     {
-        Schema::table('cms_notifications', function(Blueprint $table)
-        {
+        Schema::table('cms_notifications', function (Blueprint $table) {
             $table->dropSoftDeletes();
         });
     }

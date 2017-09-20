@@ -13,8 +13,7 @@ class AddDeletedAtCmsModuls extends Migration
      */
     public function up()
     {
-        Schema::table('cms_moduls', function(Blueprint $table)
-        {
+        Schema::table('cms_moduls', function (Blueprint $table) {
             $table->softDeletes();
         });
     }
@@ -26,8 +25,7 @@ class AddDeletedAtCmsModuls extends Migration
      */
     public function down()
     {
-        Schema::table('cms_moduls', function(Blueprint $table)
-        {
+        Schema::table('cms_moduls', function (Blueprint $table) {
             $table->dropSoftDeletes();
         });
     }
