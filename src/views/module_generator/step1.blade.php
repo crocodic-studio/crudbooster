@@ -24,11 +24,10 @@
             @include('crudbooster::module_generator.partials.nav_tabs', ['step' => ['active','','',''], 'id' => $id ])
 
         @else
-            <li role="presentation" class="active"><a href="#"><i class='fa fa-info'></i> Step 1 - Module
-                    Information</a></li>
-            <li role="presentation"><a href="#"><i class='fa fa-table'></i> Step 2 - Table Display</a></li>
-            <li role="presentation"><a href="#"><i class='fa fa-plus-square-o'></i> Step 3 - Form Display</a></li>
-            <li role="presentation"><a href="#"><i class='fa fa-wrench'></i> Step 4 - Configuration</a></li>
+            <li role="presentation" class="active"><a href="#"> {!! CB::icon('info') !!} Step 1 - Module Information</a></li>
+            <li role="presentation"><a href="#"> {!! CB::icon('table') !!} Step 2 - Table Display</a></li>
+            <li role="presentation"><a href="#"> {!! CB::icon('plus-square-o') !!} Step 3 - Form Display</a></li>
+            <li role="presentation"><a href="#"> {!! CB::icon('wrench') !!} Step 4 - Configuration</a></li>
         @endif
     </ul>
 

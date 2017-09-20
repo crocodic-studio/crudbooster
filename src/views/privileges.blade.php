@@ -21,13 +21,13 @@
                 </div>
             </div>
             <form method='post'
-                  action='{{ ($privilege->id)?route("AdminPrivilegesControllerPostEditSave")."/$privilege->id":route("AdminPrivilegesControllerPostAddSave") }}'>
+                  action='{{ ($role->id)?route("AdminPrivilegesControllerPostEditSave")."/$role->id":route("AdminPrivilegesControllerPostAddSave") }}'>
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <div class="box-body">
                     
                     <div class='form-group'>
                         <label>{{ cbTrans('privileges_name')}}</label>
-                        <input type='text' class='form-control' name='name' required value='{{ $privilege->name }}'/>
+                        <input type='text' class='form-control' name='name' required value='{{ $role->name }}'/>
                         <div class="text-danger">{{ $errors->first('name') }}</div>
                     </div>
 
@@ -62,10 +62,10 @@
                     </div>
                     </div>
 
-                @include('crudbooster::_privileges.alert')
+                    @include('crudbooster::_privileges.alert')
+                    @include('crudbooster::_privileges.footer')
                 </form>
-                </div>
-            @include('crudbooster::_privileges.footer')
+            </div>
         </div>
 
     </div>
