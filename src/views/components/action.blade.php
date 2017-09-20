@@ -1,35 +1,34 @@
 @foreach($addaction as $a)
     <?php
     foreach ($row as $key => $val) {
-        $a['url'] = str_replace("[" . $key . "]", $val, $a['url']);
+        $a['url'] = str_replace("[".$key."]", $val, $a['url']);
     }
 
     $confirm_box = '';
-    if (isset($a['confirmation']) && !empty($a['confirmation']) && $a['confirmation']) {
+    if (isset($a['confirmation']) && ! empty($a['confirmation']) && $a['confirmation']) {
 
-        $a['confirmation_title'] = !empty($a['confirmation_title']) ? $a['confirmation_title'] : cbTrans('confirmation_title');
-        $a['confirmation_text'] = !empty($a['confirmation_text']) ? $a['confirmation_text'] : cbTrans('confirmation_text');
-        $a['confirmation_type'] = !empty($a['confirmation_type']) ? $a['confirmation_type'] : 'warning';
+        $a['confirmation_title'] = ! empty($a['confirmation_title']) ? $a['confirmation_title'] : cbTrans('confirmation_title');
+        $a['confirmation_text'] = ! empty($a['confirmation_text']) ? $a['confirmation_text'] : cbTrans('confirmation_text');
+        $a['confirmation_type'] = ! empty($a['confirmation_type']) ? $a['confirmation_type'] : 'warning';
         $a['confirmation_showCancelButton'] = empty($a['confirmation_showCancelButton']) ? 'true' : 'false';
-        $a['confirmation_confirmButtonColor'] = !empty($a['confirmation_confirmButtonColor']) ? $a['confirmation_confirmButtonColor'] : '#DD6B55';
-        $a['confirmation_confirmButtonText'] = !empty($a['confirmation_confirmButtonText']) ? $a['confirmation_confirmButtonText'] : cbTrans('confirmation_yes');;
-        $a['confirmation_cancelButtonText'] = !empty($a['confirmation_cancelButtonText']) ? $a['confirmation_cancelButtonText'] : cbTrans('confirmation_no');;
+        $a['confirmation_confirmButtonColor'] = ! empty($a['confirmation_confirmButtonColor']) ? $a['confirmation_confirmButtonColor'] : '#DD6B55';
+        $a['confirmation_confirmButtonText'] = ! empty($a['confirmation_confirmButtonText']) ? $a['confirmation_confirmButtonText'] : cbTrans('confirmation_yes');;
+        $a['confirmation_cancelButtonText'] = ! empty($a['confirmation_cancelButtonText']) ? $a['confirmation_cancelButtonText'] : cbTrans('confirmation_no');;
         $a['confirmation_closeOnConfirm'] = empty($a['confirmation_closeOnConfirm']) ? 'true' : 'false';
 
         $confirm_box = '
         swal({   
-            title: "' . $a['confirmation_title'] . '",
-            text: "' . $a['confirmation_text'] . '",
-            type: "' . $a['confirmation_type'] . '",
-            showCancelButton: ' . $a['confirmation_showCancelButton'] . ',
-            confirmButtonColor: "' . $a['confirmation_confirmButtonColor'] . '",
-            confirmButtonText: "' . $a['confirmation_confirmButtonText'] . '",
-            cancelButtonText: "' . $a['confirmation_cancelButtonText'] . '",
-            closeOnConfirm: ' . $a['confirmation_closeOnConfirm'] . ', },
-            function(){  location.href="' . $a['url'] . '"});
+            title: "'.$a['confirmation_title'].'",
+            text: "'.$a['confirmation_text'].'",
+            type: "'.$a['confirmation_type'].'",
+            showCancelButton: '.$a['confirmation_showCancelButton'].',
+            confirmButtonColor: "'.$a['confirmation_confirmButtonColor'].'",
+            confirmButtonText: "'.$a['confirmation_confirmButtonText'].'",
+            cancelButtonText: "'.$a['confirmation_cancelButtonText'].'",
+            closeOnConfirm: '.$a['confirmation_closeOnConfirm'].', },
+            function(){  location.href="'.$a['url'].'"});
 
         ';
-
     }
 
     $label = $a['label'];
@@ -39,26 +38,25 @@
 
 
     $url = $a['url'];
-    if (isset($confirmation) && !empty($confirmation)) {
+    if (isset($confirmation) && ! empty($confirmation)) {
         $url = "javascript:;";
     }
 
-    if(isset($a['showIf'])) {
+    if (isset($a['showIf'])) {
 
-    $query = $a['showIf'];
+        $query = $a['showIf'];
 
-    foreach ($row as $key => $val) {
-        $query = str_replace("[" . $key . "]", '"' . $val . '"', $query);
-    }
+        foreach ($row as $key => $val) {
+            $query = str_replace("[".$key."]", '"'.$val.'"', $query);
+        }
 
-    @eval("if($query) {
+        @eval("if($query) {
         echo \"<a class='btn btn-xs btn-\$color' title='\$label' onclick='\$confirm_box' href='\$url'>
         <i class='\$icon'></i>
          $label</a>&nbsp;\";
     }");
-
-    }else{
-    echo "<a class='btn btn-xs btn-$color' title='$label' onclick='$confirm_box' href='$url'>
+    } else {
+        echo "<a class='btn btn-xs btn-$color' title='$label' onclick='$confirm_box' href='$url'>
         <i class='$icon'></i>
 
         $label</a>&nbsp;";
@@ -79,7 +77,7 @@
     @endif
 
     @if(CRUDBooster::canDelete() && $button_delete)
-        <?php $url = CRUDBooster::mainpath("delete/" . $row->$pk);?>
+        <?php $url = CRUDBooster::mainpath("delete/".$row->$pk);?>
         <a class='btn btn-xs btn-warning btn-delete' title='{{cbTrans("action_delete_data")}}' href='javascript:;'
            onclick='{{CRUDBooster::deleteConfirm($url)}}'>{{cbTrans("action_delete_data")}}</a>
     @endif
@@ -101,7 +99,7 @@
     @endif
 
     @if(CRUDBooster::canDelete() && $button_delete)
-        <?php $url = CRUDBooster::mainpath("delete/" . $row->$pk);?>
+        <?php $url = CRUDBooster::mainpath("delete/".$row->$pk);?>
         <a class='btn btn-xs btn-warning btn-delete' title='{{cbTrans("action_delete_data")}}' href='javascript:;'
            onclick='{{CRUDBooster::deleteConfirm($url)}}'>
             {!! CB::icon('trash') !!}
@@ -121,30 +119,29 @@
             @foreach($addaction as $a)
                 <?php
                 foreach ($row as $key => $val) {
-                    $a['url'] = str_replace("[" . $key . "]", $val, $a['url']);
+                    $a['url'] = str_replace("[".$key."]", $val, $a['url']);
                 }
 
                 $label = $a['label'];
-                $url = $a['url'] . "?return_url=" . urlencode(Request::fullUrl());
+                $url = $a['url']."?return_url=".urlencode(Request::fullUrl());
                 $icon = $a['icon'];
                 $color = $a['color'] ?: 'primary';
 
-                if(isset($a['showIf'])) {
+                if (isset($a['showIf'])) {
 
-                $query = $a['showIf'];
+                    $query = $a['showIf'];
 
-                foreach ($row as $key => $val) {
-                    $query = str_replace("[" . $key . "]", '"' . $val . '"', $query);
-                }
+                    foreach ($row as $key => $val) {
+                        $query = str_replace("[".$key."]", '"'.$val.'"', $query);
+                    }
 
-                @eval("if($query) {
+                    @eval("if($query) {
                     echo \"<li><a title='\$label' href='\$url'>
                     <i class='\$icon'></i>
                      \$label</a></li>\";
                 }");
-
-                }else{
-                echo "
+                } else {
+                    echo "
                 <li><a title='$label' href='$url'>
                         <i class='$icon'></i>
                         $label</a></li>";
@@ -167,7 +164,7 @@
             @endif
 
             @if(CRUDBooster::canDelete() && $button_delete)
-                <?php $url = CRUDBooster::mainpath("delete/" . $row->$pk);?>
+                <?php $url = CRUDBooster::mainpath("delete/".$row->$pk);?>
                 <li><a class='btn-delete' title='{{cbTrans("action_delete_data")}}' href='javascript:;'
                        onclick='{{CRUDBooster::deleteConfirm($url)}}'>
                         {!! CB::icon('trash') !!}
@@ -193,7 +190,7 @@
     @endif
 
     @if(CRUDBooster::canDelete() && $button_delete)
-        <?php $url = CRUDBooster::mainpath("delete/" . $row->$pk);?>
+        <?php $url = CRUDBooster::mainpath("delete/".$row->$pk);?>
         <a class='btn btn-xs btn-warning btn-delete' title='{{cbTrans("action_delete_data")}}' href='javascript:;'
            onclick='{{CRUDBooster::deleteConfirm($url)}}'>
             {!! CB::icon('trash') !!}

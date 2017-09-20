@@ -23,7 +23,7 @@
         @endif
 
         <p class='login-box-msg'>{{cbTrans("login_message")}}</p>
-            @include('crudbooster::_login.form')
+        @include('crudbooster::_login.form')
         <br/>
         <!--a href="#">I forgot my password</a-->
 

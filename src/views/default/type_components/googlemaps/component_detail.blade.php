@@ -26,41 +26,43 @@
 
 
 @push('bottom')
-<script type="text/javascript">
-    function showModalMap {{$name}}() {
-        $('#googlemaps-modal-{{$name}}').modal('show');
-    }
-    var is_init_map_{{$name}} = false;
-    $('#googlemaps-modal-{{$name}}').on('shown.bs.modal', function () {
-        if (is_init_map_{{$name}} == false) {
-            initMap{{$name}}();
-            is_init_map_{{$name}} = true;
+    <script type="text/javascript">
+        function showModalMap {{$name}}() {
+            $('#googlemaps-modal-{{$name}}').modal('show');
         }
-    });
-    function initMap {{$name}}() {
-                @if($row->{$form['options']['latitude']} && $row->{$form['options']['longitude']})
-        var map = new google.maps.Map(document.getElementById('map-{{$name}}'), {
-                center: {
-                    lat: <?php echo $row->{$form['options']['latitude']} ?: 0;?>,
-                    lng: <?php echo $row->{$form['options']['longitude']} ?: 0;?> },
-                zoom: 12
-            });
-        var infoWindow = new google.maps.InfoWindow();
 
-        var marker = new google.maps.Marker({
-            position: {
-                lat: <?php echo $row->{$form['options']['latitude']} ?: 0;?>,
-                lng: <?php echo $row->{$form['options']['longitude']} ?: 0;?> },
-            map: map,
-            title: '{{$value}}'
+        var is_init_map_{{$name}} = false;
+        $('#googlemaps-modal-{{$name}}').on('shown.bs.modal', function () {
+            if (is_init_map_{{$name}} == false) {
+                initMap{{$name}}();
+                is_init_map_{{$name}} = true;
+            }
         });
 
-        infoWindow.close();
-        infoWindow.setContent("{{$value}}");
-        infoWindow.open(map, marker);
-        @else
+        function initMap {{$name}}() {
+                    @if($row->{$form['options']['latitude']} && $row->{$form['options']['longitude']})
+            var map = new google.maps.Map(document.getElementById('map-{{$name}}'), {
+                    center: {
+                        lat: <?php echo $row->{$form['options']['latitude']} ?: 0;?>,
+                        lng: <?php echo $row->{$form['options']['longitude']} ?: 0;?> },
+                    zoom: 12
+                });
+            var infoWindow = new google.maps.InfoWindow();
+
+            var marker = new google.maps.Marker({
+                position: {
+                    lat: <?php echo $row->{$form['options']['latitude']} ?: 0;?>,
+                    lng: <?php echo $row->{$form['options']['longitude']} ?: 0;?> },
+                map: map,
+                title: '{{$value}}'
+            });
+
+            infoWindow.close();
+            infoWindow.setContent("{{$value}}");
+            infoWindow.open(map, marker);
+            @else
             $('#googlemaps-modal-{{$name}} .modal-body').html("<div align='center'>Sorry the map is not found !</div>");
-        @endif
-    }
-</script>
+            @endif
+        }
+    </script>
 @endpush        					    

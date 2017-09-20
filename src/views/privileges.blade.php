@@ -24,7 +24,7 @@
                   action='{{ ($role->id)?route("AdminPrivilegesControllerPostEditSave")."/$role->id":route("AdminPrivilegesControllerPostAddSave") }}'>
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <div class="box-body">
-                    
+
                     <div class='form-group'>
                         <label>{{ cbTrans('privileges_name')}}</label>
                         <input type='text' class='form-control' name='name' required value='{{ $role->name }}'/>
@@ -37,7 +37,7 @@
                     </div>
 
                     <div class='form-group'>
-                       @include('crudbooster::_privileges.themePicker')
+                        @include('crudbooster::_privileges.themePicker')
                     </div>
 
 
@@ -48,25 +48,24 @@
                         @endpush
 
 
-
                         <table class='table table-striped table-hover table-bordered'>
                             <thead>
-                                @include('crudbooster::_privileges.thead')
+                            @include('crudbooster::_privileges.thead')
                             </thead>
                             <tbody>
-                                @widget('\crocodicstudio\crudbooster\widgets\PrivilegeTable', ['roleId' => $id])
+                            @widget('\crocodicstudio\crudbooster\widgets\PrivilegeTable', ['roleId' => $id])
                             </tbody>
                         </table>
 
 
                     </div>
-                    </div>
+                </div>
 
-                    @include('crudbooster::_privileges.alert')
-                    @include('crudbooster::_privileges.footer')
-                </form>
-            </div>
+                @include('crudbooster::_privileges.alert')
+                @include('crudbooster::_privileges.footer')
+            </form>
         </div>
+    </div>
 
     </div>
 @endsection

@@ -1,5 +1,6 @@
 <script>
     var lastno = {!! $no + 1 !!};
+
     function generate_screet_key() {
         $.get("{!! route('AdminApiGeneratorControllerGetGenerateScreetKey') !!}", function (resp) {
             lastno += 1;
@@ -10,6 +11,7 @@
             swal("Success!", "Your new screet key has been generated successfully", "success");
         })
     }
+
     function deleteApi(id) {
         swal({
             title: "Are you sure ?",

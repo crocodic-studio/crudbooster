@@ -1,42 +1,42 @@
 @push('bottom')
-<script>
-    $(function () {
-        $('#{{$name}}').select2({
-            @if($form['options']['multiple']==true)
-            multiple: true,
-            @endif
-            placeholder: "{{ ($form['placeholder'])?:cbTrans('text_prefix_option')." ".$form['label'] }}",
-            allowClear: {{$form['options']['allow_clear']?'true':'false'}},
-            escapeMarkup: function (markup) {
-                return markup;
-            },
-
-            @if($form['options']['ajax_mode']==true)
-            minimumInputLength: 1,
-            ajax: {
-                type: 'POST',
-                url: '{{ CRUDBooster::mainpath("find-data") }}',
-                delay: 250,
-                data: function (params) {
-                    var query = {
-                        q: params.term,
-                        _token: '{{csrf_token()}}',
-                        data: "<?php echo base64_encode(json_encode($form['options'])) ?>",
-                    }
-                    return query;
+    <script>
+        $(function () {
+            $('#{{$name}}').select2({
+                @if($form['options']['multiple']==true)
+                multiple: true,
+                @endif
+                placeholder: "{{ ($form['placeholder'])?:cbTrans('text_prefix_option')." ".$form['label'] }}",
+                allowClear: {{$form['options']['allow_clear']?'true':'false'}},
+                escapeMarkup: function (markup) {
+                    return markup;
                 },
-                processResults: function (data) {
-                    return {
-                        results: data.items
-                    };
+
+                @if($form['options']['ajax_mode']==true)
+                minimumInputLength: 1,
+                ajax: {
+                    type: 'POST',
+                    url: '{{ CRUDBooster::mainpath("find-data") }}',
+                    delay: 250,
+                    data: function (params) {
+                        var query = {
+                            q: params.term,
+                            _token: '{{csrf_token()}}',
+                            data: "<?php echo base64_encode(json_encode($form['options'])) ?>",
+                        }
+                        return query;
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data.items
+                        };
+                    }
                 }
-            }
 
-            @endif
-        });
+                @endif
+            });
 
-    })
-</script>
+        })
+    </script>
 @endpush
 
 
@@ -62,7 +62,7 @@
                 <?php
 
                 $result = DB::table($select_table)->select($select_value, $select_label);
-                $result->addSelect(DB::raw("CONCAT(" . $select_label . ") as select2_text"));
+                $result->addSelect(DB::raw("CONCAT(".$select_label.") as select2_text"));
                 if ($select_where) {
                     $result->whereraw($select_where);
                 }
@@ -86,7 +86,7 @@
                     if ($form['options']['format']) {
                         $option_label = $form['options']['format'];
                         foreach ($r as $k => $v) {
-                            $option_label = str_replace("[" . $k . "]", $v, $option_label);
+                            $option_label = str_replace("[".$k."]", $v, $option_label);
                         }
                     }
 

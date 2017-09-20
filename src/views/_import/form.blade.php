@@ -7,11 +7,11 @@
             photo url.
         </div>
         @push('head')
-        <style type="text/css">
-            th, td {
-                white-space: nowrap;
-            }
-        </style>
+            <style type="text/css">
+                th, td {
+                    white-space: nowrap;
+                }
+            </style>
         @endpush
         <table class='table table-bordered' style="width:130%">
             <thead>
@@ -52,31 +52,32 @@
     </div>
 
     @push('bottom')
-    <script type="text/javascript">
-        $(function () {
-            var total_selected_column = 0;
-            setInterval(function () {
-                total_selected_column = 0;
+        <script type="text/javascript">
+            $(function () {
+                var total_selected_column = 0;
+                setInterval(function () {
+                    total_selected_column = 0;
+                    $('.select_column').each(function () {
+                        var n = $(this).val();
+                        if (n) total_selected_column = total_selected_column + 1;
+                    })
+                }, 200);
+            })
+
+            function check_selected_column() {
+                var total_selected_column = 0;
                 $('.select_column').each(function () {
                     var n = $(this).val();
                     if (n) total_selected_column = total_selected_column + 1;
                 })
-            }, 200);
-        })
-        function check_selected_column() {
-            var total_selected_column = 0;
-            $('.select_column').each(function () {
-                var n = $(this).val();
-                if (n) total_selected_column = total_selected_column + 1;
-            })
-            if (total_selected_column == 0) {
-                swal("Oops...", "Please at least 1 column that should adjusted...", "error");
-                return false;
-            } else {
-                return true;
+                if (total_selected_column == 0) {
+                    swal("Oops...", "Please at least 1 column that should adjusted...", "error");
+                    return false;
+                } else {
+                    return true;
+                }
             }
-        }
-    </script>
+        </script>
     @endpush
 
     <div class="box-footer">

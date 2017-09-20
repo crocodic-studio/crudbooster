@@ -1,5 +1,5 @@
 <?php
-$default = !empty($form['placeholder']) ? $form['placeholder'] : cbTrans('text_prefix_option') . " " . $form['label'];
+$default = ! empty($form['placeholder']) ? $form['placeholder'] : cbTrans('text_prefix_option')." ".$form['label'];
 $query = str_random(5);
 \Cache::forget($query);
 \Cache::forever($query, $form['options']['query']);
@@ -53,29 +53,29 @@ $query = str_random(5);
                 {{$required}} {!!$placeholder!!} {{$readonly}} {{$disabled}} name="{{$name}}">
             <option value=''>{{$default}}</option>
             <?php
-            if (!$form['options']['parent_select']) {
+            if (! $form['options']['parent_select']) {
 
                 if (@$form['options']['query']):
 
-            $field_label = $form['options']['field_label'];
-            $field_value = $form['options']['field_value'];
-            $selects_data = DB::select(DB::raw($form['options']['query']));
+                    $field_label = $form['options']['field_label'];
+                    $field_value = $form['options']['field_value'];
+                    $selects_data = DB::select(DB::raw($form['options']['query']));
 
-            foreach($selects_data as $d) {
-            $select = ($value == $d->{$form['options']['field_value']})?"selected":"";
-            if($form['options']['format']) {
-            $label = $form['options']['format'];
-            foreach($d as $k=>$v) {
-            $label = str_replace("[".$k."]", $v, $label);
-            }
-            }else{
-            $label = $d->{$form['options']['field_label']};
-            }
-            echo "
+                    foreach ($selects_data as $d) {
+                        $select = ($value == $d->{$form['options']['field_value']}) ? "selected" : "";
+                        if ($form['options']['format']) {
+                            $label = $form['options']['format'];
+                            foreach ($d as $k => $v) {
+                                $label = str_replace("[".$k."]", $v, $label);
+                            }
+                        } else {
+                            $label = $d->{$form['options']['field_label']};
+                        }
+                        echo "
             <option $select value='".$d->{$form[' options
             ']['field_value']}."'>".$label."</option>";
-            }
-            endif;
+                    }
+                endif;
             } //end if not parent select
             ?>
         </select>

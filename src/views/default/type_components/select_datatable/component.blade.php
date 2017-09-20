@@ -1,4 +1,4 @@
-<?php $default = !empty($form['placeholder']) ? $form['placeholder'] : cbTrans('text_prefix_option') . " " . $form['label'];?>
+<?php $default = ! empty($form['placeholder']) ? $form['placeholder'] : cbTrans('text_prefix_option')." ".$form['label'];?>
 @if($form['options']['parent_select'])
     <script type="text/javascript">
         $(function () {
@@ -42,45 +42,44 @@
                 {{$required}} {!!$placeholder!!} {{$readonly}} {{$disabled}} name="{{$name}}">
             <option value=''>{{$default}}</option>
             <?php
-            if (!$form['options']['parent_select']) {
+            if (! $form['options']['parent_select']) {
 
                 if (@$form['options']['table']):
 
-            $table = $form['options']['table'];
-            $field_label = $form['options']['field_label'];
-            $field_value = $form['options']['field_value'];
-            $selects_data = DB::table($table);
+                    $table = $form['options']['table'];
+                    $field_label = $form['options']['field_label'];
+                    $field_value = $form['options']['field_value'];
+                    $selects_data = DB::table($table);
 
-            if(\Schema::hasColumn($table,'deleted_at')) {
-            $selects_data->where($table.'.deleted_at',NULL);
-            }
+                    if (\Schema::hasColumn($table, 'deleted_at')) {
+                        $selects_data->where($table.'.deleted_at', NULL);
+                    }
 
-            if(@$form['options']['sql_where']) {
-            $selects_data->whereraw($form['options']['sql_where']);
-            }
+                    if (@$form['options']['sql_where']) {
+                        $selects_data->whereraw($form['options']['sql_where']);
+                    }
 
-            if($form['options']['sql_orderby']) {
-            $selects_data = $selects_data->orderByRaw($form['options']['sql_orderby'])->get();
-            }else{
-            $selects_data = $selects_data->orderby($form['options']['field_value'],"desc")->get();
-            }
+                    if ($form['options']['sql_orderby']) {
+                        $selects_data = $selects_data->orderByRaw($form['options']['sql_orderby'])->get();
+                    } else {
+                        $selects_data = $selects_data->orderby($form['options']['field_value'], "desc")->get();
+                    }
 
-
-            foreach($selects_data as $d) {
-            $select = ($value == $d->{$form['options']['field_value']})?"selected":"";
-            if($form['options']['format']) {
-            $label = $form['options']['format'];
-            foreach($d as $k=>$v) {
-            $label = str_replace("[".$k."]", $v, $label);
-            }
-            }else{
-            $label = $d->{$form['options']['field_label']};
-            }
-            echo "
+                    foreach ($selects_data as $d) {
+                        $select = ($value == $d->{$form['options']['field_value']}) ? "selected" : "";
+                        if ($form['options']['format']) {
+                            $label = $form['options']['format'];
+                            foreach ($d as $k => $v) {
+                                $label = str_replace("[".$k."]", $v, $label);
+                            }
+                        } else {
+                            $label = $d->{$form['options']['field_label']};
+                        }
+                        echo "
             <option $select value='".$d->{$form[' options
             ']['field_value']}."'>".$label."</option>";
-            }
-            endif;
+                    }
+                endif;
             } //end if not parent select
             ?>
         </select>
