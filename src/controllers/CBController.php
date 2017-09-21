@@ -965,7 +965,7 @@ class CBController extends Controller
     {
         $this->cbLoader();
         $data['page_menu'] = Route::getCurrentRoute()->getActionName();
-        $data['page_title'] = 'Import Data '.$module->name;
+        $data['page_title'] = 'Import Data '.CRUDBooster::getCurrentModule()->name;
 
         if (! request('file') || request('import')) {
             return view('crudbooster::import', $data);
@@ -1106,7 +1106,6 @@ class CBController extends Controller
             }
 
             try {
-
                 if ($has_created_at) {
                     $a['created_at'] = date('Y-m-d H:i:s');
                 }
