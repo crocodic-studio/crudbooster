@@ -44,17 +44,7 @@ class CrudboosterInstallationCommand extends Command
         $this->removeDefaultMigrations();
 
         //Create vendor folder at public
-        $this->info('Checking public/vendor directory...');
-        if (! file_exists(public_path('vendor'))) {
-            mkdir(public_path('vendor'), 0777);
-        } else {
-            if (! is_writable(public_path('vendor'))) {
-                $this->info('Setup aborted !');
-                $this->info('Please set public/vendor directory to writable 0777');
-
-                return false;
-            }
-        }
+        $this->createVendorAtPublic();
 
         //Create symlink for uploads path
         $this->symlinkForUpload();
@@ -269,5 +259,20 @@ class CrudboosterInstallationCommand extends Command
         $this->call('optimize');
 
         $this->info('Installing CRUDBooster Is Completed ! Thank You :)');
+    }
+
+    private function createVendorAtPublic()
+    {
+        $this->info('Checking public/vendor directory...');
+        if (! file_exists(public_path('vendor'))) {
+            mkdir(public_path('vendor'), 0777);
+        } else {
+            if (! is_writable(public_path('vendor'))) {
+                $this->info('Setup aborted !');
+                $this->info('Please set public/vendor directory to writable 0777');
+
+                exit;
+            }
+        }
     }
 }
