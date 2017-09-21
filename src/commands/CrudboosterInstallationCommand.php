@@ -41,13 +41,7 @@ class CrudboosterInstallationCommand extends Command
 
         $this->info('Installing: ');
         /* Removing the default user and password reset, it makes you ambigous when using CRUDBooster */
-        $this->info('I remove some default migration files from laravel...');
-        if (file_exists(base_path('database/migrations/2014_10_12_000000_create_users_table.php'))) {
-            @unlink(base_path('database/migrations/2014_10_12_000000_create_users_table.php'));
-        }
-        if (file_exists(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'))) {
-            @unlink(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'));
-        }
+        $this->removeDefaultMigrations();
 
         //Create vendor folder at public
         $this->info('Checking public/vendor directory...');
@@ -259,6 +253,17 @@ class CrudboosterInstallationCommand extends Command
         } else {
             $this->info('Creating public/vendor/crudbooster symlink...');
             app('files')->link(__DIR__.'/../assets', public_path('vendor/crudbooster'));
+        }
+    }
+
+    private function removeDefaultMigrations()
+    {
+        $this->info('I remove some default migration files from laravel...');
+        if (file_exists(base_path('database/migrations/2014_10_12_000000_create_users_table.php'))) {
+            @unlink(base_path('database/migrations/2014_10_12_000000_create_users_table.php'));
+        }
+        if (file_exists(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'))) {
+            @unlink(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'));
         }
     }
 }
