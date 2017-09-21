@@ -224,16 +224,16 @@ class CrudboosterInstallationCommand extends Command
     private function symlinkForUpload()
     {
         $this->info('Checking public/uploads symlink...');
-        if (file_exists(public_path('uploads'))) {
-            $uploadPath = public_path('uploads');
-            $this->info('Upload Path: '.$uploadPath);
-            if (realpath($uploadPath) == $uploadPath) {
-                $this->info('Remove the existing uploads dir, and create a symlink for it...');
-                rrmdir(public_path('uploads'));
-                app('files')->link(storage_path('app'), public_path('uploads'));
-            }
-        } else {
+        if (!file_exists(public_path('uploads'))) {
             $this->info('Creating public/uploads symlink...');
+            app('files')->link(storage_path('app'), public_path('uploads'));
+            return;
+        }
+        $uploadPath = public_path('uploads');
+        $this->info('Upload Path: '.$uploadPath);
+        if (realpath($uploadPath) == $uploadPath) {
+            $this->info('Remove the existing uploads dir, and create a symlink for it...');
+            rrmdir(public_path('uploads'));
             app('files')->link(storage_path('app'), public_path('uploads'));
         }
     }
