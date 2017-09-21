@@ -217,16 +217,12 @@ class CBController extends Controller
         $result = DB::table($this->table)->select(DB::raw($this->table.".".$this->primary_key));
 
         if (Request::get('parent_id')) {
-            $table_parent = $this->table;
-            $table_parent = CRUDBooster::parseSqlTable($table_parent)['table'];
-            $result->where($table_parent.'.'.Request::get('foreign_key'), Request::get('parent_id'));
+            $this->filterForParent($result);
         }
 
         $this->hookQueryIndex($result);
 
-        if (in_array('deleted_at', $table_columns)) {
-            $result->where($this->table.'.deleted_at', null);
-        }
+        $this->filterSoftDeleted($table_columns, $result);
 
         $alias = [];
         $join_alias_count = 0;
@@ -312,9 +308,7 @@ class CBController extends Controller
             $html_contents[] = $html_content;
         } //end foreach data[result]
 
-        $html_contents = ['html' => $html_contents, 'data' => $data['result']];
-
-        $data['html_contents'] = $html_contents;
+        $data['html_contents'] = ['html' => $html_contents, 'data' => $data['result']];
 
         return view("crudbooster::default.index", $data);
     }
@@ -1717,5 +1711,26 @@ class CBController extends Controller
         }
 
         return $columns_table;
+    }
+
+    /**
+     * @param $result
+     */
+    private function filterForParent($result)
+    {
+        $table_parent = $this->table;
+        $table_parent = CRUDBooster::parseSqlTable($table_parent)['table'];
+        $result->where($table_parent.'.'.Request::get('foreign_key'), Request::get('parent_id'));
+    }
+
+    /**
+     * @param $table_columns
+     * @param $result
+     */
+    private function filterSoftDeleted($table_columns, $result)
+    {
+        if (in_array('deleted_at', $table_columns)) {
+            $result->where($this->table.'.deleted_at', '=', null);
+        }
     }
 }
