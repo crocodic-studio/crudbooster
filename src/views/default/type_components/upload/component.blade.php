@@ -19,7 +19,7 @@
             <?php endif;
             echo "<input type='hidden' name='_$name' value='$value'/>";
             else:
-                echo "<p class='text-danger'><i class='fa fa-exclamation-triangle'></i> " . cbTrans("file_broken") . "</p>";
+                echo "<p class='text-danger'><i class='fa fa-exclamation-triangle'></i> ".cbTrans("file_broken")."</p>";
             endif;
             ?>
             @if(!$readonly || !$disabled)

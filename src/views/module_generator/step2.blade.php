@@ -1,64 +1,64 @@
 @extends("crudbooster::admin_template")
 @section("content")
     @push('head')
-    {!! cbStyleSheet('select2/dist/css/select2.min.css') !!}
-    <style>
-        .select2-container--default .select2-selection--single {
-            border-radius: 0px !important
-        }
+        {!! cbStyleSheet('select2/dist/css/select2.min.css') !!}
+        <style>
+            .select2-container--default .select2-selection--single {
+                border-radius: 0px !important
+            }
 
-        .select2-container .select2-selection--single {
-            height: 35px
-        }
-    </style>
+            .select2-container .select2-selection--single {
+                height: 35px
+            }
+        </style>
     @endpush
     @push('bottom')
-    {!! cbScript("select2/dist/js/select2.full.min.js") !!}
-    <script>
-        $(function () {
-            $('.select2').select2();
-        })
-    </script>
+        {!! cbScript("select2/dist/js/select2.full.min.js") !!}
+        <script>
+            $(function () {
+                $('.select2').select2();
+            })
+        </script>
     @endpush
 
     @include('crudbooster::module_generator.partials.nav_tabs', ['step' => ['','active','',''], 'id' => $id ])
     @push('head')
-    <style>
-        .table-display tbody tr td {
-            position: relative;
-        }
+        <style>
+            .table-display tbody tr td {
+                position: relative;
+            }
 
-        .sub {
-            position: absolute;
-            top: inherit;
-            left: inherit;
-            padding: 0 0 0 0;
-            list-style-type: none;
-            height: 180px;
-            overflow: auto;
-            z-index: 1;
-        }
+            .sub {
+                position: absolute;
+                top: inherit;
+                left: inherit;
+                padding: 0 0 0 0;
+                list-style-type: none;
+                height: 180px;
+                overflow: auto;
+                z-index: 1;
+            }
 
-        .sub li {
-            padding: 5px;
-            background: #eae9e8;
-            cursor: pointer;
-            display: block;
-            width: 180px;
-        }
+            .sub li {
+                padding: 5px;
+                background: #eae9e8;
+                cursor: pointer;
+                display: block;
+                width: 180px;
+            }
 
-        .sub li:hover {
-            background: #ECF0F5;
-        }
+            .sub li:hover {
+                background: #ECF0F5;
+            }
 
-        .btn-drag {
-            cursor: move;
-        }
-    </style>
+            .btn-drag {
+                cursor: move;
+            }
+        </style>
     @endpush
 
     @push('bottom')
-    @include('crudbooster::module_generator.step2.js')
+        @include('crudbooster::module_generator.step2.js')
     @endpush
 
     <form method="post" action="{{Route('AdminModulesControllerPostStep3')}}">
@@ -176,14 +176,15 @@
                     </button>
 
                     <button class="btn btn-success btn-sm" type="submit">
-                        {!! CB::icon('save') !!}Save Module</button>
+                        {!! CB::icon('save') !!}Save Module
+                    </button>
 
                 </div>
             </div>
 
         </div>
 
-        @push('bottom')
+    @push('bottom')
         {!! cbScript("codemirror/lib/codemirror.js") !!}
         {!! cbScript("codemirror/addon/edit/matchbrackets.js") !!}
         {!! cbScript("codemirror/mode/htmlmixed/htmlmixed.js") !!}
@@ -199,10 +200,10 @@
         <!-- /.modal -->
         @endpush
         @push('head')
-        <link rel="stylesheet" type="text/css"
-              href="{{cbAsset('codemirror/lib/codemirror.css')}}">
-        <link rel="stylesheet" type="text/css"
-              href="{{cbAsset('codemirror/theme/blackboard.css')}}">
+            <link rel="stylesheet" type="text/css"
+                  href="{{cbAsset('codemirror/lib/codemirror.css')}}">
+            <link rel="stylesheet" type="text/css"
+                  href="{{cbAsset('codemirror/theme/blackboard.css')}}">
         @endpush
 
         <div class="box box-default">

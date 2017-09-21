@@ -9,7 +9,7 @@
           href="{{ CRUDBooster::getSetting('favicon')?asset(CRUDBooster::getSetting('favicon')):cbAsset('logo_crudbooster.png') }}">
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <!-- Bootstrap 3.3.2 -->
-    {!! cbStyleSheet('adminlte/bootstrap/css/bootstrap.min.css') !!}
+{!! cbStyleSheet('adminlte/bootstrap/css/bootstrap.min.css') !!}
 
 <!-- Font Awesome Icons -->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"
@@ -24,7 +24,7 @@
     <style type="text/css">
         .lockscreen {
             background: {{ CRUDBooster::getSetting("login_background_color")?:'#dddddd'}} url('{{ CRUDBooster::getSetting("login_background_image")?asset(CRUDBooster::getSetting("login_background_image")):cbAsset('bg_blur3.jpg') }}');
-            color: {{ CRUDBooster::getSetting("login_font_color")?:'#ffffff' }}  !important;
+            color: {{ CRUDBooster::getSetting("login_font_color")?:'#ffffff' }}   !important;
             background-repeat: no-repeat;
             background-position: center;
             background-size: cover;

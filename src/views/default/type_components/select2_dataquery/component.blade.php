@@ -1,42 +1,42 @@
 @push('bottom')
-<script>
-    $(function () {
-        $('#{{$name}}').select2({
-            @if($form['options']['multiple']==true)
-            multiple: true,
-            @endif
-            placeholder: "{{ ($form['placeholder'])?:cbTrans('text_prefix_option')." ".$form['label'] }}",
-            allowClear: {{$form['options']['allow_clear']?'true':'false'}},
-            escapeMarkup: function (markup) {
-                return markup;
-            },
-
-            @if($form['options']['ajax_mode']==true)
-            minimumInputLength: 1,
-            ajax: {
-                type: 'POST',
-                url: '{{ CRUDBooster::mainpath("find-dataquery") }}',
-                delay: 250,
-                data: function (params) {
-                    var query = {
-                        q: params.term,
-                        _token: '{{csrf_token()}}',
-                        data: "<?php echo base64_encode(json_encode($form['options'])) ?>",
-                    }
-                    return query;
+    <script>
+        $(function () {
+            $('#{{$name}}').select2({
+                @if($form['options']['multiple']==true)
+                multiple: true,
+                @endif
+                placeholder: "{{ ($form['placeholder'])?:cbTrans('text_prefix_option')." ".$form['label'] }}",
+                allowClear: {{$form['options']['allow_clear']?'true':'false'}},
+                escapeMarkup: function (markup) {
+                    return markup;
                 },
-                processResults: function (data) {
-                    return {
-                        results: data.items
-                    };
+
+                @if($form['options']['ajax_mode']==true)
+                minimumInputLength: 1,
+                ajax: {
+                    type: 'POST',
+                    url: '{{ CRUDBooster::mainpath("find-dataquery") }}',
+                    delay: 250,
+                    data: function (params) {
+                        var query = {
+                            q: params.term,
+                            _token: '{{csrf_token()}}',
+                            data: "<?php echo base64_encode(json_encode($form['options'])) ?>",
+                        }
+                        return query;
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data.items
+                        };
+                    }
                 }
-            }
 
-            @endif
-        });
+                @endif
+            });
 
-    })
-</script>
+        })
+    </script>
 @endpush
 
 

@@ -60,7 +60,7 @@
 
             $sessions = Session::all();
             foreach ($sessions as $key => $val) {
-                $sql = str_replace("[" . $key . "]", $val, $sql);
+                $sql = str_replace("[".$key."]", $val, $sql);
             }
 
             try {
@@ -102,25 +102,25 @@
         <div id="chartContainer-{{$componentID}}" style="height: 250px;"></div>
 
         @push('bottom')
-        <script type="text/javascript">
+            <script type="text/javascript">
 
-            $(function () {
-                new Morris.Bar({
-                    element: 'chartContainer-{{$componentID}}',
-                    data: $.parseJSON("{!! addslashes($data_result) !!}"),
-                    xkey: 'y',
-                    ykeys: {!! json_encode($area_name_safe) !!},
-                    labels: {!! json_encode($area_name) !!},
-                    resize: true,
-                    parseTime: false,
-                    @if($config->goals)
-                    goals: [{{$config->goals}}],
-                    @endif
-                    behaveLikeLine: true,
-                    hideHover: 'auto'
-                });
-            })
-        </script>
+                $(function () {
+                    new Morris.Bar({
+                        element: 'chartContainer-{{$componentID}}',
+                        data: $.parseJSON("{!! addslashes($data_result) !!}"),
+                        xkey: 'y',
+                        ykeys: {!! json_encode($area_name_safe) !!},
+                        labels: {!! json_encode($area_name) !!},
+                        resize: true,
+                        parseTime: false,
+                        @if($config->goals)
+                        goals: [{{$config->goals}}],
+                        @endif
+                        behaveLikeLine: true,
+                        hideHover: 'auto'
+                    });
+                })
+            </script>
         @endpush
     @else
 

@@ -11,31 +11,31 @@
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 
     <!-- Bootstrap 3.3.2 -->
-    {!! cbStyleSheet('adminlte/bootstrap/css/bootstrap.min.css') !!}
-    <!-- Font Awesome Icons -->
-    {!! cbStyleSheet('adminlte/font-awesome/css/font-awesome.min.css') !!}
-    <!-- Ionicons -->
+{!! cbStyleSheet('adminlte/bootstrap/css/bootstrap.min.css') !!}
+<!-- Font Awesome Icons -->
+{!! cbStyleSheet('adminlte/font-awesome/css/font-awesome.min.css') !!}
+<!-- Ionicons -->
     <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css"/>
 
-    @include('crudbooster::_IE9')
+@include('crudbooster::_IE9')
 
-    <!-- REQUIRED JS SCRIPTS -->
+<!-- REQUIRED JS SCRIPTS -->
 
     <!-- jQuery 2.1.3 -->
-    {!! cbScript('adminlte/plugins/jQuery/jQuery-2.1.4.min.js') !!}
+{!! cbScript('adminlte/plugins/jQuery/jQuery-2.1.4.min.js') !!}
 
-    <!-- Bootstrap 3.3.2 JS -->
-    {!! cbScript('adminlte/bootstrap/js/bootstrap.min.js') !!}
+<!-- Bootstrap 3.3.2 JS -->
+{!! cbScript('adminlte/bootstrap/js/bootstrap.min.js') !!}
 
-    <!-- AdminLTE App -->
-    {!! cbScript('adminlte/dist/js/app.js') !!}
+<!-- AdminLTE App -->
+{!! cbScript('adminlte/dist/js/app.js') !!}
 
 
-    <!-- Theme style -->
-    {!! cbStyleSheet('adminlte/dist/css/AdminLTE.min.css') !!}
-    {!! cbStyleSheet('adminlte/dist/css/skins/_all-skins.min.css') !!}
+<!-- Theme style -->
+{!! cbStyleSheet('adminlte/dist/css/AdminLTE.min.css') !!}
+{!! cbStyleSheet('adminlte/dist/css/skins/_all-skins.min.css') !!}
 
-    <!--SWEET ALERT-->
+<!--SWEET ALERT-->
     {!! cbScript('sweetalert/dist/sweetalert.min.js') !!}
     {!! cbStyleSheet('sweetalert/dist/sweetalert.css') !!}
     @stack('head')

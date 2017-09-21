@@ -1,15 +1,15 @@
 @push('bottom')
-<script>
-    $(function () {
-        $('#{{$name}}').select2({
-            @if($form['options']['multiple']==true)
-            multiple: true,
-            @endif
-            placeholder: "{{ ($form['placeholder'])?:cbTrans('text_prefix_option')." ".$form['label'] }}",
-            allowClear: {{$form['options']['allow_clear']?'true':'false'}}
-        });
-    })
-</script>
+    <script>
+        $(function () {
+            $('#{{$name}}').select2({
+                @if($form['options']['multiple']==true)
+                multiple: true,
+                @endif
+                placeholder: "{{ ($form['placeholder'])?:cbTrans('text_prefix_option')." ".$form['label'] }}",
+                allowClear: {{$form['options']['allow_clear']?'true':'false'}}
+            });
+        })
+    </script>
 @endpush
 
 

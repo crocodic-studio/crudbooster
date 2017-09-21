@@ -9,10 +9,10 @@
                     <i class='{{$menu->icon}}'></i> {{$menu->name}}
                     <span class='pull-right'>
                         <a class='fa fa-pencil' title='Edit'
-                                href='{{route("AdminMenusControllerGetEdit",["id"=>$menu->id])}}?return_url={{urlencode(Request::fullUrl())}}'></a>&nbsp;&nbsp;
+                           href='{{route("AdminMenusControllerGetEdit",["id"=>$menu->id])}}?return_url={{urlencode(Request::fullUrl())}}'></a>&nbsp;&nbsp;
                         <a title='Delete' class='fa fa-trash'
-                                onclick='{{CRUDBooster::deleteConfirm(route("AdminMenusControllerGetDelete",["id"=>$menu->id]))}}'
-                                href='javascript:void(0)'></a>
+                           onclick='{{CRUDBooster::deleteConfirm(route("AdminMenusControllerGetDelete",["id"=>$menu->id]))}}'
+                           href='javascript:void(0)'></a>
                     </span>
                 </div>
                 <ul>
@@ -21,9 +21,12 @@
                             <li data-id='{{$child->id}}' data-name='{{$child->name}}'>
                                 <div><i class='{{$child->icon}}'></i> {{$child->name}}
                                     <span class='pull-right'>
-                                        <a class='fa fa-pencil' title='Edit' href='{{route("AdminMenusControllerGetEdit",["id"=>$child->id])}}?return_url={{urlencode(Request::fullUrl())}}'></a>&nbsp;
+                                        <a class='fa fa-pencil' title='Edit'
+                                           href='{{route("AdminMenusControllerGetEdit",["id"=>$child->id])}}?return_url={{urlencode(Request::fullUrl())}}'></a>&nbsp;
                                         &nbsp;
-                                        <a title="Delete" class='fa fa-trash' onclick='{{CRUDBooster::deleteConfirm(route("AdminMenusControllerGetDelete",["id"=>$child->id]))}}' href='javascript:void(0)'></a>
+                                        <a title="Delete" class='fa fa-trash'
+                                           onclick='{{CRUDBooster::deleteConfirm(route("AdminMenusControllerGetDelete",["id"=>$child->id]))}}'
+                                           href='javascript:void(0)'></a>
                                     </span>
                                 </div>
                             </li>

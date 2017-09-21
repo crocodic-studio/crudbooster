@@ -9,6 +9,6 @@
     </div>
 </div>
 <div class="box-body">
-    <textarea id='textarea-hookAfterAdd' class="form-control"    name="hookAfterAdd">{{$hookAfterAdd}}</textarea>
+    <textarea id='textarea-hookAfterAdd' class="form-control" name="hookAfterAdd">{{$hookAfterAdd}}</textarea>
 </div>
         

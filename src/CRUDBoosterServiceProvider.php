@@ -15,46 +15,44 @@ class CRUDBoosterServiceProvider extends ServiceProvider
      */
 
     public function boot()
-    {        
-                                
-        $this->loadViewsFrom(__DIR__.'/views', 'crudbooster');
-        $this->publishes([__DIR__.'/configs/crudbooster.php' => config_path('crudbooster.php')],'cb_config');            
-        $this->publishes([__DIR__.'/localization' => resource_path('lang')], 'cb_localization');                 
-        $this->publishes([__DIR__.'/database' => base_path('database')],'cb_migration');
+    {
 
+        $this->loadViewsFrom(__DIR__.'/views', 'crudbooster');
+        $this->publishes([__DIR__.'/configs/crudbooster.php' => config_path('crudbooster.php')], 'cb_config');
+        $this->publishes([__DIR__.'/localization' => resource_path('lang')], 'cb_localization');
+        $this->publishes([__DIR__.'/database' => base_path('database')], 'cb_migration');
 
         /* Integrate LFM to CRUDBooster */
         $this->publishes([
             __DIR__.'/laravel-filemanager' => base_path('vendor/unisharp/laravel-filemanager'),
-        ],'cb_lfm');
+        ], 'cb_lfm');
 
         $this->publishes([
             __DIR__.'/laravel-filemanager/public' => public_path('vendor/laravel-filemanager'),
-        ],'cb_lfm');        
+        ], 'cb_lfm');
 
         $this->publishes([
             __DIR__.'/laravel-filemanager/src/config/lfm.php' => config_path('lfm.php'),
-        ],'cb_lfm');        
+        ], 'cb_lfm');
 
         $this->publishes([
             __DIR__.'/laravel-filemanager/src/views/script.blade.php' => resource_path('views/vendor/laravel-filemanager/script.blade.php'),
-        ],'cb_lfm');
+        ], 'cb_lfm');
 
         $this->publishes([
             __DIR__.'/userfiles/views/vendor/crudbooster/type_components/readme.txt' => resource_path('views/vendor/crudbooster/type_components/readme.txt'),
-        ],'cb_type_components');
+        ], 'cb_type_components');
 
-        if(!file_exists(app_path('Http/Controllers/CBHook.php'))) {
-            $this->publishes([__DIR__.'/userfiles/controllers/CBHook.php' => app_path('Http/Controllers/CBHook.php')],'CBHook');
+        if (! file_exists(app_path('Http/Controllers/CBHook.php'))) {
+            $this->publishes([__DIR__.'/userfiles/controllers/CBHook.php' => app_path('Http/Controllers/CBHook.php')], 'CBHook');
         }
 
-        if(!file_exists(app_path('Http/Controllers/AdminUsersController.php'))) {
-            $this->publishes([__DIR__.'/userfiles/controllers/AdminUsersController.php' => app_path('Http/Controllers/AdminUsersController.php')],'cb_user_controller');
+        if (! file_exists(app_path('Http/Controllers/AdminUsersController.php'))) {
+            $this->publishes([__DIR__.'/userfiles/controllers/AdminUsersController.php' => app_path('Http/Controllers/AdminUsersController.php')], 'cb_user_controller');
         }
-        
-                    
-        require __DIR__.'/validations/validation.php';        
-        require __DIR__.'/routes.php';                        
+
+        require __DIR__.'/validations/validation.php';
+        require __DIR__.'/routes.php';
     }
 
     /**
@@ -63,25 +61,23 @@ class CRUDBoosterServiceProvider extends ServiceProvider
      * @return void
      */
     public function register()
-    {                                   
-        require __DIR__.'/helpers/Helper.php';      
+    {
+        require __DIR__.'/helpers/Helper.php';
 
-        $this->mergeConfigFrom(__DIR__.'/configs/crudbooster.php','crudbooster');        
-        
-        $this->app->singleton('crudbooster', function ()
-        {
+        $this->mergeConfigFrom(__DIR__.'/configs/crudbooster.php', 'crudbooster');
+
+        $this->app->singleton('crudbooster', function () {
             return true;
         });
 
         $this->commands([
-            commands\Mailqueues::class            
+            commands\Mailqueues::class,
         ]);
 
         $this->registerCrudboosterCommand();
 
         $this->commands('crudboosterinstall');
         $this->commands('crudboosterupdate');
-
 
         $this->app->register('Barryvdh\DomPDF\ServiceProvider');
         $this->app->register('Maatwebsite\Excel\ExcelServiceProvider');
@@ -97,15 +93,14 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $loader->alias('CB', 'crocodicstudio\crudbooster\helpers\CB');
     }
 
-
     private function registerCrudboosterCommand()
     {
-        $this->app->singleton('crudboosterinstall',function() {
+        $this->app->singleton('crudboosterinstall', function () {
             return new CrudboosterInstallationCommand;
         });
 
-        $this->app->singleton('crudboosterupdate',function() {
+        $this->app->singleton('crudboosterupdate', function () {
             return new CrudboosterUpdateCommand;
-        });        
+        });
     }
 }

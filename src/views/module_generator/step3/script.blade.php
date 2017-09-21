@@ -2,11 +2,13 @@
     var columns = {!! json_encode($columns) !!};
     var types = {!! json_encode($types) !!};
     var validation_rules = ['required', 'string', 'integer', 'double', 'image', 'date', 'numeric', 'alpha_spaces'];
+
     function ucwords(str) {
         return (str + '').replace(/^([a-z])|\s+([a-z])/g, function ($1) {
             return $1.toUpperCase();
         });
     }
+
     function showTypeSuggest(t) {
         t = $(t);
 
@@ -64,6 +66,7 @@
 
         t.after("<ul class='sub'>" + list + "</ul>");
     }
+
     function showColumnSuggest(t) {
         t = $(t);
         t.next("ul").remove();

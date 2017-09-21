@@ -25,23 +25,23 @@
 </select>
 <div class="text-danger">{{ $errors->first('theme_color') }}</div>
 @push('bottom')
-<script type="text/javascript">
-    $(function () {
-        $("select[name=theme_color]").change(function () {
-            var n = $(this).val();
-            $("body").attr("class", n);
-        })
+    <script type="text/javascript">
+        $(function () {
+            $("select[name=theme_color]").change(function () {
+                var n = $(this).val();
+                $("body").attr("class", n);
+            })
 
-        $('#set_as_superadmin input').click(function () {
-            var n = $(this).val();
-            if (n == '1') {
-                $('#privileges_configuration').hide();
-            } else {
-                $('#privileges_configuration').show();
-            }
-        })
+            $('#set_as_superadmin input').click(function () {
+                var n = $(this).val();
+                if (n == '1') {
+                    $('#privileges_configuration').hide();
+                } else {
+                    $('#privileges_configuration').show();
+                }
+            })
 
-        $('#set_as_superadmin input:checked').trigger('click');
-    })
-</script>
+            $('#set_as_superadmin input:checked').trigger('click');
+        })
+    </script>
 @endpush
