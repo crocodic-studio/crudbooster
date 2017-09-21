@@ -1004,20 +1004,13 @@ class CBController extends Controller
         return  $importer->doneImport($data);
     }
 
-    public function postDoImportChunk()
+    public function postDoImportChunk(IndexImport $import)
     {
         $this->cbLoader();
         $file_md5 = md5(request('file'));
 
         if (request('file') && request('resume') == 1) {
-            $total = Session::get('total_data_import');
-            $prog = intval(Cache::get('success_'.$file_md5)) / $total * 100;
-            $prog = round($prog, 2);
-            if ($prog >= 100) {
-                Cache::forget('success_'.$file_md5);
-            }
-
-            return response()->json(['progress' => $prog, 'last_error' => Cache::get('error_'.$file_md5)]);
+            return $import->handleImportProgress($file_md5);
         }
 
         $select_column = Session::get('select_column');
