@@ -241,17 +241,17 @@ class CrudboosterInstallationCommand extends Command
     private function symlinkForAsset()
     {
         $this->info('Checking public/vendor/crudbooster symlink...');
-        if (file_exists(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'))) {
-            $vendorpath = public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster');
-
-            $this->info('Vendor Path: '.$vendorpath);
-            if (realpath($vendorpath) == $vendorpath) {
-                $this->info('Removing public/vendor/crudbooster dir, instead of creating a symlink...');
-                rrmdir(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'));
-                app('files')->link(__DIR__.'/../assets', public_path('vendor/crudbooster'));
-            }
-        } else {
+        if (!file_exists(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'))) {
             $this->info('Creating public/vendor/crudbooster symlink...');
+            app('files')->link(__DIR__.'/../assets', public_path('vendor/crudbooster'));
+            return ;
+        }
+        $vendorpath = public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster');
+
+        $this->info('Vendor Path: '.$vendorpath);
+        if (realpath($vendorpath) == $vendorpath) {
+            $this->info('Removing public/vendor/crudbooster dir, instead of creating a symlink...');
+            rrmdir(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'));
             app('files')->link(__DIR__.'/../assets', public_path('vendor/crudbooster'));
         }
     }
