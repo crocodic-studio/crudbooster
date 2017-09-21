@@ -2,8 +2,10 @@
 
 namespace crocodicstudio\crudbooster\controllers\Helpers;
 
+use CRUDBooster;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class IndexImport
 {
@@ -46,6 +48,7 @@ class IndexImport
     {
         $dir = 'uploads/'.date('Y-m');
         $filename = md5(str_random(5)).'.'. $file->getClientOriginalExtension();
+
         //Create Directory Monthly
         Storage::makeDirectory($dir);
 
@@ -53,5 +56,14 @@ class IndexImport
         Storage::putFileAs($dir, $file, $filename);
 
         return CRUDBooster::mainpath('import-data').'?file='.base64_encode($dir.'/'.$filename);
+    }
+
+    /**
+     * @param $file
+     * @return array
+     */
+    function validateForImport($file)
+    {
+        return Validator::make(['extension' => $file->getClientOriginalExtension(),], ['extension' => 'in:xls,xlsx,csv']);
     }
 }
