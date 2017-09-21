@@ -1118,16 +1118,11 @@ class CBController extends Controller
             return redirect()->back();
         }
         $file = Request::file('userfile');
-        $ext = $file->getClientOriginalExtension();
-
-        $validator = Validator::make(['extension' => $ext,], ['extension' => 'in:xls,xlsx,csv']);
-
+        $validator = $this->validateForImport($file);
         if ($validator->fails()) {
-            $message = implode('<br/>', $validator->errors()->all());
-
-            return CRUDBooster::backWithMsg($message, 'warning');
+            return CRUDBooster::backWithMsg(implode('<br/>', $validator->errors()->all()), 'warning');
         }
-        $url = $importer->uploadImportData($ext, $file);
+        $url = $importer->uploadImportData($file);
 
         return redirect($url);
     }
@@ -1717,5 +1712,14 @@ class CBController extends Controller
         $this->hookAfterDelete($id_selected);
 
         return CRUDBooster::backWithMsg(trans("crudbooster.alert_delete_selected_success"));
+    }
+
+    /**
+     * @param $file
+     * @return array
+     */
+    function validateForImport($file)
+    {
+        return Validator::make(['extension' => $file->getClientOriginalExtension(),], ['extension' => 'in:xls,xlsx,csv']);
     }
 }
