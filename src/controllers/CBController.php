@@ -1198,9 +1198,8 @@ class CBController extends Controller
         $column = request('column');
 
         $row = DB::table($this->table)->where($this->primary_key, $id)->first();
-
-        $row = DB::table($this->table)->where($this->primary_key, $id)->first();
         $file = $row->{$column};
+
         if (Storage::exists($file)) {
             Storage::delete($file);
         }
