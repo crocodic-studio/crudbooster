@@ -240,14 +240,8 @@ class CBController extends Controller
             $join_id = @$coltab['join_id'];
             $field = @$coltab['name'];
 
-            if (strpos($field, '.') !== false) {
-                $result->addselect($field.' as '.str_slug($field, '_'));
-                $tableField = substr($field, 0, strpos($field, '.'));
-                $fieldOrign = substr($field, strpos($field, '.') + 1);
-                $columns_table[$index]['type_data'] = CRUDBooster::getFieldType($tableField, $fieldOrign);
-                $columns_table[$index]['field'] = str_slug($field, '_');
-                $columns_table[$index]['field_raw'] = $field;
-                $columns_table[$index]['field_with'] = $tableField.'.'.$fieldOrign;
+            if (strpos($field, '.')) {
+                $columns_table = $this->addDotField($result, $field, $columns_table, $index);
             } else {
                 $columns_table[$index]['type_data'] = 'varchar';
                 $columns_table[$index]['field_with'] = null;
@@ -1688,5 +1682,25 @@ class CBController extends Controller
         }
 
         return $addaction;
+    }
+
+    /**
+     * @param $result
+     * @param $field
+     * @param $columns_table
+     * @param $index
+     * @return mixed
+     */
+    private function addDotField($result, $field, $columns_table, $index)
+    {
+        $result->addselect($field.' as '.str_slug($field, '_'));
+        $tableField = substr($field, 0, strpos($field, '.'));
+        $fieldOrign = substr($field, strpos($field, '.') + 1);
+        $columns_table[$index]['type_data'] = CRUDBooster::getFieldType($tableField, $fieldOrign);
+        $columns_table[$index]['field'] = str_slug($field, '_');
+        $columns_table[$index]['field_raw'] = $field;
+        $columns_table[$index]['field_with'] = $tableField.'.'.$fieldOrign;
+
+        return $columns_table;
     }
 }
