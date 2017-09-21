@@ -998,14 +998,10 @@ class CBController extends Controller
         return view('crudbooster::import', $data);
     }
 
-    public function postDoneImport()
+    public function postDoneImport(IndexImport $importer)
     {
         $this->cbLoader();
-        $data['page_menu'] = Route::getCurrentRoute()->getActionName();
-        $data['page_title'] = trans('crudbooster.import_page_title', ['module' => $module->name]);
-        Session::put('select_column', request('select_column'));
-
-        return view('crudbooster::import', $data);
+        return  $importer->doneImport($data);
     }
 
     public function postDoImportChunk()
@@ -1121,7 +1117,7 @@ class CBController extends Controller
         return response()->json(['status' => true]);
     }
 
-    public function postDoUploadImportData()
+    public function postDoUploadImportData(IndexImport $importer)
     {
         $this->cbLoader();
         if (! Request::hasFile('userfile')) {
@@ -1137,15 +1133,7 @@ class CBController extends Controller
 
             return CRUDBooster::backWithMsg($message, 'warning');
         }
-
-        //Create Directory Monthly
-        Storage::makeDirectory('uploads/'.date('Y-m'));
-
-        //Move file to storage
-        $filename = md5(str_random(5)).'.'.$ext;
-        Storage::putFileAs('uploads/'.date('Y-m'), $file, $filename);
-        $url_filename = 'uploads/'.date('Y-m').'/'.$filename;
-        $url = CRUDBooster::mainpath('import-data').'?file='.base64_encode($url_filename);
+        $url = $importer->uploadImportData($ext, $file);
 
         return redirect($url);
     }
