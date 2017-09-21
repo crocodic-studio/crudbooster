@@ -17,9 +17,7 @@ class FileController extends Controller
         $fullFilePath = implode(DIRECTORY_SEPARATOR, array_filter(['uploads', $one, $two, $three, $four, $five]));
 
         $fullStoragePath = storage_path('app/'.$fullFilePath);
-        $lifetime = 31556926; // One year in seconds
 
-        $handler = new \Symfony\Component\HttpFoundation\File\File($fullStoragePath);
 
         if (! Storage::exists($fullFilePath)) {
             abort(404);
@@ -31,41 +29,10 @@ class FileController extends Controller
             list($imgRaw, $imageFileSize) = $this->resizeImage($fullStoragePath);
         }
 
-        /**
-         * Prepare some header variables
-         */
-        $file_time = $handler->getMTime(); // Get the last modified time for the file (Unix timestamp)
-
-        $header_content_type = $handler->getMimeType();
-        $header_content_length = ($imageFileSize) ?: $handler->getSize();
-        $header_etag = md5($file_time.$fullFilePath);
-        $header_last_modified = gmdate('r', $file_time);
-        $header_expires = gmdate('r', $file_time + $lifetime);
-
-        $headers = [
-            'Content-Disposition' => 'inline; filename="'.$filename.'"',
-            'Last-Modified' => $header_last_modified,
-            'Cache-Control' => 'must-revalidate',
-            'Expires' => $header_expires,
-            'Pragma' => 'public',
-            'Etag' => $header_etag,
-        ];
-
-        $// return Response::download($fullStoragePath, $filename, $headers);
-
-        /**
-         * Is the resource cached?
-         */
-        $h1 = Request::server('HTTP_IF_MODIFIED_SINCE') && Request::server('HTTP_IF_MODIFIED_SINCE') == $header_last_modified;
-        $h2 = Request::server('HTTP_IF_NONE_MATCH') && str_replace('"', '', stripslashes(Request::server('HTTP_IF_NONE_MATCH'))) == $header_etag;
-
-        $headers = array_merge($headers, [
-            'Content-Type' => $header_content_type,
-            'Content-Length' => $header_content_length,
-        ]);
+        list($headers, $isCachedByBrowser) = $this->prepareHeaders($imageFileSize, $fullFilePath, $filename);
 
         if ($hasImageExtension) {
-            if ($h1 || $h2) {
+            if ($isCachedByBrowser) {
                 return Response::make('', 304, $headers); // File (image) is cached by the browser, so we don't have to send it again
             }
 
@@ -116,5 +83,55 @@ class FileController extends Controller
         $hasImageExtension = in_array($extension, $images_ext);
 
         return $hasImageExtension;
+    }
+
+    /**
+     * @param $fullStoragePath
+     * @param $imageFileSize
+     * @param $fullFilePath
+     * @param $lifetime
+     * @param $filename
+     * @return array
+     */
+    private function prepareHeaders($imageFileSize, $fullFilePath, $filename)
+    {
+        $lifetime = 31556926; // One year in seconds
+        $fullStoragePath = storage_path('app/'.$fullFilePath);
+        /**
+         * Prepare some header variables
+         */
+        $handler = new \Symfony\Component\HttpFoundation\File\File($fullStoragePath);
+        $file_time = $handler->getMTime(); // Get the last modified time for the file (Unix timestamp)
+
+        $header_content_type = $handler->getMimeType();
+        $header_content_length = ($imageFileSize) ?: $handler->getSize();
+        $header_etag = md5($file_time.$fullFilePath);
+        $header_last_modified = gmdate('r', $file_time);
+        $header_expires = gmdate('r', $file_time + $lifetime);
+
+        $headers = [
+            'Content-Disposition' => 'inline; filename="'.$filename.'"',
+            'Last-Modified' => $header_last_modified,
+            'Cache-Control' => 'must-revalidate',
+            'Expires' => $header_expires,
+            'Pragma' => 'public',
+            'Etag' => $header_etag,
+        ];
+
+        // return Response::download($fullStoragePath, $filename, $headers);
+
+        $headers = array_merge($headers, [
+            'Content-Type' => $header_content_type,
+            'Content-Length' => $header_content_length,
+        ]);
+
+        /**
+         * Is the resource cached?
+         */
+        $h1 = Request::server('HTTP_IF_MODIFIED_SINCE') && Request::server('HTTP_IF_MODIFIED_SINCE') == $header_last_modified;
+        $h2 = Request::server('HTTP_IF_NONE_MATCH') && str_replace('"', '', stripslashes(Request::server('HTTP_IF_NONE_MATCH'))) == $header_etag;
+        $isCachedByBrowser = ($h1 || $h2);
+
+        return [$headers, $isCachedByBrowser];
     }
 }
