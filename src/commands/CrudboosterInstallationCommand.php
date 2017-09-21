@@ -35,7 +35,7 @@ class CrudboosterInstallationCommand extends Command
     public function handle()
     {
 
-        $this->header();
+        $this->printHeader();
 
         $this->checkRequirements();
 
@@ -60,10 +60,10 @@ class CrudboosterInstallationCommand extends Command
 			$this->info('Please setting the database configuration for first !');
 		}
 
-		$this->footer();
+		$this->printFooter();
 	}
 
-	private function header() {
+	private function printHeader() {
 		$this->info("
 
 #     __________  __  ______  ____                   __           
@@ -77,7 +77,7 @@ class CrudboosterInstallationCommand extends Command
         $this->info('====================================================================');
     }
 
-    private function footer($success = true)
+    private function printFooter($success = true)
     {
         $this->info('--');
         $this->info('Homepage : http://www.crudbooster.com');
@@ -170,7 +170,7 @@ class CrudboosterInstallationCommand extends Command
 
         if ($system_failed != 0) {
             $this->info('Sorry unfortunately your system is not meet with our requirements !');
-            $this->footer(false);
+            $this->printFooter(false);
         }
         $this->info('--');
     }
