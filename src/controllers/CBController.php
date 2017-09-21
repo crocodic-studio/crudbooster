@@ -6,6 +6,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 
 use crocodicstudio\crudbooster\controllers\Controller;
 use crocodicstudio\crudbooster\controllers\Helpers\IndexExport;
+use crocodicstudio\crudbooster\controllers\Helpers\IndexImport;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;
