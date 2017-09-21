@@ -12,7 +12,6 @@ class FileController extends Controller
 {
     public function getPreview($one, $two = null, $three = null, $four = null, $five = null)
     {
-
         // array_filter() filters out the falsy values from array.
         $filename = array_pop(array_filter([$one, $two, $three, $four, $five]));
         $fullFilePath = implode(DIRECTORY_SEPARATOR, array_filter(['uploads', $one, $two, $three, $four, $five]));
@@ -20,7 +19,7 @@ class FileController extends Controller
         $fullStoragePath = storage_path('app/'.$fullFilePath);
         $lifetime = 31556926; // One year in seconds
 
-        $handler = new \Symfony\Component\HttpFoundation\File\File(storage_path('app/'.$fullFilePath));
+        $handler = new \Symfony\Component\HttpFoundation\File\File($fullStoragePath);
 
         if (! Storage::exists($fullFilePath)) {
             abort(404);
@@ -69,7 +68,7 @@ class FileController extends Controller
             'Etag' => $header_etag,
         ];
 
-        // return Response::download(storage_path('app/'.$fullFilePath), $filename, $headers);
+        $// return Response::download($fullStoragePath, $filename, $headers);
 
         /**
          * Is the resource cached?
@@ -91,9 +90,9 @@ class FileController extends Controller
         }
 
         if (Request::get('download')) {
-            return Response::download(storage_path('app/'.$fullFilePath), $filename, $headers);
+            return Response::download($fullStoragePath, $filename, $headers);
         }
 
-        return Response::file(storage_path('app/'.$fullFilePath), $headers);
+        return Response::file($fullStoragePath, $headers);
     }
 }
