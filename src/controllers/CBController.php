@@ -1178,15 +1178,7 @@ class CBController extends Controller
             return CRUDBooster::backWithMsg(trans("crudbooster.alert_delete_selected_success"));;
         }
 
-        $action = str_replace(['-', '_'], ' ', $button_name);
-        $action = ucwords($action);
-        $type = 'success';
-        $message = trans("crudbooster.alert_action", ['action' => $action]);
-
-        if ($this->actionButtonSelected($id_selected, $button_name) === false) {
-            $message = ! empty($this->alert['message']) ? $this->alert['message'] : 'Error';
-            $type = ! empty($this->alert['type']) ? $this->alert['type'] : 'danger';
-        }
+        list($type, $message) = $this->getMessageAndType($button_name, $id_selected);
 
         return CRUDBooster::backWithMsg($message, $type);
     }
@@ -1716,5 +1708,25 @@ class CBController extends Controller
         if (in_array('deleted_at', $table_columns)) {
             $result->where($this->table.'.deleted_at', '=', null);
         }
+    }
+
+    /**
+     * @param $button_name
+     * @param $id_selected
+     * @return array
+     */
+    private function getMessageAndType($button_name, $id_selected)
+    {
+        $action = str_replace(['-', '_'], ' ', $button_name);
+        $action = ucwords($action);
+        $type = 'success';
+        $message = trans("crudbooster.alert_action", ['action' => $action]);
+
+        if ($this->actionButtonSelected($id_selected, $button_name) === false) {
+            $message = ! empty($this->alert['message']) ? $this->alert['message'] : 'Error';
+            $type = ! empty($this->alert['type']) ? $this->alert['type'] : 'danger';
+        }
+
+        return [$type, $message];
     }
 }
