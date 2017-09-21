@@ -338,10 +338,10 @@ class CBController extends Controller
                 return $this->pdf($response, $papersize, $paperorientation, $filename);
                 break;
             case 'xls':
-                $this->xls($filename, $response);
+                return $this->xls($filename, $response, $paperorientation);
                 break;
             case 'csv':
-                $this->csv($filename, $response);
+                return $this->csv($filename, $response, $paperorientation);
                 break;
         }
     }
@@ -1737,13 +1737,14 @@ class CBController extends Controller
     /**
      * @param $filename
      * @param $response
+     * @param $orientation
      */
-    private function xls($filename, $response)
+    private function xls($filename, $response, $orientation)
     {
-        Excel::create($filename, function ($excel) use ($response) {
+        return Excel::create($filename, function ($excel) use ($response, $orientation) {
             $excel->setTitle($filename)->setCreator("crudbooster.com")->setCompany(CRUDBooster::getSetting('appname'));
-            $excel->sheet($filename, function ($sheet) use ($response) {
-                $sheet->setOrientation($paperorientation);
+            $excel->sheet($filename, function ($sheet) use ($response, $orientation) {
+                $sheet->setOrientation($orientation);
                 $sheet->loadview('crudbooster::export', $response);
             });
         })->export('xls');
@@ -1752,13 +1753,14 @@ class CBController extends Controller
     /**
      * @param $filename
      * @param $response
+     * @param $orientation
      */
-    private function csv($filename, $response)
+    private function csv($filename, $response, $orientation)
     {
-        Excel::create($filename, function ($excel) use ($response) {
+        return Excel::create($filename, function ($excel) use ($response, $orientation) {
             $excel->setTitle($filename)->setCreator("crudbooster.com")->setCompany(CRUDBooster::getSetting('appname'));
-            $excel->sheet($filename, function ($sheet) use ($response) {
-                $sheet->setOrientation($paperorientation);
+            $excel->sheet($filename, function ($sheet) use ($response, $orientation) {
+                $sheet->setOrientation($orientation);
                 $sheet->loadview('crudbooster::export', $response);
             });
         })->export('csv');
