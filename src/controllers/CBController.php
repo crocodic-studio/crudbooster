@@ -1,8 +1,11 @@
-<?php namespace crocodicstudio\crudbooster\controllers;
+<?php
+
+namespace crocodicstudio\crudbooster\controllers;
 
 error_reporting(E_ALL ^ E_NOTICE);
 
 use crocodicstudio\crudbooster\controllers\Controller;
+use crocodicstudio\crudbooster\controllers\Helpers\IndexExport;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;
@@ -319,7 +322,7 @@ class CBController extends Controller
         return redirect(CRUDBooster::mainpath());
     }
 
-    public function postExportData()
+    public function postExportData(IndexExport $exporter)
     {
         $this->limit = Request::input('limit');
         $this->index_return = true;
@@ -335,13 +338,13 @@ class CBController extends Controller
 
         switch ($filetype) {
             case "pdf":
-                return $this->pdf($response, $papersize, $paperorientation, $filename);
+                return $exporter->pdf($response, $papersize, $paperorientation, $filename);
                 break;
             case 'xls':
-                return $this->xls($filename, $response, $paperorientation);
+                return $exporter->xls($filename, $response, $paperorientation);
                 break;
             case 'csv':
-                return $this->csv($filename, $response, $paperorientation);
+                return $exporter->csv($filename, $response, $paperorientation);
                 break;
         }
     }
@@ -1715,54 +1718,5 @@ class CBController extends Controller
         if (in_array('deleted_at', $table_columns)) {
             $result->where($this->table.'.deleted_at', '=', null);
         }
-    }
-
-    /**
-     * @param $response
-     * @param $papersize
-     * @param $paperorientation
-     * @param $filename
-     * @return mixed
-     */
-    private function pdf($response, $papersize, $paperorientation, $filename)
-    {
-        $view = view('crudbooster::export', $response)->render();
-        $pdf = app('dompdf.wrapper');
-        $pdf->loadHTML($view);
-        $pdf->setPaper($papersize, $paperorientation);
-
-        return $pdf->stream($filename.'.pdf');
-    }
-
-    /**
-     * @param $filename
-     * @param $response
-     * @param $orientation
-     */
-    private function xls($filename, $response, $orientation)
-    {
-        return Excel::create($filename, function ($excel) use ($response, $orientation) {
-            $excel->setTitle($filename)->setCreator("crudbooster.com")->setCompany(CRUDBooster::getSetting('appname'));
-            $excel->sheet($filename, function ($sheet) use ($response, $orientation) {
-                $sheet->setOrientation($orientation);
-                $sheet->loadview('crudbooster::export', $response);
-            });
-        })->export('xls');
-    }
-
-    /**
-     * @param $filename
-     * @param $response
-     * @param $orientation
-     */
-    private function csv($filename, $response, $orientation)
-    {
-        return Excel::create($filename, function ($excel) use ($response, $orientation) {
-            $excel->setTitle($filename)->setCreator("crudbooster.com")->setCompany(CRUDBooster::getSetting('appname'));
-            $excel->sheet($filename, function ($sheet) use ($response, $orientation) {
-                $sheet->setOrientation($orientation);
-                $sheet->loadview('crudbooster::export', $response);
-            });
-        })->export('csv');
     }
 }
