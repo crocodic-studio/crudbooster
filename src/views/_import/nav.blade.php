@@ -1,7 +1,7 @@
 <ul class='nav nav-tabs'>
     <li style="background:#eeeeee">
         <a style="color:#111" onclick="if(confirm('Are you sure want to leave ?')) location.href='{{ CRUDBooster::mainpath("import-data") }}'"
-                                      href='javascript:;'>
+           href='javascript:;'>
             {!! CB::icon('download') !!}
             Upload a File &raquo;
         </a>
@@ -17,5 +17,5 @@
             {!! CB::icon('cloud-download') !!}
             Importing &raquo;
         </a>
-        </li>
+    </li>
 </ul>

@@ -15,48 +15,49 @@
         <div class='box-body'>
 
             @push('head')
-            <style>
-                .table-api tbody tr td a {
-                    color: #db0e00;
-                    font-family: arial;
-                }
-            </style>
+                <style>
+                    .table-api tbody tr td a {
+                        color: #db0e00;
+                        font-family: arial;
+                    }
+                </style>
             @endpush
 
             @push('bottom')
-            <script>
-                $(function () {
-                    $(".link_name_api").click(function () {
-                        $(".detail_api").slideUp();
-                        $(this).parent("td").find(".detail_api").slideDown();
-                    })
-                    $(".selected_text").each(function () {
-                        var n = $(this).text();
-                        if (n.indexOf('api_') == 0) {
-                            $(this).attr('class', 'selected_text text-danger');
-                        }
-                    })
-                })
-                function deleteApi(id) {
-                    var url = "{{url(cbConfig('ADMIN_PATH').'/api-generator/delete-api')}}/" + id;
-                    swal({
-                        title: "Are you sure?",
-                        text: "You will not be able to recover this data!",
-                        type: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#DD6B55",
-                        confirmButtonText: "Yes, delete it!",
-                        closeOnConfirm: false
-                    }, function () {
-                        $.get(url, function (resp) {
-                            if (resp.status == 1) {
-                                swal("Deleted!", "The data has been deleted.", "success");
-                                location.href = document.location.href;
+                <script>
+                    $(function () {
+                        $(".link_name_api").click(function () {
+                            $(".detail_api").slideUp();
+                            $(this).parent("td").find(".detail_api").slideDown();
+                        })
+                        $(".selected_text").each(function () {
+                            var n = $(this).text();
+                            if (n.indexOf('api_') == 0) {
+                                $(this).attr('class', 'selected_text text-danger');
                             }
                         })
-                    });
-                }
-            </script>
+                    })
+
+                    function deleteApi(id) {
+                        var url = "{{url(cbConfig('ADMIN_PATH').'/api-generator/delete-api')}}/" + id;
+                        swal({
+                            title: "Are you sure?",
+                            text: "You will not be able to recover this data!",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "Yes, delete it!",
+                            closeOnConfirm: false
+                        }, function () {
+                            $.get(url, function (resp) {
+                                if (resp.status == 1) {
+                                    swal("Deleted!", "The data has been deleted.", "success");
+                                    location.href = document.location.href;
+                                }
+                            })
+                        });
+                    }
+                </script>
             @endpush
 
             <table class='table table-striped table-api table-bordered'>
@@ -126,9 +127,7 @@
                                                     @if($param['used'])
                                                         <?php
                                                         $param_exception = ['in', 'not_in', 'digits_between'];
-                                                        if ($param['config'] && substr($param['config'], 0,
-                                                                1) != '*' && !in_array($param['type'], $param_exception)
-                                                        ) continue;?>
+                                                        if ($param['config'] && substr($param['config'], 0, 1) != '*' && ! in_array($param['type'], $param_exception)) continue;?>
                                                         <tr>
                                                             <td>{{++$i}}</td>
                                                             <td width="5%"><em>{{$param['type']}}</em></td>

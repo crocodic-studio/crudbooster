@@ -17,9 +17,9 @@ class AddTableApikey extends Migration
 
             $table->string('screetkey')->nullable();
             $table->integer('hit')->nullable();
-            $table->string('status',25)->default('active');
+            $table->string('status', 25)->default('active');
 
-			$table->timestamps();
+            $table->timestamps();
         });
     }
 

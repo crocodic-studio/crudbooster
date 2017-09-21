@@ -64,7 +64,7 @@
         try {
             $sessions = Session::all();
             foreach ($sessions as $key => $val) {
-                $value = str_replace("[" . $key . "]", $val, $value);
+                $value = str_replace("[".$key."]", $val, $value);
             }
             echo reset(DB::select(DB::raw($value))[0]);
         } catch (\Exception $e) {

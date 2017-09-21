@@ -21,7 +21,7 @@
         if (is_array($config['orderby'])) {
             $orderby = [];
             foreach ($config['orderby'] as $k => $v) {
-                $orderby[] = $k . ',' . $v;
+                $orderby[] = $k.','.$v;
             }
             $orderby = implode(";", $orderby);
         } else {

@@ -20,7 +20,7 @@ class AddTableCmsNotifications extends Migration
             $table->string('url')->nullable();
             $table->boolean('is_read')->nullable();
 
-			$table->timestamps();
+            $table->timestamps();
         });
     }
 

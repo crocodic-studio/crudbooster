@@ -47,40 +47,40 @@
                 </div>
 
                 @push('bottom')
-                <script type="text/javascript">
-                    $(function () {
-                        var total = {{ intval(Session::get('total_data_import')) }};
+                    <script type="text/javascript">
+                        $(function () {
+                            var total = {{ intval(Session::get('total_data_import')) }};
 
-                        var int_prog = setInterval(function () {
+                            var int_prog = setInterval(function () {
 
-                            $.post("{{ CRUDBooster::mainpath('do-import-chunk?file='.Request::get('file')) }}", {resume: 1}, function (resp) {
-                                console.log(resp.progress);
-                                $('#progress-import').css('width', resp.progress + '%');
-                                $('#status-import').html("<i class='fa fa-spin fa-spinner'></i> Please wait importing... (" + resp.progress + "%)");
-                                $('#progress-import').attr('aria-valuenow', resp.progress);
-                                if (resp.progress >= 100) {
+                                $.post("{{ CRUDBooster::mainpath('do-import-chunk?file='.Request::get('file')) }}", {resume: 1}, function (resp) {
+                                    console.log(resp.progress);
+                                    $('#progress-import').css('width', resp.progress + '%');
+                                    $('#status-import').html("<i class='fa fa-spin fa-spinner'></i> Please wait importing... (" + resp.progress + "%)");
+                                    $('#progress-import').attr('aria-valuenow', resp.progress);
+                                    if (resp.progress >= 100) {
+                                        $('#status-import').addClass('text-success').html("<i class='fa fa-check-square-o'></i> Import Data Completed !");
+                                        clearInterval(int_prog);
+                                    }
+                                })
+
+
+                            }, 2500);
+
+                            $.post("{{ CRUDBooster::mainpath('do-import-chunk').'?file='.Request::get('file') }}", function (resp) {
+                                if (resp.status == true) {
+                                    $('#progress-import').css('width', '100%');
+                                    $('#progress-import').attr('aria-valuenow', 100);
                                     $('#status-import').addClass('text-success').html("<i class='fa fa-check-square-o'></i> Import Data Completed !");
                                     clearInterval(int_prog);
+                                    $('#upload-footer').show();
+                                    console.log('Import Success');
                                 }
                             })
 
-
-                        }, 2500);
-
-                        $.post("{{ CRUDBooster::mainpath('do-import-chunk').'?file='.Request::get('file') }}", function (resp) {
-                            if (resp.status == true) {
-                                $('#progress-import').css('width', '100%');
-                                $('#progress-import').attr('aria-valuenow', 100);
-                                $('#status-import').addClass('text-success').html("<i class='fa fa-check-square-o'></i> Import Data Completed !");
-                                clearInterval(int_prog);
-                                $('#upload-footer').show();
-                                console.log('Import Success');
-                            }
                         })
 
-                    })
-
-                </script>
+                    </script>
                 @endpush
 
             </div><!-- /.box-body -->
@@ -111,19 +111,17 @@
 
             <?php
             if ($data_sub_module) {
-                $action_path = Route($data_sub_module->controller . "GetIndex");
+                $action_path = Route($data_sub_module->controller."GetIndex");
             } else {
                 $action_path = CRUDBooster::mainpath();
             }
 
-            $action = $action_path . "/done-import?file=" . Request::get('file') . '&import=1';
+            $action = $action_path."/done-import?file=".Request::get('file').'&import=1';
             ?>
 
 
 
             @include('crudbooster::_import.form')
-
-
 
 
         </div>
@@ -154,12 +152,12 @@
 
             <?php
             if ($data_sub_module) {
-                $action_path = Route($data_sub_module->controller . "GetIndex");
+                $action_path = Route($data_sub_module->controller."GetIndex");
             } else {
                 $action_path = CRUDBooster::mainpath();
             }
 
-            $action = $action_path . "/do-upload-import-data";
+            $action = $action_path."/do-upload-import-data";
             ?>
 
             <form method='post' id="form" enctype="multipart/form-data" action='{{$action}}'>

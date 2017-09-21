@@ -92,24 +92,24 @@
     </div>
 
     @push('bottom')
-    <script type="text/javascript">
-        function showModalCreateDirectory() {
-            $('#modal-create-directory').modal('show');
-        }
-    </script>
+        <script type="text/javascript">
+            function showModalCreateDirectory() {
+                $('#modal-create-directory').modal('show');
+            }
+        </script>
 
 
-    @include('crudbooster::filemanager.partials.create_folder_modal')
+        @include('crudbooster::filemanager.partials.create_folder_modal')
 
 
 
-    <script type="text/javascript">
-        function showModalUpload() {
-            $('#modal-upload-file').modal('show');
-        }
-    </script>
+        <script type="text/javascript">
+            function showModalUpload() {
+                $('#modal-upload-file').modal('show');
+            }
+        </script>
 
-    @include('crudbooster::filemanager.partials.file_upload_modal')
+        @include('crudbooster::filemanager.partials.file_upload_modal')
 
     @endpush
 @endsection

@@ -12,17 +12,17 @@ use Validator;
 
 class CRUDBooster
 {
-
     public static function insert($table, $data = [])
     {
         $data['id'] = DB::table($table)->max('id') + 1;
-        if (!$data['created_at'] && Schema::hasColumn($table, 'created_at')) {
+        if (! $data['created_at'] && Schema::hasColumn($table, 'created_at')) {
             $data['created_at'] = date('Y-m-d H:i:s');
         }
 
         if (DB::table($table)->insert($data)) {
             return $data['id'];
         }
+
         return false;
     }
 
@@ -43,6 +43,7 @@ class CRUDBooster
         if ($skip) {
             $query->skip($skip);
         }
+
         return $query->get();
     }
 
@@ -52,14 +53,14 @@ class CRUDBooster
         $f = explode('.', $table);
 
         if (count($f) == 1) {
-            return array("table" => $f[0], "database" => cbConfig('MAIN_DB_DATABASE'));
+            return ["table" => $f[0], "database" => cbConfig('MAIN_DB_DATABASE')];
         }
         if (count($f) == 2) {
-            return array("database" => $f[0], "table" => $f[1]);
+            return ["database" => $f[0], "table" => $f[1]];
         }
 
         if (count($f) == 3) {
-            return array("table" => $f[0], "schema" => $f[1], "table" => $f[2]);
+            return ["table" => $f[0], "schema" => $f[1], "table" => $f[2]];
         }
 
         return false;
@@ -83,7 +84,7 @@ class CRUDBooster
     public static function myPrivilege()
     {
         $roles = Session::get('admin_privileges_roles');
-        if (!$roles) {
+        if (! $roles) {
             return;
         }
         foreach ($roles as $role) {
@@ -112,7 +113,7 @@ class CRUDBooster
         $session = Session::get('admin_privileges_roles');
         foreach ($session as $v) {
             if ($v->path == self::getModulePath()) {
-                return (bool)$v->is_visible;
+                return (bool) $v->is_visible;
             }
         }
     }
@@ -131,7 +132,7 @@ class CRUDBooster
         $session = Session::get('admin_privileges_roles');
         foreach ($session as $v) {
             if ($v->path == self::getModulePath()) {
-                return (bool)$v->is_edit;
+                return (bool) $v->is_edit;
             }
         }
     }
@@ -145,7 +146,7 @@ class CRUDBooster
         $session = Session::get('admin_privileges_roles');
         foreach ($session as $v) {
             if ($v->path == self::getModulePath()) {
-                return (bool)$v->is_create;
+                return (bool) $v->is_create;
             }
         }
     }
@@ -159,7 +160,7 @@ class CRUDBooster
         $session = Session::get('admin_privileges_roles');
         foreach ($session as $v) {
             if ($v->path == self::getModulePath()) {
-                return (bool)$v->is_read;
+                return (bool) $v->is_read;
             }
         }
     }
@@ -173,7 +174,7 @@ class CRUDBooster
         $session = Session::get('admin_privileges_roles');
         foreach ($session as $v) {
             if ($v->path == self::getModulePath()) {
-                return (bool)$v->is_delete;
+                return (bool) $v->is_delete;
             }
         }
     }
@@ -192,17 +193,18 @@ class CRUDBooster
             if ($v->is_visible && $v->is_create && $v->is_read && $v->is_edit && $v->is_delete) {
                 return true;
             }
-            return false;
 
+            return false;
         }
     }
 
     public static function getCurrentModule()
     {
         $modulepath = self::getModulePath();
-        if (Cache::has('moduls_' . $modulepath)) {
-            return Cache::get('moduls_' . $modulepath);
+        if (Cache::has('moduls_'.$modulepath)) {
+            return Cache::get('moduls_'.$modulepath);
         }
+
         return DB::table('cms_moduls')->where('path', self::getModulePath())->first();
     }
 
@@ -213,8 +215,8 @@ class CRUDBooster
         }
         Session::put('currentDashboardId', Request::get('d'));
         Session::put('currentMenuId', 0);
-        return Request::get('d');
 
+        return Request::get('d');
     }
 
     public static function getCurrentMenuId()
@@ -224,17 +226,14 @@ class CRUDBooster
         }
         Session::put('currentMenuId', Request::get('m'));
         Session::put('currentDashboardId', 0);
+
         return Request::get('m');
     }
 
     public static function sidebarDashboard()
     {
 
-        $menu = DB::table('cms_menus')
-            ->where('id_cms_privileges', self::myPrivilegeId())
-            ->where('is_dashboard', 1)
-            ->where('is_active', 1)
-            ->first() ?: new \stdClass();
+        $menu = DB::table('cms_menus')->where('id_cms_privileges', self::myPrivilegeId())->where('is_dashboard', 1)->where('is_active', 1)->first() ?: new \stdClass();
 
         $menu->url = self::menuUrl($menu);
 
@@ -266,24 +265,18 @@ class CRUDBooster
         }
 
         $menu->is_broken = true;
+
         return '#';
     }
 
     public static function adminPath($path = null)
     {
-        return url(cbConfig('ADMIN_PATH') . '/' . $path);
+        return url(cbConfig('ADMIN_PATH').'/'.$path);
     }
 
     public static function sidebarMenu()
     {
-        $menu_active = DB::table('cms_menus')
-            ->where('id_cms_privileges', self::myPrivilegeId())
-            ->where('parent_id', 0)
-            ->where('is_active', 1)
-            ->where('is_dashboard', 0)
-            ->orderby('sorting', 'asc')
-            ->select('cms_menus.*')
-            ->get();
+        $menu_active = DB::table('cms_menus')->where('id_cms_privileges', self::myPrivilegeId())->where('parent_id', 0)->where('is_active', 1)->where('is_dashboard', 0)->orderby('sorting', 'asc')->select('cms_menus.*')->get();
 
         foreach ($menu_active as &$menu) {
 
@@ -292,14 +285,7 @@ class CRUDBooster
             $menu->url = $url;
             $menu->url_path = trim(str_replace(url('/'), '', $url), "/");
 
-            $child = DB::table('cms_menus')
-                ->where('is_dashboard', 0)
-                ->where('is_active', 1)
-                ->where('cms_privileges', 'like', '%"' . self::myPrivilegeName() . '"%')
-                ->where('parent_id', $menu->id)
-                ->select('cms_menus.*')
-                ->orderby('sorting', 'asc')
-                ->get();
+            $child = DB::table('cms_menus')->where('is_dashboard', 0)->where('is_active', 1)->where('cms_privileges', 'like', '%"'.self::myPrivilegeName().'"%')->where('parent_id', $menu->id)->select('cms_menus.*')->orderby('sorting', 'asc')->get();
 
             if (count($child)) {
                 foreach ($child as &$c) {
@@ -323,13 +309,13 @@ class CRUDBooster
     public static function deleteConfirm($redirectTo)
     {
         echo 'swal({   
-				title: "' . trans('crudbooster.delete_title_confirm') . '",   
-				text: "' . trans('crudbooster.delete_description_confirm') . '",   
+				title: "'.trans('crudbooster.delete_title_confirm').'",   
+				text: "'.trans('crudbooster.delete_description_confirm').'",   
 				type: "warning",   
 				showCancelButton: true,   
 				confirmButtonColor: "#ff0000",   
-				confirmButtonText: "' . trans('crudbooster.confirmation_yes') . '",  
-				cancelButtonText: "' . trans('crudbooster.confirmation_no') . '",  
+				confirmButtonText: "'.trans('crudbooster.confirmation_yes').'",  
+				cancelButtonText: "'.trans('crudbooster.confirmation_no').'",  
 				closeOnConfirm: false }, 
 				function(){  location.href="$redirectTo" });';
     }
@@ -338,8 +324,9 @@ class CRUDBooster
     {
         $id = Session::get('current_row_id');
         $id = intval($id);
-        $id = (!$id) ? Request::segment(4) : $id;
+        $id = (! $id) ? Request::segment(4) : $id;
         $id = intval($id);
+
         return $id;
     }
 
@@ -348,6 +335,7 @@ class CRUDBooster
         $action = str_replace("App\Http\Controllers", "", Route::currentRouteAction());
         $atloc = strpos($action, '@') + 1;
         $method = substr($action, $atloc);
+
         return $method;
     }
 
@@ -356,14 +344,14 @@ class CRUDBooster
         if (Cache::forget($name)) {
             return true;
         }
-        return false;
 
+        return false;
     }
 
     public static function isColumnNULL($table, $field)
     {
-        if (Cache::has('field_isNull_' . $table . '_' . $field)) {
-            return Cache::get('field_isNull_' . $table . '_' . $field);
+        if (Cache::has('field_isNull_'.$table.'_'.$field)) {
+            return Cache::get('field_isNull_'.$table.'_'.$field);
         }
 
         try {
@@ -373,7 +361,8 @@ class CRUDBooster
         } catch (\Exception $e) {
             $isNULL = false;
         }
-        Cache::forever('field_isNull_' . $table . '_' . $field, $isNULL);
+        Cache::forever('field_isNull_'.$table.'_'.$field, $isNULL);
+
         return $isNULL;
     }
 
@@ -403,13 +392,14 @@ class CRUDBooster
 
     public static function stringBetween($string, $start, $end)
     {
-        $string = ' ' . $string;
+        $string = ' '.$string;
         $ini = strpos($string, $start);
         if ($ini == 0) {
             return '';
         }
         $ini += strlen($start);
         $len = strpos($string, $end, $ini) - $ini;
+
         return substr($string, $ini, $len);
     }
 
@@ -426,7 +416,7 @@ class CRUDBooster
         $diff->w = floor($diff->d / 7);
         $diff->d -= $diff->w * 7;
 
-        $string = array(
+        $string = [
             'y' => 'year',
             'm' => 'month',
             'w' => 'week',
@@ -434,19 +424,20 @@ class CRUDBooster
             'h' => 'hour',
             'i' => 'minute',
             's' => 'second',
-        );
+        ];
         foreach ($string as $k => &$v) {
             if ($diff->$k) {
-                $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
+                $v = $diff->$k.' '.$v.($diff->$k > 1 ? 's' : '');
             } else {
                 unset($string[$k]);
             }
         }
 
-        if (!$full) {
+        if (! $full) {
             $string = array_slice($string, 0, 1);
         }
-        return $string ? implode(', ', $string) . ' ' : 'just now';
+
+        return $string ? implode(', ', $string).' ' : 'just now';
     }
 
     public static function sendEmailQueue($queue)
@@ -465,31 +456,39 @@ class CRUDBooster
         $cc_email = $queue->email_cc_email;
         $attachments = unserialize($queue->email_attachments);
 
-        \Mail::send("crudbooster::emails.blank", ['content' => $html],
-            function ($message) use ($html, $to, $subject, $from_email, $from_name, $cc_email, $attachments) {
-                $message->priority(1);
-                $message->to($to);
-                $message->from($from_email, $from_name);
-                $message->cc($cc_email);
+        \Mail::send("crudbooster::emails.blank", ['content' => $html], function ($message) use (
+            $html,
+            $to,
+            $subject,
+            $from_email,
+            $from_name,
+            $cc_email,
+            $attachments
+        ) {
+            $message->priority(1);
+            $message->to($to);
+            $message->from($from_email, $from_name);
+            $message->cc($cc_email);
 
-                if (count($attachments)) {
-                    foreach ($attachments as $attachment) {
-                        $message->attach($attachment);
-                    }
+            if (count($attachments)) {
+                foreach ($attachments as $attachment) {
+                    $message->attach($attachment);
                 }
+            }
 
-                $message->subject($subject);
-            });
+            $message->subject($subject);
+        });
     }
 
     public static function getSetting($name)
     {
-        if (Cache::has('setting_' . $name)) {
-            return Cache::get('setting_' . $name);
+        if (Cache::has('setting_'.$name)) {
+            return Cache::get('setting_'.$name);
         }
 
         $query = DB::table('cms_settings')->where('name', $name)->first();
-        Cache::forever('setting_' . $name, $query->content);
+        Cache::forever('setting_'.$name, $query->content);
+
         return $query->content;
     }
 
@@ -509,14 +508,14 @@ class CRUDBooster
         $template = CRUDBooster::first('cms_email_templates', ['slug' => $template]);
         $html = $template->content;
         foreach ($data as $key => $val) {
-            $html = str_replace('[' . $key . ']', $val, $html);
-            $template->subject = str_replace('[' . $key . ']', $val, $template->subject);
+            $html = str_replace('['.$key.']', $val, $html);
+            $template->subject = str_replace('['.$key.']', $val, $template->subject);
         }
         $subject = $template->subject;
-        $attachments = ($config['attachments']) ?: array();
+        $attachments = ($config['attachments']) ?: [];
 
         if ($config['send_at'] != null) {
-            $a = array();
+            $a = [];
             $a['send_at'] = $config['send_at'];
             $a['email_recipient'] = $to;
             $a['email_from_email'] = $template->from_email ?: CRUDBooster::getSetting('email_sender');
@@ -527,38 +526,39 @@ class CRUDBooster
             $a['email_attachments'] = serialize($attachments);
             $a['is_sent'] = 0;
             DB::table('cms_email_queues')->insert($a);
+
             return true;
         }
 
-        \Mail::send("crudbooster::emails.blank", ['content' => $html],
-            function ($message) use ($to, $subject, $template, $attachments) {
-                $message->priority(1);
-                $message->to($to);
+        \Mail::send("crudbooster::emails.blank", ['content' => $html], function ($message) use ($to, $subject, $template, $attachments) {
+            $message->priority(1);
+            $message->to($to);
 
-                if ($template->from_email) {
-                    $from_name = ($template->from_name) ?: CRUDBooster::getSetting('appname');
-                    $message->from($template->from_email, $from_name);
+            if ($template->from_email) {
+                $from_name = ($template->from_name) ?: CRUDBooster::getSetting('appname');
+                $message->from($template->from_email, $from_name);
+            }
+
+            if ($template->cc_email) {
+                $message->cc($template->cc_email);
+            }
+
+            if (count($attachments)) {
+                foreach ($attachments as $attachment) {
+                    $message->attach($attachment);
                 }
+            }
 
-                if ($template->cc_email) {
-                    $message->cc($template->cc_email);
-                }
-
-                if (count($attachments)) {
-                    foreach ($attachments as $attachment) {
-                        $message->attach($attachment);
-                    }
-                }
-
-                $message->subject($subject);
-            });
+            $message->subject($subject);
+        });
     }
 
     public static function first($table, $id)
     {
         $table = self::parseSqlTable($table)['table'];
-        if (!is_array($id)) {
+        if (! is_array($id)) {
             $pk = self::pk($table);
+
             return DB::table($table)->where($pk, $id)->first();
         }
 
@@ -566,6 +566,7 @@ class CRUDBooster
         foreach ($id as $k => $v) {
             $first->where($k, $v);
         }
+
         return $first->first();
     }
 
@@ -576,16 +577,16 @@ class CRUDBooster
 
     public static function findPrimaryKey($table)
     {
-        if (!$table) {
+        if (! $table) {
             return 'id';
         }
 
-        if (self::getCache('table_' . $table, 'primary_key')) {
-            return self::getCache('table_' . $table, 'primary_key');
+        if (self::getCache('table_'.$table, 'primary_key')) {
+            return self::getCache('table_'.$table, 'primary_key');
         }
         $table = CRUDBooster::parseSqlTable($table);
 
-        if (!$table['table']) {
+        if (! $table['table']) {
             throw new \Exception("parseSqlTable can't determine the table");
         }
 
@@ -616,22 +617,22 @@ class CRUDBooster
             }
         }
 
-        if (!$primary_key) {
+        if (! $primary_key) {
             return 'id';
         }
-        self::putCache('table_' . $table, 'primary_key', $primary_key);
-        return $primary_key;
+        self::putCache('table_'.$table, 'primary_key', $primary_key);
 
+        return $primary_key;
     }
 
     public static function getCache($section, $cache_name)
     {
-        if (!Cache::has($section)) {
+        if (! Cache::has($section)) {
             return false;
         }
         $cache_open = Cache::get($section);
-        return $cache_open[$cache_name];
 
+        return $cache_open[$cache_name];
     }
 
     public static function putCache($section, $cache_name, $cache_value)
@@ -639,15 +640,16 @@ class CRUDBooster
         if (Cache::has($section)) {
             $cache_open = Cache::get($section);
         } else {
-            Cache::forever($section, array());
+            Cache::forever($section, []);
             $cache_open = Cache::get($section);
         }
         $cache_open[$cache_name] = $cache_value;
         Cache::forever($section, $cache_open);
+
         return true;
     }
 
-    public static function valid($arr = array(), $type = 'json')
+    public static function valid($arr = [], $type = 'json')
     {
         $input_arr = Request::all();
 
@@ -665,20 +667,17 @@ class CRUDBooster
             $message = $validator->errors()->all();
 
             if ($type == 'json') {
-                $result = array();
+                $result = [];
                 $result['api_status'] = 0;
                 $result['api_message'] = implode(', ', $message);
                 response()->json($result, 200)->send();
                 exit;
             }
 
-            $res = redirect()->back()
-                ->with(['message' => implode('<br/>', $message), 'message_type' => 'warning'])
-                ->withInput();
+            $res = redirect()->back()->with(['message' => implode('<br/>', $message), 'message_type' => 'warning'])->withInput();
             \Session::driver()->save();
             $res->send();
             exit;
-
         }
     }
 
@@ -689,20 +688,21 @@ class CRUDBooster
 
     public static function forgetCache($section, $cache_name)
     {
-        if (!Cache::has($section)) {
+        if (! Cache::has($section)) {
             return false;
         }
         $open = Cache::get($section);
         unset($open[$cache_name]);
         Cache::forever($section, $open);
-        return true;
 
+        return true;
     }
 
     public static function newId($table)
     {
         $key = CRUDBooster::findPrimaryKey($table);
         $id = DB::table($table)->max($key) + 1;
+
         return $id;
     }
 
@@ -710,41 +710,44 @@ class CRUDBooster
     {
         $parent_table = CRUDBooster::parseSqlTable($parent_table)['table'];
         $child_table = CRUDBooster::parseSqlTable($child_table)['table'];
-        if (self::isColumnExists($child_table, 'id_' . $parent_table)) {
-            return 'id_' . $parent_table;
+        if (self::isColumnExists($child_table, 'id_'.$parent_table)) {
+            return 'id_'.$parent_table;
         } else {
-            return $parent_table . '_id';
+            return $parent_table.'_id';
         }
     }
 
     public static function isColumnExists($table, $field)
     {
 
-        if (!$table) {
+        if (! $table) {
             throw new Exception("\$table is empty !", 1);
         }
-        if (!$field) {
+        if (! $field) {
             throw new Exception("\$field is empty !", 1);
         }
 
         $table = CRUDBooster::parseSqlTable($table);
 
-        if (self::getCache('table_' . $table, 'column_' . $field)) {
-            return self::getCache('table_' . $table, 'column_' . $field);
+        if (self::getCache('table_'.$table, 'column_'.$field)) {
+            return self::getCache('table_'.$table, 'column_'.$field);
         }
 
-        $result = DB::select('SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :database AND TABLE_NAME = :table AND COLUMN_NAME = :field',
-            ['database' => $table['database'], 'table' => $table['table'], 'field' => $field]);
+        $result = DB::select('SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :database AND TABLE_NAME = :table AND COLUMN_NAME = :field', [
+                'database' => $table['database'],
+                'table' => $table['table'],
+                'field' => $field,
+            ]);
 
         if (count($result) > 0) {
-            self::putCache('table_' . $table, 'column_' . $field, 1);
+            self::putCache('table_'.$table, 'column_'.$field, 1);
+
             return true;
         }
 
-        self::putCache('table_' . $table, 'column_' . $field, 0);
+        self::putCache('table_'.$table, 'column_'.$field, 0);
+
         return false;
-
-
     }
 
     public static function getTableForeignKey($fieldName)
@@ -755,6 +758,7 @@ class CRUDBooster
         } elseif (substr($fieldName, -3) == '_id') {
             $table = substr($fieldName, 0, (strlen($fieldName) - 3));
         }
+
         return $table;
     }
 
@@ -766,21 +770,22 @@ class CRUDBooster
             $table = substr($fieldName, 0, (strlen($fieldName) - 3));
         }
 
-        if (Cache::has('isForeignKey_' . $fieldName)) {
-            return Cache::get('isForeignKey_' . $fieldName);
+        if (Cache::has('isForeignKey_'.$fieldName)) {
+            return Cache::get('isForeignKey_'.$fieldName);
         } else {
             if ($table) {
                 $hasTable = Schema::hasTable($table);
                 if ($hasTable) {
-                    Cache::forever('isForeignKey_' . $fieldName, true);
+                    Cache::forever('isForeignKey_'.$fieldName, true);
+
                     return true;
                 } else {
-                    Cache::forever('isForeignKey_' . $fieldName, false);
+                    Cache::forever('isForeignKey_'.$fieldName, false);
+
                     return false;
                 }
             } else {
                 return false;
-
             }
         }
     }
@@ -800,36 +805,35 @@ class CRUDBooster
             }
         }
 
-
         $params['filter_column'][$key][$type] = $value;
 
         if (isset($params)) {
-            return $mainpath . '?' . http_build_query($params);
+            return $mainpath.'?'.http_build_query($params);
         } else {
-            return $mainpath . '?filter_column[' . $key . '][' . $type . ']=' . $value;
+            return $mainpath.'?filter_column['.$key.']['.$type.']='.$value;
         }
     }
 
     public static function mainpath($path = null)
     {
 
-        $controllername = str_replace(["\crocodicstudio\crudbooster\controllers\\", "App\Http\Controllers\\"], "",
-            strtok(Route::currentRouteAction(), '@'));
-        $route_url = route($controllername . 'GetIndex');
+        $controllername = str_replace(["\crocodicstudio\crudbooster\controllers\\", "App\Http\Controllers\\"], "", strtok(Route::currentRouteAction(), '@'));
+        $route_url = route($controllername.'GetIndex');
 
-        if (!$path) {
+        if (! $path) {
             return trim($route_url, '/');
         }
 
         if (substr($path, 0, 1) == '?') {
-            return trim($route_url, '/') . $path;
+            return trim($route_url, '/').$path;
         }
-        return $route_url . '/' . $path;
+
+        return $route_url.'/'.$path;
     }
 
     public static function insertLog($description)
     {
-        $a = array();
+        $a = [];
         $a['created_at'] = date('Y-m-d H:i:s');
         $a['ipaddress'] = $_SERVER['REMOTE_ADDR'];
         $a['useragent'] = $_SERVER['HTTP_USER_AGENT'];
@@ -851,9 +855,9 @@ class CRUDBooster
 
     public static function listTables()
     {
-        $tables = array();
+        $tables = [];
         $multiple_db = cbConfig('MULTIPLE_DATABASE_MODULE');
-        $multiple_db = ($multiple_db) ? $multiple_db : array();
+        $multiple_db = ($multiple_db) ? $multiple_db : [];
         $db_database = cbConfig('MAIN_DB_DATABASE');
 
         if ($multiple_db) {
@@ -866,12 +870,11 @@ class CRUDBooster
             }
         } else {
             try {
-                $tables = DB::select("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = '" . $db_database . "'");
+                $tables = DB::select("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = '".$db_database."'");
             } catch (\Exception $e) {
                 $tables = [];
             }
         }
-
 
         return $tables;
     }
@@ -881,7 +884,7 @@ class CRUDBooster
         @$get = $_GET;
         $inputhtml = '';
 
-        if (!$get) {
+        if (! $get) {
             return $inputhtml;
         }
         if (is_array($exception)) {
@@ -906,21 +909,18 @@ class CRUDBooster
     {
         if (self::getSetting('api_debug_mode') == 'false') {
 
-            $result = array();
-            $validator = Validator::make(
-                [
+            $result = [];
+            $validator = Validator::make([
 
-                    'X-Authorization-Token' => Request::header('X-Authorization-Token'),
-                    'X-Authorization-Time' => Request::header('X-Authorization-Time'),
-                    'useragent' => Request::header('User-Agent')
-                ],
-                [
+                'X-Authorization-Token' => Request::header('X-Authorization-Token'),
+                'X-Authorization-Time' => Request::header('X-Authorization-Time'),
+                'useragent' => Request::header('User-Agent'),
+            ], [
 
                     'X-Authorization-Token' => 'required',
                     'X-Authorization-Time' => 'required',
-                    'useragent' => 'required'
-                ]
-            );
+                    'useragent' => 'required',
+                ]);
 
             if ($validator->fails()) {
                 $message = $validator->errors()->all();
@@ -935,16 +935,16 @@ class CRUDBooster
             $time = Request::header('X-Authorization-Time');
 
             $keys = DB::table('cms_apikey')->where('status', 'active')->pluck('screetkey');
-            $server_token = array();
-            $server_token_screet = array();
+            $server_token = [];
+            $server_token_screet = [];
             foreach ($keys as $key) {
-                $server_token[] = md5($key . $time . $user_agent);
+                $server_token[] = md5($key.$time.$user_agent);
                 $server_token_screet[] = $key;
             }
 
             $sender_token = Request::header('X-Authorization-Token');
 
-            if (!Cache::has($sender_token) && !in_array($sender_token, $server_token)) {
+            if (! Cache::has($sender_token) && ! in_array($sender_token, $server_token)) {
                 $result['api_status'] = false;
                 $result['api_message'] = "THE TOKEN IS NOT MATCH WITH SERVER TOKEN";
                 $result['sender_token'] = $sender_token;
@@ -970,7 +970,6 @@ class CRUDBooster
 
             $expired_token = date('Y-m-d H:i:s', strtotime('+5 seconds'));
             Cache::put($sender_token, $user_agent, $expired_token);
-
         }
     }
 
@@ -981,7 +980,7 @@ class CRUDBooster
         $id_cms_users = $config['id_cms_users'];
         $id_cms_users = ($id_cms_users) ?: [CRUDBooster::myId()];
         foreach ($id_cms_users as $id) {
-            $a = array();
+            $a = [];
             $a['created_at'] = date('Y-m-d H:i:s');
             $a['id_cms_users'] = $id;
             $a['content'] = $content;
@@ -989,33 +988,34 @@ class CRUDBooster
             $a['url'] = $to;
             DB::table('cms_notifications')->insert($a);
         }
+
         return true;
     }
 
     public static function sendFCM($regID = [], $data)
     {
-        if (!$data['title'] || !$data['content']) {
+        if (! $data['title'] || ! $data['content']) {
             return 'title , content null !';
         }
 
         $apikey = CRUDBooster::getSetting('google_fcm_key');
         $url = 'https://fcm.googleapis.com/fcm/send';
-        $fields = array(
+        $fields = [
             'registration_ids' => $regID,
             'data' => $data,
             'content_available' => true,
-            'notification' => array(
+            'notification' => [
                 'sound' => 'default',
                 'badge' => 0,
                 'title' => trim(strip_tags($data['title'])),
-                'body' => trim(strip_tags($data['content']))
-            ),
-            'priority' => 'high'
-        );
-        $headers = array(
-            'Authorization:key=' . $apikey,
-            'Content-Type:application/json'
-        );
+                'body' => trim(strip_tags($data['content'])),
+            ],
+            'priority' => 'high',
+        ];
+        $headers = [
+            'Authorization:key='.$apikey,
+            'Content-Type:application/json',
+        ];
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
@@ -1026,20 +1026,21 @@ class CRUDBooster
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $chresult = curl_exec($ch);
         curl_close($ch);
+
         return $chresult;
     }
 
     public static function isExistsController($table)
     {
         $controllername = ucwords(str_replace('_', ' ', $table));
-        $controllername = str_replace(' ', '', $controllername) . 'Controller';
+        $controllername = str_replace(' ', '', $controllername).'Controller';
         $path = base_path("app/Http/Controllers/");
         $path2 = base_path("app/Http/Controllers/ControllerMaster/");
-        if (file_exists($path . 'Admin' . $controllername . '.php') || file_exists($path2 . 'Admin' . $controllername . '.php') || file_exists($path2 . $controllername . '.php')) {
+        if (file_exists($path.'Admin'.$controllername.'.php') || file_exists($path2.'Admin'.$controllername.'.php') || file_exists($path2.$controllername.'.php')) {
             return true;
         }
-        return false;
 
+        return false;
     }
 
     public static function generateAPI($controller_name, $table_name, $permalink, $method_type = 'post')
@@ -1052,40 +1053,40 @@ class CRUDBooster
 		use DB;
 		use CRUDBooster;
 
-		class Api' . $controller_name . 'Controller extends \crocodicstudio\crudbooster\controllers\ApiController {
+		class Api'.$controller_name.'Controller extends \crocodicstudio\crudbooster\controllers\ApiController {
 
 		    function __construct() {    
-				$this->table       = "' . $table_name . '";        
-				$this->permalink   = "' . $permalink . '";    
-				$this->method_type = "' . $method_type . '";    
+				$this->table       = "'.$table_name.'";        
+				$this->permalink   = "'.$permalink.'";    
+				$this->method_type = "'.$method_type.'";    
 		    }
 		';
 
-        $php .= "\n" . '
+        $php .= "\n".'
 		    public function hook_before(&$postdata) {
 		        //This method will be execute before run the main process
 
 		    }';
 
-        $php .= "\n" . '
+        $php .= "\n".'
 		    public function hook_query(&$query) {
 		        //This method is to customize the sql query
 
 		    }';
 
-        $php .= "\n" . '
+        $php .= "\n".'
 		    public function hook_after($postdata,&$result) {
 		        //This method will be execute after run the main process
 
 		    }';
 
-        $php .= "\n" . '
+        $php .= "\n".'
 		}
 		';
 
         $php = trim($php);
         $path = base_path("app/Http/Controllers/");
-        file_put_contents($path . 'Api' . $controller_name . 'Controller.php', $php);
+        file_put_contents($path.'Api'.$controller_name.'Controller.php', $php);
     }
 
     public static function generateController($table, $name = null)
@@ -1099,21 +1100,20 @@ class CRUDBooster
         $name_candidate = explode(',', cbConfig('NAME_FIELDS_CANDIDATE'));
         $url_candidate = explode(',', cbConfig("URL_FIELDS_CANDIDATE"));
 
-
         $controllername = ucwords(str_replace('_', ' ', $table));
-        $controllername = str_replace(' ', '', $controllername) . 'Controller';
+        $controllername = str_replace(' ', '', $controllername).'Controller';
         if ($name) {
-            $controllername = ucwords(str_replace(array('_', '-'), ' ', $name));
-            $controllername = str_replace(' ', '', $controllername) . 'Controller';
+            $controllername = ucwords(str_replace(['_', '-'], ' ', $name));
+            $controllername = str_replace(' ', '', $controllername).'Controller';
         }
 
         $path = base_path("app/Http/Controllers/");
-        $countSameFile = count(glob($path . 'Admin' . $controllername . '.php'));
+        $countSameFile = count(glob($path.'Admin'.$controllername.'.php'));
 
         if ($countSameFile != 0) {
             $suffix = $countSameFile;
-            $controllername = ucwords(str_replace(array('_', '-'), ' ', $name)) . $suffix;
-            $controllername = str_replace(' ', '', $controllername) . 'Controller';
+            $controllername = ucwords(str_replace(['_', '-'], ' ', $name)).$suffix;
+            $controllername = str_replace(' ', '', $controllername).'Controller';
         }
 
         $coloms = CRUDBooster::getTableColumns($table);
@@ -1141,26 +1141,26 @@ class CRUDBooster
 	use CRUDBooster;
 	use CB;
 
-	class Admin' . $controllername . ' extends \crocodicstudio\crudbooster\controllers\CBController {
+	class Admin'.$controllername.' extends \crocodicstudio\crudbooster\controllers\CBController {
 
 	    public function cbInit() {
 	    	# START CONFIGURATION DO NOT REMOVE THIS LINE
-			$this->table 			   = "' . $table . '";	        
-			$this->title_field         = "' . $name_col . '";
+			$this->table 			   = "'.$table.'";	        
+			$this->title_field         = "'.$name_col.'";
 			$this->limit               = 20;
-			$this->orderby             = "' . $pk . ',desc";
+			$this->orderby             = "'.$pk.',desc";
 			$this->show_numbering      = FALSE;			      
-			$this->button_table_action = ' . $button_table_action . ';   
-			$this->button_action_style = "' . $button_action_style . '";     
-			$this->button_add          = ' . $button_add . ';
-			$this->button_delete       = ' . $button_delete . ';
-			$this->button_edit         = ' . $button_edit . ';
-			$this->button_detail       = ' . $button_detail . ';
-			$this->button_show         = ' . $button_show . ';
-			$this->button_filter       = ' . $button_filter . ';        
-			$this->button_export       = ' . $button_export . ';	        
-			$this->button_import       = ' . $button_import . ';
-			$this->button_bulk_action  = ' . $button_bulk_action . ';	
+			$this->button_table_action = '.$button_table_action.';   
+			$this->button_action_style = "'.$button_action_style.'";     
+			$this->button_add          = '.$button_add.';
+			$this->button_delete       = '.$button_delete.';
+			$this->button_edit         = '.$button_edit.';
+			$this->button_detail       = '.$button_detail.';
+			$this->button_show         = '.$button_show.';
+			$this->button_filter       = '.$button_filter.';        
+			$this->button_export       = '.$button_export.';	        
+			$this->button_import       = '.$button_import.';
+			$this->button_bulk_action  = '.$button_bulk_action.';	
 			# END CONFIGURATION DO NOT REMOVE THIS LINE						      
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
@@ -1189,12 +1189,12 @@ class CRUDBooster
                 if (Schema::hasTable($jointable)) {
                     $joincols = CRUDBooster::getTableColumns($jointable);
                     $joinname = CRUDBooster::getNameTable($joincols);
-                    $php .= "\t\t\t" . '$this->col[] = ["label"=>"' . $label . '","name"=>"' . $jointable . '.' . $joinname . '"];' . "\n";
+                    $php .= "\t\t\t".'$this->col[] = ["label"=>"'.$label.'","name"=>"'.$jointable.'.'.$joinname.'"];'."\n";
                     $jointablePK = CB::pk($jointable);
                     $joinList[] = [
                         'table' => $jointable,
-                        'field1' => $jointable . '.' . $jointablePK,
-                        'field2' => $table . '.' . $pk
+                        'field1' => $jointable.'.'.$jointablePK,
+                        'field2' => $table.'.'.$pk,
                     ];
                 }
             } elseif (substr($field, -3) == '_id') {
@@ -1202,12 +1202,12 @@ class CRUDBooster
                 if (Schema::hasTable($jointable)) {
                     $joincols = CRUDBooster::getTableColumns($jointable);
                     $joinname = CRUDBooster::getNameTable($joincols);
-                    $php .= "\t\t\t" . '$this->col[] = ["label"=>"' . $label . '","name"=>"' . $jointable . '.' . $joinname . '"];' . "\n";
+                    $php .= "\t\t\t".'$this->col[] = ["label"=>"'.$label.'","name"=>"'.$jointable.'.'.$joinname.'"];'."\n";
                     $jointablePK = CB::pk($jointable);
                     $joinList[] = [
                         'table' => $jointable,
-                        'field1' => $jointable . '.' . $jointablePK,
-                        'field2' => $table . '.' . $pk
+                        'field1' => $jointable.'.'.$jointablePK,
+                        'field2' => $table.'.'.$pk,
                     ];
                 }
             } else {
@@ -1215,18 +1215,18 @@ class CRUDBooster
                 if (in_array($field, $image_candidate)) {
                     $image = ',"image"=>true';
                 }
-                $php .= "\t\t\t" . '$this->col[] = ["label"=>"' . $label . '","name"=>"' . $field . '" ' . $image . '];' . "\n";
+                $php .= "\t\t\t".'$this->col[] = ["label"=>"'.$label.'","name"=>"'.$field.'" '.$image.'];'."\n";
             }
         }
 
         $php .= "\t\t\t# END COLUMNS DO NOT REMOVE THIS LINE";
 
         $php .= "\n\n\t\t\t# START FORM DO NOT REMOVE THIS LINE";
-        $php .= "\n\t\t\t" . '$this->form = [];';
+        $php .= "\n\t\t\t".'$this->form = [];';
 
         foreach ($coloms as $i => $c) {
-            $attribute = array();
-            $validation = array();
+            $attribute = [];
+            $validation = [];
             $validation[] = 'required';
             $placeholder = '';
             $help = '';
@@ -1259,7 +1259,7 @@ class CRUDBooster
                     $validation[] = "date";
                     $options = [
                         'php_format' => 'M, d Y',
-                        'datepicker_format' => 'M, dd YYYY'
+                        'datepicker_format' => 'M, dd YYYY',
                     ];
                     break;
                 case 'datetime':
@@ -1267,7 +1267,7 @@ class CRUDBooster
                     $type = 'datetime';
                     $validation[] = "date_format:Y-m-d H:i:s";
                     $options = [
-                        'php_format' => 'M, d Y H:i'
+                        'php_format' => 'M, d Y H:i',
                     ];
                     break;
                 case 'time':
@@ -1295,7 +1295,7 @@ class CRUDBooster
                     $options = [
                         "table" => $jointable,
                         "field_label" => $joinname,
-                        "field_value" => $jointablePK
+                        "field_value" => $jointablePK,
                     ];
                 }
             }
@@ -1310,7 +1310,7 @@ class CRUDBooster
                     $options = [
                         "table" => $jointable,
                         "field_label" => $joinname,
-                        "field_value" => $jointablePK
+                        "field_value" => $jointablePK,
                     ];
                 }
             }
@@ -1320,8 +1320,8 @@ class CRUDBooster
                 $label_field = ucwords(substr($field, 3));
                 $validation = ['required|integer'];
                 $options = [
-                    "enum" => ["In " . $label_field, $label_field],
-                    "value" => [0, 1]
+                    "enum" => ["In ".$label_field, $label_field],
+                    "value" => [0, 1],
                 ];
             }
 
@@ -1352,7 +1352,7 @@ class CRUDBooster
 
             if (in_array($field, $email_candidate)) {
                 $type = 'email';
-                $validation[] = 'email|unique:' . $table;
+                $validation[] = 'email|unique:'.$table;
                 $placeholder = trans('crudbooster.text_default_help_email');
             }
 
@@ -1379,8 +1379,7 @@ class CRUDBooster
             $formArray['help'] = $help;
             $formArray['placeholder'] = $placeholder;
             $formArrayString = min_var_export($formArray, "\t\t\t");
-            $php .= '$this->form[] = ' . $formArrayString . ';';
-
+            $php .= '$this->form[] = '.$formArrayString.';';
         }
 
         $php .= "\n\t\t\t# END FORM DO NOT REMOVE THIS LINE";
@@ -1566,7 +1565,7 @@ class CRUDBooster
         $joinQuery = '';
         if (count($joinList)) {
             foreach ($joinList as $j) {
-                $joinQuery .= '$query->join("' . $j['table'] . '","' . $j['field1'] . '","=","' . $j['field2'] . '");' . "\n";
+                $joinQuery .= '$query->join("'.$j['table'].'","'.$j['field1'].'","=","'.$j['field2'].'");'."\n";
             }
         }
 
@@ -1580,7 +1579,7 @@ class CRUDBooster
 	    */
 	    public function hookQueryIndex(&$query) {
 	        //Your code here
-	        ' . $joinQuery . '
+	        '.$joinQuery.'
 	    }
 ';
         $php .= '	    
@@ -1679,26 +1678,30 @@ class CRUDBooster
         $php = trim($php);
 
         //create file controller
-        file_put_contents($path . 'Admin' . $controllername . '.php', $php);
-        return 'Admin' . $controllername;
+        file_put_contents($path.'Admin'.$controllername.'.php', $php);
+
+        return 'Admin'.$controllername;
     }
 
     public static function getTableColumns($table)
     {
         //$cols = DB::getSchemaBuilder()->getColumnListing($table);
         $table = CRUDBooster::parseSqlTable($table);
-        $cols = collect(DB::select('SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :database AND TABLE_NAME = :table',
-            ['database' => $table['database'], 'table' => $table['table']]))->map(function ($x) {
-            return (array)$x;
+        $cols = collect(DB::select('SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :database AND TABLE_NAME = :table', [
+                'database' => $table['database'],
+                'table' => $table['table'],
+            ]))->map(function ($x) {
+            return (array) $x;
         })->toArray();
 
-        $result = array();
+        $result = [];
         $result = $cols;
 
-        $new_result = array();
+        $new_result = [];
         foreach ($result as $ro) {
             $new_result[] = $ro['COLUMN_NAME'];
         }
+
         return $new_result;
     }
 
@@ -1721,16 +1724,17 @@ class CRUDBooster
         if ($name_col == '') {
             $name_col = 'id';
         }
+
         return $name_col;
     }
 
     public static function getFieldType($table, $field)
     {
-        if (Cache::has('field_type_' . $table . '_' . $field)) {
-            return Cache::get('field_type_' . $table . '_' . $field);
+        if (Cache::has('field_type_'.$table.'_'.$field)) {
+            return Cache::get('field_type_'.$table.'_'.$field);
         }
 
-        $typedata = Cache::rememberForever('field_type_' . $table . '_' . $field, function () use ($table, $field) {
+        $typedata = Cache::rememberForever('field_type_'.$table.'_'.$field, function () use ($table, $field) {
 
             try {
                 //MySQL & SQL Server
@@ -1739,7 +1743,7 @@ class CRUDBooster
 
             }
 
-            if (!$typedata) {
+            if (! $typedata) {
                 $typedata = 'varchar';
             }
 
@@ -1757,14 +1761,14 @@ class CRUDBooster
     public static function routeController($prefix, $controller, $namespace = null)
     {
 
-        $prefix = trim($prefix, '/') . '/';
+        $prefix = trim($prefix, '/').'/';
 
         $namespace = ($namespace) ?: 'App\Http\Controllers';
 
         try {
-            Route::get($prefix, ['uses' => $controller . '@getIndex', 'as' => $controller . 'GetIndex']);
+            Route::get($prefix, ['uses' => $controller.'@getIndex', 'as' => $controller.'GetIndex']);
 
-            $controller_class = new \ReflectionClass($namespace . '\\' . $controller);
+            $controller_class = new \ReflectionClass($namespace.'\\'.$controller);
             $controller_methods = $controller_class->getMethods(\ReflectionMethod::IS_PUBLIC);
             $wildcards = '/{one?}/{two?}/{three?}/{four?}/{five?}';
             foreach ($controller_methods as $method) {
@@ -1775,21 +1779,20 @@ class CRUDBooster
                         $slug = array_filter(preg_split('/(?=[A-Z])/', $method_name));
                         $slug = strtolower(implode('-', $slug));
                         $slug = ($slug == 'index') ? '' : $slug;
-                        Route::get($prefix . $slug . $wildcards,
-                            ['uses' => $controller . '@' . $method->name, 'as' => $controller . 'Get' . $method_name]);
+                        Route::get($prefix.$slug.$wildcards, ['uses' => $controller.'@'.$method->name, 'as' => $controller.'Get'.$method_name]);
                     } elseif (substr($method->name, 0, 4) == 'post') {
                         $method_name = substr($method->name, 4);
                         $slug = array_filter(preg_split('/(?=[A-Z])/', $method_name));
-                        Route::post($prefix . strtolower(implode('-', $slug)) . $wildcards,
-                            ['uses' => $controller . '@' . $method->name, 'as' => $controller . 'Post' . $method_name]);
+                        Route::post($prefix.strtolower(implode('-', $slug)).$wildcards, [
+                                'uses' => $controller.'@'.$method->name,
+                                'as' => $controller.'Post'.$method_name,
+                            ]);
                     }
                 }
             }
         } catch (\Exception $e) {
 
         }
-
-
     }
 
     /*
@@ -1818,11 +1821,10 @@ class CRUDBooster
         Session::driver()->save();
         $resp->send();
         exit;
-
     }
 
     public static function icon($icon)
     {
-        return '<i class=\'fa fa-' . $icon . '\'></i>';
+        return '<i class=\'fa fa-'.$icon.'\'></i>';
     }
 }

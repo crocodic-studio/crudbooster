@@ -18,13 +18,13 @@
 
             <table id='table-apikey' class='table table-striped table-bordered'>
                 <thead>
-                    <tr>
-                        <th width="3%">No</th>
-                        <th>Screet Key</th>
-                        <th width="10%">Hit</th>
-                        <th width="10%">Status</th>
-                        <th width="15%">-</th>
-                    </tr>
+                <tr>
+                    <th width="3%">No</th>
+                    <th>Screet Key</th>
+                    <th width="10%">Hit</th>
+                    <th width="10%">Status</th>
+                    <th width="15%">-</th>
+                </tr>
                 </thead>
                 <tbody>
 
@@ -39,7 +39,7 @@
             </table>
 
             @push('bottom')
-            @include('crudbooster::_api_key.script')
+                @include('crudbooster::_api_key.script')
             @endpush
 
         </div>

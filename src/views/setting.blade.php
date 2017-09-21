@@ -1,9 +1,9 @@
 @extends('crudbooster::admin_template')
 @section('content')
     @push('bottom')
-    <script src="{{asset('vendor/laravel-filemanager/js/lfm.js')}}"></script>
-    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
-    @include('crudbooster::_setting.script')
+        <script src="{{asset('vendor/laravel-filemanager/js/lfm.js')}}"></script>
+        <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+        @include('crudbooster::_setting.script')
     @endpush
 
     <div style="width:750px;margin:0 auto ">
@@ -32,7 +32,7 @@
 
                         $value = $s->content;
 
-                        if (!$s->label) {
+                        if (! $s->label) {
                             $label = ucwords(str_replace('_', ' ', $s->name));
                             DB::table('cms_settings')->where('id', $s->id)->update(['label' => $label]);
                             $s->label = $label;
@@ -77,11 +77,11 @@
                                 case 'upload':
                                 case 'upload_image':
                                     if ($value) {
-                                        echo "<p><a href='" . asset($value) . "' target='_blank' title='Download the file of $s->label'>
+                                        echo "<p><a href='".asset($value)."' target='_blank' title='Download the file of $s->label'>
                                         <i class='fa fa-download'></i>
                                          Download the File  of $s->label</a></p>";
                                         echo "<input type='hidden' name='$s->name' value='$value'/>";
-                                        echo "<div class='pull-right'><a class='btn btn-danger btn-xs' onclick='if(confirm(\"Are you sure want to delete ?\")) location.href=\"" . CRUDBooster::mainpath("delete-file-setting?id=$s->id") . "\"' title='Click here to delete'>
+                                        echo "<div class='pull-right'><a class='btn btn-danger btn-xs' onclick='if(confirm(\"Are you sure want to delete ?\")) location.href=\"".CRUDBooster::mainpath("delete-file-setting?id=$s->id")."\"' title='Click here to delete'>
 <i class='fa fa-trash'></i>
 </a></div>";
                                     } else {
@@ -91,11 +91,11 @@
                                     break;
                                 case 'upload_file':
                                     if ($value) {
-                                        echo "<p><a href='" . asset($value) . "' target='_blank' title='Download the file of $s->label'>
+                                        echo "<p><a href='".asset($value)."' target='_blank' title='Download the file of $s->label'>
 <i class='fa fa-download'></i>
  Download the File  of $s->label</a></p>";
                                         echo "<input type='hidden' name='$s->name' value='$value'/>";
-                                        echo "<div class='pull-right'><a class='btn btn-danger btn-xs' onclick='if(confirm(\"Are you sure want to delete ?\")) location.href=\"" . CRUDBooster::mainpath("delete-file-setting?id=$s->id") . "\"' title='Click here to delete'>
+                                        echo "<div class='pull-right'><a class='btn btn-danger btn-xs' onclick='if(confirm(\"Are you sure want to delete ?\")) location.href=\"".CRUDBooster::mainpath("delete-file-setting?id=$s->id")."\"' title='Click here to delete'>
 <i class='fa fa-trash'></i>
 </a></div>";
                                     } else {
@@ -112,7 +112,7 @@
                                         foreach ($dataenum as $enum) {
                                             $checked = ($enum == $value) ? "checked" : "";
                                             echo "<label class='radio-inline'>";
-                                            echo "<input type='radio' name='" . $s->name . "' value='$enum' $checked > $enum";
+                                            echo "<input type='radio' name='".$s->name."' value='$enum' $checked > $enum";
                                             echo "</label>";
                                         }
                                     endif;

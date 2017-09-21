@@ -10,16 +10,16 @@
           href="{{ CRUDBooster::getSetting('favicon')?asset(CRUDBooster::getSetting('favicon')):cbAsset('logo_crudbooster.png') }}">
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 
-    {!! cbStyleSheet('adminlte/bootstrap/css/bootstrap.min.css') !!}
+{!! cbStyleSheet('adminlte/bootstrap/css/bootstrap.min.css') !!}
 
-    {!! cbStyleSheet('adminlte/font-awesome/css/font-awesome.min.css') !!}
-    <!-- Ionicons -->
+{!! cbStyleSheet('adminlte/font-awesome/css/font-awesome.min.css') !!}
+<!-- Ionicons -->
     <link href="{{asset("vendor/crudbooster/ionic/css/ionicons.min.css")}}" rel="stylesheet" type="text/css"/>
     <!-- Theme style -->
-    {!! cbStyleSheet('adminlte/dist/css/AdminLTE.min.css') !!}
-    {!! cbStyleSheet('adminlte/dist/css/skins/_all-skins.min.css') !!}
+{!! cbStyleSheet('adminlte/dist/css/AdminLTE.min.css') !!}
+{!! cbStyleSheet('adminlte/dist/css/skins/_all-skins.min.css') !!}
 
-    <!-- support rtl-->
+<!-- support rtl-->
     @if (App::getLocale() == 'ar')
         <link rel="stylesheet" href="//cdn.rawgit.com/morteza/bootstrap-rtl/v3.3.4/dist/css/bootstrap-rtl.min.css">
         <link href="{{ cbAsset("rtl.css")}}" rel="stylesheet" type="text/css"/>

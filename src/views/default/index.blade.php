@@ -108,7 +108,7 @@
                                 $parameters = Request::all();
                                 unset($parameters['q']);
                                 $build_query = urldecode(http_build_query($parameters));
-                                $build_query = ($build_query) ? "?" . $build_query : "";
+                                $build_query = ($build_query) ? "?".$build_query : "";
                                 $build_query = (Request::all()) ? $build_query : "";
                                 ?>
                                 <button type='button'
