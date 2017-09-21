@@ -335,12 +335,7 @@ class CBController extends Controller
 
         switch ($filetype) {
             case "pdf":
-                $view = view('crudbooster::export', $response)->render();
-                $pdf = App::make('dompdf.wrapper');
-                $pdf->loadHTML($view);
-                $pdf->setPaper($papersize, $paperorientation);
-
-                return $pdf->stream($filename.'.pdf');
+                return $this->pdf($response, $papersize, $paperorientation, $filename);
                 break;
             case 'xls':
                 Excel::create($filename, function ($excel) use ($response) {
@@ -1732,5 +1727,22 @@ class CBController extends Controller
         if (in_array('deleted_at', $table_columns)) {
             $result->where($this->table.'.deleted_at', '=', null);
         }
+    }
+
+    /**
+     * @param $response
+     * @param $papersize
+     * @param $paperorientation
+     * @param $filename
+     * @return mixed
+     */
+    private function pdf($response, $papersize, $paperorientation, $filename)
+    {
+        $view = view('crudbooster::export', $response)->render();
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadHTML($view);
+        $pdf->setPaper($papersize, $paperorientation);
+
+        return $pdf->stream($filename.'.pdf');
     }
 }
