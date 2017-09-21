@@ -118,6 +118,15 @@ class AdminPrivilegesController extends CBController
 
         DB::table($this->table)->where($this->primary_key, $id)->update($this->arr);
 
+        // reset privileges
+		$arrs = [];
+		$arrs['is_visible'] = 0;
+		$arrs['is_create'] =  0;
+		$arrs['is_read'] =  0;
+		$arrs['is_edit'] = 0;
+		$arrs['is_delete'] =  0;
+		DB::table('cms_privileges_roles')->where('id_cms_privileges', $id)->update($arrs);
+        
         $priv = Request::input("privileges");
         if ($priv) {
 
