@@ -39,21 +39,19 @@ class IndexImport
     }
 
     /**
-     * @param $ext
      * @param $file
      * @return string
      */
-    function uploadImportData($ext, $file)
+    function uploadImportData($file)
     {
         $dir = 'uploads/'.date('Y-m');
-        $filename = md5(str_random(5)).'.'.$ext;
+        $filename = md5(str_random(5)).'.'. $file->getClientOriginalExtension();
         //Create Directory Monthly
         Storage::makeDirectory($dir);
 
         //Move file to storage
         Storage::putFileAs($dir, $file, $filename);
-        $url = CRUDBooster::mainpath('import-data').'?file='.base64_encode($dir.'/'.$filename);
 
-        return $url;
+        return CRUDBooster::mainpath('import-data').'?file='.base64_encode($dir.'/'.$filename);
     }
 }
