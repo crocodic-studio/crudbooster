@@ -266,13 +266,13 @@ class CrudboosterInstallationCommand extends Command
         $this->info('Checking public/vendor directory...');
         if (! file_exists(public_path('vendor'))) {
             mkdir(public_path('vendor'), 0777);
-        } else {
-            if (! is_writable(public_path('vendor'))) {
-                $this->info('Setup aborted !');
-                $this->info('Please set public/vendor directory to writable 0777');
+        }
 
-                exit;
-            }
+        if (! is_writable(public_path('vendor'))) {
+            $this->info('Setup aborted !');
+            $this->info('Please set public/vendor directory to writable 0777');
+
+            exit;
         }
     }
 }
