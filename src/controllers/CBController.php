@@ -341,13 +341,7 @@ class CBController extends Controller
                 $this->xls($filename, $response);
                 break;
             case 'csv':
-                Excel::create($filename, function ($excel) use ($response) {
-                    $excel->setTitle($filename)->setCreator("crudbooster.com")->setCompany(CRUDBooster::getSetting('appname'));
-                    $excel->sheet($filename, function ($sheet) use ($response) {
-                        $sheet->setOrientation($paperorientation);
-                        $sheet->loadview('crudbooster::export', $response);
-                    });
-                })->export('csv');
+                $this->csv($filename, $response);
                 break;
         }
     }
@@ -1753,5 +1747,20 @@ class CBController extends Controller
                 $sheet->loadview('crudbooster::export', $response);
             });
         })->export('xls');
+    }
+
+    /**
+     * @param $filename
+     * @param $response
+     */
+    private function csv($filename, $response)
+    {
+        Excel::create($filename, function ($excel) use ($response) {
+            $excel->setTitle($filename)->setCreator("crudbooster.com")->setCompany(CRUDBooster::getSetting('appname'));
+            $excel->sheet($filename, function ($sheet) use ($response) {
+                $sheet->setOrientation($paperorientation);
+                $sheet->loadview('crudbooster::export', $response);
+            });
+        })->export('csv');
     }
 }
