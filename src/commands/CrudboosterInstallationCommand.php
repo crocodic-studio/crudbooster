@@ -66,20 +66,7 @@ class CrudboosterInstallationCommand extends Command
         $this->symlinkForUpload();
 
         //Crate symlink for assets
-        $this->info('Checking public/vendor/crudbooster symlink...');
-        if (file_exists(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'))) {
-            $vendorpath = public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster');
-
-            $this->info('Vendor Path: '.$vendorpath);
-            if(realpath($vendorpath) == $vendorpath) {
-	            $this->info('Removing public/vendor/crudbooster dir, instead of creating a symlink...');
-	                rrmdir(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'));
-	                app('files')->link(__DIR__.'/../assets',public_path('vendor/crudbooster'));
-            }
-        }else{
-        	$this->info('Creating public/vendor/crudbooster symlink...');
-            app('files')->link(__DIR__.'/../assets',public_path('vendor/crudbooster'));
-        }
+        $this->symlinkForAsset();
       
 
 		if($this->confirm('Do you have setting the database configuration at .env ?')) {
@@ -254,6 +241,24 @@ class CrudboosterInstallationCommand extends Command
         } else {
             $this->info('Creating public/uploads symlink...');
             app('files')->link(storage_path('app'), public_path('uploads'));
+        }
+    }
+
+    private function symlinkForAsset()
+    {
+        $this->info('Checking public/vendor/crudbooster symlink...');
+        if (file_exists(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'))) {
+            $vendorpath = public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster');
+
+            $this->info('Vendor Path: '.$vendorpath);
+            if (realpath($vendorpath) == $vendorpath) {
+                $this->info('Removing public/vendor/crudbooster dir, instead of creating a symlink...');
+                rrmdir(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'));
+                app('files')->link(__DIR__.'/../assets', public_path('vendor/crudbooster'));
+            }
+        } else {
+            $this->info('Creating public/vendor/crudbooster symlink...');
+            app('files')->link(__DIR__.'/../assets', public_path('vendor/crudbooster'));
         }
     }
 }
