@@ -64,29 +64,7 @@ class CrudboosterInstallationCommand extends Command
       
 
 		if($this->confirm('Do you have setting the database configuration at .env ?')) {
-
-			$this->info('Publishing CRUDBooster needs file...');
-            $this->callSilent('vendor:publish', ['--provider' => 'crocodicstudio\\crudbooster\\CRUDBoosterServiceProvider', '--force' => true]);
-			$this->callSilent('vendor:publish',['--tag'=>'cb_migration','--force'=>true]);
-			$this->callSilent('vendor:publish',['--tag'=>'cb_lfm','--force'=>true]);	
-			$this->callSilent('vendor:publish',['--tag'=>'cb_localization','--force'=>true]);		
-			
-			$this->info('Dumping the autoloaded files and reloading all new files...');
-			$composer = $this->findComposer();
-	        $process = new Process($composer.' dumpautoload');
-	        $process->setWorkingDirectory(base_path())->run();
-
-			$this->info('Migrating database...');				
-			$this->call('migrate');
-
-			if (!class_exists('CBSeeder')) {
-	            require_once __DIR__.'/../database/seeds/CBSeeder.php';
-	        }
-			$this->callSilent('db:seed',['--class' => 'CBSeeder']);			
-			$this->call('config:clear');		
-			$this->call('optimize');
-			
-			$this->info('Installing CRUDBooster Is Completed ! Thank You :)');
+            $this->installCrudbooster();
 		}else{
 			$this->info('Setup Aborted !');
 			$this->info('Please setting the database configuration for first !');
@@ -119,7 +97,7 @@ class CrudboosterInstallationCommand extends Command
         if ($success == true) {
             $this->info('------------------- :===: Completed !! :===: ------------------------');
         } else {
-            $this->info('------------------- :===: Failed !!    :===: ------------------------');
+            $this->info('------------------- :===:  Failed !!  :===: ------------------------');
         }
         exit;
     }
@@ -265,5 +243,31 @@ class CrudboosterInstallationCommand extends Command
         if (file_exists(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'))) {
             @unlink(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'));
         }
+    }
+
+    private function installCrudbooster()
+    {
+        $this->info('Publishing CRUDBooster needs file...');
+        $this->callSilent('vendor:publish', ['--provider' => 'crocodicstudio\\crudbooster\\CRUDBoosterServiceProvider', '--force' => true]);
+        $this->callSilent('vendor:publish', ['--tag' => 'cb_migration', '--force' => true]);
+        $this->callSilent('vendor:publish', ['--tag' => 'cb_lfm', '--force' => true]);
+        $this->callSilent('vendor:publish', ['--tag' => 'cb_localization', '--force' => true]);
+
+        $this->info('Dumping the autoloaded files and reloading all new files...');
+        $composer = $this->findComposer();
+        $process = new Process($composer.' dumpautoload');
+        $process->setWorkingDirectory(base_path())->run();
+
+        $this->info('Migrating database...');
+        $this->call('migrate');
+
+        if (! class_exists('CBSeeder')) {
+            require_once __DIR__.'/../database/seeds/CBSeeder.php';
+        }
+        $this->callSilent('db:seed', ['--class' => 'CBSeeder']);
+        $this->call('config:clear');
+        $this->call('optimize');
+
+        $this->info('Installing CRUDBooster Is Completed ! Thank You :)');
     }
 }
