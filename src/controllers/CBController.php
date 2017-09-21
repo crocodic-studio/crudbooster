@@ -338,13 +338,7 @@ class CBController extends Controller
                 return $this->pdf($response, $papersize, $paperorientation, $filename);
                 break;
             case 'xls':
-                Excel::create($filename, function ($excel) use ($response) {
-                    $excel->setTitle($filename)->setCreator("crudbooster.com")->setCompany(CRUDBooster::getSetting('appname'));
-                    $excel->sheet($filename, function ($sheet) use ($response) {
-                        $sheet->setOrientation($paperorientation);
-                        $sheet->loadview('crudbooster::export', $response);
-                    });
-                })->export('xls');
+                $this->xls($filename, $response);
                 break;
             case 'csv':
                 Excel::create($filename, function ($excel) use ($response) {
@@ -1744,5 +1738,20 @@ class CBController extends Controller
         $pdf->setPaper($papersize, $paperorientation);
 
         return $pdf->stream($filename.'.pdf');
+    }
+
+    /**
+     * @param $filename
+     * @param $response
+     */
+    private function xls($filename, $response)
+    {
+        Excel::create($filename, function ($excel) use ($response) {
+            $excel->setTitle($filename)->setCreator("crudbooster.com")->setCompany(CRUDBooster::getSetting('appname'));
+            $excel->sheet($filename, function ($sheet) use ($response) {
+                $sheet->setOrientation($paperorientation);
+                $sheet->loadview('crudbooster::export', $response);
+            });
+        })->export('xls');
     }
 }
