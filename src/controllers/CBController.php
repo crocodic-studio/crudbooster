@@ -243,16 +243,7 @@ class CBController extends Controller
             if (strpos($field, '.')) {
                 $columns_table = $this->addDotField($result, $field, $columns_table, $index);
             } else {
-                $columns_table[$index]['type_data'] = 'varchar';
-                $columns_table[$index]['field_with'] = null;
-                $columns_table[$index]['field'] = $field;
-                $columns_table[$index]['field_raw'] = $field;
-
-                if (CB::isColumnExists($table, $field)) {
-                    $result->addselect($table.'.'.$field);
-                    $columns_table[$index]['type_data'] = CRUDBooster::getFieldType($table, $field);
-                    $columns_table[$index]['field_with'] = $table.'.'.$field;
-                }
+                $columns_table = $this->addField($columns_table, $index, $field, $table, $result);
             }
         }
 
@@ -1700,6 +1691,30 @@ class CBController extends Controller
         $columns_table[$index]['field'] = str_slug($field, '_');
         $columns_table[$index]['field_raw'] = $field;
         $columns_table[$index]['field_with'] = $tableField.'.'.$fieldOrign;
+
+        return $columns_table;
+    }
+
+    /**
+     * @param $columns_table
+     * @param $index
+     * @param $field
+     * @param $table
+     * @param $result
+     * @return mixed
+     */
+    private function addField($columns_table, $index, $field, $table, $result)
+    {
+        $columns_table[$index]['type_data'] = 'varchar';
+        $columns_table[$index]['field_with'] = null;
+        $columns_table[$index]['field'] = $field;
+        $columns_table[$index]['field_raw'] = $field;
+
+        if (CB::isColumnExists($table, $field)) {
+            $result->addselect($table.'.'.$field);
+            $columns_table[$index]['type_data'] = CRUDBooster::getFieldType($table, $field);
+            $columns_table[$index]['field_with'] = $table.'.'.$field;
+        }
 
         return $columns_table;
     }
