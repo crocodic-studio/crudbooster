@@ -24,13 +24,10 @@ class FileController extends Controller
         if (! Storage::exists($fullFilePath)) {
             abort(404);
         }
-
-        $extension = strtolower(File::extension($fullStoragePath));
-        $images_ext = cbConfig('IMAGE_EXTENSIONS', 'jpg,png,gif,bmp');
-        $images_ext = explode(',', $images_ext);
+        $hasImageExtension = $this->isImage($fullStoragePath);
         $imageFileSize = 0;
 
-        if (in_array($extension, $images_ext)) {
+        if ($hasImageExtension) {
             list($imgRaw, $imageFileSize) = $this->resizeImage($fullStoragePath);
         }
 
@@ -67,7 +64,7 @@ class FileController extends Controller
             'Content-Length' => $header_content_length,
         ]);
 
-        if (in_array($extension, $images_ext)) {
+        if ($hasImageExtension) {
             if ($h1 || $h2) {
                 return Response::make('', 304, $headers); // File (image) is cached by the browser, so we don't have to send it again
             }
@@ -105,5 +102,19 @@ class FileController extends Controller
         $imageFileSize = mb_strlen($imgRaw, '8bit') ?: 0;
 
         return [$imgRaw, $imageFileSize];
+    }
+
+    /**
+     * @param $fullStoragePath
+     * @return bool
+     */
+    private function isImage($fullStoragePath)
+    {
+        $extension = strtolower(File::extension($fullStoragePath));
+        $images_ext = cbConfig('IMAGE_EXTENSIONS', 'jpg,png,gif,bmp');
+        $images_ext = explode(',', $images_ext);
+        $hasImageExtension = in_array($extension, $images_ext);
+
+        return $hasImageExtension;
     }
 }
