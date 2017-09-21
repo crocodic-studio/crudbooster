@@ -1162,20 +1162,7 @@ class CBController extends Controller
         }
 
         if ($button_name == 'delete') {
-
-            $this->hookBeforeDelete($id_selected);
-            $tablePK = CB::pk($this->table);
-            if (Schema::hasColumn($this->table, 'deleted_at')) {
-
-                DB::table($this->table)->whereIn($tablePK, $id_selected)->update(['deleted_at' => date('Y-m-d H:i:s')]);
-            } else {
-                DB::table($this->table)->whereIn($tablePK, $id_selected)->delete();
-            }
-            CRUDBooster::insertLog(trans("crudbooster.log_delete", ['name' => implode(',', $id_selected), 'module' => CRUDBooster::getCurrentModule()->name]));
-
-            $this->hookAfterDelete($id_selected);
-
-            return CRUDBooster::backWithMsg(trans("crudbooster.alert_delete_selected_success"));;
+            return $this->deleteFromDB($id_selected);
         }
 
         list($type, $message) = $this->getMessageAndType($button_name, $id_selected);
@@ -1728,5 +1715,26 @@ class CBController extends Controller
         }
 
         return [$type, $message];
+    }
+
+    /**
+     * @param $id_selected
+     * @return mixed
+     */
+    private function deleteFromDB($id_selected)
+    {
+        $this->hookBeforeDelete($id_selected);
+        $tablePK = CB::pk($this->table);
+        if (Schema::hasColumn($this->table, 'deleted_at')) {
+
+            DB::table($this->table)->whereIn($tablePK, $id_selected)->update(['deleted_at' => date('Y-m-d H:i:s')]);
+        } else {
+            DB::table($this->table)->whereIn($tablePK, $id_selected)->delete();
+        }
+        CRUDBooster::insertLog(trans("crudbooster.log_delete", ['name' => implode(',', $id_selected), 'module' => CRUDBooster::getCurrentModule()->name]));
+
+        $this->hookAfterDelete($id_selected);
+
+        return CRUDBooster::backWithMsg(trans("crudbooster.alert_delete_selected_success"));
     }
 }
