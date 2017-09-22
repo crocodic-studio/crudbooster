@@ -1,6 +1,7 @@
 <?php namespace crocodicstudio\crudbooster\controllers;
 
 use crocodicstudio\crudbooster\controllers\Controller;
+use crocodicstudio\crudbooster\controllers\Forms\NotificationForm;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;
@@ -33,7 +34,7 @@ class AdminNotificationsController extends CBController
 
         $this->makeColumns();
 
-        $this->makeForm();
+        $this->form = NotificationForm::makeForm();
     }
 
     public function hook_query_index(&$query)
@@ -43,7 +44,6 @@ class AdminNotificationsController extends CBController
 
     public function getLatestJson()
     {
-
         $rows = DB::table('cms_notifications')->where('id_cms_users', 0)->orWhere('id_cms_users', CRUDBooster::myId())->orderby('id', 'desc')->where('is_read', 0)->whereNull('deleted_at')->take(25)->get();
 
         $total = count($rows);
@@ -57,15 +57,6 @@ class AdminNotificationsController extends CBController
         $row = DB::table('cms_notifications')->where('id', $id)->first();
 
         return redirect($row->url);
-    }
-
-    private function makeForm()
-    {
-        $this->form = [];
-        $this->form[] = ["label" => "Content", "name" => "content", "type" => "text"];
-        $this->form[] = ["label" => "Icon", "name" => "icon", "type" => "text"];
-        $this->form[] = ["label" => "Notification Command", "name" => "notification_command", "type" => "textarea"];
-        $this->form[] = ["label" => "Is Read", "name" => "is_read", "type" => "text"];
     }
 
     private function makeColumns()
