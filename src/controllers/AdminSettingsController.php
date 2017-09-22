@@ -30,41 +30,7 @@ class AdminSettingsController extends CBController
 
         $this->col = [];
 
-        $this->form = [];
-
-        if (Request::get('group_setting')) {
-            $value = Request::get('group_setting');
-        } else {
-            $value = 'General Setting';
-        }
-
-        $this->form[] = ['label' => 'Group', 'name' => 'group_setting', 'value' => $value];
-        $this->form[] = ['label' => 'Label', 'name' => 'label'];
-
-        $this->form[] = [
-            "label" => "Type",
-            "name" => "content_input_type",
-            "type" => "select_dataenum",
-            'options' => ["enum" => ["text", "number", "email", "textarea", "wysiwyg", "upload_image", "upload_document", "datepicker", "radio", "select"]],
-        ];
-        $this->form[] = [
-            "label" => "Radio / Select Data",
-            "name" => "dataenum",
-            "placeholder" => "Example : abc,def,ghi",
-            "jquery" => "
-			function show_radio_data() {
-				var cit = $('#content_input_type').val();
-				if(cit == 'radio' || cit == 'select') {
-					$('#form-group-dataenum').show();	
-				}else{
-					$('#form-group-dataenum').hide();
-				}					
-			}
-			$('#content_input_type').change(show_radio_data);
-			show_radio_data();
-			",
-        ];
-        $this->form[] = ["label" => "Helper Text", "name" => "helper", "type" => "text"];
+        $this->makeForm();
     }
 
     function getShow()
@@ -179,5 +145,44 @@ class AdminSettingsController extends CBController
         }
 
         return $content;
+    }
+
+    private function makeForm()
+    {
+        $this->form = [];
+
+        if (Request::get('group_setting')) {
+            $value = Request::get('group_setting');
+        } else {
+            $value = 'General Setting';
+        }
+
+        $this->form[] = ['label' => 'Group', 'name' => 'group_setting', 'value' => $value];
+        $this->form[] = ['label' => 'Label', 'name' => 'label'];
+
+        $this->form[] = [
+            "label" => "Type",
+            "name" => "content_input_type",
+            "type" => "select_dataenum",
+            'options' => ["enum" => ["text", "number", "email", "textarea", "wysiwyg", "upload_image", "upload_document", "datepicker", "radio", "select"]],
+        ];
+        $this->form[] = [
+            "label" => "Radio / Select Data",
+            "name" => "dataenum",
+            "placeholder" => "Example : abc,def,ghi",
+            "jquery" => "
+			function show_radio_data() {
+				var cit = $('#content_input_type').val();
+				if(cit == 'radio' || cit == 'select') {
+					$('#form-group-dataenum').show();	
+				}else{
+					$('#form-group-dataenum').hide();
+				}					
+			}
+			$('#content_input_type').change(show_radio_data);
+			show_radio_data();
+			",
+        ];
+        $this->form[] = ["label" => "Helper Text", "name" => "helper", "type" => "text"];
     }
 }
