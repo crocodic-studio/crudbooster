@@ -52,7 +52,17 @@ class AdminPrivilegesController extends CBController
 
         $id = 0;
         $data['page_title'] = "Add Data";
-        $data['moduls'] = DB::table("cms_moduls")->where('is_protected', 0)->select("cms_moduls.*", DB::raw("(select is_visible from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id') as is_visible"), DB::raw("(select is_create from cms_privileges_roles where id_cms_moduls  = cms_moduls.id and id_cms_privileges = '$id') as is_create"), DB::raw("(select is_read from cms_privileges_roles where id_cms_moduls    = cms_moduls.id and id_cms_privileges = '$id') as is_read"), DB::raw("(select is_edit from cms_privileges_roles where id_cms_moduls    = cms_moduls.id and id_cms_privileges = '$id') as is_edit"), DB::raw("(select is_delete from cms_privileges_roles where id_cms_moduls  = cms_moduls.id and id_cms_privileges = '$id') as is_delete"))->orderby("name", "asc")->get();
+        $data['moduls'] = DB::table("cms_moduls")
+            ->where('is_protected', 0)
+            ->select("cms_moduls.*",
+                DB::raw("(select is_visible from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id') as is_visible"),
+                DB::raw("(select is_create  from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id') as is_create"),
+                DB::raw("(select is_read    from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id') as is_read"),
+                DB::raw("(select is_edit    from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id') as is_edit"),
+                DB::raw("(select is_delete  from cms_privileges_roles where id_cms_moduls  = cms_moduls.id and id_cms_privileges = '$id') as is_delete"))
+            ->orderby("name", "asc")
+            ->get();
+
         $data['page_menu'] = Route::getCurrentRoute()->getActionName();
 
         return view('crudbooster::privileges', $data);
@@ -151,7 +161,6 @@ class AdminPrivilegesController extends CBController
     }
 
     /**
-     * @param $id
      */
     private function refreshSessionRoles()
     {
