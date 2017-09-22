@@ -40,6 +40,11 @@ class AdminEmailTemplatesController extends \crocodicstudio\crudbooster\controll
         $this->col[] = ["label" => "Template Name", "name" => "name"];
         $this->col[] = ["label" => "Slug", "name" => "slug"];
 
+        $this->makeForm();
+    }
+
+    private function makeForm()
+    {
         $this->form = [];
         $this->form[] = [
             "label" => "Template Name",
