@@ -976,16 +976,9 @@ class AdminMenusController extends CBController
 
     public function hookBeforeAdd(&$postdata)
     {
-
         $postdata['parent_id'] = 0;
 
-        if ($postdata['type'] == 'Statistic') {
-            $stat = CRUDBooster::first('cms_statistics', ['id' => $postdata['statistic_slug']]);
-            $postdata['path'] = 'statistic-builder/show/'.$stat->slug;
-        } elseif ($postdata['type'] == 'Module') {
-            $stat = CRUDBooster::first('cms_moduls', ['id' => $postdata['module_slug']]);
-            $postdata['path'] = $stat->path;
-        }
+        $this->setType($postdata);
 
         unset($postdata['module_slug']);
         unset($postdata['statistic_slug']);
@@ -1006,13 +999,7 @@ class AdminMenusController extends CBController
             Cache::forget('sidebarDashboard'.CRUDBooster::myPrivilegeId());
         }
 
-        if ($postdata['type'] == 'Statistic') {
-            $stat = CRUDBooster::first('cms_statistics', ['id' => $postdata['statistic_slug']]);
-            $postdata['path'] = 'statistic-builder/show/'.$stat->slug;
-        } elseif ($postdata['type'] == 'Module') {
-            $stat = CRUDBooster::first('cms_moduls', ['id' => $postdata['module_slug']]);
-            $postdata['path'] = $stat->path;
-        }
+        $this->setType($postdata);
 
         unset($postdata['module_slug']);
         unset($postdata['statistic_slug']);
@@ -1045,5 +1032,18 @@ class AdminMenusController extends CBController
         }
 
         return response()->json(['success' => true]);
+    }
+
+    /**
+     * @param $postdata
+     */
+    private function setType(&$postdata)
+    {
+        if ($postdata['type'] == 'Statistic') {
+            $stat = CRUDBooster::first('cms_statistics', ['id' => $postdata['statistic_slug']])->slug;
+            $postdata['path'] = 'statistic-builder/show/'.$stat;
+        } elseif ($postdata['type'] == 'Module') {
+            $postdata['path'] = CRUDBooster::first('cms_moduls', ['id' => $postdata['module_slug']])->path;
+        }
     }
 }
