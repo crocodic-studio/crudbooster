@@ -42,7 +42,6 @@ class AdminEmailTemplatesController extends CBController
         $this->col[] = ["label" => "Template Name", "name" => "name"];
         $this->col[] = ["label" => "Slug", "name" => "slug"];
 
-        $this->makeForm();
         $this->form = EmailTemplateForm::makeForm();
     }
 
