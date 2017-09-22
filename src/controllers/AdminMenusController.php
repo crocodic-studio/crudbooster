@@ -153,6 +153,98 @@ class AdminMenusController extends CBController
         $this->col[] = ["label" => "Name", "name" => "name"];
         $this->col[] = ["label" => "Is Active", "name" => "is_active"];
 
+        $this->makeForm($id_module, $id_statistic, $row);
+    }
+
+    public function getIndex()
+    {
+        $this->cbLoader();
+
+        $return_url = Request::fullUrl();
+
+        $page_title = 'Menu Management';
+
+        return view('crudbooster::menus_management', compact('privileges', 'return_url', 'page_title'));
+    }
+
+    public function hookBeforeAdd(&$postdata)
+    {
+        $postdata['parent_id'] = 0;
+
+        $this->setType($postdata);
+
+        unset($postdata['module_slug']);
+        unset($postdata['statistic_slug']);
+
+        if ($postdata['is_dashboard'] == 1) {
+            //If set dashboard, so unset for first all dashboard
+            DB::table('cms_menus')->where('is_dashboard', 1)->update(['is_dashboard' => 0]);
+            Cache::forget('sidebarDashboard'.CRUDBooster::myPrivilegeId());
+        }
+    }
+
+    public function hookBeforeEdit(&$postdata, $id)
+    {
+        if ($postdata['is_dashboard'] == 1) {
+            //If set dashboard, so unset for first all dashboard
+            DB::table('cms_menus')->where('is_dashboard', 1)->update(['is_dashboard' => 0]);
+            Cache::forget('sidebarDashboard'.CRUDBooster::myPrivilegeId());
+        }
+
+        $this->setType($postdata);
+
+        unset($postdata['module_slug']);
+        unset($postdata['statistic_slug']);
+    }
+
+    public function hookAfterDelete($id)
+    {
+        DB::table('cms_menus')->where('parent_id', $id)->delete();
+    }
+
+    public function postSaveMenu()
+    {
+        $isActive = Request::input('isActive');
+        $post = json_decode(Request::input('menus'), true);
+
+        $i = 1;
+        foreach ($post[0] as $ro) {
+            $pid = $ro['id'];
+            if ($ro['children'][0]) {
+                $ci = 1;
+                foreach ($ro['children'][0] as $c) {
+                    $id = $c['id'];
+                    DB::table('cms_menus')->where('id', $id)->update(['sorting' => $ci, 'parent_id' => $pid, 'is_active' => $isActive]);
+                    $ci++;
+                }
+            }
+            DB::table('cms_menus')->where('id', $pid)->update(['sorting' => $i, 'parent_id' => 0, 'is_active' => $isActive]);
+            $i++;
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * @param $postdata
+     */
+    private function setType(&$postdata)
+    {
+        if ($postdata['type'] == 'Statistic') {
+            $stat = CRUDBooster::first('cms_statistics', ['id' => $postdata['statistic_slug']])->slug;
+            $postdata['path'] = 'statistic-builder/show/'.$stat;
+        } elseif ($postdata['type'] == 'Module') {
+            $postdata['path'] = CRUDBooster::first('cms_moduls', ['id' => $postdata['module_slug']])->path;
+        }
+    }
+
+    /**
+     * @param $id_module
+     * @param $id_statistic
+     * @param $row
+     */
+    private function makeForm($id_module, $id_statistic, $row)
+    {
         $this->form = [];
         $this->form[] = [
             "label" => "Privilege(s)",
@@ -269,87 +361,5 @@ class AdminMenusController extends CBController
             "dataenum" => ['1|Yes', '0|No'],
             'value' => '0',
         ];
-    }
-
-    public function getIndex()
-    {
-        $this->cbLoader();
-
-        $return_url = Request::fullUrl();
-
-        $page_title = 'Menu Management';
-
-        return view('crudbooster::menus_management', compact('privileges', 'return_url', 'page_title'));
-    }
-
-    public function hookBeforeAdd(&$postdata)
-    {
-        $postdata['parent_id'] = 0;
-
-        $this->setType($postdata);
-
-        unset($postdata['module_slug']);
-        unset($postdata['statistic_slug']);
-
-        if ($postdata['is_dashboard'] == 1) {
-            //If set dashboard, so unset for first all dashboard
-            DB::table('cms_menus')->where('is_dashboard', 1)->update(['is_dashboard' => 0]);
-            Cache::forget('sidebarDashboard'.CRUDBooster::myPrivilegeId());
-        }
-    }
-
-    public function hookBeforeEdit(&$postdata, $id)
-    {
-        if ($postdata['is_dashboard'] == 1) {
-            //If set dashboard, so unset for first all dashboard
-            DB::table('cms_menus')->where('is_dashboard', 1)->update(['is_dashboard' => 0]);
-            Cache::forget('sidebarDashboard'.CRUDBooster::myPrivilegeId());
-        }
-
-        $this->setType($postdata);
-
-        unset($postdata['module_slug']);
-        unset($postdata['statistic_slug']);
-    }
-
-    public function hookAfterDelete($id)
-    {
-        DB::table('cms_menus')->where('parent_id', $id)->delete();
-    }
-
-    public function postSaveMenu()
-    {
-        $isActive = Request::input('isActive');
-        $post = json_decode(Request::input('menus'), true);
-
-        $i = 1;
-        foreach ($post[0] as $ro) {
-            $pid = $ro['id'];
-            if ($ro['children'][0]) {
-                $ci = 1;
-                foreach ($ro['children'][0] as $c) {
-                    $id = $c['id'];
-                    DB::table('cms_menus')->where('id', $id)->update(['sorting' => $ci, 'parent_id' => $pid, 'is_active' => $isActive]);
-                    $ci++;
-                }
-            }
-            DB::table('cms_menus')->where('id', $pid)->update(['sorting' => $i, 'parent_id' => 0, 'is_active' => $isActive]);
-            $i++;
-        }
-
-        return response()->json(['success' => true]);
-    }
-
-    /**
-     * @param $postdata
-     */
-    private function setType(&$postdata)
-    {
-        if ($postdata['type'] == 'Statistic') {
-            $stat = CRUDBooster::first('cms_statistics', ['id' => $postdata['statistic_slug']])->slug;
-            $postdata['path'] = 'statistic-builder/show/'.$stat;
-        } elseif ($postdata['type'] == 'Module') {
-            $postdata['path'] = CRUDBooster::first('cms_moduls', ['id' => $postdata['module_slug']])->path;
-        }
     }
 }
