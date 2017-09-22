@@ -86,7 +86,7 @@ class AdminPrivilegesController extends CBController
             }
         }
 
-        $this->refreshSessionRoles($id);
+        $this->refreshSessionRoles();
 
         CRUDBooster::redirect(CRUDBooster::mainpath(), trans("crudbooster.alert_add_data_success"), 'success');
     }
@@ -131,7 +131,7 @@ class AdminPrivilegesController extends CBController
         }
 
         if ($id == CRUDBooster::myPrivilegeId()) {
-            $this->refreshSessionRoles($id);
+            $this->refreshSessionRoles();
             $this->setTheme();
         }
 
@@ -156,7 +156,7 @@ class AdminPrivilegesController extends CBController
     /**
      * @param $id
      */
-    private function refreshSessionRoles($id)
+    private function refreshSessionRoles()
     {
         $roles = DB::table('cms_privileges_roles')->where('id_cms_privileges', CRUDBooster::myPrivilegeId())->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')->get();
         Session::put('admin_privileges_roles', $roles);
