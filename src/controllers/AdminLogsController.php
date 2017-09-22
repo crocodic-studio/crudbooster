@@ -33,6 +33,11 @@ class AdminLogsController extends CBController
         $this->col[] = ["label" => "User", "name" => "id_cms_users", "join" => "cms_users,name"];
         $this->col[] = ["label" => "Description", "name" => "description"];
 
+        $this->makeForm();
+    }
+
+    private function makeForm()
+    {
         $this->form = [];
         $this->form[] = ["label" => "Time Access", "name" => "created_at", "readonly" => true];
         $this->form[] = ["label" => "IP Address", "name" => "ipaddress", "readonly" => true];
