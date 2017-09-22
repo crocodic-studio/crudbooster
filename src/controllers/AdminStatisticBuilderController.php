@@ -1,6 +1,7 @@
 <?php namespace crocodicstudio\crudbooster\controllers;
 
 use crocodicstudio\crudbooster\controllers\Controller;
+use crocodicstudio\crudbooster\controllers\Forms\StatisticForm;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;
@@ -39,7 +40,7 @@ class AdminStatisticBuilderController extends CBController
 
         $this->makeColumns();
 
-        $this->makeForm();
+        $this->form = StatisticForm::makeForm();
 
         $this->addaction = [];
         $this->addaction[] = ['label' => 'Builder', 'url' => CRUDBooster::mainpath('builder').'/[id]', 'icon' => 'fa fa-wrench'];
