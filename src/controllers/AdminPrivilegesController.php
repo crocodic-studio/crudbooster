@@ -88,8 +88,7 @@ class AdminPrivilegesController extends CBController
         }
 
         //Refresh Session Roles
-        $roles = DB::table('cms_privileges_roles')->where('id_cms_privileges', CRUDBooster::myPrivilegeId())->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')->get();
-        Session::put('admin_privileges_roles', $roles);
+        $this->refreshSessionRoles($id);
 
         CRUDBooster::redirect(CRUDBooster::mainpath(), trans("crudbooster.alert_add_data_success"), 'success');
     }
@@ -122,8 +121,7 @@ class AdminPrivilegesController extends CBController
 
         foreach ($priv as $id_modul => $data) {
             //Check Menu
-            $module = DB::table('cms_moduls')->where('id', $id_modul)->first();
-
+            //$module = DB::table('cms_moduls')->where('id', $id_modul)->first();
             $arrs = [];
             $arrs['is_visible'] = @$data['is_visible'] ?: 0;
             $arrs['is_create'] = @$data['is_create'] ?: 0;
@@ -135,7 +133,10 @@ class AdminPrivilegesController extends CBController
         }
 
         //Refresh Session Roles
-        $this->refreshSessionRoles($id);
+        if ($id == CRUDBooster::myPrivilegeId()) {
+            $this->refreshSessionRoles($id);
+            Session::put('theme_color', $this->arr['theme_color']);
+        }
 
         CRUDBooster::redirect(CRUDBooster::mainpath(), trans("crudbooster.alert_update_data_success", [
             'module' => "Privilege",
@@ -160,12 +161,8 @@ class AdminPrivilegesController extends CBController
      */
     private function refreshSessionRoles($id)
     {
-        if ($id == CRUDBooster::myPrivilegeId()) {
-            $roles = DB::table('cms_privileges_roles')->where('id_cms_privileges', CRUDBooster::myPrivilegeId())->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')->get();
-            Session::put('admin_privileges_roles', $roles);
-
-            Session::put('theme_color', $this->arr['theme_color']);
-        }
+        $roles = DB::table('cms_privileges_roles')->where('id_cms_privileges', CRUDBooster::myPrivilegeId())->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')->get();
+        Session::put('admin_privileges_roles', $roles);
     }
 
     /**
