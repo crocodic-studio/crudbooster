@@ -1,6 +1,8 @@
 <?php namespace crocodicstudio\crudbooster\controllers;
 
 use crocodicstudio\crudbooster\controllers\Controller;
+use crocodicstudio\crudbooster\controllers\Forms\LogsForm;
+use crocodicstudio\crudbooster\controllers\Forms\StatisticForm;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;
@@ -29,18 +31,7 @@ class AdminLogsController extends CBController
 
         $this->makeColumns();
 
-        $this->makeForm();
-    }
-
-    private function makeForm()
-    {
-        $this->form = [];
-        $this->form[] = ["label" => "Time Access", "name" => "created_at", "readonly" => true];
-        $this->form[] = ["label" => "IP Address", "name" => "ipaddress", "readonly" => true];
-        $this->form[] = ["label" => "User Agent", "name" => "useragent", "readonly" => true];
-        $this->form[] = ["label" => "URL", "name" => "url", "readonly" => true];
-        $this->form[] = ["label" => "User", "name" => "id_cms_users", "type" => "select", "datatable" => "cms_users,name", "readonly" => true];
-        $this->form[] = ["label" => "Description", "name" => "description", "readonly" => true];
+        $this->form = LogsForm::makeForm();
     }
 
     private function makeColumns()
