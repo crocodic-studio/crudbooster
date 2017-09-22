@@ -130,10 +130,9 @@ class AdminPrivilegesController extends CBController
             $this->savePermissions($id, $id_modul, $arrs);
         }
 
-        //Refresh Session Roles
         if ($id == CRUDBooster::myPrivilegeId()) {
             $this->refreshSessionRoles($id);
-            Session::put('theme_color', $this->arr['theme_color']);
+            $this->setTheme();
         }
 
         CRUDBooster::redirect(CRUDBooster::mainpath(), trans("crudbooster.alert_update_data_success", [
@@ -174,14 +173,13 @@ class AdminPrivilegesController extends CBController
         $currentPermission = DB::table('cms_privileges_roles')->where('id_cms_moduls', $id_modul)->where('id_cms_privileges', $id)->first();
 
         if ($currentPermission) {
-            DB::table('cms_privileges_roles')->where('id', $currentPermission->id)->update($arrs);
-        } else {
-            $arrs['id'] = DB::table('cms_privileges_roles')->max('id') + 1;
-            $arrs['id_cms_privileges'] = $id;
-            $arrs['id_cms_moduls'] = $id_modul;
-            DB::table("cms_privileges_roles")->insert($arrs);
+            return DB::table('cms_privileges_roles')->where('id', $currentPermission->id)->update($arrs);
         }
 
+        $arrs['id'] = DB::table('cms_privileges_roles')->max('id') + 1;
+        $arrs['id_cms_privileges'] = $id;
+        $arrs['id_cms_moduls'] = $id_modul;
+        DB::table("cms_privileges_roles")->insert($arrs);
         return $arrs;
     }
 
