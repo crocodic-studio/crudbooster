@@ -1,25 +1,16 @@
-<?php namespace crocodicstudio\crudbooster\controllers;
+<?php
 
-use crocodicstudio\crudbooster\controllers\Controller;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
+namespace crocodicstudio\crudbooster\controllers;
+
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\PDF;
-use Illuminate\Support\Facades\Excel;
 use CRUDBooster;
 
 class AdminPrivilegesController extends CBController
 {
     public function cbInit()
     {
-
         $this->table = 'cms_privileges';
         $this->primary_key = 'id';
         $this->title_field = "name";
@@ -165,7 +156,7 @@ class AdminPrivilegesController extends CBController
     private function refreshSessionRoles()
     {
         $roles = DB::table('cms_privileges_roles')->where('id_cms_privileges', CRUDBooster::myPrivilegeId())->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')->get();
-        Session::put('admin_privileges_roles', $roles);
+        session()->put('admin_privileges_roles', $roles);
     }
 
     /**
@@ -191,6 +182,6 @@ class AdminPrivilegesController extends CBController
 
     private function setTheme()
     {
-        Session::put('theme_color', $this->arr['theme_color']);
+        session()->put('theme_color', $this->arr['theme_color']);
     }
 }
