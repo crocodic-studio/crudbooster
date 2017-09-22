@@ -70,20 +70,17 @@ class AdminPrivilegesController extends CBController
 
         $this->setTheme();
 
-        $priv = Request::input("privileges");
-        if ($priv) {
-            foreach ($priv as $id_modul => $data) {
-                $arrs = [];
-                $arrs['is_visible'] = @$data['is_visible'] ?: 0;
-                $arrs['is_create'] = @$data['is_create'] ?: 0;
-                $arrs['is_read'] = @$data['is_read'] ?: 0;
-                $arrs['is_edit'] = @$data['is_edit'] ?: 0;
-                $arrs['is_delete'] = @$data['is_delete'] ?: 0;
-                $arrs['id_cms_privileges'] = $id;
-                $arrs['id_cms_moduls'] = $id_modul;
-                DB::table("cms_privileges_roles")->insert($arrs);
-                //$module = DB::table('cms_moduls')->where('id', $id_modul)->first();
-            }
+        foreach (Request::input("privileges", []) as $id_modul => $data) {
+            $arrs = [];
+            $arrs['is_visible'] = @$data['is_visible'] ?: 0;
+            $arrs['is_create'] = @$data['is_create'] ?: 0;
+            $arrs['is_read'] = @$data['is_read'] ?: 0;
+            $arrs['is_edit'] = @$data['is_edit'] ?: 0;
+            $arrs['is_delete'] = @$data['is_delete'] ?: 0;
+            $arrs['id_cms_privileges'] = $id;
+            $arrs['id_cms_moduls'] = $id_modul;
+            DB::table("cms_privileges_roles")->insert($arrs);
+            //$module = DB::table('cms_moduls')->where('id', $id_modul)->first();
         }
 
         $this->refreshSessionRoles();
