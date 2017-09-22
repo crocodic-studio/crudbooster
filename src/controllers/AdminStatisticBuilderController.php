@@ -213,19 +213,6 @@ class AdminStatisticBuilderController extends CBController
         CRUDBooster::denyAccess();
     }
 
-    private function makeForm()
-    {
-        $this->form = [];
-        $this->form[] = [
-            "label" => "Name",
-            "name" => "name",
-            "type" => "text",
-            "required" => true,
-            "validation" => "required|min:3|max:255",
-            "placeholder" => "You can only enter the letter only",
-        ];
-    }
-
     private function makeColumns()
     {
         $this->col = [];
