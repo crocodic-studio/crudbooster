@@ -118,29 +118,27 @@ class AdminPrivilegesController extends CBController
 
         DB::table($this->table)->where($this->primary_key, $id)->update($this->arr);
 
-        $priv = Request::input("privileges");
-        if ($priv) {
+        $priv = Request::input("privileges", []);
 
-            foreach ($priv as $id_modul => $data) {
-                //Check Menu
-                $module = DB::table('cms_moduls')->where('id', $id_modul)->first();
-                $currentPermission = DB::table('cms_privileges_roles')->where('id_cms_moduls', $id_modul)->where('id_cms_privileges', $id)->first();
+        foreach ($priv as $id_modul => $data) {
+            //Check Menu
+            $module = DB::table('cms_moduls')->where('id', $id_modul)->first();
+            $currentPermission = DB::table('cms_privileges_roles')->where('id_cms_moduls', $id_modul)->where('id_cms_privileges', $id)->first();
 
-                $arrs = [];
-                $arrs['is_visible'] = @$data['is_visible'] ?: 0;
-                $arrs['is_create'] = @$data['is_create'] ?: 0;
-                $arrs['is_read'] = @$data['is_read'] ?: 0;
-                $arrs['is_edit'] = @$data['is_edit'] ?: 0;
-                $arrs['is_delete'] = @$data['is_delete'] ?: 0;
+            $arrs = [];
+            $arrs['is_visible'] = @$data['is_visible'] ?: 0;
+            $arrs['is_create'] = @$data['is_create'] ?: 0;
+            $arrs['is_read'] = @$data['is_read'] ?: 0;
+            $arrs['is_edit'] = @$data['is_edit'] ?: 0;
+            $arrs['is_delete'] = @$data['is_delete'] ?: 0;
 
-                if ($currentPermission) {
-                    DB::table('cms_privileges_roles')->where('id', $currentPermission->id)->update($arrs);
-                } else {
-                    $arrs['id'] = DB::table('cms_privileges_roles')->max('id') + 1;
-                    $arrs['id_cms_privileges'] = $id;
-                    $arrs['id_cms_moduls'] = $id_modul;
-                    DB::table("cms_privileges_roles")->insert($arrs);
-                }
+            if ($currentPermission) {
+                DB::table('cms_privileges_roles')->where('id', $currentPermission->id)->update($arrs);
+            } else {
+                $arrs['id'] = DB::table('cms_privileges_roles')->max('id') + 1;
+                $arrs['id_cms_privileges'] = $id;
+                $arrs['id_cms_moduls'] = $id_modul;
+                DB::table("cms_privileges_roles")->insert($arrs);
             }
         }
 
