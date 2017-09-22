@@ -68,8 +68,7 @@ class AdminPrivilegesController extends CBController
         DB::table($this->table)->insert($this->arr);
         $id = $this->arr[$this->primary_key];
 
-        //set theme 
-        Session::put('theme_color', $this->arr['theme_color']);
+        $this->setTheme();
 
         $priv = Request::input("privileges");
         if ($priv) {
@@ -83,11 +82,10 @@ class AdminPrivilegesController extends CBController
                 $arrs['id_cms_privileges'] = $id;
                 $arrs['id_cms_moduls'] = $id_modul;
                 DB::table("cms_privileges_roles")->insert($arrs);
-                $module = DB::table('cms_moduls')->where('id', $id_modul)->first();
+                //$module = DB::table('cms_moduls')->where('id', $id_modul)->first();
             }
         }
 
-        //Refresh Session Roles
         $this->refreshSessionRoles($id);
 
         CRUDBooster::redirect(CRUDBooster::mainpath(), trans("crudbooster.alert_add_data_success"), 'success');
@@ -185,5 +183,10 @@ class AdminPrivilegesController extends CBController
         }
 
         return $arrs;
+    }
+
+    private function setTheme()
+    {
+        Session::put('theme_color', $this->arr['theme_color']);
     }
 }
