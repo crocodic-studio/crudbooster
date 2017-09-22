@@ -27,11 +27,7 @@ class AdminLogsController extends CBController
         $this->button_edit = false;
         $this->button_delete = true;
 
-        $this->col = [];
-        $this->col[] = ["label" => "Time Access", "name" => "created_at"];
-        $this->col[] = ["label" => "IP Address", "name" => "ipaddress"];
-        $this->col[] = ["label" => "User", "name" => "id_cms_users", "join" => "cms_users,name"];
-        $this->col[] = ["label" => "Description", "name" => "description"];
+        $this->makeColumns();
 
         $this->makeForm();
     }
@@ -45,5 +41,14 @@ class AdminLogsController extends CBController
         $this->form[] = ["label" => "URL", "name" => "url", "readonly" => true];
         $this->form[] = ["label" => "User", "name" => "id_cms_users", "type" => "select", "datatable" => "cms_users,name", "readonly" => true];
         $this->form[] = ["label" => "Description", "name" => "description", "readonly" => true];
+    }
+
+    private function makeColumns()
+    {
+        $this->col = [];
+        $this->col[] = ["label" => "Time Access", "name" => "created_at"];
+        $this->col[] = ["label" => "IP Address", "name" => "ipaddress"];
+        $this->col[] = ["label" => "User", "name" => "id_cms_users", "join" => "cms_users,name"];
+        $this->col[] = ["label" => "Description", "name" => "description"];
     }
 }
