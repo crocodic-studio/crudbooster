@@ -37,18 +37,9 @@ class AdminStatisticBuilderController extends CBController
         $this->button_export = false;
         $this->button_import = false;
 
-        $this->col = [];
-        $this->col[] = ["label" => "Name", "name" => "name"];
+        $this->makeColumns();
 
-        $this->form = [];
-        $this->form[] = [
-            "label" => "Name",
-            "name" => "name",
-            "type" => "text",
-            "required" => true,
-            "validation" => "required|min:3|max:255",
-            "placeholder" => "You can only enter the letter only",
-        ];
+        $this->makeForm();
 
         $this->addaction = [];
         $this->addaction[] = ['label' => 'Builder', 'url' => CRUDBooster::mainpath('builder').'/[id]', 'icon' => 'fa fa-wrench'];
@@ -220,5 +211,24 @@ class AdminStatisticBuilderController extends CBController
         }
         CRUDBooster::insertLog(trans("crudbooster.log_try_view", ['name' => $name, 'module' => 'Statistic']));
         CRUDBooster::denyAccess();
+    }
+
+    private function makeForm()
+    {
+        $this->form = [];
+        $this->form[] = [
+            "label" => "Name",
+            "name" => "name",
+            "type" => "text",
+            "required" => true,
+            "validation" => "required|min:3|max:255",
+            "placeholder" => "You can only enter the letter only",
+        ];
+    }
+
+    private function makeColumns()
+    {
+        $this->col = [];
+        $this->col[] = ["label" => "Name", "name" => "name"];
     }
 }
