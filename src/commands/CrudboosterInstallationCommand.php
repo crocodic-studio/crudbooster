@@ -81,52 +81,54 @@ class CrudboosterInstallationCommand extends Command
         $this->info('Checking public/vendor/crudbooster symlink...');
         if (file_exists(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'))) {
             $vendorpath = public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster');
-            $this->info('Vendor Path: '.$vendorpath);
-            if (realpath($vendorpath) == $vendorpath) {
-                $this->info('Removing public/vendor/crudbooster dir, instead of creating a symlink...');
-                rrmdir(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'));
-                app('files')->link(__DIR__.'/../assets', public_path('vendor/crudbooster'));
-            }
-        } else {
-            $this->info('Creating public/vendor/crudbooster symlink...');
-            app('files')->link(__DIR__.'/../assets', public_path('vendor/crudbooster'));
+
+            $this->info('Vendor Path: '.$vendorpath);   
+            if(realpath($vendorpath) == $vendorpath) {                   	
+	            $this->info('Removing public/vendor/crudbooster dir, instead of creating a symlink...');                               
+	                rrmdir(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'));
+	                app('files')->link(__DIR__.'/../assets',public_path('vendor/crudbooster'));
+            }            
+        }else{            
+        	$this->info('Creating public/vendor/crudbooster symlink...');  
+            app('files')->link(__DIR__.'/../assets',public_path('vendor/crudbooster'));
         }
+      
 
-        if ($this->confirm('Do you have setting the database configuration at .env ?')) {
+		if($this->confirm('Do you have setting the database configuration at .env ?')) {
 
-            $this->info('Publishing CRUDBooster needs file...');
-            $this->callSilent('vendor:publish');
-            $this->callSilent('vendor:publish', ['--tag' => 'cb_migration', '--force' => true]);
-            $this->callSilent('vendor:publish', ['--tag' => 'cb_lfm', '--force' => true]);
-            $this->callSilent('vendor:publish', ['--tag' => 'cb_localization', '--force' => true]);
+			$this->info('Publishing CRUDBooster needs file...');
+            $this->callSilent('vendor:publish', ['--provider' => 'crocodicstudio\\crudbooster\\CRUDBoosterServiceProvider', '--force' => true]);
+			$this->callSilent('vendor:publish',['--tag'=>'cb_migration','--force'=>true]);
+			$this->callSilent('vendor:publish',['--tag'=>'cb_lfm','--force'=>true]);	
+			$this->callSilent('vendor:publish',['--tag'=>'cb_localization','--force'=>true]);		
+			
+			$this->info('Dumping the autoloaded files and reloading all new files...');
+			$composer = $this->findComposer();
+	        $process = new Process($composer.' dumpautoload');
+	        $process->setWorkingDirectory(base_path())->run();
 
-            $this->info('Dumping the autoloaded files and reloading all new files...');
-            $composer = $this->findComposer();
-            $process = new Process($composer.' dumpautoload');
-            $process->setWorkingDirectory(base_path())->run();
+			$this->info('Migrating database...');				
+			$this->call('migrate');
 
-            $this->info('Migrating database...');
-            $this->call('migrate');
+			if (!class_exists('CBSeeder')) {
+	            require_once __DIR__.'/../database/seeds/CBSeeder.php';
+	        }
+			$this->callSilent('db:seed',['--class' => 'CBSeeder']);			
+			$this->call('config:clear');		
+			$this->call('optimize');
+			
+			$this->info('Installing CRUDBooster Is Completed ! Thank You :)');
+		}else{
+			$this->info('Setup Aborted !');
+			$this->info('Please setting the database configuration for first !');
+		}
 
-            if (! class_exists('CBSeeder')) {
-                require_once __DIR__.'/../database/seeds/CBSeeder.php';
-            }
-            $this->callSilent('db:seed', ['--class' => 'CBSeeder']);
-            $this->call('config:clear');
-            $this->call('optimize');
+		$this->footer();
+	}
 
-            $this->info('Installing CRUDBooster Is Completed ! Thank You :)');
-        } else {
-            $this->info('Setup Aborted !');
-            $this->info('Please setting the database configuration for first !');
-        }
+	private function header() {
+		$this->info("
 
-        $this->footer();
-    }
-
-    private function header()
-    {
-        $this->info("
 #     __________  __  ______  ____                   __           
 #    / ____/ __ \/ / / / __ \/ __ )____  ____  _____/ /____  _____
 #   / /   / /_/ / / / / / / / __  / __ \/ __ \/ ___/ __/ _ \/ ___/
