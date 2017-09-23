@@ -22,12 +22,12 @@ class IndexImport
         return view('crudbooster::import', $data);
     }
 
-
     /**
      * @param $file_md5
+     *
      * @return mixed
      */
-    function handleImportProgress($file_md5)
+    public function handleImportProgress($file_md5)
     {
         $total = session('total_data_import') * 100;
         $prog = intval(cache('success_'.$file_md5)) / $total;
@@ -42,12 +42,13 @@ class IndexImport
 
     /**
      * @param $file
+     *
      * @return string
      */
-    function uploadImportData($file)
+    public function uploadImportData($file)
     {
         $dir = 'uploads/'.date('Y-m');
-        $filename = md5(str_random(5)).'.'. $file->getClientOriginalExtension();
+        $filename = md5(str_random(5)).'.'.$file->getClientOriginalExtension();
 
         //Create Directory Monthly
         Storage::makeDirectory($dir);
@@ -60,10 +61,11 @@ class IndexImport
 
     /**
      * @param $file
+     *
      * @return array
      */
-    function validateForImport($file)
+    public function validateForImport($file)
     {
-        return Validator::make(['extension' => $file->getClientOriginalExtension(),], ['extension' => 'in:xls,xlsx,csv']);
+        return Validator::make(['extension' => $file->getClientOriginalExtension()], ['extension' => 'in:xls,xlsx,csv']);
     }
 }

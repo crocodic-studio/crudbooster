@@ -1,4 +1,5 @@
 <?php
+
 if (@$ro['options'] && @$ro['options']['multiple'] == true) {
     switch ($ro['options']['multiple_result_format']) {
         case 'JSON':

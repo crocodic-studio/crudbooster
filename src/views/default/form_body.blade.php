@@ -34,8 +34,8 @@
             $old 		= old($name);
             $value 		= (!empty($old))?$old:$value;
 
-            $validation = array();
-            $validation_raw = isset($form['validation'])?explode('|',$form['validation']):array();
+            $validation = [];
+            $validation_raw = isset($form['validation'])?explode('|',$form['validation']):[];
             if($validation_raw) {
                 foreach($validation_raw as $vr) {
                     $vr_a = explode(':',$vr);

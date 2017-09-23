@@ -1,17 +1,17 @@
-<?php namespace Unisharp\Laravelfilemanager\controllers;
+<?php
 
-use Unisharp\Laravelfilemanager\controllers\Controller;
+namespace Unisharp\Laravelfilemanager\controllers;
+
+use CRUDBooster;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
-use CRUDBooster;
 
 /**
- * Class LfmController
- * @package Unisharp\Laravelfilemanager\controllers
+ * Class LfmController.
  */
-class LfmController extends Controller {
-
+class LfmController extends Controller
+{
     /**
      * @var
      */
@@ -19,9 +19,8 @@ class LfmController extends Controller {
     public $dir_location = null;
     public $file_type = null;
 
-
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -41,9 +40,8 @@ class LfmController extends Controller {
         $this->checkDefaultFolderExists('share');
     }
 
-
     /**
-     * Show the filemanager
+     * Show the filemanager.
      *
      * @return mixed
      */
@@ -52,7 +50,7 @@ class LfmController extends Controller {
         $working_dir = '/';
         $working_dir .= (Config::get('lfm.allow_multi_user')) ? $this->getUserSlug() : Config::get('lfm.shared_folder_name');
 
-        $extension_not_found = ! extension_loaded('gd') && ! extension_loaded('imagick');
+        $extension_not_found = !extension_loaded('gd') && !extension_loaded('imagick');
 
         return view('laravel-filemanager::index')
             ->with('working_dir', $working_dir)
@@ -60,11 +58,9 @@ class LfmController extends Controller {
             ->with('extension_not_found', $extension_not_found);
     }
 
-
     /*****************************
      ***   Private Functions   ***
      *****************************/
-
 
     private function checkDefaultFolderExists($type = 'share')
     {
@@ -79,13 +75,12 @@ class LfmController extends Controller {
         }
     }
 
-
     private function formatLocation($location, $type = null, $get_thumb = false)
     {
         if ($type === 'share') {
-            return $location . Config::get('lfm.shared_folder_name');
+            return $location.Config::get('lfm.shared_folder_name');
         } elseif ($type === 'user') {
-            return $location . $this->getUserSlug();
+            return $location.$this->getUserSlug();
         }
 
         $working_dir = Input::get('working_dir');
@@ -95,7 +90,6 @@ class LfmController extends Controller {
             $working_dir = substr($working_dir, 1);
         }
 
-
         $location .= $working_dir;
 
         if ($type === 'directory' || $type === 'thumb') {
@@ -104,36 +98,32 @@ class LfmController extends Controller {
 
         //if user is inside thumbs folder there is no need
         // to add thumbs substring to the end of $location
-        $in_thumb_folder = preg_match('/'.Config::get('lfm.thumb_folder_name').'$/i',$working_dir);
+        $in_thumb_folder = preg_match('/'.Config::get('lfm.thumb_folder_name').'$/i', $working_dir);
 
         if ($type === 'thumb' && !$in_thumb_folder) {
-            $location .= Config::get('lfm.thumb_folder_name') . '/';
+            $location .= Config::get('lfm.thumb_folder_name').'/';
         }
 
         return $location;
     }
 
-
     /****************************
      ***   Shared Functions   ***
      ****************************/
-
 
     public function getUserSlug()
     {
         return empty(CRUDBooster::myId()) ? '' : CRUDBooster::myId();
     }
 
-
     public function getPath($type = null, $get_thumb = false)
     {
-        $path = base_path() . '/' . $this->file_location;
+        $path = base_path().'/'.$this->file_location;
 
         $path = $this->formatLocation($path, $type);
 
         return $path;
     }
-
 
     public function getUrl($type = null)
     {
@@ -141,11 +131,10 @@ class LfmController extends Controller {
 
         $url = $this->formatLocation($url, $type);
 
-        $url = str_replace('\\','/',$url);
+        $url = str_replace('\\', '/', $url);
 
         return $url;
     }
-
 
     public function getDirectories($path)
     {
@@ -165,7 +154,6 @@ class LfmController extends Controller {
         return $arr_dir;
     }
 
-
     public function getFileName($file)
     {
         $lfm_dir_start = strpos($file, $this->file_location);
@@ -174,7 +162,7 @@ class LfmController extends Controller {
 
         $arr_dir = explode('/', $lfm_file_path);
         $arr_filename['short'] = end($arr_dir);
-        $arr_filename['long'] = '/' . $lfm_file_path;
+        $arr_filename['long'] = '/'.$lfm_file_path;
 
         return $arr_filename;
     }

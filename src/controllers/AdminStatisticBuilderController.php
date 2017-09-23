@@ -1,33 +1,24 @@
-<?php namespace crocodicstudio\crudbooster\controllers;
+<?php
 
-use crocodicstudio\crudbooster\controllers\Controller;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\PDF;
-use Illuminate\Support\Facades\Excel;
+namespace crocodicstudio\crudbooster\controllers;
+
 use CRUDBooster;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request;
 
 class AdminStatisticBuilderController extends CBController
 {
     public function cbInit()
     {
-        $this->table = "cms_statistics";
-        $this->primary_key = "id";
-        $this->title_field = "name";
+        $this->table = 'cms_statistics';
+        $this->primary_key = 'id';
+        $this->title_field = 'name';
         $this->limit = 20;
-        $this->orderby = "id,desc";
+        $this->orderby = 'id,desc';
         $this->global_privilege = false;
 
         $this->button_table_action = true;
-        $this->button_action_style = "button_icon_text";
+        $this->button_action_style = 'button_icon_text';
         $this->button_add = true;
         $this->button_delete = true;
         $this->button_edit = true;
@@ -38,16 +29,16 @@ class AdminStatisticBuilderController extends CBController
         $this->button_import = false;
 
         $this->col = [];
-        $this->col[] = ["label" => "Name", "name" => "name"];
+        $this->col[] = ['label' => 'Name', 'name' => 'name'];
 
         $this->form = [];
         $this->form[] = [
-            "label" => "Name",
-            "name" => "name",
-            "type" => "text",
-            "required" => true,
-            "validation" => "required|min:3|max:255",
-            "placeholder" => "You can only enter the letter only",
+            'label'       => 'Name',
+            'name'        => 'name',
+            'type'        => 'text',
+            'required'    => true,
+            'validation'  => 'required|min:3|max:255',
+            'placeholder' => 'You can only enter the letter only',
         ];
 
         $this->addaction = [];
@@ -58,7 +49,7 @@ class AdminStatisticBuilderController extends CBController
     {
         $this->cbLoader();
         $m = CRUDBooster::sidebarDashboard();
-        $m->path = str_replace("statistic_builder/show/", "", $m->path);
+        $m->path = str_replace('statistic_builder/show/', '', $m->path);
         if ($m->type != 'Statistic') {
             redirect('/');
         }
@@ -85,7 +76,7 @@ class AdminStatisticBuilderController extends CBController
         $this->cbLoader();
 
         $menus = DB::table('cms_menus')->where('is_dashboard', 1)->where('type', 'Statistic')->first();
-        $slug = str_replace(["statistic-builder/show/", "statistic_builder/show/"], "", $menus->path);
+        $slug = str_replace(['statistic-builder/show/', 'statistic_builder/show/'], '', $menus->path);
 
         $row = CRUDBooster::first($this->table, ['slug' => $slug]);
         $id_cms_statistics = $row->id;
@@ -121,11 +112,11 @@ class AdminStatisticBuilderController extends CBController
         $component_name = $component->component_name;
         $area_name = $component->area_name;
         $config = json_decode($component->config);
-        if (! $config) {
+        if (!$config) {
             return response()->json(compact('componentID', 'layout'));
         }
         foreach ($config as $key => $value) {
-            if (! $value) {
+            if (!$value) {
                 continue;
             }
             $command = 'showFunction';
@@ -146,11 +137,11 @@ class AdminStatisticBuilderController extends CBController
 
         $data = [
             'id_cms_statistics' => Request::get('id_cms_statistics'),
-            'componentID' => $componentID,
-            'component_name' => $component_name,
-            'area_name' => Request::get('area'),
-            'sorting' => Request::get('sorting'),
-            'name' => 'Untitled',
+            'componentID'       => $componentID,
+            'component_name'    => $component_name,
+            'area_name'         => Request::get('area'),
+            'sorting'           => Request::get('sorting'),
+            'name'              => 'Untitled',
         ];
         CRUDBooster::insert('cms_statistic_components', $data);
 
@@ -162,7 +153,7 @@ class AdminStatisticBuilderController extends CBController
     public function postUpdateAreaComponent()
     {
         DB::table('cms_statistic_components')->where('componentID', Request::get('componentid'))->update([
-                'sorting' => Request::get('sorting'),
+                'sorting'   => Request::get('sorting'),
                 'area_name' => Request::get('areaname'),
             ]);
 
@@ -186,7 +177,7 @@ class AdminStatisticBuilderController extends CBController
     public function postSaveComponent()
     {
         DB::table('cms_statistic_components')->where('componentID', Request::get('componentid'))->update([
-                'name' => Request::get('name'),
+                'name'   => Request::get('name'),
                 'config' => json_encode(Request::get('config')),
             ]);
 
@@ -218,7 +209,7 @@ class AdminStatisticBuilderController extends CBController
         if (CRUDBooster::isSuperadmin()) {
             return;
         }
-        CRUDBooster::insertLog(trans("crudbooster.log_try_view", ['name' => $name, 'module' => 'Statistic']));
+        CRUDBooster::insertLog(trans('crudbooster.log_try_view', ['name' => $name, 'module' => 'Statistic']));
         CRUDBooster::denyAccess();
     }
 }

@@ -1,3 +1,3 @@
 <?php
-$inputdata = preg_replace('/[^\d-]+/', '', $inputdata);
 
+$inputdata = preg_replace('/[^\d-]+/', '', $inputdata);

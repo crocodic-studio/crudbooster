@@ -10,24 +10,24 @@ if (Request::hasFile($name)) {
     if ($ro['options']['max_filesize'] && $filesize > $ro['options']['max_filesize']) {
         $redir = redirect()->back()->with([
             'message_type' => 'warning',
-            'message' => 'The filesize for '.$name.' is to larger',
+            'message'      => 'The filesize for '.$name.' is to larger',
         ])->withInput();
         Session::driver()->save();
         $redir->send();
         exit;
     }
 
-    if ($ro['options']['allowed_filetype'] && ! in_array($ext, $ro['options']['allowed_filetype'])) {
+    if ($ro['options']['allowed_filetype'] && !in_array($ext, $ro['options']['allowed_filetype'])) {
         $redir = redirect()->back()->with([
             'message_type' => 'warning',
-            'message' => 'The filetype for '.$name.' is not allowed',
+            'message'      => 'The filetype for '.$name.' is not allowed',
         ])->withInput();
         Session::driver()->save();
         $redir->send();
         exit;
     }
 
-    //Create Directory Monthly						
+    //Create Directory Monthly
     Storage::makeDirectory($file_path);
 
     if ($ro['options']['encrypt'] == true) {

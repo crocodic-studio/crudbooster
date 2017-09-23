@@ -5,7 +5,7 @@ Some cases you need to change the color of row. For example is change the rows c
 Open the module controller, find `$this->table_row_color` in `cbInit()` method.
 
 ```php
-$this->table_row_color = array();
+$this->table_row_color = [];
 $this->table_row_color[] = ['condition'=>"[status] == 'active'","color"=>"success"];
 ```
 `condition` attribute : you can use the field alias, for example : [id], [status], etc

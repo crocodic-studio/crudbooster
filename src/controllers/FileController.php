@@ -1,12 +1,12 @@
-<?php namespace crocodicstudio\crudbooster\controllers;
+<?php
 
-use crocodicstudio\crudbooster\controllers\Controller;
+namespace crocodicstudio\crudbooster\controllers;
 
-use Storage;
-use Response;
-use Image;
 use File;
 use Illuminate\Support\Facades\Request;
+use Image;
+use Response;
+use Storage;
 
 class FileController extends Controller
 {
@@ -18,8 +18,7 @@ class FileController extends Controller
 
         $fullStoragePath = storage_path('app/'.$fullFilePath);
 
-
-        if (! Storage::exists($fullFilePath)) {
+        if (!Storage::exists($fullFilePath)) {
             abort(404);
         }
         $hasImageExtension = $this->isImage($fullStoragePath);
@@ -48,6 +47,7 @@ class FileController extends Controller
 
     /**
      * @param $fullStoragePath
+     *
      * @return array
      */
     private function resizeImage($fullStoragePath)
@@ -56,10 +56,10 @@ class FileController extends Controller
         $h = Request::get('h', $w);
         $imgRaw = Image::cache(function ($image) use ($fullStoragePath, $w, $h) {
             $im = $image->make($fullStoragePath);
-            if (! $w) {
+            if (!$w) {
                 return $im;
             }
-            if (! $h) {
+            if (!$h) {
                 $im->fit($w);
             } else {
                 $im->fit($w, $h);
@@ -73,6 +73,7 @@ class FileController extends Controller
 
     /**
      * @param $fullStoragePath
+     *
      * @return bool
      */
     private function isImage($fullStoragePath)
@@ -91,6 +92,7 @@ class FileController extends Controller
      * @param $fullFilePath
      * @param $lifetime
      * @param $filename
+     *
      * @return array
      */
     private function prepareHeaders($imageFileSize, $fullFilePath, $filename)
@@ -98,7 +100,7 @@ class FileController extends Controller
         $lifetime = 31556926; // One year in seconds
         $fullStoragePath = storage_path('app/'.$fullFilePath);
         /**
-         * Prepare some header variables
+         * Prepare some header variables.
          */
         $handler = new \Symfony\Component\HttpFoundation\File\File($fullStoragePath);
         $file_time = $handler->getMTime(); // Get the last modified time for the file (Unix timestamp)
@@ -111,17 +113,17 @@ class FileController extends Controller
 
         $headers = [
             'Content-Disposition' => 'inline; filename="'.$filename.'"',
-            'Last-Modified' => $header_last_modified,
-            'Cache-Control' => 'must-revalidate',
-            'Expires' => $header_expires,
-            'Pragma' => 'public',
-            'Etag' => $header_etag,
+            'Last-Modified'       => $header_last_modified,
+            'Cache-Control'       => 'must-revalidate',
+            'Expires'             => $header_expires,
+            'Pragma'              => 'public',
+            'Etag'                => $header_etag,
         ];
 
         // return Response::download($fullStoragePath, $filename, $headers);
 
         $headers = array_merge($headers, [
-            'Content-Type' => $header_content_type,
+            'Content-Type'   => $header_content_type,
             'Content-Length' => $header_content_length,
         ]);
 

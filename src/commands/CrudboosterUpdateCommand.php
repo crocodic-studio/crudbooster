@@ -1,15 +1,13 @@
-<?php namespace crocodicstudio\crudbooster\commands;
+<?php
 
-use Illuminate\Console\Command;
-use Illuminate\Foundation\Inspiring;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Process\Process;
-use DB;
-use Cache;
-use Request;
-use CRUDBooster;
+namespace crocodicstudio\crudbooster\commands;
+
 use App;
+use Cache;
+use CRUDBooster;
+use DB;
+use Illuminate\Console\Command;
+use Symfony\Component\Process\Process;
 
 class CrudboosterUpdateCommand extends Command
 {
@@ -34,7 +32,6 @@ class CrudboosterUpdateCommand extends Command
      */
     public function handle()
     {
-
         $this->header();
         $this->checkRequirements();
 
@@ -42,11 +39,11 @@ class CrudboosterUpdateCommand extends Command
 
         //Create vendor folder at public
         $this->info('Checking public/vendor directory...');
-        if (! file_exists(public_path('vendor'))) {
+        if (!file_exists(public_path('vendor'))) {
             $this->info('Creating public/vendor directory...');
             mkdir(public_path('vendor'), 0777);
         } else {
-            if (! is_writable(public_path('vendor'))) {
+            if (!is_writable(public_path('vendor'))) {
                 $this->info('Setup aborted !');
                 $this->info('Please set public/vendor directory to writable 0777');
 
@@ -74,7 +71,6 @@ class CrudboosterUpdateCommand extends Command
         //Crate symlink for assets
         $this->info('Checking public/vendor/crudbooster directory...');
         if (file_exists(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'))) {
-
             $vendorpath = public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster');
 
             if (realpath($vendorpath) == $vendorpath) {
@@ -101,7 +97,7 @@ class CrudboosterUpdateCommand extends Command
         $this->info('Migrating database...');
         $this->call('migrate');
 
-        if (! class_exists('CBSeeder')) {
+        if (!class_exists('CBSeeder')) {
             require_once __DIR__.'/../database/seeds/CBSeeder.php';
         }
         $this->callSilent('db:seed', ['--class' => 'CBSeeder']);

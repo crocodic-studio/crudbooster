@@ -1,26 +1,21 @@
-<?php namespace crocodicstudio\crudbooster\controllers;
+<?php
 
-use crocodicstudio\crudbooster\controllers\Controller;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\PDF;
-use Illuminate\Support\Facades\Excel;
+namespace crocodicstudio\crudbooster\controllers;
+
 use CRUDBooster;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\PDF;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AdminSettingsController extends CBController
 {
     public function cbInit()
     {
         $this->table = 'cms_settings';
-        $this->title_field = "name";
+        $this->title_field = 'name';
         $this->index_orderby = ['name' => 'asc'];
         $this->button_delete = true;
         $this->button_show = false;
@@ -42,16 +37,16 @@ class AdminSettingsController extends CBController
         $this->form[] = ['label' => 'Label', 'name' => 'label'];
 
         $this->form[] = [
-            "label" => "Type",
-            "name" => "content_input_type",
-            "type" => "select_dataenum",
-            'options' => ["enum" => ["text", "number", "email", "textarea", "wysiwyg", "upload_image", "upload_document", "datepicker", "radio", "select"]],
+            'label'   => 'Type',
+            'name'    => 'content_input_type',
+            'type'    => 'select_dataenum',
+            'options' => ['enum' => ['text', 'number', 'email', 'textarea', 'wysiwyg', 'upload_image', 'upload_document', 'datepicker', 'radio', 'select']],
         ];
         $this->form[] = [
-            "label" => "Radio / Select Data",
-            "name" => "dataenum",
-            "placeholder" => "Example : abc,def,ghi",
-            "jquery" => "
+            'label'       => 'Radio / Select Data',
+            'name'        => 'dataenum',
+            'placeholder' => 'Example : abc,def,ghi',
+            'jquery'      => "
 			function show_radio_data() {
 				var cit = $('#content_input_type').val();
 				if(cit == 'radio' || cit == 'select') {
@@ -64,10 +59,10 @@ class AdminSettingsController extends CBController
 			show_radio_data();
 			",
         ];
-        $this->form[] = ["label" => "Helper Text", "name" => "helper", "type" => "text"];
+        $this->form[] = ['label' => 'Helper Text', 'name' => 'helper', 'type' => 'text'];
     }
 
-    function getShow()
+    public function getShow()
     {
         $this->cbLoader();
 
@@ -78,12 +73,12 @@ class AdminSettingsController extends CBController
         return view('crudbooster::setting', $data);
     }
 
-    function hook_before_edit(&$posdata, $id)
+    public function hook_before_edit(&$posdata, $id)
     {
-        $this->return_url = CRUDBooster::mainpath("show")."?group=".$posdata['group_setting'];
+        $this->return_url = CRUDBooster::mainpath('show').'?group='.$posdata['group_setting'];
     }
 
-    function getDeleteFileSetting()
+    public function getDeleteFileSetting()
     {
         $id = g('id');
         $row = CRUDBooster::first('cms_settings', $id);
@@ -94,15 +89,13 @@ class AdminSettingsController extends CBController
         CRUDBooster::redirect(Request::server('HTTP_REFERER'), trans('alert_delete_data_success'), 'success');
     }
 
-    function postSaveSetting()
+    public function postSaveSetting()
     {
-
         $this->allowOnlySuperAdmin();
 
         $group = Request::get('group_setting');
         $setting = DB::table('cms_settings')->where('group_setting', $group)->get();
         foreach ($setting as $set) {
-
             $name = $set->name;
 
             $content = Request::get($set->name);
@@ -119,13 +112,13 @@ class AdminSettingsController extends CBController
         return CRUDBooster::backWithMsg('Your setting has been saved !');
     }
 
-    function hook_before_add(&$arr)
+    public function hook_before_add(&$arr)
     {
         $arr['name'] = str_slug($arr['label'], '_');
-        $this->return_url = CRUDBooster::mainpath("show")."?group=".$arr['group_setting'];
+        $this->return_url = CRUDBooster::mainpath('show').'?group='.$arr['group_setting'];
     }
 
-    function hook_after_edit($id)
+    public function hook_after_edit($id)
     {
         $row = DB::table($this->table)->where($this->primary_key, $id)->first();
 
@@ -151,8 +144,8 @@ class AdminSettingsController extends CBController
 
     private function allowOnlySuperAdmin()
     {
-        if (! CRUDBooster::isSuperadmin()) {
-            CRUDBooster::insertLog(trans("crudbooster.log_try_view", ['name' => 'Setting', 'module' => 'Setting']));
+        if (!CRUDBooster::isSuperadmin()) {
+            CRUDBooster::insertLog(trans('crudbooster.log_try_view', ['name' => 'Setting', 'module' => 'Setting']));
             CRUDBooster::denyAccess();
         }
     }
@@ -160,6 +153,7 @@ class AdminSettingsController extends CBController
     /**
      * @param $set
      * @param $name
+     *
      * @return string
      */
     private function uploadFile($set)
