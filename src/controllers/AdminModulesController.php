@@ -888,7 +888,7 @@ class AdminModulesController extends CBController
     public function hookBeforeDelete($id)
     {
         // Delete menu
-        if($modul = DB::table('cms_moduls')->where('id', $id)->first()){
+        if ($modul = DB::table('cms_moduls')->where('id', $id)->first()) {
             DB::table('cms_menus')->where('path', 'like', '%'.$modul->controller.'%')->delete();
         }
 
@@ -1034,7 +1034,7 @@ class AdminModulesController extends CBController
                 ->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')
                 ->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')
                 ->get();
-            
+
             Session::put('admin_privileges_roles', $roles);
 
             return redirect(Route('AdminModulesControllerGetStep2', ['id' => $id]));
