@@ -61,7 +61,7 @@
 		
 		function check_gzip_use()
 		{
-			$encodings = array();
+			$encodings = [];
 			$desactivate_gzip=false;
 					
 			if (isset($_SERVER['HTTP_ACCEPT_ENCODING']))
@@ -153,7 +153,7 @@
 
 			// replace languages names
 			$reg_path= $this->path."reg_syntax/";
-			$a_displayName	= array();
+			$a_displayName	= [];
 			if (($dir = @opendir($reg_path)) !== false)
 			{
 				while (($file = readdir($dir)) !== false)
@@ -192,7 +192,7 @@
 		
 			// load sub scripts
 			$sub_scripts="";
-			$sub_scripts_list= array();
+			$sub_scripts_list= [];
 			preg_match_all('/"([^"]*)"/', $this->sub_script_list, $match);
 			foreach($match[1] as $value){
 				$sub_scripts_list[]= preg_replace("/\\|\//i", "", $value).".js";
@@ -250,7 +250,7 @@
 			}
 			else
 			{
-				$last_comp	= array();
+				$last_comp	= [];
 			}
 			
 			$js_replace= '';
