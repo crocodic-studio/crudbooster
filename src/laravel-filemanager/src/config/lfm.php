@@ -10,10 +10,10 @@ return [
     'use_package_routes'    => true,
 
     // For laravel 5.2, please set to ['web', 'auth']
-    'middlewares'           => ['web','\crocodicstudio\crudbooster\middlewares\CBBackend'],  
+    'middlewares'           => ['web', '\crocodicstudio\crudbooster\middlewares\CBBackend'],
 
     // Add prefix for routes
-    'prefix'                => 'laravel-filemanager',  
+    'prefix'                => 'laravel-filemanager',
 
     // Allow multi_user mode or not.
     // If true, laravel-filemanager create private folders for each signed-in user.
@@ -38,7 +38,7 @@ return [
         'image/jpeg',
         'image/pjpeg',
         'image/png',
-        'image/gif'
+        'image/gif',
     ],
 
     // available since v1.3.0

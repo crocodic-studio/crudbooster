@@ -1,19 +1,10 @@
-<?php namespace crocodicstudio\crudbooster\controllers;
+<?php
 
-use crocodicstudio\crudbooster\controllers\Controller;
+namespace crocodicstudio\crudbooster\controllers;
+
 use CRUDBooster;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\PDF;
-use Illuminate\Support\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
 
 class AdminFileManagerController extends CBController
 {
@@ -23,7 +14,6 @@ class AdminFileManagerController extends CBController
 
     public function getIndex()
     {
-
         $path = g('path') ? base64_decode(g('path')) : '';
 
         if (strpos($path, '..') || $path == '.' || strpos($path, '/.')) {
@@ -55,14 +45,14 @@ class AdminFileManagerController extends CBController
         $allowedExtension = explode(',', strtolower(cbConfig('UPLOAD_TYPES')));
         $path = g('path') ? base64_decode(g('path')) : 'uploads';
         $file = Request::file('userfile');
-        if (! $file) {
-            return null;
+        if (!$file) {
+            return;
         }
 
         $filename = $file->getClientOriginalName();
         $isAllowed = in_array($file->getClientOriginalExtension(), $allowedExtension);
 
-        if (! $isAllowed) {
+        if (!$isAllowed) {
             return CRUDBooster::backWithMsg('The file '.$filename.' type is not allowed!', 'warning');
         }
 

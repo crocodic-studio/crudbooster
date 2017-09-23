@@ -1,13 +1,11 @@
-<?php namespace crocodicstudio\crudbooster\commands;
+<?php
 
-use Illuminate\Console\Command;
-use Illuminate\Foundation\Inspiring;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
-use DB;
+namespace crocodicstudio\crudbooster\commands;
+
 use Cache;
-use Request;
 use CRUDBooster;
+use DB;
+use Illuminate\Console\Command;
 
 class Mailqueues extends Command
 {
@@ -32,8 +30,6 @@ class Mailqueues extends Command
      */
     public function handle()
     {
-
-
         $now = date('Y-m-d H:i:s');
 
         $this->comment('Mail Queues Started '.$now);

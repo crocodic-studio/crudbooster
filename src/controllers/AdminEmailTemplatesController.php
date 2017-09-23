@@ -1,32 +1,19 @@
-<?php namespace crocodicstudio\crudbooster\controllers;
+<?php
 
-use crocodicstudio\crudbooster\controllers\Controller;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\PDF;
-use Illuminate\Support\Facades\Excel;
-use CRUDBooster;
+namespace crocodicstudio\crudbooster\controllers;
 
 class AdminEmailTemplatesController extends \crocodicstudio\crudbooster\controllers\CBController
 {
     public function cbInit()
     {
-        $this->table = "cms_email_templates";
-        $this->title_field = "name";
+        $this->table = 'cms_email_templates';
+        $this->title_field = 'name';
         $this->limit = 20;
-        $this->orderby = ["id" => "desc"];
+        $this->orderby = ['id' => 'desc'];
         $this->global_privilege = false;
 
         $this->button_table_action = true;
-        $this->button_action_style = "button_icon";
+        $this->button_action_style = 'button_icon';
         $this->button_add = true;
         $this->button_delete = true;
         $this->button_edit = true;
@@ -37,50 +24,50 @@ class AdminEmailTemplatesController extends \crocodicstudio\crudbooster\controll
         $this->button_import = false;
 
         $this->col = [];
-        $this->col[] = ["label" => "Template Name", "name" => "name"];
-        $this->col[] = ["label" => "Slug", "name" => "slug"];
+        $this->col[] = ['label' => 'Template Name', 'name' => 'name'];
+        $this->col[] = ['label' => 'Slug', 'name' => 'slug'];
 
         $this->form = [];
         $this->form[] = [
-            "label" => "Template Name",
-            "name" => "name",
-            "type" => "text",
-            "required" => true,
-            "validation" => "required|min:3|max:255|alpha_spaces",
-            "placeholder" => "You can only enter the letter only",
+            'label'       => 'Template Name',
+            'name'        => 'name',
+            'type'        => 'text',
+            'required'    => true,
+            'validation'  => 'required|min:3|max:255|alpha_spaces',
+            'placeholder' => 'You can only enter the letter only',
         ];
-        $this->form[] = ["label" => "Slug", "type" => "text", "name" => "slug", "required" => true, 'validation' => 'required|unique:cms_email_templates,slug'];
-        $this->form[] = ["label" => "Subject", "name" => "subject", "type" => "text", "required" => true, "validation" => "required|min:3|max:255"];
-        $this->form[] = ["label" => "Content", "name" => "content", "type" => "wysiwyg", "required" => true, "validation" => "required"];
-        $this->form[] = ["label" => "Description", "name" => "description", "type" => "text", "required" => true, "validation" => "required|min:3|max:255"];
+        $this->form[] = ['label' => 'Slug', 'type' => 'text', 'name' => 'slug', 'required' => true, 'validation' => 'required|unique:cms_email_templates,slug'];
+        $this->form[] = ['label' => 'Subject', 'name' => 'subject', 'type' => 'text', 'required' => true, 'validation' => 'required|min:3|max:255'];
+        $this->form[] = ['label' => 'Content', 'name' => 'content', 'type' => 'wysiwyg', 'required' => true, 'validation' => 'required'];
+        $this->form[] = ['label' => 'Description', 'name' => 'description', 'type' => 'text', 'required' => true, 'validation' => 'required|min:3|max:255'];
 
         $this->form[] = [
-            "label" => "From Name",
-            "name" => "from_name",
-            "type" => "text",
-            "required" => false,
-            "width" => "col-sm-6",
+            'label'       => 'From Name',
+            'name'        => 'from_name',
+            'type'        => 'text',
+            'required'    => false,
+            'width'       => 'col-sm-6',
             'placeholder' => 'Optional',
         ];
         $this->form[] = [
-            "label" => "From Email",
-            "name" => "from_email",
-            "type" => "email",
-            "required" => false,
-            "validation" => "email",
-            "width" => "col-sm-6",
+            'label'       => 'From Email',
+            'name'        => 'from_email',
+            'type'        => 'email',
+            'required'    => false,
+            'validation'  => 'email',
+            'width'       => 'col-sm-6',
             'placeholder' => 'Optional',
         ];
 
         $this->form[] = [
-            "label" => "Cc Email",
-            "name" => "cc_email",
-            "type" => "email",
-            "required" => false,
-            "validation" => "email",
+            'label'       => 'Cc Email',
+            'name'        => 'cc_email',
+            'type'        => 'email',
+            'required'    => false,
+            'validation'  => 'email',
             'placeholder' => 'Optional',
         ];
     }
-    //By the way, you can still create your own method in here... :) 
 
+    //By the way, you can still create your own method in here... :)
 }

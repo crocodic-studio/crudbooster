@@ -1,21 +1,21 @@
 <?php
-/* 
+/*
 | ---------------------------------------------------------------------------------------------------------------
 | Main Helper of CRUDBooster
 | Do not edit or modify this helper unless your modification will be replace if any update from CRUDBooster.
-| 
+|
 | Homepage : http://crudbooster.com
 | ---------------------------------------------------------------------------------------------------------------
 |
 */
 
-if (! function_exists('parseControllerConfigToArray')) {
+if (!function_exists('parseControllerConfigToArray')) {
     function parseControllerConfigToArray($code)
     {
-        $configCode = extract_unit($code, "# START CONFIGURATION DO NOT REMOVE THIS LINE", "# END CONFIGURATION DO NOT REMOVE THIS LINE");
+        $configCode = extract_unit($code, '# START CONFIGURATION DO NOT REMOVE THIS LINE', '# END CONFIGURATION DO NOT REMOVE THIS LINE');
         $configCode = preg_replace('/[\t\n\r\0\x0B]/', '', $configCode);
         $configCode = preg_replace('/([\s])\1+/', ' ', $configCode);
-        $configCode = explode(";", $configCode);
+        $configCode = explode(';', $configCode);
         $configCode = array_map('trim', $configCode);
         $result = [];
         foreach ($configCode as &$code) {
@@ -23,12 +23,12 @@ if (! function_exists('parseControllerConfigToArray')) {
             $key = str_replace('$this->', '', $key);
             $val = substr($code, strpos($code, ' = ') + 3);
             $val = trim(str_replace("'", '"', $val), '"');
-            if (strtolower($val) == "true") {
+            if (strtolower($val) == 'true') {
                 $val = true;
-            } elseif (strtolower($val) == "false") {
+            } elseif (strtolower($val) == 'false') {
                 $val = false;
             }
-            if ($key == "") {
+            if ($key == '') {
                 continue;
             }
 
@@ -39,17 +39,16 @@ if (! function_exists('parseControllerConfigToArray')) {
     }
 }
 
-if (! function_exists('parseScaffoldingToArray')) {
+if (!function_exists('parseScaffoldingToArray')) {
     function parseScaffoldingToArray($code, $type = 'form')
     {
-
         if ($type == 'form') {
-            $cols = extract_unit($code, "# START FORM DO NOT REMOVE THIS LINE", "# END FORM DO NOT REMOVE THIS LINE");
+            $cols = extract_unit($code, '# START FORM DO NOT REMOVE THIS LINE', '# END FORM DO NOT REMOVE THIS LINE');
             $cols = str_replace('"', "'", $cols);
             $cols = trim(str_replace('$this->form = [];', '', $cols));
             $colsItem = explode('$this->form[] = ', $cols);
         } elseif ($type == 'col') {
-            $cols = extract_unit($code, "# START COLUMNS DO NOT REMOVE THIS LINE", "# END COLUMNS DO NOT REMOVE THIS LINE");
+            $cols = extract_unit($code, '# START COLUMNS DO NOT REMOVE THIS LINE', '# END COLUMNS DO NOT REMOVE THIS LINE');
             $cols = str_replace('"', "'", $cols);
             $cols = trim(str_replace('$this->col = [];', '', $cols));
             $colsItem = explode('$this->col[] = ', $cols);
@@ -61,7 +60,7 @@ if (! function_exists('parseScaffoldingToArray')) {
             $item = trim($item, '[');
             $item = trim($item, '];');
             $item = trim($item);
-            $item = trim(preg_replace("/[\n\r\t]/", "", $item));
+            $item = trim(preg_replace("/[\n\r\t]/", '', $item));
             $strSplit = str_split($item);
             $isInner = false;
             $innerCount = 0;
@@ -75,12 +74,12 @@ if (! function_exists('parseScaffoldingToArray')) {
                 if ($innerCount == 0) {
                     if ($s == ',') {
                         if ($strSplit[$e + 1] == "'") {
-                            $strSplit[$e] = "|SPLIT|";
+                            $strSplit[$e] = '|SPLIT|';
                         }
                     }
                 }
             }
-            $item = implode("", $strSplit);
+            $item = implode('', $strSplit);
         }
 
         foreach ($colsItem as &$col) {
@@ -89,10 +88,10 @@ if (! function_exists('parseScaffoldingToArray')) {
             foreach ($split as $s) {
                 if (strpos($s, 'options') !== false) {
                     $key = 'options';
-                    $val = trim(str_replace("'options'=>", "", $s));
+                    $val = trim(str_replace("'options'=>", '', $s));
                 } elseif (strpos($s, 'callback')) {
                     $key = 'callback';
-                    $val = trim(str_replace(["'callback'=>function(\$row) {", "'callback'=>function(\$row){"], "", $s));
+                    $val = trim(str_replace(["'callback'=>function(\$row) {", "'callback'=>function(\$row){"], '', $s));
                     $val = substr($val, 0, -1); //to remove last }
                 } else {
                     $sSplit = explode('=>', $s);
@@ -119,7 +118,7 @@ if (! function_exists('parseScaffoldingToArray')) {
     }
 }
 
-if (! function_exists('readMethodContent')) {
+if (!function_exists('readMethodContent')) {
     function readMethodContent($code, $findMethod)
     {
         $functionToFind = $findMethod;
@@ -213,7 +212,7 @@ if (! function_exists('readMethodContent')) {
     }
 }
 
-if (! function_exists('writeMethodContent')) {
+if (!function_exists('writeMethodContent')) {
     function writeMethodContent($code, $findMethod, $stringContent)
     {
         $functionToFind = $findMethod;
@@ -315,17 +314,17 @@ if (! function_exists('writeMethodContent')) {
     }
 }
 
-if (! function_exists('rrmdir')) {
+if (!function_exists('rrmdir')) {
     function rrmdir($dir)
     {
         if (is_dir($dir)) {
             $objects = scandir($dir);
             foreach ($objects as $object) {
-                if ($object != "." && $object != "..") {
-                    if (is_dir($dir."/".$object)) {
-                        rrmdir($dir."/".$object);
+                if ($object != '.' && $object != '..') {
+                    if (is_dir($dir.'/'.$object)) {
+                        rrmdir($dir.'/'.$object);
                     } else {
-                        unlink($dir."/".$object);
+                        unlink($dir.'/'.$object);
                     }
                 }
             }
@@ -334,7 +333,7 @@ if (! function_exists('rrmdir')) {
     }
 }
 
-if (! function_exists('extract_unit')) {
+if (!function_exists('extract_unit')) {
     /*
     Credits: Bit Repository
     URL: http://www.bitrepository.com/extract-content-between-two-delimiters-with-php.html
@@ -352,39 +351,39 @@ if (! function_exists('extract_unit')) {
     }
 }
 
-if (! function_exists('now')) {
+if (!function_exists('now')) {
     function now()
     {
         return date('Y-m-d H:i:s');
     }
 }
 
-/* 
+/*
 | --------------------------------------------------------------------------------------------------------------
 | Get data from input post/get more simply
 | --------------------------------------------------------------------------------------------------------------
 | $name = name of input
 |
 */
-if (! function_exists('g')) {
+if (!function_exists('g')) {
     function g($name)
     {
         return Request::get($name);
     }
 }
 
-if (! function_exists('min_var_export')) {
-    function min_var_export($input, $indent = "")
+if (!function_exists('min_var_export')) {
+    function min_var_export($input, $indent = '')
     {
         if (is_array($input)) {
             $buffer = [];
             foreach ($input as $key => $value) {
-                $buffer[] = $indent.var_export($key, true)."=>".min_var_export($value, ($indent."\t"));
+                $buffer[] = $indent.var_export($key, true).'=>'.min_var_export($value, ($indent."\t"));
             }
             if (count($buffer)) {
                 return "[\n".implode(",\n", $buffer)."\n$indent]";
             } else {
-                return "[]";
+                return '[]';
             }
         } else {
             return var_export($input, true);
@@ -392,7 +391,7 @@ if (! function_exists('min_var_export')) {
     }
 }
 
-if (! function_exists('rrmdir')) {
+if (!function_exists('rrmdir')) {
     /*
     * http://stackoverflow.com/questions/3338123/how-do-i-recursively-delete-a-directory-and-its-entire-contents-files-sub-dir
     */
@@ -401,11 +400,11 @@ if (! function_exists('rrmdir')) {
         if (is_dir($dir)) {
             $objects = scandir($dir);
             foreach ($objects as $object) {
-                if ($object != "." && $object != "..") {
-                    if (is_dir($dir."/".$object)) {
-                        rrmdir($dir."/".$object);
+                if ($object != '.' && $object != '..') {
+                    if (is_dir($dir.'/'.$object)) {
+                        rrmdir($dir.'/'.$object);
                     } else {
-                        unlink($dir."/".$object);
+                        unlink($dir.'/'.$object);
                     }
                 }
             }
@@ -414,35 +413,35 @@ if (! function_exists('rrmdir')) {
     }
 }
 
-if (! function_exists('cbTrans')) {
+if (!function_exists('cbTrans')) {
     function cbTrans($key, $params = [])
     {
         return trans('crudbooster.'.$key, $params);
     }
 }
 
-if (! function_exists('cbAsset')) {
+if (!function_exists('cbAsset')) {
     function cbAsset($key)
     {
         return asset('vendor/crudbooster/assets/'.$key);
     }
 }
 
-if (! function_exists('cbScript')) {
+if (!function_exists('cbScript')) {
     function cbScript($key)
     {
         return '<script src="'.cbAsset($key).'" type="text/javascript"></script>';
     }
 }
 
-if (! function_exists('cbStyleSheet')) {
+if (!function_exists('cbStyleSheet')) {
     function cbStyleSheet($key)
     {
         return '<link rel="stylesheet" type="text/css" href="'.cbAsset($key).'"/>';
     }
 }
 
-if (! function_exists('cbConfig')) {
+if (!function_exists('cbConfig')) {
     function cbConfig($key)
     {
         return config('crudbooster.'.$key);

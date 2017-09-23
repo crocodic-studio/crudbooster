@@ -1,15 +1,12 @@
-<?php namespace crocodicstudio\crudbooster\commands;
+<?php
 
-use Illuminate\Console\Command;
-use Illuminate\Foundation\Inspiring;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Process\Process;
-use DB;
-use Cache;
-use Request;
-use CRUDBooster;
+namespace crocodicstudio\crudbooster\commands;
+
 use App;
+use CRUDBooster;
+use DB;
+use Illuminate\Console\Command;
+use Symfony\Component\Process\Process;
 
 class CrudboosterInstallationCommand extends Command
 {
@@ -34,7 +31,6 @@ class CrudboosterInstallationCommand extends Command
      */
     public function handle()
     {
-
         $this->printHeader();
 
         $this->checkRequirements();
@@ -51,20 +47,20 @@ class CrudboosterInstallationCommand extends Command
 
         //Crate symlink for assets
         $this->symlinkForAsset();
-      
 
-		if($this->confirm('Do you have setting the database configuration at .env ?')) {
+        if ($this->confirm('Do you have setting the database configuration at .env ?')) {
             $this->installCrudbooster();
-		}else{
-			$this->info('Setup Aborted !');
-			$this->info('Please setting the database configuration for first !');
-		}
+        } else {
+            $this->info('Setup Aborted !');
+            $this->info('Please setting the database configuration for first !');
+        }
 
-		$this->printFooter();
-	}
+        $this->printFooter();
+    }
 
-	private function printHeader() {
-		$this->info("
+    private function printHeader()
+    {
+        $this->info("
 
 #     __________  __  ______  ____                   __           
 #    / ____/ __ \/ / / / __ \/ __ )____  ____  _____/ /____  _____
@@ -195,6 +191,7 @@ class CrudboosterInstallationCommand extends Command
         if (!file_exists(public_path('uploads'))) {
             $this->info('Creating public/uploads symlink...');
             app('files')->link(storage_path('app'), public_path('uploads'));
+
             return;
         }
         $uploadPath = public_path('uploads');
@@ -212,7 +209,8 @@ class CrudboosterInstallationCommand extends Command
         if (!file_exists(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'))) {
             $this->info('Creating public/vendor/crudbooster symlink...');
             app('files')->link(__DIR__.'/../assets', public_path('vendor/crudbooster'));
-            return ;
+
+            return;
         }
         $vendorpath = public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster');
 
@@ -251,7 +249,7 @@ class CrudboosterInstallationCommand extends Command
         $this->info('Migrating database...');
         $this->call('migrate');
 
-        if (! class_exists('CBSeeder')) {
+        if (!class_exists('CBSeeder')) {
             require_once __DIR__.'/../database/seeds/CBSeeder.php';
         }
         $this->callSilent('db:seed', ['--class' => 'CBSeeder']);
@@ -264,11 +262,11 @@ class CrudboosterInstallationCommand extends Command
     private function createVendorAtPublic()
     {
         $this->info('Checking public/vendor directory...');
-        if (! file_exists(public_path('vendor'))) {
+        if (!file_exists(public_path('vendor'))) {
             mkdir(public_path('vendor'), 0777);
         }
 
-        if (! is_writable(public_path('vendor'))) {
+        if (!is_writable(public_path('vendor'))) {
             $this->info('Setup aborted !');
             $this->info('Please set public/vendor directory to writable 0777');
 

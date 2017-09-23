@@ -1,10 +1,11 @@
-<?php namespace crocodicstudio\crudbooster;
+<?php
 
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\ServiceProvider;
+namespace crocodicstudio\crudbooster;
+
 use crocodicstudio\crudbooster\commands\CrudboosterInstallationCommand;
 use crocodicstudio\crudbooster\commands\CrudboosterUpdateCommand;
 use Illuminate\Foundation\AliasLoader;
+use Illuminate\Support\ServiceProvider;
 
 class CRUDBoosterServiceProvider extends ServiceProvider
 {
@@ -13,10 +14,8 @@ class CRUDBoosterServiceProvider extends ServiceProvider
      *
      * @return void
      */
-
     public function boot()
     {
-
         $this->loadViewsFrom(__DIR__.'/views', 'crudbooster');
         $this->publishes([__DIR__.'/configs/crudbooster.php' => config_path('crudbooster.php')], 'cb_config');
         $this->publishes([__DIR__.'/localization' => resource_path('lang')], 'cb_localization');
@@ -43,11 +42,11 @@ class CRUDBoosterServiceProvider extends ServiceProvider
             __DIR__.'/userfiles/views/vendor/crudbooster/type_components/readme.txt' => resource_path('views/vendor/crudbooster/type_components/readme.txt'),
         ], 'cb_type_components');
 
-        if (! file_exists(app_path('Http/Controllers/CBHook.php'))) {
+        if (!file_exists(app_path('Http/Controllers/CBHook.php'))) {
             $this->publishes([__DIR__.'/userfiles/controllers/CBHook.php' => app_path('Http/Controllers/CBHook.php')], 'CBHook');
         }
 
-        if (! file_exists(app_path('Http/Controllers/AdminUsersController.php'))) {
+        if (!file_exists(app_path('Http/Controllers/AdminUsersController.php'))) {
             $this->publishes([__DIR__.'/userfiles/controllers/AdminUsersController.php' => app_path('Http/Controllers/AdminUsersController.php')], 'cb_user_controller');
         }
 
@@ -96,11 +95,11 @@ class CRUDBoosterServiceProvider extends ServiceProvider
     private function registerCrudboosterCommand()
     {
         $this->app->singleton('crudboosterinstall', function () {
-            return new CrudboosterInstallationCommand;
+            return new CrudboosterInstallationCommand();
         });
 
         $this->app->singleton('crudboosterupdate', function () {
-            return new CrudboosterUpdateCommand;
+            return new CrudboosterUpdateCommand();
         });
     }
 }

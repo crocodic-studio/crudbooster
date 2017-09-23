@@ -1,4 +1,5 @@
 <?php
+
 if ($ro['options']['latitude'] && $ro['options']['longitude']) {
     $latitude_name = $ro['options']['latitude'];
     $longitude_name = $ro['options']['longitude'];

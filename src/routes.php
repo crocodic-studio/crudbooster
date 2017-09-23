@@ -6,7 +6,7 @@ $namespace = '\crocodicstudio\crudbooster\controllers';
 Route::group(['middleware' => ['api', '\crocodicstudio\crudbooster\middlewares\CBAuthAPI'], 'namespace' => 'App\Http\Controllers'], function () {
     //Router for custom api defeault
 
-    $dir = scandir(base_path("app/Http/Controllers"));
+    $dir = scandir(base_path('app/Http/Controllers'));
     foreach ($dir as $v) {
         $v = str_replace('.php', '', $v);
         $names = array_filter(preg_split('/(?=[A-Z])/', str_replace('Controller', '', $v)));
@@ -28,7 +28,6 @@ Route::group(['middleware' => ['web'], 'namespace' => $namespace], function () {
 
 /* ROUTER FOR WEB */
 Route::group(['middleware' => ['web'], 'prefix' => cbConfig('ADMIN_PATH'), 'namespace' => $namespace], function () {
-
     Route::post('unlock-screen', ['uses' => 'AdminController@postUnlockScreen', 'as' => 'postUnlockScreen']);
     Route::get('lock-screen', ['uses' => 'AdminController@getLockscreen', 'as' => 'getLockScreen']);
     Route::post('forgot', ['uses' => 'AdminController@postForgot', 'as' => 'postForgot']);
@@ -43,10 +42,9 @@ Route::group(['middleware' => ['web'], 'prefix' => cbConfig('ADMIN_PATH'), 'name
 // ROUTER FOR OWN CONTROLLER FROM CB
 Route::group([
     'middleware' => ['web', '\crocodicstudio\crudbooster\middlewares\CBBackend'],
-    'prefix' => cbConfig('ADMIN_PATH'),
-    'namespace' => 'App\Http\Controllers',
+    'prefix'     => cbConfig('ADMIN_PATH'),
+    'namespace'  => 'App\Http\Controllers',
 ], function () {
-
     if (Request::is(cbConfig('ADMIN_PATH'))) {
         $menus = DB::table('cms_menus')->where('is_dashboard', 1)->first();
         if ($menus) {
@@ -56,7 +54,7 @@ Route::group([
                 $module = CRUDBooster::first('cms_moduls', ['path' => $menus->path]);
                 Route::get('/', $module->controller.'@getIndex');
             } elseif ($menus->type == 'Route') {
-                $action = str_replace("Controller", "Controller@", $menus->path);
+                $action = str_replace('Controller', 'Controller@', $menus->path);
                 $action = str_replace(['Get', 'Post'], ['get', 'post'], $action);
                 Route::get('/', $action);
             } elseif ($menus->type == 'Controller & Method') {
@@ -73,21 +71,20 @@ Route::group([
             CRUDBooster::routeController($v->path, $v->controller);
         }
     } catch (Exception $e) {
-
     }
 });
 
 /* ROUTER FOR BACKEND CRUDBOOSTER */
 Route::group([
     'middleware' => ['web', '\crocodicstudio\crudbooster\middlewares\CBBackend'],
-    'prefix' => cbConfig('ADMIN_PATH'),
-    'namespace' => $namespace,
+    'prefix'     => cbConfig('ADMIN_PATH'),
+    'namespace'  => $namespace,
 ], function () {
 
     /* DO NOT EDIT THESE BELLOW LINES */
     if (Request::is(cbConfig('ADMIN_PATH'))) {
         $menus = DB::table('cms_menus')->where('is_dashboard', 1)->first();
-        if (! $menus) {
+        if (!$menus) {
             CRUDBooster::routeController('/', 'AdminController', $namespace = '\crocodicstudio\crudbooster\controllers');
         }
     }
@@ -110,16 +107,14 @@ Route::group([
             }
         }
     } catch (Exception $e) {
-
     }
 });
 
 Route::group([
     'middleware' => ['web', '\crocodicstudio\crudbooster\middlewares\CBSuperadmin'],
-    'prefix' => cbConfig('ADMIN_PATH'),
-    'namespace' => $namespace,
+    'prefix'     => cbConfig('ADMIN_PATH'),
+    'namespace'  => $namespace,
 ], function () {
-
     CRUDBooster::routeController('privileges', 'AdminPrivilegesController', $namespace = '\crocodicstudio\crudbooster\controllers');
     CRUDBooster::routeController('settings', 'AdminSettingsController', $namespace = '\crocodicstudio\crudbooster\controllers');
     CRUDBooster::routeController('modules', 'AdminModulesController', $namespace = '\crocodicstudio\crudbooster\controllers');
@@ -130,4 +125,3 @@ Route::group([
     CRUDBooster::routeController('api-generator', 'AdminApiGeneratorController', $namespace = '\crocodicstudio\crudbooster\controllers');
     CRUDBooster::routeController('logs', 'AdminLogsController', $namespace = '\crocodicstudio\crudbooster\controllers');
 });
-
