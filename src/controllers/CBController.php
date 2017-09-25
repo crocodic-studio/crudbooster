@@ -517,74 +517,76 @@ class CBController extends Controller
         $fk = request('fk');
         $fk_value = request('fk_value');
 
-        if ($q || $id || $table1) {
-            $rows = DB::table($table1);
-            $rows->select($table1.'.*');
-            $rows->take(request('limit', 10));
-
-            if (Schema::hasColumn($table1, 'deleted_at')) {
-                $rows->where($table1.'.deleted_at', null);
-            }
-
-            if ($fk && $fk_value) {
-                $rows->where($table1.'.'.$fk, $fk_value);
-            }
-
-            if ($table1 && $column1) {
-
-                $orderby_table = $table1;
-                $orderby_column = $column1;
-            }
-
-            if ($table2 && $column2) {
-                $table2PK = CB::pk($table2);
-                $rows->join($table2, $table2.'.'.$table2PK, '=', $table1.'.'.$column1);
-                $columns = CRUDBooster::getTableColumns($table2);
-                foreach ($columns as $col) {
-                    $rows->addselect($table2.".".$col." as ".$table2."_".$col);
-                }
-                $orderby_table = $table2;
-                $orderby_column = $column2;
-            }
-
-            if ($table3 && $column3) {
-                $table3PK = CB::pk($table3);
-                $rows->join($table3, $table3.'.'.$table3PK, '=', $table2.'.'.$column2);
-                $columns = CRUDBooster::getTableColumns($table3);
-                foreach ($columns as $col) {
-                    $rows->addselect($table3.".".$col." as ".$table3."_".$col);
-                }
-                $orderby_table = $table3;
-                $orderby_column = $column3;
-            }
-
-            if ($id) {
-                $rows->where($table1.".".$table1PK, $id);
-            }
-
-            if ($where) {
-                $rows->whereraw($where);
-            }
-
-            if ($format) {
-                $format = str_replace('&#039;', "'", $format);
-                $rows->addselect(DB::raw("CONCAT($format) as text"));
-                if ($q) {
-                    $rows->whereraw("CONCAT($format) like '%".$q."%'");
-                }
-            } else {
-                $rows->addselect($orderby_table.'.'.$orderby_column.' as text');
-                if ($q) {
-                    $rows->where($orderby_table.'.'.$orderby_column, 'like', '%'.$q.'%');
-                }
-            }
-
-            $result = [];
-            $result['items'] = $rows->get();
-        } else {
+        if (!$q && !$id && !$table1) {
             $result = [];
             $result['items'] = [];
+            return response()->json($result);
         }
+
+        $rows = DB::table($table1);
+        $rows->select($table1.'.*');
+        $rows->take(request('limit', 10));
+
+        if (Schema::hasColumn($table1, 'deleted_at')) {
+            $rows->where($table1.'.deleted_at', null);
+        }
+
+        if ($fk && $fk_value) {
+            $rows->where($table1.'.'.$fk, $fk_value);
+        }
+
+        if ($table1 && $column1) {
+
+            $orderby_table = $table1;
+            $orderby_column = $column1;
+        }
+
+        if ($table2 && $column2) {
+            $table2PK = CB::pk($table2);
+            $rows->join($table2, $table2.'.'.$table2PK, '=', $table1.'.'.$column1);
+            $columns = CRUDBooster::getTableColumns($table2);
+            foreach ($columns as $col) {
+                $rows->addselect($table2.".".$col." as ".$table2."_".$col);
+            }
+            $orderby_table = $table2;
+            $orderby_column = $column2;
+        }
+
+        if ($table3 && $column3) {
+            $table3PK = CB::pk($table3);
+            $rows->join($table3, $table3.'.'.$table3PK, '=', $table2.'.'.$column2);
+            $columns = CRUDBooster::getTableColumns($table3);
+            foreach ($columns as $col) {
+                $rows->addselect($table3.".".$col." as ".$table3."_".$col);
+            }
+            $orderby_table = $table3;
+            $orderby_column = $column3;
+        }
+
+        if ($id) {
+            $rows->where($table1.".".$table1PK, $id);
+        }
+
+        if ($where) {
+            $rows->whereraw($where);
+        }
+
+        if ($format) {
+            $format = str_replace('&#039;', "'", $format);
+            $rows->addselect(DB::raw("CONCAT($format) as text"));
+            if ($q) {
+                $rows->whereraw("CONCAT($format) like '%".$q."%'");
+            }
+        } else {
+            $rows->addselect($orderby_table.'.'.$orderby_column.' as text');
+            if ($q) {
+                $rows->where($orderby_table.'.'.$orderby_column, 'like', '%'.$q.'%');
+            }
+        }
+
+        $result = [];
+        $result['items'] = $rows->get();
+
 
         return response()->json($result);
     }
