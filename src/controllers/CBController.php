@@ -1155,9 +1155,7 @@ class CBController extends Controller
         $row = $this->table()->where($this->primary_key, $id)->first();
         $file = $row->{$column};
 
-        if (Storage::exists($file)) {
-            Storage::delete($file);
-        }
+        Storage::delete($file);
 
         $this->table()->where($this->primary_key, $id)->update([$column => null]);
 
