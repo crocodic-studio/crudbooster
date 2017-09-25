@@ -2,11 +2,11 @@
     <th width='3%'>{{cbTrans('privileges_module_list_no')}}</th>
     <th width='60%'>{{cbTrans('privileges_module_list_mod_names')}}</th>
     <th>&nbsp;</th>
-    <th>{{cbTrans('privileges_module_list_view')}}</th>
-    <th>{{cbTrans('privileges_module_list_create')}}</th>
-    <th>{{cbTrans('privileges_module_list_read')}}</th>
-    <th>{{cbTrans('privileges_module_list_update')}}</th>
-    <th>{{cbTrans('privileges_module_list_delete')}}</th>
+    <th>{{ cbTrans('privileges_module_list_view') }}</th>
+    <th>{{ cbTrans('privileges_module_list_create') }}</th>
+    <th>{{ cbTrans('privileges_module_list_read') }}</th>
+    <th>{{ cbTrans('privileges_module_list_update') }}</th>
+    <th>{{ cbTrans('privileges_module_list_delete') }}</th>
 </tr>
 <tr class='info'>
     <th>&nbsp;</th>

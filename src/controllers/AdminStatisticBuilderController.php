@@ -1,6 +1,7 @@
 <?php namespace crocodicstudio\crudbooster\controllers;
 
 use crocodicstudio\crudbooster\controllers\Controller;
+use crocodicstudio\crudbooster\controllers\Forms\StatisticForm;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;
@@ -37,18 +38,9 @@ class AdminStatisticBuilderController extends CBController
         $this->button_export = false;
         $this->button_import = false;
 
-        $this->col = [];
-        $this->col[] = ["label" => "Name", "name" => "name"];
+        $this->makeColumns();
 
-        $this->form = [];
-        $this->form[] = [
-            "label" => "Name",
-            "name" => "name",
-            "type" => "text",
-            "required" => true,
-            "validation" => "required|min:3|max:255",
-            "placeholder" => "You can only enter the letter only",
-        ];
+        $this->form = StatisticForm::makeForm();
 
         $this->addaction = [];
         $this->addaction[] = ['label' => 'Builder', 'url' => CRUDBooster::mainpath('builder').'/[id]', 'icon' => 'fa fa-wrench'];
@@ -220,5 +212,11 @@ class AdminStatisticBuilderController extends CBController
         }
         CRUDBooster::insertLog(trans("crudbooster.log_try_view", ['name' => $name, 'module' => 'Statistic']));
         CRUDBooster::denyAccess();
+    }
+
+    private function makeColumns()
+    {
+        $this->col = [];
+        $this->col[] = ["label" => "Name", "name" => "name"];
     }
 }
