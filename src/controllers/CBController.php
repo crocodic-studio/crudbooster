@@ -1713,10 +1713,20 @@ class CBController extends Controller
     }
 
     /**
-     * @return mixed
-     */
+ * @return mixed
+ */
     protected function table()
     {
         return \DB::table($this->table);
     }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    protected function findRow($id)
+    {
+        return $this->table()->where($this->primary_key, $id);
+    }
+
 }
