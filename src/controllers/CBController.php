@@ -617,46 +617,7 @@ class CBController extends Controller
             }
 
             if (@$di['validation']) {
-                $exp = explode('|', $di['validation']);
-                if (count($exp)) {
-                    foreach ($exp as &$validationItem) {
-                        if (substr($validationItem, 0, 6) !== 'unique') {
-                            continue;
-                        }
-                        $parseUnique = explode(',', str_replace('unique:', '', $validationItem));
-                        $uniqueTable = ($parseUnique[0]) ?: $this->table;
-                        $uniqueColumn = ($parseUnique[1]) ?: $name;
-                        $uniqueIgnoreId = ($parseUnique[2]) ?: (($id) ?: '');
-
-                        //Make sure table name
-                        $uniqueTable = CB::parseSqlTable($uniqueTable)['table'];
-
-                        //Rebuild unique rule
-                        $uniqueRebuild = [];
-                        $uniqueRebuild[] = $uniqueTable;
-                        $uniqueRebuild[] = $uniqueColumn;
-                        if ($uniqueIgnoreId) {
-                            $uniqueRebuild[] = $uniqueIgnoreId;
-                        } else {
-                            $uniqueRebuild[] = 'NULL';
-                        }
-
-                        //Check whether deleted_at exists or not
-                        if (Schema::hasColumn($uniqueTable, 'deleted_at')) {
-                            $uniqueRebuild[] = CB::findPrimaryKey($uniqueTable);
-                            $uniqueRebuild[] = 'deleted_at';
-                            $uniqueRebuild[] = 'NULL';
-                        }
-                        $uniqueRebuild = array_filter($uniqueRebuild);
-                        $validationItem = 'unique:'.implode(',', $uniqueRebuild);
-                    }
-                } else {
-                    $exp = [];
-                }
-
-                $validation = implode('|', $exp);
-
-                $array_input[$name] = $validation;
+                $array_input[$name] = $this->prepareValidationRules($id, $di);
             } else {
                 $array_input[$name] = implode('|', $ai);
             }
@@ -1726,4 +1687,51 @@ class CBController extends Controller
         return $this->table()->where($this->primary_key, $id);
     }
 
+    /**
+     * @param $id
+     * @param $di
+     * @return array
+     */
+    private function prepareValidationRules($id, $di)
+    {
+        $name = $di['name'];
+        $exp = explode('|', $di['validation']);
+        if (count($exp)) {
+            foreach ($exp as &$validationItem) {
+                if (substr($validationItem, 0, 6) !== 'unique') {
+                    continue;
+                }
+                $parseUnique = explode(',', str_replace('unique:', '', $validationItem));
+                $uniqueTable = ($parseUnique[0]) ?: $this->table;
+                $uniqueColumn = ($parseUnique[1]) ?: $name;
+                $uniqueIgnoreId = ($parseUnique[2]) ?: (($id) ?: '');
+
+                //Make sure table name
+                $uniqueTable = CB::parseSqlTable($uniqueTable)['table'];
+
+                //Rebuild unique rule
+                $uniqueRebuild = [];
+                $uniqueRebuild[] = $uniqueTable;
+                $uniqueRebuild[] = $uniqueColumn;
+                if ($uniqueIgnoreId) {
+                    $uniqueRebuild[] = $uniqueIgnoreId;
+                } else {
+                    $uniqueRebuild[] = 'NULL';
+                }
+
+                //Check whether deleted_at exists or not
+                if (Schema::hasColumn($uniqueTable, 'deleted_at')) {
+                    $uniqueRebuild[] = CB::findPrimaryKey($uniqueTable);
+                    $uniqueRebuild[] = 'deleted_at';
+                    $uniqueRebuild[] = 'NULL';
+                }
+                $uniqueRebuild = array_filter($uniqueRebuild);
+                $validationItem = 'unique:'.implode(',', $uniqueRebuild);
+            }
+        } else {
+            $exp = [];
+        }
+
+        return implode('|', $exp);
+    }
 }
