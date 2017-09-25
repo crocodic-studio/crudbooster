@@ -132,17 +132,16 @@ class AdminSettingsController extends CBController
     private function uploadFile($set)
     {
         $this->validateFileType($set);
+        $month = date('Y-m');
 
         $file = Request::file($set->name);
-        $ext = $file->getClientOriginalExtension();
-
         //Create Directory Monthly
-        Storage::makeDirectory(date('Y-m'));
+        Storage::makeDirectory($month);
 
         //Move file to storage
-        $filename = md5(str_random(5)).'.'.$ext;
-        if ($file->move(storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m')), $filename)) {
-            $content = 'uploads/'.date('Y-m').'/'.$filename;
+        $filename = md5(str_random(5)).'.'.$file->getClientOriginalExtension();
+        if ($file->move(storage_path('app'.DIRECTORY_SEPARATOR.$month), $filename)) {
+            $content = 'uploads/'.$month.'/'.$filename;
         }
 
         return $content;
