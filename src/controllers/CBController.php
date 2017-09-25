@@ -228,16 +228,16 @@ class CBController extends Controller
 
         $this->filterSoftDeleted($table_columns, $result);
 
-        $alias = [];
-        $join_alias_count = 0;
-        $join_table_temp = [];
+        //$alias = [];
+        //$join_alias_count = 0;
+        //$join_table_temp = [];
         $table = $this->table;
         $columns_table = $this->columns_table;
         foreach ($columns_table as $index => $coltab) {
 
-            $join = @$coltab['join'];
-            $join_where = @$coltab['join_where'];
-            $join_id = @$coltab['join_id'];
+            //$join = @$coltab['join'];
+            //$join_where = @$coltab['join_where'];
+            //$join_id = @$coltab['join_id'];
             $field = @$coltab['name'];
 
             if (strpos($field, '.')) {
@@ -270,9 +270,9 @@ class CBController extends Controller
             $addaction = $this->_handleSubModules($addaction);
         }
 
-        $mainpath = CRUDBooster::mainpath();
-        $orig_mainpath = $this->data['mainpath'];
-        $title_field = $this->title_field;
+        //$mainpath = CRUDBooster::mainpath();
+        //$orig_mainpath = $this->data['mainpath'];
+        //$title_field = $this->title_field;
         $html_contents = [];
         $page = request('page', 1);
         $number = ($page - 1) * $limit + 1;
