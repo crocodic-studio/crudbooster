@@ -57,7 +57,7 @@ class AdminSettingsController extends CBController
         if (Storage::exists($row->content)) {
             Storage::delete($row->content);
         }
-        DB::table('cms_settings')->where('id', $id)->update(['content' => null]);
+        $this->table()->where('id', $id)->update(['content' => null]);
         CRUDBooster::redirect(Request::server('HTTP_REFERER'), trans('alert_delete_data_success'), 'success');
     }
 
@@ -67,7 +67,7 @@ class AdminSettingsController extends CBController
         $this->allowOnlySuperAdmin();
 
         $group = Request::get('group_setting');
-        $setting = DB::table('cms_settings')->where('group_setting', $group)->get();
+        $setting = $this->table()->where('group_setting', $group)->get();
         foreach ($setting as $set) {
 
             $name = $set->name;
@@ -78,7 +78,7 @@ class AdminSettingsController extends CBController
                 $content = $this->uploadFile($set);
             }
 
-            DB::table('cms_settings')->where('name', $set->name)->update(['content' => $content]);
+            $this->table()->where('name', $set->name)->update(['content' => $content]);
 
             Cache::forget('setting_'.$set->name);
         }
@@ -94,7 +94,7 @@ class AdminSettingsController extends CBController
 
     function hook_after_edit($id)
     {
-        $row = DB::table($this->table)->where($this->primary_key, $id)->first();
+        $row = $this->table()->where($this->primary_key, $id)->first();
 
         /* REMOVE CACHE */
         Cache::forget('setting_'.$row->name);
