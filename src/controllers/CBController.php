@@ -358,22 +358,19 @@ class CBController extends Controller
         $query = Cache::get($key);
         $fk_name = g('fk_name');
         $fk_value = g('fk_value');
+
         if (strpos(strtolower($query), 'where') !== false) {
-            if (strpos(strtolower($query), 'order by')) {
-                $query = str_replace("ORDER BY", "order by", $query);
-                $qraw = explode('order by', $query);
-                $query = $qraw[0]." and ".$fk_name." = '".$fk_value."' ".$qraw[1];
-            } else {
-                $query .= " and ".$fk_name." = '".$fk_value."'";
-            }
+            $condition = " and ";
+        }else{
+            $condition = " where ";
+        }
+
+        if (strpos(strtolower($query), 'order by')) {
+            $query = str_replace("ORDER BY", "order by", $query);
+            $qraw = explode('order by', $query);
+            $query = $qraw[0].$condition.$fk_name." = '".$fk_value."' ".$qraw[1];
         } else {
-            if (strpos(strtolower($query), 'order by')) {
-                $query = str_replace("ORDER BY", "order by", $query);
-                $qraw = explode('order by', $query);
-                $query = $qraw[0]." where ".$fk_name." = '".$fk_value."' ".$qraw[1];
-            } else {
-                $query .= " where ".$fk_name." = '".$fk_value."'";
-            }
+            $query .= $condition.$fk_name." = '".$fk_value."'";
         }
 
         $query = DB::select(DB::raw($query));
