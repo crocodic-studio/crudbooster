@@ -296,15 +296,16 @@ class AdminApiGeneratorController extends CBController
         $responses_subquery = g('responses_subquery');
         $responses_used = g('responses_used');
         $json = [];
-        for ($i = 0; $i <= count($responses_name); $i++) {
-            if ($responses_name[$i]) {
-                $json[] = [
-                    'name' => $responses_name[$i],
-                    'type' => $responses_type[$i],
-                    'subquery' => $responses_subquery[$i],
-                    'used' => $responses_used[$i],
-                ];
+        for ($i = 0,$_count = count($responses_name); $i <= $_count; $i++) {
+            if (!$responses_name[$i]) {
+                continue;
             }
+            $json[] = [
+                'name' => $responses_name[$i],
+                'type' => $responses_type[$i],
+                'subquery' => $responses_subquery[$i],
+                'used' => $responses_used[$i],
+            ];
         }
 
         $json = array_filter($json);
