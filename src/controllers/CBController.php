@@ -609,8 +609,10 @@ class CBController extends Controller
             if ($di['required'] && ! Request::hasFile($name)) {
                 $ai[] = 'required';
             }
-
-            include_once base_path($componentPath.$type.DIRECTORY_SEPARATOR.'hookInputValidation.php');
+            
+            if (file_exists(base_path($componentPath.$type.DIRECTORY_SEPARATOR.'hookInputValidation.php'))) {
+                require_once(base_path($componentPath.$type.DIRECTORY_SEPARATOR.'hookInputValidation.php'));
+            }
 
             if (@$di['validation']) {
                 $array_input[$name] = $this->prepareValidationRules($id, $di);
