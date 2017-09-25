@@ -218,7 +218,7 @@ class CBController extends Controller
         $tablePK = $data['table_pk'];
         $table_columns = CB::getTableColumns($this->table);
 
-        $result = DB::table($this->table)->select(DB::raw($this->table.".".$this->primary_key));
+        $result = $this->table()->select(DB::raw($this->table.".".$this->primary_key));
 
         if (request('parent_id')) {
             $this->filterForParent($result);
@@ -753,7 +753,7 @@ class CBController extends Controller
         $this->hookBeforeAdd($this->arr);
 
         $this->arr[$this->primary_key] = $id = CRUDBooster::newId($this->table);
-        DB::table($this->table)->insert($this->arr);
+        $this->table()->insert($this->arr);
 
         //Looping Data Input Again After Insert
         foreach ($this->data_inputan as $ro) {
@@ -800,7 +800,7 @@ class CBController extends Controller
     public function getEdit($id)
     {
         $this->cbLoader();
-        $row = DB::table($this->table)->where($this->primary_key, $id)->first();
+        $row = $this->table()->where($this->primary_key, $id)->first();
 
         $page_menu = Route::getCurrentRoute()->getActionName();
         $page_title = trans("crudbooster.edit_data_page_title", ['module' => CRUDBooster::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
@@ -813,7 +813,7 @@ class CBController extends Controller
     public function postEditSave($id)
     {
         $this->cbLoader();
-        $row = DB::table($this->table)->where($this->primary_key, $id)->first();
+        $row = $this->table()->where($this->primary_key, $id)->first();
 
         $this->validation($id);
         $this->inputAssignment($id);
@@ -823,7 +823,7 @@ class CBController extends Controller
         }
 
         $this->hookBeforeEdit($this->arr, $id);
-        DB::table($this->table)->where($this->primary_key, $id)->update($this->arr);
+        $this->table()->where($this->primary_key, $id)->update($this->arr);
 
         //Looping Data Input Again After Insert
         foreach ($this->data_inputan as $ro) {
@@ -926,7 +926,7 @@ class CBController extends Controller
     public function getDelete($id)
     {
         $this->cbLoader();
-        $row = DB::table($this->table)->where($this->primary_key, $id)->first();
+        $row = $this->table()->where($this->primary_key, $id)->first();
 
         //insert log
         CRUDBooster::insertLog(trans("crudbooster.log_delete", ['name' => $row->{$this->title_field}, 'module' => CRUDBooster::getCurrentModule()->name]));
@@ -934,9 +934,9 @@ class CBController extends Controller
         $this->hookBeforeDelete($id);
 
         if (Schema::hasColumn($this->table, 'deleted_at')) {
-            DB::table($this->table)->where($this->primary_key, $id)->update(['deleted_at' => date('Y-m-d H:i:s')]);
+            $this->table()->where($this->primary_key, $id)->update(['deleted_at' => date('Y-m-d H:i:s')]);
         } else {
-            DB::table($this->table)->where($this->primary_key, $id)->delete();
+            $this->table()->where($this->primary_key, $id)->delete();
         }
 
         $this->hookAfterDelete($id);
@@ -949,7 +949,7 @@ class CBController extends Controller
     public function getDetail($id)
     {
         $this->cbLoader();
-        $row = DB::table($this->table)->where($this->primary_key, $id)->first();
+        $row = $this->table()->where($this->primary_key, $id)->first();
 
         $module = CRUDBooster::getCurrentModule();
 
@@ -1100,7 +1100,7 @@ class CBController extends Controller
                     $a['created_at'] = date('Y-m-d H:i:s');
                 }
 
-                DB::table($this->table)->insert($a);
+                $this->table()->insert($a);
                 Cache::increment('success_'.$file_md5);
             } catch (\Exception $e) {
                 $e = (string) $e;
@@ -1152,14 +1152,14 @@ class CBController extends Controller
         $id = request('id');
         $column = request('column');
 
-        $row = DB::table($this->table)->where($this->primary_key, $id)->first();
+        $row = $this->table()->where($this->primary_key, $id)->first();
         $file = $row->{$column};
 
         if (Storage::exists($file)) {
             Storage::delete($file);
         }
 
-        DB::table($this->table)->where($this->primary_key, $id)->update([$column => null]);
+        $this->table()->where($this->primary_key, $id)->update([$column => null]);
 
         CRUDBooster::insertLog(trans("crudbooster.log_delete_image", [
             'name' => $row->{$this->title_field},
@@ -1703,14 +1703,22 @@ class CBController extends Controller
         $tablePK = CB::pk($this->table);
         if (Schema::hasColumn($this->table, 'deleted_at')) {
 
-            DB::table($this->table)->whereIn($tablePK, $id_selected)->update(['deleted_at' => date('Y-m-d H:i:s')]);
+            $this->table()->whereIn($tablePK, $id_selected)->update(['deleted_at' => date('Y-m-d H:i:s')]);
         } else {
-            DB::table($this->table)->whereIn($tablePK, $id_selected)->delete();
+            $this->table()->whereIn($tablePK, $id_selected)->delete();
         }
         CRUDBooster::insertLog(trans("crudbooster.log_delete", ['name' => implode(',', $id_selected), 'module' => CRUDBooster::getCurrentModule()->name]));
 
         $this->hookAfterDelete($id_selected);
 
         return CRUDBooster::backWithMsg(trans("crudbooster.alert_delete_selected_success"));
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function table()
+    {
+        return \DB::table($this->table);
     }
 }
