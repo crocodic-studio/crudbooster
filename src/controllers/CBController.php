@@ -210,7 +210,7 @@ class CBController extends Controller
 
         $data['table'] = $this->table;
         $data['table_pk'] = CB::pk($this->table);
-        $data['page_title'] = $module->name;
+        $data['page_title'] = CRUDBooster::getCurrentModule()->name;
         $data['page_description'] = trans('crudbooster.default_module_description');
         $data['date_candidate'] = $this->date_candidate;
         $data['limit'] = $limit = request('limit', $this->limit);
