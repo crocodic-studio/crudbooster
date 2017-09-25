@@ -20,6 +20,7 @@ class AdminApiGeneratorController extends CBController
     public function cbInit()
     {
         $this->table = 'cms_apicustom';
+        $this->primary_key = "id";
         $this->title_field = "nama";
         $this->button_show = false;
         $this->button_new = false;
@@ -37,7 +38,7 @@ class AdminApiGeneratorController extends CBController
 
         $data['page_title'] = 'API Generator';
         $data['page_menu'] = Route::getCurrentRoute()->getActionName();
-        $data['apis'] = DB::table('cms_apicustom')->orderby('nama', 'asc')->get();
+        $data['apis'] = $this->table()->orderby('nama', 'asc')->get();
 
         return view('crudbooster::api_documentation', $data);
     }
@@ -47,7 +48,7 @@ class AdminApiGeneratorController extends CBController
         $this->cbLoader();
         $data = [];
 
-        $data['apis'] = DB::table('cms_apicustom')->orderby('nama', 'asc')->get();
+        $data['apis'] = $this->table()->orderby('nama', 'asc')->get();
 
         return view('crudbooster::api_documentation_public', $data);
     }
@@ -64,7 +65,7 @@ class AdminApiGeneratorController extends CBController
             'schema' => 'https://schema.getpostman.com/json/collection/v2.0.0/collection.json',
         ];
         $items = [];
-        $apis = DB::table('cms_apicustom')->orderby('nama', 'asc')->get();
+        $apis = $this->table()->orderby('nama', 'asc')->get();
 
         foreach ($apis as $a) {
             $parameters = unserialize($a->parameters);
@@ -149,7 +150,7 @@ class AdminApiGeneratorController extends CBController
     {
         $this->cbLoader();
 
-        $row = DB::table('cms_apicustom')->where('id', $id)->first();
+        $row = $this->findRow($id)->first();
 
         $data['row'] = $row;
         $data['parameters'] = json_encode(unserialize($row->parameters));
@@ -197,8 +198,8 @@ class AdminApiGeneratorController extends CBController
     {
         CRUDBooster::valid(['id', 'status'], 'view');
 
-        $id = Request::get('id');
-        $status = (Request::get('status') == 1) ? "active" : "non active";
+        $id = request('id');
+        $status = (request('status') == 1) ? "active" : "non active";
 
         DB::table('cms_apikey')->where('id', $id)->update(['status' => $status]);
 
@@ -208,7 +209,7 @@ class AdminApiGeneratorController extends CBController
     public function getDeleteApiKey()
     {
 
-        $id = Request::get('id');
+        $id = request('id');
         if (DB::table('cms_apikey')->where('id', $id)->delete()) {
             return response()->json(['status' => 1]);
         }
@@ -322,15 +323,15 @@ class AdminApiGeneratorController extends CBController
         $a['responses'] = serialize($json);
         $a['keterangan'] = g('keterangan');
 
-        if (Request::get('id')) {
-            DB::table('cms_apicustom')->where('id', g('id'))->update($a);
+        if (request('id')) {
+            $this->findRow(g('id'))->update($a);
         } else {
 
             $controllerName = ucwords(str_replace('_', ' ', $a['permalink']));
             $controllerName = str_replace(' ', '', $controllerName);
             CRUDBooster::generateAPI($controllerName, $a['tabel'], $a['permalink'], $a['method_type']);
 
-            DB::table('cms_apicustom')->insert($a);
+            $this->table()->insert($a);
         }
 
         return redirect(CRUDBooster::mainpath())->with(['message' => 'Yeay, your api has been saved successfully !', 'message_type' => 'success']);
@@ -339,8 +340,8 @@ class AdminApiGeneratorController extends CBController
     function getDeleteApi($id)
     {
         $this->cbLoader();
-        $row = DB::table('cms_apicustom')->where('id', $id)->first();
-        DB::table('cms_apicustom')->where('id', $id)->delete();
+        $row = $this->findRow($id)->first();
+        $this->findRow($id)->delete();
 
         $controllername = ucwords(str_replace('_', ' ', $row->permalink));
         $controllername = str_replace(' ', '', $controllername);
