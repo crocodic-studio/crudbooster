@@ -31,7 +31,7 @@ class AdminSettingsController extends CBController
 
         $this->col = [];
 
-        $this->form = SettingsForm::makeForm(Request::get('group_setting', 'General Setting'));
+        $this->form = SettingsForm::makeForm(request('group_setting', 'General Setting'));
     }
 
     function getShow()
@@ -40,7 +40,7 @@ class AdminSettingsController extends CBController
 
         $this->allowOnlySuperAdmin();
 
-        $data['page_title'] = urldecode(Request::get('group'));
+        $data['page_title'] = urldecode(request('group'));
 
         return view('crudbooster::setting', $data);
     }
@@ -66,13 +66,13 @@ class AdminSettingsController extends CBController
 
         $this->allowOnlySuperAdmin();
 
-        $group = Request::get('group_setting');
+        $group = request('group_setting');
         $setting = $this->table()->where('group_setting', $group)->get();
         foreach ($setting as $set) {
 
             $name = $set->name;
 
-            $content = Request::get($set->name);
+            $content = request($set->name);
 
             if (Request::hasFile($name)) {
                 $content = $this->uploadFile($set);
