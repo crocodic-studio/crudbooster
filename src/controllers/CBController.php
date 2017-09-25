@@ -800,7 +800,7 @@ class CBController extends Controller
     public function getEdit($id)
     {
         $this->cbLoader();
-        $row = $this->table()->where($this->primary_key, $id)->first();
+        $row = $this->findRow($id)->first();
 
         $page_menu = Route::getCurrentRoute()->getActionName();
         $page_title = trans("crudbooster.edit_data_page_title", ['module' => CRUDBooster::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
@@ -813,7 +813,7 @@ class CBController extends Controller
     public function postEditSave($id)
     {
         $this->cbLoader();
-        $row = $this->table()->where($this->primary_key, $id)->first();
+        $row = $this->findRow($id)->first();
 
         $this->validation($id);
         $this->inputAssignment($id);
@@ -823,7 +823,7 @@ class CBController extends Controller
         }
 
         $this->hookBeforeEdit($this->arr, $id);
-        $this->table()->where($this->primary_key, $id)->update($this->arr);
+        $this->findRow($id)->update($this->arr);
 
         //Looping Data Input Again After Insert
         foreach ($this->data_inputan as $ro) {
@@ -926,7 +926,7 @@ class CBController extends Controller
     public function getDelete($id)
     {
         $this->cbLoader();
-        $row = $this->table()->where($this->primary_key, $id)->first();
+        $row = $this->findRow($id)->first();
 
         //insert log
         CRUDBooster::insertLog(trans("crudbooster.log_delete", ['name' => $row->{$this->title_field}, 'module' => CRUDBooster::getCurrentModule()->name]));
@@ -934,9 +934,9 @@ class CBController extends Controller
         $this->hookBeforeDelete($id);
 
         if (Schema::hasColumn($this->table, 'deleted_at')) {
-            $this->table()->where($this->primary_key, $id)->update(['deleted_at' => date('Y-m-d H:i:s')]);
+            $this->findRow($id)->update(['deleted_at' => date('Y-m-d H:i:s')]);
         } else {
-            $this->table()->where($this->primary_key, $id)->delete();
+            $this->findRow($id)->delete();
         }
 
         $this->hookAfterDelete($id);
@@ -949,7 +949,7 @@ class CBController extends Controller
     public function getDetail($id)
     {
         $this->cbLoader();
-        $row = $this->table()->where($this->primary_key, $id)->first();
+        $row = $this->findRow($id)->first();
 
         $module = CRUDBooster::getCurrentModule();
 
@@ -1152,12 +1152,12 @@ class CBController extends Controller
         $id = request('id');
         $column = request('column');
 
-        $row = $this->table()->where($this->primary_key, $id)->first();
+        $row = $this->findRow($id)->first();
         $file = $row->{$column};
 
         Storage::delete($file);
 
-        $this->table()->where($this->primary_key, $id)->update([$column => null]);
+        $this->findRow($id)->update([$column => null]);
 
         CRUDBooster::insertLog(trans("crudbooster.log_delete_image", [
             'name' => $row->{$this->title_field},
