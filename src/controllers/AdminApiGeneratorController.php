@@ -233,21 +233,22 @@ class AdminApiGeneratorController extends CBController
 
             $new_result[] = ['name' => $ro, 'type' => $type_field];
 
-            if (in_array($type, ['list', 'detail']) && substr($ro, 0, 3) == 'id_') {
-                $table2 = substr($ro, 3);
-                $t2 = DB::getSchemaBuilder()->getColumnListing($table2);
-                foreach ($t2 as $t) {
-                    if (in_array($t, ['id', 'created_at', 'updated_at', 'deleted_at'])) {
-                        continue;
-                    }
-                    if (substr($t, 0, 3) == 'id_') {
-                        continue;
-                    }
-
-                    $type_field = CRUDBooster::getFieldType($table2, $t);
-                    $t = str_replace("_$table2", "", $t);
-                    $new_result[] = ['name' => $table2.'_'.$t, 'type' => $type_field];
+            if (!in_array($type, ['list', 'detail']) || substr($ro, 0, 3) !== 'id_') {
+                continue;
+            }
+            $table2 = substr($ro, 3);
+            $t2 = DB::getSchemaBuilder()->getColumnListing($table2);
+            foreach ($t2 as $t) {
+                if (in_array($t, ['id', 'created_at', 'updated_at', 'deleted_at'])) {
+                    continue;
                 }
+                if (substr($t, 0, 3) == 'id_') {
+                    continue;
+                }
+
+                $type_field = CRUDBooster::getFieldType($table2, $t);
+                $t = str_replace("_$table2", "", $t);
+                $new_result[] = ['name' => $table2.'_'.$t, 'type' => $type_field];
             }
         }
 
