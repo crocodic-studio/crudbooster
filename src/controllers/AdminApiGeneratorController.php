@@ -74,13 +74,9 @@ class AdminApiGeneratorController extends CBController
                 }
             }
 
-            if (strtolower($a->method_type) == 'get') {
-                if ($httpbuilder) {
-                    $httpbuilder = "?".http_build_query($httpbuilder);
-                } else {
-                    $httpbuilder = '';
-                }
-            } else {
+            if (strtolower($a->method_type) == 'get' && $httpbuilder) {
+                $httpbuilder = "?".http_build_query($httpbuilder);
+            }else{
                 $httpbuilder = '';
             }
 
