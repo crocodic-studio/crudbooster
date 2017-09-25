@@ -44,7 +44,14 @@ class AdminNotificationsController extends CBController
 
     public function getLatestJson()
     {
-        $rows = DB::table('cms_notifications')->where('id_cms_users', 0)->orWhere('id_cms_users', CRUDBooster::myId())->orderby('id', 'desc')->where('is_read', 0)->whereNull('deleted_at')->take(25)->get();
+        $rows = $this->table()
+            ->where('id_cms_users', 0)
+            ->orWhere('id_cms_users', CRUDBooster::myId())
+            ->orderby('id', 'desc')
+            ->where('is_read', 0)
+            ->whereNull('deleted_at')
+            ->take(25)
+            ->get();
 
         $total = count($rows);
 
@@ -53,8 +60,8 @@ class AdminNotificationsController extends CBController
 
     public function getRead($id)
     {
-        DB::table('cms_notifications')->where('id', $id)->update(['is_read' => 1]);
-        $row = DB::table('cms_notifications')->where('id', $id)->first();
+        $this->findRow($id)->update(['is_read' => 1]);
+        $row = $this->findRow($id)->first();
 
         return redirect($row->url);
     }
