@@ -1,6 +1,8 @@
 <?php namespace crocodicstudio\crudbooster\controllers;
 
 use crocodicstudio\crudbooster\controllers\Controller;
+use crocodicstudio\crudbooster\controllers\Forms\LogsForm;
+use crocodicstudio\crudbooster\controllers\Forms\StatisticForm;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;
@@ -27,18 +29,17 @@ class AdminLogsController extends CBController
         $this->button_edit = false;
         $this->button_delete = true;
 
+        $this->makeColumns();
+
+        $this->form = LogsForm::makeForm();
+    }
+
+    private function makeColumns()
+    {
         $this->col = [];
         $this->col[] = ["label" => "Time Access", "name" => "created_at"];
         $this->col[] = ["label" => "IP Address", "name" => "ipaddress"];
         $this->col[] = ["label" => "User", "name" => "id_cms_users", "join" => "cms_users,name"];
         $this->col[] = ["label" => "Description", "name" => "description"];
-
-        $this->form = [];
-        $this->form[] = ["label" => "Time Access", "name" => "created_at", "readonly" => true];
-        $this->form[] = ["label" => "IP Address", "name" => "ipaddress", "readonly" => true];
-        $this->form[] = ["label" => "User Agent", "name" => "useragent", "readonly" => true];
-        $this->form[] = ["label" => "URL", "name" => "url", "readonly" => true];
-        $this->form[] = ["label" => "User", "name" => "id_cms_users", "type" => "select", "datatable" => "cms_users,name", "readonly" => true];
-        $this->form[] = ["label" => "Description", "name" => "description", "readonly" => true];
     }
 }
