@@ -1,19 +1,11 @@
-<?php namespace crocodicstudio\crudbooster\controllers;
+<?php
 
-use crocodicstudio\crudbooster\controllers\Controller;
+namespace crocodicstudio\crudbooster\controllers;
+
 use crocodicstudio\crudbooster\controllers\Forms\SettingsForm;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\PDF;
-use Illuminate\Support\Facades\Excel;
 use CRUDBooster;
 
 class AdminSettingsController extends CBController
@@ -67,20 +59,21 @@ class AdminSettingsController extends CBController
         $this->allowOnlySuperAdmin();
 
         $group = request('group_setting');
-        $setting = $this->table()->where('group_setting', $group)->get();
-        foreach ($setting as $set) {
 
-            $name = $set->name;
+        $settings = $this->table()->where('group_setting', $group)->get();
 
-            $content = request($set->name);
+        foreach ($settings as $setting) {
 
+            $name = $setting->name;
+
+            $content = request($name);
             if (Request::hasFile($name)) {
-                $content = $this->uploadFile($set);
+                $content = $this->uploadFile($setting);
             }
 
-            $this->table()->where('name', $set->name)->update(['content' => $content]);
+            $this->table()->where('name', $name)->update(['content' => $content]);
 
-            Cache::forget('setting_'.$set->name);
+            Cache::forget('setting_'.$name);
         }
 
         return CRUDBooster::backWithMsg('Your setting has been saved !');
