@@ -359,10 +359,9 @@ class CBController extends Controller
         $fk_name = g('fk_name');
         $fk_value = g('fk_value');
 
-        if (strpos(strtolower($query), 'where') !== false) {
+        $condition = " where ";
+        if (strpos(strtolower($query), 'where')) {
             $condition = " and ";
-        }else{
-            $condition = " where ";
         }
 
         if (strpos(strtolower($query), 'order by')) {
@@ -440,8 +439,7 @@ class CBController extends Controller
         $column = request('column');
         $value = request('value');
         $id = request('id');
-        $tablePK = CB::pk($table);
-        DB::table($table)->where($tablePK, $id)->update([$column => $value]);
+        DB::table($table)->where(CB::pk($table), $id)->update([$column => $value]);
 
         return CRUDBooster::backWithMsg(trans('crudbooster.alert_delete_data_success'));
     }
@@ -1693,9 +1691,8 @@ class CBController extends Controller
      * @param $di
      * @return array
      */
-    private function prepareValidationRules($id, &$di)
+    private function prepareValidationRules($id, $di)
     {
-        $name = $di['name'];
         $exp = explode('|', $di['validation']);
 
         if (!count($exp)) {
@@ -1709,7 +1706,7 @@ class CBController extends Controller
 
             $parseUnique = explode(',', str_replace('unique:', '', $validationItem));
             $uniqueTable = ($parseUnique[0]) ?: $this->table;
-            $uniqueColumn = ($parseUnique[1]) ?: $name;
+            $uniqueColumn = ($parseUnique[1]) ?: $di['name'];
             $uniqueIgnoreId = ($parseUnique[2]) ?: (($id) ?: '');
 
             //Make sure table name
