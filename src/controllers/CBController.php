@@ -591,7 +591,6 @@ class CBController extends Controller
 
     public function validation($id = null)
     {
-
         $request_all = Request::all();
         $array_input = [];
         $componentPath = implode(DIRECTORY_SEPARATOR, ["vendor", "crocodicstudio", "crudbooster", "src", "views", "default", "type_components", ""]);
@@ -620,24 +619,27 @@ class CBController extends Controller
 
         $validator = Validator::make($request_all, $array_input);
 
-        if ($validator->fails()) {
-            $message = $validator->messages();
-            $message_all = $message->all();
+        if (!$validator->fails()) {
+            return null;
+        }
 
-            if (Request::ajax()) {
-                response()->json([
-                    'message' => trans('crudbooster.alert_validation_error', ['error' => implode(', ', $message_all)]),
-                    'message_type' => 'warning',
-                ])->send();
-                exit;
-            }
-            redirect()->back()->with("errors", $message)->with([
+        $message = $validator->messages();
+        $message_all = $message->all();
+
+        if (Request::ajax()) {
+            response()->json([
                 'message' => trans('crudbooster.alert_validation_error', ['error' => implode(', ', $message_all)]),
                 'message_type' => 'warning',
-            ])->withInput()->send();
-            \Session::driver()->save();
+            ])->send();
             exit;
         }
+
+        redirect()->back()->with("errors", $message)->with([
+            'message' => trans('crudbooster.alert_validation_error', ['error' => implode(', ', $message_all)]),
+            'message_type' => 'warning',
+        ])->withInput()->send();
+        \Session::driver()->save();
+        exit;
     }
 
     public function inputAssignment($id = null)
