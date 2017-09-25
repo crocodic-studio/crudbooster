@@ -274,7 +274,7 @@ class AdminApiGeneratorController extends CBController
         $params_used = g('params_used');
         $json = [];
 
-        for ($i = 0; $i <= count($params_name); $i++) {
+        for ($i = 0, $_count = count($params_name); $i <= $_count; $i++) {
             if (!$params_name[$i]) {
                 continue;
             }
