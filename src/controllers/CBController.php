@@ -600,11 +600,8 @@ class CBController extends Controller
             $ai = [];
             $name = $di['name'];
             $type = $di['type'];
-            if (! $name) {
-                continue;
-            }
 
-            if (! isset($request_all[$name])) {
+            if (!$name || !isset($request_all[$name])) {
                 continue;
             }
 
