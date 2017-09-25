@@ -1687,45 +1687,49 @@ class CBController extends Controller
      * @param $di
      * @return array
      */
-    private function prepareValidationRules($id, $di)
+    private function prepareValidationRules($id, &$di)
     {
         $name = $di['name'];
         $exp = explode('|', $di['validation']);
-        if (count($exp)) {
-            foreach ($exp as &$validationItem) {
-                if (substr($validationItem, 0, 6) !== 'unique') {
-                    continue;
-                }
-                $parseUnique = explode(',', str_replace('unique:', '', $validationItem));
-                $uniqueTable = ($parseUnique[0]) ?: $this->table;
-                $uniqueColumn = ($parseUnique[1]) ?: $name;
-                $uniqueIgnoreId = ($parseUnique[2]) ?: (($id) ?: '');
 
-                //Make sure table name
-                $uniqueTable = CB::parseSqlTable($uniqueTable)['table'];
-
-                //Rebuild unique rule
-                $uniqueRebuild = [];
-                $uniqueRebuild[] = $uniqueTable;
-                $uniqueRebuild[] = $uniqueColumn;
-                if ($uniqueIgnoreId) {
-                    $uniqueRebuild[] = $uniqueIgnoreId;
-                } else {
-                    $uniqueRebuild[] = 'NULL';
-                }
-
-                //Check whether deleted_at exists or not
-                if (Schema::hasColumn($uniqueTable, 'deleted_at')) {
-                    $uniqueRebuild[] = CB::findPrimaryKey($uniqueTable);
-                    $uniqueRebuild[] = 'deleted_at';
-                    $uniqueRebuild[] = 'NULL';
-                }
-                $uniqueRebuild = array_filter($uniqueRebuild);
-                $validationItem = 'unique:'.implode(',', $uniqueRebuild);
-            }
-        } else {
-            $exp = [];
+        if (!count($exp)) {
+            return '';
         }
+
+        foreach ($exp as &$validationItem) {
+            if (substr($validationItem, 0, 6) !== 'unique') {
+                continue;
+            }
+
+            $parseUnique = explode(',', str_replace('unique:', '', $validationItem));
+            $uniqueTable = ($parseUnique[0]) ?: $this->table;
+            $uniqueColumn = ($parseUnique[1]) ?: $name;
+            $uniqueIgnoreId = ($parseUnique[2]) ?: (($id) ?: '');
+
+            //Make sure table name
+            $uniqueTable = CB::parseSqlTable($uniqueTable)['table'];
+
+            //Rebuild unique rule
+            $uniqueRebuild = [];
+            $uniqueRebuild[] = $uniqueTable;
+            $uniqueRebuild[] = $uniqueColumn;
+
+            if ($uniqueIgnoreId) {
+                $uniqueRebuild[] = $uniqueIgnoreId;
+            } else {
+                $uniqueRebuild[] = 'NULL';
+            }
+
+            //Check whether deleted_at exists or not
+            if (Schema::hasColumn($uniqueTable, 'deleted_at')) {
+                $uniqueRebuild[] = CB::findPrimaryKey($uniqueTable);
+                $uniqueRebuild[] = 'deleted_at';
+                $uniqueRebuild[] = 'NULL';
+            }
+            $uniqueRebuild = array_filter($uniqueRebuild);
+            $validationItem = 'unique:'.implode(',', $uniqueRebuild);
+        }
+
 
         return implode('|', $exp);
     }
