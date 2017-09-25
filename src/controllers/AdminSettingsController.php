@@ -52,18 +52,18 @@ class AdminSettingsController extends CBController
 
     function getDeleteFileSetting()
     {
-        $id = g('id');
-        $row = CRUDBooster::first('cms_settings', $id);
-        if (Storage::exists($row->content)) {
-            Storage::delete($row->content);
-        }
+        $id = request('id');
+        $content = CRUDBooster::first($this->table, $id)->content;
+
+        Storage::delete($content);
+
         $this->table()->where('id', $id)->update(['content' => null]);
+
         CRUDBooster::redirect(Request::server('HTTP_REFERER'), trans('alert_delete_data_success'), 'success');
     }
 
     function postSaveSetting()
     {
-
         $this->allowOnlySuperAdmin();
 
         $group = request('group_setting');
