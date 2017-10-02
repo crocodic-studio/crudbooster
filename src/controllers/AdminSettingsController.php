@@ -1,19 +1,11 @@
-<?php namespace crocodicstudio\crudbooster\controllers;
+<?php
 
-use crocodicstudio\crudbooster\controllers\Controller;
+namespace crocodicstudio\crudbooster\controllers;
+
 use crocodicstudio\crudbooster\controllers\Forms\SettingsForm;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\PDF;
-use Illuminate\Support\Facades\Excel;
 use CRUDBooster;
 
 class AdminSettingsController extends CBController
@@ -31,7 +23,7 @@ class AdminSettingsController extends CBController
 
         $this->col = [];
 
-        $this->form = SettingsForm::makeForm(Request::get('group_setting', 'General Setting'));
+        $this->form = SettingsForm::makeForm(request('group_setting', 'General Setting'));
     }
 
     function getShow()
@@ -40,7 +32,7 @@ class AdminSettingsController extends CBController
 
         $this->allowOnlySuperAdmin();
 
-        $data['page_title'] = urldecode(Request::get('group'));
+        $data['page_title'] = urldecode(request('group'));
 
         return view('crudbooster::setting', $data);
     }
@@ -52,35 +44,36 @@ class AdminSettingsController extends CBController
 
     function getDeleteFileSetting()
     {
-        $id = g('id');
-        $row = CRUDBooster::first('cms_settings', $id);
-        if (Storage::exists($row->content)) {
-            Storage::delete($row->content);
-        }
-        DB::table('cms_settings')->where('id', $id)->update(['content' => null]);
+        $id = request('id');
+        $content = CRUDBooster::first($this->table, $id)->content;
+
+        Storage::delete($content);
+
+        $this->table()->where('id', $id)->update(['content' => null]);
+
         CRUDBooster::redirect(Request::server('HTTP_REFERER'), trans('alert_delete_data_success'), 'success');
     }
 
     function postSaveSetting()
     {
-
         $this->allowOnlySuperAdmin();
 
-        $group = Request::get('group_setting');
-        $setting = DB::table('cms_settings')->where('group_setting', $group)->get();
-        foreach ($setting as $set) {
+        $group = request('group_setting');
 
-            $name = $set->name;
+        $settings = $this->table()->where('group_setting', $group)->get();
 
-            $content = Request::get($set->name);
+        foreach ($settings as $setting) {
 
+            $name = $setting->name;
+
+            $content = request($name);
             if (Request::hasFile($name)) {
-                $content = $this->uploadFile($set);
+                $content = $this->uploadFile($setting);
             }
 
-            DB::table('cms_settings')->where('name', $set->name)->update(['content' => $content]);
+            $this->table()->where('name', $name)->update(['content' => $content]);
 
-            Cache::forget('setting_'.$set->name);
+            Cache::forget('setting_'.$name);
         }
 
         return CRUDBooster::backWithMsg('Your setting has been saved !');
@@ -94,7 +87,7 @@ class AdminSettingsController extends CBController
 
     function hook_after_edit($id)
     {
-        $row = DB::table($this->table)->where($this->primary_key, $id)->first();
+        $row = $this->table()->where($this->primary_key, $id)->first();
 
         /* REMOVE CACHE */
         Cache::forget('setting_'.$row->name);
@@ -132,17 +125,16 @@ class AdminSettingsController extends CBController
     private function uploadFile($set)
     {
         $this->validateFileType($set);
+        $month = date('Y-m');
 
         $file = Request::file($set->name);
-        $ext = $file->getClientOriginalExtension();
-
         //Create Directory Monthly
-        Storage::makeDirectory(date('Y-m'));
+        Storage::makeDirectory($month);
 
         //Move file to storage
-        $filename = md5(str_random(5)).'.'.$ext;
-        if ($file->move(storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m')), $filename)) {
-            $content = 'uploads/'.date('Y-m').'/'.$filename;
+        $filename = md5(str_random(5)).'.'.$file->getClientOriginalExtension();
+        if ($file->move(storage_path('app'.DIRECTORY_SEPARATOR.$month), $filename)) {
+            $content = 'uploads/'.$month.'/'.$filename;
         }
 
         return $content;
