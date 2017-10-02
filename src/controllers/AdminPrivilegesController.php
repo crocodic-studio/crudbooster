@@ -49,6 +49,7 @@ class AdminPrivilegesController extends CBController {
 		$data['page_title'] = "Add Data";	
 		$data['moduls'] = DB::table("cms_moduls")
 		->where('is_protected',0)
+		->whereNull('deleted_at')	
 		->select("cms_moduls.*",
 			DB::raw("(select is_visible from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id') as is_visible"),
 			DB::raw("(select is_create from cms_privileges_roles where id_cms_moduls  = cms_moduls.id and id_cms_privileges = '$id') as is_create"),
