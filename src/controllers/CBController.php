@@ -1670,8 +1670,8 @@ class CBController extends Controller
     }
 
     /**
- * @return mixed
- */
+     * @return mixed
+     */
     protected function table()
     {
         return \DB::table($this->table);

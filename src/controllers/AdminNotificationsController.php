@@ -1,19 +1,8 @@
-<?php namespace crocodicstudio\crudbooster\controllers;
+<?php
 
-use crocodicstudio\crudbooster\controllers\Controller;
+namespace crocodicstudio\crudbooster\controllers;
+
 use crocodicstudio\crudbooster\controllers\Forms\NotificationForm;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\PDF;
-use Illuminate\Support\Facades\Excel;
 use CRUDBooster;
 
 class AdminNotificationsController extends CBController
@@ -44,7 +33,14 @@ class AdminNotificationsController extends CBController
 
     public function getLatestJson()
     {
-        $rows = DB::table('cms_notifications')->where('id_cms_users', 0)->orWhere('id_cms_users', CRUDBooster::myId())->orderby('id', 'desc')->where('is_read', 0)->whereNull('deleted_at')->take(25)->get();
+        $rows = $this->table()
+            ->where('id_cms_users', 0)
+            ->orWhere('id_cms_users', CRUDBooster::myId())
+            ->orderby('id', 'desc')
+            ->where('is_read', 0)
+            ->whereNull('deleted_at')
+            ->take(25)
+            ->get();
 
         $total = count($rows);
 
@@ -53,8 +49,8 @@ class AdminNotificationsController extends CBController
 
     public function getRead($id)
     {
-        DB::table('cms_notifications')->where('id', $id)->update(['is_read' => 1]);
-        $row = DB::table('cms_notifications')->where('id', $id)->first();
+        $this->findRow($id)->update(['is_read' => 1]);
+        $row = $this->findRow($id)->first();
 
         return redirect($row->url);
     }
