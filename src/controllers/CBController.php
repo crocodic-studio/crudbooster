@@ -1713,4 +1713,12 @@ class CBController extends Controller
 
         return CRUDBooster::backWithMsg(trans("crudbooster.alert_delete_selected_success"));
     }
+
+    /**
+     * @return mixed
+     */
+    protected function table()
+    {
+        return \DB::table($this->table);
+    }
 }

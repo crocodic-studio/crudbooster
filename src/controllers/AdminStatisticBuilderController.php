@@ -1,19 +1,9 @@
-<?php namespace crocodicstudio\crudbooster\controllers;
+<?php
 
-use crocodicstudio\crudbooster\controllers\Controller;
+namespace crocodicstudio\crudbooster\controllers;
+
 use crocodicstudio\crudbooster\controllers\Forms\StatisticForm;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\PDF;
-use Illuminate\Support\Facades\Excel;
 use CRUDBooster;
 
 class AdminStatisticBuilderController extends CBController
@@ -131,17 +121,17 @@ class AdminStatisticBuilderController extends CBController
     public function postAddComponent()
     {
         $this->cbLoader();
-        $component_name = Request::get('component_name');
+        $component_name = request('component_name');
         $componentID = md5(time());
 
         $command = 'layout';
 
         $data = [
-            'id_cms_statistics' => Request::get('id_cms_statistics'),
+            'id_cms_statistics' => request('id_cms_statistics'),
             'componentID' => $componentID,
             'component_name' => $component_name,
-            'area_name' => Request::get('area'),
-            'sorting' => Request::get('sorting'),
+            'area_name' => request('area'),
+            'sorting' => request('sorting'),
             'name' => 'Untitled',
         ];
         CRUDBooster::insert('cms_statistic_components', $data);
@@ -153,9 +143,9 @@ class AdminStatisticBuilderController extends CBController
 
     public function postUpdateAreaComponent()
     {
-        DB::table('cms_statistic_components')->where('componentID', Request::get('componentid'))->update([
-                'sorting' => Request::get('sorting'),
-                'area_name' => Request::get('areaname'),
+        DB::table('cms_statistic_components')->where('componentID', request('componentid'))->update([
+                'sorting' => request('sorting'),
+                'area_name' => request('areaname'),
             ]);
 
         return response()->json(['status' => true]);
@@ -177,9 +167,9 @@ class AdminStatisticBuilderController extends CBController
 
     public function postSaveComponent()
     {
-        DB::table('cms_statistic_components')->where('componentID', Request::get('componentid'))->update([
-                'name' => Request::get('name'),
-                'config' => json_encode(Request::get('config')),
+        DB::table('cms_statistic_components')->where('componentID', request('componentid'))->update([
+                'name' => request('name'),
+                'config' => json_encode(request('config')),
             ]);
 
         return response()->json(['status' => true]);
