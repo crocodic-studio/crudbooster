@@ -949,8 +949,7 @@ class CRUDBooster
                 $result['api_message'] = "THE TOKEN IS NOT MATCH WITH SERVER TOKEN";
                 $result['sender_token'] = $sender_token;
                 $result['server_token'] = $server_token;
-                $res = response()->json($result, 200);
-                $res->send();
+                response()->json($result, 200)->send();
                 exit;
             }
 
@@ -959,8 +958,7 @@ class CRUDBooster
                 $result['api_message'] = "THE TOKEN IS ALREADY BUT NOT MATCH WITH YOUR DEVICE";
                 $result['sender_token'] = $sender_token;
                 $result['server_token'] = $server_token;
-                $res = response()->json($result, 200);
-                $res->send();
+                response()->json($result, 200)->send();
                 exit;
             }
 
@@ -980,13 +978,14 @@ class CRUDBooster
         $id_cms_users = $config['id_cms_users'];
         $id_cms_users = ($id_cms_users) ?: [CRUDBooster::myId()];
         foreach ($id_cms_users as $id) {
-            $a = [];
-            $a['created_at'] = date('Y-m-d H:i:s');
-            $a['id_cms_users'] = $id;
-            $a['content'] = $content;
-            $a['is_read'] = 0;
-            $a['url'] = $to;
-            DB::table('cms_notifications')->insert($a);
+            $notif = [
+                'created_at' => date('Y-m-d H:i:s'),
+                'id_cms_users' => $id,
+                'content' => $content,
+                'is_read' => 0,
+                'url' => $to,
+            ];
+            DB::table('cms_notifications')->insert($notif);
         }
 
         return true;
