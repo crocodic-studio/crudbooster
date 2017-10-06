@@ -1,11 +1,10 @@
-<?php namespace crocodicstudio\crudbooster\controllers;
+<?php
 
-use crocodicstudio\crudbooster\controllers\Controller;
+namespace crocodicstudio\crudbooster\controllers;
+
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use CRUDBooster;
 use CB;
@@ -14,7 +13,6 @@ class AdminController extends CBController
 {
     function getIndex()
     {
-
         $data = [];
         $data['page_title'] = '<strong>Dashboard</strong>';
 
@@ -23,15 +21,12 @@ class AdminController extends CBController
 
     public function getLockscreen()
     {
-
         if (! CRUDBooster::myId()) {
             Session::flush();
-
             return redirect()->route('getLogin')->with('message', trans('crudbooster.alert_session_expired'));
         }
 
         Session::put('admin_lock', 1);
-
         return view('crudbooster::lockscreen');
     }
 
@@ -61,7 +56,6 @@ class AdminController extends CBController
 
     public function postLogin()
     {
-
         $validator = Validator::make(Request::all(), [
                 'email' => 'required|email|exists:cms_users',
                 'password' => 'required',
@@ -143,7 +137,6 @@ class AdminController extends CBController
 
     public function getLogout()
     {
-
         $me = CRUDBooster::me();
         CRUDBooster::insertLog(trans("crudbooster.log_logout", ['email' => $me->email]));
 
