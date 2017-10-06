@@ -772,22 +772,19 @@ class CRUDBooster
 
         if (Cache::has('isForeignKey_'.$fieldName)) {
             return Cache::get('isForeignKey_'.$fieldName);
-        } else {
-            if ($table) {
-                $hasTable = Schema::hasTable($table);
-                if ($hasTable) {
-                    Cache::forever('isForeignKey_'.$fieldName, true);
-
-                    return true;
-                } else {
-                    Cache::forever('isForeignKey_'.$fieldName, false);
-
-                    return false;
-                }
-            } else {
-                return false;
-            }
         }
+
+        if (!$table) {
+            return false;
+        }
+
+        if (Schema::hasTable($table)) {
+            Cache::forever('isForeignKey_'.$fieldName, true);
+            return true;
+        }
+
+        Cache::forever('isForeignKey_'.$fieldName, false);
+        return false;
     }
 
     public static function urlFilterColumn($key, $type, $value = '', $singleSorting = true)
