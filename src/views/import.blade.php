@@ -17,13 +17,13 @@
             <li style="background:#eeeeee"><a style="color:#111"
                                               onclick="if(confirm('Are you sure want to leave ?')) location.href='{{ CRUDBooster::mainpath("import-data") }}'"
                                               href='javascript:;'>
-                    <i class='fa fa-download'></i> Upload a File &raquo;
+                    {!! CB::icon('download') !!} Upload a File &raquo;
                 </a>
             </li>
-            <li style="background:#eeeeee"><a style="color:#111" href='#'><i class='fa fa-cogs'></i> Adjustment &raquo;</a>
+            <li style="background:#eeeeee"><a style="color:#111" href='#'>{!! CB::icon('cogs') !!} Adjustment &raquo;</a>
             </li>
-            <li style="background:#ffffff" class='active'><a style="color:#111" href='#'><i
-                            class='fa fa-cloud-download'></i> Importing &raquo;</a></li>
+            <li style="background:#ffffff" class='active'><a style="color:#111" href='#'>
+                    {!! CB::icon('cloud-download') !!} Importing &raquo;</a></li>
         </ul>
 
         <div id='box_main' class="box box-primary">
@@ -54,25 +54,23 @@
             $action = $action_path."/done-import?file=".Request::get('file').'&import=1';
             ?>
 
-
-
             @include('crudbooster::_import.form')
 
 
         </div>
-
-
     @endif
+
 
     @if(!Request::get('file'))
         <ul class='nav nav-tabs'>
-            <li style="background:#ffffff" class='active'><a style="color:#111"
-                                                             onclick="if(confirm('Are you sure want to leave ?')) location.href='{{ CRUDBooster::mainpath("import-data") }}'"
-                                                             href='javascript:;'><i class='fa fa-download'></i> Upload a
-                    File &raquo;</a></li>
-            <li style="background:#eeeeee"><a style="color:#111" href='#'><i class='fa fa-cogs'></i> Adjustment &raquo;</a>
+            <li style="background:#ffffff" class='active'>
+
+                <a style="color:#111" onclick="if(confirm('Are you sure want to leave ?')) location.href='{{ CRUDBooster::mainpath("import-data") }}'" href='javascript:;'>
+                    {!! CB::icon('download') !!} Upload aFile &raquo;</a>
             </li>
-            <li style="background:#eeeeee"><a style="color:#111" href='#'><i class='fa fa-cloud-download'></i> Importing
+            <li style="background:#eeeeee"><a style="color:#111" href='#'>{!! CB::icon('cogs')  !!}Adjustment &raquo;</a>
+            </li>
+            <li style="background:#eeeeee"><a style="color:#111" href='#'>{!! CB::icon('cloud-download') !!} Importing
                     &raquo;</a></li>
         </ul>
 
