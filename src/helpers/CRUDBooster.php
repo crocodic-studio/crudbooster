@@ -211,24 +211,24 @@ class CRUDBooster
 
     public static function getCurrentDashboardId()
     {
-        if (Request::get('d') == null) {
+        if (request('d') == null) {
             return session('currentDashboardId');
         }
-        Session::put('currentDashboardId', Request::get('d'));
+        Session::put('currentDashboardId', request('d'));
         Session::put('currentMenuId', 0);
 
-        return Request::get('d');
+        return request('d');
     }
 
     public static function getCurrentMenuId()
     {
-        if (Request::get('m') == null) {
+        if (request('m') == null) {
             return session('currentMenuId');
         }
-        Session::put('currentMenuId', Request::get('m'));
+        Session::put('currentMenuId', request('m'));
         Session::put('currentDashboardId', 0);
 
-        return Request::get('m');
+        return request('m');
     }
 
     public static function sidebarDashboard()
@@ -369,7 +369,7 @@ class CRUDBooster
 
     public static function getValueFilter($field)
     {
-        $filter = Request::get('filter_column');
+        $filter = request('filter_column');
         if ($filter[$field]) {
             return $filter[$field]['value'];
         }
@@ -377,7 +377,7 @@ class CRUDBooster
 
     public static function getSortingFilter($field)
     {
-        $filter = Request::get('filter_column');
+        $filter = request('filter_column');
         if ($filter[$field]) {
             return $filter[$field]['sorting'];
         }
@@ -385,7 +385,7 @@ class CRUDBooster
 
     public static function getTypeFilter($field)
     {
-        $filter = Request::get('filter_column');
+        $filter = request('filter_column');
         if ($filter[$field]) {
             return $filter[$field]['type'];
         }
