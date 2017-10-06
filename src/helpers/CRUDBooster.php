@@ -855,7 +855,6 @@ class CRUDBooster
 
     public static function listTables()
     {
-        $tables = [];
         $multiple_db = cbConfig('MULTIPLE_DATABASE_MODULE');
         $multiple_db = ($multiple_db) ? $multiple_db : [];
         $db_database = cbConfig('MAIN_DB_DATABASE');
@@ -868,13 +867,15 @@ class CRUDBooster
             } catch (\Exception $e) {
                 $tables = [];
             }
-        } else {
-            try {
-                $tables = DB::select("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = '".$db_database."'");
-            } catch (\Exception $e) {
-                $tables = [];
-            }
+            return $tables;
         }
+
+        try {
+            $tables = DB::select("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = '".$db_database."'");
+        } catch (\Exception $e) {
+            $tables = [];
+        }
+
 
         return $tables;
     }
@@ -916,7 +917,6 @@ class CRUDBooster
                 'X-Authorization-Time' => Request::header('X-Authorization-Time'),
                 'useragent' => Request::header('User-Agent'),
             ], [
-
                     'X-Authorization-Token' => 'required',
                     'X-Authorization-Time' => 'required',
                     'useragent' => 'required',
