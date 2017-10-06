@@ -210,7 +210,7 @@ class CBController extends Controller
 
         $data['table'] = $this->table;
         $data['table_pk'] = CB::pk($this->table);
-        $data['page_title'] = $module->name;
+        $data['page_title'] = CRUDBooster::getCurrentModule()->name;
         $data['page_description'] = trans('crudbooster.default_module_description');
         $data['date_candidate'] = $this->date_candidate;
         $data['limit'] = $limit = request('limit', $this->limit);
@@ -218,7 +218,7 @@ class CBController extends Controller
         $tablePK = $data['table_pk'];
         $table_columns = CB::getTableColumns($this->table);
 
-        $result = DB::table($this->table)->select(DB::raw($this->table.".".$this->primary_key));
+        $result = $this->table()->select(DB::raw($this->table.".".$this->primary_key));
 
         if (request('parent_id')) {
             $this->filterForParent($result);
@@ -228,16 +228,16 @@ class CBController extends Controller
 
         $this->filterSoftDeleted($table_columns, $result);
 
-        $alias = [];
-        $join_alias_count = 0;
-        $join_table_temp = [];
+        //$alias = [];
+        //$join_alias_count = 0;
+        //$join_table_temp = [];
         $table = $this->table;
         $columns_table = $this->columns_table;
         foreach ($columns_table as $index => $coltab) {
 
-            $join = @$coltab['join'];
-            $join_where = @$coltab['join_where'];
-            $join_id = @$coltab['join_id'];
+            //$join = @$coltab['join'];
+            //$join_where = @$coltab['join_where'];
+            //$join_id = @$coltab['join_id'];
             $field = @$coltab['name'];
 
             if (strpos($field, '.')) {
@@ -270,9 +270,9 @@ class CBController extends Controller
             $addaction = $this->_handleSubModules($addaction);
         }
 
-        $mainpath = CRUDBooster::mainpath();
-        $orig_mainpath = $this->data['mainpath'];
-        $title_field = $this->title_field;
+        //$mainpath = CRUDBooster::mainpath();
+        //$orig_mainpath = $this->data['mainpath'];
+        //$title_field = $this->title_field;
         $html_contents = [];
         $page = request('page', 1);
         $number = ($page - 1) * $limit + 1;
@@ -356,6 +356,7 @@ class CBController extends Controller
             return response()->json(['items' => []]);
         }
         $query = Cache::get($key);
+
         $fk_name = request('fk_name');
         $fk_value = request('fk_value');
 
@@ -440,8 +441,7 @@ class CBController extends Controller
         $column = request('column');
         $value = request('value');
         $id = request('id');
-        $tablePK = CB::pk($table);
-        DB::table($table)->where($tablePK, $id)->update([$column => $value]);
+        DB::table($table)->where(CB::pk($table), $id)->update([$column => $value]);
 
         return CRUDBooster::backWithMsg(trans('crudbooster.alert_delete_data_success'));
     }
@@ -517,81 +517,82 @@ class CBController extends Controller
         $fk = request('fk');
         $fk_value = request('fk_value');
 
-        if ($q || $id || $table1) {
-            $rows = DB::table($table1);
-            $rows->select($table1.'.*');
-            $rows->take(request('limit', 10));
-
-            if (Schema::hasColumn($table1, 'deleted_at')) {
-                $rows->where($table1.'.deleted_at', null);
-            }
-
-            if ($fk && $fk_value) {
-                $rows->where($table1.'.'.$fk, $fk_value);
-            }
-
-            if ($table1 && $column1) {
-
-                $orderby_table = $table1;
-                $orderby_column = $column1;
-            }
-
-            if ($table2 && $column2) {
-                $table2PK = CB::pk($table2);
-                $rows->join($table2, $table2.'.'.$table2PK, '=', $table1.'.'.$column1);
-                $columns = CRUDBooster::getTableColumns($table2);
-                foreach ($columns as $col) {
-                    $rows->addselect($table2.".".$col." as ".$table2."_".$col);
-                }
-                $orderby_table = $table2;
-                $orderby_column = $column2;
-            }
-
-            if ($table3 && $column3) {
-                $table3PK = CB::pk($table3);
-                $rows->join($table3, $table3.'.'.$table3PK, '=', $table2.'.'.$column2);
-                $columns = CRUDBooster::getTableColumns($table3);
-                foreach ($columns as $col) {
-                    $rows->addselect($table3.".".$col." as ".$table3."_".$col);
-                }
-                $orderby_table = $table3;
-                $orderby_column = $column3;
-            }
-
-            if ($id) {
-                $rows->where($table1.".".$table1PK, $id);
-            }
-
-            if ($where) {
-                $rows->whereraw($where);
-            }
-
-            if ($format) {
-                $format = str_replace('&#039;', "'", $format);
-                $rows->addselect(DB::raw("CONCAT($format) as text"));
-                if ($q) {
-                    $rows->whereraw("CONCAT($format) like '%".$q."%'");
-                }
-            } else {
-                $rows->addselect($orderby_table.'.'.$orderby_column.' as text');
-                if ($q) {
-                    $rows->where($orderby_table.'.'.$orderby_column, 'like', '%'.$q.'%');
-                }
-            }
-
-            $result = [];
-            $result['items'] = $rows->get();
-        } else {
+        if (!$q && !$id && !$table1) {
             $result = [];
             $result['items'] = [];
+            return response()->json($result);
         }
+
+        $rows = DB::table($table1);
+        $rows->select($table1.'.*');
+        $rows->take(request('limit', 10));
+
+        if (Schema::hasColumn($table1, 'deleted_at')) {
+            $rows->where($table1.'.deleted_at', null);
+        }
+
+        if ($fk && $fk_value) {
+            $rows->where($table1.'.'.$fk, $fk_value);
+        }
+
+        if ($table1 && $column1) {
+
+            $orderby_table = $table1;
+            $orderby_column = $column1;
+        }
+
+        if ($table2 && $column2) {
+            $table2PK = CB::pk($table2);
+            $rows->join($table2, $table2.'.'.$table2PK, '=', $table1.'.'.$column1);
+            $columns = CRUDBooster::getTableColumns($table2);
+            foreach ($columns as $col) {
+                $rows->addselect($table2.".".$col." as ".$table2."_".$col);
+            }
+            $orderby_table = $table2;
+            $orderby_column = $column2;
+        }
+
+        if ($table3 && $column3) {
+            $table3PK = CB::pk($table3);
+            $rows->join($table3, $table3.'.'.$table3PK, '=', $table2.'.'.$column2);
+            $columns = CRUDBooster::getTableColumns($table3);
+            foreach ($columns as $col) {
+                $rows->addselect($table3.".".$col." as ".$table3."_".$col);
+            }
+            $orderby_table = $table3;
+            $orderby_column = $column3;
+        }
+
+        if ($id) {
+            $rows->where($table1.".".$table1PK, $id);
+        }
+
+        if ($where) {
+            $rows->whereraw($where);
+        }
+
+        if ($format) {
+            $format = str_replace('&#039;', "'", $format);
+            $rows->addselect(DB::raw("CONCAT($format) as text"));
+            if ($q) {
+                $rows->whereraw("CONCAT($format) like '%".$q."%'");
+            }
+        } else {
+            $rows->addselect($orderby_table.'.'.$orderby_column.' as text');
+            if ($q) {
+                $rows->where($orderby_table.'.'.$orderby_column, 'like', '%'.$q.'%');
+            }
+        }
+
+        $result = [];
+        $result['items'] = $rows->get();
+
 
         return response()->json($result);
     }
 
     public function validation($id = null)
     {
-
         $request_all = Request::all();
         $array_input = [];
         $componentPath = implode(DIRECTORY_SEPARATOR, ["vendor", "crocodicstudio", "crudbooster", "src", "views", "default", "type_components", ""]);
@@ -600,63 +601,21 @@ class CBController extends Controller
             $ai = [];
             $name = $di['name'];
             $type = $di['type'];
-            if (! $name) {
-                continue;
-            }
 
-            if (! isset($request_all[$name])) {
+            if (!$name || !isset($request_all[$name])) {
                 continue;
             }
 
             if ($di['required'] && ! Request::hasFile($name)) {
                 $ai[] = 'required';
             }
-
+            
             if (file_exists(base_path($componentPath.$type.DIRECTORY_SEPARATOR.'hookInputValidation.php'))) {
                 require_once(base_path($componentPath.$type.DIRECTORY_SEPARATOR.'hookInputValidation.php'));
             }
 
             if (@$di['validation']) {
-                $exp = explode('|', $di['validation']);
-                if (count($exp)) {
-                    foreach ($exp as &$validationItem) {
-                        if (substr($validationItem, 0, 6) !== 'unique') {
-                            continue;
-                        }
-                        $parseUnique = explode(',', str_replace('unique:', '', $validationItem));
-                        $uniqueTable = ($parseUnique[0]) ?: $this->table;
-                        $uniqueColumn = ($parseUnique[1]) ?: $name;
-                        $uniqueIgnoreId = ($parseUnique[2]) ?: (($id) ?: '');
-
-                        //Make sure table name
-                        $uniqueTable = CB::parseSqlTable($uniqueTable)['table'];
-
-                        //Rebuild unique rule
-                        $uniqueRebuild = [];
-                        $uniqueRebuild[] = $uniqueTable;
-                        $uniqueRebuild[] = $uniqueColumn;
-                        if ($uniqueIgnoreId) {
-                            $uniqueRebuild[] = $uniqueIgnoreId;
-                        } else {
-                            $uniqueRebuild[] = 'NULL';
-                        }
-
-                        //Check whether deleted_at exists or not
-                        if (Schema::hasColumn($uniqueTable, 'deleted_at')) {
-                            $uniqueRebuild[] = CB::findPrimaryKey($uniqueTable);
-                            $uniqueRebuild[] = 'deleted_at';
-                            $uniqueRebuild[] = 'NULL';
-                        }
-                        $uniqueRebuild = array_filter($uniqueRebuild);
-                        $validationItem = 'unique:'.implode(',', $uniqueRebuild);
-                    }
-                } else {
-                    $exp = [];
-                }
-
-                $validation = implode('|', $exp);
-
-                $array_input[$name] = $validation;
+                $array_input[$name] = $this->prepareValidationRules($id, $di);
             } else {
                 $array_input[$name] = implode('|', $ai);
             }
@@ -664,24 +623,27 @@ class CBController extends Controller
 
         $validator = Validator::make($request_all, $array_input);
 
-        if ($validator->fails()) {
-            $message = $validator->messages();
-            $message_all = $message->all();
+        if (!$validator->fails()) {
+            return null;
+        }
 
-            if (Request::ajax()) {
-                response()->json([
-                    'message' => trans('crudbooster.alert_validation_error', ['error' => implode(', ', $message_all)]),
-                    'message_type' => 'warning',
-                ])->send();
-                exit;
-            }
-            redirect()->back()->with("errors", $message)->with([
+        $message = $validator->messages();
+        $message_all = $message->all();
+
+        if (Request::ajax()) {
+            response()->json([
                 'message' => trans('crudbooster.alert_validation_error', ['error' => implode(', ', $message_all)]),
                 'message_type' => 'warning',
-            ])->withInput()->send();
-            \Session::driver()->save();
+            ])->send();
             exit;
         }
+
+        redirect()->back()->with("errors", $message)->with([
+            'message' => trans('crudbooster.alert_validation_error', ['error' => implode(', ', $message_all)]),
+            'message_type' => 'warning',
+        ])->withInput()->send();
+        \Session::driver()->save();
+        exit;
     }
 
     public function inputAssignment($id = null)
@@ -750,7 +712,7 @@ class CBController extends Controller
         $this->hookBeforeAdd($this->arr);
 
         $this->arr[$this->primary_key] = $id = CRUDBooster::newId($this->table);
-        DB::table($this->table)->insert($this->arr);
+        $this->table()->insert($this->arr);
 
         //Looping Data Input Again After Insert
         foreach ($this->data_inputan as $ro) {
@@ -797,7 +759,7 @@ class CBController extends Controller
     public function getEdit($id)
     {
         $this->cbLoader();
-        $row = DB::table($this->table)->where($this->primary_key, $id)->first();
+        $row = $this->findRow($id)->first();
 
         $page_menu = Route::getCurrentRoute()->getActionName();
         $page_title = trans("crudbooster.edit_data_page_title", ['module' => CRUDBooster::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
@@ -810,7 +772,7 @@ class CBController extends Controller
     public function postEditSave($id)
     {
         $this->cbLoader();
-        $row = DB::table($this->table)->where($this->primary_key, $id)->first();
+        $row = $this->findRow($id)->first();
 
         $this->validation($id);
         $this->inputAssignment($id);
@@ -820,7 +782,7 @@ class CBController extends Controller
         }
 
         $this->hookBeforeEdit($this->arr, $id);
-        DB::table($this->table)->where($this->primary_key, $id)->update($this->arr);
+        $this->findRow($id)->update($this->arr);
 
         //Looping Data Input Again After Insert
         foreach ($this->data_inputan as $ro) {
@@ -923,7 +885,7 @@ class CBController extends Controller
     public function getDelete($id)
     {
         $this->cbLoader();
-        $row = DB::table($this->table)->where($this->primary_key, $id)->first();
+        $row = $this->findRow($id)->first();
 
         //insert log
         CRUDBooster::insertLog(trans("crudbooster.log_delete", ['name' => $row->{$this->title_field}, 'module' => CRUDBooster::getCurrentModule()->name]));
@@ -931,9 +893,9 @@ class CBController extends Controller
         $this->hookBeforeDelete($id);
 
         if (Schema::hasColumn($this->table, 'deleted_at')) {
-            DB::table($this->table)->where($this->primary_key, $id)->update(['deleted_at' => date('Y-m-d H:i:s')]);
+            $this->findRow($id)->update(['deleted_at' => date('Y-m-d H:i:s')]);
         } else {
-            DB::table($this->table)->where($this->primary_key, $id)->delete();
+            $this->findRow($id)->delete();
         }
 
         $this->hookAfterDelete($id);
@@ -946,7 +908,7 @@ class CBController extends Controller
     public function getDetail($id)
     {
         $this->cbLoader();
-        $row = DB::table($this->table)->where($this->primary_key, $id)->first();
+        $row = $this->findRow($id)->first();
 
         $module = CRUDBooster::getCurrentModule();
 
@@ -1097,7 +1059,7 @@ class CBController extends Controller
                     $a['created_at'] = date('Y-m-d H:i:s');
                 }
 
-                DB::table($this->table)->insert($a);
+                $this->table()->insert($a);
                 Cache::increment('success_'.$file_md5);
             } catch (\Exception $e) {
                 $e = (string) $e;
@@ -1149,14 +1111,12 @@ class CBController extends Controller
         $id = request('id');
         $column = request('column');
 
-        $row = DB::table($this->table)->where($this->primary_key, $id)->first();
+        $row = $this->findRow($id)->first();
         $file = $row->{$column};
 
-        if (Storage::exists($file)) {
-            Storage::delete($file);
-        }
+        Storage::delete($file);
 
-        DB::table($this->table)->where($this->primary_key, $id)->update([$column => null]);
+        $this->findRow($id)->update([$column => null]);
 
         CRUDBooster::insertLog(trans("crudbooster.log_delete_image", [
             'name' => $row->{$this->title_field},
@@ -1700,9 +1660,9 @@ class CBController extends Controller
         $tablePK = CB::pk($this->table);
         if (Schema::hasColumn($this->table, 'deleted_at')) {
 
-            DB::table($this->table)->whereIn($tablePK, $id_selected)->update(['deleted_at' => date('Y-m-d H:i:s')]);
+            $this->table()->whereIn($tablePK, $id_selected)->update(['deleted_at' => date('Y-m-d H:i:s')]);
         } else {
-            DB::table($this->table)->whereIn($tablePK, $id_selected)->delete();
+            $this->table()->whereIn($tablePK, $id_selected)->delete();
         }
         CRUDBooster::insertLog(trans("crudbooster.log_delete", ['name' => implode(',', $id_selected), 'module' => CRUDBooster::getCurrentModule()->name]));
 
@@ -1717,5 +1677,65 @@ class CBController extends Controller
     protected function table()
     {
         return \DB::table($this->table);
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    protected function findRow($id)
+    {
+        return $this->table()->where($this->primary_key, $id);
+    }
+
+    /**
+     * @param $id
+     * @param $di
+     * @return array
+     */
+    private function prepareValidationRules($id, $di)
+    {
+        $exp = explode('|', $di['validation']);
+
+        if (!count($exp)) {
+            return '';
+        }
+
+        foreach ($exp as &$validationItem) {
+            if (substr($validationItem, 0, 6) !== 'unique') {
+                continue;
+            }
+
+            $parseUnique = explode(',', str_replace('unique:', '', $validationItem));
+            $uniqueTable = ($parseUnique[0]) ?: $this->table;
+            $uniqueColumn = ($parseUnique[1]) ?: $di['name'];
+            $uniqueIgnoreId = ($parseUnique[2]) ?: (($id) ?: '');
+
+            //Make sure table name
+            $uniqueTable = CB::parseSqlTable($uniqueTable)['table'];
+
+            //Rebuild unique rule
+            $uniqueRebuild = [];
+            $uniqueRebuild[] = $uniqueTable;
+            $uniqueRebuild[] = $uniqueColumn;
+
+            if ($uniqueIgnoreId) {
+                $uniqueRebuild[] = $uniqueIgnoreId;
+            } else {
+                $uniqueRebuild[] = 'NULL';
+            }
+
+            //Check whether deleted_at exists or not
+            if (Schema::hasColumn($uniqueTable, 'deleted_at')) {
+                $uniqueRebuild[] = CB::findPrimaryKey($uniqueTable);
+                $uniqueRebuild[] = 'deleted_at';
+                $uniqueRebuild[] = 'NULL';
+            }
+            $uniqueRebuild = array_filter($uniqueRebuild);
+            $validationItem = 'unique:'.implode(',', $uniqueRebuild);
+        }
+
+
+        return implode('|', $exp);
     }
 }
