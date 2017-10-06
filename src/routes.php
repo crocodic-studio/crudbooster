@@ -82,20 +82,20 @@ Route::group([
     'middleware' => ['web', \crocodicstudio\crudbooster\middlewares\CBBackend::class],
     'prefix' => cbConfig('ADMIN_PATH'),
     'namespace' => $namespace,
-], function () {
+], function () use ($namespace){
 
     /* DO NOT EDIT THESE BELLOW LINES */
     if (Request::is(cbConfig('ADMIN_PATH'))) {
         $menus = DB::table('cms_menus')->where('is_dashboard', 1)->first();
         if (! $menus) {
-            CRUDBooster::routeController('/', 'AdminController', $namespace = '\crocodicstudio\crudbooster\controllers');
+            CRUDBooster::routeController('/', 'AdminController', $namespace);
         }
     }
 
-    CRUDBooster::routeController('file-manager', $namespace = '\crocodicstudio\crudbooster\controllers');
-    CRUDBooster::routeController('notifications', 'AdminNotificationsController', $namespace = '\crocodicstudio\crudbooster\controllers');
-    CRUDBooster::routeController('users', 'AdminUsersController', $namespace = '\crocodicstudio\crudbooster\controllers');
-    
+    CRUDBooster::routeController('file-manager', $namespace);
+    CRUDBooster::routeController('notifications', 'AdminNotificationsController', $namespace);
+    CRUDBooster::routeController('users', 'AdminUsersController', $namespace);
+
     $master_controller = glob(__DIR__.'/controllers/*.php');
     foreach ($master_controller as &$file) {
         $file = str_replace('.php', '', basename($file));
