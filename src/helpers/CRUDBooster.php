@@ -68,22 +68,22 @@ class CRUDBooster
 
     public static function me()
     {
-        return DB::table(cbConfig('USER_TABLE'))->where('id', Session::get('admin_id'))->first();
+        return DB::table(cbConfig('USER_TABLE'))->where('id', session('admin_id'))->first();
     }
 
     public static function myName()
     {
-        return Session::get('admin_name');
+        return session('admin_name');
     }
 
     public static function myPhoto()
     {
-        return Session::get('admin_photo');
+        return session('admin_photo');
     }
 
     public static function myPrivilege()
     {
-        $roles = Session::get('admin_privileges_roles');
+        $roles = session('admin_privileges_roles');
         if (! $roles) {
             return;
         }
@@ -101,7 +101,7 @@ class CRUDBooster
 
     public static function isLocked()
     {
-        return Session::get('admin_lock');
+        return session('admin_lock');
     }
 
     public static function canView()
@@ -110,7 +110,7 @@ class CRUDBooster
             return true;
         }
 
-        $session = Session::get('admin_privileges_roles');
+        $session = session('admin_privileges_roles');
         foreach ($session as $v) {
             if ($v->path == self::getModulePath()) {
                 return (bool) $v->is_visible;
@@ -120,7 +120,7 @@ class CRUDBooster
 
     public static function isSuperadmin()
     {
-        return Session::get('admin_is_superadmin');
+        return session('admin_is_superadmin');
     }
 
     public static function canUpdate()
@@ -129,7 +129,7 @@ class CRUDBooster
             return true;
         }
 
-        $session = Session::get('admin_privileges_roles');
+        $session = session('admin_privileges_roles');
         foreach ($session as $v) {
             if ($v->path == self::getModulePath()) {
                 return (bool) $v->is_edit;
@@ -143,7 +143,7 @@ class CRUDBooster
             return true;
         }
 
-        $session = Session::get('admin_privileges_roles');
+        $session = session('admin_privileges_roles');
         foreach ($session as $v) {
             if ($v->path == self::getModulePath()) {
                 return (bool) $v->is_create;
@@ -157,7 +157,7 @@ class CRUDBooster
             return true;
         }
 
-        $session = Session::get('admin_privileges_roles');
+        $session = session('admin_privileges_roles');
         foreach ($session as $v) {
             if ($v->path == self::getModulePath()) {
                 return (bool) $v->is_read;
@@ -171,7 +171,7 @@ class CRUDBooster
             return true;
         }
 
-        $session = Session::get('admin_privileges_roles');
+        $session = session('admin_privileges_roles');
         foreach ($session as $v) {
             if ($v->path == self::getModulePath()) {
                 return (bool) $v->is_delete;
@@ -185,7 +185,7 @@ class CRUDBooster
             return true;
         }
 
-        $session = Session::get('admin_privileges_roles');
+        $session = session('admin_privileges_roles');
         foreach ($session as $v) {
             if ($v->path !== self::getModulePath()) {
                 continue;
@@ -211,7 +211,7 @@ class CRUDBooster
     public static function getCurrentDashboardId()
     {
         if (Request::get('d') == null) {
-            return Session::get('currentDashboardId');
+            return session('currentDashboardId');
         }
         Session::put('currentDashboardId', Request::get('d'));
         Session::put('currentMenuId', 0);
@@ -222,7 +222,7 @@ class CRUDBooster
     public static function getCurrentMenuId()
     {
         if (Request::get('m') == null) {
-            return Session::get('currentMenuId');
+            return session('currentMenuId');
         }
         Session::put('currentMenuId', Request::get('m'));
         Session::put('currentDashboardId', 0);
@@ -242,7 +242,7 @@ class CRUDBooster
 
     public static function myPrivilegeId()
     {
-        return Session::get('admin_privileges');
+        return session('admin_privileges');
     }
 
     private static function menuUrl($menu)
@@ -303,7 +303,7 @@ class CRUDBooster
 
     public static function myPrivilegeName()
     {
-        return Session::get('admin_privileges_name');
+        return session('admin_privileges_name');
     }
 
     public static function deleteConfirm($redirectTo)
@@ -322,7 +322,7 @@ class CRUDBooster
 
     public static function getCurrentId()
     {
-        $id = Session::get('current_row_id');
+        $id = session('current_row_id');
         $id = intval($id);
         $id = (! $id) ? Request::segment(4) : $id;
         $id = intval($id);
@@ -845,7 +845,7 @@ class CRUDBooster
 
     public static function myId()
     {
-        return Session::get('admin_id');
+        return session('admin_id');
     }
 
     public static function referer()
