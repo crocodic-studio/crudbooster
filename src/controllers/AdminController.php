@@ -13,10 +13,7 @@ class AdminController extends CBController
 {
     function getIndex()
     {
-        $data = [];
-        $data['page_title'] = '<strong>Dashboard</strong>';
-
-        return view('crudbooster::auth.home', $data);
+        return view('crudbooster::auth.home', ['page_title' => '<strong>Dashboard</strong>']);
     }
 
     public function getLockscreen()
@@ -32,11 +29,9 @@ class AdminController extends CBController
 
     public function postUnlockScreen()
     {
-        $id = CRUDBooster::myId();
-        $password = Request::input('password');
-        $users = DB::table('cms_users')->where('id', $id)->first();
+        $users = DB::table('cms_users')->where('id', CRUDBooster::myId())->first();
 
-        if (\Hash::check($password, $users->password)) {
+        if (\Hash::check(Request::input('password'), $users->password)) {
             Session::put('admin_lock', 0);
 
             return redirect()->route('AdminControllerGetIndex');
@@ -109,35 +104,29 @@ class AdminController extends CBController
 
     public function postForgot()
     {
-        $validator = Validator::make(Request::all(), [
-                'email' => 'required|email|exists:cms_users',
-            ]);
+        $validator = Validator::make(Request::all(), ['email' => 'required|email|exists:cms_users',]);
 
         if ($validator->fails()) {
             $message = $validator->errors()->all();
-
             return CRUDBooster::backWithMsg(implode(', ', $message), 'danger');
         }
 
         $rand_string = str_random(5);
-        $password = \Hash::make($rand_string);
+        DB::table('cms_users')->where('email', Request::input('email'))->update(['password' => \Hash::make($rand_string)]);
 
-        DB::table('cms_users')->where('email', Request::input('email'))->update(['password' => $password]);
-
-        $appname = CRUDBooster::getSetting('appname');
-        $user = CRUDBooster::first('cms_users', ['email' => g('email')]);
+        //$appname = CRUDBooster::getSetting('appname');
+        $user = CRUDBooster::first('cms_users', ['email' => request('email')]);
         $user->password = $rand_string;
         CRUDBooster::sendEmail(['to' => $user->email, 'data' => $user, 'template' => 'forgot_password_backend']);
 
-        CRUDBooster::insertLog(trans("crudbooster.log_forgot", ['email' => g('email'), 'ip' => Request::server('REMOTE_ADDR')]));
+        CRUDBooster::insertLog(trans("crudbooster.log_forgot", ['email' => request('email'), 'ip' => Request::server('REMOTE_ADDR')]));
 
         return redirect()->route('getLogin')->with('message', trans("crudbooster.message_forgot_password"));
     }
 
     public function getLogout()
     {
-        $me = CRUDBooster::me();
-        CRUDBooster::insertLog(trans("crudbooster.log_logout", ['email' => $me->email]));
+        CRUDBooster::insertLog(trans("crudbooster.log_logout", ['email' => CRUDBooster::me()->email]));
 
         Session::flush();
 
