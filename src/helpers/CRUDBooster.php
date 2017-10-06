@@ -833,14 +833,15 @@ class CRUDBooster
 
     public static function insertLog($description)
     {
-        $a = [];
-        $a['created_at'] = date('Y-m-d H:i:s');
-        $a['ipaddress'] = $_SERVER['REMOTE_ADDR'];
-        $a['useragent'] = $_SERVER['HTTP_USER_AGENT'];
-        $a['url'] = Request::url();
-        $a['description'] = $description;
-        $a['id_cms_users'] = self::myId();
-        DB::table('cms_logs')->insert($a);
+        $log = [
+            'created_at' => date('Y-m-d H:i:s'),
+            'ipaddress' => $_SERVER['REMOTE_ADDR'],
+            'useragent' => $_SERVER['HTTP_USER_AGENT'],
+            'url' => Request::url(),
+            'description' => $description,
+            'id_cms_users' => self::myId(),
+        ];
+        DB::table('cms_logs')->insert($log);
     }
 
     public static function myId()
