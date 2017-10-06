@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\controllers;
+namespace crocodicstudio\crudbooster\AuthModule;
 
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
@@ -9,11 +9,11 @@ use Illuminate\Support\Facades\Validator;
 use CRUDBooster;
 use CB;
 
-class AdminController extends Controller
+class AuthController extends Controller
 {
     function getIndex()
     {
-        return view('crudbooster::auth.home', ['page_title' => '<strong>Dashboard</strong>']);
+        return view('CbAuth::home', ['page_title' => '<strong>Dashboard</strong>']);
     }
 
     public function getLockscreen()
@@ -24,7 +24,7 @@ class AdminController extends Controller
         }
 
         Session::put('admin_lock', 1);
-        return view('crudbooster::auth.lockscreen');
+        return view('CbAuth::lockscreen');
     }
 
     public function postUnlockScreen()
@@ -45,7 +45,7 @@ class AdminController extends Controller
             return redirect(cbConfig('ADMIN_PATH'));
         }
 
-        return view('crudbooster::auth.login');
+        return view('CbAuth::login');
     }
 
     public function postLogin()
@@ -96,10 +96,10 @@ class AdminController extends Controller
     public function getForgot()
     {
         if (CRUDBooster::myId()) {
-            return redirect()->action('\crocodicstudio\crudbooster\controllers\AdminController@getIndex');
+            return redirect()->action(AuthController::class.'@getIndex');
         }
 
-        return view('crudbooster::auth.forgot');
+        return view('CbAuth::forgot');
     }
 
     public function postForgot()
