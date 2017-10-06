@@ -37,12 +37,10 @@ class AdminMenusController extends CBController
         $id_module = $id_statistic = 0;
 
         if ($row->type == 'Module') {
-            $m = DB::table('cms_moduls')->where('path', $row->path)->first();
-            $id_module = $m->id;
+            $id_module = DB::table('cms_moduls')->where('path', $row->path)->first()->id;
         } elseif ($row->type == 'Statistic') {
             $row->path = str_replace('statistic-builder/show/', '', $row->path);
-            $m = DB::table('cms_statistics')->where('slug', $row->path)->first();
-            $id_statistic = $m->id;
+            $id_statistic = DB::table('cms_statistics')->where('slug', $row->path)->first()->id;
         }
 
         $this->script_js = "
