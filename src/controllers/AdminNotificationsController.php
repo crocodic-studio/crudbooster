@@ -14,13 +14,9 @@ class AdminNotificationsController extends CBController
         $this->title_field = "content";
         $this->limit = 20;
         $this->index_orderby = ["id" => "desc"];
-        $this->button_show = true;
-        $this->button_add = false;
-        $this->button_delete = true;
-        $this->button_export = false;
-        $this->button_import = false;
         $this->global_privilege = true;
 
+        $this->setButtons();
         $this->makeColumns();
 
         $this->form = NotificationForm::makeForm();
@@ -66,5 +62,14 @@ class AdminNotificationsController extends CBController
             'name' => 'is_read',
             'callback_php' => '($row->is_read)?"<span class=\"label label-default\">Already Read</span>":"<span class=\"label label-danger\">NEW</span>"',
         ];
+    }
+
+    private function setButtons()
+    {
+        $this->button_show = true;
+        $this->button_add = false;
+        $this->button_delete = true;
+        $this->button_export = false;
+        $this->button_import = false;
     }
 }
