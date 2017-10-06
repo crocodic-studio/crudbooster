@@ -516,17 +516,18 @@ class CRUDBooster
         $attachments = ($config['attachments']) ?: [];
 
         if ($config['send_at'] != null) {
-            $a = [];
-            $a['send_at'] = $config['send_at'];
-            $a['email_recipient'] = $to;
-            $a['email_from_email'] = $template->from_email ?: CRUDBooster::getSetting('email_sender');
-            $a['email_from_name'] = $template->from_name ?: CRUDBooster::getSetting('appname');
-            $a['email_cc_email'] = $template->cc_email;
-            $a['email_subject'] = $subject;
-            $a['email_content'] = $html;
-            $a['email_attachments'] = serialize($attachments);
-            $a['is_sent'] = 0;
-            DB::table('cms_email_queues')->insert($a);
+            $queue = [
+                'send_at' => $config['send_at'],
+                'email_recipient' => $to,
+                'email_from_email' => $template->from_email ?: CRUDBooster::getSetting('email_sender'),
+                'email_from_name' => $template->from_name ?: CRUDBooster::getSetting('appname'),
+                'email_cc_email' => $template->cc_email,
+                'email_subject' => $subject,
+                'email_content' => $html,
+                'email_attachments' => serialize($attachments),
+                'is_sent' => 0,
+            ];
+            DB::table('cms_email_queues')->insert($queue);
 
             return true;
         }
