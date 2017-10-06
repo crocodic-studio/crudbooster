@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use CRUDBooster;
 use CB;
 
-class AdminController extends CBController
+class AdminController extends Controller
 {
     function getIndex()
     {
