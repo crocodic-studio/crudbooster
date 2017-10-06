@@ -79,7 +79,7 @@ Route::group([
 
 /* ROUTER FOR BACKEND CRUDBOOSTER */
 Route::group([
-    'middleware' => ['web', '\crocodicstudio\crudbooster\middlewares\CBBackend'],
+    'middleware' => ['web', \crocodicstudio\crudbooster\middlewares\CBBackend::class],
     'prefix' => cbConfig('ADMIN_PATH'),
     'namespace' => $namespace,
 ], function () {
@@ -95,39 +95,34 @@ Route::group([
     CRUDBooster::routeController('file-manager', $namespace = '\crocodicstudio\crudbooster\controllers');
     CRUDBooster::routeController('notifications', 'AdminNotificationsController', $namespace = '\crocodicstudio\crudbooster\controllers');
     CRUDBooster::routeController('users', 'AdminUsersController', $namespace = '\crocodicstudio\crudbooster\controllers');
+    
+    $master_controller = glob(__DIR__.'/controllers/*.php');
+    foreach ($master_controller as &$file) {
+        $file = str_replace('.php', '', basename($file));
+    }
 
-    try {
-        $master_controller = glob(__DIR__.'/controllers/*.php');
-        foreach ($master_controller as &$m) {
-            $m = str_replace('.php', '', basename($m));
+    $moduls = DB::table('cms_moduls')->whereIn('controller', $master_controller)->get();
+
+    foreach ($moduls as $module) {
+        if (@$module->path && @$module->controller) {
+            CRUDBooster::routeController($module->path, $module->controller, $namespace);
         }
-
-        $moduls = DB::table('cms_moduls')->whereIn('controller', $master_controller)->get();
-
-        foreach ($moduls as $v) {
-            if (@$v->path && @$v->controller) {
-                CRUDBooster::routeController($v->path, $v->controller, $namespace = '\crocodicstudio\crudbooster\controllers');
-            }
-        }
-    } catch (Exception $e) {
-
     }
 });
 
 Route::group([
-    'middleware' => ['web', '\crocodicstudio\crudbooster\middlewares\CBSuperadmin'],
+    'middleware' => ['web', \crocodicstudio\crudbooster\middlewares\CBSuperadmin::class],
     'prefix' => cbConfig('ADMIN_PATH'),
     'namespace' => $namespace,
-], function () {
-
-    CRUDBooster::routeController('privileges', 'AdminPrivilegesController', $namespace = '\crocodicstudio\crudbooster\controllers');
-    CRUDBooster::routeController('settings', 'AdminSettingsController', $namespace = '\crocodicstudio\crudbooster\controllers');
-    CRUDBooster::routeController('modules', 'AdminModulesController', $namespace = '\crocodicstudio\crudbooster\controllers');
-    CRUDBooster::routeController('statistic-builder', 'AdminStatisticBuilderController', $namespace = '\crocodicstudio\crudbooster\controllers');
-    CRUDBooster::routeController('file-manager', 'AdminFileManagerController', $namespace = '\crocodicstudio\crudbooster\controllers');
-    CRUDBooster::routeController('menus', 'AdminMenusController', $namespace = '\crocodicstudio\crudbooster\controllers');
-    CRUDBooster::routeController('email-templates', 'AdminEmailTemplatesController', $namespace = '\crocodicstudio\crudbooster\controllers');
-    CRUDBooster::routeController('api-generator', 'AdminApiGeneratorController', $namespace = '\crocodicstudio\crudbooster\controllers');
-    CRUDBooster::routeController('logs', 'AdminLogsController', $namespace = '\crocodicstudio\crudbooster\controllers');
+], function () use ($namespace) {
+    CRUDBooster::routeController('privileges', 'AdminPrivilegesController', $namespace);
+    CRUDBooster::routeController('settings', 'AdminSettingsController', $namespace);
+    CRUDBooster::routeController('modules', 'AdminModulesController', $namespace);
+    CRUDBooster::routeController('statistic-builder', 'AdminStatisticBuilderController', $namespace);
+    CRUDBooster::routeController('file-manager', 'AdminFileManagerController', $namespace);
+    CRUDBooster::routeController('menus', 'AdminMenusController', $namespace);
+    CRUDBooster::routeController('email-templates', 'AdminEmailTemplatesController', $namespace);
+    CRUDBooster::routeController('api-generator', 'AdminApiGeneratorController', $namespace);
+    CRUDBooster::routeController('logs', 'AdminLogsController', $namespace);
 });
 
