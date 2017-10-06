@@ -11,11 +11,11 @@
     @endif
 
 
-    @if(Request::get('file') && Request::get('import'))
+    @if(request('file') && request('import'))
 
         <ul class='nav nav-tabs'>
-            <li style="background:#eeeeee"><a style="color:#111"
-                                              onclick="if(confirm('Are you sure want to leave ?')) location.href='{{ CRUDBooster::mainpath("import-data") }}'"
+            <li style="background:#eeeeee">
+                <a style="color:#111" onclick="if(confirm('Are you sure want to leave ?')) location.href='{{ CRUDBooster::mainpath("import-data") }}'"
                                               href='javascript:;'>
                     {!! CB::icon('download') !!} Upload a File &raquo;
                 </a>
@@ -31,7 +31,7 @@
         </div>
     @endif
 
-    @if(Request::get('file') && !Request::get('import'))
+    @if(request('file') && !request('import'))
 
         @include('crudbooster::_import.nav')
 
@@ -51,7 +51,7 @@
                 $action_path = CRUDBooster::mainpath();
             }
 
-            $action = $action_path."/done-import?file=".Request::get('file').'&import=1';
+            $action = $action_path."/done-import?file=".request('file').'&import=1';
             ?>
 
             @include('crudbooster::_import.form')
@@ -61,7 +61,7 @@
     @endif
 
 
-    @if(!Request::get('file'))
+    @if(!request('file'))
         <ul class='nav nav-tabs'>
             <li style="background:#ffffff" class='active'>
 
