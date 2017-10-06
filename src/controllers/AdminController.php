@@ -16,7 +16,7 @@ class AdminController extends CBController
         $data = [];
         $data['page_title'] = '<strong>Dashboard</strong>';
 
-        return view('crudbooster::home', $data);
+        return view('crudbooster::auth.home', $data);
     }
 
     public function getLockscreen()
@@ -27,7 +27,7 @@ class AdminController extends CBController
         }
 
         Session::put('admin_lock', 1);
-        return view('crudbooster::lockscreen');
+        return view('crudbooster::auth.lockscreen');
     }
 
     public function postUnlockScreen()
@@ -46,12 +46,11 @@ class AdminController extends CBController
 
     public function getLogin()
     {
-
         if (CRUDBooster::myId()) {
             return redirect(cbConfig('ADMIN_PATH'));
         }
 
-        return view('crudbooster::login');
+        return view('crudbooster::auth.login');
     }
 
     public function postLogin()
@@ -105,7 +104,7 @@ class AdminController extends CBController
             return redirect()->action('\crocodicstudio\crudbooster\controllers\AdminController@getIndex');
         }
 
-        return view('crudbooster::forgot');
+        return view('crudbooster::auth.forgot');
     }
 
     public function postForgot()
