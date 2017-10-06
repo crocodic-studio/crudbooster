@@ -665,22 +665,23 @@ class CRUDBooster
 
         $validator = Validator::make($input_arr, $arr);
 
-        if ($validator->fails()) {
-            $message = $validator->errors()->all();
+        if (!$validator->fails()) {
+            return true;
+        }
+        $message = $validator->errors()->all();
 
-            if ($type == 'json') {
-                $result = [];
-                $result['api_status'] = 0;
-                $result['api_message'] = implode(', ', $message);
-                response()->json($result, 200)->send();
-                exit;
-            }
-
-            $res = redirect()->back()->with(['message' => implode('<br/>', $message), 'message_type' => 'warning'])->withInput();
-            \Session::driver()->save();
-            $res->send();
+        if ($type == 'json') {
+            $result = [];
+            $result['api_status'] = 0;
+            $result['api_message'] = implode(', ', $message);
+            response()->json($result, 200)->send();
             exit;
         }
+
+        $res = redirect()->back()->with(['message' => implode('<br/>', $message), 'message_type' => 'warning'])->withInput();
+        \Session::driver()->save();
+        $res->send();
+        exit;
     }
 
     public static function flushCache()
