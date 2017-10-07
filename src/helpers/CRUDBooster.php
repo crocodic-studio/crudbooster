@@ -1194,164 +1194,7 @@ class CRUDBooster
             # START FORM DO NOT REMOVE THIS LINE
             \$this->form = [];';
 
-        foreach ($coloms as $i => $c) {
-            //$attribute = [];
-            $validation = [];
-            $validation[] = 'required';
-            $placeholder = '';
-            $help = '';
-            $options = [];
-
-            $label = str_replace("id_", "", $c);
-            $label = ucwords(str_replace("_", " ", $label));
-            $field = $c;
-
-            if (in_array($field, $exception)) {
-                continue;
-            }
-
-            $typedata = CRUDBooster::getFieldType($table, $field);
-
-            switch ($typedata) {
-                default:
-                case 'varchar':
-                case 'char':
-                    $type = "text";
-                    $validation[] = "min:1|max:255";
-                    break;
-                case 'text':
-                case 'longtext':
-                    $type = 'textarea';
-                    $validation[] = "string|min:5";
-                    break;
-                case 'date':
-                    $type = 'date';
-                    $validation[] = "date";
-                    $options = [
-                        'php_format' => 'M, d Y',
-                        'datepicker_format' => 'M, dd YYYY',
-                    ];
-                    break;
-                case 'datetime':
-                case 'timestamp':
-                    $type = 'datetime';
-                    $validation[] = "date_format:Y-m-d H:i:s";
-                    $options = [
-                        'php_format' => 'M, d Y H:i',
-                    ];
-                    break;
-                case 'time':
-                    $type = 'time';
-                    $validation[] = 'date_format:H:i:s';
-                    break;
-                case 'double':
-                    $type = 'money';
-                    $validation[] = "integer|min:0";
-                    break;
-                case 'int':
-                case 'integer':
-                    $type = 'number';
-                    $validation[] = 'integer|min:0';
-                    break;
-            }
-
-            if (substr($field, 0, 3) == 'id_') {
-                $jointable = str_replace('id_', '', $field);
-                if (Schema::hasTable($jointable)) {
-                    $joincols = CRUDBooster::getTableColumns($jointable);
-                    $joinname = CRUDBooster::getNameTable($joincols);
-                    $jointablePK = CB::pk($jointable);
-                    $type = 'select2_datatable';
-                    $options = [
-                        "table" => $jointable,
-                        "field_label" => $joinname,
-                        "field_value" => $jointablePK,
-                    ];
-                }
-            }
-
-            if (substr($field, -3) == '_id') {
-                $jointable = str_replace('_id', '', $field);
-                if (Schema::hasTable($jointable)) {
-                    $joincols = CRUDBooster::getTableColumns($jointable);
-                    $joinname = CRUDBooster::getNameTable($joincols);
-                    $jointablePK = CB::pk($jointable);
-                    $type = 'select2_datatable';
-                    $options = [
-                        "table" => $jointable,
-                        "field_label" => $joinname,
-                        "field_value" => $jointablePK,
-                    ];
-                }
-            }
-
-            if (substr($field, 0, 3) == 'is_') {
-                $type = 'radio_dataenum';
-                $label_field = ucwords(substr($field, 3));
-                $validation = ['required|integer'];
-                $options = [
-                    "enum" => ["In ".$label_field, $label_field],
-                    "value" => [0, 1],
-                ];
-            }
-
-            if (in_array($field, $password_candidate)) {
-                $type = 'password';
-                $validation = ['min:3', 'max:32'];
-                $help = trans("crudbooster.text_default_help_password");
-            }
-
-            if (in_array($field, $image_candidate)) {
-                $type = 'upload';
-                $help = trans('crudbooster.text_default_help_upload');
-                $validation = ['required|image'];
-            }
-
-            if ($field == 'latitude') {
-                $type = 'hidden';
-            }
-            if ($field == 'longitude') {
-                $type = 'hidden';
-            }
-
-            if (in_array($field, explode(',', cbConfig('PHONE_FIELDS_CANDIDATE')))) {
-                $type = 'number';
-                $validation = ['required', 'numeric'];
-                $placeholder = trans('crudbooster.text_default_help_number');
-            }
-
-            if (in_array($field, explode(',', cbConfig('EMAIL_FIELDS_CANDIDATE')))) {
-                $type = 'email';
-                $validation[] = 'email|unique:'.$table;
-                $placeholder = trans('crudbooster.text_default_help_email');
-            }
-
-            if ($type == 'text' && in_array($field, explode(',', cbConfig('NAME_FIELDS_CANDIDATE')))) {
-                $placeholder = trans('crudbooster.text_default_help_text');
-                $validation = ['required', 'string', 'min:3', 'max:70'];
-            }
-
-            if ($type == 'text' && in_array($field, explode(',', cbConfig("URL_FIELDS_CANDIDATE")))) {
-                $validation = ['required', 'url'];
-                $placeholder = trans('crudbooster.text_default_help_url');
-            }
-
-            $validation = implode('|', $validation);
-
-            $php .= "
-            ";
-            $formArray = [];
-            $formArray['label'] = $label;
-            $formArray['name'] = $field;
-            $formArray['type'] = $type;
-            $formArray['options'] = $options;
-            $formArray['required'] = true;
-            $formArray['validation'] = $validation;
-            $formArray['help'] = $help;
-            $formArray['placeholder'] = $placeholder;
-            $formArrayString = min_var_export($formArray, "            ");
-            $php .= '$this->form[] = '.$formArrayString.';';
-        }
+        $php = self::addFormToController($table, $coloms, $exception, $password_candidate, $image_candidate, $php);
 
         $php .= '
             # END FORM DO NOT REMOVE THIS LINE
@@ -1820,5 +1663,178 @@ class CRUDBooster
         }
 
         return $controllername;
+    }
+
+    /**
+     * @param $table
+     * @param $coloms
+     * @param $exception
+     * @param $password_candidate
+     * @param $image_candidate
+     * @param $php
+     * @return string
+     */
+    private static function addFormToController($table, $coloms, $exception, $password_candidate, $image_candidate, $php)
+    {
+        foreach ($coloms as $i => $c) {
+            //$attribute = [];
+            $validation = [];
+            $validation[] = 'required';
+            $placeholder = '';
+            $help = '';
+            $options = [];
+
+            $label = str_replace("id_", "", $c);
+            $label = ucwords(str_replace("_", " ", $label));
+            $field = $c;
+
+            if (in_array($field, $exception)) {
+                continue;
+            }
+
+            $typedata = CRUDBooster::getFieldType($table, $field);
+
+            switch ($typedata) {
+                default:
+                case 'varchar':
+                case 'char':
+                    $type = "text";
+                    $validation[] = "min:1|max:255";
+                    break;
+                case 'text':
+                case 'longtext':
+                    $type = 'textarea';
+                    $validation[] = "string|min:5";
+                    break;
+                case 'date':
+                    $type = 'date';
+                    $validation[] = "date";
+                    $options = [
+                        'php_format' => 'M, d Y',
+                        'datepicker_format' => 'M, dd YYYY',
+                    ];
+                    break;
+                case 'datetime':
+                case 'timestamp':
+                    $type = 'datetime';
+                    $validation[] = "date_format:Y-m-d H:i:s";
+                    $options = [
+                        'php_format' => 'M, d Y H:i',
+                    ];
+                    break;
+                case 'time':
+                    $type = 'time';
+                    $validation[] = 'date_format:H:i:s';
+                    break;
+                case 'double':
+                    $type = 'money';
+                    $validation[] = "integer|min:0";
+                    break;
+                case 'int':
+                case 'integer':
+                    $type = 'number';
+                    $validation[] = 'integer|min:0';
+                    break;
+            }
+
+            if (substr($field, 0, 3) == 'id_') {
+                $jointable = str_replace('id_', '', $field);
+                if (Schema::hasTable($jointable)) {
+                    $joincols = CRUDBooster::getTableColumns($jointable);
+                    $joinname = CRUDBooster::getNameTable($joincols);
+                    $jointablePK = CB::pk($jointable);
+                    $type = 'select2_datatable';
+                    $options = [
+                        "table" => $jointable,
+                        "field_label" => $joinname,
+                        "field_value" => $jointablePK,
+                    ];
+                }
+            }
+
+            if (substr($field, -3) == '_id') {
+                $jointable = str_replace('_id', '', $field);
+                if (Schema::hasTable($jointable)) {
+                    $joincols = CRUDBooster::getTableColumns($jointable);
+                    $joinname = CRUDBooster::getNameTable($joincols);
+                    $jointablePK = CB::pk($jointable);
+                    $type = 'select2_datatable';
+                    $options = [
+                        "table" => $jointable,
+                        "field_label" => $joinname,
+                        "field_value" => $jointablePK,
+                    ];
+                }
+            }
+
+            if (substr($field, 0, 3) == 'is_') {
+                $type = 'radio_dataenum';
+                $label_field = ucwords(substr($field, 3));
+                $validation = ['required|integer'];
+                $options = [
+                    "enum" => ["In ".$label_field, $label_field],
+                    "value" => [0, 1],
+                ];
+            }
+
+            if (in_array($field, $password_candidate)) {
+                $type = 'password';
+                $validation = ['min:3', 'max:32'];
+                $help = trans("crudbooster.text_default_help_password");
+            }
+
+            if (in_array($field, $image_candidate)) {
+                $type = 'upload';
+                $help = trans('crudbooster.text_default_help_upload');
+                $validation = ['required|image'];
+            }
+
+            if ($field == 'latitude') {
+                $type = 'hidden';
+            }
+            if ($field == 'longitude') {
+                $type = 'hidden';
+            }
+
+            if (in_array($field, explode(',', cbConfig('PHONE_FIELDS_CANDIDATE')))) {
+                $type = 'number';
+                $validation = ['required', 'numeric'];
+                $placeholder = trans('crudbooster.text_default_help_number');
+            }
+
+            if (in_array($field, explode(',', cbConfig('EMAIL_FIELDS_CANDIDATE')))) {
+                $type = 'email';
+                $validation[] = 'email|unique:'.$table;
+                $placeholder = trans('crudbooster.text_default_help_email');
+            }
+
+            if ($type == 'text' && in_array($field, explode(',', cbConfig('NAME_FIELDS_CANDIDATE')))) {
+                $placeholder = trans('crudbooster.text_default_help_text');
+                $validation = ['required', 'string', 'min:3', 'max:70'];
+            }
+
+            if ($type == 'text' && in_array($field, explode(',', cbConfig("URL_FIELDS_CANDIDATE")))) {
+                $validation = ['required', 'url'];
+                $placeholder = trans('crudbooster.text_default_help_url');
+            }
+
+            $validation = implode('|', $validation);
+
+            $php .= "
+            ";
+            $formArray = [];
+            $formArray['label'] = $label;
+            $formArray['name'] = $field;
+            $formArray['type'] = $type;
+            $formArray['options'] = $options;
+            $formArray['required'] = true;
+            $formArray['validation'] = $validation;
+            $formArray['help'] = $help;
+            $formArray['placeholder'] = $placeholder;
+            $formArrayString = min_var_export($formArray, "            ");
+            $php .= '$this->form[] = '.$formArrayString.';';
+        }
+
+        return $php;
     }
 }
