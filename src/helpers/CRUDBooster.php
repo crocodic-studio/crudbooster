@@ -1196,6 +1196,13 @@ class CRUDBooster
 
         $php = self::addFormToController($table, $coloms, $exception, $password_candidate, $image_candidate, $php);
 
+        $joinQuery = '';
+        if (count($joinList)) {
+            foreach ($joinList as $j) {
+                $joinQuery .= '$query->join("'.$j['table'].'","'.$j['field1'].'","=","'.$j['field2'].'");'."\n";
+            }
+        }
+
         $php .= '
             # END FORM DO NOT REMOVE THIS LINE
 
@@ -1373,16 +1380,7 @@ class CRUDBooster
 	        //Your code here
 	            
 	    }
-';
 
-        $joinQuery = '';
-        if (count($joinList)) {
-            foreach ($joinList as $j) {
-                $joinQuery .= '$query->join("'.$j['table'].'","'.$j['field1'].'","=","'.$j['field2'].'");'."\n";
-            }
-        }
-
-        $php .= '
 	    /*
 	    | ---------------------------------------------------------------------- 
 	    | Hook for manipulate query of index result 
@@ -1393,9 +1391,7 @@ class CRUDBooster
 	    public function hookQueryIndex(&$query) {
 	        //Your code here
 	        '.$joinQuery.'
-	    }
-';
-        $php .= '	    
+	    }  
 
 	    /*
 	    | ---------------------------------------------------------------------- 
