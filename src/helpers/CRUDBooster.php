@@ -1100,7 +1100,7 @@ class CRUDBooster
         $name_candidate = explode(',', cbConfig('NAME_FIELDS_CANDIDATE'));
         $url_candidate = explode(',', cbConfig("URL_FIELDS_CANDIDATE"));
 
-        $controllername = self::getControllerName($table, $name);
+        $controllerName = self::getControllerName($table, $name);
 
         $coloms = CRUDBooster::getTableColumns($table);
         $name_col = CRUDBooster::getNameTable($coloms);
@@ -1653,9 +1653,9 @@ class CRUDBooster
         $php = trim($php);
 
         //create file controller
-        file_put_contents(base_path("app/Http/Controllers/").'Admin'.$controllername.'.php', $php);
+        file_put_contents(base_path("app/Http/Controllers/").'Admin'.$controllerName.'.php', $php);
 
-        return 'Admin'.$controllername;
+        return 'Admin'.$controllerName;
     }
 
     public static function getTableColumns($table)
