@@ -285,7 +285,8 @@ class CRUDBooster  {
 		  		$menu->url_path = trim(str_replace(url('/'),'',$url),"/");
 
 		  		$child = DB::table('cms_menus')
-		  		->where('is_dashboard',0)
+                ->whereRaw("cms_menus.id IN (select id_cms_menus from cms_menus_privileges where id_cms_privileges = '".self::myPrivilegeId()."')")
+                ->where('is_dashboard',0)
 		  		->where('is_active',1)
 		  		->where('parent_id',$menu->id)
 		  		->select('cms_menus.*')
