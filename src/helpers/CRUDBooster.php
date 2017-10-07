@@ -1193,10 +1193,11 @@ class CRUDBooster
             }
         }
 
-        $php .= "\t\t\t# END COLUMNS DO NOT REMOVE THIS LINE";
-
-        $php .= "\n\n\t\t\t# START FORM DO NOT REMOVE THIS LINE";
-        $php .= "\n\t\t\t".'$this->form = [];';
+        $php .= '
+            # END COLUMNS DO NOT REMOVE THIS LINE
+        
+            # START FORM DO NOT REMOVE THIS LINE
+            \$this->form = [];';
 
         foreach ($coloms as $i => $c) {
             $attribute = [];
