@@ -1120,18 +1120,6 @@ class CRUDBooster
         $name_col = CRUDBooster::getNameTable($coloms);
         $pk = CB::pk($table);
 
-        $button_table_action = 'TRUE';
-        $button_action_style = "button_icon";
-        $button_add = 'TRUE';
-        $button_edit = 'TRUE';
-        $button_delete = 'TRUE';
-        $button_show = 'TRUE';
-        $button_detail = 'TRUE';
-        $button_filter = 'TRUE';
-        $button_export = 'FALSE';
-        $button_import = 'FALSE';
-        $button_bulk_action = 'TRUE';
-
         $php = '
 <?php namespace App\Http\Controllers;
 
@@ -1150,17 +1138,17 @@ class CRUDBooster
 			$this->limit               = 20;
 			$this->orderby             = "'.$pk.',desc";
 			$this->show_numbering      = FALSE;			      
-			$this->button_table_action = '.$button_table_action.';   
-			$this->button_action_style = "'.$button_action_style.'";     
-			$this->button_add          = '.$button_add.';
-			$this->button_delete       = '.$button_delete.';
-			$this->button_edit         = '.$button_edit.';
-			$this->button_detail       = '.$button_detail.';
-			$this->button_show         = '.$button_show.';
-			$this->button_filter       = '.$button_filter.';        
-			$this->button_export       = '.$button_export.';	        
-			$this->button_import       = '.$button_import.';
-			$this->button_bulk_action  = '.$button_bulk_action.';	
+			$this->button_table_action = '.'TRUE'.';   
+			$this->button_action_style = "'."button_icon".'";     
+			$this->button_add          = '.'TRUE'.';
+			$this->button_delete       = '.'TRUE'.';
+			$this->button_edit         = '.'TRUE'.';
+			$this->button_detail       = '.'TRUE'.';
+			$this->button_show         = '.'TRUE'.';
+			$this->button_filter       = '.'TRUE'.';        
+			$this->button_export       = '.'FALSE'.';	        
+			$this->button_import       = '.'FALSE'.';
+			$this->button_bulk_action  = '.'TRUE'.';	
 			# END CONFIGURATION DO NOT REMOVE THIS LINE						      
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
