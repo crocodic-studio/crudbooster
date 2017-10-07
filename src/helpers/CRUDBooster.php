@@ -1158,7 +1158,7 @@ class CRUDBooster
                 if (Schema::hasTable($jointable)) {
                     $joincols = CRUDBooster::getTableColumns($jointable);
                     $joinname = CRUDBooster::getNameTable($joincols);
-                    $php .= "            ".'$this->col[] = ["label"=>"'.$label.'","name"=>"'.$jointable.'.'.$joinname.'"];'."\n";
+                    $php .= "            \$this->col[] = ['label'=>$label,'name'=>'$jointable.$joinname'];"."\n";
                     $jointablePK = CB::pk($jointable);
                     $joinList[] = [
                         'table' => $jointable,
@@ -1171,7 +1171,7 @@ class CRUDBooster
                 if (Schema::hasTable($jointable)) {
                     $joincols = CRUDBooster::getTableColumns($jointable);
                     $joinname = CRUDBooster::getNameTable($joincols);
-                    $php .= "            ".'$this->col[] = ["label"=>"'.$label.'","name"=>"'.$jointable.'.'.$joinname.'"];'."\n";
+                    $php .= "            \$this->col[] = ['label'=>$label,'name'=>'$jointable.$joinname'];"."\n";
                     $jointablePK = CB::pk($jointable);
                     $joinList[] = [
                         'table' => $jointable,
@@ -1195,7 +1195,7 @@ class CRUDBooster
             \$this->form = [];';
 
         foreach ($coloms as $i => $c) {
-            $attribute = [];
+            //$attribute = [];
             $validation = [];
             $validation[] = 'required';
             $placeholder = '';
