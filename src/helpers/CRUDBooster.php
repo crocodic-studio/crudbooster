@@ -1100,20 +1100,7 @@ class CRUDBooster
         $name_candidate = explode(',', cbConfig('NAME_FIELDS_CANDIDATE'));
         $url_candidate = explode(',', cbConfig("URL_FIELDS_CANDIDATE"));
 
-        $controllername = ucwords(str_replace('_', ' ', $table));
-        $controllername = str_replace(' ', '', $controllername).'Controller';
-        if ($name) {
-            $controllername = ucwords(str_replace(['_', '-'], ' ', $name));
-            $controllername = str_replace(' ', '', $controllername).'Controller';
-        }
-
-        $countSameFile = count(glob(base_path("app/Http/Controllers/").'Admin'.$controllername.'.php'));
-
-        if ($countSameFile != 0) {
-            $suffix = $countSameFile;
-            $controllername = ucwords(str_replace(['_', '-'], ' ', $name)).$suffix;
-            $controllername = str_replace(' ', '', $controllername).'Controller';
-        }
+        $controllername = self::getControllerName($table, $name);
 
         $coloms = CRUDBooster::getTableColumns($table);
         $name_col = CRUDBooster::getNameTable($coloms);
@@ -1812,5 +1799,30 @@ class CRUDBooster
     public static function icon($icon)
     {
         return '<i class=\'fa fa-'.$icon.'\'></i>';
+    }
+
+    /**
+     * @param $table
+     * @param $name
+     * @return string
+     */
+    private static function getControllerName($table, $name)
+    {
+        $controllername = ucwords(str_replace('_', ' ', $table));
+        $controllername = str_replace(' ', '', $controllername).'Controller';
+        if ($name) {
+            $controllername = ucwords(str_replace(['_', '-'], ' ', $name));
+            $controllername = str_replace(' ', '', $controllername).'Controller';
+        }
+
+        $countSameFile = count(glob(base_path("app/Http/Controllers/").'Admin'.$controllername.'.php'));
+
+        if ($countSameFile != 0) {
+            $suffix = $countSameFile;
+            $controllername = ucwords(str_replace(['_', '-'], ' ', $name)).$suffix;
+            $controllername = str_replace(' ', '', $controllername).'Controller';
+        }
+
+        return $controllername;
     }
 }
