@@ -1097,8 +1097,9 @@ class CRUDBooster
         $coloms = CRUDBooster::getTableColumns($table);
         $pk = CB::pk($table);
 
-        $php = '
-<?php namespace App\Http\Controllers;
+        $php = '<?php
+ 
+    namespace App\Http\Controllers;
 
 	use Session;
 	use Request;
@@ -1131,64 +1132,7 @@ class CRUDBooster
 			# START COLUMNS DO NOT REMOVE THIS LINE
 	        $this->col = [];
 ';
-        $coloms_col = array_slice($coloms, 0, 8);
-        $joinList = [];
-
-        foreach ($coloms_col as $c) {
-            $label = str_replace("id_", "", $c);
-            $label = ucwords(str_replace("_", " ", $label));
-            $label = str_replace('Cms ', '', $label);
-            $field = $c;
-
-            if (in_array($field, ['id', 'created_at', 'updated_at', 'deleted_at'])) {
-                continue;
-            }
-
-            if (array_search($field, explode(',', cbConfig('PASSWORD_FIELDS_CANDIDATE'))) !== false) {
-                continue;
-            }
-
-            if (substr($field, 0, 3) == 'id_') {
-                $jointable = str_replace('id_', '', $field);
-
-                if (Schema::hasTable($jointable)) {
-                    $joincols = CRUDBooster::getTableColumns($jointable);
-                    $joinname = CRUDBooster::getNameTable($joincols);
-                    $php .= "            \$this->col[] = ['label'=>$label,'name'=>'$jointable.$joinname'];"."\n";
-                    $jointablePK = CB::pk($jointable);
-                    $joinList[] = [
-                        'table' => $jointable,
-                        'field1' => $jointable.'.'.$jointablePK,
-                        'field2' => $table.'.'.$pk,
-                    ];
-                }
-            } elseif (substr($field, -3) == '_id') {
-                $jointable = substr($field, 0, (strlen($field) - 3));
-                if (Schema::hasTable($jointable)) {
-                    $joincols = CRUDBooster::getTableColumns($jointable);
-                    $joinname = CRUDBooster::getNameTable($joincols);
-                    $php .= "            \$this->col[] = ['label'=>$label,'name'=>'$jointable.$joinname'];"."\n";
-                    $jointablePK = CB::pk($jointable);
-                    $joinList[] = [
-                        'table' => $jointable,
-                        'field1' => $jointable.'.'.$jointablePK,
-                        'field2' => $table.'.'.$pk,
-                    ];
-                }
-            } else {
-                $image = '';
-                if (in_array($field, explode(',', cbConfig('IMAGE_FIELDS_CANDIDATE')))) {
-                    $image = ',"image"=>true';
-                }
-                $php .= "            ".'$this->col[] = ["label"=>"'.$label.'","name"=>"'.$field.'" '.$image.'];'."\n";
-            }
-        }
-        $joinQuery = '';
-        if (count($joinList)) {
-            foreach ($joinList as $j) {
-                $joinQuery .= '$query->join("'.$j['table'].'","'.$j['field1'].'","=","'.$j['field2'].'");'."\n";
-            }
-        }
+        list($php, $joinQuery) = self::addCol($table, $coloms, $php, $pk);
 
         $php .= '
             # END COLUMNS DO NOT REMOVE THIS LINE
@@ -1196,7 +1140,7 @@ class CRUDBooster
             # START FORM DO NOT REMOVE THIS LINE
             \$this->form = [];';
 
-        $php = self::addFormToController($table, $coloms, ['id', 'created_at', 'updated_at', 'deleted_at'], explode(',', cbConfig('PASSWORD_FIELDS_CANDIDATE')), explode(',', cbConfig('IMAGE_FIELDS_CANDIDATE')), $php);
+        $php = self::addFormToController($table, $coloms, explode(',', cbConfig('PASSWORD_FIELDS_CANDIDATE')), explode(',', cbConfig('IMAGE_FIELDS_CANDIDATE')), $php);
 
         $php .= '
             # END FORM DO NOT REMOVE THIS LINE
@@ -1362,7 +1306,6 @@ class CRUDBooster
 	        
 	    }
 
-
 	    /*
 	    | ---------------------------------------------------------------------- 
 	    | Hook for button selected
@@ -1471,16 +1414,10 @@ class CRUDBooster
 
 	    }
 
-
-
 	    //By the way, you can still create your own method in here... :) 
 
-
 	}
-	        ';
-
-        $php = trim($php);
-
+';
         //create file controller
         file_put_contents(base_path("app/Http/Controllers/").'Admin'.$controllerName.'.php', $php);
 
@@ -1665,7 +1602,7 @@ class CRUDBooster
      * @param $php
      * @return string
      */
-    private static function addFormToController($table, $coloms, $exception, $password_candidate, $image_candidate, $php)
+    private static function addFormToController($table, $coloms, $password_candidate, $image_candidate, $php)
     {
         foreach ($coloms as $i => $c) {
             //$attribute = [];
@@ -1679,7 +1616,7 @@ class CRUDBooster
             $label = ucwords(str_replace("_", " ", $label));
             $field = $c;
 
-            if (in_array($field, $exception)) {
+            if (in_array($field, ['id', 'created_at', 'updated_at', 'deleted_at'])) {
                 continue;
             }
 
@@ -1827,5 +1764,76 @@ class CRUDBooster
         }
 
         return $php;
+    }
+
+    /**
+     * @param $table
+     * @param $coloms
+     * @param $php
+     * @param $pk
+     * @return array
+     */
+    private static function addCol($table, $coloms, $php, $pk)
+    {
+        $coloms_col = array_slice($coloms, 0, 8);
+        $joinList = [];
+
+        foreach ($coloms_col as $c) {
+            $label = str_replace("id_", "", $c);
+            $label = ucwords(str_replace("_", " ", $label));
+            $label = str_replace('Cms ', '', $label);
+            $field = $c;
+
+            if (in_array($field, ['id', 'created_at', 'updated_at', 'deleted_at'])) {
+                continue;
+            }
+
+            if (array_search($field, explode(',', cbConfig('PASSWORD_FIELDS_CANDIDATE'))) !== false) {
+                continue;
+            }
+
+            if (substr($field, 0, 3) == 'id_') {
+                $jointable = str_replace('id_', '', $field);
+
+                if (Schema::hasTable($jointable)) {
+                    $joincols = CRUDBooster::getTableColumns($jointable);
+                    $joinname = CRUDBooster::getNameTable($joincols);
+                    $php .= "            \$this->col[] = ['label'=>$label,'name'=>'$jointable.$joinname'];"."\n";
+                    $jointablePK = CB::pk($jointable);
+                    $joinList[] = [
+                        'table' => $jointable,
+                        'field1' => $jointable.'.'.$jointablePK,
+                        'field2' => $table.'.'.$pk,
+                    ];
+                }
+            } elseif (substr($field, -3) == '_id') {
+                $jointable = substr($field, 0, (strlen($field) - 3));
+                if (Schema::hasTable($jointable)) {
+                    $joincols = CRUDBooster::getTableColumns($jointable);
+                    $joinname = CRUDBooster::getNameTable($joincols);
+                    $php .= "            \$this->col[] = ['label'=>$label,'name'=>'$jointable.$joinname'];"."\n";
+                    $jointablePK = CB::pk($jointable);
+                    $joinList[] = [
+                        'table' => $jointable,
+                        'field1' => $jointable.'.'.$jointablePK,
+                        'field2' => $table.'.'.$pk,
+                    ];
+                }
+            } else {
+                $image = '';
+                if (in_array($field, explode(',', cbConfig('IMAGE_FIELDS_CANDIDATE')))) {
+                    $image = ',"image"=>true';
+                }
+                $php .= "            ".'$this->col[] = ["label"=>"'.$label.'","name"=>"'.$field.'" '.$image.'];'."\n";
+            }
+        }
+        $joinQuery = '';
+        if (count($joinList)) {
+            foreach ($joinList as $j) {
+                $joinQuery .= '$query->join("'.$j['table'].'","'.$j['field1'].'","=","'.$j['field2'].'");'."\n";
+            }
+        }
+
+        return [$php, $joinQuery];
     }
 }
