@@ -1092,18 +1092,9 @@ class CRUDBooster
     public static function generateController($table, $name = null)
     {
 
-        $exception = ['id', 'created_at', 'updated_at', 'deleted_at'];
-        $image_candidate = explode(',', cbConfig('IMAGE_FIELDS_CANDIDATE'));
-        $password_candidate = explode(',', cbConfig('PASSWORD_FIELDS_CANDIDATE'));
-        $phone_candidate = explode(',', cbConfig('PHONE_FIELDS_CANDIDATE'));
-        $email_candidate = explode(',', cbConfig('EMAIL_FIELDS_CANDIDATE'));
-        $name_candidate = explode(',', cbConfig('NAME_FIELDS_CANDIDATE'));
-        $url_candidate = explode(',', cbConfig("URL_FIELDS_CANDIDATE"));
-
         $controllerName = self::getControllerName($table, $name);
 
         $coloms = CRUDBooster::getTableColumns($table);
-        $name_col = CRUDBooster::getNameTable($coloms);
         $pk = CB::pk($table);
 
         $php = '
@@ -1115,12 +1106,12 @@ class CRUDBooster
 	use CRUDBooster;
 	use CB;
 
-	class Admin'.$controllername.' extends \crocodicstudio\crudbooster\controllers\CBController {
+	class Admin'.$controllerName.' extends \crocodicstudio\crudbooster\controllers\CBController {
 
 	    public function cbInit() {
 	    	# START CONFIGURATION DO NOT REMOVE THIS LINE
 			$this->table 			   = "'.$table.'";	        
-			$this->title_field         = "'.$name_col.'";
+			$this->title_field         = "'.CRUDBooster::getNameTable($coloms).'";
 			$this->limit               = 20;
 			$this->orderby             = "'.$pk.',desc";
 			$this->show_numbering      = FALSE;			      
@@ -1140,6 +1131,10 @@ class CRUDBooster
 			# START COLUMNS DO NOT REMOVE THIS LINE
 	        $this->col = [];
 ';
+        $exception = ['id', 'created_at', 'updated_at', 'deleted_at'];
+        $image_candidate = explode(',', cbConfig('IMAGE_FIELDS_CANDIDATE'));
+        $password_candidate = explode(',', cbConfig('PASSWORD_FIELDS_CANDIDATE'));
+        
         $coloms_col = array_slice($coloms, 0, 8);
         $joinList = [];
 
@@ -1319,31 +1314,32 @@ class CRUDBooster
                 $type = 'hidden';
             }
 
-            if (in_array($field, $phone_candidate)) {
+            if (in_array($field, explode(',', cbConfig('PHONE_FIELDS_CANDIDATE')))) {
                 $type = 'number';
                 $validation = ['required', 'numeric'];
                 $placeholder = trans('crudbooster.text_default_help_number');
             }
 
-            if (in_array($field, $email_candidate)) {
+            if (in_array($field, explode(',', cbConfig('EMAIL_FIELDS_CANDIDATE')))) {
                 $type = 'email';
                 $validation[] = 'email|unique:'.$table;
                 $placeholder = trans('crudbooster.text_default_help_email');
             }
 
-            if ($type == 'text' && in_array($field, $name_candidate)) {
+            if ($type == 'text' && in_array($field, explode(',', cbConfig('NAME_FIELDS_CANDIDATE')))) {
                 $placeholder = trans('crudbooster.text_default_help_text');
                 $validation = ['required', 'string', 'min:3', 'max:70'];
             }
 
-            if ($type == 'text' && in_array($field, $url_candidate)) {
+            if ($type == 'text' && in_array($field, explode(',', cbConfig("URL_FIELDS_CANDIDATE")))) {
                 $validation = ['required', 'url'];
                 $placeholder = trans('crudbooster.text_default_help_url');
             }
 
             $validation = implode('|', $validation);
 
-            $php .= "\n\t\t\t";
+            $php .= "
+            ";
             $formArray = [];
             $formArray['label'] = $label;
             $formArray['name'] = $field;
@@ -1353,13 +1349,12 @@ class CRUDBooster
             $formArray['validation'] = $validation;
             $formArray['help'] = $help;
             $formArray['placeholder'] = $placeholder;
-            $formArrayString = min_var_export($formArray, "\t\t\t");
+            $formArrayString = min_var_export($formArray, "            ");
             $php .= '$this->form[] = '.$formArrayString.';';
         }
 
-        $php .= "\n\t\t\t# END FORM DO NOT REMOVE THIS LINE";
-
-        $php .= '     
+        $php .= '
+            # END FORM DO NOT REMOVE THIS LINE
 
 			/* 
 	        | ---------------------------------------------------------------------- 
