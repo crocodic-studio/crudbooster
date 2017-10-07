@@ -1131,10 +1131,6 @@ class CRUDBooster
 			# START COLUMNS DO NOT REMOVE THIS LINE
 	        $this->col = [];
 ';
-        $exception = ['id', 'created_at', 'updated_at', 'deleted_at'];
-        $image_candidate = explode(',', cbConfig('IMAGE_FIELDS_CANDIDATE'));
-        $password_candidate = explode(',', cbConfig('PASSWORD_FIELDS_CANDIDATE'));
-
         $coloms_col = array_slice($coloms, 0, 8);
         $joinList = [];
 
@@ -1144,11 +1140,11 @@ class CRUDBooster
             $label = str_replace('Cms ', '', $label);
             $field = $c;
 
-            if (in_array($field, $exception)) {
+            if (in_array($field, ['id', 'created_at', 'updated_at', 'deleted_at'])) {
                 continue;
             }
 
-            if (array_search($field, $password_candidate) !== false) {
+            if (array_search($field, explode(',', cbConfig('PASSWORD_FIELDS_CANDIDATE'))) !== false) {
                 continue;
             }
 
@@ -1181,10 +1177,16 @@ class CRUDBooster
                 }
             } else {
                 $image = '';
-                if (in_array($field, $image_candidate)) {
+                if (in_array($field, explode(',', cbConfig('IMAGE_FIELDS_CANDIDATE')))) {
                     $image = ',"image"=>true';
                 }
                 $php .= "            ".'$this->col[] = ["label"=>"'.$label.'","name"=>"'.$field.'" '.$image.'];'."\n";
+            }
+        }
+        $joinQuery = '';
+        if (count($joinList)) {
+            foreach ($joinList as $j) {
+                $joinQuery .= '$query->join("'.$j['table'].'","'.$j['field1'].'","=","'.$j['field2'].'");'."\n";
             }
         }
 
@@ -1194,14 +1196,7 @@ class CRUDBooster
             # START FORM DO NOT REMOVE THIS LINE
             \$this->form = [];';
 
-        $php = self::addFormToController($table, $coloms, $exception, $password_candidate, $image_candidate, $php);
-
-        $joinQuery = '';
-        if (count($joinList)) {
-            foreach ($joinList as $j) {
-                $joinQuery .= '$query->join("'.$j['table'].'","'.$j['field1'].'","=","'.$j['field2'].'");'."\n";
-            }
-        }
+        $php = self::addFormToController($table, $coloms, ['id', 'created_at', 'updated_at', 'deleted_at'], explode(',', cbConfig('PASSWORD_FIELDS_CANDIDATE')), explode(',', cbConfig('IMAGE_FIELDS_CANDIDATE')), $php);
 
         $php .= '
             # END FORM DO NOT REMOVE THIS LINE
