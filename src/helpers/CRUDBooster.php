@@ -1107,8 +1107,7 @@ class CRUDBooster
             $controllername = str_replace(' ', '', $controllername).'Controller';
         }
 
-        $path = base_path("app/Http/Controllers/");
-        $countSameFile = count(glob($path.'Admin'.$controllername.'.php'));
+        $countSameFile = count(glob(base_path("app/Http/Controllers/").'Admin'.$controllername.'.php'));
 
         if ($countSameFile != 0) {
             $suffix = $countSameFile;
@@ -1666,7 +1665,7 @@ class CRUDBooster
         $php = trim($php);
 
         //create file controller
-        file_put_contents($path.'Admin'.$controllername.'.php', $php);
+        file_put_contents(base_path("app/Http/Controllers/").'Admin'.$controllername.'.php', $php);
 
         return 'Admin'.$controllername;
     }
