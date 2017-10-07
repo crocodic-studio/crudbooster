@@ -14,14 +14,7 @@
         </script>
     @endpush
 
-    <ul class="nav nav-tabs">
-        <li><a href="{{ CRUDBooster::mainpath() }}"><i class='fa fa-file'></i> List API</a></li>
-
-        <li class="active"><a href="{{ CRUDBooster::mainpath('generator') }}"><i class='fa fa-cog'></i> API
-                Generator</a></li>
-        <li><a href="{{ CRUDBooster::mainpath('screet-key') }}"><i class='fa fa-key'></i> API Secret Key</a></li>
-        <li><a href="{{ url('api/doc')}}" target="_blank"><i class='fa fa-book'></i> API Documentation</a></li>
-    </ul>
+    @include('crudbooster::api_generator._generator.tabs')
 
     <div class='box'>
 
@@ -816,7 +809,7 @@
                     <input type='submit' class='btn btn-success' value='SAVE & GENERATE API'/>
                 </div>
 
-
+            </form>
         </div><!--END BODY-->
     </div><!--END BOX-->
 
