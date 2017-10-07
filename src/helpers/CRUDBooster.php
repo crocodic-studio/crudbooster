@@ -1134,7 +1134,7 @@ class CRUDBooster
         $exception = ['id', 'created_at', 'updated_at', 'deleted_at'];
         $image_candidate = explode(',', cbConfig('IMAGE_FIELDS_CANDIDATE'));
         $password_candidate = explode(',', cbConfig('PASSWORD_FIELDS_CANDIDATE'));
-        
+
         $coloms_col = array_slice($coloms, 0, 8);
         $joinList = [];
 
@@ -1158,7 +1158,7 @@ class CRUDBooster
                 if (Schema::hasTable($jointable)) {
                     $joincols = CRUDBooster::getTableColumns($jointable);
                     $joinname = CRUDBooster::getNameTable($joincols);
-                    $php .= "\t\t\t".'$this->col[] = ["label"=>"'.$label.'","name"=>"'.$jointable.'.'.$joinname.'"];'."\n";
+                    $php .= "            ".'$this->col[] = ["label"=>"'.$label.'","name"=>"'.$jointable.'.'.$joinname.'"];'."\n";
                     $jointablePK = CB::pk($jointable);
                     $joinList[] = [
                         'table' => $jointable,
@@ -1171,7 +1171,7 @@ class CRUDBooster
                 if (Schema::hasTable($jointable)) {
                     $joincols = CRUDBooster::getTableColumns($jointable);
                     $joinname = CRUDBooster::getNameTable($joincols);
-                    $php .= "\t\t\t".'$this->col[] = ["label"=>"'.$label.'","name"=>"'.$jointable.'.'.$joinname.'"];'."\n";
+                    $php .= "            ".'$this->col[] = ["label"=>"'.$label.'","name"=>"'.$jointable.'.'.$joinname.'"];'."\n";
                     $jointablePK = CB::pk($jointable);
                     $joinList[] = [
                         'table' => $jointable,
@@ -1184,7 +1184,7 @@ class CRUDBooster
                 if (in_array($field, $image_candidate)) {
                     $image = ',"image"=>true';
                 }
-                $php .= "\t\t\t".'$this->col[] = ["label"=>"'.$label.'","name"=>"'.$field.'" '.$image.'];'."\n";
+                $php .= "            ".'$this->col[] = ["label"=>"'.$label.'","name"=>"'.$field.'" '.$image.'];'."\n";
             }
         }
 
