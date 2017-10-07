@@ -1138,17 +1138,17 @@ class CRUDBooster
 			$this->limit               = 20;
 			$this->orderby             = "'.$pk.',desc";
 			$this->show_numbering      = FALSE;			      
-			$this->button_table_action = '.'TRUE'.';   
-			$this->button_action_style = "'."button_icon".'";     
-			$this->button_add          = '.'TRUE'.';
-			$this->button_delete       = '.'TRUE'.';
-			$this->button_edit         = '.'TRUE'.';
-			$this->button_detail       = '.'TRUE'.';
-			$this->button_show         = '.'TRUE'.';
-			$this->button_filter       = '.'TRUE'.';        
-			$this->button_export       = '.'FALSE'.';	        
-			$this->button_import       = '.'FALSE'.';
-			$this->button_bulk_action  = '.'TRUE'.';	
+			$this->button_table_action = TRUE;   
+			$this->button_action_style = "button_icon";     
+			$this->button_add          = TRUE;
+			$this->button_delete       = TRUE;
+			$this->button_edit         = TRUE;
+			$this->button_detail       = TRUE;
+			$this->button_show         = TRUE;
+			$this->button_filter       = TRUE;        
+			$this->button_export       = FALSE;	        
+			$this->button_import       = FALSE;
+			$this->button_bulk_action  = TRUE;	
 			# END CONFIGURATION DO NOT REMOVE THIS LINE						      
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
