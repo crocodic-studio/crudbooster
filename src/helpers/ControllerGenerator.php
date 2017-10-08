@@ -431,7 +431,7 @@ class ControllerGenerator
                     break;
             }
 
-            if (substr($field, 0, 3) == 'id_' || substr($field, -3) == '_id') {
+            if (self::isForeignKey($field)) {
                 $jointable = str_replace(['id_', '_id'], '', $field);
                 if (Schema::hasTable($jointable)) {
                     $joincols = CRUDBooster::getTableColumns($jointable);
@@ -540,7 +540,7 @@ class ControllerGenerator
                 continue;
             }
 
-            if (substr($field, 0, 3) == 'id_' || substr($field, -3) == '_id') {
+            if (self::isForeignKey($field)) {
                 $jointable = str_replace(['id_', '_id'], '', $field);
 
                 if (Schema::hasTable($jointable)) {
@@ -615,5 +615,14 @@ class ControllerGenerator
     private static function isExceptional($field)
     {
         return in_array($field, ['id', 'created_at', 'updated_at', 'deleted_at']);
+    }
+
+    /**
+     * @param $field
+     * @return bool
+     */
+    private static function isForeignKey($field)
+    {
+        return substr($field, 0, 3) == 'id_' || substr($field, -3) == '_id';
     }
 }
