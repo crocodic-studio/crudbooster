@@ -477,7 +477,7 @@ class ControllerGenerator
                 $help = trans("crudbooster.text_default_help_password");
             }
 
-            if (in_array($field, explode(',', cbConfig('IMAGE_FIELDS_CANDIDATE')))) {
+            if (self::isImage($field)) {
                 $type = 'upload';
                 $help = trans('crudbooster.text_default_help_upload');
                 $validation = ['required|image'];
@@ -584,7 +584,7 @@ class ControllerGenerator
                 }
             } else {
                 $image = '';
-                if (in_array($field, explode(',', cbConfig('IMAGE_FIELDS_CANDIDATE')))) {
+                if (self::isImage($field)) {
                     $image = ',"image"=>true';
                 }
                 $php .= "            ".'$this->col[] = ["label"=>"'.$label.'","name"=>"'.$field.'" '.$image.'];'."\n";
@@ -625,5 +625,14 @@ class ControllerGenerator
     private static function isPhone($field)
     {
         return in_array($field, explode(',', cbConfig('PHONE_FIELDS_CANDIDATE')));
+    }
+
+    /**
+     * @param $field
+     * @return bool
+     */
+    private static function isImage($field)
+    {
+        return in_array($field, explode(',', cbConfig('IMAGE_FIELDS_CANDIDATE')));
     }
 }
