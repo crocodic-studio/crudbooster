@@ -15,16 +15,10 @@ class CRUDBooster
 {
     public static function insert($table, $data = [])
     {
-        $data['id'] = DB::table($table)->max('id') + 1;
         if (! $data['created_at'] && Schema::hasColumn($table, 'created_at')) {
             $data['created_at'] = date('Y-m-d H:i:s');
         }
-
-        if (DB::table($table)->insert($data)) {
-            return $data['id'];
-        }
-
-        return false;
+        return DB::table($table)->insertGetId($data);
     }
 
     public static function get($table, $string_conditions = null, $orderby = null, $limit = null, $skip = null)
@@ -277,7 +271,13 @@ class CRUDBooster
 
     public static function sidebarMenu()
     {
-        $menu_active = DB::table('cms_menus')->where('id_cms_privileges', self::myPrivilegeId())->where('parent_id', 0)->where('is_active', 1)->where('is_dashboard', 0)->orderby('sorting', 'asc')->select('cms_menus.*')->get();
+        $menu_active = DB::table('cms_menus')
+            ->where('id_cms_privileges', self::myPrivilegeId())
+            ->where('parent_id', 0)->where('is_active', 1)
+            ->where('is_dashboard', 0)
+            ->orderby('sorting', 'asc')
+            ->select('cms_menus.*')
+            ->get();
 
         foreach ($menu_active as &$menu) {
 
@@ -286,7 +286,14 @@ class CRUDBooster
             $menu->url = $url;
             $menu->url_path = trim(str_replace(url('/'), '', $url), "/");
 
-            $child = DB::table('cms_menus')->where('is_dashboard', 0)->where('is_active', 1)->where('cms_privileges', 'like', '%"'.self::myPrivilegeName().'"%')->where('parent_id', $menu->id)->select('cms_menus.*')->orderby('sorting', 'asc')->get();
+            $child = DB::table('cms_menus')
+                ->where('is_dashboard', 0)
+                ->where('is_active', 1)
+                ->where('cms_privileges', 'like', '%"'.self::myPrivilegeName().'"%')
+                ->where('parent_id', $menu->id)
+                ->select('cms_menus.*')
+                ->orderby('sorting', 'asc')
+                ->get();
 
             if (count($child)) {
                 foreach ($child as &$c) {
