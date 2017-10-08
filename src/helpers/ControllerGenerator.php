@@ -366,10 +366,6 @@ class ControllerGenerator
     /**
      * @param $table
      * @param $coloms
-     * @param $exception
-     * @param $password_candidate
-     * @param $image_candidate
-     * @param $php
      * @return string
      */
     private static function addFormToController($table, $coloms)
@@ -475,7 +471,7 @@ class ControllerGenerator
                 ];
             }
 
-            if (in_array($field, explode(',', cbConfig('PASSWORD_FIELDS_CANDIDATE')))) {
+            if (self::isPassword($field)) {
                 $type = 'password';
                 $validation = ['min:3', 'max:32'];
                 $help = trans("crudbooster.text_default_help_password");
@@ -605,5 +601,14 @@ class ControllerGenerator
         }
 
         return [$php, $joinQuery];
+    }
+
+    /**
+     * @param $field
+     * @return bool
+     */
+    private static function isPassword($field)
+    {
+        return in_array($field, explode(',', cbConfig('PASSWORD_FIELDS_CANDIDATE')));
     }
 }
