@@ -47,7 +47,7 @@ class ControllerGenerator
 			# START COLUMNS DO NOT REMOVE THIS LINE
 	        $this->col = [];
 ';
-        list($php, $joinQuery) = self::addCol($table, $coloms, $php, $pk);
+        list($php, $joinList) = self::addCol($table, $coloms, $php, $pk);
 
 
         $php .= '
@@ -246,7 +246,11 @@ class ControllerGenerator
 	    */
 	    public function hookQueryIndex(&$query) {
 	        //Your code here
-	        '.$joinQuery.'
+';
+        foreach ($joinList as $join) {
+            $php .= '$query->join("'.$join['table'].'","'.$join['field1'].'","=","'.$join['field2'].'");'."\n";
+        }
+        $php .= '
 	    }  
 
 	    /*
@@ -559,14 +563,8 @@ class ControllerGenerator
                 $php .= "            ".'$this->col[] = ["label"=>"'.$label.'","name"=>"'.$field.'" '.$image.'];'."\n";
             }
         }
-        $joinQuery = '';
-        if (count($joinList)) {
-            foreach ($joinList as $join) {
-                $joinQuery .= '$query->join("'.$join['table'].'","'.$join['field1'].'","=","'.$join['field2'].'");'."\n";
-            }
-        }
 
-        return [$php, $joinQuery];
+        return [$php, $joinList];
     }
 
     /**
