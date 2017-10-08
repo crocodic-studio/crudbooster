@@ -90,19 +90,6 @@ if (! function_exists('readMethodContent')) {
             }
         }
 
-        // echo "Tag Buka: ".$tagBuka."<br/>";
-        // echo "Tag Pembukas: ".implode(",",$tagPembukas)."<br/>";
-        // echo "Tag Pentutups: ".implode(",",$tagPentutups)."<br/>";
-        // echo "Tag Penutups Last:".end($tagPentutups)."<br/>";
-        // echo "Tag Tutup: ".$tagTutup."<br/>";
-        // echo "Method Index:".implode(",",$methodIndex)."<br/>";
-        // echo "Method Index Last:".end($methodIndex)."<br/>";
-        // echo "Method Next Index: ".$methodNextIndex."<br/>";
-        // echo "Method Next Index Val: ".$methodIndex[$methodNextIndex]."<br/>";
-
-        // echo "Final Tag Pembuka: ".$tagBuka."<br/>";
-        // echo "Final Tag Penutup: ".$finalTagPenutup."<br/>";
-
         $content = [];
         foreach ($codeArray as $i => $c) {
             if ($i > $tagBuka && $i < $finalTagPenutup) {
@@ -111,9 +98,6 @@ if (! function_exists('readMethodContent')) {
         }
 
         return implode("\n", $content);
-        // // dd($codeArray);
-        // echo '<pre>';
-        // print_r($codeArray);
     }
 }
 
@@ -183,17 +167,6 @@ if (! function_exists('writeMethodContent')) {
                 }
             }
         }
-
-        // echo "Tag Buka: ".$tagBuka."<br/>";
-        // echo "Tag Pembukas: ".implode(",",$tagPembukas)."<br/>";
-        // echo "Tag Pentutups: ".implode(",",$tagPentutups)."<br/>";
-        // echo "Tag Tutup: ".$tagTutup."<br/>";
-        // echo "Method Index:".implode(",",$methodIndex)."<br/>";
-        // echo "Method Next Index: ".$methodNextIndex."<br/>";
-        // echo "Method Next Index Val: ".$methodIndex[$methodNextIndex]."<br/>";
-
-        // echo "Final Tag Pembuka: ".$tagBuka."<br/>";
-        // echo "Final Tag Penutup: ".$finalTagPenutup."<br/>";
 
         //Removing Content Of Method
         foreach ($codeArray as $i => $c) {
