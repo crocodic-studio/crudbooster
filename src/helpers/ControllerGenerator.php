@@ -55,7 +55,7 @@ class ControllerGenerator
             # START FORM DO NOT REMOVE THIS LINE
             \$this->form = [];';
 
-        $php = self::addFormToController($table, $coloms, $php);
+        $php .= self::generateFormConfig($table, $coloms);
 
         $php .= '
             # END FORM DO NOT REMOVE THIS LINE
@@ -368,7 +368,7 @@ class ControllerGenerator
      * @param $coloms
      * @return string
      */
-    private static function addFormToController($table, $coloms)
+    private static function generateFormConfig($table, $coloms)
     {
         foreach ($coloms as $i => $c) {
             //$attribute = [];
