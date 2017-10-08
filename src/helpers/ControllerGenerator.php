@@ -12,6 +12,7 @@ class ControllerGenerator
         $coloms = CRUDBooster::getTableColumns($table);
         $pk = CB::pk($table);
         $formArrayString = self::generateFormConfig($table, $coloms);
+        list($cols, $joinList) = self::addCol($table, $coloms, $pk);
         $php = '<?php
  
     namespace App\Http\Controllers;
@@ -47,8 +48,9 @@ class ControllerGenerator
 			# START COLUMNS DO NOT REMOVE THIS LINE
 	        $this->col = [];
 ';
-        list($php, $joinList) = self::addCol($table, $coloms, $php, $pk);
-
+        foreach($cols as $col){
+            $php .= '            $this->col[]'." = ['label' => {$col['label']}, 'name' => '{$col["name"]}'];\n";
+        }
 
         $php .= '
             # END COLUMNS DO NOT REMOVE THIS LINE
@@ -526,10 +528,11 @@ class ControllerGenerator
      * @param $pk
      * @return array
      */
-    private static function addCol($table, $coloms, $php, $pk)
+    private static function addCol($table, $coloms, $pk)
     {
         $coloms_col = array_slice($coloms, 0, 8);
         $joinList = [];
+        $cols = [];
 
         foreach ($coloms_col as $c) {
             $label = str_replace("id_", "", $c);
@@ -547,7 +550,7 @@ class ControllerGenerator
                 if (Schema::hasTable($jointable)) {
                     $joincols = CRUDBooster::getTableColumns($jointable);
                     $joinname = CRUDBooster::getNameTable($joincols);
-                    $php .= '            $this->col[]'." = ['label' => $label, 'name' => '$jointable.$joinname'];\n";
+                    $cols[] = ['label' => $label, 'name' =>  "$jointable.$joinname"];
                     $jointablePK = CB::pk($jointable);
                     $joinList[] = [
                         'table' => $jointable,
@@ -560,11 +563,11 @@ class ControllerGenerator
                 if (self::isImage($field)) {
                     $image = '"image" => true';
                 }
-                $php .= '            $this->col[]'." = ['label' => $label, 'name' => '$field', $image];\n";
+                $cols[] = ['label' => $label, 'name' =>  "'$field', $image"];
             }
         }
 
-        return [$php, $joinList];
+        return [$cols, $joinList];
     }
 
     /**
