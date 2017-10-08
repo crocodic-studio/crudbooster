@@ -105,13 +105,14 @@ if (! function_exists('parseScaffoldingToArray')) {
         }
 
         foreach ($colsItem as &$form) {
-            if ($type == 'form') {
-                if ($form['options']) {
-                    @eval("\$options = $form[options];");
-                    @$form['options'] = $options;
-                } else {
-                    $form['options'] = [];
-                }
+            if ($type !== 'form') {
+                continue;
+            }
+            if ($form['options']) {
+                @eval("\$options = $form[options];");
+                @$form['options'] = $options;
+            } else {
+                $form['options'] = [];
             }
         }
 
