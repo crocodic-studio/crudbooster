@@ -48,14 +48,17 @@ class ControllerGenerator
 	        $this->col = [];
 ';
         list($php, $joinQuery) = self::addCol($table, $coloms, $php, $pk);
+        $formArrayString = self::generateFormConfig($table, $coloms);
 
         $php .= '
             # END COLUMNS DO NOT REMOVE THIS LINE
         
             # START FORM DO NOT REMOVE THIS LINE
-            \$this->form = [];';
-
-        $php .= self::generateFormConfig($table, $coloms);
+            \$this->form = [];
+            ';
+        foreach($formArrayString as $formArray){
+            $php .= '$this->form[] = '.$formArray.';';
+        }
 
         $php .= '
             # END FORM DO NOT REMOVE THIS LINE
@@ -370,6 +373,7 @@ class ControllerGenerator
      */
     private static function generateFormConfig($table, $coloms)
     {
+        $formArrayString = [];
         foreach ($coloms as $i => $c) {
             //$attribute = [];
             $validation = [];
@@ -505,13 +509,10 @@ class ControllerGenerator
             $formArray['validation'] = $validation;
             $formArray['help'] = $help;
             $formArray['placeholder'] = $placeholder;
-            $formArrayString = min_var_export($formArray, "            ");
-            $php = "
-            ";
-            $php .= '$this->form[] = '.$formArrayString.';';
+            $formArrayString[] = min_var_export($formArray, "            ");
         }
 
-        return $php;
+        return $formArrayString;
     }
 
     /**
