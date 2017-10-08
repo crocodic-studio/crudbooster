@@ -555,22 +555,9 @@ class ControllerGenerator
                 continue;
             }
 
-            if (substr($field, 0, 3) == 'id_') {
-                $jointable = str_replace('id_', '', $field);
+            if (substr($field, 0, 3) == 'id_' || substr($field, -3) == '_id') {
+                $jointable = str_replace(['id_', '_id'], '', $field);
 
-                if (Schema::hasTable($jointable)) {
-                    $joincols = CRUDBooster::getTableColumns($jointable);
-                    $joinname = CRUDBooster::getNameTable($joincols);
-                    $php .= "            \$this->col[] = ['label'=>$label,'name'=>'$jointable.$joinname'];"."\n";
-                    $jointablePK = CB::pk($jointable);
-                    $joinList[] = [
-                        'table' => $jointable,
-                        'field1' => $jointable.'.'.$jointablePK,
-                        'field2' => $table.'.'.$pk,
-                    ];
-                }
-            } elseif (substr($field, -3) == '_id') {
-                $jointable = substr($field, 0, (strlen($field) - 3));
                 if (Schema::hasTable($jointable)) {
                     $joincols = CRUDBooster::getTableColumns($jointable);
                     $joinname = CRUDBooster::getNameTable($joincols);
