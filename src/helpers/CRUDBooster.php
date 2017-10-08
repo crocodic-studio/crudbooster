@@ -1060,29 +1060,22 @@ class CRUDBooster
 				$this->permalink   = "'.$permalink.'";    
 				$this->method_type = "'.$method_type.'";    
 		    }
-		';
-
-        $php .= "\n".'
+		
 		    public function hook_before(&$postdata) {
 		        //This method will be execute before run the main process
 
-		    }';
-
-        $php .= "\n".'
+		    }
+		    
 		    public function hook_query(&$query) {
 		        //This method is to customize the sql query
 
-		    }';
-
-        $php .= "\n".'
+		    }
+		    
 		    public function hook_after($postdata,&$result) {
 		        //This method will be execute after run the main process
 
-		    }';
-
-        $php .= "\n".'
-		}
-		';
+		    }
+';
 
         $php = trim($php);
         $path = base_path("app/Http/Controllers/");
