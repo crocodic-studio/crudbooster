@@ -490,13 +490,13 @@ class ControllerGenerator
                 $type = 'hidden';
             }
 
-            if (in_array($field, explode(',', cbConfig('PHONE_FIELDS_CANDIDATE')))) {
+            if (self::isPhone($field)) {
                 $type = 'number';
                 $validation = ['required', 'numeric'];
                 $placeholder = trans('crudbooster.text_default_help_number');
             }
 
-            if (in_array($field, explode(',', cbConfig('EMAIL_FIELDS_CANDIDATE')))) {
+            if (self::isEmail($field)) {
                 $type = 'email';
                 $validation[] = 'email|unique:'.$table;
                 $placeholder = trans('crudbooster.text_default_help_email');
@@ -610,5 +610,23 @@ class ControllerGenerator
     private static function isPassword($field)
     {
         return in_array($field, explode(',', cbConfig('PASSWORD_FIELDS_CANDIDATE')));
+    }
+
+    /**
+     * @param $field
+     * @return bool
+     */
+    private static function isEmail($field)
+    {
+        return in_array($field, explode(',', cbConfig('EMAIL_FIELDS_CANDIDATE')));
+    }
+
+    /**
+     * @param $field
+     * @return bool
+     */
+    private static function isPhone($field)
+    {
+        return in_array($field, explode(',', cbConfig('PHONE_FIELDS_CANDIDATE')));
     }
 }
