@@ -1045,7 +1045,7 @@ class CRUDBooster
 
     public static function generateAPI($controller_name, $table_name, $permalink, $method_type = 'post')
     {
-        $php = view('crudbooster::file_stubs.api_stub', compact('controller_name', 'table_name', 'permalink', 'method_type'))->render();
+        $php = '<?php '.view('crudbooster::file_stubs.api_stub', compact('controller_name', 'table_name', 'permalink', 'method_type'))->render();
         $path = base_path("app/Http/Controllers/");
         file_put_contents($path.'Api'.$controller_name.'Controller.php', $php);
     }
