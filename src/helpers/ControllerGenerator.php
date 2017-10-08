@@ -382,7 +382,7 @@ class ControllerGenerator
             $label = ucwords(str_replace("_", " ", $label));
             $field = $c;
 
-            if (in_array($field, ['id', 'created_at', 'updated_at', 'deleted_at'])) {
+            if (self::isExceptional($field)) {
                 continue;
             }
 
@@ -547,11 +547,11 @@ class ControllerGenerator
             $label = str_replace('Cms ', '', $label);
             $field = $c;
 
-            if (in_array($field, ['id', 'created_at', 'updated_at', 'deleted_at'])) {
+            if (self::isExceptional($field)) {
                 continue;
             }
 
-            if (array_search($field, explode(',', cbConfig('PASSWORD_FIELDS_CANDIDATE'))) !== false) {
+            if (self::isPassword($field)) {
                 continue;
             }
 
@@ -621,5 +621,14 @@ class ControllerGenerator
     private static function isImage($field)
     {
         return in_array($field, explode(',', cbConfig('IMAGE_FIELDS_CANDIDATE')));
+    }
+
+    /**
+     * @param $field
+     * @return bool
+     */
+    private static function isExceptional($field)
+    {
+        return in_array($field, ['id', 'created_at', 'updated_at', 'deleted_at']);
     }
 }
