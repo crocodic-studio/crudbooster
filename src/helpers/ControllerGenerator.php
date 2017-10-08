@@ -483,10 +483,7 @@ class ControllerGenerator
                 $validation = ['required|image'];
             }
 
-            if ($field == 'latitude') {
-                $type = 'hidden';
-            }
-            if ($field == 'longitude') {
+            if ($field == 'latitude' || $field == 'longitude') {
                 $type = 'hidden';
             }
 
