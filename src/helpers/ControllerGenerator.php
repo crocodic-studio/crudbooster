@@ -11,7 +11,7 @@ class ControllerGenerator
 
         $coloms = CRUDBooster::getTableColumns($table);
         $pk = CB::pk($table);
-
+        $formArrayString = self::generateFormConfig($table, $coloms);
         $php = '<?php
  
     namespace App\Http\Controllers;
@@ -48,7 +48,7 @@ class ControllerGenerator
 	        $this->col = [];
 ';
         list($php, $joinQuery) = self::addCol($table, $coloms, $php, $pk);
-        $formArrayString = self::generateFormConfig($table, $coloms);
+
 
         $php .= '
             # END COLUMNS DO NOT REMOVE THIS LINE
@@ -561,8 +561,8 @@ class ControllerGenerator
         }
         $joinQuery = '';
         if (count($joinList)) {
-            foreach ($joinList as $j) {
-                $joinQuery .= '$query->join("'.$j['table'].'","'.$j['field1'].'","=","'.$j['field2'].'");'."\n";
+            foreach ($joinList as $join) {
+                $joinQuery .= '$query->join("'.$join['table'].'","'.$join['field1'].'","=","'.$join['field2'].'");'."\n";
             }
         }
 
