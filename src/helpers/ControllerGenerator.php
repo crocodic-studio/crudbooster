@@ -484,12 +484,12 @@ class ControllerGenerator
                 $placeholder = trans('crudbooster.text_default_help_email');
             }
 
-            if ($type == 'text' && in_array($field, explode(',', cbConfig('NAME_FIELDS_CANDIDATE')))) {
+            if ($type == 'text' && self::isNameField($field)) {
                 $placeholder = trans('crudbooster.text_default_help_text');
                 $validation = ['required', 'string', 'min:3', 'max:70'];
             }
 
-            if ($type == 'text' && in_array($field, explode(',', cbConfig("URL_FIELDS_CANDIDATE")))) {
+            if ($type == 'text' && self::isUrlField($field)) {
                 $validation = ['required', 'url'];
                 $placeholder = trans('crudbooster.text_default_help_url');
             }
@@ -629,5 +629,23 @@ class ControllerGenerator
     private static function isGeographical($field)
     {
         return $field == 'latitude' || $field == 'longitude';
+    }
+
+    /**
+     * @param $field
+     * @return bool
+     */
+    private static function isNameField($field)
+    {
+        return in_array($field, explode(',', cbConfig('NAME_FIELDS_CANDIDATE')));
+    }
+
+    /**
+     * @param $field
+     * @return bool
+     */
+    private static function isUrlField($field)
+    {
+        return in_array($field, explode(',', cbConfig("URL_FIELDS_CANDIDATE")));
     }
 }
