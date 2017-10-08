@@ -431,23 +431,8 @@ class ControllerGenerator
                     break;
             }
 
-            if (substr($field, 0, 3) == 'id_') {
-                $jointable = str_replace('id_', '', $field);
-                if (Schema::hasTable($jointable)) {
-                    $joincols = CRUDBooster::getTableColumns($jointable);
-                    $joinname = CRUDBooster::getNameTable($joincols);
-                    $jointablePK = CB::pk($jointable);
-                    $type = 'select2_datatable';
-                    $options = [
-                        "table" => $jointable,
-                        "field_label" => $joinname,
-                        "field_value" => $jointablePK,
-                    ];
-                }
-            }
-
-            if (substr($field, -3) == '_id') {
-                $jointable = str_replace('_id', '', $field);
+            if (substr($field, 0, 3) == 'id_' || substr($field, -3) == '_id') {
+                $jointable = str_replace(['id_', '_id'], '', $field);
                 if (Schema::hasTable($jointable)) {
                     $joincols = CRUDBooster::getTableColumns($jointable);
                     $joinname = CRUDBooster::getNameTable($joincols);
