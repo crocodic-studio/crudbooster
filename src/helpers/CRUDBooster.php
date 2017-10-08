@@ -351,8 +351,10 @@ class CRUDBooster
 
     public static function isColumnNULL($table, $field)
     {
-        if (Cache::has('field_isNull_'.$table.'_'.$field)) {
-            return Cache::get('field_isNull_'.$table.'_'.$field);
+        $cacheKey = 'field_isNull_'.$table.'_'.$field;
+
+        if (Cache::has($cacheKey)) {
+            return Cache::get($cacheKey);
         }
 
         try {
@@ -362,7 +364,7 @@ class CRUDBooster
         } catch (\Exception $e) {
             $isNULL = false;
         }
-        Cache::forever('field_isNull_'.$table.'_'.$field, $isNULL);
+        Cache::forever($cacheKey, $isNULL);
 
         return $isNULL;
     }
@@ -766,9 +768,10 @@ class CRUDBooster
     public static function isForeignKey($fieldName)
     {
         $table = self::getTableForeignKey($fieldName);
+        $cacheKey = 'isForeignKey_'.$fieldName;
 
-        if (Cache::has('isForeignKey_'.$fieldName)) {
-            return Cache::get('isForeignKey_'.$fieldName);
+        if (Cache::has($cacheKey)) {
+            return Cache::get($cacheKey);
         }
 
         if (!$table) {
@@ -776,11 +779,11 @@ class CRUDBooster
         }
 
         if (Schema::hasTable($table)) {
-            Cache::forever('isForeignKey_'.$fieldName, true);
+            Cache::forever($cacheKey, true);
             return true;
         }
 
-        Cache::forever('isForeignKey_'.$fieldName, false);
+        Cache::forever($cacheKey, false);
         return false;
     }
 
