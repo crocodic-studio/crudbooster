@@ -1045,39 +1045,7 @@ class CRUDBooster
 
     public static function generateAPI($controller_name, $table_name, $permalink, $method_type = 'post')
     {
-        $php = '
-		<?php namespace App\Http\Controllers;
-
-		use Session;
-		use Request;
-		use DB;
-		use CRUDBooster;
-
-		class Api'.$controller_name.'Controller extends \crocodicstudio\crudbooster\controllers\ApiController {
-
-		    function __construct() {    
-				$this->table       = "'.$table_name.'";        
-				$this->permalink   = "'.$permalink.'";    
-				$this->method_type = "'.$method_type.'";    
-		    }
-		
-		    public function hook_before(&$postdata) {
-		        //This method will be execute before run the main process
-
-		    }
-		    
-		    public function hook_query(&$query) {
-		        //This method is to customize the sql query
-
-		    }
-		    
-		    public function hook_after($postdata,&$result) {
-		        //This method will be execute after run the main process
-
-		    }
-';
-
-        $php = trim($php);
+        $php = view('crudbooster::file_stubs.api_stub', compact('controller_name', 'table_name', 'permalink', 'method_type'))->render();
         $path = base_path("app/Http/Controllers/");
         file_put_contents($path.'Api'.$controller_name.'Controller.php', $php);
     }
