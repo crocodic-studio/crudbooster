@@ -1095,12 +1095,9 @@ class CRUDBooster
 
     public static function getFieldType($table, $field)
     {
-        if (Cache::has('field_type_'.$table.'_'.$field)) {
-            return Cache::get('field_type_'.$table.'_'.$field);
-        }
+        $field = 'field_type_'.$table.'_'.$field;
 
-        $typedata = Cache::rememberForever('field_type_'.$table.'_'.$field, function () use ($table, $field) {
-
+        return Cache::rememberForever($field, function () use ($table, $field) {
             try {
                 //MySQL & SQL Server
                 $typedata = DB::select(DB::raw("select DATA_TYPE from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='$table' and COLUMN_NAME = '$field'"))[0]->DATA_TYPE;
@@ -1114,8 +1111,6 @@ class CRUDBooster
 
             return $typedata;
         });
-
-        return $typedata;
     }
 
     public static function backWithMsg($msg, $type = 'success')
