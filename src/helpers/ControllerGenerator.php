@@ -468,7 +468,7 @@ class ControllerGenerator
                 $validation = ['required|image'];
             }
 
-            if ($field == 'latitude' || $field == 'longitude') {
+            if (self::isGeographical($field)) {
                 $type = 'hidden';
             }
 
@@ -620,5 +620,14 @@ class ControllerGenerator
     private static function isForeignKey($field)
     {
         return substr($field, 0, 3) == 'id_' || substr($field, -3) == '_id';
+    }
+
+    /**
+     * @param $field
+     * @return bool
+     */
+    private static function isGeographical($field)
+    {
+        return $field == 'latitude' || $field == 'longitude';
     }
 }
