@@ -57,7 +57,7 @@ class ControllerGenerator
             \$this->form = [];
             ';
         foreach($formArrayString as $formArray){
-            $php .= '$this->form[] = '.$formArray.';';
+            $php .= '            $this->form[] = '.$formArray.';';
         }
 
         $php .= '
@@ -547,7 +547,7 @@ class ControllerGenerator
                 if (Schema::hasTable($jointable)) {
                     $joincols = CRUDBooster::getTableColumns($jointable);
                     $joinname = CRUDBooster::getNameTable($joincols);
-                    $php .= "            \$this->col[] = ['label'=>$label,'name'=>'$jointable.$joinname'];"."\n";
+                    $php .= '            $this->col[]'." = ['label' => $label, 'name' => '$jointable.$joinname'];\n";
                     $jointablePK = CB::pk($jointable);
                     $joinList[] = [
                         'table' => $jointable,
@@ -558,9 +558,9 @@ class ControllerGenerator
             } else {
                 $image = '';
                 if (self::isImage($field)) {
-                    $image = ',"image"=>true';
+                    $image = '"image" => true';
                 }
-                $php .= "            ".'$this->col[] = ["label"=>"'.$label.'","name"=>"'.$field.'" '.$image.'];'."\n";
+                $php .= '            $this->col[]'." = ['label' => $label, 'name' => '$field', $image];\n";
             }
         }
 
