@@ -203,10 +203,13 @@ if (! function_exists('rrmdir')) {
             if ($object == "." || $object == "..") {
                 continue;
             }
-            if (is_dir($dir."/".$object)) {
-                rrmdir($dir."/".$object);
+
+            $objPath = $dir."/".$object;
+
+            if (is_dir($objPath)) {
+                rrmdir($objPath);
             } else {
-                unlink($dir."/".$object);
+                unlink($objPath);
             }
         }
         rmdir($dir);
