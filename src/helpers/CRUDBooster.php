@@ -765,9 +765,7 @@ class CRUDBooster
 
     public static function isForeignKey($fieldName)
     {
-        if (substr($fieldName, 0, 3) == 'id_' || substr($fieldName, -3) == '_id') {
-            $table = str_replace(['_id', 'id_'], '', $fieldName);
-        }
+        $table = self::getTableForeignKey($fieldName);
 
         if (Cache::has('isForeignKey_'.$fieldName)) {
             return Cache::get('isForeignKey_'.$fieldName);
