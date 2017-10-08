@@ -532,11 +532,7 @@ class ControllerGenerator
             $label = str_replace('Cms ', '', $label);
             $field = $c;
 
-            if (self::isExceptional($field)) {
-                continue;
-            }
-
-            if (self::isPassword($field)) {
+            if (self::isExceptional($field) || self::isPassword($field)) {
                 continue;
             }
 
