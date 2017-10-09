@@ -86,10 +86,10 @@
 <div id='app' class="wrapper">
 
     <!-- Header -->
-@include('crudbooster::header')
+@include('crudbooster::_admin_template.header')
 
 <!-- Sidebar -->
-@include('crudbooster::sidebar')
+@include('crudbooster::_admin_template.sidebar')
 
 <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -169,9 +169,11 @@
 
 
                 <ol class="breadcrumb">
-                    <li><a href="{{CRUDBooster::adminPath()}}">
+                    <li>
+                        <a href="{{CRUDBooster::adminPath()}}">
                             {!!  CB::icon('dashboard') !!}
-                            {{ cbTrans('home') }}</a>
+                            {{ cbTrans('home') }}
+                        </a>
                     </li>
                     <li class="active">{{$module->name}}</li>
                 </ol>
@@ -213,12 +215,12 @@
     </div><!-- /.content-wrapper -->
 
     <!-- Footer -->
-    @include('crudbooster::footer')
+    @include('crudbooster::_admin_template.footer')
 
 </div><!-- ./wrapper -->
 
 
-@include('crudbooster::admin_template_plugins')
+@include('crudbooster::_admin_template.admin_template_plugins')
 
 <!-- load js -->
 @if($load_js)
