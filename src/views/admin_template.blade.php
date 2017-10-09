@@ -116,39 +116,14 @@
                             </a>
                         @endif
 
-                        @if($button_add && CRUDBooster::canCreate())
-                            <a href="{{ CRUDBooster::mainpath('add').'?return_url='.urlencode(Request::fullUrl()).'&parent_id='.g('parent_id').'&parent_field='.$parent_field }}"
-                               id='btn_add_new_data' class="btn btn-sm btn-success"
-                               title="{{cbTrans('action_add_data')}}">
-
-                                {!!  CB::icon('plus-circle') !!}
-                                {{cbTrans('action_add_data')}}
-                            </a>
-                        @endif
+                        @include('crudbooster::_admin_template.addButton')
                     @endif
 
 
-                    @if($button_export && CRUDBooster::getCurrentMethod() == 'getIndex')
-                        <a href="javascript:void(0)" id='btn_export_data' data-url-parameter='{{$build_query}}'
-                           title='Export Data' class="btn btn-sm btn-primary btn-export-data">
-
-                            {!!  CB::icon('upload') !!}
-                            {{cbTrans("button_export")}}
-                        </a>
-                    @endif
-
-                    @if($button_import && CRUDBooster::getCurrentMethod() == 'getIndex')
-                        <a href="{{ CRUDBooster::mainpath('import-data') }}" id='btn_import_data'
-                           data-url-parameter='{{$build_query}}' title='Import Data'
-                           class="btn btn-sm btn-primary btn-import-data">
-
-                            {!!  CB::icon('download') !!}
-                            {{cbTrans("button_import")}}
-                        </a>
-                    @endif
+                @include('crudbooster::_admin_template.export_import_buttons', ['exportBtn' => $button_export, 'importBtn' => $button_import, 'query' => $build_query])
 
                 <!--ADD ACTIon-->
-                 @include('crudbooster::_admin_template.action_buttons', ['index_button' => $index_button])
+                @include('crudbooster::_admin_template.action_buttons', ['index_button' => $index_button])
                 <!-- END BUTTON -->
                 </h1>
 
