@@ -155,9 +155,9 @@
         <!-- Your Page Content Here -->
             @yield('content')
         </section><!-- /.content -->
-    </div><!-- /.content-wrapper -->
+    </div>
 
-    <!-- Footer -->
+
     @include('crudbooster::_admin_template.footer')
 
 </div><!-- ./wrapper -->
@@ -166,17 +166,7 @@
 @include('crudbooster::_admin_template.admin_template_plugins')
 
 <!-- load js -->
-@if($load_js)
-    @foreach($load_js as $js)
-        <script src="{{$js}}"></script>
-    @endforeach
-@endif
-<script type="text/javascript">
-    var site_url = "{{url('/')}}";
-    @if($script_js)
-        {!! $script_js !!}
-    @endif
-</script>
+@include('crudbooster::_admin_template.js')
 
 @stack('bottom')
 
