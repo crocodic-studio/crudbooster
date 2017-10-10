@@ -228,7 +228,7 @@ class CRUDBooster
     public static function sidebarDashboard()
     {
 
-        $menu = DB::table('cms_menus')->where('id_cms_privileges', self::myPrivilegeId())->where('is_dashboard', 1)->where('is_active', 1)->first() ?: new \stdClass();
+        $menu = DB::table('cms_menus')->where('cms_privileges', self::myPrivilegeId())->where('is_dashboard', 1)->where('is_active', 1)->first() ?: new \stdClass();
 
         $menu->url = self::menuUrl($menu);
 

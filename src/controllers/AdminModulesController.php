@@ -517,7 +517,7 @@ class AdminModulesController extends CBController
                 'path' => '#',
                 'type' => 'URL External',
                 'is_active' => 1,
-                'id_cms_privileges' => CRUDBooster::myPrivilegeId(),
+                'cms_privileges' => CRUDBooster::myPrivilegeId(),
                 'sorting' => $parent_menu_sort,
                 'parent_id' => 0,
             ]);
@@ -529,7 +529,7 @@ class AdminModulesController extends CBController
                 'path' => $this->arr['controller'].'GetAdd',
                 'type' => 'Route',
                 'is_active' => 1,
-                'id_cms_privileges' => CRUDBooster::myPrivilegeId(),
+                'cms_privileges' => CRUDBooster::myPrivilegeId(),
                 'sorting' => 1,
                 'parent_id' => $parent_menu_id,
             ]);
@@ -541,7 +541,7 @@ class AdminModulesController extends CBController
                 'path' => $this->arr['controller'].'GetIndex',
                 'type' => 'Route',
                 'is_active' => 1,
-                'id_cms_privileges' => CRUDBooster::myPrivilegeId(),
+                'cms_privileges' => CRUDBooster::myPrivilegeId(),
                 'sorting' => 2,
                 'parent_id' => $parent_menu_id,
             ]);
