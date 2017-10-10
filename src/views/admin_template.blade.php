@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>{{ ($page_title)?CRUDBooster::getSetting('appname').': '.strip_tags($page_title):"Admin Area" }}</title>
+    <title>{{ ($page_title)?Session::get('appname').': '.strip_tags($page_title):"Admin Area" }}</title>
  	  <meta name="csrf-token" content="{{ csrf_token() }}" />
 	  <meta name='generator' content='CRUDBooster 5.4.0.1'/>
     <meta name='robots' content='noindex,nofollow'/>
@@ -128,7 +128,7 @@
             <li class="active">{{$module->name}}</li>
           </ol>
           @else
-          <h1>{{CRUDBooster::getSetting('appname')}} <small>Information</small></h1>
+          <h1>{{Session::get('appname')}} <small>Information</small></h1>
           @endif
         </section>	
 		
