@@ -1,5 +1,6 @@
 <?php namespace crocodicstudio\crudbooster;
 
+use crocodicstudio\crudbooster\AuthModule\CbAuthServiceProvider;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\ServiceProvider;
 use crocodicstudio\crudbooster\commands\CrudboosterInstallationCommand;
@@ -84,6 +85,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->app->register('Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider');
         $this->app->register('Intervention\Image\ImageServiceProvider');
         $this->app->register('Imanghafoori\Widgets\WidgetsServiceProvider');
+        $this->app->register(CbAuthServiceProvider::class);
 
         $loader = AliasLoader::getInstance();
         $loader->alias('PDF', 'Barryvdh\DomPDF\Facade');
