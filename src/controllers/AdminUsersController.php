@@ -24,10 +24,7 @@ class AdminUsersController extends CBController
         # START CONFIGURATION DO NOT REMOVE THIS LINE
         $this->table = 'cms_users';
         $this->title_field = "name";
-        $this->button_action_style = 'button_icon';
-        $this->button_import = false;
-        $this->button_export = false;
-        $this->button_save = true;
+        $this->setButtons();
 
         $this->makeColumns();
         $this->form = UsersForm::makeForm();
@@ -61,5 +58,13 @@ class AdminUsersController extends CBController
         $this->col[] = ["label" => "Email", "name" => "email"];
         $this->col[] = ["label" => "Privilege", "name" => "cms_privileges_name"];
         $this->col[] = ["label" => "Photo", "name" => "photo", "image" => 1];
+    }
+
+    private function setButtons()
+    {
+        $this->button_action_style = 'button_icon';
+        $this->button_import = false;
+        $this->button_export = false;
+        $this->button_save = true;
     }
 }

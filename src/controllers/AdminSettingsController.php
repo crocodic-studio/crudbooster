@@ -15,11 +15,8 @@ class AdminSettingsController extends CBController
         $this->table = 'cms_settings';
         $this->title_field = "name";
         $this->index_orderby = ['name' => 'asc'];
-        $this->button_delete = true;
-        $this->button_show = false;
-        $this->button_cancel = false;
-        $this->button_import = false;
-        $this->button_export = false;
+
+        $this->setButtons();
 
         $this->col = [];
 
@@ -138,5 +135,14 @@ class AdminSettingsController extends CBController
         }
 
         return $content;
+    }
+
+    private function setButtons()
+    {
+        $this->button_delete = true;
+        $this->button_show = false;
+        $this->button_cancel = false;
+        $this->button_import = false;
+        $this->button_export = false;
     }
 }

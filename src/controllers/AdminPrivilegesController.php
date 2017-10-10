@@ -14,11 +14,7 @@ class AdminPrivilegesController extends CBController
         $this->table = 'cms_privileges';
         $this->primary_key = 'id';
         $this->title_field = "name";
-        $this->button_import = false;
-        $this->button_export = false;
-        $this->button_action_style = 'button_icon';
-        $this->button_detail = false;
-        $this->button_bulk_action = false;
+        $this->setButtons();
 
         $this->col = [];
         $this->col[] = ["label" => "ID", "name" => "id"];
@@ -183,5 +179,14 @@ class AdminPrivilegesController extends CBController
     private function setTheme()
     {
         session()->put('theme_color', $this->arr['theme_color']);
+    }
+
+    private function setButtons()
+    {
+        $this->button_import = false;
+        $this->button_export = false;
+        $this->button_action_style = 'button_icon';
+        $this->button_detail = false;
+        $this->button_bulk_action = false;
     }
 }

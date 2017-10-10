@@ -17,16 +17,7 @@ class AdminStatisticBuilderController extends CBController
         $this->orderby = "id,desc";
         $this->global_privilege = false;
 
-        $this->button_table_action = true;
-        $this->button_action_style = "button_icon_text";
-        $this->button_add = true;
-        $this->button_delete = true;
-        $this->button_edit = true;
-        $this->button_detail = false;
-        $this->button_show = true;
-        $this->button_filter = false;
-        $this->button_export = false;
-        $this->button_import = false;
+        $this->setButtons();
 
         $this->makeColumns();
 
@@ -208,5 +199,19 @@ class AdminStatisticBuilderController extends CBController
     {
         $this->col = [];
         $this->col[] = ["label" => "Name", "name" => "name"];
+    }
+
+    private function setButtons()
+    {
+        $this->button_table_action = true;
+        $this->button_action_style = "button_icon_text";
+        $this->button_add = true;
+        $this->button_delete = true;
+        $this->button_edit = true;
+        $this->button_detail = false;
+        $this->button_show = true;
+        $this->button_filter = false;
+        $this->button_export = false;
+        $this->button_import = false;
     }
 }
