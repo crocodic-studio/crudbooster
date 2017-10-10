@@ -32,7 +32,7 @@ class AdminApiGeneratorController extends CBController
         $data['page_menu'] = Route::getCurrentRoute()->getActionName();
         $data['apis'] = $this->table()->orderby('nama', 'asc')->get();
 
-        return view('crudbooster::api_documentation', $data);
+        return view('crudbooster::api_generator.api_documentation', $data);
     }
 
     function apiDocumentation()
@@ -42,7 +42,7 @@ class AdminApiGeneratorController extends CBController
 
         $data['apis'] = $this->table()->orderby('nama', 'asc')->get();
 
-        return view('crudbooster::api_documentation_public', $data);
+        return view('crudbooster::api_generator.api_documentation_public', $data);
     }
 
     function getDownloadPostman()
@@ -111,7 +111,7 @@ class AdminApiGeneratorController extends CBController
         $data['page_menu'] = Route::getCurrentRoute()->getActionName();
         $data['apikeys'] = DB::table('cms_apikey')->get();
 
-        return view('crudbooster::api_key', $data);
+        return view('crudbooster::api_generator.api_key', $data);
     }
 
     public function getGenerator()
@@ -131,7 +131,7 @@ class AdminApiGeneratorController extends CBController
 
         $data['tables'] = $tables_list;
 
-        return view('crudbooster::api_generator', $data);
+        return view('crudbooster::api_generator.api_generator', $data);
     }
 
     public function getEditApi($id)
@@ -156,7 +156,7 @@ class AdminApiGeneratorController extends CBController
 
         $data['tables'] = $tables_list;
 
-        return view('crudbooster::api_generator', $data);
+        return view('crudbooster::api_generator.api_generator', $data);
     }
 
     function getGenerateScreetKey()
@@ -196,7 +196,6 @@ class AdminApiGeneratorController extends CBController
 
     public function getDeleteApiKey()
     {
-
         $id = request('id');
         if (DB::table('cms_apikey')->where('id', $id)->delete()) {
             return response()->json(['status' => 1]);
