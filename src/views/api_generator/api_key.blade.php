@@ -2,7 +2,7 @@
 
 @section('content')
 
-    @include('crudbooster::_api_key.navtabs')
+    @include('crudbooster::api_generator._api_key.navtabs')
 
     <div class='box'>
 
@@ -29,17 +29,17 @@
                 <tbody>
 
                 @foreach($apikeys as $no => $row)
-                    @include('crudbooster::_api_key.api_key')
+                    @include('crudbooster::api_generator._api_key.api_key')
                 @endforeach
 
 
-                @include('crudbooster::_api_key.empty')
+                @include('crudbooster::api_generator._api_key.empty')
 
                 </tbody>
             </table>
 
             @push('bottom')
-                @include('crudbooster::_api_key.script')
+                @include('crudbooster::api_generator._api_key.script')
             @endpush
 
         </div>
