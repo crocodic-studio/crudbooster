@@ -27,6 +27,17 @@ class AdminEmailTemplatesController extends CBController
         $this->orderby = ["id" => "desc"];
         $this->global_privilege = false;
 
+        $this->setButtons();
+
+        $this->col = [];
+        $this->col[] = ["label" => "Template Name", "name" => "name"];
+        $this->col[] = ["label" => "Slug", "name" => "slug"];
+
+        $this->form = EmailTemplateForm::makeForm();
+    }
+
+    private function setButtons()
+    {
         $this->button_table_action = true;
         $this->button_action_style = "button_icon";
         $this->button_add = true;
@@ -37,14 +48,7 @@ class AdminEmailTemplatesController extends CBController
         $this->button_filter = true;
         $this->button_export = false;
         $this->button_import = false;
-
-        $this->col = [];
-        $this->col[] = ["label" => "Template Name", "name" => "name"];
-        $this->col[] = ["label" => "Slug", "name" => "slug"];
-
-        $this->form = EmailTemplateForm::makeForm();
     }
-
     //By the way, you can still create your own method in here... :)
 
 }

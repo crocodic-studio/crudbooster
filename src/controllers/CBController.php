@@ -351,16 +351,18 @@ class CBController extends Controller
 
     public function getDataQuery()
     {
-        $key = g('query');
+        $key = request('query');
         if (! Cache::has($key)) {
             return response()->json(['items' => []]);
         }
         $query = Cache::get($key);
-        $fk_name = g('fk_name');
-        $fk_value = g('fk_value');
+
+        $fk_name = request('fk_name');
+        $fk_value = request('fk_value');
+
 
         $condition = " where ";
-        if (strpos(strtolower($query), 'where')) {
+        if (strpos(strtolower($query), 'where') !== false) {
             $condition = " and ";
         }
 
