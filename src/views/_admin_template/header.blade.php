@@ -2,7 +2,8 @@
 <header class="main-header">
 
     <!-- Logo -->
-    <a href="{{url(cbConfig('ADMIN_PATH'))}}" title='{{CRUDBooster::getSetting('appname')}}'
+    <a href="{{url(cbConfig('ADMIN_PATH'))}}"
+       title='{{CRUDBooster::getSetting('appname')}}'
        class="logo">{{CRUDBooster::getSetting('appname')}}</a>
 
     <!-- Header Navbar -->
@@ -70,8 +71,8 @@
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-{{ cbTrans('left') }}">
-                                <a href="{{ CB::adminPath('users/profile') }}" class="btn btn-default btn-flat"><i
-                                            class='fa fa-user'></i> {{cbTrans("label_button_profile")}}</a>
+                                <a href="{{ CB::adminPath('users/profile') }}" class="btn btn-default btn-flat">
+                                    <i class='fa fa-user'></i> {{cbTrans("label_button_profile")}}</a>
                             </div>
                             <div class="pull-{{ cbTrans('right') }}">
                                 <a title='Lock Screen' href="{{ route('getLockScreen') }}"
