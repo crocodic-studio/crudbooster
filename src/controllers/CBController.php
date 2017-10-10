@@ -290,9 +290,7 @@ class CBController extends Controller
             }
 
             foreach ($columns_table as $col) {
-                if (! $col['visible']) {
-                    continue;
-                }
+                if($col['visible']===FALSE) continue;
 
                 $value = $this->_calculateColumnValue($col, $row, $table);
 
