@@ -1056,7 +1056,7 @@ class CRUDBooster
 
     public static function generateController($table, $name = null)
     {
-        ControllerGenerator::generateController($table, $name);
+        return ControllerGenerator::generateController($table, $name);
     }
 
     public static function getTableColumns($table)
