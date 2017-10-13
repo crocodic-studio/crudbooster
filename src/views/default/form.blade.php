@@ -49,36 +49,34 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2"></label>
                             <div class="col-sm-10">
+
+
                                 @if($button_cancel && CRUDBooster::getCurrentMethod() != 'getDetail')
+                                        <a href='
                                     @if(g('return_url'))
-                                        <a href='{{g("return_url")}}' class='btn btn-default'><i
-                                                    class='fa fa-chevron-circle-left'></i> {{cbTrans("button_back")}}
-                                        </a>
+                                           {{g("return_url")}}
                                     @else
-                                        <a href='{{CRUDBooster::mainpath("?".http_build_query(@$_GET)) }}'
-                                           class='btn btn-default'><i
-                                                    class='fa fa-chevron-circle-left'></i> {{cbTrans("button_back")}}
+                                           {{CRUDBooster::mainpath("?".http_build_query(@$_GET)) }}
+                                    @endif
+                                            ' class='btn btn-default'>
+                                            <i class='fa fa-chevron-circle-left'></i> {{cbTrans("button_back")}}
                                         </a>
-                                    @endif
                                 @endif
+
+
                                 @if(CRUDBooster::canCreate() || CRUDBooster::canUpdate())
-
+                                    <input type="submit" name="submit" value='
                                     @if(CRUDBooster::canCreate() && $button_addmore==TRUE && $command == 'add')
-                                        <input type="submit" name="submit" value='{{cbTrans("button_save_more")}}'
-                                               class='btn btn-success'>
+                                        {{cbTrans("button_save_more")}}
                                     @endif
 
-                                    @if($button_save && $command != 'detail')
-                                        <input type="submit" name="submit" value='{{cbTrans("button_save")}}'
-                                               class='btn btn-success'>
+                                    @if(($button_save && $command != 'detail') || CB::getCurrentMethod() == 'getProfile')
+                                      {{cbTrans("button_save")}}
                                     @endif
+                                    ' class='btn btn-success'>
 
                                 @endif
 
-                                @if(CB::getCurrentMethod() == 'getProfile')
-                                    <input type="submit" name="submit" value='{{cbTrans("button_save")}}'
-                                           class='btn btn-success'>
-                                @endif
                             </div>
                         </div>
 
