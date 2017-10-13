@@ -99,79 +99,34 @@ class CRUDBooster
         return session('admin_lock');
     }
 
-    public static function canView()
-    {
-        if (self::isSuperadmin()) {
-            return true;
-        }
-
-        $session = session('admin_privileges_roles');
-        foreach ($session as $v) {
-            if ($v->path == self::getModulePath()) {
-                return (bool) $v->is_visible;
-            }
-        }
-    }
-
     public static function isSuperadmin()
     {
         return session('admin_is_superadmin');
     }
 
+    public static function canView()
+    {
+        return self::canDo('is_visible');
+    }
+
     public static function canUpdate()
     {
-        if (self::isSuperadmin()) {
-            return true;
-        }
-
-        $session = session('admin_privileges_roles');
-        foreach ($session as $v) {
-            if ($v->path == self::getModulePath()) {
-                return (bool) $v->is_edit;
-            }
-        }
+        return self::canDo('is_edit');
     }
 
     public static function canCreate()
     {
-        if (self::isSuperadmin()) {
-            return true;
-        }
-
-        $session = session('admin_privileges_roles');
-        foreach ($session as $v) {
-            if ($v->path == self::getModulePath()) {
-                return (bool) $v->is_create;
-            }
-        }
+        return self::canDo('is_create');
     }
 
     public static function canRead()
     {
-        if (self::isSuperadmin()) {
-            return true;
-        }
-
-        $session = session('admin_privileges_roles');
-        foreach ($session as $v) {
-            if ($v->path == self::getModulePath()) {
-                return (bool) $v->is_read;
-            }
-        }
+        return self::canDo('is_read');
     }
 
     public static function canDelete()
     {
-        if (self::isSuperadmin()) {
-            return true;
-        }
-
-        $session = session('admin_privileges_roles');
-        foreach ($session as $v) {
-            if ($v->path == self::getModulePath()) {
-                return (bool) $v->is_delete;
-            }
-        }
+        return self::canDo('is_delete');
     }
 
     public static function canCRUD()
@@ -1196,5 +1151,18 @@ class CRUDBooster
     public static function icon($icon)
     {
         return '<i class=\'fa fa-'.$icon.'\'></i>';
+    }
+
+    private static function canDo($verb)
+    {
+        if (self::isSuperadmin()) {
+            return true;
+        }
+
+        foreach (session('admin_privileges_roles') as $role) {
+            if ($role->path == self::getModulePath()) {
+                return (bool) $role->{$verb};
+            }
+        }
     }
 }
