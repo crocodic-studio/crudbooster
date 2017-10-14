@@ -280,7 +280,7 @@ class CRUDBooster
 				confirmButtonText: "'.trans('crudbooster.confirmation_yes').'",  
 				cancelButtonText: "'.trans('crudbooster.confirmation_no').'",  
 				closeOnConfirm: false }, 
-				function(){  location.href="$redirectTo" });';
+				function(){  location.href="'.$redirectTo.'" });';
     }
 
     public static function getCurrentId()
