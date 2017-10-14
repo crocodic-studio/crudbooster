@@ -190,7 +190,7 @@ class AdminModulesController extends CBController
                     'path' => $controller.'GetIndex',
                     'type' => 'Route',
                     'is_active' => 1,
-                    'cms_privileges' => '["'.CRUDBooster::myPrivilegeName().'"]',
+                    'cms_privileges' => CRUDBooster::myPrivilegeId(),
                     'sorting' => $parent_menu_sort,
                     'parent_id' => 0,
                 ]);
