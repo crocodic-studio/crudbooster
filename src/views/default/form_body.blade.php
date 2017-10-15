@@ -1,7 +1,3 @@
-<form class='form-horizontal' method='post' id="form" enctype="multipart/form-data"
-      action='{{CRUDBooster::mainpath("add-save")}}'>
-    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-    <input type='hidden' name='return_url' value='{{Request::fullUrl()}}'/>
     @php
 
         //Loading Assets
@@ -82,6 +78,3 @@
     @endif
     <?php
     } ?>
-
-    <p align="right"><input type='submit' class='btn btn-primary' value='Add Menu'/></p>
-</form>
