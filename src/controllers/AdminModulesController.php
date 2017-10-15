@@ -163,12 +163,12 @@ class AdminModulesController extends CBController
     {
         $this->cbLoader();
 
-        $name = Request::get('name');
-        $table_name = Request::get('table');
-        $icon = Request::get('icon');
-        $path = Request::get('path');
+        $name = request('name');
+        $table_name = request('table');
+        $icon = request('icon');
+        $path = request('path');
 
-        if (! Request::get('id')) {
+        if (! request('id')) {
 
             if (DB::table('cms_moduls')->where('path', $path)->where('deleted_at', null)->count()) {
                 return CRUDBooster::backWithMsg('Sorry the slug has already exists, please choose another !', 'warning');
@@ -180,7 +180,7 @@ class AdminModulesController extends CBController
             $id = DB::table($this->table)->insertGetId(compact("controller", "name", "table_name", "icon", "path", "created_at"));
 
             //Insert Menu
-            if ($controller && Request::get('create_menu')) {
+            if ($controller && request('create_menu')) {
                 $parent_menu_sort = DB::table('cms_menus')->where('parent_id', 0)->max('sorting') + 1;
 
                 DB::table('cms_menus')->insert([
@@ -215,7 +215,7 @@ class AdminModulesController extends CBController
             return redirect(Route("AdminModulesControllerGetStep2", ["id" => $id]));
         }
 
-        $id = Request::get('id');
+        $id = request('id');
         DB::table($this->table)->where('id', $id)->update(compact("name", "table_name", "icon", "path"));
 
         $row = DB::table('cms_moduls')->where('id', $id)->first();
@@ -496,9 +496,9 @@ class AdminModulesController extends CBController
         $this->inputAssignment();
 
         //Generate Controller 
-        $route_basename = basename(Request::get('path'));
+        $route_basename = basename(request('path'));
         if ($this->arr['controller'] == '') {
-            $this->arr['controller'] = CRUDBooster::generateController(Request::get('table_name'), $route_basename);
+            $this->arr['controller'] = CRUDBooster::generateController(request('table_name'), $route_basename);
         }
 
         $this->arr['created_at'] = date('Y-m-d H:i:s');
@@ -566,10 +566,10 @@ class AdminModulesController extends CBController
         Session::put('admin_privileges_roles', $roles);
 
         $ref_parameter = Request::input('ref_parameter');
-        if (Request::get('return_url')) {
-            CRUDBooster::redirect(Request::get('return_url'), trans("crudbooster.alert_add_data_success"), 'success');
+        if (request('return_url')) {
+            CRUDBooster::redirect(request('return_url'), trans("crudbooster.alert_add_data_success"), 'success');
         } else {
-            if (Request::get('submit') == trans('crudbooster.button_save_more')) {
+            if (request('submit') == trans('crudbooster.button_save_more')) {
                 CRUDBooster::redirect(CRUDBooster::mainpath('add'), trans("crudbooster.alert_add_data_success"), 'success');
             } else {
                 CRUDBooster::redirect(CRUDBooster::mainpath(), trans("crudbooster.alert_add_data_success"), 'success');
@@ -587,12 +587,12 @@ class AdminModulesController extends CBController
         $this->inputAssignment();
 
         //Generate Controller 
-        $route_basename = basename(Request::get('path'));
+        $route_basename = basename(request('path'));
         if ($this->arr['controller'] == '') {
-            $this->arr['controller'] = CRUDBooster::generateController(Request::get('table_name'), $route_basename);
+            $this->arr['controller'] = CRUDBooster::generateController(request('table_name'), $route_basename);
         }
 
-        DB::table($this->table)->where($this->primary_key, $id)->update($this->arr);
+        $this->findRow($id)->update($this->arr);
 
         //Refresh Session Roles
         $roles = DB::table('cms_privileges_roles')->where('id_cms_privileges', CRUDBooster::myPrivilegeId())->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')->get();
