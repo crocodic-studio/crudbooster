@@ -22,7 +22,7 @@ class AdminNotificationsController extends CBController
         $this->form = NotificationForm::makeForm();
     }
 
-    public function hook_query_index(&$query)
+    public function hookQueryIndex(&$query)
     {
         $query->where('id_cms_users', CRUDBooster::myId());
     }
