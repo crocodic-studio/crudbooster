@@ -289,6 +289,7 @@ $name = str_slug($form['label'], '');
                                                             }
                                                         } else {
                                                             $data = $col['dataenum'];
+							                                $data = (is_array($data))?$data:explode(";",$data);
                                                             foreach ($data as $d) {
                                                                 $enum = explode('|', $d);
                                                                 if (count($enum) == 2) {
