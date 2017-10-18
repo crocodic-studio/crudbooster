@@ -4,8 +4,8 @@
     <div>
 
         @if(CRUDBooster::getCurrentMethod() != 'getProfile' && $button_cancel)
-            @if(g('return_url'))
-                <p><a title='Return' href='{{g("return_url")}}'><i class='fa fa-chevron-circle-left '></i>
+            @if(request('return_url'))
+                <p><a title='Return' href='{{request("return_url")}}'><i class='fa fa-chevron-circle-left '></i>
                         &nbsp; {{cbTrans("form_back_to_list",['module'=>CRUDBooster::getCurrentModule()->name])}}</a>
                 </p>
             @else
@@ -24,7 +24,7 @@
             <div class="panel-body" style="padding:20px 0px 0px 0px">
                 <?php
                 $action = (@$row) ? CRUDBooster::mainpath("edit-save/$row->id") : CRUDBooster::mainpath("add-save");
-                $return_url = ($return_url) ?: g('return_url');
+                $return_url = ($return_url) ?: request('return_url');
                 ?>
                 <form class='form-horizontal' method='post' id="form" enctype="multipart/form-data"
                       action='{{$action}}'>
@@ -49,36 +49,34 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2"></label>
                             <div class="col-sm-10">
+
+
                                 @if($button_cancel && CRUDBooster::getCurrentMethod() != 'getDetail')
-                                    @if(g('return_url'))
-                                        <a href='{{g("return_url")}}' class='btn btn-default'><i
-                                                    class='fa fa-chevron-circle-left'></i> {{cbTrans("button_back")}}
-                                        </a>
+                                        <a href='
+                                    @if(request('return_url'))
+                                           {{request("return_url")}}
                                     @else
-                                        <a href='{{CRUDBooster::mainpath("?".http_build_query(@$_GET)) }}'
-                                           class='btn btn-default'><i
-                                                    class='fa fa-chevron-circle-left'></i> {{cbTrans("button_back")}}
+                                           {{CRUDBooster::mainpath("?".http_build_query(@$_GET)) }}
+                                    @endif
+                                            ' class='btn btn-default'>
+                                            <i class='fa fa-chevron-circle-left'></i> {{cbTrans("button_back")}}
                                         </a>
-                                    @endif
                                 @endif
+
+
                                 @if(CRUDBooster::canCreate() || CRUDBooster::canUpdate())
-
+                                    <input type="submit" name="submit" value='
                                     @if(CRUDBooster::canCreate() && $button_addmore==TRUE && $command == 'add')
-                                        <input type="submit" name="submit" value='{{cbTrans("button_save_more")}}'
-                                               class='btn btn-success'>
+                                        {{cbTrans("button_save_more")}}
                                     @endif
 
-                                    @if($button_save && $command != 'detail')
-                                        <input type="submit" name="submit" value='{{cbTrans("button_save")}}'
-                                               class='btn btn-success'>
+                                    @if(($button_save && $command != 'detail') || CB::getCurrentMethod() == 'getProfile')
+                                      {{cbTrans("button_save")}}
                                     @endif
+                                    ' class='btn btn-success'>
 
                                 @endif
 
-                                @if(CB::getCurrentMethod() == 'getProfile')
-                                    <input type="submit" name="submit" value='{{cbTrans("button_save")}}'
-                                           class='btn btn-success'>
-                                @endif
                             </div>
                         </div>
 

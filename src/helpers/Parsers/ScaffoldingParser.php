@@ -8,6 +8,8 @@ class ScaffoldingParser
     {
         $colsItem = self::extractLines($code, $type);
         foreach ($colsItem as &$item) {
+            $item = str_replace(' ','', $item);
+            $item = str_replace('\',]',']', $item);
             $item = trim($item);
             $item = trim($item, '[');
             $item = trim($item, '];');
@@ -32,9 +34,9 @@ class ScaffoldingParser
             }
             $item = implode("", $strSplit);
         }
-
         foreach ($colsItem as &$col) {
             $split = explode('|SPLIT|', $col);
+
             $colInnerItem = [];
             foreach ($split as $s) {
                 if (strpos($s, 'options') !== false) {
@@ -52,7 +54,9 @@ class ScaffoldingParser
                 $colInnerItem[$key] = $val;
             }
             $col = $colInnerItem;
+
         }
+
 
         foreach ($colsItem as &$form) {
             if ($type !== 'form') {

@@ -38,31 +38,31 @@ if (! function_exists('readMethodContent')) {
         $methodAccessCandidate = ['public', 'private'];
 
         $e = 0;
-        foreach ($codeArray as &$a) {
+        foreach ($codeArray as &$line) {
 
-            // if($a=='') continue;
+            // if($line=='') continue;
 
-            if (strpos($a, 'function '.$functionToFind.'(') !== false) {
+            if (strpos($line, 'function '.$functionToFind.'(') !== false) {
                 $tagBuka = $e;
-                $indentCount = substr_count($a, "\t");
+                $indentCount = substr_count($line, "\t");
             }
 
-            if (stripos($a, '}') !== false) {
+            if (stripos($line, '}') !== false) {
                 $tagPentutups[$e] = $e;
             }
 
-            if (stripos($a, '{') !== false) {
+            if (stripos($line, '{') !== false) {
                 $tagPembukas[$e] = $e;
             }
 
             foreach ($methodAccessCandidate as $m) {
-                if (strpos($a, $m) !== false) {
+                if (strpos($line, $m) !== false) {
                     $methodIndex[] = $e;
                     break;
                 }
             }
 
-            if (strpos($a, ' function ') !== false) {
+            if (strpos($line, ' function ') !== false) {
                 $methodIndex[] = $e;
             }
 

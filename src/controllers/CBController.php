@@ -171,8 +171,8 @@ class CBController extends Controller
         $this->data['script_js'] = $this->script_js;
         $this->data['style_css'] = $this->style_css;
         $this->data['sub_module'] = $this->sub_module;
-        $this->data['parent_field'] = (g('parent_field')) ?: $this->parent_field;
-        $this->data['parent_id'] = (g('parent_id')) ?: $this->parent_id;
+        $this->data['parent_field'] = (request('parent_field')) ?: $this->parent_field;
+        $this->data['parent_id'] = (request('parent_id')) ?: $this->parent_id;
 
         if (CRUDBooster::getCurrentMethod() == 'getProfile') {
             Session::put('current_row_id', CRUDBooster::myId());
@@ -290,9 +290,7 @@ class CBController extends Controller
             }
 
             foreach ($columns_table as $col) {
-                if (! $col['visible']) {
-                    continue;
-                }
+                if($col['visible']===FALSE) continue;
 
                 $value = $this->_calculateColumnValue($col, $row, $table);
 
@@ -738,6 +736,7 @@ class CBController extends Controller
         }
 
         $this->hookAfterAdd($this->arr[$this->primary_key]);
+
 
         $this->return_url = ($this->return_url) ? $this->return_url : request('return_url');
 
@@ -1441,12 +1440,12 @@ class CBController extends Controller
     private function _handleParentTable()
     {
         $data = [];
-        $parentTablePK = CB::pk(g('parent_table'));
+        $parentTablePK = CB::pk(request('parent_table'));
         $data['parent_table'] = DB::table(request('parent_table'))->where($parentTablePK, request('parent_id'))->first();
         if (request('foreign_key')) {
             $data['parent_field'] = request('foreign_key');
         } else {
-            $data['parent_field'] = CB::getTableForeignKey(g('parent_table'), $this->table);
+            $data['parent_field'] = CB::getTableForeignKey(request('parent_table'), $this->table);
         }
 
         if ($data['parent_field']) {

@@ -32,16 +32,15 @@ public function cbInit() {
     # START COLUMNS DO NOT REMOVE THIS LINE
     $this->col = [];
     @foreach($cols as $col)
-    $this->col[] = ['label' => {{$col['label']}}, 'name' => '{{$col["name"]}}'];
+    $this->col[] = ['label' => '{!! $col['label'] !!}', 'name' => {!! $col["name"] !!}];
     @endforeach
-
-
     # END COLUMNS DO NOT REMOVE THIS LINE
+
 
     # START FORM DO NOT REMOVE THIS LINE
     $this->form = [];
     @foreach($formArrayString as $formArray)
-    $this->form[] = {{$formArray}};
+    $this->form[] = {!! $formArray  !!};
     @endforeach
 
     # END FORM DO NOT REMOVE THIS LINE
@@ -231,7 +230,7 @@ public function cbInit() {
     //Your code here
 
     @foreach ($joinList as $join)
-        $query->join("{{$join['table']}}", "{{$join['field1']}}", "=", "{{$join['field2']}}");
+        $query->join("{!! $join['table'] !!}", "{!! $join['field1'] !!}", "=", "{!! $join['field2'] !!}");
     @endforeach
     }
 

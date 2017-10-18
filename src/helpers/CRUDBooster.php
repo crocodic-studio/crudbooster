@@ -99,79 +99,34 @@ class CRUDBooster
         return session('admin_lock');
     }
 
-    public static function canView()
-    {
-        if (self::isSuperadmin()) {
-            return true;
-        }
-
-        $session = session('admin_privileges_roles');
-        foreach ($session as $v) {
-            if ($v->path == self::getModulePath()) {
-                return (bool) $v->is_visible;
-            }
-        }
-    }
-
     public static function isSuperadmin()
     {
         return session('admin_is_superadmin');
     }
 
+    public static function canView()
+    {
+        return self::canDo('is_visible');
+    }
+
     public static function canUpdate()
     {
-        if (self::isSuperadmin()) {
-            return true;
-        }
-
-        $session = session('admin_privileges_roles');
-        foreach ($session as $v) {
-            if ($v->path == self::getModulePath()) {
-                return (bool) $v->is_edit;
-            }
-        }
+        return self::canDo('is_edit');
     }
 
     public static function canCreate()
     {
-        if (self::isSuperadmin()) {
-            return true;
-        }
-
-        $session = session('admin_privileges_roles');
-        foreach ($session as $v) {
-            if ($v->path == self::getModulePath()) {
-                return (bool) $v->is_create;
-            }
-        }
+        return self::canDo('is_create');
     }
 
     public static function canRead()
     {
-        if (self::isSuperadmin()) {
-            return true;
-        }
-
-        $session = session('admin_privileges_roles');
-        foreach ($session as $v) {
-            if ($v->path == self::getModulePath()) {
-                return (bool) $v->is_read;
-            }
-        }
+        return self::canDo('is_read');
     }
 
     public static function canDelete()
     {
-        if (self::isSuperadmin()) {
-            return true;
-        }
-
-        $session = session('admin_privileges_roles');
-        foreach ($session as $v) {
-            if ($v->path == self::getModulePath()) {
-                return (bool) $v->is_delete;
-            }
-        }
+        return self::canDo('is_delete');
     }
 
     public static function canCRUD()
@@ -228,7 +183,7 @@ class CRUDBooster
     public static function sidebarDashboard()
     {
 
-        $menu = DB::table('cms_menus')->where('id_cms_privileges', self::myPrivilegeId())->where('is_dashboard', 1)->where('is_active', 1)->first() ?: new \stdClass();
+        $menu = DB::table('cms_menus')->where('cms_privileges', self::myPrivilegeId())->where('is_dashboard', 1)->where('is_active', 1)->first() ?: new \stdClass();
 
         $menu->url = self::menuUrl($menu);
 
@@ -272,7 +227,7 @@ class CRUDBooster
     public static function sidebarMenu()
     {
         $menu_active = DB::table('cms_menus')
-            ->where('id_cms_privileges', self::myPrivilegeId())
+            ->where('cms_privileges', self::myPrivilegeId())
             ->where('parent_id', 0)->where('is_active', 1)
             ->where('is_dashboard', 0)
             ->orderby('sorting', 'asc')
@@ -325,7 +280,7 @@ class CRUDBooster
 				confirmButtonText: "'.trans('crudbooster.confirmation_yes').'",  
 				cancelButtonText: "'.trans('crudbooster.confirmation_no').'",  
 				closeOnConfirm: false }, 
-				function(){  location.href="$redirectTo" });';
+				function(){  location.href="'.$redirectTo.'" });';
     }
 
     public static function getCurrentId()
@@ -1056,7 +1011,7 @@ class CRUDBooster
 
     public static function generateController($table, $name = null)
     {
-        ControllerGenerator::generateController($table, $name);
+        return ControllerGenerator::generateController($table, $name);
     }
 
     public static function getTableColumns($table)
@@ -1183,18 +1138,30 @@ class CRUDBooster
 
     public static function redirect($to, $message, $type = 'warning')
     {
-
         if (Request::ajax()) {
             response()->json(['message' => $message, 'message_type' => $type, 'redirect_url' => $to])->send();
             exit;
         }
+        redirect($to)->with(['message' => $message, 'message_type' => $type])->prepare(request())->send();
         Session::driver()->save();
-        redirect($to)->with(['message' => $message, 'message_type' => $type])->send();
         exit;
     }
 
     public static function icon($icon)
     {
         return '<i class=\'fa fa-'.$icon.'\'></i>';
+    }
+
+    private static function canDo($verb)
+    {
+        if (self::isSuperadmin()) {
+            return true;
+        }
+
+        foreach (session('admin_privileges_roles') as $role) {
+            if ($role->path == self::getModulePath()) {
+                return (bool) $role->{$verb};
+            }
+        }
     }
 }
