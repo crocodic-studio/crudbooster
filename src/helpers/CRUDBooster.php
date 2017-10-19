@@ -820,9 +820,9 @@ class CRUDBooster
 
     public static function mainpath($path = null)
     {
-
-        $controllername = str_replace(["\crocodicstudio\crudbooster\controllers\\", "App\Http\Controllers\\"], "", strtok(Route::currentRouteAction(), '@'));
-        $route_url = route($controllername.'GetIndex');
+        $controllerName = strtok(Route::currentRouteAction(), '@');
+        $controllerName = array_pop(explode('\\', $controllerName));
+        $route_url = route($controllerName.'GetIndex');
 
         if (! $path) {
             return trim($route_url, '/');

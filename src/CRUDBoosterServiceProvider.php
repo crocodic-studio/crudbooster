@@ -1,5 +1,6 @@
 <?php namespace crocodicstudio\crudbooster;
 
+use crocodicstudio\crudbooster\ApiGeneratorModule\CbApiGeneratorServiceProvider;
 use crocodicstudio\crudbooster\AuthModule\CbAuthServiceProvider;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\ServiceProvider;
@@ -86,6 +87,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->app->register('Intervention\Image\ImageServiceProvider');
         $this->app->register('Imanghafoori\Widgets\WidgetsServiceProvider');
         $this->app->register(CbAuthServiceProvider::class);
+        $this->app->register(CbApiGeneratorServiceProvider::class);
 
         $loader = AliasLoader::getInstance();
         $loader->alias('PDF', 'Barryvdh\DomPDF\Facade');

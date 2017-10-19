@@ -21,8 +21,6 @@ Route::group(['middleware' => ['api', '\crocodicstudio\crudbooster\middlewares\C
 
 /* ROUTER FOR UPLOADS */
 Route::group(['middleware' => ['web'], 'namespace' => $namespace], function () {
-    Route::get('api/doc', ['uses' => 'AdminApiGeneratorController@apiDocumentation', 'as' => 'apiDocumentation']);
-    Route::get('download-documentation-postman', ['uses' => 'AdminApiGeneratorController@getDownloadPostman', 'as' => 'downloadDocumentationPostman']);
     Route::get('uploads/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'FileController@getPreview', 'as' => 'fileControllerPreview']);
 });
 
@@ -111,7 +109,6 @@ Route::group([
     CRUDBooster::routeController('file-manager', 'AdminFileManagerController', $namespace);
     CRUDBooster::routeController('menus', 'AdminMenusController', $namespace);
     CRUDBooster::routeController('email-templates', 'AdminEmailTemplatesController', $namespace);
-    CRUDBooster::routeController('api-generator', 'AdminApiGeneratorController', $namespace);
     CRUDBooster::routeController('logs', 'AdminLogsController', $namespace);
 });
 
