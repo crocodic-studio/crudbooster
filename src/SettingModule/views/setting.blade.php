@@ -3,7 +3,7 @@
     @push('bottom')
         <script src="{{asset('vendor/laravel-filemanager/js/lfm.js')}}"></script>
         <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
-        @include('crudbooster::_setting.script')
+        @include('CbSettings::_setting.script')
     @endpush
 
     <div style="width:750px;margin:0 auto ">

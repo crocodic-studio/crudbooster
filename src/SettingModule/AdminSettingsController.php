@@ -1,8 +1,8 @@
 <?php
 
-namespace crocodicstudio\crudbooster\controllers;
+namespace crocodicstudio\crudbooster\SettingModule;
 
-use crocodicstudio\crudbooster\controllers\Forms\SettingsForm;
+use crocodicstudio\crudbooster\controllers\CBController;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Cache;
@@ -31,10 +31,10 @@ class AdminSettingsController extends CBController
 
         $data['page_title'] = urldecode(request('group'));
 
-        return view('crudbooster::setting', $data);
+        return view('CbSettings::setting', $data);
     }
 
-    function hook_before_edit(&$posdata, $id)
+    function hookBeforeEdit(&$posdata, $id)
     {
         $this->return_url = CRUDBooster::mainpath("show")."?group=".$posdata['group_setting'];
     }
@@ -76,13 +76,13 @@ class AdminSettingsController extends CBController
         return CRUDBooster::backWithMsg('Your setting has been saved !');
     }
 
-    function hook_before_add(&$arr)
+    function hookBeforeAdd(&$arr)
     {
         $arr['name'] = str_slug($arr['label'], '_');
         $this->return_url = CRUDBooster::mainpath("show")."?group=".$arr['group_setting'];
     }
 
-    function hook_after_edit($id)
+    function hookAfterEdit($id)
     {
         $row = $this->table()->where($this->primary_key, $id)->first();
 

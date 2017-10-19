@@ -105,7 +105,6 @@ Route::group([
     'namespace' => $namespace,
 ], function () use ($namespace) {
     CRUDBooster::routeController('privileges', 'AdminPrivilegesController', $namespace);
-    CRUDBooster::routeController('settings', 'AdminSettingsController', $namespace);
     CRUDBooster::routeController('modules', 'AdminModulesController', $namespace);
     CRUDBooster::routeController('statistic-builder', 'AdminStatisticBuilderController', $namespace);
     CRUDBooster::routeController('file-manager', 'AdminFileManagerController', $namespace);
