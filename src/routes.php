@@ -40,7 +40,7 @@ Route::group([
         $menus = DB::table('cms_menus')->where('is_dashboard', 1)->first();
         if ($menus) {
             if ($menus->type == 'Statistic') {
-                Route::get('/', '\crocodicstudio\crudbooster\controllers\AdminStatisticBuilderController@getDashboard');
+                Route::get('/', '\\crocodicstudio\\crudbooster\\StatisticModule\\AdminStatisticBuilderController@getDashboard');
             } elseif ($menus->type == 'Module') {
                 $module = CRUDBooster::first('cms_moduls', ['path' => $menus->path]);
                 Route::get('/', $module->controller.'@getIndex');
@@ -108,7 +108,7 @@ Route::group([
 ], function () use ($namespace) {
     CRUDBooster::routeController('privileges', 'AdminPrivilegesController', $namespace);
     CRUDBooster::routeController('modules', 'AdminModulesController', $namespace);
-    CRUDBooster::routeController('statistic-builder', 'AdminStatisticBuilderController', $namespace);
+    CRUDBooster::routeController('statistic-builder', 'AdminStatisticBuilderController', '\crocodicstudio\crudbooster\StatisticModule');
     CRUDBooster::routeController('file-manager', 'AdminFileManagerController', $namespace);
     CRUDBooster::routeController('menus', 'AdminMenusController', $namespace);
     CRUDBooster::routeController('email-templates', 'AdminEmailTemplatesController', $namespace);
