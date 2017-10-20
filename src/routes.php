@@ -106,7 +106,6 @@ Route::group([
     'prefix' => cbConfig('ADMIN_PATH'),
     'namespace' => $namespace,
 ], function () use ($namespace) {
-    CRUDBooster::routeController('privileges', 'AdminPrivilegesController', $namespace);
     CRUDBooster::routeController('modules', 'AdminModulesController', $namespace);
     CRUDBooster::routeController('statistic-builder', 'AdminStatisticBuilderController', '\crocodicstudio\crudbooster\StatisticModule');
     CRUDBooster::routeController('file-manager', 'AdminFileManagerController', $namespace);

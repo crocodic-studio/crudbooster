@@ -33,11 +33,11 @@
 
 
                     <div class='form-group'>
-                        @include('crudbooster::_privileges.set_super_admin')
+                        @include('CbPrivilege::_privileges.set_super_admin')
                     </div>
 
                     <div class='form-group'>
-                        @include('crudbooster::_privileges.themePicker')
+                        @include('CbPrivilege::_privileges.themePicker')
                     </div>
 
 
@@ -45,16 +45,16 @@
                         <label>{{ cbTrans('privileges_configuration') }}</label>
 
                         @push('bottom')
-                            @include('crudbooster::_privileges.bottom_js')
+                            @include('CbPrivilege::_privileges.bottom_js')
                         @endpush
 
 
                         <table class='table table-striped table-hover table-bordered'>
                             <thead>
-                                @include('crudbooster::_privileges.thead')
+                                @include('CbPrivilege::_privileges.thead')
                             </thead>
                             <tbody>
-                                @widget('\crocodicstudio\crudbooster\widgets\PrivilegeTable', ['roleId' => $id])
+                                @widget('\crocodicstudio\crudbooster\PrivilegeModule\PrivilegeTableWidget', ['roleId' => $id])
                             </tbody>
                         </table>
 
@@ -62,8 +62,8 @@
                     </div>
                 </div>
 
-                @include('crudbooster::_privileges.alert')
-                @include('crudbooster::_privileges.footer')
+                @include('CbPrivilege::_privileges.alert')
+                @include('CbPrivilege::_privileges.footer')
             </form>
         </div>
     </div>

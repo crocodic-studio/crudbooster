@@ -1,6 +1,7 @@
 <?php namespace crocodicstudio\crudbooster;
 
 use crocodicstudio\crudbooster\AuthModule\CbAuthServiceProvider;
+use crocodicstudio\crudbooster\PrivilegeModule\CbPrivilegesServiceProvider;
 use crocodicstudio\crudbooster\SettingModule\CbSettingsServiceProvider;
 use crocodicstudio\crudbooster\StatisticModule\CbStatisticsServiceProvider;
 use Illuminate\Support\Facades\Artisan;
@@ -97,6 +98,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $loader->alias('CB', 'crocodicstudio\crudbooster\helpers\CB');
         $this->app->register(CbSettingsServiceProvider::class);
         $this->app->register(CbStatisticsServiceProvider::class);
+        $this->app->register(CbPrivilegesServiceProvider::class);
     }
 
     private function registerCrudboosterCommand()

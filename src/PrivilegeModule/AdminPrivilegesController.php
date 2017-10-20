@@ -1,7 +1,8 @@
 <?php
 
-namespace crocodicstudio\crudbooster\controllers;
+namespace crocodicstudio\crudbooster\PrivilegeModule;
 
+use crocodicstudio\crudbooster\controllers\CBController;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -59,8 +60,8 @@ class AdminPrivilegesController extends CBController
     {
         $this->cbLoader();
 
-        $this->validation($request);
-        $this->inputAssignment($request);
+        $this->validation();
+        $this->inputAssignment();
 
         DB::table($this->table)->insert($this->arr);
         $id = $this->arr[$this->primary_key];
