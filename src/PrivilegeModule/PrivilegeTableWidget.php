@@ -1,10 +1,10 @@
 <?php
 
-namespace crocodicstudio\crudbooster\widgets;
+namespace crocodicstudio\crudbooster\PrivilegeModule;
 
-class PrivilegeTable
+class PrivilegeTableWidget
 {
-    public $template = 'crudbooster::_privileges.table';
+    public $template = 'CbPrivilege::_privileges.table';
 
     public $cacheLifeTime = 0;
 
