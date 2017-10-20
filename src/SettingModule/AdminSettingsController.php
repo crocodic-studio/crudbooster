@@ -1,8 +1,8 @@
 <?php
 
-namespace crocodicstudio\crudbooster\controllers;
+namespace crocodicstudio\crudbooster\SettingModule;
 
-use crocodicstudio\crudbooster\controllers\Forms\SettingsForm;
+use crocodicstudio\crudbooster\controllers\CBController;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Cache;
@@ -31,7 +31,7 @@ class AdminSettingsController extends CBController
 
         $data['page_title'] = urldecode(request('group'));
 
-        return view('crudbooster::setting', $data);
+        return view('CbSettings::setting', $data);
     }
 
     function hookBeforeEdit(&$posdata, $id)
