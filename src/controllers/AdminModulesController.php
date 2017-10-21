@@ -139,7 +139,7 @@ class AdminModulesController extends CBController
             }
         }
 
-        $code = file_get_contents(base_path(controllers_dir().$row->controller.'.php'));
+        $code = file_get_contents($this->controller_path($row->controller.'.php'));
 
         $data = [];
         $data['id'] = $id;
@@ -305,7 +305,7 @@ class AdminModulesController extends CBController
 
         $columns = CRUDBooster::getTableColumns($row->table_name);
 
-        $code = file_get_contents(base_path(controllers_dir().$row->controller.'.php'));
+        $code = file_get_contents($this->controller_path($row->controller.'.php'));
 
         $forms = parseScaffoldingToArray($code, 'form');
 
@@ -603,7 +603,7 @@ class AdminModulesController extends CBController
 
     public function getTest()
     {
-        $code = file_get_contents(base_path(controllers_dir().'AdminCustomersController.php'));
+        $code = file_get_contents($this->controller_path('AdminCustomersController.php'));
 
         $forms = parseFormToArray($code);
         echo '<pre>';
