@@ -72,7 +72,7 @@ class AdminModulesController extends CBController
     {
         $modul = DB::table('cms_moduls')->where('id', $id)->first();
         $menus = DB::table('cms_menus')->where('path', 'like', '%'.$modul->controller.'%')->delete();
-        @unlink(app_path('Http/Controllers/'.$modul->controller.'.php'));
+        @unlink($this->controller_path($modul->controller));
     }
 
     public function getTableColumns($table)
@@ -222,7 +222,7 @@ class AdminModulesController extends CBController
 
         $response = file_get_contents(__DIR__.'/'.str_replace('.', '', $row->controller).'.php');
         if (file_exists($this->controller_path($row->controller))) {
-            $response = file_get_contents(app_path('Http/Controllers/'.str_replace('.', '', $row->controller).'.php'));
+            $response = file_get_contents($this->controller_path(str_replace('.', '', $row->controller)));
         }
 
         if (strpos($response, "# START COLUMNS") !== true) {
