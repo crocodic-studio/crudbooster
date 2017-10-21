@@ -16,6 +16,13 @@ if (! function_exists('parseControllerConfigToArray')) {
     }
 }
 
+if (! function_exists('controllers_dir')) {
+    function controllers_dir()
+    {
+        return 'app/Http/Controllers/';
+    }
+}
+
 if (! function_exists('parseScaffoldingToArray')) {
     function parseScaffoldingToArray($code, $type = 'form')
     {
