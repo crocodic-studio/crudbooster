@@ -221,7 +221,7 @@ class AdminModulesController extends CBController
         $row = DB::table('cms_moduls')->where('id', $id)->first();
 
         $response = file_get_contents(__DIR__.'/'.str_replace('.', '', $row->controller).'.php');
-        if (file_exists(app_path('Http/Controllers/'.$row->controller.'.php'))) {
+        if (file_exists($this->controller_path($row->controller))) {
             $response = file_get_contents(app_path('Http/Controllers/'.str_replace('.', '', $row->controller).'.php'));
         }
 
@@ -271,7 +271,7 @@ class AdminModulesController extends CBController
             $columnScript[] = "\t\t\t".'$this->col[] = ['.implode(",", $colKey).'];';
         }
 
-        $code = file_get_contents(app_path('Http/Controllers/'.$row->controller.'.php'));
+        $code = file_get_contents($this->controller_path($row->controller));
         $rawBefore = explode("# START COLUMNS DO NOT REMOVE THIS LINE", $code);
         $rawAfter = explode("# END COLUMNS DO NOT REMOVE THIS LINE", $rawBefore[1]);
 
@@ -292,7 +292,7 @@ class AdminModulesController extends CBController
         $fileResult = writeMethodContent($fileResult, 'hookBeforeDelete', g('hookBeforeDelete'));
         $fileResult = writeMethodContent($fileResult, 'hookAfterDelete', g('hookAfterDelete'));
 
-        file_put_contents(app_path('Http/Controllers/'.$row->controller.'.php'), $fileResult);
+        file_put_contents($this->controller_path($row->controller), $fileResult);
 
         return redirect(Route("AdminModulesControllerGetStep3", ["id" => $id]));
     }
@@ -380,7 +380,7 @@ class AdminModulesController extends CBController
         }
 
         $scripts = implode("\n", $script_form);
-        $raw = file_get_contents(app_path('Http/Controllers/'.$row->controller.'.php'));
+        $raw = file_get_contents($this->controller_path($row->controller));
         $raw = explode("# START FORM DO NOT REMOVE THIS LINE", $raw);
         $rraw = explode("# END FORM DO NOT REMOVE THIS LINE", $raw[1]);
 
@@ -420,7 +420,7 @@ class AdminModulesController extends CBController
         $file_controller .= "\t\t\t".trim($bottom_script);
 
         //CREATE FILE CONTROLLER
-        file_put_contents(app_path('Http/Controllers/'.$row->controller.'.php'), $file_controller);
+        file_put_contents($this->controller_path($row->controller), $file_controller);
 
         return redirect(Route("AdminModulesControllerGetStep4", ["id" => $id]));
     }
@@ -433,8 +433,8 @@ class AdminModulesController extends CBController
 
         $data = [];
         $data['id'] = $id;
-        if (file_exists(app_path('Http/Controllers/'.$row->controller.'.php'))) {
-            $response = file_get_contents(app_path('Http/Controllers/'.$row->controller.'.php'));
+        if (file_exists($this->controller_path($row->controller))) {
+            $response = file_get_contents($this->controller_path($row->controller));
             $data['config'] = parseControllerConfigToArray($response);
         }
 
@@ -470,7 +470,7 @@ class AdminModulesController extends CBController
         }
 
         $scripts = implode("\n", $script_config);
-        $raw = file_get_contents(app_path('Http/Controllers/'.$row->controller.'.php'));
+        $raw = file_get_contents($this->controller_path($row->controller));
         $raw = explode("# START CONFIGURATION DO NOT REMOVE THIS LINE", $raw);
         $rraw = explode("# END CONFIGURATION DO NOT REMOVE THIS LINE", $raw[1]);
 
@@ -480,7 +480,7 @@ class AdminModulesController extends CBController
         $file_controller .= "\t\t\t# END CONFIGURATION DO NOT REMOVE THIS LINE\n\n";
         $file_controller .= "\t\t\t".trim($rraw[1]);
 
-        file_put_contents(app_path('Http/Controllers/'.$row->controller.'.php'), $file_controller);
+        file_put_contents($this->controller_path($row->controller), $file_controller);
 
         return redirect()->route('AdminModulesControllerGetIndex')->with([
             'message' => trans('crudbooster.alert_update_data_success'),
@@ -740,5 +740,14 @@ class AdminModulesController extends CBController
             'exception' => true,
         ];
 
+    }
+
+    /**
+     * @param $controller
+     * @return mixed
+     */
+    private function controller_path($controller)
+    {
+        return app_path('Http/Controllers/'.$controller.'.php');
     }
 }
