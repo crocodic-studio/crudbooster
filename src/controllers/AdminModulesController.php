@@ -568,13 +568,11 @@ class AdminModulesController extends CBController
         $ref_parameter = Request::input('ref_parameter');
         if (request('return_url')) {
             CRUDBooster::redirect(request('return_url'), trans("crudbooster.alert_add_data_success"), 'success');
-        } else {
-            if (request('submit') == trans('crudbooster.button_save_more')) {
-                CRUDBooster::redirect(CRUDBooster::mainpath('add'), trans("crudbooster.alert_add_data_success"), 'success');
-            } else {
-                CRUDBooster::redirect(CRUDBooster::mainpath(), trans("crudbooster.alert_add_data_success"), 'success');
-            }
+        } 
+        if (request('submit') == trans('crudbooster.button_save_more')) {
+            CRUDBooster::redirect(CRUDBooster::mainpath('add'), trans("crudbooster.alert_add_data_success"), 'success');
         }
+        CRUDBooster::redirect(CRUDBooster::mainpath(), trans("crudbooster.alert_add_data_success"), 'success');
     }
 
     public function postEditSave($id)
