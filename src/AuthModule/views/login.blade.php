@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-    @include('crudbooster::_login.head')
+    @include('CbAuth::_login.head')
 </head>
 
 <body class="login-page">
 
 <div class="login-box">
+
     <div class="login-logo">
         <a href="{{url('/')}}">
             <img title='{!!(CRUDBooster::getSetting('appname') == 'CRUDBooster')?"<b>CRUD</b>Booster":CRUDBooster::getSetting('appname')!!}'
                  src='{{ CRUDBooster::getSetting("logo")?asset(CRUDBooster::getSetting('logo')):cbAsset('logo_crudbooster.png') }}'
                  style='max-width: 100%;max-height:170px'/>
         </a>
-    </div><!-- /.login-logo -->
+    </div>
+
     <div class="login-box-body">
 
         @if ( Session::get('message') != '' )
@@ -23,10 +25,8 @@
         @endif
 
         <p class='login-box-msg'>{{cbTrans("login_message")}}</p>
-        @include('crudbooster::_login.form')
+        @include('CbAuth::_login.form')
         <br/>
-        <!--a href="#">I forgot my password</a-->
-
     </div>
 
 </div>
