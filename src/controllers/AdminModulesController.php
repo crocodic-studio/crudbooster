@@ -752,7 +752,7 @@ class AdminModulesController extends CBController
             $form['help'] = $help[$i];
             $form['style'] = $style[$i];
 
-            $info = file_get_contents(base_path('vendor/crocodicstudio/crudbooster/src/views/default/type_components/'.$type[$i].'/info.json'));
+            $info = file_get_contents($this->componentsTypePath().$type[$i].'/info.json');
             $info = json_decode($info, true);
             if (count($info['options'])) {
                 $options = [];
