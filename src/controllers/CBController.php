@@ -1281,6 +1281,7 @@ class CBController extends Controller
      * @param $ro
      * @param $id
      * @param $inputdata
+     * @return null
      */
     private function _handleCheckbox($ro, $id, $inputdata)
     {
@@ -1289,15 +1290,16 @@ class CBController extends Controller
         $foreignKey = CRUDBooster::getForeignKey($this->table, $ro['relationship_table']);
         DB::table($ro['relationship_table'])->where($foreignKey, $id)->delete();
 
-        if ($inputdata) {
-            $relationship_table_pk = CB::pk($ro['relationship_table']);
-            foreach ($inputdata as $input_id) {
-                DB::table($ro['relationship_table'])->insert([
-                    $relationship_table_pk => CRUDBooster::newId($ro['relationship_table']),
-                    $foreignKey => $id,
-                    $foreignKey2 => $input_id,
-                ]);
-            }
+        if (!$inputdata) {
+            return null;
+        }
+        $relationship_table_pk = CB::pk($ro['relationship_table']);
+        foreach ($inputdata as $input_id) {
+            DB::table($ro['relationship_table'])->insert([
+                $relationship_table_pk => CRUDBooster::newId($ro['relationship_table']),
+                $foreignKey => $id,
+                $foreignKey2 => $input_id,
+            ]);
         }
     }
 
@@ -1653,7 +1655,6 @@ class CBController extends Controller
         $this->hookBeforeDelete($id_selected);
         $tablePK = CB::pk($this->table);
         if (Schema::hasColumn($this->table, 'deleted_at')) {
-
             $this->table()->whereIn($tablePK, $id_selected)->update(['deleted_at' => date('Y-m-d H:i:s')]);
         } else {
             $this->table()->whereIn($tablePK, $id_selected)->delete();
