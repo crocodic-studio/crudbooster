@@ -30,6 +30,13 @@ if (! function_exists('parseScaffoldingToArray')) {
     }
 }
 
+if (! function_exists('controller_path')) {
+    function controller_path($controller)
+    {
+        return app_path('Http/Controllers/'.$controller.'.php');
+    }
+}
+
 if (! function_exists('readMethodContent')) {
     function readMethodContent($code, $findMethod)
     {

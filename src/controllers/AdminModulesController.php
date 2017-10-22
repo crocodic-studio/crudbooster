@@ -2,6 +2,7 @@
 
 use crocodicstudio\crudbooster\controllers\Controller;
 use crocodicstudio\crudbooster\controllers\Helpers\FontAwesome;
+use crocodicstudio\crudbooster\ModuleGenerator\Step3Handler;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;
@@ -266,21 +267,10 @@ class AdminModulesController extends CBController
         return redirect(Route("AdminModulesControllerGetStep3", ["id" => $id]));
     }
 
-    public function getStep3($id)
+    public function getStep3($id, Step3Handler $step3)
     {
         $this->cbLoader();
-
-        $row = DB::table('cms_moduls')->where('id', $id)->first();
-
-        $columns = CRUDBooster::getTableColumns($row->table_name);
-
-        $code = file_get_contents($this->controller_path($row->controller.'.php'));
-
-        $forms = parseScaffoldingToArray($code, 'form');
-
-        $types = $this->getlComponentTypes();
-
-        return view('crudbooster::module_generator.step3', compact('columns', 'forms', 'types', 'id'));
+        return $step3->showForm($id);
     }
 
     public function getTypeInfo($type = 'text')
@@ -289,42 +279,10 @@ class AdminModulesController extends CBController
         echo file_get_contents($this->componentsTypePath().$type.'/info.json');
     }
 
-    public function postStep4()
+    public function postStep4(Step3Handler $handler)
     {
         $this->cbLoader();
-
-        $post = Request::all();
-
-        $script_form = $this->setFormScript($post);
-        $row = DB::table('cms_moduls')->where('id', request('id'))->first();
-        $scripts = implode("\n", $script_form);
-        $raw = file_get_contents($this->controller_path($row->controller));
-        $raw = explode("# START FORM DO NOT REMOVE THIS LINE", $raw);
-        $rraw = explode("# END FORM DO NOT REMOVE THIS LINE", $raw[1]);
-
-        $top_script = trim($raw[0]);
-        $current_scaffolding_form = trim($rraw[0]);
-        $bottom_script = trim($rraw[1]);
-
-        //IF FOUND OLD, THEN CLEAR IT
-        $bottom_script = $this->clearOldBackup($bottom_script);
-
-        //ARRANGE THE FULL SCRIPT
-        $file_controller = $top_script."\n\n";
-        $file_controller .= "            # START FORM DO NOT REMOVE THIS LINE\n";
-        $file_controller .= "            ".'$this->form = [];'."\n";
-        $file_controller .= $scripts."\n";
-        $file_controller .= "            # END FORM DO NOT REMOVE THIS LINE\n\n";
-
-        //CREATE A BACKUP SCAFFOLDING TO OLD TAG
-        $file_controller = $this->backupOldTagScaffold($file_controller, $current_scaffolding_form);
-
-        $file_controller .= "            ".trim($bottom_script);
-
-        //CREATE FILE CONTROLLER
-        file_put_contents($this->controller_path($row->controller), $file_controller);
-
-        return redirect(Route("AdminModulesControllerGetStep4", ["id" => request('id')]));
+        return $handler->handleFormSubmit();
     }
 
     public function getStep4($id)
@@ -416,7 +374,6 @@ class AdminModulesController extends CBController
 
         $user_id_privileges = CRUDBooster::myPrivilegeId();
         DB::table('cms_privileges_roles')->insert([
-            'id' => DB::table('cms_privileges_roles')->max('id') + 1,
             'id_cms_moduls' => $id_modul,
             'id_cms_privileges' => $user_id_privileges,
             'is_visible' => 1,
@@ -611,112 +568,6 @@ class AdminModulesController extends CBController
     private function controller_path($controller)
     {
         return app_path('Http/Controllers/'.$controller.'.php');
-    }
-
-    /**
-     * @param $file_controller
-     * @param $current_scaffolding_form
-     * @return array
-     */
-    private function backupOldTagScaffold($file_controller, $current_scaffolding_form)
-    {
-        if ($current_scaffolding_form) {
-            $current_scaffolding_form = preg_split("/\\r\\n|\\r|\\n/", $current_scaffolding_form);
-            foreach ($current_scaffolding_form as &$c) {
-                $c = "            //".trim($c);
-            }
-            $current_scaffolding_form = implode("\n", $current_scaffolding_form);
-
-            $file_controller .= "            # OLD START FORM\n";
-            $file_controller .= $current_scaffolding_form."\n";
-            $file_controller .= "            # OLD END FORM\n\n";
-        }
-
-        return $file_controller;
-    }
-
-    /**
-     * @param $bottom_script
-     * @return mixed
-     */
-    private function clearOldBackup($bottom_script)
-    {
-        if (strpos($bottom_script, '# OLD START FORM') !== false) {
-            $line_start_old = strpos($bottom_script, '# OLD START FORM');
-            $line_end_old = strpos($bottom_script, '# OLD END FORM') + strlen('# OLD END FORM');
-
-            $get_string = substr($bottom_script, $line_start_old, $line_end_old);
-            $bottom_script = str_replace($get_string, '', $bottom_script);
-        }
-
-        return $bottom_script;
-    }
-
-    /**
-     * @param $post
-     * @return array
-     */
-    private function setFormScript($post)
-    {
-        $labels = $post['label'];
-        $name = $post['name'];
-        $width = $post['width'];
-        $type = $post['type'];
-        $help = $post['help'];
-        $placeholder = $post['placeholder'];
-        $style = $post['style'];
-        $validation = $post['validation'];
-
-        $script_form = [];
-        foreach ($labels as $i => $label) {
-            if ($label == '') {
-                continue;
-            }
-            $currentName = $name[$i];
-            $form = [];
-            $form['label'] = $label;
-            $form['name'] = $name[$i];
-            $form['type'] = $type[$i];
-            $form['validation'] = $validation[$i];
-            $form['width'] = $width[$i];
-            $form['placeholder'] = $placeholder[$i];
-            $form['help'] = $help[$i];
-            $form['style'] = $style[$i];
-
-            $info = file_get_contents($this->componentsTypePath().$type[$i].'/info.json');
-            $info = json_decode($info, true);
-            if (count($info['options'])) {
-                $options = [];
-                foreach ($info['options'] as $i => $opt) {
-                    $optionName = $opt['name'];
-                    $optionValue = $post[$optionName][$currentName];
-                    if ($opt['type'] == 'array') {
-                        $optionValue = ($optionValue) ? explode(";", $optionValue) : [];
-                    } elseif ($opt['type'] == 'boolean') {
-                        $optionValue = ($optionValue == 1) ? true : false;
-                    }
-                    $options[$optionName] = $optionValue;
-                }
-                $form['options'] = $options;
-            }
-
-            $script_form[] = "            ".'$this->form[] = '.min_var_export($form, "            ").";";
-        }
-
-        return $script_form;
-    }
-
-    /**
-     * @return array
-     */
-    private function getlComponentTypes()
-    {
-        $types = [];
-        foreach (glob($this->componentsTypePath().'*', GLOB_ONLYDIR) as $dir) {
-            $types[] = basename($dir);
-        }
-
-        return $types;
     }
 
     private function componentsTypePath()
