@@ -728,9 +728,7 @@ class AdminModulesController extends CBController
     private function createMenuForModule()
     {
         $parent_menu_sort = DB::table('cms_menus')->where('parent_id', 0)->max('sorting') + 1;
-        $parent_menu_id = DB::table('cms_menus')->max('id') + 1;
-        DB::table('cms_menus')->insert([
-            'id' => $parent_menu_id,
+        $parent_menu_id = DB::table('cms_menus')->insertGetId([
             'created_at' => date('Y-m-d H:i:s'),
             'name' => $this->arr['name'],
             'icon' => $this->arr['icon'],
@@ -741,30 +739,30 @@ class AdminModulesController extends CBController
             'sorting' => $parent_menu_sort,
             'parent_id' => 0,
         ]);
-        DB::table('cms_menus')->insert([
-            'id' => DB::table('cms_menus')->max('id') + 1,
+
+        $arr = [
             'created_at' => date('Y-m-d H:i:s'),
+            'type' => 'Route',
+            'is_active' => 1,
+            'cms_privileges' => CRUDBooster::myPrivilegeId(),
+            'parent_id' => $parent_menu_id,
+        ];
+
+        DB::table('cms_menus')->insert([
             'name' => trans("crudbooster.text_default_add_new_module", ['module' => $this->arr['name']]),
             'icon' => 'fa fa-plus',
             'path' => $this->arr['controller'].'GetAdd',
-            'type' => 'Route',
-            'is_active' => 1,
-            'cms_privileges' => CRUDBooster::myPrivilegeId(),
             'sorting' => 1,
-            'parent_id' => $parent_menu_id,
-        ]);
+        ] + $arr);
+
         DB::table('cms_menus')->insert([
-            'id' => DB::table('cms_menus')->max('id') + 1,
-            'created_at' => date('Y-m-d H:i:s'),
             'name' => trans("crudbooster.text_default_list_module", ['module' => $this->arr['name']]),
             'icon' => 'fa fa-bars',
             'path' => $this->arr['controller'].'GetIndex',
-            'type' => 'Route',
-            'is_active' => 1,
             'cms_privileges' => CRUDBooster::myPrivilegeId(),
             'sorting' => 2,
-            'parent_id' => $parent_menu_id,
-        ]);
+        ] + $arr);
+
     }
 
     /**
