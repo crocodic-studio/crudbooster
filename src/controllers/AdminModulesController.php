@@ -741,6 +741,9 @@ class AdminModulesController extends CBController
 
         $script_form = [];
         foreach ($labels as $i => $label) {
+            if ($label == '') {
+                continue;
+            }
             $currentName = $name[$i];
             $form = [];
             $form['label'] = $label;
@@ -752,27 +755,24 @@ class AdminModulesController extends CBController
             $form['help'] = $help[$i];
             $form['style'] = $style[$i];
 
-            if ($label != '') {
-
-                $info = file_get_contents(base_path('vendor/crocodicstudio/crudbooster/src/views/default/type_components/'.$type[$i].'/info.json'));
-                $info = json_decode($info, true);
-                if (count($info['options'])) {
-                    $options = [];
-                    foreach ($info['options'] as $i => $opt) {
-                        $optionName = $opt['name'];
-                        $optionValue = $post[$optionName][$currentName];
-                        if ($opt['type'] == 'array') {
-                            $optionValue = ($optionValue) ? explode(";", $optionValue) : [];
-                        } elseif ($opt['type'] == 'boolean') {
-                            $optionValue = ($optionValue == 1) ? true : false;
-                        }
-                        $options[$optionName] = $optionValue;
+            $info = file_get_contents(base_path('vendor/crocodicstudio/crudbooster/src/views/default/type_components/'.$type[$i].'/info.json'));
+            $info = json_decode($info, true);
+            if (count($info['options'])) {
+                $options = [];
+                foreach ($info['options'] as $i => $opt) {
+                    $optionName = $opt['name'];
+                    $optionValue = $post[$optionName][$currentName];
+                    if ($opt['type'] == 'array') {
+                        $optionValue = ($optionValue) ? explode(";", $optionValue) : [];
+                    } elseif ($opt['type'] == 'boolean') {
+                        $optionValue = ($optionValue == 1) ? true : false;
                     }
-                    $form['options'] = $options;
+                    $options[$optionName] = $optionValue;
                 }
-
-                $script_form[] = "            ".'$this->form[] = '.min_var_export($form, "\t\t\t").";";
+                $form['options'] = $options;
             }
+
+            $script_form[] = "            ".'$this->form[] = '.min_var_export($form, "            ").";";
         }
 
         return $script_form;
