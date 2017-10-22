@@ -367,9 +367,9 @@ class CBController extends Controller
         if (strpos(strtolower($query), 'order by')) {
             $query = str_replace("ORDER BY", "order by", $query);
             $qraw = explode('order by', $query);
-            $query = $qraw[0].$condition.$fk_name." = '".$fk_value."' ".$qraw[1];
+            $query = $qraw[0].$condition.$fk_name." = '$fk_value' $qraw[1]";
         } else {
-            $query .= $condition.$fk_name." = '".$fk_value."'";
+            $query .= $condition.$fk_name." = '$fk_value'";
         }
 
         $query = DB::select(DB::raw($query));
