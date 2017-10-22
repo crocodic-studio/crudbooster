@@ -440,44 +440,7 @@ class AdminModulesController extends CBController
 
         //Insert Menu
         if ($this->arr['controller']) {
-            $parent_menu_sort = DB::table('cms_menus')->where('parent_id', 0)->max('sorting') + 1;
-            $parent_menu_id = DB::table('cms_menus')->max('id') + 1;
-            DB::table('cms_menus')->insert([
-                'id' => $parent_menu_id,
-                'created_at' => date('Y-m-d H:i:s'),
-                'name' => $this->arr['name'],
-                'icon' => $this->arr['icon'],
-                'path' => '#',
-                'type' => 'URL External',
-                'is_active' => 1,
-                'cms_privileges' => CRUDBooster::myPrivilegeId(),
-                'sorting' => $parent_menu_sort,
-                'parent_id' => 0,
-            ]);
-            DB::table('cms_menus')->insert([
-                'id' => DB::table('cms_menus')->max('id') + 1,
-                'created_at' => date('Y-m-d H:i:s'),
-                'name' => trans("crudbooster.text_default_add_new_module", ['module' => $this->arr['name']]),
-                'icon' => 'fa fa-plus',
-                'path' => $this->arr['controller'].'GetAdd',
-                'type' => 'Route',
-                'is_active' => 1,
-                'cms_privileges' => CRUDBooster::myPrivilegeId(),
-                'sorting' => 1,
-                'parent_id' => $parent_menu_id,
-            ]);
-            DB::table('cms_menus')->insert([
-                'id' => DB::table('cms_menus')->max('id') + 1,
-                'created_at' => date('Y-m-d H:i:s'),
-                'name' => trans("crudbooster.text_default_list_module", ['module' => $this->arr['name']]),
-                'icon' => 'fa fa-bars',
-                'path' => $this->arr['controller'].'GetIndex',
-                'type' => 'Route',
-                'is_active' => 1,
-                'cms_privileges' => CRUDBooster::myPrivilegeId(),
-                'sorting' => 2,
-                'parent_id' => $parent_menu_id,
-            ]);
+            $this->createMenuForModule();
         }
 
         $id_modul = $this->arr['id'];
@@ -791,5 +754,47 @@ class AdminModulesController extends CBController
     private function componentsTypePath()
     {
         return base_path('vendor/crocodicstudio/crudbooster/src/views/default/type_components/');
+    }
+
+    private function createMenuForModule()
+    {
+        $parent_menu_sort = DB::table('cms_menus')->where('parent_id', 0)->max('sorting') + 1;
+        $parent_menu_id = DB::table('cms_menus')->max('id') + 1;
+        DB::table('cms_menus')->insert([
+            'id' => $parent_menu_id,
+            'created_at' => date('Y-m-d H:i:s'),
+            'name' => $this->arr['name'],
+            'icon' => $this->arr['icon'],
+            'path' => '#',
+            'type' => 'URL External',
+            'is_active' => 1,
+            'cms_privileges' => CRUDBooster::myPrivilegeId(),
+            'sorting' => $parent_menu_sort,
+            'parent_id' => 0,
+        ]);
+        DB::table('cms_menus')->insert([
+            'id' => DB::table('cms_menus')->max('id') + 1,
+            'created_at' => date('Y-m-d H:i:s'),
+            'name' => trans("crudbooster.text_default_add_new_module", ['module' => $this->arr['name']]),
+            'icon' => 'fa fa-plus',
+            'path' => $this->arr['controller'].'GetAdd',
+            'type' => 'Route',
+            'is_active' => 1,
+            'cms_privileges' => CRUDBooster::myPrivilegeId(),
+            'sorting' => 1,
+            'parent_id' => $parent_menu_id,
+        ]);
+        DB::table('cms_menus')->insert([
+            'id' => DB::table('cms_menus')->max('id') + 1,
+            'created_at' => date('Y-m-d H:i:s'),
+            'name' => trans("crudbooster.text_default_list_module", ['module' => $this->arr['name']]),
+            'icon' => 'fa fa-bars',
+            'path' => $this->arr['controller'].'GetIndex',
+            'type' => 'Route',
+            'is_active' => 1,
+            'cms_privileges' => CRUDBooster::myPrivilegeId(),
+            'sorting' => 2,
+            'parent_id' => $parent_menu_id,
+        ]);
     }
 }
