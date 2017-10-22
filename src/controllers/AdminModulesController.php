@@ -236,41 +236,8 @@ class AdminModulesController extends CBController
     {
         $this->cbLoader();
 
-        $label = Request::input('column');
-        $name = Request::input('name');
-        $isImage = Request::input('is_image');
-        $isDownload = Request::input('is_download');
-        $callback = Request::input('callback');
         $id = Request::input('id');
-        $width = Request::input('width');
-
         $row = DB::table('cms_moduls')->where('id', $id)->first();
-        $columnScript = [];
-        foreach ($label as $i => $lab) {
-
-            if (! $name[$i]) {
-                continue;
-            }
-
-            $colKey = [];
-            $colKey[] = '"label"=>"'.$lab.'"';
-            $colKey[] = '"name"=>"'.$name[$i].'"';
-            if ($isImage[$i]) {
-                $colKey[] = '"image"=>true';
-            }
-            if ($isDownload[$i]) {
-                $colKey[] = '"download"=>true';
-            }
-            if ($callback[$i]) {
-                $colKey[] = '"callback"=>function($row) {'.$callback[$i].'}';
-            }
-            if ($width[$i]) {
-                $colKey[] = '"width"=>"'.$width[$i].'"';
-            }
-
-            $columnScript[] = "            ".'$this->col[] = ['.implode(",", $colKey).'];';
-        }
-
         $code = file_get_contents($this->controller_path($row->controller));
         $rawBefore = explode("# START COLUMNS DO NOT REMOVE THIS LINE", $code);
         $rawAfter = explode("# END COLUMNS DO NOT REMOVE THIS LINE", $rawBefore[1]);
@@ -279,7 +246,7 @@ class AdminModulesController extends CBController
         $fileResult .= "\n";
         $fileResult .= "\n            # START COLUMNS DO NOT REMOVE THIS LINE\n";
         $fileResult .= "            ".'$this->col = [];'."\n";
-        $fileResult .= implode("\n", $columnScript);
+        $fileResult .= implode("\n", $this->makeColumnPhpCode());
         $fileResult .= "\n            # END COLUMNS DO NOT REMOVE THIS LINE\n";
         $fileResult .= "\n            ";
         $fileResult .= trim($rawAfter[1]);
@@ -796,5 +763,46 @@ class AdminModulesController extends CBController
             'sorting' => 2,
             'parent_id' => $parent_menu_id,
         ]);
+    }
+
+    /**
+     * @return array
+     */
+    private function makeColumnPhpCode()
+    {
+        $label = Request::input('column');
+        $name = Request::input('name');
+        $isImage = Request::input('is_image');
+        $isDownload = Request::input('is_download');
+        $callback = Request::input('callback');
+        $width = Request::input('width');
+
+        $columnScript = [];
+        foreach ($label as $i => $lab) {
+
+            if (! $name[$i]) {
+                continue;
+            }
+
+            $colKey = [];
+            $colKey[] = '"label"=>"'.$lab.'"';
+            $colKey[] = '"name"=>"'.$name[$i].'"';
+            if ($isImage[$i]) {
+                $colKey[] = '"image"=>true';
+            }
+            if ($isDownload[$i]) {
+                $colKey[] = '"download"=>true';
+            }
+            if ($callback[$i]) {
+                $colKey[] = '"callback"=>function($row) {'.$callback[$i].'}';
+            }
+            if ($width[$i]) {
+                $colKey[] = '"width"=>"'.$width[$i].'"';
+            }
+
+            $columnScript[] = "            ".'$this->col[] = ['.implode(",", $colKey).'];';
+        }
+
+        return $columnScript;
     }
 }
