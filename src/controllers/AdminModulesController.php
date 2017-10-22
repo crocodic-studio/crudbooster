@@ -70,9 +70,9 @@ class AdminModulesController extends CBController
 
     function hookBeforeDelete($id)
     {
-        $modul = DB::table('cms_moduls')->where('id', $id)->first();
-        $menus = DB::table('cms_menus')->where('path', 'like', '%'.$modul->controller.'%')->delete();
-        @unlink($this->controller_path($modul->controller));
+        $controller = DB::table('cms_moduls')->where('id', $id)->first()->controller;
+        DB::table('cms_menus')->where('path', 'like', '%'.$controller.'%')->delete();
+        @unlink($this->controller_path($controller));
     }
 
     public function getTableColumns($table)
@@ -147,14 +147,12 @@ class AdminModulesController extends CBController
         $data['table_list'] = $table_list;
         $data['cols'] = parseScaffoldingToArray($code, 'col');
 
-        $data['hookQueryIndex'] = readMethodContent($code, 'hookQueryIndex');
-        $data['hookRowIndex'] = readMethodContent($code, 'hookRowIndex');
-        $data['hookBeforeAdd'] = readMethodContent($code, 'hookBeforeAdd');
-        $data['hookAfterAdd'] = readMethodContent($code, 'hookAfterAdd');
-        $data['hookBeforeEdit'] = readMethodContent($code, 'hookBeforeEdit');
-        $data['hookAfterEdit'] = readMethodContent($code, 'hookAfterEdit');
-        $data['hookBeforeDelete'] = readMethodContent($code, 'hookBeforeDelete');
-        $data['hookAfterDelete'] = readMethodContent($code, 'hookAfterDelete');
+
+        $hooks = ['hookQueryIndex', 'hookRowIndex', 'hookBeforeAdd', 'hookAfterAdd',
+            'hookBeforeEdit', 'hookAfterEdit', 'hookBeforeDelete', 'hookAfterDelete',];
+        foreach($hooks as $hook){
+            $data[$hook] = readMethodContent($code, $hook);
+        }
 
         return view('crudbooster::module_generator.step2', $data);
     }
@@ -196,11 +194,10 @@ class AdminModulesController extends CBController
                 ]);
             }
 
-            $user_id_privileges = CRUDBooster::myPrivilegeId();
             DB::table('cms_privileges_roles')->insert([
                 'id' => DB::table('cms_privileges_roles')->max('id') + 1,
                 'id_cms_moduls' => $id,
-                'id_cms_privileges' => $user_id_privileges,
+                'id_cms_privileges' => CRUDBooster::myPrivilegeId(),
                 'is_visible' => 1,
                 'is_create' => 1,
                 'is_read' => 1,
@@ -209,7 +206,12 @@ class AdminModulesController extends CBController
             ]);
 
             //Refresh Session Roles
-            $roles = DB::table('cms_privileges_roles')->where('id_cms_privileges', CRUDBooster::myPrivilegeId())->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')->get();
+            $roles = DB::table('cms_privileges_roles')
+                ->where('id_cms_privileges', CRUDBooster::myPrivilegeId())
+                ->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')
+                ->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')
+                ->get();
+
             Session::put('admin_privileges_roles', $roles);
 
             return redirect(Route("AdminModulesControllerGetStep2", ["id" => $id]));
@@ -770,7 +772,7 @@ class AdminModulesController extends CBController
      */
     private function makeColumnPhpCode()
     {
-        $label = Request::input('column');
+        $labels = Request::input('column');
         $name = Request::input('name');
         $isImage = Request::input('is_image');
         $isDownload = Request::input('is_download');
@@ -778,29 +780,27 @@ class AdminModulesController extends CBController
         $width = Request::input('width');
 
         $columnScript = [];
-        foreach ($label as $i => $lab) {
+        foreach ($labels as $i => $label) {
 
             if (! $name[$i]) {
                 continue;
             }
 
-            $colKey = [];
-            $colKey[] = '"label"=>"'.$lab.'"';
-            $colKey[] = '"name"=>"'.$name[$i].'"';
+            $colProperties = ["'label' => '$label'", "'name' => '{$name[$i]}'"];
             if ($isImage[$i]) {
-                $colKey[] = '"image"=>true';
+                $colProperties[] = '"image" => true ';
             }
             if ($isDownload[$i]) {
-                $colKey[] = '"download"=>true';
+                $colProperties[] = '"download" => true';
             }
             if ($callback[$i]) {
-                $colKey[] = '"callback"=>function($row) {'.$callback[$i].'}';
+                $colProperties[] = '"callback" => function($row) {'.$callback[$i].'}';
             }
             if ($width[$i]) {
-                $colKey[] = '"width"=>"'.$width[$i].'"';
+                $colProperties[] = "'width' => '$width[$i]'";
             }
 
-            $columnScript[] = "            ".'$this->col[] = ['.implode(",", $colKey).'];';
+            $columnScript[] = '            $this->col[] = ['.implode(", ", $colProperties).'];';
         }
 
         return $columnScript;
