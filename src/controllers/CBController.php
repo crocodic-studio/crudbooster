@@ -1123,35 +1123,17 @@ class CBController extends Controller
     public function postUploadSummernote()
     {
         $this->cbLoader();
-        $name = 'userfile';
-        if (! Request::hasFile($name)) {
-            return null;
-        }
-        $file = Request::file($name);
-        $ext = $file->getClientOriginalExtension();
-        $filesize = $file->getClientSize() / 1024;
-        if ($filesize > cbConfig('UPLOAD_MAX_SIZE', 5000)) {
-            echo "The filesize is too large!";
-            exit;
-        }
-        if (! in_array($ext, explode(',', cbConfig('UPLOAD_TYPES')))) {
-            echo "The filetype is not allowed!";
-            exit;
-        }
-
-        //Create Directory Monthly
-        Storage::makeDirectory(date('Y-m'));
-        //Move file to storage
-        $filename = md5(str_random(5)).'.'.$ext;
-        $file_path = 'uploads'.DIRECTORY_SEPARATOR.date('Y-m');
-        Storage::putFileAs($file_path, $file, $filename);
-        echo asset('uploads/'.date('Y-m').'/'.$filename);
+        echo asset($this->uploadFile('userfile'));
     }
 
     public function postUploadFile()
     {
         $this->cbLoader();
-        $name = 'userfile';
+        echo $this->uploadFile('userfile');
+    }
+
+    private function uploadFile($name)
+    {
         if (! Request::hasFile($name)) {
             return null;
         }
@@ -1173,7 +1155,7 @@ class CBController extends Controller
         $filename = md5(str_random(5)).'.'.$ext;
         $file_path = 'uploads'.DIRECTORY_SEPARATOR.date('Y-m');
         Storage::putFileAs($file_path, $file, $filename);
-        echo 'uploads/'.date('Y-m').'/'.$filename;
+        return 'uploads/'.date('Y-m').'/'.$filename;
     }
 
     public function actionButtonSelected($id_selected, $button_name)
