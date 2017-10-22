@@ -479,12 +479,11 @@ class AdminModulesController extends CBController
         $this->form[] = ["label" => "Name", "name" => "name", "placeholder" => "Module name here", 'required' => true];
 
         $tables_list = [];
-        foreach (CRUDBooster::listTables() as $tab) {
-            foreach ($tab as $key => $label) {
+        foreach (CRUDBooster::listTables() as $table) {
+
+            unset($table['migrations']);
+            foreach ($table as $key => $label) {
                 if (substr($label, 0, 4) == 'cms_' && $label != 'cms_users') {
-                    continue;
-                }
-                if ($label == 'migrations') {
                     continue;
                 }
 
