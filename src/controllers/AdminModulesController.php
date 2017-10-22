@@ -237,8 +237,10 @@ class AdminModulesController extends CBController
         $this->cbLoader();
 
         $id = Request::input('id');
-        $row = DB::table('cms_moduls')->where('id', $id)->first();
-        $code = file_get_contents($this->controller_path($row->controller));
+        $controller = DB::table('cms_moduls')->where('id', $id)->first()->controller;
+        $controller_path = $this->controller_path($controller);
+
+        $code = file_get_contents($controller_path);
         $rawBefore = explode("# START COLUMNS DO NOT REMOVE THIS LINE", $code);
         $rawAfter = explode("# END COLUMNS DO NOT REMOVE THIS LINE", $rawBefore[1]);
 
@@ -259,7 +261,7 @@ class AdminModulesController extends CBController
         $fileResult = writeMethodContent($fileResult, 'hookBeforeDelete', g('hookBeforeDelete'));
         $fileResult = writeMethodContent($fileResult, 'hookAfterDelete', g('hookAfterDelete'));
 
-        file_put_contents($this->controller_path($row->controller), $fileResult);
+        file_put_contents($controller_path, $fileResult);
 
         return redirect(Route("AdminModulesControllerGetStep3", ["id" => $id]));
     }
