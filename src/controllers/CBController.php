@@ -1124,23 +1124,17 @@ class CBController extends Controller
     {
         $this->cbLoader();
         $name = 'userfile';
-        $uploadTypes = explode(',', cbConfig('UPLOAD_TYPES'));
-        $uploadMaxSize = cbConfig('UPLOAD_MAX_SIZE') ?: 5000;
-
         if (! Request::hasFile($name)) {
             return null;
         }
-
         $file = Request::file($name);
         $ext = $file->getClientOriginalExtension();
         $filesize = $file->getClientSize() / 1024;
-
-        if ($filesize > $uploadMaxSize) {
+        if ($filesize > cbConfig('UPLOAD_MAX_SIZE', 5000)) {
             echo "The filesize is too large!";
             exit;
         }
-
-        if (! in_array($ext, $uploadTypes)) {
+        if (! in_array($ext, explode(',', cbConfig('UPLOAD_TYPES')))) {
             echo "The filetype is not allowed!";
             exit;
         }
@@ -1164,15 +1158,11 @@ class CBController extends Controller
         $file = Request::file($name);
         $ext = $file->getClientOriginalExtension();
         $filesize = $file->getClientSize() / 1024;
-        $uploadMaxSize = cbConfig('UPLOAD_MAX_SIZE', 5000);
-
-        if ($filesize > $uploadMaxSize) {
+        if ($filesize > cbConfig('UPLOAD_MAX_SIZE', 5000)) {
             echo "The filesize is too large!";
             exit;
         }
-        $uploadTypes = explode(',', cbConfig('UPLOAD_TYPES'));
-
-        if (! in_array($ext, $uploadTypes)) {
+        if (! in_array($ext, explode(',', cbConfig('UPLOAD_TYPES')))) {
             echo "The filetype is not allowed!";
             exit;
         }

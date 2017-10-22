@@ -357,8 +357,8 @@ if (! function_exists('cbStyleSheet')) {
 }
 
 if (! function_exists('cbConfig')) {
-    function cbConfig($key)
+    function cbConfig($key, $default = null)
     {
-        return config('crudbooster.'.$key);
+        return config('crudbooster.'.$key, $default);
     }
 }
