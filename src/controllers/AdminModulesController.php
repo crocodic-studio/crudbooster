@@ -375,7 +375,7 @@ class AdminModulesController extends CBController
                     $form['options'] = $options;
                 }
 
-                $script_form[] = "\t\t\t".'$this->form[] = '.min_var_export($form, "\t\t\t").";";
+                $script_form[] = "            ".'$this->form[] = '.min_var_export($form, "\t\t\t").";";
             }
         }
 
@@ -399,22 +399,22 @@ class AdminModulesController extends CBController
 
         //ARRANGE THE FULL SCRIPT
         $file_controller = $top_script."\n\n";
-        $file_controller .= "\t\t\t# START FORM DO NOT REMOVE THIS LINE\n";
-        $file_controller .= "\t\t\t".'$this->form = [];'."\n";
+        $file_controller .= "            # START FORM DO NOT REMOVE THIS LINE\n";
+        $file_controller .= "            ".'$this->form = [];'."\n";
         $file_controller .= $scripts."\n";
-        $file_controller .= "\t\t\t# END FORM DO NOT REMOVE THIS LINE\n\n";
+        $file_controller .= "            # END FORM DO NOT REMOVE THIS LINE\n\n";
 
         //CREATE A BACKUP SCAFFOLDING TO OLD TAG
         if ($current_scaffolding_form) {
             $current_scaffolding_form = preg_split("/\\r\\n|\\r|\\n/", $current_scaffolding_form);
             foreach ($current_scaffolding_form as &$c) {
-                $c = "\t\t\t//".trim($c);
+                $c = "            //".trim($c);
             }
             $current_scaffolding_form = implode("\n", $current_scaffolding_form);
 
-            $file_controller .= "\t\t\t# OLD START FORM\n";
+            $file_controller .= "            # OLD START FORM\n";
             $file_controller .= $current_scaffolding_form."\n";
-            $file_controller .= "\t\t\t# OLD END FORM\n\n";
+            $file_controller .= "            # OLD END FORM\n\n";
         }
 
         $file_controller .= "\t\t\t".trim($bottom_script);
