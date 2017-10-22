@@ -4,6 +4,7 @@ use crocodicstudio\crudbooster\controllers\Controller;
 use crocodicstudio\crudbooster\controllers\Helpers\FontAwesome;
 use crocodicstudio\crudbooster\ModuleGenerator\Step1Handler;
 use crocodicstudio\crudbooster\ModuleGenerator\Step3Handler;
+use crocodicstudio\crudbooster\ModuleGenerator\Step4Handler;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;
@@ -74,7 +75,7 @@ class AdminModulesController extends CBController
     {
         $controller = DB::table('cms_moduls')->where('id', $id)->first()->controller;
         DB::table('cms_menus')->where('path', 'like', '%'.$controller.'%')->delete();
-        @unlink($this->controller_path($controller));
+        @unlink(controller_path($controller));
     }
 
     public function getTableColumns($table)
@@ -151,7 +152,7 @@ class AdminModulesController extends CBController
 
         $id = Request::input('id');
         $controller = DB::table('cms_moduls')->where('id', $id)->first()->controller;
-        $controller_path = $this->controller_path($controller);
+        $controller_path = controller_path($controller);
 
         $code = file_get_contents($controller_path);
         $rawBefore = explode("# START COLUMNS DO NOT REMOVE THIS LINE", $code);
@@ -165,6 +166,7 @@ class AdminModulesController extends CBController
         $fileResult .= trim($rawAfter[1]);
 
         $fileResult = writeMethodContent($fileResult, 'hookQueryIndex', g('hookQueryIndex'));
+        $fileResult = writeMethodContent($fileResult, 'hookRowIndex', g('hookRowIndex'));
         $fileResult = writeMethodContent($fileResult, 'hookBeforeAdd', g('hookBeforeAdd'));
         $fileResult = writeMethodContent($fileResult, 'hookAfterAdd', g('hookAfterAdd'));
         $fileResult = writeMethodContent($fileResult, 'hookBeforeEdit', g('hookBeforeEdit'));
@@ -195,67 +197,16 @@ class AdminModulesController extends CBController
         return $handler->handleFormSubmit();
     }
 
-    public function getStep4($id)
+    public function getStep4($id, Step4Handler $handler)
     {
         $this->cbLoader();
-
-        $row = DB::table('cms_moduls')->where('id', $id)->first();
-
-        $data = [];
-        $data['id'] = $id;
-        if (file_exists($this->controller_path($row->controller))) {
-            $response = file_get_contents($this->controller_path($row->controller));
-            $data['config'] = parseControllerConfigToArray($response);
-        }
-
-        return view('crudbooster::module_generator.step4', $data);
+        return $handler->showForm($id);
     }
 
-    public function postStepFinish()
+    public function postStepFinish(Step4Handler $handler)
     {
         $this->cbLoader();
-        $id = Request::input('id');
-        $row = DB::table('cms_moduls')->where('id', $id)->first();
-
-        $post = Request::all();
-
-        $post['table'] = $row->table_name;
-
-        $script_config = [];
-        $exception = ['_token', 'id', 'submit'];
-        $i = 0;
-        foreach ($post as $key => $val) {
-            if (in_array($key, $exception)) {
-                continue;
-            }
-
-            if ($val != 'true' && $val != 'false') {
-                $value = '"'.$val.'"';
-            } else {
-                $value = $val;
-            }
-
-            $script_config[$i] = "            ".'$this->'.$key.' = '.$value.';';
-            $i++;
-        }
-
-        $scripts = implode("\n", $script_config);
-        $raw = file_get_contents($this->controller_path($row->controller));
-        $raw = explode("# START CONFIGURATION DO NOT REMOVE THIS LINE", $raw);
-        $rraw = explode("# END CONFIGURATION DO NOT REMOVE THIS LINE", $raw[1]);
-
-        $file_controller = trim($raw[0])."\n\n";
-        $file_controller .= "            # START CONFIGURATION DO NOT REMOVE THIS LINE\n";
-        $file_controller .= $scripts."\n";
-        $file_controller .= "            # END CONFIGURATION DO NOT REMOVE THIS LINE\n\n";
-        $file_controller .= "            ".trim($rraw[1]);
-
-        file_put_contents($this->controller_path($row->controller), $file_controller);
-
-        return redirect()->route('AdminModulesControllerGetIndex')->with([
-            'message' => trans('crudbooster.alert_update_data_success'),
-            'message_type' => 'success',
-        ]);
+        return $handler->handleFormSubmit();
     }
 
     public function postAddSave()
@@ -333,7 +284,7 @@ class AdminModulesController extends CBController
 
     public function getTest()
     {
-        $code = file_get_contents($this->controller_path('AdminCustomersController.php'));
+        $code = file_get_contents(controller_path('AdminCustomersController.php'));
 
         $forms = parseFormToArray($code);
         echo '<pre>';
@@ -345,18 +296,7 @@ class AdminModulesController extends CBController
         $this->form = [];
         $this->form[] = ["label" => "Name", "name" => "name", "placeholder" => "Module name here", 'required' => true];
 
-        $tables_list = [];
-        foreach (CRUDBooster::listTables() as $table) {
-
-            unset($table['migrations']);
-            foreach ($table as $key => $label) {
-                if (substr($label, 0, 4) == 'cms_' && $label != 'cms_users') {
-                    continue;
-                }
-
-                $tables_list[] = $label;
-            }
-        }
+        $tables_list = getTablesList();
 
         $this->form[] = [
             "label" => "Table Name",
