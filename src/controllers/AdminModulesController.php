@@ -177,7 +177,7 @@ class AdminModulesController extends CBController
             $created_at = now();
 
             $controller = CRUDBooster::generateController($table_name, $path);
-            $id = DB::table($this->table)->insertGetId(compact("controller", "name", "table_name", "icon", "path", "created_at"));
+            $id = $this->table()->insertGetId(compact("controller", "name", "table_name", "icon", "path", "created_at"));
 
             //Insert Menu
             if ($controller && request('create_menu')) {
@@ -216,7 +216,7 @@ class AdminModulesController extends CBController
         }
 
         $id = request('id');
-        DB::table($this->table)->where('id', $id)->update(compact("name", "table_name", "icon", "path"));
+        $this->table()->where('id', $id)->update(compact("name", "table_name", "icon", "path"));
 
         $row = DB::table('cms_moduls')->where('id', $id)->first();
 
@@ -435,8 +435,8 @@ class AdminModulesController extends CBController
         }
 
         $this->arr['created_at'] = date('Y-m-d H:i:s');
-        $this->arr['id'] = DB::table($this->table)->max('id') + 1;
-        DB::table($this->table)->insert($this->arr);
+        $this->arr['id'] = $this->table()->max('id') + 1;
+        $this->table()->insert($this->arr);
 
         //Insert Menu
         if ($this->arr['controller']) {
@@ -512,7 +512,7 @@ class AdminModulesController extends CBController
     {
         $this->cbLoader();
 
-        $row = DB::table($this->table)->where($this->primary_key, $id)->first();
+        $row = $this->table()->where($this->primary_key, $id)->first();
 
         $this->validation();
         $this->inputAssignment();
