@@ -2,6 +2,7 @@
 
 use crocodicstudio\crudbooster\controllers\Controller;
 use crocodicstudio\crudbooster\controllers\Helpers\FontAwesome;
+use crocodicstudio\crudbooster\ModuleGenerator\Step1Handler;
 use crocodicstudio\crudbooster\ModuleGenerator\Step3Handler;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -98,29 +99,10 @@ class AdminModulesController extends CBController
         return redirect()->route("ModulesControllerGetStep1");
     }
 
-    public function getStep1($id = 0)
+    public function getStep1($id = 0, Step1Handler $handler)
     {
         $this->cbLoader();
-
-        $tables = CRUDBooster::listTables();
-        $tables_list = [];
-        foreach ($tables as $tab) {
-            foreach ($tab as $key => $value) {
-                $label = $value;
-
-                if (substr($label, 0, 4) == 'cms_' && $label != 'cms_users') {
-                    continue;
-                }
-                if ($label == 'migrations') {
-                    continue;
-                }
-
-                $tables_list[] = $value;
-            }
-        }
-        $row = CRUDBooster::first($this->table, ['id' => $id]);
-
-        return view("crudbooster::module_generator.step1", compact("tables_list", "fontawesome", "row", "id"));
+        return $handler->showForm($id);
     }
 
     public function getStep2($id)
@@ -135,12 +117,11 @@ class AdminModulesController extends CBController
         $table_list = [];
         foreach ($tables as $tab) {
             foreach ($tab as $key => $value) {
-                $label = $value;
                 $table_list[] = $value;
             }
         }
 
-        $code = file_get_contents($this->controller_path($row->controller.'.php'));
+        $code = file_get_contents(controller_path($row->controller.'.php'));
 
         $data = [];
         $data['id'] = $id;
@@ -158,81 +139,10 @@ class AdminModulesController extends CBController
         return view('crudbooster::module_generator.step2', $data);
     }
 
-    public function postStep2()
+    public function postStep2(Step1Handler $handler)
     {
         $this->cbLoader();
-
-        $name = request('name');
-        $table_name = request('table');
-        $icon = request('icon');
-        $path = request('path');
-
-        if (! request('id')) {
-
-            if (DB::table('cms_moduls')->where('path', $path)->where('deleted_at', null)->count()) {
-                return CRUDBooster::backWithMsg('Sorry the slug has already exists, please choose another !', 'warning');
-            }
-
-            $created_at = now();
-
-            $controller = CRUDBooster::generateController($table_name, $path);
-            $id = $this->table()->insertGetId(compact("controller", "name", "table_name", "icon", "path", "created_at"));
-
-            //Insert Menu
-            if ($controller && request('create_menu')) {
-                $parent_menu_sort = DB::table('cms_menus')->where('parent_id', 0)->max('sorting') + 1;
-
-                DB::table('cms_menus')->insert([
-                    'created_at' => date('Y-m-d H:i:s'),
-                    'name' => $name,
-                    'icon' => $icon,
-                    'path' => $controller.'GetIndex',
-                    'type' => 'Route',
-                    'is_active' => 1,
-                    'cms_privileges' => CRUDBooster::myPrivilegeId(),
-                    'sorting' => $parent_menu_sort,
-                    'parent_id' => 0,
-                ]);
-            }
-
-            DB::table('cms_privileges_roles')->insert([
-                'id' => DB::table('cms_privileges_roles')->max('id') + 1,
-                'id_cms_moduls' => $id,
-                'id_cms_privileges' => CRUDBooster::myPrivilegeId(),
-                'is_visible' => 1,
-                'is_create' => 1,
-                'is_read' => 1,
-                'is_edit' => 1,
-                'is_delete' => 1,
-            ]);
-
-            //Refresh Session Roles
-            $roles = DB::table('cms_privileges_roles')
-                ->where('id_cms_privileges', CRUDBooster::myPrivilegeId())
-                ->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')
-                ->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')
-                ->get();
-
-            Session::put('admin_privileges_roles', $roles);
-
-            return redirect(Route("AdminModulesControllerGetStep2", ["id" => $id]));
-        }
-
-        $id = request('id');
-        $this->table()->where('id', $id)->update(compact("name", "table_name", "icon", "path"));
-
-        $row = DB::table('cms_moduls')->where('id', $id)->first();
-
-        $response = file_get_contents(__DIR__.'/'.str_replace('.', '', $row->controller).'.php');
-        if (file_exists($this->controller_path($row->controller))) {
-            $response = file_get_contents($this->controller_path(str_replace('.', '', $row->controller)));
-        }
-
-        if (strpos($response, "# START COLUMNS") !== true) {
-            // return redirect()->back()->with(['message'=>'Sorry, is not possible to edit the module with Module Generator Tool. Prefix and or Suffix tag is missing !','message_type'=>'warning']);
-        }
-
-        return redirect(Route("AdminModulesControllerGetStep2", ["id" => $id]));
+        return $handler->handleFormSubmit();
     }
 
     public function postStep3()

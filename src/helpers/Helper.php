@@ -37,6 +37,24 @@ if (! function_exists('controller_path')) {
     }
 }
 
+if (! function_exists('getTablesList')) {
+    function getTablesList()
+    {
+        $tables_list = [];
+        foreach (CRUDBooster::listTables() as $table) {
+            unset($table['migrations']);
+            foreach ($table as $key => $label) {
+                if (substr($label, 0, 4) == 'cms_' && $label != 'cms_users') {
+                    continue;
+                }
+                $tables_list[] = $label;
+            }
+        }
+
+        return $tables_list;
+    }
+}
+
 if (! function_exists('readMethodContent')) {
     function readMethodContent($code, $findMethod)
     {
