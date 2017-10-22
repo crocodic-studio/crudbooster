@@ -329,56 +329,8 @@ class AdminModulesController extends CBController
 
         $post = Request::all();
 
-        $id = $post['id'];
-
-        $labels = $post['label'];
-        $name = $post['name'];
-        $width = $post['width'];
-        $type = $post['type'];
-        $help = $post['help'];
-        $placeholder = $post['placeholder'];
-        $style = $post['style'];
-        $validation = $post['validation'];
-
-        $row = DB::table('cms_moduls')->where('id', $id)->first();
-
-        $i = 0;
-        $script_form = [];
-        foreach ($labels as $i => $label) {
-            $currentName = $name[$i];
-            $form = [];
-            $form['label'] = $label;
-            $form['name'] = $name[$i];
-            $form['type'] = $type[$i];
-            $form['validation'] = $validation[$i];
-            $form['width'] = $width[$i];
-            $form['placeholder'] = $placeholder[$i];
-            $form['help'] = $help[$i];
-            $form['style'] = $style[$i];
-
-            if ($label != '') {
-
-                $info = file_get_contents(base_path('vendor/crocodicstudio/crudbooster/src/views/default/type_components/'.$type[$i].'/info.json'));
-                $info = json_decode($info, true);
-                if (count($info['options'])) {
-                    $options = [];
-                    foreach ($info['options'] as $i => $opt) {
-                        $optionName = $opt['name'];
-                        $optionValue = $post[$optionName][$currentName];
-                        if ($opt['type'] == 'array') {
-                            $optionValue = ($optionValue) ? explode(";", $optionValue) : [];
-                        } elseif ($opt['type'] == 'boolean') {
-                            $optionValue = ($optionValue == 1) ? true : false;
-                        }
-                        $options[$optionName] = $optionValue;
-                    }
-                    $form['options'] = $options;
-                }
-
-                $script_form[] = "            ".'$this->form[] = '.min_var_export($form, "\t\t\t").";";
-            }
-        }
-
+        $script_form = $this->setFormScript($post);
+        $row = DB::table('cms_moduls')->where('id', request('id'))->first();
         $scripts = implode("\n", $script_form);
         $raw = file_get_contents($this->controller_path($row->controller));
         $raw = explode("# START FORM DO NOT REMOVE THIS LINE", $raw);
@@ -389,13 +341,7 @@ class AdminModulesController extends CBController
         $bottom_script = trim($rraw[1]);
 
         //IF FOUND OLD, THEN CLEAR IT
-        if (strpos($bottom_script, '# OLD START FORM') !== false) {
-            $line_end_count = strlen('# OLD END FORM');
-            $line_start_old = strpos($bottom_script, '# OLD START FORM');
-            $line_end_old = strpos($bottom_script, '# OLD END FORM') + $line_end_count;
-            $get_string = substr($bottom_script, $line_start_old, $line_end_old);
-            $bottom_script = str_replace($get_string, '', $bottom_script);
-        }
+        $bottom_script = $this->clearOldBackup($bottom_script);
 
         //ARRANGE THE FULL SCRIPT
         $file_controller = $top_script."\n\n";
@@ -405,24 +351,14 @@ class AdminModulesController extends CBController
         $file_controller .= "            # END FORM DO NOT REMOVE THIS LINE\n\n";
 
         //CREATE A BACKUP SCAFFOLDING TO OLD TAG
-        if ($current_scaffolding_form) {
-            $current_scaffolding_form = preg_split("/\\r\\n|\\r|\\n/", $current_scaffolding_form);
-            foreach ($current_scaffolding_form as &$c) {
-                $c = "            //".trim($c);
-            }
-            $current_scaffolding_form = implode("\n", $current_scaffolding_form);
+        $file_controller = $this->backupOldTagScaffold($file_controller, $current_scaffolding_form);
 
-            $file_controller .= "            # OLD START FORM\n";
-            $file_controller .= $current_scaffolding_form."\n";
-            $file_controller .= "            # OLD END FORM\n\n";
-        }
-
-        $file_controller .= "\t\t\t".trim($bottom_script);
+        $file_controller .= "            ".trim($bottom_script);
 
         //CREATE FILE CONTROLLER
         file_put_contents($this->controller_path($row->controller), $file_controller);
 
-        return redirect(Route("AdminModulesControllerGetStep4", ["id" => $id]));
+        return redirect(Route("AdminModulesControllerGetStep4", ["id" => request('id')]));
     }
 
     public function getStep4($id)
@@ -747,5 +683,98 @@ class AdminModulesController extends CBController
     private function controller_path($controller)
     {
         return app_path('Http/Controllers/'.$controller.'.php');
+    }
+
+    /**
+     * @param $file_controller
+     * @param $current_scaffolding_form
+     * @return array
+     */
+    private function backupOldTagScaffold($file_controller, $current_scaffolding_form)
+    {
+        if ($current_scaffolding_form) {
+            $current_scaffolding_form = preg_split("/\\r\\n|\\r|\\n/", $current_scaffolding_form);
+            foreach ($current_scaffolding_form as &$c) {
+                $c = "            //".trim($c);
+            }
+            $current_scaffolding_form = implode("\n", $current_scaffolding_form);
+
+            $file_controller .= "            # OLD START FORM\n";
+            $file_controller .= $current_scaffolding_form."\n";
+            $file_controller .= "            # OLD END FORM\n\n";
+        }
+
+        return $file_controller;
+    }
+
+    /**
+     * @param $bottom_script
+     * @return mixed
+     */
+    private function clearOldBackup($bottom_script)
+    {
+        if (strpos($bottom_script, '# OLD START FORM') !== false) {
+            $line_start_old = strpos($bottom_script, '# OLD START FORM');
+            $line_end_old = strpos($bottom_script, '# OLD END FORM') + strlen('# OLD END FORM');
+
+            $get_string = substr($bottom_script, $line_start_old, $line_end_old);
+            $bottom_script = str_replace($get_string, '', $bottom_script);
+        }
+
+        return $bottom_script;
+    }
+
+    /**
+     * @param $post
+     * @return array
+     */
+    private function setFormScript($post)
+    {
+        $labels = $post['label'];
+        $name = $post['name'];
+        $width = $post['width'];
+        $type = $post['type'];
+        $help = $post['help'];
+        $placeholder = $post['placeholder'];
+        $style = $post['style'];
+        $validation = $post['validation'];
+
+        $script_form = [];
+        foreach ($labels as $i => $label) {
+            $currentName = $name[$i];
+            $form = [];
+            $form['label'] = $label;
+            $form['name'] = $name[$i];
+            $form['type'] = $type[$i];
+            $form['validation'] = $validation[$i];
+            $form['width'] = $width[$i];
+            $form['placeholder'] = $placeholder[$i];
+            $form['help'] = $help[$i];
+            $form['style'] = $style[$i];
+
+            if ($label != '') {
+
+                $info = file_get_contents(base_path('vendor/crocodicstudio/crudbooster/src/views/default/type_components/'.$type[$i].'/info.json'));
+                $info = json_decode($info, true);
+                if (count($info['options'])) {
+                    $options = [];
+                    foreach ($info['options'] as $i => $opt) {
+                        $optionName = $opt['name'];
+                        $optionValue = $post[$optionName][$currentName];
+                        if ($opt['type'] == 'array') {
+                            $optionValue = ($optionValue) ? explode(";", $optionValue) : [];
+                        } elseif ($opt['type'] == 'boolean') {
+                            $optionValue = ($optionValue == 1) ? true : false;
+                        }
+                        $options[$optionName] = $optionValue;
+                    }
+                    $form['options'] = $options;
+                }
+
+                $script_form[] = "            ".'$this->form[] = '.min_var_export($form, "\t\t\t").";";
+            }
+        }
+
+        return $script_form;
     }
 }
