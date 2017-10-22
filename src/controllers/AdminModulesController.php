@@ -245,12 +245,10 @@ class AdminModulesController extends CBController
         $rawAfter = explode("# END COLUMNS DO NOT REMOVE THIS LINE", $rawBefore[1]);
 
         $fileResult = trim($rawBefore[0]);
-        $fileResult .= "\n";
-        $fileResult .= "\n            # START COLUMNS DO NOT REMOVE THIS LINE\n";
-        $fileResult .= "            ".'$this->col = [];'."\n";
+        $fileResult .= "\n\n            # START COLUMNS DO NOT REMOVE THIS LINE\n";
+        $fileResult .= "            \$this->col = [];\n";
         $fileResult .= implode("\n", $this->makeColumnPhpCode());
-        $fileResult .= "\n            # END COLUMNS DO NOT REMOVE THIS LINE\n";
-        $fileResult .= "\n            ";
+        $fileResult .= "\n            # END COLUMNS DO NOT REMOVE THIS LINE\n\n            ";
         $fileResult .= trim($rawAfter[1]);
 
         $fileResult = writeMethodContent($fileResult, 'hookQueryIndex', g('hookQueryIndex'));
