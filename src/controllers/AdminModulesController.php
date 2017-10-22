@@ -268,7 +268,7 @@ class AdminModulesController extends CBController
                 $colKey[] = '"width"=>"'.$width[$i].'"';
             }
 
-            $columnScript[] = "\t\t\t".'$this->col[] = ['.implode(",", $colKey).'];';
+            $columnScript[] = "            ".'$this->col[] = ['.implode(",", $colKey).'];';
         }
 
         $code = file_get_contents($this->controller_path($row->controller));
@@ -277,11 +277,11 @@ class AdminModulesController extends CBController
 
         $fileResult = trim($rawBefore[0]);
         $fileResult .= "\n";
-        $fileResult .= "\n\t\t\t# START COLUMNS DO NOT REMOVE THIS LINE\n";
-        $fileResult .= "\t\t\t".'$this->col = [];'."\n";
+        $fileResult .= "\n            # START COLUMNS DO NOT REMOVE THIS LINE\n";
+        $fileResult .= "            ".'$this->col = [];'."\n";
         $fileResult .= implode("\n", $columnScript);
-        $fileResult .= "\n\t\t\t# END COLUMNS DO NOT REMOVE THIS LINE\n";
-        $fileResult .= "\n\t\t\t";
+        $fileResult .= "\n            # END COLUMNS DO NOT REMOVE THIS LINE\n";
+        $fileResult .= "\n            ";
         $fileResult .= trim($rawAfter[1]);
 
         $fileResult = writeMethodContent($fileResult, 'hookQueryIndex', g('hookQueryIndex'));
@@ -398,7 +398,7 @@ class AdminModulesController extends CBController
                 $value = $val;
             }
 
-            $script_config[$i] = "\t\t\t".'$this->'.$key.' = '.$value.';';
+            $script_config[$i] = "            ".'$this->'.$key.' = '.$value.';';
             $i++;
         }
 
@@ -408,10 +408,10 @@ class AdminModulesController extends CBController
         $rraw = explode("# END CONFIGURATION DO NOT REMOVE THIS LINE", $raw[1]);
 
         $file_controller = trim($raw[0])."\n\n";
-        $file_controller .= "\t\t\t# START CONFIGURATION DO NOT REMOVE THIS LINE\n";
+        $file_controller .= "            # START CONFIGURATION DO NOT REMOVE THIS LINE\n";
         $file_controller .= $scripts."\n";
-        $file_controller .= "\t\t\t# END CONFIGURATION DO NOT REMOVE THIS LINE\n\n";
-        $file_controller .= "\t\t\t".trim($rraw[1]);
+        $file_controller .= "            # END CONFIGURATION DO NOT REMOVE THIS LINE\n\n";
+        $file_controller .= "            ".trim($rraw[1]);
 
         file_put_contents($this->controller_path($row->controller), $file_controller);
 
