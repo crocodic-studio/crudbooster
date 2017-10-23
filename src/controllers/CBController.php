@@ -4,6 +4,7 @@ namespace crocodicstudio\crudbooster\controllers;
 
 error_reporting(E_ALL ^ E_NOTICE);
 
+use crocodicstudio\crudbooster\CBCoreModule\DataSaver;
 use crocodicstudio\crudbooster\CBCoreModule\Index;
 use crocodicstudio\crudbooster\controllers\Controller;
 use crocodicstudio\crudbooster\controllers\Helpers\IndexExport;
@@ -493,7 +494,7 @@ class CBController extends Controller
         return view('crudbooster::default.form', compact('page_title', 'page_menu', 'command'));
     }
 
-    public function postAddSave()
+    public function postAddSave(DataSaver $saver)
     {
         $this->cbLoader();
 
@@ -506,30 +507,7 @@ class CBController extends Controller
 
         $this->hookBeforeAdd($this->arr);
 
-        $this->arr[$this->primary_key] = $id = $this->table()->insertGetId($this->arr);
-
-        //Looping Data Input Again After Insert
-        foreach ($this->data_inputan as $row) {
-            $name = $row['name'];
-            if (! $name) {
-                continue;
-            }
-
-            $inputdata = request($name);
-
-            //Insert Data Checkbox if Type Datatable
-            if ($row['type'] == 'checkbox' && $row['relationship_table']) {
-                $this->_handleCheckbox($row, $id, $inputdata);
-            }
-
-            if ($row['type'] == 'select2' && $row['relationship_table']) {
-                $this->_updateRelations($row, $id, $inputdata);
-            }
-
-            if ($row['type'] == 'child') {
-                $this->_updateChildTable($row, $id);
-            }
-        }
+        $saver->insert($this);
 
         $this->hookAfterAdd($this->arr[$this->primary_key]);
 
@@ -708,89 +686,6 @@ class CBController extends Controller
         return \DB::table($this->table);
     }
 
-    /**
-     * @param $ro
-     * @param $id
-     * @param $inputdata
-     * @return null
-     */
-    private function _handleCheckbox($ro, $id, $inputdata)
-    {
-        $datatable = explode(",", $ro['datatable'])[0];
-        $foreignKey2 = CRUDBooster::getForeignKey($datatable, $ro['relationship_table']);
-        $foreignKey = CRUDBooster::getForeignKey($this->table, $ro['relationship_table']);
-        DB::table($ro['relationship_table'])->where($foreignKey, $id)->delete();
-
-        if (! $inputdata) {
-            return null;
-        }
-        $relationship_table_pk = CB::pk($ro['relationship_table']);
-        foreach ($inputdata as $input_id) {
-            DB::table($ro['relationship_table'])->insert([
-                $relationship_table_pk => CRUDBooster::newId($ro['relationship_table']),
-                $foreignKey => $id,
-                $foreignKey2 => $input_id,
-            ]);
-        }
-    }
-
-    /**
-     * @param $row
-     * @param $id
-     * @param $inputData
-     * @param $row
-     * @return array
-     */
-    private function _updateRelations($row, $id, $inputData)
-    {
-        $dataTable = explode(",", $row['datatable'])[0];
-        $foreignKey2 = CRUDBooster::getForeignKey($dataTable, $row['relationship_table']);
-        $foreignKey = CRUDBooster::getForeignKey($this->table, $row['relationship_table']);
-        DB::table($row['relationship_table'])->where($foreignKey, $id)->delete();
-
-        if (!$inputData) {
-            return null;
-        }
-
-        foreach ($inputData as $input_id) {
-            $relationship_table_pk = CB::pk($row['relationship_table']);
-            DB::table($row['relationship_table'])->insert([
-                $relationship_table_pk => CRUDBooster::newId($row['relationship_table']),
-                $foreignKey => $id,
-                $foreignKey2 => $input_id,
-            ]);
-        }
-    }
-
-    /**
-     * @param $ro
-     * @param $id
-     * @return string
-     */
-    private function _updateChildTable($ro, $id)
-    {
-        $name = str_slug($ro['label'], '');
-        $columns = $ro['columns'];
-        $count_input_data = count(request($name.'-'.$columns[0]['name'])) - 1;
-        $child_array = [];
-
-        $fk = $ro['foreign_key'];
-        for ($i = 0; $i <= $count_input_data; $i++) {
-            $column_data = [];
-            $column_data[$fk] = $id;
-            foreach ($columns as $col) {
-                $colName = $col['name'];
-                $column_data[$colName] = request($name.'-'.$colName)[$i];
-            }
-            $child_array[] = $column_data;
-        }
-
-        $childTable = CRUDBooster::parseSqlTable($ro['table'])['table'];
-        DB::table($childTable)->insert($child_array);
-
-        return $name;
-    }
-
     public function hookAfterAdd($id)
     {
     }
@@ -812,15 +707,15 @@ class CBController extends Controller
      * @param $id
      * @return mixed
      */
-    protected function findRow($id)
+    public function findRow($id)
     {
         return $this->table()->where($this->primary_key, $id);
     }
 
-    public function postEditSave($id)
+    public function postEditSave($id, DataSaver $saver)
     {
         $this->cbLoader();
-        $row = $this->findRow($id)->first();
+        //$row = $this->findRow($id)->first();
 
         $this->validation($id);
         $this->inputAssignment($id);
@@ -830,10 +725,7 @@ class CBController extends Controller
         }
 
         $this->hookBeforeEdit($this->arr, $id);
-        $this->findRow($id)->update($this->arr);
-
-        //Looping Data Input Again After Insert
-        $this->insertIntoRelatedTables($id);
+        $saver->update($id, $this);
 
         $this->hookAfterEdit($id);
 
@@ -852,63 +744,6 @@ class CBController extends Controller
 
         CRUDBooster::redirect(CRUDBooster::mainpath(), trans("crudbooster.alert_update_data_success"), 'success');
     }
-
-    /**
-     * @param $id
-     */
-    private function insertIntoRelatedTables($id)
-    {
-        foreach ($this->data_inputan as $ro) {
-            $name = $ro['name'];
-            if (! $name) {
-                continue;
-            }
-
-            $inputData = request($name);
-
-            //Insert Data Checkbox if Type Datatable
-            if ($ro['type'] == 'checkbox' && $ro['relationship_table']) {
-                $this->_handleCheckbox($ro, $id, $inputData);
-            }
-
-            if ($ro['type'] == 'select2' && $ro['relationship_table']) {
-                $this->_updateRelations($ro, $id, $inputData);
-            }
-
-            if ($ro['type'] == 'child') {
-                $name = str_slug($ro['label'], '');
-                $columns = $ro['columns'];
-                $count_input_data = count(request($name.'-'.$columns[0]['name'])) - 1;
-                $child_array = [];
-
-                $childtable = CRUDBooster::parseSqlTable($ro['table'])['table'];
-                $fk = $ro['foreign_key'];
-
-                DB::table($childtable)->where($fk, $id)->delete();
-                $lastId = CRUDBooster::newId($childtable);
-                $childtablePK = CB::pk($childtable);
-
-                for ($i = 0; $i <= $count_input_data; $i++) {
-
-                    $column_data = [];
-                    $column_data[$childtablePK] = $lastId;
-                    $column_data[$fk] = $id;
-                    foreach ($columns as $col) {
-                        $colname = $col['name'];
-                        $column_data[$colname] = request($name.'-'.$colname)[$i];
-                    }
-                    $child_array[] = $column_data;
-
-                    $lastId++;
-                }
-
-                $child_array = array_reverse($child_array);
-
-                DB::table($childtable)->insert($child_array);
-            }
-        }
-    }
-
 
     public function hookBeforeEdit(&$arr, $id)
     {
