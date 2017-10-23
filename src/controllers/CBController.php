@@ -128,6 +128,12 @@ class CBController extends Controller
 
     public $index_return = false; //for export
 
+    public function cbView($template, $data)
+    {
+        $this->cbLoader();
+        echo view($template, $data);
+    }
+
     public function cbLoader()
     {
         $this->cbInit();
@@ -183,12 +189,6 @@ class CBController extends Controller
         view()->share($this->data);
     }
 
-    public function cbView($template, $data)
-    {
-        $this->cbLoader();
-        echo view($template, $data);
-    }
-
     private function checkHideForm()
     {
         if (! count($this->hide_form)) {
@@ -199,14 +199,6 @@ class CBController extends Controller
                 unset($this->form[$i]);
             }
         }
-    }
-
-    public function getIndex(Index $index)
-    {
-        $this->cbLoader();
-        $data = $index->index($this);
-
-        return view("crudbooster::default.index", $data);
     }
 
     public function getExportData()
@@ -241,6 +233,14 @@ class CBController extends Controller
         }
     }
 
+    public function getIndex(Index $index)
+    {
+        $this->cbLoader();
+        $data = $index->index($this);
+
+        return view("crudbooster::default.index", $data);
+    }
+
     public function getDataQuery()
     {
         $key = request('query');
@@ -251,7 +251,6 @@ class CBController extends Controller
 
         $fk_name = request('fk_name');
         $fk_value = request('fk_value');
-
 
         $condition = " where ";
         if (strpos(strtolower($query), 'where') !== false) {
@@ -409,9 +408,10 @@ class CBController extends Controller
         $fk = request('fk');
         $fk_value = request('fk_value');
 
-        if (!$q && !$id && !$table1) {
+        if (! $q && ! $id && ! $table1) {
             $result = [];
             $result['items'] = [];
+
             return response()->json($result);
         }
 
@@ -479,104 +479,7 @@ class CBController extends Controller
         $result = [];
         $result['items'] = $rows->get();
 
-
         return response()->json($result);
-    }
-
-    public function validation($id = null)
-    {
-        $request_all = Request::all();
-        $array_input = [];
-        $componentPath = implode(DIRECTORY_SEPARATOR, ["vendor", "crocodicstudio", "crudbooster", "src", "views", "default", "type_components", ""]);
-
-        foreach ($this->data_inputan as $di) {
-            $ai = [];
-            $name = $di['name'];
-            $type = $di['type'];
-
-            if (!$name || !isset($request_all[$name])) {
-                continue;
-            }
-
-            if ($di['required'] && ! Request::hasFile($name)) {
-                $ai[] = 'required';
-            }
-            
-            if (file_exists(base_path($componentPath.$type.DIRECTORY_SEPARATOR.'hookInputValidation.php'))) {
-                require_once(base_path($componentPath.$type.DIRECTORY_SEPARATOR.'hookInputValidation.php'));
-            }
-
-            if (@$di['validation']) {
-                $array_input[$name] = $this->prepareValidationRules($id, $di);
-            } else {
-                $array_input[$name] = implode('|', $ai);
-            }
-        }
-
-        $validator = Validator::make($request_all, $array_input);
-
-        if (!$validator->fails()) {
-            return null;
-        }
-
-        $message = $validator->messages();
-        $message_all = $message->all();
-
-        if (Request::ajax()) {
-            response()->json([
-                'message' => trans('crudbooster.alert_validation_error', ['error' => implode(', ', $message_all)]),
-                'message_type' => 'warning',
-            ])->send();
-            exit;
-        }
-
-        redirect()->back()->with("errors", $message)->with([
-            'message' => trans('crudbooster.alert_validation_error', ['error' => implode(', ', $message_all)]),
-            'message_type' => 'warning',
-        ])->withInput()->send();
-        \Session::driver()->save();
-        exit;
-    }
-
-    public function inputAssignment($id = null)
-    {
-
-        $hide_form = (request('hide_form')) ? unserialize(request('hide_form')) : [];
-        $componentPath = implode(DIRECTORY_SEPARATOR, ["vendor", "crocodicstudio", "crudbooster", "src", "views", "default", 'type_components', '']);
-
-        foreach ($this->data_inputan as $ro) {
-            $name = $ro['name'];
-            $type = $ro['type'] ?: 'text';
-            $inputdata = request($name);
-
-            if (! $name) {
-                continue;
-            }
-            if ($ro['exception']) {
-                continue;
-            }
-
-            if (count($hide_form) && in_array($name, $hide_form)) {
-                continue;
-            }
-
-            if (file_exists(base_path($componentPath.$type.DIRECTORY_SEPARATOR.'hookInputAssignment.php'))) {
-                require_once(base_path($componentPath.$type.DIRECTORY_SEPARATOR.'hookInputAssignment.php'));
-            }
-
-            if (Request::hasFile($name)) {
-                continue;
-            }
-            if ($inputdata != '') {
-                $this->arr[$name] = $inputdata;
-            } else {
-                if (CB::isColumnNULL($this->table, $name)) {
-                    continue;
-                }
-
-                $this->arr[$name] = "";
-            }
-        }
     }
 
     public function getAdd()
@@ -631,7 +534,6 @@ class CBController extends Controller
 
         $this->hookAfterAdd($this->arr[$this->primary_key]);
 
-
         $this->return_url = ($this->return_url) ? $this->return_url : request('return_url');
 
         //insert log
@@ -649,6 +551,235 @@ class CBController extends Controller
         CRUDBooster::redirect(CRUDBooster::mainpath(), trans("crudbooster.alert_add_data_success"), 'success');
     }
 
+    public function validation($id = null)
+    {
+        $request_all = Request::all();
+        $array_input = [];
+        $componentPath = implode(DIRECTORY_SEPARATOR, ["vendor", "crocodicstudio", "crudbooster", "src", "views", "default", "type_components", ""]);
+
+        foreach ($this->data_inputan as $di) {
+            $ai = [];
+            $name = $di['name'];
+            $type = $di['type'];
+
+            if (! $name || ! isset($request_all[$name])) {
+                continue;
+            }
+
+            if ($di['required'] && ! Request::hasFile($name)) {
+                $ai[] = 'required';
+            }
+
+            if (file_exists(base_path($componentPath.$type.DIRECTORY_SEPARATOR.'hookInputValidation.php'))) {
+                require_once(base_path($componentPath.$type.DIRECTORY_SEPARATOR.'hookInputValidation.php'));
+            }
+
+            if (@$di['validation']) {
+                $array_input[$name] = $this->prepareValidationRules($id, $di);
+            } else {
+                $array_input[$name] = implode('|', $ai);
+            }
+        }
+
+        $validator = Validator::make($request_all, $array_input);
+
+        if (! $validator->fails()) {
+            return null;
+        }
+
+        $message = $validator->messages();
+        $message_all = $message->all();
+
+        if (Request::ajax()) {
+            response()->json([
+                'message' => trans('crudbooster.alert_validation_error', ['error' => implode(', ', $message_all)]),
+                'message_type' => 'warning',
+            ])->send();
+            exit;
+        }
+
+        redirect()->back()->with("errors", $message)->with([
+            'message' => trans('crudbooster.alert_validation_error', ['error' => implode(', ', $message_all)]),
+            'message_type' => 'warning',
+        ])->withInput()->send();
+        \Session::driver()->save();
+        exit;
+    }
+
+    /**
+     * @param $id
+     * @param $di
+     * @return array
+     */
+    private function prepareValidationRules($id, $di)
+    {
+        $exp = explode('|', $di['validation']);
+
+        if (! count($exp)) {
+            return '';
+        }
+
+        foreach ($exp as &$validationItem) {
+            if (substr($validationItem, 0, 6) !== 'unique') {
+                continue;
+            }
+
+            $parseUnique = explode(',', str_replace('unique:', '', $validationItem));
+            $uniqueTable = ($parseUnique[0]) ?: $this->table;
+            $uniqueColumn = ($parseUnique[1]) ?: $di['name'];
+            $uniqueIgnoreId = ($parseUnique[2]) ?: (($id) ?: '');
+
+            //Make sure table name
+            $uniqueTable = CB::parseSqlTable($uniqueTable)['table'];
+
+            //Rebuild unique rule
+            $uniqueRebuild = [];
+            $uniqueRebuild[] = $uniqueTable;
+            $uniqueRebuild[] = $uniqueColumn;
+
+            if ($uniqueIgnoreId) {
+                $uniqueRebuild[] = $uniqueIgnoreId;
+            } else {
+                $uniqueRebuild[] = 'NULL';
+            }
+
+            //Check whether deleted_at exists or not
+            if (Schema::hasColumn($uniqueTable, 'deleted_at')) {
+                $uniqueRebuild[] = CB::findPrimaryKey($uniqueTable);
+                $uniqueRebuild[] = 'deleted_at';
+                $uniqueRebuild[] = 'NULL';
+            }
+            $uniqueRebuild = array_filter($uniqueRebuild);
+            $validationItem = 'unique:'.implode(',', $uniqueRebuild);
+        }
+
+        return implode('|', $exp);
+    }
+
+    public function inputAssignment($id = null)
+    {
+
+        $hide_form = (request('hide_form')) ? unserialize(request('hide_form')) : [];
+        $componentPath = implode(DIRECTORY_SEPARATOR, ["vendor", "crocodicstudio", "crudbooster", "src", "views", "default", 'type_components', '']);
+
+        foreach ($this->data_inputan as $ro) {
+            $name = $ro['name'];
+            $type = $ro['type'] ?: 'text';
+            $inputdata = request($name);
+
+            if (! $name) {
+                continue;
+            }
+            if ($ro['exception']) {
+                continue;
+            }
+
+            if (count($hide_form) && in_array($name, $hide_form)) {
+                continue;
+            }
+
+            if (file_exists(base_path($componentPath.$type.DIRECTORY_SEPARATOR.'hookInputAssignment.php'))) {
+                require_once(base_path($componentPath.$type.DIRECTORY_SEPARATOR.'hookInputAssignment.php'));
+            }
+
+            if (Request::hasFile($name)) {
+                continue;
+            }
+            if ($inputdata != '') {
+                $this->arr[$name] = $inputdata;
+            } else {
+                if (CB::isColumnNULL($this->table, $name)) {
+                    continue;
+                }
+
+                $this->arr[$name] = "";
+            }
+        }
+    }
+
+    public function hookBeforeAdd(&$arr)
+    {
+    }
+
+    /**
+     * @return mixed
+     */
+    public function table()
+    {
+        return \DB::table($this->table);
+    }
+
+    /**
+     * @param $ro
+     * @param $id
+     * @param $inputdata
+     * @return null
+     */
+    private function _handleCheckbox($ro, $id, $inputdata)
+    {
+        $datatable = explode(",", $ro['datatable'])[0];
+        $foreignKey2 = CRUDBooster::getForeignKey($datatable, $ro['relationship_table']);
+        $foreignKey = CRUDBooster::getForeignKey($this->table, $ro['relationship_table']);
+        DB::table($ro['relationship_table'])->where($foreignKey, $id)->delete();
+
+        if (! $inputdata) {
+            return null;
+        }
+        $relationship_table_pk = CB::pk($ro['relationship_table']);
+        foreach ($inputdata as $input_id) {
+            DB::table($ro['relationship_table'])->insert([
+                $relationship_table_pk => CRUDBooster::newId($ro['relationship_table']),
+                $foreignKey => $id,
+                $foreignKey2 => $input_id,
+            ]);
+        }
+    }
+
+    /**
+     * @param $row
+     * @param $id
+     * @param $inputData
+     * @param $row
+     * @return array
+     */
+    private function _updateRelations($row, $id, $inputData)
+    {
+        $this->_updateRelations($row, $id, $inputData)
+    }
+
+    /**
+     * @param $ro
+     * @param $id
+     * @return string
+     */
+    private function _updateChildTable($ro, $id)
+    {
+        $name = str_slug($ro['label'], '');
+        $columns = $ro['columns'];
+        $count_input_data = count(request($name.'-'.$columns[0]['name'])) - 1;
+        $child_array = [];
+
+        $fk = $ro['foreign_key'];
+        for ($i = 0; $i <= $count_input_data; $i++) {
+            $column_data = [];
+            $column_data[$fk] = $id;
+            foreach ($columns as $col) {
+                $colName = $col['name'];
+                $column_data[$colName] = request($name.'-'.$colName)[$i];
+            }
+            $child_array[] = $column_data;
+        }
+
+        $childTable = CRUDBooster::parseSqlTable($ro['table'])['table'];
+        DB::table($childTable)->insert($child_array);
+
+        return $name;
+    }
+
+    public function hookAfterAdd($id)
+    {
+    }
+
     public function getEdit($id)
     {
         $this->cbLoader();
@@ -660,6 +791,15 @@ class CBController extends Controller
         Session::put('current_row_id', $id);
 
         return view('crudbooster::default.form', compact('id', 'row', 'page_menu', 'page_title', 'command'));
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    protected function findRow($id)
+    {
+        return $this->table()->where($this->primary_key, $id);
     }
 
     public function postEditSave($id)
@@ -678,51 +818,46 @@ class CBController extends Controller
         $this->findRow($id)->update($this->arr);
 
         //Looping Data Input Again After Insert
+        $this->insertIntoRelatedTables($id);
+
+        $this->hookAfterEdit($id);
+
+        $this->return_url = ($this->return_url) ? $this->return_url : request('return_url');
+
+        //insert log
+        CRUDBooster::insertLog(trans("crudbooster.log_update", ['name' => $this->arr[$this->title_field], 'module' => CRUDBooster::getCurrentModule()->name]));
+
+        if ($this->return_url) {
+            CRUDBooster::redirect($this->return_url, trans("crudbooster.alert_update_data_success"), 'success');
+        }
+
+        if (request('submit') == trans('crudbooster.button_save_more')) {
+            CRUDBooster::redirect(CRUDBooster::mainpath('add'), trans("crudbooster.alert_update_data_success"), 'success');
+        }
+
+        CRUDBooster::redirect(CRUDBooster::mainpath(), trans("crudbooster.alert_update_data_success"), 'success');
+    }
+    
+    /**
+     * @param $id
+     */
+    private function insertIntoRelatedTables($id)
+    {
         foreach ($this->data_inputan as $ro) {
             $name = $ro['name'];
             if (! $name) {
                 continue;
             }
 
-            $inputdata = request($name);
+            $inputData = request($name);
 
             //Insert Data Checkbox if Type Datatable
             if ($ro['type'] == 'checkbox' && $ro['relationship_table']) {
-                $datatable = explode(",", $ro['datatable'])[0];
-
-                $foreignKey2 = CRUDBooster::getForeignKey($datatable, $ro['relationship_table']);
-                $foreignKey = CRUDBooster::getForeignKey($this->table, $ro['relationship_table']);
-                DB::table($ro['relationship_table'])->where($foreignKey, $id)->delete();
-
-                if ($inputdata) {
-                    foreach ($inputdata as $input_id) {
-                        $relationship_table_pk = CB::pk($ro['relationship_table']);
-                        DB::table($ro['relationship_table'])->insert([
-                            $relationship_table_pk => CRUDBooster::newId($ro['relationship_table']),
-                            $foreignKey => $id,
-                            $foreignKey2 => $input_id,
-                        ]);
-                    }
-                }
+                $this->_handleCheckbox($ro, $id, $inputData);
             }
 
             if ($ro['type'] == 'select2' && $ro['relationship_table']) {
-                $datatable = explode(",", $ro['datatable'])[0];
-
-                $foreignKey2 = CRUDBooster::getForeignKey($datatable, $ro['relationship_table']);
-                $foreignKey = CRUDBooster::getForeignKey($this->table, $ro['relationship_table']);
-                DB::table($ro['relationship_table'])->where($foreignKey, $id)->delete();
-
-                if ($inputdata) {
-                    foreach ($inputdata as $input_id) {
-                        $relationship_table_pk = CB::pk($ro['relationship_table']);
-                        DB::table($ro['relationship_table'])->insert([
-                            $relationship_table_pk => CRUDBooster::newId($ro['relationship_table']),
-                            $foreignKey => $id,
-                            $foreignKey2 => $input_id,
-                        ]);
-                    }
-                }
+                $this->_updateRelations($ro, $id, $inputData);
             }
 
             if ($ro['type'] == 'child') {
@@ -730,6 +865,7 @@ class CBController extends Controller
                 $columns = $ro['columns'];
                 $count_input_data = count(request($name.'-'.$columns[0]['name'])) - 1;
                 $child_array = [];
+
                 $childtable = CRUDBooster::parseSqlTable($ro['table'])['table'];
                 $fk = $ro['foreign_key'];
 
@@ -756,23 +892,15 @@ class CBController extends Controller
                 DB::table($childtable)->insert($child_array);
             }
         }
+    }
 
-        $this->hookAfterEdit($id);
 
-        $this->return_url = ($this->return_url) ? $this->return_url : request('return_url');
+    public function hookBeforeEdit(&$arr, $id)
+    {
+    }
 
-        //insert log
-        CRUDBooster::insertLog(trans("crudbooster.log_update", ['name' => $this->arr[$this->title_field], 'module' => CRUDBooster::getCurrentModule()->name]));
-
-        if ($this->return_url) {
-            CRUDBooster::redirect($this->return_url, trans("crudbooster.alert_update_data_success"), 'success');
-        }
-
-        if (request('submit') == trans('crudbooster.button_save_more')) {
-            CRUDBooster::redirect(CRUDBooster::mainpath('add'), trans("crudbooster.alert_update_data_success"), 'success');
-        }
-
-        CRUDBooster::redirect(CRUDBooster::mainpath(), trans("crudbooster.alert_update_data_success"), 'success');
+    public function hookAfterEdit($id)
+    {
     }
 
     public function getDelete($id)
@@ -796,6 +924,14 @@ class CBController extends Controller
         $url = request('return_url') ?: CRUDBooster::referer();
 
         CRUDBooster::redirect($url, trans("crudbooster.alert_delete_data_success"), 'success');
+    }
+
+    public function hookBeforeDelete($id)
+    {
+    }
+
+    public function hookAfterDelete($id)
+    {
     }
 
     public function getDetail($id)
@@ -854,7 +990,8 @@ class CBController extends Controller
     public function postDoneImport(IndexImport $importer)
     {
         $this->cbLoader();
-        return  $importer->doneImport($data);
+
+        return $importer->doneImport($data);
     }
 
     public function postDoImportChunk(IndexImport $import)
@@ -886,7 +1023,7 @@ class CBController extends Controller
             foreach ($select_column as $sk => $s) {
                 $colname = $table_columns[$sk];
 
-                if (!CRUDBooster::isForeignKey($colname) || intval($value->$s)) {
+                if (! CRUDBooster::isForeignKey($colname) || intval($value->$s)) {
                     $a[$colname] = $value->$s;
                     continue;
                 }
@@ -993,6 +1130,50 @@ class CBController extends Controller
         return CRUDBooster::backWithMsg($message, $type);
     }
 
+    /**
+     * @param $id_selected
+     * @return mixed
+     */
+    private function deleteFromDB($id_selected)
+    {
+        $this->hookBeforeDelete($id_selected);
+        $tablePK = CB::pk($this->table);
+        if (Schema::hasColumn($this->table, 'deleted_at')) {
+            $this->table()->whereIn($tablePK, $id_selected)->update(['deleted_at' => date('Y-m-d H:i:s')]);
+        } else {
+            $this->table()->whereIn($tablePK, $id_selected)->delete();
+        }
+        CRUDBooster::insertLog(trans("crudbooster.log_delete", ['name' => implode(',', $id_selected), 'module' => CRUDBooster::getCurrentModule()->name]));
+
+        $this->hookAfterDelete($id_selected);
+
+        return CRUDBooster::backWithMsg(trans("crudbooster.alert_delete_selected_success"));
+    }
+
+    /**
+     * @param $button_name
+     * @param $id_selected
+     * @return array
+     */
+    private function _getMessageAndType($button_name, $id_selected)
+    {
+        $action = str_replace(['-', '_'], ' ', $button_name);
+        $action = ucwords($action);
+        $type = 'success';
+        $message = trans("crudbooster.alert_action", ['action' => $action]);
+
+        if ($this->actionButtonSelected($id_selected, $button_name) === false) {
+            $message = ! empty($this->alert['message']) ? $this->alert['message'] : 'Error';
+            $type = ! empty($this->alert['type']) ? $this->alert['type'] : 'danger';
+        }
+
+        return [$type, $message];
+    }
+
+    public function actionButtonSelected($id_selected, $button_name)
+    {
+    }
+
     public function getDeleteImage()
     {
         $this->cbLoader();
@@ -1020,12 +1201,6 @@ class CBController extends Controller
         echo asset($this->uploadFile('userfile'));
     }
 
-    public function postUploadFile()
-    {
-        $this->cbLoader();
-        echo $this->uploadFile('userfile');
-    }
-
     private function uploadFile($name)
     {
         if (! Request::hasFile($name)) {
@@ -1049,11 +1224,14 @@ class CBController extends Controller
         $filename = md5(str_random(5)).'.'.$ext;
         $file_path = 'uploads'.DIRECTORY_SEPARATOR.date('Y-m');
         Storage::putFileAs($file_path, $file, $filename);
+
         return 'uploads/'.date('Y-m').'/'.$filename;
     }
 
-    public function actionButtonSelected($id_selected, $button_name)
+    public function postUploadFile()
     {
+        $this->cbLoader();
+        echo $this->uploadFile('userfile');
     }
 
     public function hookQueryIndex(&$query)
@@ -1062,219 +1240,5 @@ class CBController extends Controller
 
     public function hookRowIndex($index, &$value)
     {
-    }
-
-    public function hookBeforeAdd(&$arr)
-    {
-    }
-
-    public function hookAfterAdd($id)
-    {
-    }
-
-    public function hookBeforeEdit(&$arr, $id)
-    {
-    }
-
-    public function hookAfterEdit($id)
-    {
-    }
-
-    public function hookBeforeDelete($id)
-    {
-    }
-
-    public function hookAfterDelete($id)
-    {
-    }
-
-    /**
-     * @param $row
-     * @param $id
-     * @param $inputData
-     * @param $row
-     * @return array
-     */
-    private function _updateRelations($row, $id, $inputData)
-    {
-        $dataTable = explode(",", $row['datatable'])[0];
-        $foreignKey2 = CRUDBooster::getForeignKey($dataTable, $row['relationship_table']);
-        $foreignKey = CRUDBooster::getForeignKey($this->table, $row['relationship_table']);
-        DB::table($row['relationship_table'])->where($foreignKey, $id)->delete();
-
-        if (!$inputData) {
-            return null;
-        }
-        foreach ($inputData as $input_id) {
-            $relationship_table_pk = CB::pk($row['relationship_table']);
-            DB::table($row['relationship_table'])->insert([
-                $relationship_table_pk => CRUDBooster::newId($row['relationship_table']),
-                $foreignKey => $id,
-                $foreignKey2 => $input_id,
-            ]);
-        }
-    }
-
-    /**
-     * @param $ro
-     * @param $id
-     * @return string
-     */
-    private function _updateChildTable($ro, $id)
-    {
-        $name = str_slug($ro['label'], '');
-        $columns = $ro['columns'];
-        $count_input_data = count(request($name.'-'.$columns[0]['name'])) - 1;
-        $child_array = [];
-
-        for ($i = 0; $i <= $count_input_data; $i++) {
-            $fk = $ro['foreign_key'];
-            $column_data = [];
-            $column_data[$fk] = $id;
-            foreach ($columns as $col) {
-                $colName = $col['name'];
-                $column_data[$colName] = request($name.'-'.$colName)[$i];
-            }
-            $child_array[] = $column_data;
-        }
-
-        $childTable = CRUDBooster::parseSqlTable($ro['table'])['table'];
-        DB::table($childTable)->insert($child_array);
-
-        return $name;
-    }
-
-    /**
-     * @param $ro
-     * @param $id
-     * @param $inputdata
-     * @return null
-     */
-    private function _handleCheckbox($ro, $id, $inputdata)
-    {
-        $datatable = explode(",", $ro['datatable'])[0];
-        $foreignKey2 = CRUDBooster::getForeignKey($datatable, $ro['relationship_table']);
-        $foreignKey = CRUDBooster::getForeignKey($this->table, $ro['relationship_table']);
-        DB::table($ro['relationship_table'])->where($foreignKey, $id)->delete();
-
-        if (!$inputdata) {
-            return null;
-        }
-        $relationship_table_pk = CB::pk($ro['relationship_table']);
-        foreach ($inputdata as $input_id) {
-            DB::table($ro['relationship_table'])->insert([
-                $relationship_table_pk => CRUDBooster::newId($ro['relationship_table']),
-                $foreignKey => $id,
-                $foreignKey2 => $input_id,
-            ]);
-        }
-    }
-
-    /**
-     * @param $button_name
-     * @param $id_selected
-     * @return array
-     */
-    private function _getMessageAndType($button_name, $id_selected)
-    {
-        $action = str_replace(['-', '_'], ' ', $button_name);
-        $action = ucwords($action);
-        $type = 'success';
-        $message = trans("crudbooster.alert_action", ['action' => $action]);
-
-        if ($this->actionButtonSelected($id_selected, $button_name) === false) {
-            $message = ! empty($this->alert['message']) ? $this->alert['message'] : 'Error';
-            $type = ! empty($this->alert['type']) ? $this->alert['type'] : 'danger';
-        }
-
-        return [$type, $message];
-    }
-
-    /**
-     * @param $id_selected
-     * @return mixed
-     */
-    private function deleteFromDB($id_selected)
-    {
-        $this->hookBeforeDelete($id_selected);
-        $tablePK = CB::pk($this->table);
-        if (Schema::hasColumn($this->table, 'deleted_at')) {
-            $this->table()->whereIn($tablePK, $id_selected)->update(['deleted_at' => date('Y-m-d H:i:s')]);
-        } else {
-            $this->table()->whereIn($tablePK, $id_selected)->delete();
-        }
-        CRUDBooster::insertLog(trans("crudbooster.log_delete", ['name' => implode(',', $id_selected), 'module' => CRUDBooster::getCurrentModule()->name]));
-
-        $this->hookAfterDelete($id_selected);
-
-        return CRUDBooster::backWithMsg(trans("crudbooster.alert_delete_selected_success"));
-    }
-
-    /**
-     * @return mixed
-     */
-    public function table()
-    {
-        return \DB::table($this->table);
-    }
-
-    /**
-     * @param $id
-     * @return mixed
-     */
-    protected function findRow($id)
-    {
-        return $this->table()->where($this->primary_key, $id);
-    }
-
-    /**
-     * @param $id
-     * @param $di
-     * @return array
-     */
-    private function prepareValidationRules($id, $di)
-    {
-        $exp = explode('|', $di['validation']);
-
-        if (!count($exp)) {
-            return '';
-        }
-
-        foreach ($exp as &$validationItem) {
-            if (substr($validationItem, 0, 6) !== 'unique') {
-                continue;
-            }
-
-            $parseUnique = explode(',', str_replace('unique:', '', $validationItem));
-            $uniqueTable = ($parseUnique[0]) ?: $this->table;
-            $uniqueColumn = ($parseUnique[1]) ?: $di['name'];
-            $uniqueIgnoreId = ($parseUnique[2]) ?: (($id) ?: '');
-
-            //Make sure table name
-            $uniqueTable = CB::parseSqlTable($uniqueTable)['table'];
-
-            //Rebuild unique rule
-            $uniqueRebuild = [];
-            $uniqueRebuild[] = $uniqueTable;
-            $uniqueRebuild[] = $uniqueColumn;
-
-            if ($uniqueIgnoreId) {
-                $uniqueRebuild[] = $uniqueIgnoreId;
-            } else {
-                $uniqueRebuild[] = 'NULL';
-            }
-
-            //Check whether deleted_at exists or not
-            if (Schema::hasColumn($uniqueTable, 'deleted_at')) {
-                $uniqueRebuild[] = CB::findPrimaryKey($uniqueTable);
-                $uniqueRebuild[] = 'deleted_at';
-                $uniqueRebuild[] = 'NULL';
-            }
-            $uniqueRebuild = array_filter($uniqueRebuild);
-            $validationItem = 'unique:'.implode(',', $uniqueRebuild);
-        }
-
-
-        return implode('|', $exp);
     }
 }
