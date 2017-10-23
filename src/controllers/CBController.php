@@ -506,12 +506,11 @@ class CBController extends Controller
 
         $this->hookBeforeAdd($this->arr);
 
-        $this->arr[$this->primary_key] = $id = CRUDBooster::newId($this->table);
-        $this->table()->insert($this->arr);
+        $this->arr[$this->primary_key] = $id = $this->table()->insertGetId($this->arr);
 
         //Looping Data Input Again After Insert
-        foreach ($this->data_inputan as $ro) {
-            $name = $ro['name'];
+        foreach ($this->data_inputan as $row) {
+            $name = $row['name'];
             if (! $name) {
                 continue;
             }
@@ -519,16 +518,16 @@ class CBController extends Controller
             $inputdata = request($name);
 
             //Insert Data Checkbox if Type Datatable
-            if ($ro['type'] == 'checkbox' && $ro['relationship_table']) {
-                $this->_handleCheckbox($ro, $id, $inputdata);
+            if ($row['type'] == 'checkbox' && $row['relationship_table']) {
+                $this->_handleCheckbox($row, $id, $inputdata);
             }
 
-            if ($ro['type'] == 'select2' && $ro['relationship_table']) {
-                $this->_updateRelations($ro, $id, $inputdata);
+            if ($row['type'] == 'select2' && $row['relationship_table']) {
+                $this->_updateRelations($row, $id, $inputdata);
             }
 
-            if ($ro['type'] == 'child') {
-                $this->_updateChildTable($ro, $id);
+            if ($row['type'] == 'child') {
+                $this->_updateChildTable($row, $id);
             }
         }
 
@@ -744,7 +743,23 @@ class CBController extends Controller
      */
     private function _updateRelations($row, $id, $inputData)
     {
-        $this->_updateRelations($row, $id, $inputData)
+        $dataTable = explode(",", $row['datatable'])[0];
+        $foreignKey2 = CRUDBooster::getForeignKey($dataTable, $row['relationship_table']);
+        $foreignKey = CRUDBooster::getForeignKey($this->table, $row['relationship_table']);
+        DB::table($row['relationship_table'])->where($foreignKey, $id)->delete();
+
+        if (!$inputData) {
+            return null;
+        }
+
+        foreach ($inputData as $input_id) {
+            $relationship_table_pk = CB::pk($row['relationship_table']);
+            DB::table($row['relationship_table'])->insert([
+                $relationship_table_pk => CRUDBooster::newId($row['relationship_table']),
+                $foreignKey => $id,
+                $foreignKey2 => $input_id,
+            ]);
+        }
     }
 
     /**
@@ -837,7 +852,7 @@ class CBController extends Controller
 
         CRUDBooster::redirect(CRUDBooster::mainpath(), trans("crudbooster.alert_update_data_success"), 'success');
     }
-    
+
     /**
      * @param $id
      */
