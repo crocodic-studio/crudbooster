@@ -816,7 +816,7 @@ class CBController extends Controller
     {
         $this->cbLoader();
 
-        return $importer->doneImport($data);
+        return $importer->doneImport();
     }
 
     public function postDoImportChunk(IndexImport $import)
