@@ -328,7 +328,7 @@ class CBController extends Controller
         $filename = Request::input('filename');
         $papersize = Request::input('page_size');
         $paperorientation = Request::input('page_orientation');
-        $response = $this->getIndex();
+        $indexContent = $this->getIndex();
 
         if (Request::input('default_paper_size')) {
             DB::table('cms_settings')->where('name', 'default_paper_size')->update(['content' => $papersize]);
@@ -336,13 +336,13 @@ class CBController extends Controller
 
         switch (Request::input('fileformat')) {
             case "pdf":
-                return $exporter->pdf($response, $papersize, $paperorientation, $filename);
+                return $exporter->pdf($filename, $indexContent, $paperorientation, $papersize);
                 break;
             case 'xls':
-                return $exporter->xls($filename, $response, $paperorientation);
+                return $exporter->xls($filename, $indexContent, $paperorientation);
                 break;
             case 'csv':
-                return $exporter->csv($filename, $response, $paperorientation);
+                return $exporter->csv($filename, $indexContent, $paperorientation);
                 break;
         }
     }
