@@ -5,6 +5,7 @@ namespace crocodicstudio\crudbooster\controllers;
 error_reporting(E_ALL ^ E_NOTICE);
 
 use crocodicstudio\crudbooster\CBCoreModule\DataSaver;
+use crocodicstudio\crudbooster\CBCoreModule\Hooks;
 use crocodicstudio\crudbooster\CBCoreModule\Index;
 use crocodicstudio\crudbooster\controllers\Controller;
 use crocodicstudio\crudbooster\controllers\Helpers\IndexExport;
@@ -27,6 +28,8 @@ use Schema;
 
 class CBController extends Controller
 {
+    use Hooks;
+
     public $data_inputan;
 
     public $columns_table;
@@ -674,20 +677,12 @@ class CBController extends Controller
         }
     }
 
-    public function hookBeforeAdd(&$arr)
-    {
-    }
-
     /**
      * @return mixed
      */
     public function table()
     {
         return \DB::table($this->table);
-    }
-
-    public function hookAfterAdd($id)
-    {
     }
 
     public function getEdit($id)
@@ -745,14 +740,6 @@ class CBController extends Controller
         CRUDBooster::redirect(CRUDBooster::mainpath(), trans("crudbooster.alert_update_data_success"), 'success');
     }
 
-    public function hookBeforeEdit(&$arr, $id)
-    {
-    }
-
-    public function hookAfterEdit($id)
-    {
-    }
-
     public function getDelete($id)
     {
         $this->cbLoader();
@@ -774,14 +761,6 @@ class CBController extends Controller
         $url = request('return_url') ?: CRUDBooster::referer();
 
         CRUDBooster::redirect($url, trans("crudbooster.alert_delete_data_success"), 'success');
-    }
-
-    public function hookBeforeDelete($id)
-    {
-    }
-
-    public function hookAfterDelete($id)
-    {
     }
 
     public function getDetail($id)
@@ -1082,13 +1061,5 @@ class CBController extends Controller
     {
         $this->cbLoader();
         echo $this->uploadFile('userfile');
-    }
-
-    public function hookQueryIndex(&$query)
-    {
-    }
-
-    public function hookRowIndex($index, &$value)
-    {
     }
 }
