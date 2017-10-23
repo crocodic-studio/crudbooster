@@ -828,19 +828,13 @@ class CBController extends Controller
             return $import->handleImportProgress($file_md5);
         }
 
-        $select_column = Session::get('select_column');
-        $select_column = array_filter($select_column);
+        $select_column = array_filter(Session::get('select_column'));
         $table_columns = DB::getSchemaBuilder()->getColumnListing($this->table);
 
         $file = base64_decode(request('file'));
         $file = 'storage'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.$file;
         $rows = Excel::load($file, function ($reader) {
         })->get();
-
-        $has_created_at = false;
-        if (CRUDBooster::isColumnExists($this->table, 'created_at')) {
-            $has_created_at = true;
-        }
 
         //$data_import_column = [];
         foreach ($rows as $value) {
@@ -905,7 +899,7 @@ class CBController extends Controller
             }
 
             try {
-                if ($has_created_at) {
+                if (CRUDBooster::isColumnExists($this->table, 'created_at')) {
                     $a['created_at'] = date('Y-m-d H:i:s');
                 }
 
