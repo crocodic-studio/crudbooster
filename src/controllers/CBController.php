@@ -366,8 +366,8 @@ class CBController extends Controller
             $rows->addselect($data['field_label'].' as text');
         }
 
-        if ($data['field_value']) {
-            $rows->addselect($data['field_value'].' as id');
+        if ($fieldValue) {
+            $rows->addselect($fieldValue.' as id');
         }
 
         if ($data['sql_where']) {
@@ -379,12 +379,10 @@ class CBController extends Controller
         }
 
         if ($id) {
-            $rows->where($data['field_value'], $id);
+            $rows->where($fieldValue, $id);
         }
 
-        $result = $rows->get();
-
-        return response()->json(['items' => $result]);
+        return response()->json(['items' => $rows->get()]);
     }
 
     public function postFindDataOld()
