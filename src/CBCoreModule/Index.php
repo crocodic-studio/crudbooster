@@ -220,23 +220,23 @@ class Index
 
 
     /**
-     * @param $addaction
+     * @param $addAction
      * @return array
      */
-    private function _handleSubModules($addaction)
+    private function _handleSubModules($addAction)
     {
-        foreach ($this->cb->sub_module as $s) {
+        foreach ($this->cb->sub_module as $module) {
             $table_parent = CRUDBooster::parseSqlTable($this->table)['table'];
-            $addaction[] = [
-                'label' => $s['label'],
-                'icon' => $s['button_icon'],
-                'url' => CRUDBooster::adminPath($s['path']).'?parent_table='.$table_parent.'&parent_columns='.$s['parent_columns'].'&parent_columns_alias='.$s['parent_columns_alias'].'&parent_id=['.(! isset($s['custom_parent_id']) ? "id" : $s['custom_parent_id']).']&return_url='.urlencode(Request::fullUrl()).'&foreign_key='.$s['foreign_key'].'&label='.urlencode($s['label']),
-                'color' => $s['button_color'],
-                'showIf' => $s['showIf'],
+            $addAction[] = [
+                'label' => $module['label'],
+                'icon' => $module['button_icon'],
+                'url' => CRUDBooster::adminPath($module['path']).'?parent_table='.$table_parent.'&parent_columns='.$module['parent_columns'].'&parent_columns_alias='.$module['parent_columns_alias'].'&parent_id=['.(! isset($module['custom_parent_id']) ? "id" : $module['custom_parent_id']).']&return_url='.urlencode(Request::fullUrl()).'&foreign_key='.$module['foreign_key'].'&label='.urlencode($module['label']),
+                'color' => $module['button_color'],
+                'showIf' => $module['showIf'],
             ];
         }
 
-        return $addaction;
+        return $addAction;
     }
 
 
