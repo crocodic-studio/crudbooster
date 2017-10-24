@@ -5,6 +5,7 @@ namespace crocodicstudio\crudbooster\controllers;
 error_reporting(E_ALL ^ E_NOTICE);
 
 use crocodicstudio\crudbooster\CBCoreModule\DataSaver;
+use crocodicstudio\crudbooster\CBCoreModule\FileUploader;
 use crocodicstudio\crudbooster\CBCoreModule\Hooks;
 use crocodicstudio\crudbooster\CBCoreModule\Index;
 use crocodicstudio\crudbooster\controllers\Helpers\IndexExport;
@@ -1014,42 +1015,15 @@ class CBController extends Controller
         CRUDBooster::redirect(Request::server('HTTP_REFERER'), trans('crudbooster.alert_delete_data_success'), 'success');
     }
 
-    public function postUploadSummernote()
+    public function postUploadSummernote(FileUploader $uploader)
     {
         $this->cbLoader();
-        echo asset($this->uploadFile('userfile'));
+        echo asset($uploader->uploadFile('userfile'));
     }
 
-    private function uploadFile($name)
-    {
-        if (! Request::hasFile($name)) {
-            return null;
-        }
-        $file = Request::file($name);
-        $ext = $file->getClientOriginalExtension();
-        $filesize = $file->getClientSize() / 1024;
-        if ($filesize > cbConfig('UPLOAD_MAX_SIZE', 5000)) {
-            echo "The filesize is too large!";
-            exit;
-        }
-        if (! in_array($ext, explode(',', cbConfig('UPLOAD_TYPES')))) {
-            echo "The filetype is not allowed!";
-            exit;
-        }
-        //Create Directory Monthly
-        Storage::makeDirectory(date('Y-m'));
-
-        //Move file to storage
-        $filename = md5(str_random(5)).'.'.$ext;
-        $file_path = 'uploads'.DIRECTORY_SEPARATOR.date('Y-m');
-        Storage::putFileAs($file_path, $file, $filename);
-
-        return 'uploads/'.date('Y-m').'/'.$filename;
-    }
-
-    public function postUploadFile()
+    public function postUploadFile(FileUploader $uploader)
     {
         $this->cbLoader();
-        echo $this->uploadFile('userfile');
+        echo $uploader->uploadFile('userfile');
     }
 }
