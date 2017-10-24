@@ -563,23 +563,7 @@ class CBController extends Controller
             return null;
         }
 
-        $message = $validator->messages();
-        $message_all = $message->all();
-
-        if (Request::ajax()) {
-            response()->json([
-                'message' => trans('crudbooster.alert_validation_error', ['error' => implode(', ', $message_all)]),
-                'message_type' => 'warning',
-            ])->send();
-            exit;
-        }
-
-        redirect()->back()->with("errors", $message)->with([
-            'message' => trans('crudbooster.alert_validation_error', ['error' => implode(', ', $message_all)]),
-            'message_type' => 'warning',
-        ])->withInput()->send();
-        \Session::driver()->save();
-        exit;
+        $this->sendFailedValidationResponse($validator);
     }
 
     /**
@@ -940,5 +924,29 @@ class CBController extends Controller
     {
         $this->cbLoader();
         echo $uploader->uploadFile('userfile');
+    }
+
+    /**
+     * @param $validator
+     */
+    private function sendFailedValidationResponse($validator)
+    {
+        $message = $validator->messages();
+        $message_all = $message->all();
+
+        if (Request::ajax()) {
+            response()->json([
+                'message' => trans('crudbooster.alert_validation_error', ['error' => implode(', ', $message_all)]),
+                'message_type' => 'warning',
+            ])->send();
+            exit;
+        }
+
+        redirect()->back()->with("errors", $message)->with([
+            'message' => trans('crudbooster.alert_validation_error', ['error' => implode(', ', $message_all)]),
+            'message_type' => 'warning',
+        ])->withInput()->send();
+        \Session::driver()->save();
+        exit;
     }
 }
