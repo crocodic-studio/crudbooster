@@ -8,6 +8,7 @@ use crocodicstudio\crudbooster\CBCoreModule\DataSaver;
 use crocodicstudio\crudbooster\CBCoreModule\FileUploader;
 use crocodicstudio\crudbooster\CBCoreModule\Hooks;
 use crocodicstudio\crudbooster\CBCoreModule\Index;
+use crocodicstudio\crudbooster\CBCoreModule\Search;
 use crocodicstudio\crudbooster\controllers\Helpers\IndexExport;
 use crocodicstudio\crudbooster\controllers\Helpers\IndexImport;
 use Illuminate\Support\Facades\Session;
@@ -337,52 +338,15 @@ class CBController extends Controller
         return CRUDBooster::backWithMsg(trans('crudbooster.alert_delete_data_success'));
     }
 
-    public function postFindData()
+    public function postFindData(Search $search)
     {
         $q = request('q');
         $data = request('data');
-        $data = base64_decode($data);
-        $data = json_decode($data, true);
         $id = request('id');
 
-        $fieldValue = $data['field_value'];
+        $items = $search->searchData($data, $q, $id);
 
-        $table = $data['table'];
-        $rows = DB::table($table);
-        $rows->select($table.'.*');
-
-        if ($data['sql_orderby']) {
-            $rows->orderbyRaw($data['sql_orderby']);
-        } else {
-            $rows->orderby($fieldValue, 'desc');
-        }
-        if ($data['limit']) {
-            $rows->take($data['limit']);
-        } else {
-            $rows->take(10);
-        }
-
-        if ($data['field_label']) {
-            $rows->addselect($data['field_label'].' as text');
-        }
-
-        if ($fieldValue) {
-            $rows->addselect($fieldValue.' as id');
-        }
-
-        if ($data['sql_where']) {
-            $rows->whereRaw($data['sql_where']);
-        }
-
-        if ($q) {
-            $rows->where($data['field_label'], 'like', '%'.$q.'%');
-        }
-
-        if ($id) {
-            $rows->where($fieldValue, $id);
-        }
-
-        return response()->json(['items' => $rows->get()]);
+        return response()->json(['items' => $items]);
     }
 
     public function postFindDataOld()
