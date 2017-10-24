@@ -17,8 +17,7 @@ class Search
      */
     function searchData($data, $q, $id)
     {
-        $data = base64_decode($data);
-        $data = json_decode($data, true);
+        $data = $this->decode($data);
         $fieldValue = $data['field_value'];
 
         $table = $data['table'];
@@ -88,5 +87,17 @@ class Search
         if ($id) {
             $this->rows->where($fieldValue, $id);
         }
+    }
+
+    /**
+     * @param $data
+     * @return bool|mixed|string
+     */
+    private function decode($data)
+    {
+        $data = base64_decode($data);
+        $data = json_decode($data, true);
+
+        return $data;
     }
 }
