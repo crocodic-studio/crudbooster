@@ -764,10 +764,8 @@ class CBController extends Controller
         $this->cbLoader();
         $row = $this->findRow($id)->first();
 
-        $module = CRUDBooster::getCurrentModule();
-
         $page_menu = Route::getCurrentRoute()->getActionName();
-        $page_title = trans("crudbooster.detail_data_page_title", ['module' => $module->name, 'name' => $row->{$this->title_field}]);
+        $page_title = trans("crudbooster.detail_data_page_title", ['module' => CRUDBooster::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
         $command = 'detail';
 
         Session::put('current_row_id', $id);
@@ -778,6 +776,8 @@ class CBController extends Controller
     public function getImportData()
     {
         $this->cbLoader();
+
+        $data = [];
         $data['page_menu'] = Route::getCurrentRoute()->getActionName();
         $data['page_title'] = 'Import Data '.CRUDBooster::getCurrentModule()->name;
 
@@ -785,8 +785,7 @@ class CBController extends Controller
             return view('crudbooster::import', $data);
         }
 
-        $file = base64_decode(request('file'));
-        $file = 'storage'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.$file;
+        $file = 'storage'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.base64_decode(request('file'));
         $rows = Excel::load($file, function ($reader) {
         })->get();
 
@@ -804,9 +803,7 @@ class CBController extends Controller
             break;
         }
 
-        $table_columns = DB::getSchemaBuilder()->getColumnListing($this->table);
-
-        $data['table_columns'] = $table_columns;
+        $data['table_columns'] = DB::getSchemaBuilder()->getColumnListing($this->table);
         $data['data_import_column'] = $data_import_column;
 
         return view('crudbooster::import', $data);
