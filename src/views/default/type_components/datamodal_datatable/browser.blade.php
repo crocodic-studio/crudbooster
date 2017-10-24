@@ -43,9 +43,13 @@
                 }
                 ?>
             @endforeach
-            <td><a class='btn btn-primary' href='javascript:void(0)'
-                   onclick='parent.selectDataModal{{$name}}("{{ $col->{$data['column_label'] }}","{{ $col->{$data['column_value']} }}")'><i
-                            class='fa fa-check-circle'></i> {{cbTrans('datamodal_select')}}</a></td>
+            <td>
+                <a class='btn btn-primary' href='javascript:void(0)'
+                   onclick='parent.selectDataModal{{$name}}("{{ $col->{$data['column_label'] }}","{{ $col->{$data['column_value']} }}")'>
+                    <i class='fa fa-check-circle'></i>
+                    {{cbTrans('datamodal_select')}}
+                </a>
+            </td>
         </tr>
     @endforeach
     </tbody>
