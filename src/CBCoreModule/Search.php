@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\DB;
 
 class Search
 {
+    private $rows;
+
     /**
      * @param $data
      * @param $q
@@ -20,41 +22,71 @@ class Search
         $fieldValue = $data['field_value'];
 
         $table = $data['table'];
-        $rows = DB::table($table);
-        $rows->select($table.'.*');
+        $this->rows = DB::table($table);
+        $this->rows->select($table.'.*');
 
-        if ($data['sql_orderby']) {
-            $rows->orderbyRaw($data['sql_orderby']);
-        } else {
-            $rows->orderby($fieldValue, 'desc');
-        }
-        if ($data['limit']) {
-            $rows->take($data['limit']);
-        } else {
-            $rows->take(10);
-        }
+        $this->orderRows($data, $fieldValue);
+
+        $this->limitRows($data);
 
         if ($data['field_label']) {
-            $rows->addselect($data['field_label'].' as text');
+            $this->rows->addselect($data['field_label'].' as text');
         }
 
         if ($fieldValue) {
-            $rows->addselect($fieldValue.' as id');
+            $this->rows->addselect($fieldValue.' as id');
         }
 
+        $this->filterRow($data, $q, $id, $fieldValue);
+
+        $items = $this->rows->get();
+
+        return $items;
+    }
+
+    /**
+     * @param $data
+     * @param $fieldValue
+     */
+    private function orderRows($data, $fieldValue)
+    {
+        if ($data['sql_orderby']) {
+            $this->rows->orderbyRaw($data['sql_orderby']);
+        } else {
+            $this->rows->orderby($fieldValue, 'desc');
+        }
+    }
+
+    /**
+     * @param $data
+     */
+    private function limitRows($data)
+    {
+        if ($data['limit']) {
+            $this->rows->take($data['limit']);
+        } else {
+            $this->rows->take(10);
+        }
+    }
+
+    /**
+     * @param $data
+     * @param $q
+     * @param $id
+     * @param $fieldValue
+     */
+    private function filterRow($data, $q, $id, $fieldValue)
+    {
         if ($data['sql_where']) {
-            $rows->whereRaw($data['sql_where']);
+            $this->rows->whereRaw($data['sql_where']);
         }
 
         if ($q) {
-            $rows->where($data['field_label'], 'like', '%'.$q.'%');
+            $this->rows->where($data['field_label'], 'like', '%'.$q.'%');
         }
 
         if ($id) {
-            $rows->where($fieldValue, $id);
+            $this->rows->where($fieldValue, $id);
         }
-        $items = $rows->get();
-
-        return $items;
     }
 }
