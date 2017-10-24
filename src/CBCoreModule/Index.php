@@ -3,6 +3,11 @@
 namespace crocodicstudio\crudbooster\CBCoreModule;
 
 use crocodicstudio\crudbooster\controllers\CBController;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\DB;
+use CRUDBooster;
+use CB;
+use Schema;
 
 class Index
 {

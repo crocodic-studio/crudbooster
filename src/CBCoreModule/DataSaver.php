@@ -3,6 +3,11 @@
 namespace crocodicstudio\crudbooster\CBCoreModule;
 
 use crocodicstudio\crudbooster\controllers\CBController;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\PDF;
+use CRUDBooster;
+use CB;
+use Schema;
 
 class DataSaver
 {
