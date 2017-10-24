@@ -2,6 +2,8 @@
 
 namespace crocodicstudio\crudbooster\CBCoreModule;
 
+use Illuminate\Support\Facades\DB;
+
 class Search
 {
     /**
