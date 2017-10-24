@@ -151,7 +151,7 @@ class CBController extends Controller
         $this->data['addaction'] = ($this->show_addaction) ? $this->addaction : null;
         $this->data['table'] = $this->table;
         $this->data['title_field'] = $this->title_field;
-        $this->data['appname'] = CRUDBooster::getSetting('appname');
+        $this->data['appname'] = CB::getSetting('appname');
         $this->data['alerts'] = $this->alert;
         $this->data['index_button'] = $this->index_button;
         $this->data['show_numbering'] = $this->show_numbering;
@@ -183,8 +183,8 @@ class CBController extends Controller
         $this->data['parent_field'] = (request('parent_field')) ?: $this->parent_field;
         $this->data['parent_id'] = (request('parent_id')) ?: $this->parent_id;
 
-        if (CRUDBooster::getCurrentMethod() == 'getProfile') {
-            Session::put('current_row_id', CRUDBooster::myId());
+        if (CB::getCurrentMethod() == 'getProfile') {
+            Session::put('current_row_id', CB::myId());
             $this->data['return_url'] = Request::fullUrl();
         }
 
@@ -205,7 +205,7 @@ class CBController extends Controller
 
     public function getExportData()
     {
-        return redirect(CRUDBooster::mainpath());
+        return redirect(CB::mainpath());
     }
 
     public function postExportData(IndexExport $exporter)
@@ -335,7 +335,7 @@ class CBController extends Controller
         $id = request('id');
         DB::table($table)->where(CB::pk($table), $id)->update([$column => $value]);
 
-        return CRUDBooster::backWithMsg(trans('crudbooster.alert_delete_data_success'));
+        return CB::backWithMsg(trans('crudbooster.alert_delete_data_success'));
     }
 
     public function postFindData(Search $search)
@@ -398,7 +398,7 @@ class CBController extends Controller
         if ($table2 && $column2) {
             $table2PK = CB::pk($table2);
             $rows->join($table2, $table2.'.'.$table2PK, '=', $table1.'.'.$column1);
-            $columns = CRUDBooster::getTableColumns($table2);
+            $columns = CB::getTableColumns($table2);
             foreach ($columns as $col) {
                 $rows->addselect($table2.".".$col." as ".$table2."_".$col);
             }
@@ -409,7 +409,7 @@ class CBController extends Controller
         if ($table3 && $column3) {
             $table3PK = CB::pk($table3);
             $rows->join($table3, $table3.'.'.$table3PK, '=', $table2.'.'.$column2);
-            $columns = CRUDBooster::getTableColumns($table3);
+            $columns = CB::getTableColumns($table3);
             foreach ($columns as $col) {
                 $rows->addselect($table3.".".$col." as ".$table3."_".$col);
             }
@@ -448,7 +448,7 @@ class CBController extends Controller
     {
         $this->cbLoader();
 
-        $page_title = trans("crudbooster.add_data_page_title", ['module' => CRUDBooster::getCurrentModule()->name]);
+        $page_title = trans("crudbooster.add_data_page_title", ['module' => CB::getCurrentModule()->name]);
         $page_menu = Route::getCurrentRoute()->getActionName();
         $command = 'add';
 
@@ -475,18 +475,18 @@ class CBController extends Controller
         $this->return_url = ($this->return_url) ? $this->return_url : request('return_url');
 
         //insert log
-        CRUDBooster::insertLog(trans("crudbooster.log_add", ['name' => $this->arr[$this->title_field], 'module' => CRUDBooster::getCurrentModule()->name]));
+        CB::insertLog(trans("crudbooster.log_add", ['name' => $this->arr[$this->title_field], 'module' => CB::getCurrentModule()->name]));
 
         if ($this->return_url) {
             if (request('submit') == trans('crudbooster.button_save_more')) {
-                CRUDBooster::redirect(Request::server('HTTP_REFERER'), trans("crudbooster.alert_add_data_success"), 'success');
+                CB::redirect(Request::server('HTTP_REFERER'), trans("crudbooster.alert_add_data_success"), 'success');
             }
-            CRUDBooster::redirect($this->return_url, trans("crudbooster.alert_add_data_success"), 'success');
+            CB::redirect($this->return_url, trans("crudbooster.alert_add_data_success"), 'success');
         }
         if (request('submit') == trans('crudbooster.button_save_more')) {
-            CRUDBooster::redirect(CRUDBooster::mainpath('add'), trans("crudbooster.alert_add_data_success"), 'success');
+            CB::redirect(CB::mainpath('add'), trans("crudbooster.alert_add_data_success"), 'success');
         }
-        CRUDBooster::redirect(CRUDBooster::mainpath(), trans("crudbooster.alert_add_data_success"), 'success');
+        CB::redirect(CB::mainpath(), trans("crudbooster.alert_add_data_success"), 'success');
     }
 
     public function validation($id = null)
@@ -633,7 +633,7 @@ class CBController extends Controller
         $row = $this->findRow($id)->first();
 
         $page_menu = Route::getCurrentRoute()->getActionName();
-        $page_title = trans("crudbooster.edit_data_page_title", ['module' => CRUDBooster::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
+        $page_title = trans("crudbooster.edit_data_page_title", ['module' => CB::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
         $command = 'edit';
         Session::put('current_row_id', $id);
 
@@ -669,17 +669,17 @@ class CBController extends Controller
         $this->return_url = ($this->return_url) ? $this->return_url : request('return_url');
 
         //insert log
-        CRUDBooster::insertLog(trans("crudbooster.log_update", ['name' => $this->arr[$this->title_field], 'module' => CRUDBooster::getCurrentModule()->name]));
+        CB::insertLog(trans("crudbooster.log_update", ['name' => $this->arr[$this->title_field], 'module' => CB::getCurrentModule()->name]));
 
         if ($this->return_url) {
-            CRUDBooster::redirect($this->return_url, trans("crudbooster.alert_update_data_success"), 'success');
+            CB::redirect($this->return_url, trans("crudbooster.alert_update_data_success"), 'success');
         }
 
         if (request('submit') == trans('crudbooster.button_save_more')) {
-            CRUDBooster::redirect(CRUDBooster::mainpath('add'), trans("crudbooster.alert_update_data_success"), 'success');
+            CB::redirect(CB::mainpath('add'), trans("crudbooster.alert_update_data_success"), 'success');
         }
 
-        CRUDBooster::redirect(CRUDBooster::mainpath(), trans("crudbooster.alert_update_data_success"), 'success');
+        CB::redirect(CB::mainpath(), trans("crudbooster.alert_update_data_success"), 'success');
     }
 
     public function getDelete($id)
@@ -688,7 +688,7 @@ class CBController extends Controller
         $row = $this->findRow($id)->first();
 
         //insert log
-        CRUDBooster::insertLog(trans("crudbooster.log_delete", ['name' => $row->{$this->title_field}, 'module' => CRUDBooster::getCurrentModule()->name]));
+        CB::insertLog(trans("crudbooster.log_delete", ['name' => $row->{$this->title_field}, 'module' => CB::getCurrentModule()->name]));
 
         $this->hookBeforeDelete($id);
 
@@ -700,9 +700,9 @@ class CBController extends Controller
 
         $this->hookAfterDelete($id);
 
-        $url = request('return_url') ?: CRUDBooster::referer();
+        $url = request('return_url') ?: CB::referer();
 
-        CRUDBooster::redirect($url, trans("crudbooster.alert_delete_data_success"), 'success');
+        CB::redirect($url, trans("crudbooster.alert_delete_data_success"), 'success');
     }
 
     public function getDetail($id)
@@ -711,7 +711,7 @@ class CBController extends Controller
         $row = $this->findRow($id)->first();
 
         $page_menu = Route::getCurrentRoute()->getActionName();
-        $page_title = trans("crudbooster.detail_data_page_title", ['module' => CRUDBooster::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
+        $page_title = trans("crudbooster.detail_data_page_title", ['module' => CB::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
         $command = 'detail';
 
         Session::put('current_row_id', $id);
@@ -725,7 +725,7 @@ class CBController extends Controller
 
         $data = [];
         $data['page_menu'] = Route::getCurrentRoute()->getActionName();
-        $data['page_title'] = 'Import Data '.CRUDBooster::getCurrentModule()->name;
+        $data['page_title'] = 'Import Data '.CB::getCurrentModule()->name;
 
         if (! request('file') || request('import')) {
             return view('crudbooster::import', $data);
@@ -785,7 +785,7 @@ class CBController extends Controller
         $file = Request::file('userfile');
         $validator = $importer->validateForImport($file);
         if ($validator->fails()) {
-            return CRUDBooster::backWithMsg(implode('<br/>', $validator->errors()->all()), 'warning');
+            return CB::backWithMsg(implode('<br/>', $validator->errors()->all()), 'warning');
         }
         $url = $importer->uploadImportData($file);
 
@@ -799,7 +799,7 @@ class CBController extends Controller
         $button_name = Request::input('button_name');
 
         if (! $id_selected) {
-            CRUDBooster::redirect($_SERVER['HTTP_REFERER'], 'Please select at least one data!', 'warning');
+            CB::redirect($_SERVER['HTTP_REFERER'], 'Please select at least one data!', 'warning');
         }
 
         if ($button_name == 'delete') {
@@ -808,7 +808,7 @@ class CBController extends Controller
 
         list($type, $message) = $this->_getMessageAndType($button_name, $id_selected);
 
-        return CRUDBooster::backWithMsg($message, $type);
+        return CB::backWithMsg($message, $type);
     }
 
     /**
@@ -819,16 +819,18 @@ class CBController extends Controller
     {
         $this->hookBeforeDelete($id_selected);
         $tablePK = CB::pk($this->table);
+
         if (Schema::hasColumn($this->table, 'deleted_at')) {
             $this->table()->whereIn($tablePK, $id_selected)->update(['deleted_at' => date('Y-m-d H:i:s')]);
         } else {
             $this->table()->whereIn($tablePK, $id_selected)->delete();
         }
-        CRUDBooster::insertLog(trans("crudbooster.log_delete", ['name' => implode(',', $id_selected), 'module' => CRUDBooster::getCurrentModule()->name]));
+
+        CB::insertLog(trans("crudbooster.log_delete", ['name' => implode(',', $id_selected), 'module' => CB::getCurrentModule()->name]));
 
         $this->hookAfterDelete($id_selected);
 
-        return CRUDBooster::backWithMsg(trans("crudbooster.alert_delete_selected_success"));
+        return CB::backWithMsg(trans("crudbooster.alert_delete_selected_success"));
     }
 
     /**
@@ -868,12 +870,12 @@ class CBController extends Controller
 
         $this->findRow($id)->update([$column => null]);
 
-        CRUDBooster::insertLog(trans("crudbooster.log_delete_image", [
+        CB::insertLog(trans("crudbooster.log_delete_image", [
             'name' => $row->{$this->title_field},
-            'module' => CRUDBooster::getCurrentModule()->name,
+            'module' => CB::getCurrentModule()->name,
         ]));
 
-        CRUDBooster::redirect(Request::server('HTTP_REFERER'), trans('crudbooster.alert_delete_data_success'), 'success');
+        CB::redirect(Request::server('HTTP_REFERER'), trans('crudbooster.alert_delete_data_success'), 'success');
     }
 
     public function postUploadSummernote(FileUploader $uploader)
