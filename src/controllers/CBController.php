@@ -1574,7 +1574,7 @@ class CBController extends Controller {
 				}
 
 				$v = $this->validationArray($a);
-				if (!f$v->fails())
+				if (!$v->fails())
 					DB::table($this->table)->insert($a);
 				Cache::increment('success_'.$file_md5);
 			}catch(\Exception $e) {
