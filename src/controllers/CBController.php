@@ -856,6 +856,103 @@ class CBController extends Controller {
 		}
 	}
 
+	public function validationArray($formarray) {
+
+		$request_all = $formarray;
+		$array_input = array();
+		foreach($this->form as $di) {
+			$ai = array();
+			$name = $di['name'];			
+
+			if( !isset($formarray[$name]) ) continue;
+
+			if($di['type'] != 'upload') {
+				if(@$di['required']) {
+					$ai[] = 'required';
+				}
+			}
+
+			if($di['type'] == 'upload') {
+				if($id) {
+					$row = DB::table($this->table)->where($this->primary_key,$id)->first();
+					if($row->{$di['name']}=='') {
+						$ai[] = 'required';
+					}
+				}
+			}
+
+			if(@$di['min']) {
+				$ai[] = 'min:'.$di['min'];
+			}
+			if(@$di['max']) {
+				$ai[] = 'max:'.$di['max'];
+			}
+			if(@$di['image']) {
+				$ai[] = 'image';
+			}
+			if(@$di['mimes']) {
+				$ai[] = 'mimes:'.$di['mimes'];
+			}
+			$name = $di['name'];
+			if(!$name) continue;
+
+			if($di['type']=='money') {
+				$formarray[$name] = preg_replace('/[^\d-]+/', '', $formarray[$name]);
+			}
+
+
+			if(@$di['validation']) {
+
+				$exp = explode('|',$di['validation']);
+				if (count($exp)) {
+					foreach ($exp as &$validationItem) {
+						if (substr($validationItem, 0,6) == 'unique') {
+							$parseUnique = explode(',',str_replace('unique:','',$validationItem));
+							$uniqueTable = ($parseUnique[0])?:$this->table;
+							$uniqueColumn = ($parseUnique[1])?:$name;
+							$uniqueIgnoreId = ($parseUnique[2])?:(($id)?:'');
+
+							//Make sure table name
+							$uniqueTable = CB::parseSqlTable($uniqueTable)['table'];
+
+							//Rebuild unique rule
+							$uniqueRebuild = [];
+							$uniqueRebuild[] = $uniqueTable;
+							$uniqueRebuild[] = $uniqueColumn;
+							if ($uniqueIgnoreId) {							
+								$uniqueRebuild[] = $uniqueIgnoreId;
+							} else {
+								$uniqueRebuild[] = 'NULL';
+							}
+
+							//Check whether deleted_at exists or not
+							if (CB::isColumnExists($uniqueTable,'deleted_at')) {
+								$uniqueRebuild[] = CB::findPrimaryKey($uniqueTable);
+								$uniqueRebuild[] = 'deleted_at';
+								$uniqueRebuild[] = 'NULL';							
+							}							
+							$uniqueRebuild = array_filter($uniqueRebuild);
+							$validationItem = 'unique:'.implode(',',$uniqueRebuild);
+						}
+					}
+				} else {
+					$exp = array();
+				}
+
+
+				$validation = implode('|',$exp);
+
+				$array_input[$name] = $validation;
+			}else{
+				$array_input[$name] = implode('|',$ai);
+			}
+		}
+
+		$validator = Validator::make($formarray,$array_input);
+
+		return $validator;
+	}
+
 	public function input_assignment($id=null) {			
 
 		$hide_form = (Request::get('hide_form'))?unserialize(Request::get('hide_form')):array();	
@@ -1472,7 +1569,9 @@ class CBController extends Controller {
 					$a['created_at'] = date('Y-m-d H:i:s');
 				}
 
-				DB::table($this->table)->insert($a);
+				$v = $this->validationArray($a);
+				if (!$v->fails())
+					DB::table($this->table)->insert($a);
 				Cache::increment('success_'.$file_md5);
 			}catch(\Exception $e) {
 				$e = (string) $e;
