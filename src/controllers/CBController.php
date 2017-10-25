@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\PDF;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Log;
 use CRUDBooster;
 use CB;
 use Schema;
@@ -948,6 +949,9 @@ class CBController extends Controller {
 			}
 		}
 
+		foreach($array_input as $di)
+			Log::error('validation '.$di);
+
 		$validator = Validator::make($formarray,$array_input);
 
 		return $validator;
@@ -1570,7 +1574,7 @@ class CBController extends Controller {
 				}
 
 				$v = $this->validationArray($a);
-				if (!$v->fails())
+				if (!f$v->fails())
 					DB::table($this->table)->insert($a);
 				Cache::increment('success_'.$file_md5);
 			}catch(\Exception $e) {
