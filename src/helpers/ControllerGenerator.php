@@ -2,6 +2,7 @@
 
 namespace crocodicstudio\crudbooster\helpers;
 
+use Schema;
 
 class ControllerGenerator
 {

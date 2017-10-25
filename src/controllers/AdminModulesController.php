@@ -220,10 +220,15 @@ class AdminModulesController extends CBController
 
         $row = DB::table('cms_moduls')->where('id', $id)->first();
 
-        $response = file_get_contents(__DIR__.'/'.str_replace('.', '', $row->controller).'.php');
+		
         if (file_exists(app_path('Http/Controllers/'.$row->controller.'.php'))) {
-            $response = file_get_contents(app_path('Http/Controllers/'.str_replace('.', '', $row->controller).'.php'));
+            $ctrlPath = app_path('Http/Controllers/'.str_replace('.', '', $row->controller));
+        }else{
+            $ctrlPath = __DIR__.'/'.str_replace('.', '', $row->controller);
         }
+        
+        $response = file_get_contents($ctrlPath.'.php');
+		
 
         if (strpos($response, "# START COLUMNS") !== true) {
             // return redirect()->back()->with(['message'=>'Sorry, is not possible to edit the module with Module Generator Tool. Prefix and or Suffix tag is missing !','message_type'=>'warning']);
