@@ -1,7 +1,8 @@
 <?php
 
-namespace crocodicstudio\crudbooster\controllers;
+namespace crocodicstudio\crudbooster\ApiGeneratorModule;
 
+use crocodicstudio\crudbooster\controllers\CBController;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -32,7 +33,7 @@ class AdminApiGeneratorController extends CBController
         $data['page_menu'] = Route::getCurrentRoute()->getActionName();
         $data['apis'] = $this->table()->orderby('nama', 'asc')->get();
 
-        return view('crudbooster::api_generator.api_documentation', $data);
+        return view('CbApiGen::api_documentation', $data);
     }
 
     function apiDocumentation()
@@ -42,7 +43,7 @@ class AdminApiGeneratorController extends CBController
 
         $data['apis'] = $this->table()->orderby('nama', 'asc')->get();
 
-        return view('crudbooster::api_generator.api_documentation_public', $data);
+        return view('CbApiGen::api_documentation_public', $data);
     }
 
     function getDownloadPostman()
@@ -111,7 +112,7 @@ class AdminApiGeneratorController extends CBController
         $data['page_menu'] = Route::getCurrentRoute()->getActionName();
         $data['apikeys'] = DB::table('cms_apikey')->get();
 
-        return view('crudbooster::api_generator.api_key', $data);
+        return view('CbApiGen::api_key', $data);
     }
 
     public function getGenerator()
@@ -131,7 +132,7 @@ class AdminApiGeneratorController extends CBController
 
         $data['tables'] = $tables_list;
 
-        return view('crudbooster::api_generator.api_generator', $data);
+        return view('CbApiGen::api_generator', $data);
     }
 
     public function getEditApi($id)
@@ -156,7 +157,7 @@ class AdminApiGeneratorController extends CBController
 
         $data['tables'] = $tables_list;
 
-        return view('crudbooster::api_generator.api_generator', $data);
+        return view('CbApiGen::api_generator', $data);
     }
 
     function getGenerateScreetKey()

@@ -116,6 +116,7 @@ class AdminModulesController extends CBController
     public function postStep2(Step1Handler $handler)
     {
         $this->cbLoader();
+
         return $handler->handleFormSubmit();
     }
 
