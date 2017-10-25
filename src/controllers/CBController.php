@@ -949,8 +949,8 @@ class CBController extends Controller {
 			}
 		}
 
-		foreach($array_input as $name,$di)
-			Log::error('validation '.$name."=>".$di);
+		foreach($array_input as $di)
+			Log::error('validation '.$di);
 
 		foreach($formarray as $item)
 			Log::error('validationitem '.$item);
