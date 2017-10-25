@@ -1,6 +1,6 @@
 @extends('crudbooster::admin_template')
 @section('content')
 
-    @include('crudbooster::statistic_builder.index')
+    @include('CbStatistics::index')
 
 @endsection

@@ -1,8 +1,8 @@
 <?php
 
-namespace crocodicstudio\crudbooster\controllers;
+namespace crocodicstudio\crudbooster\StatisticModule;
 
-use crocodicstudio\crudbooster\controllers\Forms\StatisticForm;
+use crocodicstudio\crudbooster\controllers\CBController;
 use Illuminate\Support\Facades\DB;
 use CRUDBooster;
 
@@ -40,7 +40,7 @@ class AdminStatisticBuilderController extends CBController
         $id_cms_statistics = $row->id;
         $page_title = $row->name;
 
-        return view('crudbooster::statistic_builder.show', compact('page_title', 'id_cms_statistics'));
+        return view('CbStatistics::show', compact('page_title', 'id_cms_statistics'));
     }
 
     public function getShow($slug)
@@ -50,7 +50,7 @@ class AdminStatisticBuilderController extends CBController
         $id_cms_statistics = $row->id;
         $page_title = $row->name;
 
-        return view('crudbooster::statistic_builder.show', compact('page_title', 'id_cms_statistics'));
+        return view('CbStatistics::show', compact('page_title', 'id_cms_statistics'));
     }
 
     public function getDashboard()
@@ -64,7 +64,7 @@ class AdminStatisticBuilderController extends CBController
         $id_cms_statistics = $row->id;
         $page_title = $row->name;
 
-        return view('crudbooster::statistic_builder.show', compact('page_title', 'id_cms_statistics'));
+        return view('CbStatistics::show', compact('page_title', 'id_cms_statistics'));
     }
 
     public function getBuilder($id_cms_statistics)
@@ -74,7 +74,7 @@ class AdminStatisticBuilderController extends CBController
 
         $page_title = 'Statistic Builder';
 
-        return view('crudbooster::statistic_builder.builder', compact('page_title', 'id_cms_statistics'));
+        return view('CbStatistics::builder', compact('page_title', 'id_cms_statistics'));
     }
 
     public function getListComponent($id_cms_statistics, $area_name)
@@ -89,7 +89,7 @@ class AdminStatisticBuilderController extends CBController
         $component = CRUDBooster::first('cms_statistic_components', ['componentID' => $componentID]);
 
         $command = 'layout';
-        $layout = view('crudbooster::statistic_builder.components.'.$component->component_name, compact('command', 'componentID'))->render();
+        $layout = view('CbStatistics::components.'.$component->component_name, compact('command', 'componentID'))->render();
 
         $component_name = $component->component_name;
         $area_name = $component->area_name;
@@ -102,7 +102,7 @@ class AdminStatisticBuilderController extends CBController
                 continue;
             }
             $command = 'showFunction';
-            $value = view('crudbooster::statistic_builder.components.'.$component_name, compact('command', 'value', 'key', 'config', 'componentID'))->render();
+            $value = view('CbStatistics::components.'.$component_name, compact('command', 'value', 'key', 'config', 'componentID'))->render();
             $layout = str_replace('['.$key.']', $value, $layout);
         }
 
@@ -127,7 +127,7 @@ class AdminStatisticBuilderController extends CBController
         ];
         CRUDBooster::insert('cms_statistic_components', $data);
 
-        $layout = view('crudbooster::statistic_builder.components.'.$component_name, compact('command', 'componentID'))->render();
+        $layout = view('CbStatistics::components.'.$component_name, compact('command', 'componentID'))->render();
 
         return response()->json(compact('layout', 'componentID'));
     }
@@ -153,7 +153,7 @@ class AdminStatisticBuilderController extends CBController
 
         $command = 'configuration';
 
-        return view('crudbooster::statistic_builder.components.'.$component_row->component_name, compact('command', 'componentID', 'config'));
+        return view('CbStatistics::components.'.$component_row->component_name, compact('command', 'componentID', 'config'));
     }
 
     public function postSaveComponent()

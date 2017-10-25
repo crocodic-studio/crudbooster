@@ -13,7 +13,7 @@ class IndexExport
      * @param $filename
      * @return mixed
      */
-    public function pdf($response, $papersize, $paperorientation, $filename)
+    public function pdf($filename, $response, $paperorientation, $papersize)
     {
         $view = view('crudbooster::export', $response)->render();
         $pdf = app('dompdf.wrapper');

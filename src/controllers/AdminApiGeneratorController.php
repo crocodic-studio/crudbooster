@@ -335,7 +335,7 @@ class AdminApiGeneratorController extends CBController
 
         $controllername = ucwords(str_replace('_', ' ', $row->permalink));
         $controllername = str_replace(' ', '', $controllername);
-        @unlink(base_path("app/Http/Controllers/Api".$controllername."Controller.php"));
+        @unlink(base_path(controllers_dir()."Api".$controllername."Controller.php"));
 
         return response()->json(['status' => 1]);
     }

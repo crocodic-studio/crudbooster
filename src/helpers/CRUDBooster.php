@@ -775,9 +775,9 @@ class CRUDBooster
 
     public static function mainpath($path = null)
     {
-
-        $controllername = str_replace(["\crocodicstudio\crudbooster\controllers\\", "App\Http\Controllers\\"], "", strtok(Route::currentRouteAction(), '@'));
-        $route_url = route($controllername.'GetIndex');
+        $controllerName = strtok(Route::currentRouteAction(), '@');
+        $controllerName = array_pop(explode('\\', $controllerName));
+        $route_url = route($controllerName.'GetIndex');
 
         if (! $path) {
             return trim($route_url, '/');
@@ -993,8 +993,8 @@ class CRUDBooster
     {
         $controllername = ucwords(str_replace('_', ' ', $table));
         $controllername = str_replace(' ', '', $controllername).'Controller';
-        $path = base_path("app/Http/Controllers/");
-        $path2 = base_path("app/Http/Controllers/ControllerMaster/");
+        $path = base_path(controllers_dir());
+        $path2 = base_path(controllers_dir()."ControllerMaster/");
         if (file_exists($path.'Admin'.$controllername.'.php') || file_exists($path2.'Admin'.$controllername.'.php') || file_exists($path2.$controllername.'.php')) {
             return true;
         }
@@ -1005,7 +1005,7 @@ class CRUDBooster
     public static function generateAPI($controller_name, $table_name, $permalink, $method_type = 'post')
     {
         $php = '<?php '.view('crudbooster::file_stubs.api_stub', compact('controller_name', 'table_name', 'permalink', 'method_type'))->render();
-        $path = base_path("app/Http/Controllers/");
+        $path = base_path(controllers_dir());
         file_put_contents($path.'Api'.$controller_name.'Controller.php', $php);
     }
 

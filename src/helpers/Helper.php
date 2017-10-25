@@ -16,10 +16,42 @@ if (! function_exists('parseControllerConfigToArray')) {
     }
 }
 
+if (! function_exists('controllers_dir')) {
+    function controllers_dir()
+    {
+        return 'app/Http/Controllers/';
+    }
+}
+
 if (! function_exists('parseScaffoldingToArray')) {
     function parseScaffoldingToArray($code, $type = 'form')
     {
         return \crocodicstudio\crudbooster\helpers\Parsers\ScaffoldingParser::parse($code, $type);
+    }
+}
+
+if (! function_exists('controller_path')) {
+    function controller_path($controller)
+    {
+        return app_path('Http/Controllers/'.$controller.'.php');
+    }
+}
+
+if (! function_exists('getTablesList')) {
+    function getTablesList()
+    {
+        $tables_list = [];
+        foreach (CRUDBooster::listTables() as $table) {
+            unset($table['migrations']);
+            foreach ($table as $key => $label) {
+                if (substr($label, 0, 4) == 'cms_' && $label != 'cms_users') {
+                    continue;
+                }
+                $tables_list[] = $label;
+            }
+        }
+
+        return $tables_list;
     }
 }
 
@@ -325,8 +357,8 @@ if (! function_exists('cbStyleSheet')) {
 }
 
 if (! function_exists('cbConfig')) {
-    function cbConfig($key)
+    function cbConfig($key, $default = null)
     {
-        return config('crudbooster.'.$key);
+        return config('crudbooster.'.$key, $default);
     }
 }
