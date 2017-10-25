@@ -1,3 +1,6 @@
+@if(is_array($value))
+@php	$value=implode("|", $value); @endphp
+@endif
 <div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}'
      style="{{@$form['style']}}">
     <label class='control-label col-sm-2'>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>

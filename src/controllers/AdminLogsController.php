@@ -3,7 +3,6 @@
 namespace crocodicstudio\crudbooster\controllers;
 
 use crocodicstudio\crudbooster\controllers\Forms\LogsForm;
-use crocodicstudio\crudbooster\controllers\Forms\StatisticForm;
 
 class AdminLogsController extends CBController
 {
