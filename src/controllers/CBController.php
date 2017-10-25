@@ -949,11 +949,11 @@ class CBController extends Controller {
 			}
 		}
 
-		foreach($array_input as $di)
-			Log::error('validation '.$di);
+		foreach($array_input as $key => $di)
+			Log::error('validation '.$key.'=>'.$di);
 
-		foreach($formarray as $item)
-			Log::error('validationitem '.$item);
+		foreach($formarray as $key => $item)
+			Log::error('validationitem '.$key.'=>'.$item);
 
 		$validator = Validator::make($formarray,$array_input);
 
