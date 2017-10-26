@@ -197,18 +197,15 @@ class AdminMenusController extends CBController
         $isActive = Request::input('isActive');
         $post = json_decode(Request::input('menus'), true);
 
-        $i = 1;
-        foreach ($post[0] as $menu) {
+        foreach ($post[0] as $i => $menu) {
             $pid = $menu['id'];
-            if ($menu['children'][0]) {
-                $ci = 1;
-                foreach ($menu['children'][0] as $child) {
-                    $this->findRow($child['id'])->update(['sorting' => $ci, 'parent_id' => $pid, 'is_active' => $isActive]);
-                    $ci++;
-                }
+            $children = $menu['children'][0] ?: [];
+
+            foreach ($children as $index => $child) {
+                $this->findRow($child['id'])->update(['sorting' => $index + 1, 'parent_id' => $pid, 'is_active' => $isActive]);
             }
-            $this->findRow($pid)->update(['sorting' => $i, 'parent_id' => 0, 'is_active' => $isActive]);
-            $i++;
+
+            $this->findRow($pid)->update(['sorting' => $i + 1, 'parent_id' => 0, 'is_active' => $isActive]);
         }
 
         return response()->json(['success' => true]);
@@ -222,7 +219,9 @@ class AdminMenusController extends CBController
         if ($postdata['type'] == 'Statistic') {
             $stat = CRUDBooster::first('cms_statistics', ['id' => $postdata['statistic_slug']])->slug;
             $postdata['path'] = 'statistic-builder/show/'.$stat;
-        } elseif ($postdata['type'] == 'Module') {
+        }
+
+        if ($postdata['type'] == 'Module') {
             $postdata['path'] = CRUDBooster::first('cms_moduls', ['id' => $postdata['module_slug']])->path;
         }
     }
