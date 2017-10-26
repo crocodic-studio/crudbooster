@@ -167,7 +167,7 @@ class AdminMenusController extends CBController
 
         if ($postdata['is_dashboard'] == 1) {
             //If set dashboard, so unset for first all dashboard
-            DB::table('cms_menus')->where('is_dashboard', 1)->update(['is_dashboard' => 0]);
+            DB::table($this->table)->where('is_dashboard', 1)->update(['is_dashboard' => 0]);
             Cache::forget('sidebarDashboard'.CRUDBooster::myPrivilegeId());
         }
     }
@@ -176,7 +176,7 @@ class AdminMenusController extends CBController
     {
         if ($postdata['is_dashboard'] == 1) {
             //If set dashboard, so unset for first all dashboard
-            DB::table('cms_menus')->where('is_dashboard', 1)->update(['is_dashboard' => 0]);
+            DB::table($this->table)->where('is_dashboard', 1)->update(['is_dashboard' => 0]);
             Cache::forget('sidebarDashboard'.CRUDBooster::myPrivilegeId());
         }
 
@@ -188,7 +188,7 @@ class AdminMenusController extends CBController
 
     public function hookAfterDelete($id)
     {
-        DB::table('cms_menus')->where('parent_id', $id)->delete();
+        DB::table($this->table)->where('parent_id', $id)->delete();
     }
 
     public function postSaveMenu()
@@ -203,11 +203,11 @@ class AdminMenusController extends CBController
                 $ci = 1;
                 foreach ($ro['children'][0] as $c) {
                     $id = $c['id'];
-                    DB::table('cms_menus')->where('id', $id)->update(['sorting' => $ci, 'parent_id' => $pid, 'is_active' => $isActive]);
+                    DB::table($this->table)->where('id', $id)->update(['sorting' => $ci, 'parent_id' => $pid, 'is_active' => $isActive]);
                     $ci++;
                 }
             }
-            DB::table('cms_menus')->where('id', $pid)->update(['sorting' => $i, 'parent_id' => 0, 'is_active' => $isActive]);
+            DB::table($this->table)->where('id', $pid)->update(['sorting' => $i, 'parent_id' => 0, 'is_active' => $isActive]);
             $i++;
         }
 
