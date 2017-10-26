@@ -198,13 +198,12 @@ class AdminMenusController extends CBController
         $post = json_decode(Request::input('menus'), true);
 
         $i = 1;
-        foreach ($post[0] as $ro) {
-            $pid = $ro['id'];
-            if ($ro['children'][0]) {
+        foreach ($post[0] as $menu) {
+            $pid = $menu['id'];
+            if ($menu['children'][0]) {
                 $ci = 1;
-                foreach ($ro['children'][0] as $c) {
-                    $id = $c['id'];
-                    $this->findRow($id)->update(['sorting' => $ci, 'parent_id' => $pid, 'is_active' => $isActive]);
+                foreach ($menu['children'][0] as $child) {
+                    $this->findRow($child['id'])->update(['sorting' => $ci, 'parent_id' => $pid, 'is_active' => $isActive]);
                     $ci++;
                 }
             }
