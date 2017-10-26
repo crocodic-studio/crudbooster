@@ -68,11 +68,10 @@ class Index
 
         $filter_is_orderby = false;
         if (request('filter_column')) {
-
             $filter_is_orderby = $this->_filterIndexRows($result);
         }
 
-        $data = $this->_prepareResults($filter_is_orderby, $result, $limit, $data, $table);
+        $data = $this->_orderAndPaginate($filter_is_orderby, $result, $limit, $data, $table);
 
         $data['columns'] = $columns_table;
 
@@ -96,7 +95,6 @@ class Index
             $html_content = [];
 
             if ($CbCtrl->button_bulk_action) {
-
                 $html_content[] = "<input type='checkbox' class='checkbox' name='checkbox[]' value='".$row->{$tablePK}."'/>";
             }
 
@@ -329,36 +327,27 @@ class Index
                     continue;
                 }
 
-                if ($value == '' || $type == '') {
-                    continue;
-                }
-
                 if ($type == 'between') {
                     continue;
                 }
-
+                if (!$value || !$key || !$type) {
+                    continue;
+                }
                 switch ($type) {
                     default:
-                        if ($key && $type && $value) {
-                            $query->where($key, $type, $value);
-                        }
+                        $query->where($key, $type, $value);
                         break;
                     case 'like':
                     case 'not like':
-                        $value = '%'.$value.'%';
-                        if ($key && $type && $value) {
-                            $query->where($key, $type, $value);
-                        }
+                        $query->where($key, $type, '%'.$value.'%');
                         break;
                     case 'in':
                     case 'not in':
+                        $value = explode(',', $value);
                         if ($value) {
-                            $value = explode(',', $value);
-                            if ($key && $value) {
-                                $query->whereIn($key, $value);
-                            }
+                            $query->whereIn($key, $value);
                         }
-                        break;
+                    break;
                 }
             }
         });
@@ -417,7 +406,7 @@ class Index
      * @param $table
      * @return array
      */
-    private function _prepareResults($filter_is_orderby, $result, $limit, $data, $table)
+    private function _orderAndPaginate($filter_is_orderby, $result, $limit, $data, $table)
     {
         $orderby = $this->cb->orderby;
         if ($filter_is_orderby !== true) {
@@ -446,17 +435,16 @@ class Index
             return $data;
         }
 
-        $orderby = explode(";", $orderby);
-        foreach ($orderby as $o) {
+        foreach (explode(";", $orderby) as $o) {
             $o = explode(",", $o);
-            $k = $o[0];
-            $v = $o[1];
-            if (strpos($k, '.') !== false) {
-                $orderby_table = explode(".", $k)[0];
-            } else {
-                $orderby_table = $table;
+            $key = $o[0];
+            $value = $o[1];
+
+            $orderby_table = $table;
+            if (strpos($key, '.')) {
+                $orderby_table = explode(".", $key)[0];
             }
-            $result->orderby($orderby_table.'.'.$k, $v);
+            $result->orderby($orderby_table.'.'.$key, $value);
         }
 
         $data['result'] = $result->paginate($limit);
