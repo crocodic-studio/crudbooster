@@ -5,12 +5,12 @@ namespace crocodicstudio\crudbooster\MenuModule;
 class MenusForm
 {
     /**
-     * @param $id_module
-     * @param $id_statistic
+     * @param $module_id
+     * @param $statistic_id
      * @param $row
      * @return array
      */
-    static function makeForm($id_module, $id_statistic, $row)
+    static function makeForm($statistic_id, $module_id, $row)
     {
         $form = [];
         $form[] = [
@@ -58,7 +58,7 @@ class MenusForm
                 "field_value" => "id",
                 "sql_where" => "is_protected = 0",
             ],
-            "value" => $id_module,
+            "value" => $module_id,
         ];
 
         $form[] = [
@@ -71,7 +71,7 @@ class MenusForm
                 "field_value" => "id",
             ],
             "style" => "display:none",
-            "value" => $id_statistic,
+            "value" => $statistic_id,
         ];
 
         $form[] = [

@@ -36,22 +36,12 @@ class AdminMenusController extends CBController
         $row = CRUDBooster::first($this->table, $id);
         $row = (Request::segment(3) == 'edit') ? $row : null;
 
-        $id_module = $id_statistic = 0;
-
-        if ($row->type == 'Module') {
-            $id_module = DB::table('cms_moduls')->where('path', $row->path)->first()->id;
-        } elseif ($row->type == 'Statistic') {
-            $row->path = str_replace('statistic-builder/show/', '', $row->path);
-            $id_statistic = DB::table('cms_statistics')->where('slug', $row->path)->first()->id;
-        }
-
         $this->script_js = MenuJavascript::setJs($id, $row->type);
 
-        $this->col = [];
-        $this->col[] = ["label" => "Name", "name" => "name"];
-        $this->col[] = ["label" => "Is Active", "name" => "is_active"];
+        $this->setCols();
 
-        $this->form = MenusForm::makeForm($id_module, $id_statistic, $row);
+        list($statistic_id, $module_id) = $this->getMenuId($row);
+        $this->form = MenusForm::makeForm($statistic_id, $module_id, $row);
     }
 
     public function getIndex()
@@ -147,5 +137,32 @@ class AdminMenusController extends CBController
         $this->button_filter = true;
         $this->button_export = false;
         $this->button_import = false;
+    }
+
+    /**
+     * @param $row
+     * @return array
+     */
+    private function getMenuId($row)
+    {
+        $id_module = $id_statistic = 0;
+
+        if ($row->type == 'Module') {
+            $id_module = DB::table('cms_moduls')->where('path', $row->path)->first()->id;
+        }
+
+        if ($row->type == 'Statistic') {
+            $row->path = str_replace('statistic-builder/show/', '', $row->path);
+            $id_statistic = DB::table('cms_statistics')->where('slug', $row->path)->first()->id;
+        }
+
+        return [$id_statistic, $id_module];
+    }
+
+    private function setCols()
+    {
+        $this->col = [];
+        $this->col[] = ["label" => "Name", "name" => "name"];
+        $this->col[] = ["label" => "Is Active", "name" => "is_active"];
     }
 }
