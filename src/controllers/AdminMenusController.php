@@ -161,7 +161,7 @@ class AdminMenusController extends CBController
     {
         $postdata['parent_id'] = 0;
 
-        $this->setMenuPath($postdata);
+        $postdata['path'] = $this->getMenuPath($postdata);
 
         unset($postdata['module_slug']);
         unset($postdata['statistic_slug']);
@@ -181,7 +181,7 @@ class AdminMenusController extends CBController
             Cache::forget('sidebarDashboard'.CRUDBooster::myPrivilegeId());
         }
 
-        $this->setMenuPath($postdata);
+        $postdata['path'] = $this->getMenuPath($postdata);
 
         unset($postdata['module_slug']);
         unset($postdata['statistic_slug']);
@@ -213,16 +213,17 @@ class AdminMenusController extends CBController
 
     /**
      * @param $postdata
+     * @return string
      */
-    private function setMenuPath(&$postdata)
+    private function getMenuPath($postdata)
     {
         if ($postdata['type'] == 'Statistic') {
             $stat = CRUDBooster::first('cms_statistics', ['id' => $postdata['statistic_slug']])->slug;
-            $postdata['path'] = 'statistic-builder/show/'.$stat;
+            return 'statistic-builder/show/'.$stat;
         }
 
         if ($postdata['type'] == 'Module') {
-            $postdata['path'] = CRUDBooster::first('cms_moduls', ['id' => $postdata['module_slug']])->path;
+            return CRUDBooster::first('cms_moduls', ['id' => $postdata['module_slug']])->path;
         }
     }
 
