@@ -91,8 +91,7 @@ class Index
         //$orig_mainpath = $CbCtrl->data['mainpath'];
         //$title_field = $CbCtrl->title_field;
         $html_contents = [];
-        $page = request('page', 1);
-        $number = ($page - 1) * $limit + 1;
+        $number = (request('page', 1) - 1) * $limit + 1;
         foreach ($data['result'] as $row) {
             $html_content = [];
 
@@ -109,9 +108,7 @@ class Index
             foreach ($columns_table as $col) {
                 if($col['visible']===FALSE) continue;
 
-                $value = $this->_calculateColumnValue($col, $row, $table);
-
-                $html_content[] = $value;
+                $html_content[] = $this->_calculateColumnValue($col, $row, $table);
             } //end foreach columns_table
 
             if ($CbCtrl->button_table_action) {
@@ -372,10 +369,8 @@ class Index
                 $filter_is_orderby = true;
             }
 
-            if ($type == 'between') {
-                if ($key && $value) {
-                    $result->whereBetween($key, $value);
-                }
+            if ($type == 'between' && $key && $value) {
+                $result->whereBetween($key, $value);
             }
         }
 
