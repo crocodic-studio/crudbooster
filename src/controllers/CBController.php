@@ -1576,6 +1576,7 @@ class CBController extends Controller {
 				else
 				{
 					Log::error('Validation issue');
+					$errors = $v->errors();
 					foreach ($errors->all() as $message) {
     					Log::error($message);	
 					}
