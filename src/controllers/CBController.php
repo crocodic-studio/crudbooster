@@ -949,12 +949,6 @@ class CBController extends Controller {
 			}
 		}
 
-		foreach($array_input as $key => $di)
-			Log::error('validation '.$key.'=>'.$di);
-
-		foreach($formarray as $key => $item)
-			Log::error('validationitem '.$key.'=>'.$item);
-
 		$validator = Validator::make($formarray,$array_input);
 
 		return $validator;
@@ -1580,7 +1574,12 @@ class CBController extends Controller {
 				if (!$v->fails())
 					DB::table($this->table)->insert($a);
 				else
+				{
 					Log::error('Validation issue');
+					foreach ($errors->all() as $message) {
+    					Log::error($message);	
+					}
+				}
 				Cache::increment('success_'.$file_md5);
 			}catch(\Exception $e) {
 				$e = (string) $e;
