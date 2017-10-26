@@ -37,13 +37,13 @@ class Index
 
         $result = $CbCtrl->table()->select(DB::raw($CbCtrl->table.".".$CbCtrl->primary_key));
 
-        if (request('parent_id')) {
-            $this->_filterForParent($result);
-        }
+
+        $this->_filterForParent($result);
+
 
         $CbCtrl->hookQueryIndex($result);
 
-        $this->_filterSoftDeleted($table_columns, $result);
+        $this->_filterOutSoftDeleted($table_columns, $result);
 
         //$alias = [];
         //$join_alias_count = 0;
@@ -58,9 +58,9 @@ class Index
             $field = @$coltab['name'];
 
             if (strpos($field, '.')) {
-                $columns_table = $this->addDotField($result, $field, $columns_table, $index);
+                $columns_table = $this->addDotField($columns_table, $index, $field, $result);
             } else {
-                $columns_table = $this->_addField($columns_table, $index, $field, $table, $result);
+                $columns_table = $this->_addField($columns_table, $index, $field, $result, $table);
             }
         }
 
@@ -244,7 +244,7 @@ class Index
      * @param $index
      * @return mixed
      */
-    private function addDotField($result, $field, $columns_table, $index)
+    private function addDotField($columns_table, $index, $field, $result)
     {
         $result->addselect($field.' as '.str_slug($field, '_'));
         $tableField = substr($field, 0, strpos($field, '.'));
@@ -266,7 +266,7 @@ class Index
      * @param $result
      * @return mixed
      */
-    private function _addField($columns_table, $index, $field, $table, $result)
+    private function _addField($columns_table, $index, $field, $result, $table)
     {
         $columns_table[$index]['type_data'] = 'varchar';
         $columns_table[$index]['field_with'] = null;
@@ -288,8 +288,11 @@ class Index
      */
     private function _filterForParent($result)
     {
-        $table_parent = $this->table;
-        $table_parent = CRUDBooster::parseSqlTable($table_parent)['table'];
+        if (!request('parent_id')) {
+            return null;
+        }
+
+        $table_parent = CRUDBooster::parseSqlTable($this->table)['table'];
         $result->where($table_parent.'.'.request('foreign_key'), request('parent_id'));
     }
 
@@ -298,11 +301,12 @@ class Index
      * @param $table_columns
      * @param $result
      */
-    private function _filterSoftDeleted($table_columns, $result)
+    private function _filterOutSoftDeleted($table_columns, $result)
     {
-        if (in_array('deleted_at', $table_columns)) {
-            $result->where($this->table.'.deleted_at', '=', null);
+        if (!in_array('deleted_at', $table_columns)) {
+            return ;
         }
+        $result->where($this->table.'.deleted_at', '=', null);
     }
 
 
