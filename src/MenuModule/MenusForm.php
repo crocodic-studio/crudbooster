@@ -2,6 +2,8 @@
 
 namespace crocodicstudio\crudbooster\MenuModule;
 
+use crocodicstudio\crudbooster\controllers\Helpers\FontAwesome;
+
 class MenusForm
 {
     /**

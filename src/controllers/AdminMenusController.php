@@ -3,7 +3,6 @@
 namespace crocodicstudio\crudbooster\controllers;
 
 use crocodicstudio\crudbooster\controllers\Controller;
-use crocodicstudio\crudbooster\controllers\Helpers\FontAwesome;
 use crocodicstudio\crudbooster\MenuModule\MenuJavascript;
 use crocodicstudio\crudbooster\MenuModule\MenusForm;
 use Illuminate\Support\Facades\Session;
