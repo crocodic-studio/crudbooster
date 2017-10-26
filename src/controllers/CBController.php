@@ -1579,9 +1579,12 @@ class CBController extends Controller {
 				$v = $this->validationArray($a);
 				if (!$v->fails())
 					DB::table($this->table)->insert($a);
+				else
+					Log::error('Validation issue');
 				Cache::increment('success_'.$file_md5);
 			}catch(\Exception $e) {
 				$e = (string) $e;
+				Log::error('Error'.$e);
 				Cache::put('error_'.$file_md5,$e,500);
 			}
 		}
