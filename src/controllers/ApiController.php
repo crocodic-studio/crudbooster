@@ -484,20 +484,13 @@ class ApiController extends Controller
             $format_validation[] = 'required';
         }
 
-        if ($type == 'exists') {
+        if (in_array($type, ['unique', 'exists'])) {
             $config = explode(',', $config);
             $table_exist = $config[0];
             $table_exist = CRUDBooster::parseSqlTable($table_exist)['table'];
             $field_exist = $config[1];
             $config = ($field_exist) ? $table_exist.','.$field_exist : $table_exist;
-            $format_validation[] = 'exists:'.$config;
-        } elseif ($type == 'unique') {
-            $config = explode(',', $config);
-            $table_exist = $config[0];
-            $table_exist = CRUDBooster::parseSqlTable($table_exist)['table'];
-            $field_exist = $config[1];
-            $config = ($field_exist) ? $table_exist.','.$field_exist : $table_exist;
-            $format_validation[] = 'unique:'.$config;
+            $format_validation[] = $type.':'.$config;
         } elseif (in_array($type, ['date_format','digits_between', 'in', 'mimes', 'min', 'max', 'not_in'])) {
             $format_validation[] = $type.':'.$config;
         } elseif (! in_array($type, $type_except)) {
