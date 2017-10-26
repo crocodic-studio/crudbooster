@@ -142,7 +142,7 @@ class AdminMenusController extends CBController
         $this->col[] = ["label" => "Name", "name" => "name"];
         $this->col[] = ["label" => "Is Active", "name" => "is_active"];
 
-        $this->makeForm($id_module, $id_statistic, $row);
+        $this->form = $this->makeForm($id_module, $id_statistic, $row);
     }
 
     public function getIndex()
@@ -231,11 +231,12 @@ class AdminMenusController extends CBController
      * @param $id_module
      * @param $id_statistic
      * @param $row
+     * @return array
      */
     private function makeForm($id_module, $id_statistic, $row)
     {
-        $this->form = [];
-        $this->form[] = [
+        $form = [];
+        $form[] = [
             "label" => "Privilege(s)",
             "name" => "cms_privileges",
             "type" => "select2_datatable",
@@ -253,7 +254,7 @@ class AdminMenusController extends CBController
                 'multiple_result_format' => 'JSON',
             ],
         ];
-        $this->form[] = [
+        $form[] = [
             "label" => "Name",
             "name" => "name",
             "type" => "text",
@@ -261,7 +262,7 @@ class AdminMenusController extends CBController
             "validation" => "required|min:3|max:255|alpha_spaces",
             "placeholder" => "You can only enter the letter only",
         ];
-        $this->form[] = [
+        $form[] = [
             "label" => "Type",
             "name" => "type",
             "type" => "radio",
@@ -270,7 +271,7 @@ class AdminMenusController extends CBController
             'value' => 'Module',
         ];
 
-        $this->form[] = [
+        $form[] = [
             "label" => "Module",
             "name" => "module_slug",
             "type" => "select2_datatable",
@@ -283,7 +284,7 @@ class AdminMenusController extends CBController
             "value" => $id_module,
         ];
 
-        $this->form[] = [
+        $form[] = [
             "label" => "Statistic",
             "name" => "statistic_slug",
             "type" => "select2_datatable",
@@ -296,7 +297,7 @@ class AdminMenusController extends CBController
             "value" => $id_statistic,
         ];
 
-        $this->form[] = [
+        $form[] = [
             "label" => "Value",
             "name" => "path",
             "type" => "text",
@@ -307,17 +308,16 @@ class AdminMenusController extends CBController
 
         $fontawesome = FontAwesome::cssClass();
 
-        $custom = view('crudbooster::components.list_icon', compact('fontawesome', 'row'))->render();
-        $this->form[] = [
+        $form[] = [
             'label' => 'Icon',
             'name' => 'icon',
             'type' => 'custom_html',
             'options' => [
-                'html' => $custom,
+                'html' => view('crudbooster::components.list_icon', compact('fontawesome', 'row'))->render(),
             ],
             'required' => true,
         ];
-        $this->form[] = [
+        $form[] = [
             'label' => 'Color',
             'name' => 'color',
             'type' => 'select2_dataenum',
@@ -332,7 +332,7 @@ class AdminMenusController extends CBController
             'value' => 'normal',
         ];
 
-        $this->form[] = [
+        $form[] = [
             "label" => "Active",
             "name" => "is_active",
             "type" => "radio",
@@ -341,7 +341,8 @@ class AdminMenusController extends CBController
             "dataenum" => ['1|Active', '0|InActive'],
             'value' => '1',
         ];
-        $this->form[] = [
+
+        $form[] = [
             "label" => "Dashboard",
             "name" => "is_dashboard",
             "type" => "radio",
@@ -350,6 +351,8 @@ class AdminMenusController extends CBController
             "dataenum" => ['1|Yes', '0|No'],
             'value' => '0',
         ];
+
+        return $form;
     }
 
     private function setButtons()
