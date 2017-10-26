@@ -161,7 +161,7 @@ class AdminMenusController extends CBController
     {
         $postdata['parent_id'] = 0;
 
-        $this->setType($postdata);
+        $this->setMenuPath($postdata);
 
         unset($postdata['module_slug']);
         unset($postdata['statistic_slug']);
@@ -181,7 +181,7 @@ class AdminMenusController extends CBController
             Cache::forget('sidebarDashboard'.CRUDBooster::myPrivilegeId());
         }
 
-        $this->setType($postdata);
+        $this->setMenuPath($postdata);
 
         unset($postdata['module_slug']);
         unset($postdata['statistic_slug']);
@@ -204,11 +204,11 @@ class AdminMenusController extends CBController
                 $ci = 1;
                 foreach ($ro['children'][0] as $c) {
                     $id = $c['id'];
-                    DB::table($this->table)->where('id', $id)->update(['sorting' => $ci, 'parent_id' => $pid, 'is_active' => $isActive]);
+                    $this->findRow($id)->update(['sorting' => $ci, 'parent_id' => $pid, 'is_active' => $isActive]);
                     $ci++;
                 }
             }
-            DB::table($this->table)->where('id', $pid)->update(['sorting' => $i, 'parent_id' => 0, 'is_active' => $isActive]);
+            $this->findRow($pid)->update(['sorting' => $i, 'parent_id' => 0, 'is_active' => $isActive]);
             $i++;
         }
 
@@ -218,7 +218,7 @@ class AdminMenusController extends CBController
     /**
      * @param $postdata
      */
-    private function setType(&$postdata)
+    private function setMenuPath(&$postdata)
     {
         if ($postdata['type'] == 'Statistic') {
             $stat = CRUDBooster::first('cms_statistics', ['id' => $postdata['statistic_slug']])->slug;
