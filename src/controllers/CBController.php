@@ -1129,7 +1129,7 @@ class CBController extends Controller
     {
         $this->cbLoader();
         $name = 'userfile';
-        $uploadTypes = explode(',', cbConfig('UPLOAD_TYPES'));
+		$uploadTypes = explode(',', strtolower(config('crudbooster.UPLOAD_TYPES')));
         $uploadMaxSize = cbConfig('UPLOAD_MAX_SIZE') ?: 5000;
 
         if (! Request::hasFile($name)) {
@@ -1145,7 +1145,7 @@ class CBController extends Controller
             exit;
         }
 
-        if (! in_array($ext, $uploadTypes)) {
+        if (! in_array(strtolower($ext), $uploadTypes)) {
             echo "The filetype is not allowed!";
             exit;
         }
