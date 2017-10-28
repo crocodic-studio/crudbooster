@@ -605,7 +605,7 @@ class CBController extends Controller {
 		$foreign_key_name = Request::get('fk_name');
 		$foreign_key_value = Request::get('fk_value');
 		if($table && $label && $foreign_key_name && $foreign_key_value) {
-			$query = DB::table($table)->select('id as select_value',$label.' as select_label')->where($foreign_key_name,$foreign_key_value)->orderby($label,'asc')->get();
+			$query = DB::table($table)->select($label.' as select_value',$label.' as select_label')->where($foreign_key_name,$foreign_key_value)->orderby($label,'asc')->get();
 			return response()->json($query);
 		}else{
 			return response()->json([]);
