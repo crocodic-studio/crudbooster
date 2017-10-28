@@ -126,7 +126,7 @@
 						
 						foreach($selects_data as $d) {											
 
-							$val    = $d->id;
+							$val    = $d->label;
 							$select = ($value == $val)?"selected":"";							
 
 							echo "<option $select value='$val'>".$d->label."</option>";
