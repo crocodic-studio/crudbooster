@@ -825,7 +825,7 @@ class CBController extends Controller {
 						}
 						if (substr($validationItem, 0,9) == 'sixmonths') {
 							$parseSixMonths = explode(',',str_replace('sixmonths:','',$validationItem));
-							if isset($id)
+							if (isset($id))
 							{
 								$parseSixMonths[] = $id;
 							}
