@@ -91,7 +91,8 @@ class CRUDBooster
 
     private static function getModulePath()
     {
-        return Request::segment(2);
+        $adminPathSegments = count(explode('/',config('crudbooster.ADMIN_PATH')));
+        return Request::segment(1 + $adminPathSegments);
     }
 
     public static function isLocked()
