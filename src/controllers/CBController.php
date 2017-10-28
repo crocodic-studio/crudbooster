@@ -823,6 +823,14 @@ class CBController extends Controller {
 							$uniqueRebuild = array_filter($uniqueRebuild);
 							$validationItem = 'unique:'.implode(',',$uniqueRebuild);
 						}
+						if (substr($validationItem, 0,9) == 'sixmonths') {
+							$parseSixMonths = explode(',',str_replace('sixmonths:','',$validationItem));
+							if ($id)
+							{
+								$parseSixMonths[] = $id;
+							}
+							$validationItem = 'sixmonths:'.implode(',',$parseSixMonths);
+						}
 					}
 				} else {
 					$exp = array();
