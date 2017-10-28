@@ -484,38 +484,17 @@ class ApiController extends Controller
             $format_validation[] = 'required';
         }
 
-        if ($type == 'exists') {
+        if (in_array($type, ['unique', 'exists'])) {
             $config = explode(',', $config);
             $table_exist = $config[0];
             $table_exist = CRUDBooster::parseSqlTable($table_exist)['table'];
             $field_exist = $config[1];
             $config = ($field_exist) ? $table_exist.','.$field_exist : $table_exist;
-            $format_validation[] = 'exists:'.$config;
-        } elseif ($type == 'unique') {
-            $config = explode(',', $config);
-            $table_exist = $config[0];
-            $table_exist = CRUDBooster::parseSqlTable($table_exist)['table'];
-            $field_exist = $config[1];
-            $config = ($field_exist) ? $table_exist.','.$field_exist : $table_exist;
-            $format_validation[] = 'unique:'.$config;
-        } elseif ($type == 'date_format') {
-            $format_validation[] = 'date_format:'.$config;
-        } elseif ($type == 'digits_between') {
-            $format_validation[] = 'digits_between:'.$config;
-        } elseif ($type == 'in') {
-            $format_validation[] = 'in:'.$config;
-        } elseif ($type == 'mimes') {
-            $format_validation[] = 'mimes:'.$config;
-        } elseif ($type == 'min') {
-            $format_validation[] = 'min:'.$config;
-        } elseif ($type == 'max') {
-            $format_validation[] = 'max:'.$config;
-        } elseif ($type == 'not_in') {
-            $format_validation[] = 'not_in:'.$config;
-        } else {
-            if (! in_array($type, $type_except)) {
-                $format_validation[] = $type;
-            }
+            $format_validation[] = $type.':'.$config;
+        } elseif (in_array($type, ['date_format','digits_between', 'in', 'mimes', 'min', 'max', 'not_in'])) {
+            $format_validation[] = $type.':'.$config;
+        } elseif (! in_array($type, $type_except)) {
+            $format_validation[] = $type;
         }
 
         if ($name == 'id') {

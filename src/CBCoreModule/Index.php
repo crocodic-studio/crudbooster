@@ -37,13 +37,13 @@ class Index
 
         $result = $CbCtrl->table()->select(DB::raw($CbCtrl->table.".".$CbCtrl->primary_key));
 
-        if (request('parent_id')) {
-            $this->_filterForParent($result);
-        }
+
+        $this->_filterForParent($result);
+
 
         $CbCtrl->hookQueryIndex($result);
 
-        $this->_filterSoftDeleted($table_columns, $result);
+        $this->_filterOutSoftDeleted($table_columns, $result);
 
         //$alias = [];
         //$join_alias_count = 0;
@@ -58,9 +58,9 @@ class Index
             $field = @$coltab['name'];
 
             if (strpos($field, '.')) {
-                $columns_table = $this->addDotField($result, $field, $columns_table, $index);
+                $columns_table = $this->addDotField($columns_table, $index, $field, $result);
             } else {
-                $columns_table = $this->_addField($columns_table, $index, $field, $table, $result);
+                $columns_table = $this->_addField($columns_table, $index, $field, $result, $table);
             }
         }
 
@@ -68,11 +68,10 @@ class Index
 
         $filter_is_orderby = false;
         if (request('filter_column')) {
-
             $filter_is_orderby = $this->_filterIndexRows($result);
         }
 
-        $data = $this->_prepareResults($filter_is_orderby, $result, $limit, $data, $table);
+        $data = $this->_orderAndPaginate($filter_is_orderby, $result, $limit, $data, $table);
 
         $data['columns'] = $columns_table;
 
@@ -91,13 +90,11 @@ class Index
         //$orig_mainpath = $CbCtrl->data['mainpath'];
         //$title_field = $CbCtrl->title_field;
         $html_contents = [];
-        $page = request('page', 1);
-        $number = ($page - 1) * $limit + 1;
+        $number = (request('page', 1) - 1) * $limit + 1;
         foreach ($data['result'] as $row) {
             $html_content = [];
 
             if ($CbCtrl->button_bulk_action) {
-
                 $html_content[] = "<input type='checkbox' class='checkbox' name='checkbox[]' value='".$row->{$tablePK}."'/>";
             }
 
@@ -109,9 +106,7 @@ class Index
             foreach ($columns_table as $col) {
                 if($col['visible']===FALSE) continue;
 
-                $value = $this->_calculateColumnValue($col, $row, $table);
-
-                $html_content[] = $value;
+                $html_content[] = $this->_calculateColumnValue($col, $row, $table);
             } //end foreach columns_table
 
             if ($CbCtrl->button_table_action) {
@@ -154,7 +149,7 @@ class Index
         }
 
         if (@$col['download']) {
-            $url = (strpos($value, 'http://') !== false) ? $value : asset($value).'?download=1';
+            $url = (strpos($value, 'http://')) ? $value : asset($value).'?download=1';
             if ($value) {
                 $value = "<a class='btn btn-xs btn-primary' href='$url' target='_blank' title='Download File'><i class='fa fa-download'></i> Download</a>";
             } else {
@@ -247,7 +242,7 @@ class Index
      * @param $index
      * @return mixed
      */
-    private function addDotField($result, $field, $columns_table, $index)
+    private function addDotField($columns_table, $index, $field, $result)
     {
         $result->addselect($field.' as '.str_slug($field, '_'));
         $tableField = substr($field, 0, strpos($field, '.'));
@@ -269,7 +264,7 @@ class Index
      * @param $result
      * @return mixed
      */
-    private function _addField($columns_table, $index, $field, $table, $result)
+    private function _addField($columns_table, $index, $field, $result, $table)
     {
         $columns_table[$index]['type_data'] = 'varchar';
         $columns_table[$index]['field_with'] = null;
@@ -291,8 +286,11 @@ class Index
      */
     private function _filterForParent($result)
     {
-        $table_parent = $this->table;
-        $table_parent = CRUDBooster::parseSqlTable($table_parent)['table'];
+        if (!request('parent_id')) {
+            return null;
+        }
+
+        $table_parent = CRUDBooster::parseSqlTable($this->table)['table'];
         $result->where($table_parent.'.'.request('foreign_key'), request('parent_id'));
     }
 
@@ -301,11 +299,12 @@ class Index
      * @param $table_columns
      * @param $result
      */
-    private function _filterSoftDeleted($table_columns, $result)
+    private function _filterOutSoftDeleted($table_columns, $result)
     {
-        if (in_array('deleted_at', $table_columns)) {
-            $result->where($this->table.'.deleted_at', '=', null);
+        if (!in_array('deleted_at', $table_columns)) {
+            return ;
         }
+        $result->where($this->table.'.deleted_at', '=', null);
     }
 
 
@@ -328,36 +327,27 @@ class Index
                     continue;
                 }
 
-                if ($value == '' || $type == '') {
-                    continue;
-                }
-
                 if ($type == 'between') {
                     continue;
                 }
-
+                if (!$value || !$key || !$type) {
+                    continue;
+                }
                 switch ($type) {
                     default:
-                        if ($key && $type && $value) {
-                            $query->where($key, $type, $value);
-                        }
+                        $query->where($key, $type, $value);
                         break;
                     case 'like':
                     case 'not like':
-                        $value = '%'.$value.'%';
-                        if ($key && $type && $value) {
-                            $query->where($key, $type, $value);
-                        }
+                        $query->where($key, $type, '%'.$value.'%');
                         break;
                     case 'in':
                     case 'not in':
+                        $value = explode(',', $value);
                         if ($value) {
-                            $value = explode(',', $value);
-                            if ($key && $value) {
-                                $query->whereIn($key, $value);
-                            }
+                            $query->whereIn($key, $value);
                         }
-                        break;
+                    break;
                 }
             }
         });
@@ -372,10 +362,8 @@ class Index
                 $filter_is_orderby = true;
             }
 
-            if ($type == 'between') {
-                if ($key && $value) {
-                    $result->whereBetween($key, $value);
-                }
+            if ($type == 'between' && $key && $value) {
+                $result->whereBetween($key, $value);
             }
         }
 
@@ -418,7 +406,7 @@ class Index
      * @param $table
      * @return array
      */
-    private function _prepareResults($filter_is_orderby, $result, $limit, $data, $table)
+    private function _orderAndPaginate($filter_is_orderby, $result, $limit, $data, $table)
     {
         $orderby = $this->cb->orderby;
         if ($filter_is_orderby !== true) {
@@ -447,17 +435,16 @@ class Index
             return $data;
         }
 
-        $orderby = explode(";", $orderby);
-        foreach ($orderby as $o) {
+        foreach (explode(";", $orderby) as $o) {
             $o = explode(",", $o);
-            $k = $o[0];
-            $v = $o[1];
-            if (strpos($k, '.') !== false) {
-                $orderby_table = explode(".", $k)[0];
-            } else {
-                $orderby_table = $table;
+            $key = $o[0];
+            $value = $o[1];
+
+            $orderby_table = $table;
+            if (strpos($key, '.')) {
+                $orderby_table = explode(".", $key)[0];
             }
-            $result->orderby($orderby_table.'.'.$k, $v);
+            $result->orderby($orderby_table.'.'.$key, $value);
         }
 
         $data['result'] = $result->paginate($limit);
