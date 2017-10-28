@@ -2,6 +2,9 @@
 
 use crocodicstudio\crudbooster\ApiGeneratorModule\CbApiGeneratorServiceProvider;
 use crocodicstudio\crudbooster\AuthModule\CbAuthServiceProvider;
+use crocodicstudio\crudbooster\PrivilegeModule\CbPrivilegesServiceProvider;
+use crocodicstudio\crudbooster\SettingModule\CbSettingsServiceProvider;
+use crocodicstudio\crudbooster\StatisticModule\CbStatisticsServiceProvider;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\ServiceProvider;
 use crocodicstudio\crudbooster\commands\CrudboosterInstallationCommand;
@@ -95,6 +98,9 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $loader->alias('Image', 'Intervention\Image\Facades\Image');
         $loader->alias('CRUDBooster', 'crocodicstudio\crudbooster\helpers\CRUDBooster');
         $loader->alias('CB', 'crocodicstudio\crudbooster\helpers\CB');
+        $this->app->register(CbSettingsServiceProvider::class);
+        $this->app->register(CbStatisticsServiceProvider::class);
+        $this->app->register(CbPrivilegesServiceProvider::class);
     }
 
     private function registerCrudboosterCommand()

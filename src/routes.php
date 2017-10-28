@@ -6,7 +6,7 @@ $namespace = '\crocodicstudio\crudbooster\controllers';
 Route::group(['middleware' => ['api', '\crocodicstudio\crudbooster\middlewares\CBAuthAPI'], 'namespace' => 'App\Http\Controllers'], function () {
     //Router for custom api defeault
 
-    $dir = scandir(base_path("app/Http/Controllers"));
+    $dir = scandir(base_path(controllers_dir()));
     foreach ($dir as $v) {
         $v = str_replace('.php', '', $v);
         $names = array_filter(preg_split('/(?=[A-Z])/', str_replace('Controller', '', $v)));
@@ -38,7 +38,7 @@ Route::group([
         $menus = DB::table('cms_menus')->where('is_dashboard', 1)->first();
         if ($menus) {
             if ($menus->type == 'Statistic') {
-                Route::get('/', '\crocodicstudio\crudbooster\controllers\AdminStatisticBuilderController@getDashboard');
+                Route::get('/', '\\crocodicstudio\\crudbooster\\StatisticModule\\AdminStatisticBuilderController@getDashboard');
             } elseif ($menus->type == 'Module') {
                 $module = CRUDBooster::first('cms_moduls', ['path' => $menus->path]);
                 Route::get('/', $module->controller.'@getIndex');
@@ -104,10 +104,8 @@ Route::group([
     'prefix' => cbConfig('ADMIN_PATH'),
     'namespace' => $namespace,
 ], function () use ($namespace) {
-    CRUDBooster::routeController('privileges', 'AdminPrivilegesController', $namespace);
-    CRUDBooster::routeController('settings', 'AdminSettingsController', $namespace);
     CRUDBooster::routeController('modules', 'AdminModulesController', $namespace);
-    CRUDBooster::routeController('statistic-builder', 'AdminStatisticBuilderController', $namespace);
+    CRUDBooster::routeController('statistic-builder', 'AdminStatisticBuilderController', '\crocodicstudio\crudbooster\StatisticModule');
     CRUDBooster::routeController('file-manager', 'AdminFileManagerController', $namespace);
     CRUDBooster::routeController('menus', 'AdminMenusController', $namespace);
     CRUDBooster::routeController('email-templates', 'AdminEmailTemplatesController', $namespace);

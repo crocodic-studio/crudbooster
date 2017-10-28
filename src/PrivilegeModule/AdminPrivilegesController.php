@@ -1,7 +1,8 @@
 <?php
 
-namespace crocodicstudio\crudbooster\controllers;
+namespace crocodicstudio\crudbooster\PrivilegeModule;
 
+use crocodicstudio\crudbooster\controllers\CBController;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -59,8 +60,8 @@ class AdminPrivilegesController extends CBController
     {
         $this->cbLoader();
 
-        $this->validation($request);
-        $this->inputAssignment($request);
+        $this->validation();
+        $this->inputAssignment();
 
         DB::table($this->table)->insert($this->arr);
         $id = $this->arr[$this->primary_key];
@@ -107,11 +108,8 @@ class AdminPrivilegesController extends CBController
         $this->validation($id);
         $this->inputAssignment($id);
 
-        DB::table($this->table)->where($this->primary_key, $id)->update($this->arr);
-
-        $priv = Request::input("privileges", []);
-
-        foreach ($priv as $id_modul => $data) {
+        $this->findRow($id)->update($this->arr);
+        foreach (Request::input("privileges", []) as $id_modul => $data) {
             //Check Menu
             //$module = DB::table('cms_moduls')->where('id', $id_modul)->first();
             $arrs = [];
@@ -139,9 +137,9 @@ class AdminPrivilegesController extends CBController
     {
         $this->cbLoader();
 
-        $row = DB::table($this->table)->where('id', $id)->first();
+        $row = $this->findRow($id)->first();
 
-        DB::table($this->table)->where('id', $id)->delete();
+        $this->findRow($id)->delete();
         DB::table("cms_privileges_roles")->where("id_cms_privileges", $row->id)->delete();
 
         CRUDBooster::redirect(CRUDBooster::mainpath(), trans("crudbooster.alert_delete_data_success"), 'success');

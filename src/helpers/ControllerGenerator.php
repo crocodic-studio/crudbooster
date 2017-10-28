@@ -16,7 +16,7 @@ class ControllerGenerator
         list($cols, $joinList) = self::addCol($table, $coloms, $pk);
         $php = '<?php '.view('crudbooster::file_stubs.controller_stub', compact('controllerName', 'table', 'pk', 'coloms', 'cols', 'formArrayString', 'joinList'))->render();
         //create file controller
-        file_put_contents(base_path("app/Http/Controllers/").'Admin'.$controllerName.'.php', $php);
+        file_put_contents(base_path(controllers_dir()).'Admin'.$controllerName.'.php', $php);
 
         return 'Admin'.$controllerName;
     }
@@ -34,7 +34,7 @@ class ControllerGenerator
             $controllername = str_replace(' ', '', $controllername).'Controller';
         }
 
-        $countSameFile = count(glob(base_path("app/Http/Controllers/").'Admin'.$controllername.'.php'));
+        $countSameFile = count(glob(base_path(controllers_dir()).'Admin'.$controllername.'.php'));
 
         if ($countSameFile != 0) {
             $suffix = $countSameFile;
