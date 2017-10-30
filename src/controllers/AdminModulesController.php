@@ -1,11 +1,13 @@
-<?php namespace crocodicstudio\crudbooster\controllers;
+<?php
+
+namespace crocodicstudio\crudbooster\controllers;
 
 use crocodicstudio\crudbooster\controllers\Controller;
 use crocodicstudio\crudbooster\controllers\Helpers\FontAwesome;
-use crocodicstudio\crudbooster\ModuleGenerator\Step1Handler;
-use crocodicstudio\crudbooster\ModuleGenerator\Step2Handler;
-use crocodicstudio\crudbooster\ModuleGenerator\Step3Handler;
-use crocodicstudio\crudbooster\ModuleGenerator\Step4Handler;
+use crocodicstudio\crudbooster\Modules\ModuleGenerator\Step1Handler;
+use crocodicstudio\crudbooster\Modules\ModuleGenerator\Step2Handler;
+use crocodicstudio\crudbooster\Modules\ModuleGenerator\Step3Handler;
+use crocodicstudio\crudbooster\Modules\ModuleGenerator\Step4Handler;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;

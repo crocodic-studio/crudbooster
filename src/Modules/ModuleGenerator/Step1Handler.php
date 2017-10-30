@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\ModuleGenerator;
+namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
 class Step1Handler
 {
