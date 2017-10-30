@@ -105,7 +105,7 @@ Route::group([
     'namespace' => $namespace,
 ], function () use ($namespace) {
     CRUDBooster::routeController('modules', 'AdminModulesController', $namespace);
-    CRUDBooster::routeController('statistic-builder', 'AdminStatisticBuilderController', '\crocodicstudio\crudbooster\StatisticModule');
+    CRUDBooster::routeController('statistic-builder', 'AdminStatisticBuilderController', '\crocodicstudio\crudbooster\Modules\StatisticModule');
     CRUDBooster::routeController('file-manager', 'AdminFileManagerController', $namespace);
     CRUDBooster::routeController('menus', 'AdminMenusController', $namespace);
     CRUDBooster::routeController('email-templates', 'AdminEmailTemplatesController', $namespace);

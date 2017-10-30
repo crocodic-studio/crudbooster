@@ -21,20 +21,20 @@
         </script>
     @endpush
 
-    @include('crudbooster::module_generator.partials.nav_tabs', ['step' => ['','','active',''], 'id' => $id ])
+    @include('CbModulesGen::partials.nav_tabs', ['step' => ['','','active',''], 'id' => $id ])
 
 
     @push('head')
-        @include('crudbooster::module_generator.step3.styles')
+        @include('CbModulesGen::step3.styles')
     @endpush
 
 
     @push('bottom')
-        @include('crudbooster::module_generator.step3.script')
+        @include('CbModulesGen::step3.script')
     @endpush
 
 
-    @include('crudbooster::module_generator.step3.optionsModal')
+    @include('CbModulesGen::step3.optionsModal')
 
     <div class="box box-default">
         <div class="box-header with-border">
@@ -60,19 +60,19 @@
 
                     @foreach($forms as $index => $form)
                         <tr>
-                            @include('crudbooster::module_generator.step3.tableRow')
+                            @include('CbModulesGen::step3.tableRow')
                         </tr>
                     @endforeach
 
                     <tr id='tr-sample' style="display: none">
-                        @include('crudbooster::module_generator.step3.lastRow')
+                        @include('CbModulesGen::step3.lastRow')
                     </tr>
 
 
                     </tbody>
                 </table>
 
-                @include('crudbooster::module_generator.step3.footer')
+                @include('CbModulesGen::step3.footer')
             </form>
         </div>
     </div>

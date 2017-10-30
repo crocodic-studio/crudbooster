@@ -21,7 +21,7 @@
         </script>
     @endpush
 
-    @include('crudbooster::module_generator.partials.nav_tabs', ['step' => ['','active','',''], 'id' => $id ])
+    @include('CbModulesGen::partials.nav_tabs', ['step' => ['','active','',''], 'id' => $id ])
     @push('head')
         <style>
             .table-display tbody tr td {
@@ -58,7 +58,7 @@
     @endpush
 
     @push('bottom')
-        @include('crudbooster::module_generator.step2.js')
+        @include('CbModulesGen::step2.js')
     @endpush
 
     <form method="post" action="{{Route('AdminModulesControllerPostStep3')}}">
@@ -194,9 +194,9 @@
         {!! cbScript("codemirror/mode/clike/clike.js") !!}
         {!! cbScript("codemirror/mode/php/php.js") !!}
         {!! cbScript("codemirror/keymap/sublime.js") !!}
-        @include('crudbooster::module_generator.step2.script')
+        @include('CbModulesGen::step2.script')
 
-        @include('crudbooster::module_generator.step2.modal')
+        @include('CbModulesGen::step2.modal')
         <!-- /.modal -->
         @endpush
         @push('head')
@@ -207,35 +207,35 @@
         @endpush
 
         <div class="box box-default">
-            @include('crudbooster::module_generator.step2.hookRowQuery')
+            @include('CbModulesGen::step2.hookRowQuery')
         </div>
 
         <div class="box box-default">
-            @include('crudbooster::module_generator.step2.hookRowIndex')
+            @include('CbModulesGen::step2.hookRowIndex')
         </div>
 
         <div class="box box-default">
-            @include('crudbooster::module_generator.step2.hookBeforeAdd')
+            @include('CbModulesGen::step2.hookBeforeAdd')
         </div>
 
         <div class="box box-default">
-            @include('crudbooster::module_generator.step2.hookAfterAdd')
+            @include('CbModulesGen::step2.hookAfterAdd')
         </div>
 
         <div class="box box-default">
-            @include('crudbooster::module_generator.step2.hookBeforeEdit')
+            @include('CbModulesGen::step2.hookBeforeEdit')
         </div>
 
         <div class="box box-default">
-            @include('crudbooster::module_generator.step2.hookAfterEdit')
+            @include('CbModulesGen::step2.hookAfterEdit')
         </div>
 
         <div class="box box-default">
-            @include('crudbooster::module_generator.step2.hookBeforeDelete')
+            @include('CbModulesGen::step2.hookBeforeDelete')
         </div>
 
         <div class="box box-default">
-            @include('crudbooster::module_generator.step2.hookAfterDelete')
+            @include('CbModulesGen::step2.hookAfterDelete')
         </div>
 
     </form>

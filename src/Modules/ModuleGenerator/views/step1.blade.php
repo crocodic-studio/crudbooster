@@ -15,13 +15,13 @@
 
     @push('bottom')
         {!! cbScript("select2/dist/js/select2.full.min.js") !!}
-        @include('crudbooster::module_generator.step1.script')
+        @include('CbModulesGen::step1.script')
     @endpush
 
     <ul class="nav nav-tabs">
         @if($id)
 
-            @include('crudbooster::module_generator.partials.nav_tabs', ['step' => ['active','','',''], 'id' => $id ])
+            @include('CbModulesGen::partials.nav_tabs', ['step' => ['active','','',''], 'id' => $id ])
 
         @else
             <li role="presentation" class="active"><a href="#"> {!! CB::icon('info') !!} Step 1 - Module Information</a></li>
@@ -35,7 +35,7 @@
         <div class="box-header with-border">
             <h3 class="box-title">Module Information</h3>
         </div>
-        @include('crudbooster::module_generator.step1.step1form')
+        @include('CbModulesGen::step1.step1form')
     </div>
 
 

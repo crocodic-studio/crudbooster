@@ -1,7 +1,7 @@
 @extends("crudbooster::admin_template")
 @section("content")
 
-    @include('crudbooster::module_generator.partials.nav_tabs', ['step' => ['','','','active'], 'id' => $id ])
+    @include('CbModulesGen::partials.nav_tabs', ['step' => ['','','','active'], 'id' => $id ])
 
     <div class="box box-default">
         <div class="box-header">
@@ -13,26 +13,26 @@
             <div class="box-body">
 
                 <div class="row">
-                    @include('crudbooster::module_generator.step4.text_field')
+                    @include('CbModulesGen::step4.text_field')
                 </div>
 
                 <div class="row">
                     <div class="col-sm-4">
-                        @include('crudbooster::module_generator.step4.radio_col1')
+                        @include('CbModulesGen::step4.radio_col1')
                     </div>
 
                     <div class="col-sm-3">
-                        @include('crudbooster::module_generator.step4.radio_col2')
+                        @include('CbModulesGen::step4.radio_col2')
                     </div>
 
                     <div class="col-sm-4">
-                        @include('crudbooster::module_generator.step4.radio_col3')
+                        @include('CbModulesGen::step4.radio_col3')
                     </div>
 
                 </div>
 
             </div>
-            @include('crudbooster::module_generator.step4.footer')
+            @include('CbModulesGen::step4.footer')
         </form>
     </div>
 
