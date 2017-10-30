@@ -107,7 +107,6 @@ Route::group([
     CRUDBooster::routeController('modules', 'AdminModulesController', '\crocodicstudio\crudbooster\Modules\ModuleGenerator');
     CRUDBooster::routeController('statistic-builder', 'AdminStatisticBuilderController', '\crocodicstudio\crudbooster\Modules\StatisticModule');
     CRUDBooster::routeController('file-manager', 'AdminFileManagerController', $namespace);
-    CRUDBooster::routeController('menus', 'AdminMenusController', $namespace);
     CRUDBooster::routeController('email-templates', 'AdminEmailTemplatesController', $namespace);
     CRUDBooster::routeController('logs', 'AdminLogsController', $namespace);
 });

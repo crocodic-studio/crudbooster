@@ -15,6 +15,7 @@ class CbStatisticsServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->app['view']->addNamespace('CbStatistics', __DIR__.'/views');
+        require __DIR__.'/statistic_route.php';
     }
 
     /**

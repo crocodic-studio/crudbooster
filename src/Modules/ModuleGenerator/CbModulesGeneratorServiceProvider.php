@@ -15,7 +15,7 @@ class CbModulesGeneratorServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->app['view']->addNamespace('CbModulesGen', __DIR__.'/views');
-        //require __DIR__.'/_routes.php';
+        require __DIR__.'/module_generator_routes.php';
     }
 
     /**
