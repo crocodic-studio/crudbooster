@@ -2,7 +2,7 @@
 
 use crocodicstudio\crudbooster\middlewares\CBSuperadmin;
 
-$namespace = '\crocodicstudio\crudbooster\ApiGeneratorModule';
+$namespace = '\crocodicstudio\crudbooster\Modules\ApiGeneratorModule';
 
 Route::group(['middleware' => ['web'], 'namespace' => $namespace], function () {
     Route::get('api/doc', ['uses' => 'AdminApiGeneratorController@apiDocumentation', 'as' => 'apiDocumentation']);
