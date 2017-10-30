@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\MenuModule;
+namespace crocodicstudio\crudbooster\Modules\MenuModule;
 
 use crocodicstudio\crudbooster\controllers\Helpers\FontAwesome;
 

@@ -15,7 +15,7 @@ class AdminFileManagerController extends CBController
     public function getIndex()
     {
 
-        $path = g('path') ? base64_decode(g('path')) : '';
+        $path = request('path') ? base64_decode(request('path')) : '';
 
         if (strpos($path, '..') || $path == '.' || strpos($path, '/.')) {
             return redirect()->route('AdminFileManagerControllerGetIndex');
@@ -32,7 +32,7 @@ class AdminFileManagerController extends CBController
 
     public function postCreateDirectory()
     {
-        $path = base64_decode(g('path'));
+        $path = base64_decode(request('path'));
         $path = ($path) ?: 'uploads';
         $name = g('name');
         $name = str_slug($name, '_');
@@ -44,7 +44,7 @@ class AdminFileManagerController extends CBController
     public function postUpload()
     {
         $allowedExtension = explode(',', strtolower(cbConfig('UPLOAD_TYPES')));
-        $path = g('path') ? base64_decode(g('path')) : 'uploads';
+        $path = g('path') ? base64_decode(request('path')) : 'uploads';
         $file = Request::file('userfile');
         if (! $file) {
             return null;

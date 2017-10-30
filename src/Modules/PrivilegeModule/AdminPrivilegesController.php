@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\PrivilegeModule;
+namespace crocodicstudio\crudbooster\Modules\PrivilegeModule;
 
 use crocodicstudio\crudbooster\controllers\CBController;
 use Illuminate\Support\Facades\Request;

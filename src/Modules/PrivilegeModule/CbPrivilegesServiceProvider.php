@@ -1,11 +1,10 @@
 <?php
 
-namespace crocodicstudio\crudbooster\ApiGeneratorModule;
+namespace crocodicstudio\crudbooster\Modules\PrivilegeModule;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Foundation\AliasLoader;
 
-class CbApiGeneratorServiceProvider extends ServiceProvider
+class CbPrivilegesServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
@@ -14,8 +13,8 @@ class CbApiGeneratorServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app['view']->addNamespace('CbApiGen', __DIR__.'/views');
-        require __DIR__.'/api_generator_routes.php';
+        $this->app['view']->addNamespace('CbPrivilege', __DIR__.'/views');
+        require __DIR__.'/privileges_routes.php';
     }
 
     /**

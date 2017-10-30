@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\StatisticModule;
+namespace crocodicstudio\crudbooster\Modules\StatisticModule;
 
 use crocodicstudio\crudbooster\controllers\CBController;
 use Illuminate\Support\Facades\DB;

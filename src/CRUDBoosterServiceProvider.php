@@ -1,10 +1,12 @@
-<?php namespace crocodicstudio\crudbooster;
+<?php
+namespace crocodicstudio\crudbooster;
 
-use crocodicstudio\crudbooster\ApiGeneratorModule\CbApiGeneratorServiceProvider;
-use crocodicstudio\crudbooster\AuthModule\CbAuthServiceProvider;
-use crocodicstudio\crudbooster\PrivilegeModule\CbPrivilegesServiceProvider;
-use crocodicstudio\crudbooster\SettingModule\CbSettingsServiceProvider;
-use crocodicstudio\crudbooster\StatisticModule\CbStatisticsServiceProvider;
+use crocodicstudio\crudbooster\Modules\ApiGeneratorModule\CbApiGeneratorServiceProvider;
+use crocodicstudio\crudbooster\Modules\AuthModule\CbAuthServiceProvider;
+use crocodicstudio\crudbooster\Modules\AuthModule\CbMenuServiceProvider;
+use crocodicstudio\crudbooster\Modules\PrivilegeModule\CbPrivilegesServiceProvider;
+use crocodicstudio\crudbooster\Modules\SettingModule\CbSettingsServiceProvider;
+use crocodicstudio\crudbooster\Modules\StatisticModule\CbStatisticsServiceProvider;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\ServiceProvider;
 use crocodicstudio\crudbooster\commands\CrudboosterInstallationCommand;
@@ -101,6 +103,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->app->register(CbSettingsServiceProvider::class);
         $this->app->register(CbStatisticsServiceProvider::class);
         $this->app->register(CbPrivilegesServiceProvider::class);
+        $this->app->register(CbMenuServiceProvider::class);
     }
 
     private function registerCrudboosterCommand()

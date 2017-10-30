@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\SettingModule;
+namespace crocodicstudio\crudbooster\Modules\SettingModule;
 
 use crocodicstudio\crudbooster\controllers\CBController;
 use Illuminate\Support\Facades\Storage;

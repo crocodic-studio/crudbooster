@@ -1,11 +1,11 @@
 <?php
 
-namespace crocodicstudio\crudbooster\StatisticModule;
+namespace crocodicstudio\crudbooster\Modules\AuthModule;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\AliasLoader;
 
-class CbStatisticsServiceProvider extends ServiceProvider
+class CbAuthServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
@@ -14,7 +14,8 @@ class CbStatisticsServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app['view']->addNamespace('CbStatistics', __DIR__.'/views');
+        $this->app['view']->addNamespace('CbAuth', __DIR__.'/views');
+        require __DIR__.'/auth_routes.php';
     }
 
     /**

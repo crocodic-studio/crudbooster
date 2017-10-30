@@ -1,8 +1,8 @@
-@extends('crudbooster::admin_template')
+@extends('CbMenu::views.admin_template')
 @section('content')
 
     @push('head')
-        @include('crudbooster::_menus_management.css')
+        @include('CbMenu::_menus_management.css')
     @endpush
 
     @push('bottom')
@@ -27,7 +27,7 @@
     @endpush
     @push('bottom')
         <script src='{{asset("vendor/crudbooster/assets/jquery-sortable-min.js")}}'></script>
-        @include('crudbooster::_menus_management.js')
+        @include('CbMenu::_menus_management.js')
     @endpush
 
     <div class='row'>
@@ -35,12 +35,12 @@
         <div class="col-sm-5">
 
             <div class="panel panel-success">
-                @widget('\crocodicstudio\crudbooster\widgets\ActiveMenus')
+                @widget('\crocodicstudio\crudbooster\Modules\MenuModule\widgets\ActiveMenus')
             </div>
 
 
             <div class="panel panel-danger">
-                @widget('\crocodicstudio\crudbooster\widgets\InActiveMenus')
+                @widget('\crocodicstudio\crudbooster\Modules\MenuModule\widgets\InActiveMenus')
             </div>
 
         </div>

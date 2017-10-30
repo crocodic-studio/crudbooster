@@ -1,10 +1,10 @@
 <?php
 
-namespace crocodicstudio\crudbooster\widgets;
+namespace crocodicstudio\crudbooster\Modules\MenuModule\widgets;
 
 class ActiveMenus
 {
-    public $template = 'crudbooster::_menus_management.active_menus';
+    public $template = 'CbMenu::_menus_management.active_menus';
 
     public $cacheLifeTime = 0;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\SettingModule;
+namespace crocodicstudio\crudbooster\Modules\SettingModule;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\AliasLoader;

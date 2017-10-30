@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\AuthModule;
+namespace crocodicstudio\crudbooster\Modules\AuthModule;
 
 use crocodicstudio\crudbooster\controllers\Controller;
 use Illuminate\Support\Facades\Request;

@@ -1,10 +1,11 @@
 <?php
 
-namespace crocodicstudio\crudbooster\PrivilegeModule;
+namespace crocodicstudio\crudbooster\Modules\StatisticModule;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Foundation\AliasLoader;
 
-class CbPrivilegesServiceProvider extends ServiceProvider
+class CbStatisticsServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
@@ -13,8 +14,7 @@ class CbPrivilegesServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app['view']->addNamespace('CbPrivilege', __DIR__.'/views');
-        require __DIR__.'/privileges_routes.php';
+        $this->app['view']->addNamespace('CbStatistics', __DIR__.'/views');
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\PrivilegeModule;
+namespace crocodicstudio\crudbooster\Modules\PrivilegeModule;
 
 class PrivilegeTableWidget
 {

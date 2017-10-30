@@ -79,7 +79,7 @@ class Step1Handler
         if (file_exists(controller_path($row->controller))) {
             $response = file_get_contents(controller_path(str_replace('.', '', $row->controller)));
         }else{
-            $response = file_get_contents(__DIR__.'/'.str_replace('.', '', $row->controller).'.php');
+            $response = file_get_contents(__DIR__.'Step1Handler.php/'.str_replace('.', '', $row->controller).'.php');
         }
 
         if (strpos($response, "# START COLUMNS") !== true) {

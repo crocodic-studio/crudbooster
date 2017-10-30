@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\ApiGeneratorModule;
+namespace crocodicstudio\crudbooster\Modules\ApiGeneratorModule;
 
 use crocodicstudio\crudbooster\controllers\CBController;
 use Illuminate\Support\Facades\Request;

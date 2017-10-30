@@ -2,8 +2,8 @@
 
 namespace crocodicstudio\crudbooster\controllers;
 
-use crocodicstudio\crudbooster\MenuModule\MenuJavascript;
-use crocodicstudio\crudbooster\MenuModule\MenusForm;
+use crocodicstudio\crudbooster\Modules\MenuModule\MenuJavascript;
+use crocodicstudio\crudbooster\Modules\MenuModule\MenusForm;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
@@ -43,7 +43,7 @@ class AdminMenusController extends CBController
 
         $page_title = 'Menu Management';
 
-        return view('crudbooster::menus_management', compact('privileges', 'return_url', 'page_title'));
+        return view('CbMenu::menus_management', compact('privileges', 'return_url', 'page_title'));
     }
 
     public function hookBeforeAdd(&$postdata)
