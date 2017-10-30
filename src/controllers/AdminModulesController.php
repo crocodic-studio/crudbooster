@@ -2,28 +2,15 @@
 
 namespace crocodicstudio\crudbooster\controllers;
 
-use crocodicstudio\crudbooster\controllers\Controller;
 use crocodicstudio\crudbooster\controllers\Helpers\FontAwesome;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\Step1Handler;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\Step2Handler;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\Step3Handler;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\Step4Handler;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\PDF;
-use Illuminate\Support\Facades\Excel;
 use CRUDBooster;
-use PhpParser\Error;
-use PhpParser\ParserFactory;
-use PhpParser\PrettyPrinter;
 
 class AdminModulesController extends CBController
 {
