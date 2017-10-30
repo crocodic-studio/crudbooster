@@ -1,9 +1,7 @@
 <?php
 
-namespace crocodicstudio\crudbooster\controllers;
+namespace crocodicstudio\crudbooster\Modules\MenuModule;
 
-use crocodicstudio\crudbooster\Modules\MenuModule\MenuJavascript;
-use crocodicstudio\crudbooster\Modules\MenuModule\MenusForm;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
