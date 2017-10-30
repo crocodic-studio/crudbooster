@@ -2,6 +2,7 @@
 
 namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
+use crocodicstudio\crudbooster\controllers\CBController;
 use crocodicstudio\crudbooster\controllers\Helpers\FontAwesome;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Request;

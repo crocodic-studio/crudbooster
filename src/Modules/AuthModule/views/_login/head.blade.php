@@ -21,7 +21,7 @@
     {!! cbStyleSheet('rtl.css') !!}
 @endif
 
-@include('crudbooster::views._IE9')
+@include('crudbooster::_IE9')
 
 {!! cbStyleSheet('css/main.css') !!}
 <style type="text/css">

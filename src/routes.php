@@ -74,7 +74,7 @@ Route::group([
     if (Request::is(cbConfig('ADMIN_PATH'))) {
         $menus = DB::table('cms_menus')->where('is_dashboard', 1)->first();
         if (! $menus) {
-            CRUDBooster::routeController('/', '\crocodicstudio\crudbooster\AuthModule\AuthController');
+            CRUDBooster::routeController('/', '\crocodicstudio\crudbooster\Modules\AuthModule\AuthController');
         }
     }
 
