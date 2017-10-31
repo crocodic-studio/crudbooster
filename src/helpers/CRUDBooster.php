@@ -2,6 +2,7 @@
 
 namespace crocodicstudio\crudbooster\helpers;
 
+use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator;
 use Session;
 use Request;
 use Schema;

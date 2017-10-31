@@ -1,8 +1,10 @@
 <?php
 
-namespace crocodicstudio\crudbooster\helpers;
+namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
 use Schema;
+use CRUDBooster;
+use CB;
 
 class ControllerGenerator
 {
