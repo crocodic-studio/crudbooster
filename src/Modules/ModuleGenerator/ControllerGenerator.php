@@ -16,7 +16,7 @@ class ControllerGenerator
         $pk = CB::pk($table);
         $formArrayString = self::generateFormConfig($table, $coloms);
         list($cols, $joinList) = self::addCol($table, $coloms, $pk);
-        $php = '<?php '.view('crudbooster::file_stubs.controller_stub', compact('controllerName', 'table', 'pk', 'coloms', 'cols', 'formArrayString', 'joinList'))->render();
+        $php = '<?php '.view('CbModulesGen::controller_stub', compact('controllerName', 'table', 'pk', 'coloms', 'cols', 'formArrayString', 'joinList'))->render();
         //create file controller
         file_put_contents(base_path(controllers_dir()).'Admin'.$controllerName.'.php', $php);
 

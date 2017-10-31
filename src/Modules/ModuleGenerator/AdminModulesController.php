@@ -55,7 +55,7 @@ class AdminModulesController extends CBController
     // public function getIndex() {
     // 	$data['page_title'] = 'Module Generator';
     // 	$data['result'] = DB::table('cms_moduls')->where('is_protected',0)->orderby('name','asc')->get();
-    // 	$this->cbView('crudbooster::module_generator.index',$data);		
+    // 	$this->cbView('CbModulesGen::index',$data);
     // }	
 
     function hookBeforeDelete($id)
