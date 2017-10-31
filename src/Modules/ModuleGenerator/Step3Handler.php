@@ -16,7 +16,7 @@ class Step3Handler
 
         $types = $this->getComponentTypes();
 
-        return view('crudbooster::module_generator.step3', compact('columns', 'forms', 'types', 'id'));
+        return view('CbModulesGen::step3', compact('columns', 'forms', 'types', 'id'));
     }
 
     public function handleFormSubmit()

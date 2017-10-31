@@ -15,7 +15,7 @@ class Step4Handler
             $data['config'] = parseControllerConfigToArray($response);
         }
 
-        return view('crudbooster::module_generator.step4', $data);
+        return view('CbModulesGen::step4', $data);
     }
 
     public function handleFormSubmit()

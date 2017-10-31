@@ -33,7 +33,7 @@ class Step2Handler
             $data[$hook] = readMethodContent($code, $hook);
         }
 
-        return view('crudbooster::module_generator.step2', $data);
+        return view('CbModulesGen::step2', $data);
     }
 
     public function handleFormSubmit()
