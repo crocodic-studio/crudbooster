@@ -208,8 +208,9 @@ class CBController extends Controller
         return redirect(CB::mainpath());
     }
 
-    public function postExportData(IndexExport $exporter)
+    public function postExportData()
     {
+        $exporter = app(IndexExport::class);
         $this->limit = Request::input('limit');
         $this->index_return = true;
         $filename = Request::input('filename');
@@ -234,8 +235,9 @@ class CBController extends Controller
         }
     }
 
-    public function getIndex(Index $index)
+    public function getIndex()
     {
+        $index = app(Index::class);
         $this->cbLoader();
         $data = $index->index($this);
 
@@ -338,8 +340,9 @@ class CBController extends Controller
         return CB::backWithMsg(trans('crudbooster.alert_delete_data_success'));
     }
 
-    public function postFindData(Search $search)
+    public function postFindData()
     {
+        $search = app( Search::class);
         $q = request('q');
         $data = request('data');
         $id = request('id');
@@ -455,8 +458,9 @@ class CBController extends Controller
         return view('crudbooster::default.form', compact('page_title', 'page_menu', 'command'));
     }
 
-    public function postAddSave(DataSaver $saver)
+    public function postAddSave()
     {
+        $saver = app(DataSaver::class);
         $this->cbLoader();
 
         $this->validation();
@@ -649,8 +653,9 @@ class CBController extends Controller
         return $this->table()->where($this->primary_key, $id);
     }
 
-    public function postEditSave($id, DataSaver $saver)
+    public function postEditSave($id)
     {
+        $saver = app(DataSaver::class);
         $this->cbLoader();
         //$row = $this->findRow($id)->first();
 
@@ -755,15 +760,17 @@ class CBController extends Controller
         return view('crudbooster::import', $data);
     }
 
-    public function postDoneImport(IndexImport $importer)
+    public function postDoneImport()
     {
+        $importer = app(IndexImport::class);
         $this->cbLoader();
 
         return $importer->doneImport();
     }
 
-    public function postDoImportChunk(IndexImport $import)
+    public function postDoImportChunk()
     {
+        $import = app(IndexImport::class);
         $this->cbLoader();
         $fileMD5 = md5(request('file'));
 
@@ -776,18 +783,19 @@ class CBController extends Controller
         return response()->json(['status' => true]);
     }
 
-    public function postDoUploadImportData(IndexImport $importer)
+    public function postDoUploadImportData()
     {
+        $import = app(IndexImport::class);
         $this->cbLoader();
         if (! Request::hasFile('userfile')) {
             return redirect()->back();
         }
         $file = Request::file('userfile');
-        $validator = $importer->validateForImport($file);
+        $validator = $import->validateForImport($file);
         if ($validator->fails()) {
             return CB::backWithMsg(implode('<br/>', $validator->errors()->all()), 'warning');
         }
-        $url = $importer->uploadImportData($file);
+        $url = $import->uploadImportData($file);
 
         return redirect($url);
     }
@@ -878,14 +886,16 @@ class CBController extends Controller
         CB::redirect(Request::server('HTTP_REFERER'), trans('crudbooster.alert_delete_data_success'), 'success');
     }
 
-    public function postUploadSummernote(FileUploader $uploader)
+    public function postUploadSummernote()
     {
+        $uploader = app( FileUploader::class);
         $this->cbLoader();
         echo asset($uploader->uploadFile('userfile'));
     }
 
-    public function postUploadFile(FileUploader $uploader)
+    public function postUploadFile()
     {
+        $uploader = app( FileUploader::class);
         $this->cbLoader();
         echo $uploader->uploadFile('userfile');
     }
