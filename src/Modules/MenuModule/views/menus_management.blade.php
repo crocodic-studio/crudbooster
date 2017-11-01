@@ -1,4 +1,4 @@
-@extends('CbMenu::views.admin_template')
+@extends('CbMenu::admin_template')
 @section('content')
 
     @push('head')
