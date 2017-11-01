@@ -2,6 +2,8 @@
 
 namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
+use CRUDBooster;
+
 class Step1Handler
 {
     public function showForm($id)

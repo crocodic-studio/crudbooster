@@ -2,6 +2,9 @@
 
 namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request;
+
 class Step4Handler
 {
     public function showForm($id)
