@@ -42,7 +42,7 @@ if (! function_exists('getTablesList')) {
     {
         $tables_list = [];
         foreach (CRUDBooster::listTables() as $table) {
-            unset($table['migrations']);
+            unset($table->migrations);
             foreach ($table as $key => $label) {
                 if (substr($label, 0, 4) == 'cms_' && $label != 'cms_users') {
                     continue;
