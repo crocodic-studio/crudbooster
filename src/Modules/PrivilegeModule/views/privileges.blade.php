@@ -54,7 +54,7 @@
                                 @include('CbPrivilege::_privileges.thead')
                             </thead>
                             <tbody>
-                                @widget('\crocodicstudio\crudbooster\PrivilegeModule\PrivilegeTableWidget', ['roleId' => $id])
+                                @widget('\crocodicstudio\crudbooster\Modules\PrivilegeModule\PrivilegeTableWidget', ['roleId' => $id])
                             </tbody>
                         </table>
 
