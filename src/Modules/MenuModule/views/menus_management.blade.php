@@ -1,4 +1,4 @@
-@extends('CbMenu::admin_template')
+@extends('crudbooster::admin_template')
 @section('content')
 
     @push('head')
