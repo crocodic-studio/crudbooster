@@ -53,7 +53,7 @@ class AdminPrivilegesController extends CBController
 
         $data['page_menu'] = Route::getCurrentRoute()->getActionName();
 
-        return view('crudbooster::privileges', $data);
+        return view('CbPrivilege::privileges', $data);
     }
 
     public function postAddSave()
@@ -96,7 +96,7 @@ class AdminPrivilegesController extends CBController
 
         $page_menu = Route::getCurrentRoute()->getActionName();
 
-        return view('crudbooster::privileges', compact('role', 'page_title', 'page_menu', 'id'));
+        return view('CbPrivilege::privileges', compact('role', 'page_title', 'page_menu', 'id'));
     }
 
     public function postEditSave($id)
