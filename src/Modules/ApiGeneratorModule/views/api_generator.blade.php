@@ -14,13 +14,13 @@
         </script>
     @endpush
 
-    @include('crudbooster::api_generator._generator.tabs')
+    @include('CbApiGen::_generator.tabs')
 
     <div class='box'>
 
         <div class='box-body'>
             @push('bottom')
-                @include('crudbooster::api_generator._generator.script')
+                @include('CbApiGen::_generator.script')
             @endpush
 
             @push('head')
@@ -124,7 +124,7 @@
                            onclick="load_parameters()"><i class='fa fa-refresh'></i> Reset</a>
                     </div>
 
-                    @include('crudbooster::api_generator._generator.table_parameters')
+                    @include('CbApiGen::_generator.table_parameters')
 
                     <div class="help-block">
                         To set as comment at description. Add prefix * (asterisk) before description. Unless will be set
