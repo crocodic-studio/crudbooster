@@ -13,6 +13,39 @@ Route::group([
     'middleware' => ['web', CBSuperadmin::class],
     'prefix' => cbConfig('ADMIN_PATH'),
     'namespace' => $namespace,
-], function () use ($namespace) {
-    CRUDBooster::routeController('api-generator', 'AdminApiGeneratorController', $namespace);
+], function () {
+    Route::get('api-generator/', ['uses' => 'AdminApiGeneratorController@getIndex', 'as' => 'AdminApiGeneratorControllerGetIndex']);
+
+    Route::get('api-generator/download-postman/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@getDownloadPostman', 'as' => 'AdminApiGeneratorControllerGetDownloadPostman']);
+    Route::get('api-generator/screet-key/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@getScreetKey', 'as' => 'AdminApiGeneratorControllerGetScreetKey']);
+    Route::get('api-generator/generator/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@getGenerator', 'as' => 'AdminApiGeneratorControllerGetGenerator']);
+    Route::get('api-generator/edit-api/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@getEditApi', 'as' => 'AdminApiGeneratorControllerGetEditApi']);
+    Route::get('api-generator/generate-screet-key/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@getGenerateScreetKey', 'as' => 'AdminApiGeneratorControllerGetGenerateScreetKey']);
+    Route::get('api-generator/status-apikey/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@getStatusApikey', 'as' => 'AdminApiGeneratorControllerGetStatusApikey']);
+    Route::get('api-generator/delete-api-key/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@getDeleteApiKey', 'as' => 'AdminApiGeneratorControllerGetDeleteApiKey']);
+    Route::get('api-generator/column-table/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@getColumnTable', 'as' => 'AdminApiGeneratorControllerGetColumnTable']);
+    Route::post('api-generator/save-api-custom/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@postSaveApiCustom', 'as' => 'AdminApiGeneratorControllerPostSaveApiCustom',]);
+    Route::get('api-generator/delete-api/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@getDeleteApi', 'as' => 'AdminApiGeneratorControllerGetDeleteApi']);
+    Route::get('api-generator/export-data/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@getExportData', 'as' => 'AdminApiGeneratorControllerGetExportData']);
+    Route::post('api-generator/export-data/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@postExportData', 'as' => 'AdminApiGeneratorControllerPostExportData',]);
+    Route::get('api-generator/data-query/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@getDataQuery', 'as' => 'AdminApiGeneratorControllerGetDataQuery']);
+    Route::get('api-generator/data-table/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@getDataTable', 'as' => 'AdminApiGeneratorControllerGetDataTable']);
+    Route::get('api-generator/data-modal-datatable/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@getDataModalDatatable', 'as' => 'AdminApiGeneratorControllerGetDataModalDatatable']);
+    Route::get('api-generator/update-single/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@getUpdateSingle', 'as' => 'AdminApiGeneratorControllerGetUpdateSingle']);
+    Route::post('api-generator/find-data/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@postFindData', 'as' => 'AdminApiGeneratorControllerPostFindData',]);
+    Route::post('api-generator/find-data-old/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@postFindDataOld', 'as' => 'AdminApiGeneratorControllerPostFindDataOld',]);
+    Route::get('api-generator/add/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@getAdd', 'as' => 'AdminApiGeneratorControllerGetAdd']);
+    Route::post('api-generator/add-save/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@postAddSave', 'as' => 'AdminApiGeneratorControllerPostAddSave',]);
+    Route::get('api-generator/edit/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@getEdit', 'as' => 'AdminApiGeneratorControllerGetEdit']);
+    Route::post('api-generator/edit-save/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@postEditSave', 'as' => 'AdminApiGeneratorControllerPostEditSave',]);
+    Route::get('api-generator/delete/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@getDelete', 'as' => 'AdminApiGeneratorControllerGetDelete']);
+    Route::get('api-generator/detail/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@getDetail', 'as' => 'AdminApiGeneratorControllerGetDetail']);
+    Route::get('api-generator/import-data/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@getImportData', 'as' => 'AdminApiGeneratorControllerGetImportData']);
+    Route::post('api-generator/done-import/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@postDoneImport', 'as' => 'AdminApiGeneratorControllerPostDoneImport',]);
+    Route::post('api-generator/do-import-chunk/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@postDoImportChunk', 'as' => 'AdminApiGeneratorControllerPostDoImportChunk',]);
+    Route::post('api-generator/do-upload-import-data/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@postDoUploadImportData', 'as' => 'AdminApiGeneratorControllerPostDoUploadImportData',]);
+    Route::post('api-generator/action-selected/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@postActionSelected', 'as' => 'AdminApiGeneratorControllerPostActionSelected',]);
+    Route::get('api-generator/delete-image/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@getDeleteImage', 'as' => 'AdminApiGeneratorControllerGetDeleteImage']);
+    Route::post('api-generator/upload-summernote/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@postUploadSummernote', 'as' => 'AdminApiGeneratorControllerPostUploadSummernote',]);
+    Route::post('api-generator/upload-file/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminApiGeneratorController@postUploadFile', 'as' => 'AdminApiGeneratorControllerPostUploadFile',]);
 });
