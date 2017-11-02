@@ -16,6 +16,7 @@ Route::group([
     Route::get('privileges/data-table', ['uses' => 'AdminPrivilegesController@getDataTable', 'as' => 'AdminPrivilegesControllerGetDataTable']);
     Route::get('privileges/data-modal-datatable', ['uses' => 'AdminPrivilegesController@getDataModalDatatable', 'as' => 'AdminPrivilegesControllerGetDataModalDatatable']);
     Route::get('privileges/delete-image', ['uses' => 'AdminPrivilegesController@getDeleteImage', 'as' => 'AdminPrivilegesControllerGetDeleteImage']);
+
     Route::post('privileges/add-save', ['uses' => 'AdminPrivilegesController@postAddSave', 'as' => 'AdminPrivilegesControllerPostAddSave',]);
     Route::post('privileges/edit-save/{id?}', ['uses' => 'AdminPrivilegesController@postEditSave', 'as' => 'AdminPrivilegesControllerPostEditSave',]);
     Route::post('privileges/done-import', ['uses' => 'AdminPrivilegesController@postDoneImport', 'as' => 'AdminPrivilegesControllerPostDoneImport',]);
