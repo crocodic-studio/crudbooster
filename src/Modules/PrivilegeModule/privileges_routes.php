@@ -14,14 +14,14 @@ Route::group([
     Route::get('privileges/export-data', ['uses' => 'AdminPrivilegesController@getExportData', 'as' => 'AdminPrivilegesControllerGetExportData']);
     Route::get('privileges/data-query', ['uses' => 'AdminPrivilegesController@getDataQuery', 'as' => 'AdminPrivilegesControllerGetDataQuery']);
     Route::get('privileges/data-table', ['uses' => 'AdminPrivilegesController@getDataTable', 'as' => 'AdminPrivilegesControllerGetDataTable']);
-    Route::get('privileges/data-modal-datatable/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminPrivilegesController@getDataModalDatatable', 'as' => 'AdminPrivilegesControllerGetDataModalDatatable']);
+    Route::get('privileges/data-modal-datatable', ['uses' => 'AdminPrivilegesController@getDataModalDatatable', 'as' => 'AdminPrivilegesControllerGetDataModalDatatable']);
     Route::get('privileges/delete-image', ['uses' => 'AdminPrivilegesController@getDeleteImage', 'as' => 'AdminPrivilegesControllerGetDeleteImage']);
     Route::post('privileges/add-save', ['uses' => 'AdminPrivilegesController@postAddSave', 'as' => 'AdminPrivilegesControllerPostAddSave',]);
     Route::post('privileges/edit-save/{one?}', ['uses' => 'AdminPrivilegesController@postEditSave', 'as' => 'AdminPrivilegesControllerPostEditSave',]);
     Route::post('privileges/done-import', ['uses' => 'AdminPrivilegesController@postDoneImport', 'as' => 'AdminPrivilegesControllerPostDoneImport',]);
     Route::post('privileges/do-import-chunk', ['uses' => 'AdminPrivilegesController@postDoImportChunk', 'as' => 'AdminPrivilegesControllerPostDoImportChunk',]);
     Route::post('privileges/do-upload-import-data', ['uses' => 'AdminPrivilegesController@postDoUploadImportData', 'as' => 'AdminPrivilegesControllerPostDoUploadImportData',]);
-    Route::post('privileges/action-selected/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminPrivilegesController@postActionSelected', 'as' => 'AdminPrivilegesControllerPostActionSelected',]);
+    Route::post('privileges/action-selected', ['uses' => 'AdminPrivilegesController@postActionSelected', 'as' => 'AdminPrivilegesControllerPostActionSelected',]);
     Route::post('privileges/export-data', ['uses' => 'AdminPrivilegesController@postExportData', 'as' => 'AdminPrivilegesControllerPostExportData',]);
     Route::post('privileges/find-data', ['uses' => 'AdminPrivilegesController@postFindData', 'as' => 'AdminPrivilegesControllerPostFindData',]);
     Route::post('privileges/upload-summernote', ['uses' => 'AdminPrivilegesController@postUploadSummernote', 'as' => 'AdminPrivilegesControllerPostUploadSummernote',]);

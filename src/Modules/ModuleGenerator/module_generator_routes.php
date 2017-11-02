@@ -15,13 +15,13 @@ Route::group([
     Route::get('modules/add', ['uses' => 'AdminModulesController@getAdd', 'as' => 'AdminModulesControllerGetAdd']);
     Route::get('modules/step1/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminModulesController@getStep1', 'as' => 'AdminModulesControllerGetStep1']);
 
-    Route::get('modules/step2/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminModulesController@getStep2', 'as' => 'AdminModulesControllerGetStep2']);
-    Route::post('modules/step2/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminModulesController@postStep2', 'as' => 'AdminModulesControllerPostStep2',]);
+    Route::get('modules/step2/{one?}', ['uses' => 'AdminModulesController@getStep2', 'as' => 'AdminModulesControllerGetStep2']);
+    Route::post('modules/step2', ['uses' => 'AdminModulesController@postStep2', 'as' => 'AdminModulesControllerPostStep2',]);
 
-    Route::post('modules/step3/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminModulesController@postStep3', 'as' => 'AdminModulesControllerPostStep3',]);
-    Route::get('modules/step3/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminModulesController@getStep3', 'as' => 'AdminModulesControllerGetStep3']);
+    Route::post('modules/step3', ['uses' => 'AdminModulesController@postStep3', 'as' => 'AdminModulesControllerPostStep3',]);
+    Route::get('modules/step3/{id?}', ['uses' => 'AdminModulesController@getStep3', 'as' => 'AdminModulesControllerGetStep3']);
 
-    Route::get('modules/type-info/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminModulesController@getTypeInfo', 'as' => 'AdminModulesControllerGetTypeInfo']);
+    Route::get('modules/type-info/{one?}', ['uses' => 'AdminModulesController@getTypeInfo', 'as' => 'AdminModulesControllerGetTypeInfo']);
 
     Route::post('modules/step4/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminModulesController@postStep4', 'as' => 'AdminModulesControllerPostStep4',]);
     Route::get('modules/step4/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminModulesController@getStep4', 'as' => 'AdminModulesControllerGetStep4']);
@@ -29,7 +29,7 @@ Route::group([
     Route::get('modules/delete-image', ['uses' => 'AdminModulesController@getDeleteImage', 'as' => 'AdminModulesControllerGetDeleteImage']);
     Route::get('modules/data-query', ['uses' => 'AdminModulesController@getDataQuery', 'as' => 'AdminModulesControllerGetDataQuery']);
     Route::get('modules/data-table', ['uses' => 'AdminModulesController@getDataTable', 'as' => 'AdminModulesControllerGetDataTable']);
-    Route::get('modules/data-modal-datatable/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminModulesController@getDataModalDatatable', 'as' => 'AdminModulesControllerGetDataModalDatatable']);
+    Route::get('modules/data-modal-datatable', ['uses' => 'AdminModulesController@getDataModalDatatable', 'as' => 'AdminModulesControllerGetDataModalDatatable']);
     Route::get('modules/update-single', ['uses' => 'AdminModulesController@getUpdateSingle', 'as' => 'AdminModulesControllerGetUpdateSingle']);
     Route::get('modules/edit/{one?}', ['uses' => 'AdminModulesController@getEdit', 'as' => 'AdminModulesControllerGetEdit']);
     Route::get('modules/delete/{id?}', ['uses' => 'AdminModulesController@getDelete', 'as' => 'AdminModulesControllerGetDelete']);

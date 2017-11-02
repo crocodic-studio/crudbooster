@@ -14,9 +14,9 @@ Route::group([
     Route::get('statistic-builder/view-component/{one?}', ['uses' => 'AdminStatisticBuilderController@getViewComponent', 'as' => 'AdminStatisticBuilderControllerGetViewComponent']);
     Route::get('statistic-builder/edit-component/{one?}', ['uses' => 'AdminStatisticBuilderController@getEditComponent', 'as' => 'AdminStatisticBuilderControllerGetEditComponent']);
     Route::get('statistic-builder/data-table', ['uses' => 'AdminStatisticBuilderController@getDataTable', 'as' => 'AdminStatisticBuilderControllerGetDataTable']);
-    Route::get('statistic-builder/data-modal-datatable/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminStatisticBuilderController@getDataModalDatatable', 'as' => 'AdminStatisticBuilderControllerGetDataModalDatatable']);
+    Route::get('statistic-builder/data-modal-datatable', ['uses' => 'AdminStatisticBuilderController@getDataModalDatatable', 'as' => 'AdminStatisticBuilderControllerGetDataModalDatatable']);
     Route::get('statistic-builder/update-single', ['uses' => 'AdminStatisticBuilderController@getUpdateSingle', 'as' => 'AdminStatisticBuilderControllerGetUpdateSingle']);
-    Route::get('statistic-builder/delete-component/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminStatisticBuilderController@getDeleteComponent', 'as' => 'AdminStatisticBuilderControllerGetDeleteComponent']);
+    Route::get('statistic-builder/delete-component/{id?}', ['uses' => 'AdminStatisticBuilderController@getDeleteComponent', 'as' => 'AdminStatisticBuilderControllerGetDeleteComponent']);
     Route::get('statistic-builder/data-query', ['uses' => 'AdminStatisticBuilderController@getDataQuery', 'as' => 'AdminStatisticBuilderControllerGetDataQuery']);
     Route::get('statistic-builder/delete/{one?}', ['uses' => 'AdminStatisticBuilderController@getDelete', 'as' => 'AdminStatisticBuilderControllerGetDelete']);
     Route::get('statistic-builder/detail/{one?}', ['uses' => 'AdminStatisticBuilderController@getDetail', 'as' => 'AdminStatisticBuilderControllerGetDetail']);

@@ -25,11 +25,11 @@ Route::group([
     Route::post('settings/find-data-old', ['uses' => 'AdminSettingsController@postFindDataOld', 'as' => 'AdminSettingsControllerPostFindDataOld',]);
     Route::post('settings/done-import', ['uses' => 'AdminSettingsController@postDoneImport', 'as' => 'AdminSettingsControllerPostDoneImport',]);
     Route::post('settings/find-data', ['uses' => 'AdminSettingsController@postFindData', 'as' => 'AdminSettingsControllerPostFindData',]);
-    Route::post('settings/save-setting/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminSettingsController@postSaveSetting', 'as' => 'AdminSettingsControllerPostSaveSetting',]);
+    Route::post('settings/save-setting', ['uses' => 'AdminSettingsController@postSaveSetting', 'as' => 'AdminSettingsControllerPostSaveSetting',]);
     Route::post('settings/export-data', ['uses' => 'AdminSettingsController@postExportData', 'as' => 'AdminSettingsControllerPostExportData',]);
     Route::post('settings/do-import-chunk', ['uses' => 'AdminSettingsController@postDoImportChunk', 'as' => 'AdminSettingsControllerPostDoImportChunk',]);
     Route::post('settings/do-upload-import-data', ['uses' => 'AdminSettingsController@postDoUploadImportData', 'as' => 'AdminSettingsControllerPostDoUploadImportData',]);
-    Route::post('settings/action-selected/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminSettingsController@postActionSelected', 'as' => 'AdminSettingsControllerPostActionSelected',]);
+    Route::post('settings/action-selected', ['uses' => 'AdminSettingsController@postActionSelected', 'as' => 'AdminSettingsControllerPostActionSelected',]);
     Route::post('settings/add-save', ['uses' => 'AdminSettingsController@postAddSave', 'as' => 'AdminSettingsControllerPostAddSave',]);
     Route::post('settings/upload-summernote', ['uses' => 'AdminSettingsController@postUploadSummernote', 'as' => 'AdminSettingsControllerPostUploadSummernote',]);
     Route::post('settings/edit-save/{one?}', ['uses' => 'AdminSettingsController@postEditSave', 'as' => 'AdminSettingsControllerPostEditSave',]);
