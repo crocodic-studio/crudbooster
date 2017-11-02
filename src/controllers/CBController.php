@@ -895,7 +895,7 @@ class CBController extends Controller
 
     public function postUploadFile()
     {
-        $uploader = app( FileUploader::class);
+        $uploader = app(FileUploader::class);
         $this->cbLoader();
         echo $uploader->uploadFile('userfile');
     }

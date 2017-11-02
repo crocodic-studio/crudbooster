@@ -12,7 +12,7 @@ Route::group([
     Route::get('modules/export-data', ['uses' => 'AdminModulesController@getExportData', 'as' => 'AdminModulesControllerGetExportData']);
     Route::get('modules/table-columns/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminModulesController@getTableColumns', 'as' => 'AdminModulesControllerGetTableColumns']);
     Route::get('modules/check-slug/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminModulesController@getCheckSlug', 'as' => 'AdminModulesControllerGetCheckSlug']);
-    Route::get('modules/add/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminModulesController@getAdd', 'as' => 'AdminModulesControllerGetAdd']);
+    Route::get('modules/add', ['uses' => 'AdminModulesController@getAdd', 'as' => 'AdminModulesControllerGetAdd']);
     Route::get('modules/step1/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminModulesController@getStep1', 'as' => 'AdminModulesControllerGetStep1']);
 
     Route::get('modules/step2/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminModulesController@getStep2', 'as' => 'AdminModulesControllerGetStep2']);
@@ -27,7 +27,7 @@ Route::group([
     Route::get('modules/step4/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminModulesController@getStep4', 'as' => 'AdminModulesControllerGetStep4']);
 
     Route::get('modules/delete-image', ['uses' => 'AdminModulesController@getDeleteImage', 'as' => 'AdminModulesControllerGetDeleteImage']);
-    Route::get('modules/data-query/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminModulesController@getDataQuery', 'as' => 'AdminModulesControllerGetDataQuery']);
+    Route::get('modules/data-query', ['uses' => 'AdminModulesController@getDataQuery', 'as' => 'AdminModulesControllerGetDataQuery']);
     Route::get('modules/data-table', ['uses' => 'AdminModulesController@getDataTable', 'as' => 'AdminModulesControllerGetDataTable']);
     Route::get('modules/data-modal-datatable/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminModulesController@getDataModalDatatable', 'as' => 'AdminModulesControllerGetDataModalDatatable']);
     Route::get('modules/update-single', ['uses' => 'AdminModulesController@getUpdateSingle', 'as' => 'AdminModulesControllerGetUpdateSingle']);
@@ -37,15 +37,15 @@ Route::group([
     Route::get('modules/import-data', ['uses' => 'AdminModulesController@getImportData', 'as' => 'AdminModulesControllerGetImportData']);
 
     Route::post('modules/step-finish/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminModulesController@postStepFinish', 'as' => 'AdminModulesControllerPostStepFinish',]);
-    Route::post('modules/add-save/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminModulesController@postAddSave', 'as' => 'AdminModulesControllerPostAddSave',]);
+    Route::post('modules/add-save', ['uses' => 'AdminModulesController@postAddSave', 'as' => 'AdminModulesControllerPostAddSave',]);
     Route::post('modules/edit-save/{one?}', ['uses' => 'AdminModulesController@postEditSave', 'as' => 'AdminModulesControllerPostEditSave',]);
     Route::post('modules/export-data', ['uses' => 'AdminModulesController@postExportData', 'as' => 'AdminModulesControllerPostExportData',]);
     Route::post('modules/find-data', ['uses' => 'AdminModulesController@postFindData', 'as' => 'AdminModulesControllerPostFindData',]);
-    Route::post('modules/find-data-old/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminModulesController@postFindDataOld', 'as' => 'AdminModulesControllerPostFindDataOld',]);
+    Route::post('modules/find-data-old', ['uses' => 'AdminModulesController@postFindDataOld', 'as' => 'AdminModulesControllerPostFindDataOld',]);
     Route::post('modules/done-import', ['uses' => 'AdminModulesController@postDoneImport', 'as' => 'AdminModulesControllerPostDoneImport',]);
     Route::post('modules/do-import-chunk', ['uses' => 'AdminModulesController@postDoImportChunk', 'as' => 'AdminModulesControllerPostDoImportChunk',]);
     Route::post('modules/do-upload-import-data', ['uses' => 'AdminModulesController@postDoUploadImportData', 'as' => 'AdminModulesControllerPostDoUploadImportData',]);
     Route::post('modules/action-selected/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminModulesController@postActionSelected', 'as' => 'AdminModulesControllerPostActionSelected',]);
-    Route::post('modules/upload-summernote/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminModulesController@postUploadSummernote', 'as' => 'AdminModulesControllerPostUploadSummernote',]);
-    Route::post('modules/upload-file/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'AdminModulesController@postUploadFile', 'as' => 'AdminModulesControllerPostUploadFile',]);
+    Route::post('modules/upload-summernote', ['uses' => 'AdminModulesController@postUploadSummernote', 'as' => 'AdminModulesControllerPostUploadSummernote',]);
+    Route::post('modules/upload-file', ['uses' => 'AdminModulesController@postUploadFile', 'as' => 'AdminModulesControllerPostUploadFile',]);
 });
