@@ -9,8 +9,8 @@ Route::group([
     Route::get('statistic-builder/show-dashboard', ['uses' => 'AdminStatisticBuilderController@getShowDashboard', 'as' => 'AdminStatisticBuilderControllerGetShowDashboard']);
     Route::get('statistic-builder/show', ['uses' => 'AdminStatisticBuilderController@getShow', 'as' => 'AdminStatisticBuilderControllerGetShow']);
     Route::get('statistic-builder/dashboard', ['uses' => 'AdminStatisticBuilderController@getDashboard', 'as' => 'AdminStatisticBuilderControllerGetDashboard']);
-    Route::get('statistic-builder/builder/{one?}', ['uses' => 'AdminStatisticBuilderController@getBuilder', 'as' => 'AdminStatisticBuilderControllerGetBuilder']);
-    Route::get('statistic-builder/list-component/{one?}/{two?}', ['uses' => 'AdminStatisticBuilderController@getListComponent', 'as' => 'AdminStatisticBuilderControllerGetListComponent']);
+    Route::get('statistic-builder/builder/{id_cms_statistics?}', ['uses' => 'AdminStatisticBuilderController@getBuilder', 'as' => 'AdminStatisticBuilderControllerGetBuilder']);
+    Route::get('statistic-builder/list-component/{one?}/{area_name?}', ['uses' => 'AdminStatisticBuilderController@getListComponent', 'as' => 'AdminStatisticBuilderControllerGetListComponent']);
     Route::get('statistic-builder/view-component/{one?}', ['uses' => 'AdminStatisticBuilderController@getViewComponent', 'as' => 'AdminStatisticBuilderControllerGetViewComponent']);
     Route::get('statistic-builder/edit-component/{one?}', ['uses' => 'AdminStatisticBuilderController@getEditComponent', 'as' => 'AdminStatisticBuilderControllerGetEditComponent']);
     Route::get('statistic-builder/data-table', ['uses' => 'AdminStatisticBuilderController@getDataTable', 'as' => 'AdminStatisticBuilderControllerGetDataTable']);

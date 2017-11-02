@@ -6,9 +6,9 @@ Route::group([
 ], function () {
     Route::get('privileges/', ['uses' => 'AdminPrivilegesController@getIndex', 'as' => 'AdminPrivilegesControllerGetIndex']);
     Route::get('privileges/add', ['uses' => 'AdminPrivilegesController@getAdd', 'as' => 'AdminPrivilegesControllerGetAdd']);
-    Route::get('privileges/edit/{one?}', ['uses' => 'AdminPrivilegesController@getEdit', 'as' => 'AdminPrivilegesControllerGetEdit']);
+    Route::get('privileges/edit/{id?}', ['uses' => 'AdminPrivilegesController@getEdit', 'as' => 'AdminPrivilegesControllerGetEdit']);
     Route::get('privileges/update-single', ['uses' => 'AdminPrivilegesController@getUpdateSingle', 'as' => 'AdminPrivilegesControllerGetUpdateSingle']);
-    Route::get('privileges/detail/{one?}', ['uses' => 'AdminPrivilegesController@getDetail', 'as' => 'AdminPrivilegesControllerGetDetail']);
+    Route::get('privileges/detail/{id?}', ['uses' => 'AdminPrivilegesController@getDetail', 'as' => 'AdminPrivilegesControllerGetDetail']);
     Route::get('privileges/import-data', ['uses' => 'AdminPrivilegesController@getImportData', 'as' => 'AdminPrivilegesControllerGetImportData']);
     Route::get('privileges/delete/{id?}', ['uses' => 'AdminPrivilegesController@getDelete', 'as' => 'AdminPrivilegesControllerGetDelete']);
     Route::get('privileges/export-data', ['uses' => 'AdminPrivilegesController@getExportData', 'as' => 'AdminPrivilegesControllerGetExportData']);
@@ -17,7 +17,7 @@ Route::group([
     Route::get('privileges/data-modal-datatable', ['uses' => 'AdminPrivilegesController@getDataModalDatatable', 'as' => 'AdminPrivilegesControllerGetDataModalDatatable']);
     Route::get('privileges/delete-image', ['uses' => 'AdminPrivilegesController@getDeleteImage', 'as' => 'AdminPrivilegesControllerGetDeleteImage']);
     Route::post('privileges/add-save', ['uses' => 'AdminPrivilegesController@postAddSave', 'as' => 'AdminPrivilegesControllerPostAddSave',]);
-    Route::post('privileges/edit-save/{one?}', ['uses' => 'AdminPrivilegesController@postEditSave', 'as' => 'AdminPrivilegesControllerPostEditSave',]);
+    Route::post('privileges/edit-save/{id?}', ['uses' => 'AdminPrivilegesController@postEditSave', 'as' => 'AdminPrivilegesControllerPostEditSave',]);
     Route::post('privileges/done-import', ['uses' => 'AdminPrivilegesController@postDoneImport', 'as' => 'AdminPrivilegesControllerPostDoneImport',]);
     Route::post('privileges/do-import-chunk', ['uses' => 'AdminPrivilegesController@postDoImportChunk', 'as' => 'AdminPrivilegesControllerPostDoImportChunk',]);
     Route::post('privileges/do-upload-import-data', ['uses' => 'AdminPrivilegesController@postDoUploadImportData', 'as' => 'AdminPrivilegesControllerPostDoUploadImportData',]);
