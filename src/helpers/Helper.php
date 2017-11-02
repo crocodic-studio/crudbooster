@@ -41,14 +41,17 @@ if (! function_exists('getTablesList')) {
     function getTablesList()
     {
         $tables_list = [];
-        foreach (CRUDBooster::listTables() as $table) {
-            unset($table->migrations);
-            foreach ($table as $key => $label) {
-                if (substr($label, 0, 4) == 'cms_' && $label != 'cms_users') {
-                    continue;
-                }
-                $tables_list[] = $label;
+        foreach (CRUDBooster::listTables() as $tableObj) {
+
+            $tableName = $tableObj->TABLE_NAME;
+            if($tableName == config('database.migrations')){
+                continue;
             }
+            if (substr($tableName, 0, 4) == 'cms_' && $tableName != 'cms_users') {
+                continue;
+            }
+
+            $tables_list[] = $tableName;
         }
 
         return $tables_list;
