@@ -29,7 +29,7 @@ class MenusForm
                 'limit' => null,
                 'ajax_mode' => true,
                 'allow_clear' => true,
-                'multiple' => true,
+                'multiple' => false,
                 'multiple_result_format' => 'JSON',
             ],
         ];
