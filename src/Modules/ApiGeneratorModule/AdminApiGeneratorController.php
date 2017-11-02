@@ -121,16 +121,7 @@ class AdminApiGeneratorController extends CBController
 
         $data['page_title'] = 'API Generator';
         $data['page_menu'] = Route::getCurrentRoute()->getActionName();
-
-        $tables = CRUDBooster::listTables();
-        $tables_list = [];
-        foreach ($tables as $tab) {
-            foreach ($tab as $key => $value) {
-                $tables_list[] = $value;
-            }
-        }
-
-        $data['tables'] = $tables_list;
+        $data['tables'] = getTablesList();
 
         return view('CbApiGen::api_generator', $data);
     }
