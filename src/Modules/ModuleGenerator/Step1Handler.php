@@ -68,7 +68,7 @@ class Step1Handler
                 ->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')
                 ->get();
 
-            Session::put('admin_privileges_roles', $roles);
+            session()->put('admin_privileges_roles', $roles);
 
             return redirect()->route("AdminModulesControllerGetStep2", ["id" => $id]);
         }
