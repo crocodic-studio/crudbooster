@@ -9,6 +9,35 @@
 |
 */
 
+if (! function_exists('is_checked')) {
+    /**
+     * @param $format
+     * @param $value
+     * @param $option_value
+     * @return string
+     */
+    function is_checked($format, $value, $option_value)
+    {
+        switch ($format) {
+            case 'JSON':
+                $valueFormat = json_decode($value, true);
+                $checked = (in_array($option_value, $valueFormat)) ? "checked" : "";
+                break;
+            default:
+            case 'COMMA_SEPARATOR':
+                $valueFormat = explode(', ', $value);
+                $checked = (in_array($option_value, $valueFormat)) ? "checked" : "";
+                break;
+            case 'SEMICOLON_SEPARATOR':
+                $valueFormat = explode('; ', $value);
+                $checked = (in_array($option_value, $valueFormat)) ? "checked" : "";
+                break;
+        }
+
+        return $checked;
+    }
+}
+
 if (! function_exists('parseControllerConfigToArray')) {
     function parseControllerConfigToArray($code)
     {
@@ -44,7 +73,7 @@ if (! function_exists('getTablesList')) {
         foreach (CRUDBooster::listTables() as $tableObj) {
 
             $tableName = $tableObj->TABLE_NAME;
-            if($tableName == config('database.migrations')){
+            if ($tableName == config('database.migrations')) {
                 continue;
             }
             if (substr($tableName, 0, 4) == 'cms_' && $tableName != 'cms_users') {
@@ -230,7 +259,7 @@ if (! function_exists('writeMethodContent')) {
 if (! function_exists('rrmdir')) {
     function rrmdir($dir)
     {
-        if (!is_dir($dir)) {
+        if (! is_dir($dir)) {
             return;
         }
         $objects = scandir($dir);
@@ -293,7 +322,7 @@ if (! function_exists('g')) {
 if (! function_exists('min_var_export')) {
     function min_var_export($input, $indent = "")
     {
-        if (!is_array($input)) {
+        if (! is_array($input)) {
             return var_export($input, true);
         }
         $buffer = [];
@@ -303,6 +332,7 @@ if (! function_exists('min_var_export')) {
         if (count($buffer) == 0) {
             return "[]";
         }
+
         return "[\n".implode(",\n", $buffer)."\n$indent]";
     }
 }
@@ -313,7 +343,7 @@ if (! function_exists('rrmdir')) {
     */
     function rrmdir($dir)
     {
-        if (!is_dir($dir)) {
+        if (! is_dir($dir)) {
             return;
         }
         $objects = scandir($dir);

@@ -15,35 +15,16 @@
                 } else {
                     $option_value = $d;
                 }
-
-                switch ($form['options']['result_format']) {
-                    case 'JSON':
-                        $valueFormat = json_decode($value, true);
-                        $checked = (in_array($option_value, $valueFormat)) ? "checked" : "";
-                        break;
-                    default:
-                    case 'COMMA_SEPARATOR':
-                        $valueFormat = explode(', ', $value);
-                        $checked = (in_array($option_value, $valueFormat)) ? "checked" : "";
-                        break;
-                    case 'SEMICOLON_SEPARATOR':
-                        $valueFormat = explode('; ', $value);
-                        $checked = (in_array($option_value, $valueFormat)) ? "checked" : "";
-                        break;
-                }
-
-                echo "
-        <div data-val='$val' class='checkbox $disabled'>
-            <label>
-                <input type='checkbox' $disabled $checked name='".$name."[]' value='".$option_value."'>
-                ".$option_label."
-            </label>
-        </div>
-        ";
-            }
-
-        endif;
-        ?>
+              ?>
+            <div data-val='{!! $val !!}' class='checkbox {{$disabled}}'>
+                <label>
+                    <input type='checkbox'  {{$disabled}} {!! is_checked($form['options']['result_format'], $value, $option_value) !!}
+                     name='{!! $name !!}[]'
+                     value='{!! $option_value !!}'>
+                     {!! $option_label !!}
+                </label>
+            </div>
+        <?php } endif; ?>
         <div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
         <p class='help-block'>{{ @$form['help'] }}</p>
     </div>
