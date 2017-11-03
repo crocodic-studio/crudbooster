@@ -3,6 +3,7 @@ $namespace = '\crocodicstudio\crudbooster\Modules\AuthModule';
 $prefix = cbConfig('ADMIN_PATH');
 
 Route::group(['middleware' => ['web'], 'prefix' => $prefix, 'namespace' => $namespace], function () {
+    Route::get('/', ['uses' => 'AuthController@getIndex', 'as' => 'AuthControllerGetIndex']);
     Route::post('unlock-screen', ['uses' => 'AuthController@postUnlockScreen', 'as' => 'postUnlockScreen']);
     Route::get('lock-screen', ['uses' => 'AuthController@getLockscreen', 'as' => 'getLockScreen']);
     Route::post('forgot', ['uses' => 'AuthController@postForgot', 'as' => 'postForgot']);

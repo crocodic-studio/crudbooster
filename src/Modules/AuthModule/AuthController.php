@@ -35,7 +35,7 @@ class AuthController extends Controller
         if (\Hash::check(Request::input('password'), $users->password)) {
             Session::put('admin_lock', 0);
 
-            return redirect()->route('AdminControllerGetIndex');
+            return redirect()->route('AuthControllerGetIndex');
         }
         echo "<script>alert('".trans('crudbooster.alert_password_wrong')."');history.go(-1);</script>";
     }
