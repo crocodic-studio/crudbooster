@@ -14,6 +14,7 @@
                 "url": "https://github.com/barryvdh/laravel-dompdf.git",
                 "reference": "3b2235e589616331d68482d61b7763789a2600fe"
             },
+            
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/barryvdh/laravel-dompdf/zipball/3b2235e589616331d68482d61b7763789a2600fe",
