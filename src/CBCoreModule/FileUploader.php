@@ -14,15 +14,8 @@ class FileUploader
         }
         $file = Request::file($name);
         $ext = $file->getClientOriginalExtension();
-        $filesize = $file->getClientSize() / 1024;
-        if ($filesize > cbConfig('UPLOAD_MAX_SIZE', 5000)) {
-            echo "The filesize is too large!";
-            exit;
-        }
-        if (! in_array($ext, explode(',', cbConfig('UPLOAD_TYPES')))) {
-            echo "The filetype is not allowed!";
-            exit;
-        }
+        $this->validateSize($file);
+        $this->validateExtension($ext);
         //Create Directory Monthly
         Storage::makeDirectory(date('Y-m'));
 
@@ -32,5 +25,28 @@ class FileUploader
         Storage::putFileAs($file_path, $file, $filename);
 
         return 'uploads/'.date('Y-m').'/'.$filename;
+    }
+
+    /**
+     * @param $ext
+     */
+    private function validateExtension($ext)
+    {
+        if (! in_array($ext, explode(',', cbConfig('UPLOAD_TYPES')))) {
+            echo "The filetype is not allowed!";
+            exit;
+        }
+    }
+
+    /**
+     * @param $file
+     */
+    private function validateSize($file)
+    {
+        $fileSize = $file->getClientSize() / 1024;
+        if ($fileSize > cbConfig('UPLOAD_MAX_SIZE', 5000)) {
+            echo "The file Size is too large!";
+            exit;
+        }
     }
 }
