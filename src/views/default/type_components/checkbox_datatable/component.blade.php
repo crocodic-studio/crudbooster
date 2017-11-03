@@ -3,8 +3,8 @@
     <label class='control-label col-sm-2'>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
     <div class="{{$col_width?:'col-sm-10'}}">
 
+        @if (@$form['options']['table'])
         <?php
-        if (@$form['options']['table']):
             $field_label = $form['options']['field_label'];
             $field_value = $form['options']['field_value'];
 
@@ -26,7 +26,6 @@
                 $selects_data->orderby($field_value, 'desc');
             }
             $selects_data = $selects_data->get();
-
                 ?>
             @foreach ($selects_data as $d)
                 <div data-val='{!! $val !!}' class='checkbox  {{$disabled}}'>
@@ -40,10 +39,7 @@
                     </label>
                 </div>
             @endforeach
-            <?php
-
-        endif;
-        ?>
+        @endif
         <div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
         <p class='help-block'>{{ @$form['help'] }}</p>
     </div>

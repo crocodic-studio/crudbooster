@@ -9,16 +9,16 @@
             $field_value = $form['options']['field_value'];
 
             $selects_data = DB::select(DB::raw($form['options']['query']));
-            ?>
+        ?>
             @foreach ($selects_data as $d)
-                    <div data-val='{!! $val !!}' class='checkbox  {{$disabled}}'>
-                    <label> <input type='checkbox'
-                      {{$disabled}}
-                    {{ is_checked($form['options']['result_format'], $value, $d->field_value) }}
-                     name='{!! $name !!}[]'
-                     value='{!! $d->$field_value !!}'>
-                    {!! $d->$field_label !!}
-                    </label> </div>
+                <div data-val='{!! $val !!}' class='checkbox  {{ $disabled }}'>
+                <label> <input type='checkbox'
+                  {{ $disabled }}
+                {{ is_checked($form['options']['result_format'], $value, $d->field_value) }}
+                 name='{!! $name !!}[]'
+                 value='{!! $d->$field_value !!}'>
+                {!! $d->$field_label !!}
+                </label> </div>
             @endforeach
         @endif
         <div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
