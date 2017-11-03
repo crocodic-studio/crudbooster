@@ -10,31 +10,23 @@ class Step2Handler
 {
     public function showForm($id)
     {
-        $row = DB::table('cms_moduls')->where('id', $id)->first();
+        $module = DB::table('cms_moduls')->where('id', $id)->first();
 
-        $columns = CRUDBooster::getTableColumns($row->table_name);
+        $columns = CRUDBooster::getTableColumns($module->table_name);
 
-        $tables = CRUDBooster::listTables();
-        $table_list = [];
-        foreach ($tables as $tab) {
-            foreach ($tab as $key => $value) {
-                $table_list[] = $value;
-            }
-        }
-
-        $code = file_get_contents(controller_path($row->controller));
+        $controllerCode = file_get_contents(controller_path($module->controller));
 
         $data = [];
         $data['id'] = $id;
         $data['columns'] = $columns;
-        $data['table_list'] = $table_list;
-        $data['cols'] = parseScaffoldingToArray($code, 'col');
+        //$data['table_list'] = getTablesList();
+        $data['cols'] = parseScaffoldingToArray($controllerCode, 'col');
 
 
         $hooks = ['hookQueryIndex', 'hookRowIndex', 'hookBeforeAdd', 'hookAfterAdd',
             'hookBeforeEdit', 'hookAfterEdit', 'hookBeforeDelete', 'hookAfterDelete',];
         foreach($hooks as $hook){
-            $data[$hook] = readMethodContent($code, $hook);
+            $data[$hook] = readMethodContent($controllerCode, $hook);
         }
 
         return view('CbModulesGen::step2', $data);
