@@ -61,11 +61,8 @@ class Search
      */
     private function limitRows($data)
     {
-        if ($data['limit']) {
-            $this->rows->take($data['limit']);
-        } else {
-            $this->rows->take(10);
-        }
+        $num = $data['limit'] ?: 10;
+        $this->rows->take($num);
     }
 
     /**
