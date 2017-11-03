@@ -7,7 +7,10 @@ use CRUDBooster;
 
 class AdminNotificationsController extends CBController
 {
-    public function cbInit()
+    /**
+     * AdminNotificationsController constructor.
+     */
+    public function __construct()
     {
         $this->table = "cms_notifications";
         $this->primary_key = "id";
@@ -15,7 +18,10 @@ class AdminNotificationsController extends CBController
         $this->limit = 20;
         $this->index_orderby = ["id" => "desc"];
         $this->global_privilege = true;
+    }
 
+    public function cbInit()
+    {
         $this->setButtons();
         $this->makeColumns();
 
@@ -29,7 +35,6 @@ class AdminNotificationsController extends CBController
 
     public function getLatestJson()
     {
-        $this->table = "cms_notifications";
         $rows = $this->table()
             ->where('id_cms_users', 0)
             ->orWhere('id_cms_users', CRUDBooster::myId())
