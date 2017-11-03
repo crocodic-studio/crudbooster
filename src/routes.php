@@ -104,7 +104,7 @@ Route::group([
     'prefix' => cbConfig('ADMIN_PATH'),
     'namespace' => $namespace,
 ], function () use ($namespace) {
-    CRUDBooster::routeController('file-manager', 'AdminFileManagerController', $namespace);
+    //CRUDBooster::routeController('file-manager', 'AdminFileManagerController', $namespace);
     CRUDBooster::routeController('email-templates', 'AdminEmailTemplatesController', $namespace);
     CRUDBooster::routeController('logs', 'AdminLogsController', $namespace);
 });

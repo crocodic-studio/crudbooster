@@ -1,7 +1,8 @@
 <?php
 
-namespace crocodicstudio\crudbooster\controllers;
+namespace crocodicstudio\crudbooster\Modules\FileManagerModule;
 
+use crocodicstudio\crudbooster\controllers\CBController;
 use CRUDBooster;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;
@@ -27,14 +28,14 @@ class AdminFileManagerController extends CBController
         $directories = Storage::directories($currentPath);
         $files = Storage::files($currentPath);
 
-        return view('crudbooster::filemanager.index', ['files' => $files, 'directories' => $directories, 'currentPath' => $currentPath]);
+        return view('CbFileManager::index', ['files' => $files, 'directories' => $directories, 'currentPath' => $currentPath]);
     }
 
     public function postCreateDirectory()
     {
         $path = base64_decode(request('path'));
         $path = ($path) ?: 'uploads';
-        $name = g('name');
+        $name = request('name');
         $name = str_slug($name, '_');
         Storage::makeDirectory($path.'/'.$name);
 
@@ -44,7 +45,7 @@ class AdminFileManagerController extends CBController
     public function postUpload()
     {
         $allowedExtension = explode(',', strtolower(cbConfig('UPLOAD_TYPES')));
-        $path = g('path') ? base64_decode(request('path')) : 'uploads';
+        $path = request('path') ? base64_decode(request('path')) : 'uploads';
         $file = Request::file('userfile');
         if (! $file) {
             return null;

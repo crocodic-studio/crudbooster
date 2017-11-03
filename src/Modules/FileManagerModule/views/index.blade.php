@@ -99,7 +99,7 @@
         </script>
 
 
-        @include('crudbooster::filemanager.partials.create_folder_modal')
+        @include('CbFileManager::partials.create_folder_modal')
 
 
 
@@ -109,7 +109,7 @@
             }
         </script>
 
-        @include('crudbooster::filemanager.partials.file_upload_modal')
+        @include('CbFileManager::partials.file_upload_modal')
 
     @endpush
 @endsection
