@@ -121,7 +121,7 @@ class AdminModulesController extends CBController
     public function getTypeInfo($type = 'text')
     {
         header("Content-Type: application/json");
-        echo file_get_contents($this->componentsTypePath().$type.'/info.json');
+        echo file_get_contents(CRUDBooster::componentsTypePath().$type.'/info.json');
     }
 
     public function postStep4(Step3Handler $handler)
@@ -342,11 +342,6 @@ class AdminModulesController extends CBController
             'exception' => true,
         ];
 
-    }
-
-    private function componentsTypePath()
-    {
-        return base_path('vendor/crocodicstudio/crudbooster/src/views/default/type_components/');
     }
 
     private function createMenuForModule()

@@ -30,7 +30,7 @@ class Step3Handler
         $script_form = $this->setFormScript($post);
         $row = DB::table('cms_moduls')->where('id', request('id'))->first();
         $scripts = implode("\n", $script_form);
-        $raw = file_get_contents($this->controller_path($row->controller));
+        $raw = file_get_contents(controller_path($row->controller));
         $raw = explode("# START FORM DO NOT REMOVE THIS LINE", $raw);
         $rraw = explode("# END FORM DO NOT REMOVE THIS LINE", $raw[1]);
 
@@ -54,7 +54,7 @@ class Step3Handler
         $file_controller .= "            ".trim($bottom_script);
 
         //CREATE FILE CONTROLLER
-        file_put_contents($this->controller_path($row->controller), $file_controller);
+        file_put_contents(controller_path($row->controller), $file_controller);
 
         return redirect(Route("AdminModulesControllerGetStep4", ["id" => request('id')]));
     }
@@ -86,7 +86,7 @@ class Step3Handler
     private function getComponentTypes()
     {
         $types = [];
-        foreach (glob($this->componentsTypePath().'*', GLOB_ONLYDIR) as $dir) {
+        foreach (glob(CRUDBooster::componentsTypePath().'*', GLOB_ONLYDIR) as $dir) {
             $types[] = basename($dir);
         }
 
@@ -140,7 +140,7 @@ class Step3Handler
             $form['help'] = $help[$i];
             $form['style'] = $style[$i];
 
-            $info = file_get_contents($this->componentsTypePath().$type[$i].'/info.json');
+            $info = file_get_contents(CRUDBooster::componentsTypePath().$type[$i].'/info.json');
             $info = json_decode($info, true);
             if (count($info['options'])) {
                 $options = [];

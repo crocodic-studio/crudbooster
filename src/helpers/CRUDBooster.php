@@ -1166,4 +1166,9 @@ class CRUDBooster
             }
         }
     }
+
+    public static function componentsTypePath()
+    {
+        return base_path('vendor/crocodicstudio/crudbooster/src/views/default/type_components/');
+    }
 }
