@@ -22,7 +22,7 @@ class Step2Handler
             }
         }
 
-        $code = file_get_contents(controller_path($row->controller.'.php'));
+        $code = file_get_contents(controller_path($row->controller));
 
         $data = [];
         $data['id'] = $id;
