@@ -97,7 +97,7 @@ class AuthController extends Controller
     public function getForgot()
     {
         if (CRUDBooster::myId()) {
-            return redirect()->action(AuthController::class.'@getIndex');
+            return redirect()->action('\\'.AuthController::class.'@getIndex');
         }
 
         return view('CbAuth::forgot');
