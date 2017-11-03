@@ -29,6 +29,7 @@ class AdminNotificationsController extends CBController
 
     public function getLatestJson()
     {
+        $this->table = "cms_notifications";
         $rows = $this->table()
             ->where('id_cms_users', 0)
             ->orWhere('id_cms_users', CRUDBooster::myId())
