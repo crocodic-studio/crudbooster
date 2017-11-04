@@ -37,6 +37,15 @@
                     @endif
                     <div class="box-body" id="parent-form-area">
 
+                        @php
+                            $defaluts = [ 'type' => 'text', 'required' => '', 'readonly' => '', 'disabled' => '', 'value' => '', 'validation' => [], 'width' => 'col-sm-9' ];
+                            foreach($forms as $index => $form) {
+                                $forms[$index] = array_merge($defaluts, $form);
+                            }
+                        @endphp
+
+                        @include('crudbooster::default._form_body.component_assets', ['types' => array_column($forms,'type')])
+
                         @if($command == 'detail')
                             @include("crudbooster::default.form_detail")
                         @else

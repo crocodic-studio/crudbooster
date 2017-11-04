@@ -1,11 +1,3 @@
-@php
-$defaluts = [ 'type' => 'text', 'required' => '', 'readonly' => '', 'disabled' => '', 'value' => '', 'validation' => [], 'width' => 'col-sm-9' ];
-foreach($forms as $index => $form) {
-    $forms[$index] = array_merge($defaluts, $form);
-}
-@endphp
-
-@include('default._form_body.component_assets', ['types' => array_column($forms,'type')])
 <?php
     $header_group_class = "header-group-0";
 ?>
