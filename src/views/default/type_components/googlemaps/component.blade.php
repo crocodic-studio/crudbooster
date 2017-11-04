@@ -12,9 +12,9 @@
             <input type="hidden" name="input-longitude-{{$name}}" id="input-longitude-{{$name}}"
                    value="{{ ($form['options']['longitude'])?$row->{$form['options']['longitude']}:0 }}">
             <span class="input-group-btn">
-						        <button class="btn btn-primary" onclick="showMapModal{{$name}}()" type="button"><i
-                                            class='fa fa-map-marker'></i> Browse Map</button>
-						      </span>
+            <button class="btn btn-primary" onclick="showMapModal{{$name}}()" type="button">
+                <i class='fa fa-map-marker'></i> Browse Map</button>
+          </span>
         </div><!-- /input-group -->
 
 

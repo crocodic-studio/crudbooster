@@ -395,3 +395,18 @@ if (! function_exists('cbConfig')) {
         return config('crudbooster.'.$key, $default);
     }
 }
+if (! function_exists('makeValidationForHTML')) {
+    function makeValidationForHTML($rules){
+        $validation = array();
+        $validation_raw = $rules ? explode('|', $rules) : [];
+        foreach($validation_raw as $vr) {
+            $vr_a = explode(':',$vr);
+            if($vr_a[1]) {
+                $validation[$vr_a[0]] = $vr_a[1];
+            }else{
+                $validation[$vr] = true;
+            }
+        }
+        return $validation;
+    }
+}

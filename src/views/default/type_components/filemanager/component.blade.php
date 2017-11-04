@@ -32,11 +32,15 @@
                         </a>
                         &nbsp;<a class='btn btn-danger btn-delete btn-xs'
                                  onclick='swal({   title: "{{cbTrans("delete_title_confirm")}}",   text: "{{cbTrans("delete_description_confirm")}}",   type: "warning",   showCancelButton: true,   confirmButtonColor: "#DD6B55",   confirmButtonText: "{{cbTrans("confirmation_yes")}}",cancelButtonText: "{{cbTrans('button_cancel')}}",   closeOnConfirm: false }, function(){  location.href="{{url($mainpath."/delete-filemanager?file=".$row->{$name}."&id=".$row->id."&column=".$name)}}" });'
-                                 href='javascript:void(0)' title='{{cbTrans('text_delete')}}'><i class='fa fa-ban'></i></a>
+                                 href='javascript:void(0)' title='{{cbTrans('text_delete')}}'>
+                            <i class='fa fa-ban'></i>
+                        </a>
                     </div>@endif
             @else
-                <p><a data-lightbox="roadtrip" href="{{ ($value)?asset($value):'' }}"><img id='holder-{{$name}}'
-                                                                                           {{ ($value)?'src='.asset($value):'' }} style="margin-top:15px;max-height:100px;"></a>
+                <p>
+                    <a data-lightbox="roadtrip" href="{{ ($value)?asset($value):'' }}">
+                        <img id='holder-{{$name}}' {{ ($value)?'src='.asset($value):'' }} style="margin-top:15px;max-height:100px;">
+                    </a>
                 </p>
             @endif
 
