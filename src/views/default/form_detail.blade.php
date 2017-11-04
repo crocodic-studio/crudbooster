@@ -10,14 +10,12 @@
 <div class='table-responsive'>
     <table id='table-detail' class='table table-striped'>
 
+        @foreach($forms as $index => $form)
         <?php
-        foreach($forms as $index=>$form):
-
+        $form = array_merge(['showInDetail' => true, 'value' => '', 'join' => ''], $form);
         $name = $form['name'];
-        @$join = $form['join'];
-        @$value = (isset($form['value'])) ? $form['value'] : '';
-        @$value = (isset($row->{$name})) ? $row->{$name} : $value;
-        @$showInDetail = (isset($form['showInDetail'])) ? $form['showInDetail'] : true;
+        $value = (isset($row->{$name})) ? $row->{$name} : $value;
+        $showInDetail = $form['showInDetail'];
 
         if ($showInDetail == FALSE) {
             continue;
@@ -32,11 +30,11 @@
         }
 
         if (isset($form['default_value'])) {
-            @$value = $form['default_value'];
+            $value = $form['default_value'];
         }
 
-        if ($join && @$row) {
-            $join_arr = explode(',', $join);
+        if ($form['join'] && @$row) {
+            $join_arr = explode(',', $form['join']);
             array_walk($join_arr, 'trim');
             $join_table = $join_arr[0];
             $join_title = $join_arr[1];
@@ -46,12 +44,14 @@
             $value = @$join_query_{$join_table}->{$join_title};
         }
 
-        $type = @$form['type'] ?: 'text';
-        $required = (@$form['required']) ? "required" : "";
-        $readonly = (@$form['readonly']) ? "readonly" : "";
-        $disabled = (@$form['disabled']) ? "disabled" : "";
+        $required = $form['required'] ? "required" : "";
+        $readonly = $form['readonly'] ? "readonly" : "";
+        $disabled = $form['disabled'] ? "disabled" : "";
         $jquery = @$form['jquery'];
-        $placeholder = (@$form['placeholder']) ? "placeholder='".$form['placeholder']."'" : "";
+        $placeholder = "placeholder='{$form['placeholder']}'";
+
+
+
         $file_location = base_path('vendor/crocodicstudio/crudbooster/src/views/default/type_components/'.$type.'/component_detail.blade.php');
         $user_location = resource_path('views/vendor/crudbooster/type_components/'.$type.'/component_detail.blade.php');
 
@@ -82,7 +82,7 @@
         @endif
 
 
-        <?php endforeach;?>
+        @endforeach
 
     </table>
 </div>

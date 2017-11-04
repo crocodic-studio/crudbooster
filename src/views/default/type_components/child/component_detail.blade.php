@@ -39,8 +39,8 @@
                     }
 
                     $data_child = $data_child->orderby($form['table'].'.id', 'desc')->get();
-                    foreach($data_child as $d):
                     ?>
+                    @foreach($data_child as $d)
                     <tr>
                         @foreach($form['columns'] as $col)
                             <td class="{{$col['name']}}">
@@ -88,7 +88,7 @@
 
                     </tr>
 
-                    <?php endforeach;?>
+                    @endforeach
 
                     @if(count($data_child)==0)
                         <tr class="trNull">
