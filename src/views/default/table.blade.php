@@ -51,12 +51,13 @@
     <table id='table_dashboard' class="table table-hover table-striped table-bordered">
         <thead>
         <tr class="active">
-            <?php if($button_bulk_action):?>
-            <th width='3%'><input type='checkbox' id='checkall'/></th>
-            <?php endif;?>
-            <?php if($show_numbering):?>
-            <th width="1%">{{ cbTrans('no') }}</th>
-            <?php endif;?>
+            @if($button_bulk_action)
+                <th width='3%'><input type='checkbox' id='checkall'/></th>
+            @endif
+            @if($show_numbering)
+                <th width="1%">{{ cbTrans('no') }}</th>
+            @endif
+
             <?php
             foreach ($columns as $col) {
                 if ($col['visible'] === FALSE) continue;
@@ -103,14 +104,13 @@
         <tbody>
         @if(count($result)==0)
             <tr class='warning'>
-                <?php if($button_bulk_action && $show_numbering):?>
-                <td colspan='{{count($columns)+3}}' align="center">
-                <?php elseif( ($button_bulk_action && ! $show_numbering) || (! $button_bulk_action && $show_numbering) ):?>
-                <td colspan='{{count($columns)+2}}' align="center">
-                <?php else:?>
-                <td colspan='{{count($columns)+1}}' align="center">
-                    <?php endif;?>
-
+                @if($button_bulk_action && $show_numbering)
+                    <td colspan='{{count($columns)+3}}' align="center">
+                @elseif( ($button_bulk_action && ! $show_numbering) || (! $button_bulk_action && $show_numbering) )
+                    <td colspan='{{count($columns)+2}}' align="center">
+                @else
+                    <td colspan='{{count($columns)+1}}' align="center">
+                @endif
                     <i class='fa fa-search'></i> {{cbTrans("table_data_not_found")}}
                 </td>
             </tr>
@@ -134,7 +134,7 @@
                     }");
                     ?>
                 @endforeach
-                <?php echo "<tr class='$tr_color'>";?>
+               <tr class='{!! $tr_color !!}'>
             @else
                 <tr>
                     @endif
@@ -149,13 +149,13 @@
 
         <tfoot>
         <tr>
-            <?php if($button_bulk_action):?>
-            <th>&nbsp;</th>
-            <?php endif;?>
+            @if($button_bulk_action)
+                <th>&nbsp;</th>
+            @endif
 
-            <?php if($show_numbering):?>
-            <th>&nbsp;</th>
-            <?php endif;?>
+            @if($show_numbering)
+                <th>&nbsp;</th>
+            @endif
 
             <?php
             foreach ($columns as $col) {
