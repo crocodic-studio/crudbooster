@@ -6,7 +6,7 @@
     @include("crudbooster::default._index.statistics" , ['index_statistic' => $index_statistic])
 
 
-    @if(!is_null($pre_index_html) && !empty($pre_index_html))
+    @if(!empty($pre_index_html))
         {!! $pre_index_html !!}
     @endif
 
@@ -54,7 +54,7 @@
         </div>
     </div>
 
-    @if(!is_null($post_index_html) && !empty($post_index_html))
+    @if(!empty($post_index_html))
         {!! $post_index_html !!}
     @endif
 
