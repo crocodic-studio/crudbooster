@@ -58,80 +58,24 @@
                 @if($form['options']['multiple']==false)
                     <option value=''>{{cbTrans('text_prefix_option')}} {{$form['label']}}</option>
                 @endif
-                <?php
 
-                $result = DB::select(DB::raw($query));
-                $rawvalue = $value;
+                @foreach (DB::select(DB::raw($query)) as $row)
+                    <option {{findSelected($value, $form, $row->$select_value, $value)}} value='{!! $row->$select_value !!}'>{!!  $row->$select_label !!}</option>
+                @endforeach
 
-                foreach ($result as $r) {
-                    $option_label = $r->$select_label;
-                    $option_value = $r->$select_value;
-                    if ($rawvalue) {
-                        if ($form['options']['multiple'] == true) {
-                            switch ($form['options']['multiple_result_format']) {
-                                case 'JSON':
-                                    $value = json_decode($rawvalue, true);
-                                    $selected = (in_array($option_value, $value)) ? "selected" : "";
-                                    break;
-                                default:
-                                case 'COMMA_SEPARATOR':
-                                    $value = explode(', ', $rawvalue);
-                                    $selected = (in_array($option_value, $value)) ? "selected" : "";
-                                    break;
-                                case 'SEMICOLON_SEPARATOR':
-                                    $value = explode('; ', $rawvalue);
-                                    $selected = (in_array($option_value, $value)) ? "selected" : "";
-                                    break;
-                            }
-                        } else {
-
-                            $selected = ($option_value == $value) ? "selected" : "";
-                        }
-                    } else {
-                        $selected = '';
-                    }
-
-                    echo "<option $selected value='$option_value'>$option_label</option>";
-                }
-                ?>
             <!--end-datatable-ajax-->
             @else
                 @if($value)
-                    @php
-                        $rawvalue = $value;
-                        $result = DB::select(DB::raw($query));
-                    @endphp
-                    @foreach($result as $r)
-                        @php
-                            $option_value = $r->$select_value;
-                            if($form['options']['multiple']==true) {
-                                switch ($form['options']['multiple_result_format']) {
-                                    case 'JSON':
-                                        $value = json_decode($rawvalue,true)?:[];
-                                        $selected = (in_array($option_value, $value))?"selected":"";
-                                        break;
-                                    default:
-                                    case 'COMMA_SEPARATOR':
-                                        $value = explode(', ',$rawvalue);
-                                        $selected = (in_array($option_value,$value))?"selected":"";
-                                        break;
-                                    case 'SEMICOLON_SEPARATOR':
-                                        $value = explode('; ', $rawvalue);
-                                        $selected = (in_array($option_value, $value))?"selected":"";
-                                        break;
-                                }
-                            }else{
-                                $selected = ($option_value == $value)?"selected":"";
-                            }
-                        @endphp
-                        <option value="{{$option_value}}" {{$selected}} >{{$r->$select_label}}</option>
+                    @foreach(DB::select(DB::raw($query)) as $row)
+                        <option value="{{$row->$select_value}}" {!! findSelected($value, $form, $row->$select_value, $value) !!} > {{ $row->$select_label }} </option>
                     @endforeach
                 @endif
             @endif
         </select>
+
         <div class="text-danger">
             {!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}
-        </div><!--end-text-danger-->
+        </div>
         <p class='help-block'>{{ @$form['help'] }}</p>
 
     </div>

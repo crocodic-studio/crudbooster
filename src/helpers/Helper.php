@@ -396,17 +396,56 @@ if (! function_exists('cbConfig')) {
     }
 }
 if (! function_exists('makeValidationForHTML')) {
-    function makeValidationForHTML($rules){
-        $validation = array();
+    function makeValidationForHTML($rules)
+    {
+        $validation = [];
         $validation_raw = $rules ? explode('|', $rules) : [];
-        foreach($validation_raw as $vr) {
-            $vr_a = explode(':',$vr);
-            if($vr_a[1]) {
+        foreach ($validation_raw as $vr) {
+            $vr_a = explode(':', $vr);
+            if ($vr_a[1]) {
                 $validation[$vr_a[0]] = $vr_a[1];
-            }else{
+            } else {
                 $validation[$vr] = true;
             }
         }
+
         return $validation;
+    }
+}
+
+if (! function_exists('findSelected')) {
+    /**
+     * @param $rawvalue
+     * @param $form
+     * @param $option_value
+     * @param $value
+     * @return string
+     */
+    function findSelected($rawvalue, $form, $option_value, $value)
+    {
+        if (! $rawvalue) {
+            return '';
+        }
+
+        if ($form['options']['multiple'] !== true) {
+            return ($option_value == $value) ? "selected" : "";
+        }
+
+        switch ($form['options']['multiple_result_format']) {
+            case 'JSON':
+                $value = json_decode($rawvalue, true) ?: [];
+                $selected = (in_array($option_value, $value)) ? "selected" : "";
+                break;
+            default:
+            case 'COMMA_SEPARATOR':
+                $value = explode(', ', $rawvalue);
+                $selected = (in_array($option_value, $value)) ? "selected" : "";
+                break;
+            case 'SEMICOLON_SEPARATOR':
+                $value = explode('; ', $rawvalue);
+                $selected = (in_array($option_value, $value)) ? "selected" : "";
+                break;
+        }
+        return $selected;
     }
 }
