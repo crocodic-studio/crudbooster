@@ -10,28 +10,7 @@
   </span>
 </div><!-- /input-group -->
 
-<div id='modal-datamodal-{{$name_column}}' class="modal"
-     tabindex="-1" role="dialog">
-    <div class="modal-dialog {{ $col['datamodal_size']=='large'?'modal-lg':'' }} "
-         role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close"
-                        data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title"><i
-                            class='fa fa-search'></i> {{cbTrans('datamodal_browse_data')}} {{$col['label']}}
-                </h4>
-            </div>
-            <div class="modal-body">
-                <iframe id='iframe-modal-{{$name_column}}'
-                        style="border:0;height: 430px;width: 100%"
-                        src=""></iframe>
-            </div>
-
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+@include('crudbooster::default.type_components.modal_dialog', ['name' => $name_column, 'label'=> $col['label'], 'size' => $col['datamodal_size']])
 
 @push('bottom')
     <script type="text/javascript">
