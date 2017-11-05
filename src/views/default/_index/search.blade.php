@@ -7,7 +7,6 @@
         <div class="input-group-btn">
             @if(Request::get('q'))
                 <?php
-                $parameters = Request::all();
                 unset($parameters['q']);
                 $build_query = urldecode(http_build_query($parameters));
                 $build_query = ($build_query) ? "?".$build_query : "";

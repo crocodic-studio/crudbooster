@@ -2,9 +2,9 @@
 
 @section('content')
 
-    @if($index_statistic)
-        @include("crudbooster::default._index.statistics")
-    @endif
+
+    @include("crudbooster::default._index.statistics" , ['index_statistic' => $index_statistic])
+
 
     @if(!is_null($pre_index_html) && !empty($pre_index_html))
         {!! $pre_index_html !!}
@@ -20,9 +20,9 @@
         </p>
     @endif
 
-    @if($parent_table)
-        @include("crudbooster::default._index.parent_table")
-    @endif
+
+    @include("crudbooster::default._index.parent_table", ['parent_table' => $parent_table])
+
 
     <div class="box">
         <div class="box-header">
@@ -40,9 +40,9 @@
                     </a>
                 @endif
 
-            @include("crudbooster::default._index.search")
+            @include("crudbooster::default._index.search", ['parameters' => Request::all()])
 
-            @include("crudbooster::default._index.pagination_select")
+            @include("crudbooster::default._index.pagination_select", ['limit' => $limit ])
 
             </div>
 

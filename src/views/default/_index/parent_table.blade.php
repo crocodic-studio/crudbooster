@@ -1,3 +1,4 @@
+@if($parent_table)
 <div class="box box-default">
     <div class="box-body table-responsive no-padding">
         <table class='table table-bordered'>
@@ -23,3 +24,4 @@
         </table>
     </div>
 </div>
+@endif
