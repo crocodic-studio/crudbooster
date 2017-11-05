@@ -88,7 +88,7 @@
                             $option_label = str_replace("[".$k."]", $v, $option_label);
                         }
                     }
-                    echo "<option ".findSelected($value, $form, $option_value, $value)." value='$option_value'>$option_label</option>";
+                    echo "<option ".findSelected($value, $form, $option_value)." value='$option_value'>$option_label</option>";
                 }
                 ?>
             <!--end-datatable-ajax-->
@@ -112,7 +112,7 @@
                                 $option_label = $r->$select_label;
                             }
                         @endphp
-                        <option value="{{$option_value}}" {{findSelected($value, $form, $option_value, $value)}} >{{$option_label}}</option>
+                        <option value="{{$option_value}}" {{findSelected($value, $form, $option_value)}} >{{$option_label}}</option>
                     @endforeach
                 @endif
             @endif

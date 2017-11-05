@@ -421,8 +421,9 @@ if (! function_exists('findSelected')) {
      * @param $value
      * @return string
      */
-    function findSelected($rawvalue, $form, $option_value, $value)
+    function findSelected($rawvalue, $form, $option_value)
     {
+        $value = $rawvalue;
         if (! $rawvalue) {
             return '';
         }

@@ -60,14 +60,14 @@
                 @endif
 
                 @foreach (DB::select(DB::raw($query)) as $row)
-                    <option {{findSelected($value, $form, $row->$select_value, $value)}} value='{!! $row->$select_value !!}'>{!!  $row->$select_label !!}</option>
+                    <option {{findSelected($value, $form, $row->$select_value)}} value='{!! $row->$select_value !!}'>{!!  $row->$select_label !!}</option>
                 @endforeach
 
             <!--end-datatable-ajax-->
             @else
                 @if($value)
                     @foreach(DB::select(DB::raw($query)) as $row)
-                        <option value="{{$row->$select_value}}" {!! findSelected($value, $form, $row->$select_value, $value) !!} > {{ $row->$select_label }} </option>
+                        <option value="{{$row->$select_value}}" {!! findSelected($value, $form, $row->$select_value) !!} > {{ $row->$select_label }} </option>
                     @endforeach
                 @endif
             @endif
