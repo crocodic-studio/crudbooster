@@ -4,13 +4,12 @@
 
     @foreach($forms as $index => $formInput)
         @php
-            $name 		= $formInput['name'];
-            $join 		= $formInput['join'];
-            $value		= (isset($formInput['value']))?$formInput['value']:'';
-            $value		= (isset($row->{$name}))?$row->{$name}:$value;
-
-            $old 		= old($name);
-            $value 		= (!empty($old))?$old:$value;
+            $name = $formInput['name'];
+            $join = $formInput['join'];
+            $value= $formInput['value'] ?: '';
+            $value= (isset($row->{$name}))?$row->{$name}:$value;
+            $old = old($name);
+            $value = (!empty($old))?$old:$value;
 
             $validation = makeValidationForHTML($formInput['validation']);
 
@@ -23,8 +22,8 @@
             }
 
             $type = $formInput['type'];
-            $readonly = $formInput['readonly']?'readonly':'';
-            $disabled = $formInput['disabled']?'disabled':'';
+            $readonly = $formInput['readonly'] ? 'readonly' : '';
+            $disabled = $formInput['disabled'] ? 'disabled' : '';
             $placeholder  = "placeholder='{$formInput['placeholder']}'";
             $col_width = $formInput['width'];
 

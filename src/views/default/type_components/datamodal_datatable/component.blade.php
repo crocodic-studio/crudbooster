@@ -1,15 +1,15 @@
+<?php
+$dm_label = $form['options']['column_label'];
+$dm_value = $form['options']['column_value'];
+$dm_table = $form['options']['table'];
+$datamodal_value = DB::table($dm_table)->where($dm_value, $value)->first()->$dm_label;
+?>
 <div class='form-group form-datepicker {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}'
      id='form-group-{{$name}}' style="{{@$form['style']}}">
     <label class='control-label col-sm-2'>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
 
     <div class="{{$col_width?:'col-sm-10'}}">
 
-        <?php
-        $dm_label = $form['options']['column_label'];
-        $dm_value = $form['options']['column_value'];
-        $dm_table = $form['options']['table'];
-        $datamodal_value = DB::table($dm_table)->where($dm_value, $value)->first()->$dm_label;
-        ?>
 
         <div id='{{$name}}' class="input-group">
             <input type="hidden" name="{{$name}}" id='datamodal-input-value-{{$name}}' value="{{$value}}">
