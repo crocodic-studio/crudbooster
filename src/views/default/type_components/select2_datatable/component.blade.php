@@ -77,45 +77,18 @@
                 }
 
                 $result = $result->get();
-                $rawvalue = $value;
 
-                foreach ($result as $r) {
-                    $option_label = $r->select2_text;
-                    $option_value = $r->{$form['options']['field_value']};
+                foreach ($result as $row) {
+                    $option_label = $row->select2_text;
+                    $option_value = $row->{$form['options']['field_value']};
 
                     if ($form['options']['format']) {
                         $option_label = $form['options']['format'];
-                        foreach ($r as $k => $v) {
+                        foreach ($row as $k => $v) {
                             $option_label = str_replace("[".$k."]", $v, $option_label);
                         }
                     }
-
-                    if ($rawvalue) {
-                        if ($form['options']['multiple'] == true) {
-                            switch ($form['options']['multiple_result_format']) {
-                                case 'JSON':
-                                    $value = json_decode($rawvalue, true);
-                                    $selected = (in_array($option_value, $value)) ? "selected" : "";
-                                    break;
-                                default:
-                                case 'COMMA_SEPARATOR':
-                                    $value = explode(', ', $rawvalue);
-                                    $selected = (in_array($option_value, $value)) ? "selected" : "";
-                                    break;
-                                case 'SEMICOLON_SEPARATOR':
-                                    $value = explode('; ', $rawvalue);
-                                    $selected = (in_array($option_value, $value)) ? "selected" : "";
-                                    break;
-                            }
-                        } else {
-
-                            $selected = ($option_value == $value) ? "selected" : "";
-                        }
-                    } else {
-                        $selected = '';
-                    }
-
-                    echo "<option $selected value='$option_value'>$option_label</option>";
+                    echo "<option ".findSelected($value, $form, $option_value, $value)." value='$option_value'>$option_label</option>";
                 }
                 ?>
             <!--end-datatable-ajax-->
@@ -138,28 +111,8 @@
                             }else{
                                 $option_label = $r->$select_label;
                             }
-
-                            if($form['options']['multiple']==true) {
-                                switch ($form['options']['multiple_result_format']) {
-                                    case 'JSON':
-                                        $value = json_decode($rawvalue,true)?:[];
-                                        $selected = (in_array($option_value, $value))?"selected":"";
-                                        break;
-                                    default:
-                                    case 'COMMA_SEPARATOR':
-                                        $value = explode(', ',$rawvalue);
-                                        $selected = (in_array($option_value,$value))?"selected":"";
-                                        break;
-                                    case 'SEMICOLON_SEPARATOR':
-                                        $value = explode('; ', $rawvalue);
-                                        $selected = (in_array($option_value, $value))?"selected":"";
-                                        break;
-                                }
-                            }else{
-                                $selected = ($option_value == $value)?"selected":"";
-                            }
                         @endphp
-                        <option value="{{$option_value}}" {{$selected}} >{{$option_label}}</option>
+                        <option value="{{$option_value}}" {{findSelected($value, $form, $option_value, $value)}} >{{$option_label}}</option>
                     @endforeach
                 @endif
             @endif
