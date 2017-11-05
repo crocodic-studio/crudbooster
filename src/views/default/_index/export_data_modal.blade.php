@@ -4,7 +4,8 @@
 
             <div class="modal-header">
                 <button class="close" aria-label="Close" type="button" data-dismiss="modal">
-                    <span aria-hidden="true">×</span></button>
+                    <span aria-hidden="true">×</span>
+                </button>
                 <h4 class="modal-title"><i class='fa fa-download'></i> {{cbTrans("export_dialog_title")}}</h4>
             </div>
 
@@ -31,9 +32,11 @@
                     <div class='form-group'>
                         <label>{{cbTrans("export_dialog_columns")}}</label><br/>
                         @foreach($columns as $col)
-                            <div class='checkbox inline'><label>
+                            <div class='checkbox inline'>
+                                <label>
                                     <input type='checkbox' checked name='columns[]' value='{{$col["name"]}}'>{{$col["label"]}}
-                                </label></div>
+                                </label>
+                            </div>
                         @endforeach
                     </div>
 
@@ -46,8 +49,8 @@
                         </select>
                     </div>
 
-                    <p><a href='javascript:void(0)' class='toggle_advanced_report'><i
-                                    class='fa fa-plus-square-o'></i> {{cbTrans("export_dialog_show_advanced")}}</a>
+                    <p><a href='javascript:void(0)' class='toggle_advanced_report'>
+                            <i class='fa fa-plus-square-o'></i> {{cbTrans("export_dialog_show_advanced")}}</a>
                     </p>
 
                     <div id='advanced_export' style='display: none'>
@@ -69,8 +72,7 @@
                                     Ledger
                                 </option>
                                 @for($i = 0;$i <= 8;$i++)
-                                    <?php $select = ($setting->default_paper_size == 'A'.$i) ? "selected" : ""; ?>
-                                    <option  {!! $select !!} value='A{{$i}}'>A{{$i}}</option>
+                                    <option  {!! ($setting->default_paper_size == 'A'.$i) ? "selected" : "" !!} value='A{{$i}}'>A{{$i}}</option>
                                 @endfor
 
                                 @for($i = 0;$i <= 10;$i++)
