@@ -56,65 +56,9 @@
             @endphp
 
             @if($form['options']['ajax_mode'] == false)
-                @if($form['options']['multiple']==false)
-                    <option value=''>{{cbTrans('text_prefix_option')}} {{$form['label']}}</option>
-                @endif
-                <?php
-
-                $result = DB::table($select_table)->select($select_value, $select_label);
-                $result->addSelect(DB::raw("CONCAT(".$select_label.") as select2_text"));
-                if ($select_where) {
-                    $result->whereraw($select_where);
-                }
-                if ($form['options']['sql_orderby']) {
-                    $result->orderByRaw($form['options']['sql_orderby']);
-                } else {
-                    $result->orderBy('select2_text', 'asc');
-                }
-
-                if (Schema::hasColumn($form['options']['table'], 'deleted_at')) {
-                    $result->whereNull('deleted_at');
-                }
-
-                $result = $result->get();
-
-                foreach ($result as $row) {
-                    $option_label = $row->select2_text;
-                    $option_value = $row->{$form['options']['field_value']};
-
-                    if ($form['options']['format']) {
-                        $option_label = $form['options']['format'];
-                        foreach ($row as $k => $v) {
-                            $option_label = str_replace("[".$k."]", $v, $option_label);
-                        }
-                    }
-                    echo "<option ".findSelected($value, $form, $option_value)." value='$option_value'>$option_label</option>";
-                }
-                ?>
-            <!--end-datatable-ajax-->
+                @include('crudbooster::default.type_components.select2_datatable.partials.severside_options')
             @else
-                @if($value)
-                    @php
-                        $rawvalue = $value;
-                        $data = DB::table($select_table);
-                        $result = $data->get();
-                    @endphp
-                    @foreach($result as $r)
-                        @php
-                            $option_value = $r->$select_value;
 
-                            if($form['options']['format']) {
-                                $option_label = $form['options']['format'];
-                                foreach($r as $k=>$v) {
-                                    $option_label = str_replace("[".$k."]", $v, $option_label);
-                                }
-                            }else{
-                                $option_label = $r->$select_label;
-                            }
-                        @endphp
-                        <option value="{{$option_value}}" {{findSelected($value, $form, $option_value)}} >{{$option_label}}</option>
-                    @endforeach
-                @endif
             @endif
         </select>
         <div class="text-danger">
