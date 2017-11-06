@@ -7,8 +7,8 @@
             $label = $formInput['label'];
             $name = $formInput['name'];
             $join = $formInput['join'];
-            $value= $formInput['value'] ?: '';
-            $value= (isset($row->{$name}))?$row->{$name}:$value;
+            $value = $formInput['value'] ?: '';
+            $value = (isset($row->{$name}))?$row->{$name}:$value;
             $old = old($name);
             $value = (!empty($old))?$old:$value;
 
@@ -38,6 +38,6 @@
             }
 
         @endphp
-    @include('crudbooster::default._form_body.component', ['form' => $formInput])
+        @include('crudbooster::default._form_body.component', ['form' => $formInput])
 
     @endforeach

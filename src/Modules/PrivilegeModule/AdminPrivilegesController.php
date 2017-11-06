@@ -10,11 +10,18 @@ use CRUDBooster;
 
 class AdminPrivilegesController extends CBController
 {
-    public function cbInit()
+    /**
+     * AdminPrivilegesController constructor.
+     */
+    public function __construct()
     {
         $this->table = 'cms_privileges';
         $this->primary_key = 'id';
         $this->title_field = "name";
+    }
+
+    public function cbInit()
+    {
         $this->setButtons();
 
         $this->col = [];
@@ -58,7 +65,7 @@ class AdminPrivilegesController extends CBController
 
     public function postAddSave()
     {
-        $this->cbLoader();
+        //$this->cbLoader();
 
         $this->validation();
         $this->inputAssignment();
@@ -101,7 +108,7 @@ class AdminPrivilegesController extends CBController
 
     public function postEditSave($id)
     {
-        $this->cbLoader();
+        //$this->cbLoader();
 
         $row = CRUDBooster::first($this->table, $id);
 
