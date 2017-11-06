@@ -93,7 +93,7 @@ class CrudboosterInstallationCommand extends Command {
             app('files')->link(__DIR__.'/../assets',public_path('vendor/crudbooster'));
         }
 
-		if($this->confirm('Do you have setting the database configuration at .env ?')) {
+		//if($this->confirm('Do you have setting the database configuration at .env ?')) {
 
 			$this->info('Publishing CRUDBooster needs file...');
 			$this->callSilent('vendor:publish');	
@@ -117,10 +117,10 @@ class CrudboosterInstallationCommand extends Command {
 			$this->call('optimize');
 			
 			$this->info('Installing CRUDBooster Is Completed ! Thank You :)');
-		}else{
+		/*}else{
 			$this->info('Setup Aborted !');
 			$this->info('Please setting the database configuration for first !');
-		}
+		}*/
 
 		$this->footer();
 	}
