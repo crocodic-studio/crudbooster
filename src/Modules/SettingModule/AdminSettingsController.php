@@ -10,10 +10,17 @@ use CRUDBooster;
 
 class AdminSettingsController extends CBController
 {
-    public function cbInit()
+    /**
+     * AdminSettingsController constructor.
+     */
+    public function __construct()
     {
         $this->table = 'cms_settings';
         $this->title_field = "name";
+    }
+
+    public function cbInit()
+    {
         $this->index_orderby = ['name' => 'asc'];
 
         $this->setButtons();
