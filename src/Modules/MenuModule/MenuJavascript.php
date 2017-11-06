@@ -83,6 +83,7 @@ class MenuJavascript
 
 						$('#form-group-path').show();
 						$('#form-group-module_slug,#form-group-statistic_slug').hide();
+                        $('#statistic_slug,#path').prop('required',false);
 					}else if (n == 'Route') {
 						$('input[name=path]').attr('placeholder','Please enter the Route');
                         $('#statistic_slug,#path').prop('required',false);
