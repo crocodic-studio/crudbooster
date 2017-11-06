@@ -85,7 +85,7 @@ class MenuJavascript
 						$('#form-group-module_slug,#form-group-statistic_slug').hide();
 					}else if (n == 'Route') {
 						$('input[name=path]').attr('placeholder','Please enter the Route');
-
+                        $('#statistic_slug,#path').prop('required',false);
 						$('#path').prop('required',true);
 						$('#form-group-path label .text-danger').remove();
 						$('#form-group-path label').append('<span class=\"text-danger\" title=\"This field is required\">*</span>');
