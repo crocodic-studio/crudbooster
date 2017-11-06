@@ -37,20 +37,10 @@
                     @endif
                     <div class="box-body" id="parent-form-area">
 
-                        @php
-                            $defaluts = [ 'type' => 'text', 'required' => '', 'readonly' => '', 'disabled' => '', 'value' => '', 'validation' => [], 'width' => 'col-sm-9' ];
-                            foreach($forms as $index => $form) {
-                                $forms[$index] = array_merge($defaluts, $form);
-                            }
-                            unset($form);
-                        @endphp
-
-                        @include('crudbooster::default._form_body.component_assets', ['types' => array_column($forms,'type')])
-
                         @if($command == 'detail')
-                            @include("crudbooster::default.form_detail")
+                            @include("crudbooster::default.form_detail", ['forms' => $forms])
                         @else
-                            @include("crudbooster::default.form_body")
+                            @include("crudbooster::default.form_body", ['forms' => $forms])
                         @endif
                     </div><!-- /.box-body -->
 

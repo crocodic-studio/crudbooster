@@ -6,7 +6,7 @@
         }
     </style>
 @endpush
-
+@include('crudbooster::default._form_body.component_assets', ['forms' => $forms])
 <div class='table-responsive'>
     <table id='table-detail' class='table table-striped'>
 
