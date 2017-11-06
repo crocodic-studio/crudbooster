@@ -10,7 +10,7 @@ $name = str_slug($label, '');
 @endpush
 <div class='form-group {{$header_group_class}}' id='form-group-{{$name}}'>
 
-    @if($form['columns'])
+    @if($formInput['columns'])
         <div class="col-sm-12">
 
             <div id='panel-form-{{$name}}' class="panel panel-default">
@@ -25,7 +25,7 @@ $name = str_slug($label, '');
                                 <div class="panel-heading">
                                     <i class="fa fa-pencil-square-o"></i> {{cbTrans("text_form")}}</div>
                                 <div class="panel-body child-form-area">
-                                    @foreach($form['columns'] as $col)
+                                    @foreach($formInput['columns'] as $col)
                                         <?php $name_column = $name.$col['name'];?>
                                         <div class='form-group'>
                                             @if($col['type']!='hidden')

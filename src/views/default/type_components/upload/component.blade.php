@@ -1,5 +1,5 @@
 <div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}'
-     style="{{@$form['style']}}">
+     style="{{@$formInput['style']}}">
     <label class='col-sm-2 control-label'>{{$label}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
 
     <div class="{{$col_width?:'col-sm-10'}}">
@@ -32,7 +32,7 @@
         @if(!$value)
             <input type='file' id="{{$name}}" title="{{$label}}"
                    {{$required}} {{$readonly}} {{$disabled}} class='form-control' name="{{$name}}"/>
-            <p class='help-block'>{{ @$form['help'] }}</p>
+            <p class='help-block'>{{ @$formInput['help'] }}</p>
         @else
             <p class='text-muted'><em>{{cbTrans("notice_delete_file_upload")}}</em></p>
         @endif

@@ -2,7 +2,7 @@
 $formula = $col['formula'] ?: '';
 $formula_function_name = 'formula'.str_slug($name.$col['name'], '');
 $script_onchange = "";
-foreach ($form['columns'] as $c) {
+foreach ($formInput['columns'] as $c) {
     if (strpos($formula, "[{$c['name']}]") !== false) {
         $script_onchange .= "$('#{$name}{$c['name']}').change(function() { $formula_function_name(); }); ";
     }

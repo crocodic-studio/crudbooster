@@ -8,9 +8,9 @@
             <input type="text" class="form-control" id="{{$name}}"
                    {{ ($readonly)?"readonly":"" }} {{ ($required)?"required":""}} value="{{$value}}" name="{{$name}}">
             <input type="hidden" name="input-latitude-{{$name}}" id="input-latitude-{{$name}}"
-                   value="{{ ($form['options']['latitude'])?$row->{$form['options']['latitude']}:0 }}">
+                   value="{{ ($formInput['options']['latitude'])?$row->{$formInput['options']['latitude']}:0 }}">
             <input type="hidden" name="input-longitude-{{$name}}" id="input-longitude-{{$name}}"
-                   value="{{ ($form['options']['longitude'])?$row->{$form['options']['longitude']}:0 }}">
+                   value="{{ ($formInput['options']['longitude'])?$row->{$formInput['options']['longitude']}:0 }}">
             <span class="input-group-btn">
             <button class="btn btn-primary" onclick="showMapModal{{$name}}()" type="button">
                 <i class='fa fa-map-marker'></i> Browse Map</button>
@@ -102,10 +102,10 @@
         function initMap {{$index}}() {
             geocoder = new google.maps.Geocoder();
             var map = new google.maps.Map(document.getElementById('map-{{$name}}'), {
-                @if($row->{$form['options']['latitude']} && $row->{$form['options']['longitude']})
+                @if($row->{$formInput['options']['latitude']} && $row->{$formInput['options']['longitude']})
                 center: {
-                    lat: <?php echo $row->{$form['options']['latitude']} ?: 0;?>,
-                    lng: <?php echo $row->{$form['options']['longitude']} ?: 0;?> },
+                    lat: <?php echo $row->{$formInput['options']['latitude']} ?: 0;?>,
+                    lng: <?php echo $row->{$formInput['options']['longitude']} ?: 0;?> },
                 @endif
                 zoom: 12
             });
@@ -129,7 +129,7 @@
 
             // Try HTML5 geolocation.
 
-            @if(!$row->$form['options']['latitude'] && !$row->$form['options']['longitude'])
+            @if(!$row->$formInput['options']['latitude'] && !$row->$formInput['options']['longitude'])
 
                 latitude_temp_{{$name}} = 0;
             longitude_temp_{{$name}} = 0;
@@ -142,12 +142,12 @@
 
                     @else
             var pos = {
-                    lat: {{ $row->{$form['options']['latitude']}?:0 }},
-                    lng: {{ $row->{$form['options']['longitude']}?:0 }}
+                    lat: {{ $row->{$formInput['options']['latitude']}?:0 }},
+                    lng: {{ $row->{$formInput['options']['longitude']}?:0 }}
                 };
 
-            latitude_temp_{{$name}} = {{ $row->$form['options']['latitude']?:0 }};
-            longitude_temp_{{$name}} = {{ $row->$form['options']['longitude']?:0 }};
+            latitude_temp_{{$name}} = {{ $row->$formInput['options']['latitude']?:0 }};
+            longitude_temp_{{$name}} = {{ $row->$formInput['options']['longitude']?:0 }};
 
             address_temp_{{$name}} = "{{$value}}";
 

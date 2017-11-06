@@ -38,6 +38,6 @@
             }
 
         @endphp
-    @include('crudbooster::default._form_body.component')
+    @include('crudbooster::default._form_body.component', ['form' => $formInput])
 
     @endforeach

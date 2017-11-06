@@ -10,31 +10,31 @@
 <div class='table-responsive'>
     <table id='table-detail' class='table table-striped'>
 
-        @foreach($forms as $index => $form)
+        @foreach($forms as $index => $formInput)
         <?php
-        $form = array_merge(['showInDetail' => true, 'value' => '', 'join' => ''], $form);
-        $name = $form['name'];
+        $formInput = array_merge(['showInDetail' => true, 'value' => '', 'join' => ''], $formInput);
+        $name = $formInput['name'];
         $value = (isset($row->{$name})) ? $row->{$name} : $value;
-        $showInDetail = $form['showInDetail'];
+        $showInDetail = $formInput['showInDetail'];
 
         if ($showInDetail == FALSE) {
             continue;
         }
 
-        if (isset($form['callback_php'])) {
-            @eval("\$value = ".$form['callback_php'].";");
+        if (isset($formInput['callback_php'])) {
+            @eval("\$value = ".$formInput['callback_php'].";");
         }
 
-        if (isset($form['callback'])) {
-            $value = call_user_func($form['callback'], $row);
+        if (isset($formInput['callback'])) {
+            $value = call_user_func($formInput['callback'], $row);
         }
 
-        if (isset($form['default_value'])) {
-            $value = $form['default_value'];
+        if (isset($formInput['default_value'])) {
+            $value = $formInput['default_value'];
         }
 
-        if ($form['join'] && @$row) {
-            $join_arr = explode(',', $form['join']);
+        if ($formInput['join'] && @$row) {
+            $join_arr = explode(',', $formInput['join']);
             array_walk($join_arr, 'trim');
             $join_table = $join_arr[0];
             $join_title = $join_arr[1];
@@ -44,11 +44,11 @@
             $value = @$join_query_{$join_table}->{$join_title};
         }
 
-        $required = $form['required'] ? "required" : "";
-        $readonly = $form['readonly'] ? "readonly" : "";
-        $disabled = $form['disabled'] ? "disabled" : "";
-        $jquery = @$form['jquery'];
-        $placeholder = "placeholder='{$form['placeholder']}'";
+        $required = $formInput['required'] ? "required" : "";
+        $readonly = $formInput['readonly'] ? "readonly" : "";
+        $disabled = $formInput['disabled'] ? "disabled" : "";
+        $jquery = @$formInput['jquery'];
+        $placeholder = "placeholder='{$formInput['placeholder']}'";
 
 
 

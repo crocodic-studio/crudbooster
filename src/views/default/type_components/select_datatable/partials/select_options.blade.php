@@ -1,11 +1,11 @@
 <?php
-if (! $form['options']['parent_select']) {
+if (! $formInput['options']['parent_select']) {
 
-    if (@$form['options']['table']):
+    if (@$formInput['options']['table']):
 
-        $table = $form['options']['table'];
-        $field_label = $form['options']['field_label'];
-        $field_value = $form['options']['field_value'];
+        $table = $formInput['options']['table'];
+        $field_label = $formInput['options']['field_label'];
+        $field_value = $formInput['options']['field_value'];
 
         $selects_data = DB::table($table);
 
@@ -13,12 +13,12 @@ if (! $form['options']['parent_select']) {
             $selects_data->where($table.'.deleted_at', NULL);
         }
 
-        if (@$form['options']['sql_where']) {
-            $selects_data->whereraw($form['options']['sql_where']);
+        if (@$formInput['options']['sql_where']) {
+            $selects_data->whereraw($formInput['options']['sql_where']);
         }
 
-        if ($form['options']['sql_orderby']) {
-            $selects_data = $selects_data->orderByRaw($form['options']['sql_orderby'])->get();
+        if ($formInput['options']['sql_orderby']) {
+            $selects_data = $selects_data->orderByRaw($formInput['options']['sql_orderby'])->get();
         } else {
             $selects_data = $selects_data->orderby($field_value, "desc")->get();
         }
@@ -27,8 +27,8 @@ if (! $form['options']['parent_select']) {
         foreach ($selects_data as $i => $d) {
             $options[$i]['select'] = ($value == $d->{$field_value}) ? "selected" : "";
 
-            if ($form['options']['format']) {
-                $options[$i]['label'] = $form['options']['format'];
+            if ($formInput['options']['format']) {
+                $options[$i]['label'] = $formInput['options']['format'];
                 foreach ($d as $k => $v) {
                     $options[$i]['label'] = str_replace("[$k]", $v, $options[$i]['label']);
                 }
@@ -41,7 +41,7 @@ if (! $form['options']['parent_select']) {
 } //end if not parent select
 ?>
 <div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}'
-     style="{{@$form['style']}}">
+     style="{{@$formInput['style']}}">
     <label class='control-label col-sm-2'>{{$label}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
 
     <div class="{{$col_width?:'col-sm-10'}}">
@@ -55,6 +55,6 @@ if (! $form['options']['parent_select']) {
 
         </select>
         <div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
-        <p class='help-block'>{{ @$form['help'] }}</p>
+        <p class='help-block'>{{ @$formInput['help'] }}</p>
     </div>
 </div>

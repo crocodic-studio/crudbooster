@@ -1,14 +1,14 @@
-<?php $default = ! empty($form['placeholder']) ? $form['placeholder'] : cbTrans('text_prefix_option')." ".$label;?>
-@if($form['options']['parent_select'])
+<?php $default = ! empty($formInput['placeholder']) ? $formInput['placeholder'] : cbTrans('text_prefix_option')." ".$label;?>
+@if($formInput['options']['parent_select'])
     <script type="text/javascript">
         $(function () {
-            $('#{{$form['options']['parent_select']}}').change(function () {
-                var $current = $("#{{$form['name']}}");
+            $('#{{$formInput['options']['parent_select']}}').change(function () {
+                var $current = $("#{{$formInput['name']}}");
                 var parent_id = $(this).val();
-                var fk_name = "{{$form['options']['parent_select']}}";
+                var fk_name = "{{$formInput['options']['parent_select']}}";
                 var fk_value = $(this).val();
-                var table = "{{$form['options']['table']}}";
-                var label = "{{$form['options']['field_label']}}";
+                var table = "{{$formInput['options']['table']}}";
+                var label = "{{$formInput['options']['field_label']}}";
                 var value = "{{$value}}";
 
                 if (fk_value != '') {
@@ -18,7 +18,7 @@
                             $current.html("<option value=''>{{$default}}");
                             $.each(response, function (i, obj) {
                                 var selected = (value && value == obj.select_value) ? "selected" : "";
-                                $("<option " + selected + " value='" + obj.select_value + "'>" + obj.select_label + "</option>").appendTo("#{{$form['name']}}");
+                                $("<option " + selected + " value='" + obj.select_value + "'>" + obj.select_label + "</option>").appendTo("#{{$formInput['name']}}");
                             })
                             $current.trigger('change');
                         }
@@ -28,8 +28,8 @@
                 }
             })
 
-            $('#{{$form['options']['parent_select']}}').trigger('change');
-            $("#{{$form['name']}}").trigger('change');
+            $('#{{$formInput['options']['parent_select']}}').trigger('change');
+            $("#{{$formInput['name']}}").trigger('change');
         })
     </script>
 @endif

@@ -4,8 +4,8 @@
     foreach(DB::table($select_table)->get() as $i => $r):
         $options[$i]['value'] = $r->$select_value;
 
-        if($form['options']['format']) {
-             $options[$i]['label'] = $form['options']['format'];
+        if($formInput['options']['format']) {
+             $options[$i]['label'] = $formInput['options']['format'];
             foreach($r as $k => $v) {
                 $options[$i]['label'] = str_replace("[$k]", $v, $options[$i]['label']);
             }

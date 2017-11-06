@@ -1,8 +1,8 @@
 <?php
-if ($form['options']['query']) {
-    $query = $form['options']['query'];
-    $fieldLabel = $form['options']['field_label'];
-    $fieldValue = $form['options']['field_value'];
+if ($formInput['options']['query']) {
+    $query = $formInput['options']['query'];
+    $fieldLabel = $formInput['options']['field_label'];
+    $fieldValue = $formInput['options']['field_value'];
     echo CRUDBooster::first($query, [$fieldValue => $value])->$fieldLabel;
 }
 ?>

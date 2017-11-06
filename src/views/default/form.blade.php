@@ -42,6 +42,7 @@
                             foreach($forms as $index => $form) {
                                 $forms[$index] = array_merge($defaluts, $form);
                             }
+                            unset($form);
                         @endphp
 
                         @include('crudbooster::default._form_body.component_assets', ['types' => array_column($forms,'type')])

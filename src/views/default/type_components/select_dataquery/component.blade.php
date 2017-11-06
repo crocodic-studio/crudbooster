@@ -1,16 +1,16 @@
 <?php
-$default = ! empty($form['placeholder']) ? $form['placeholder'] : cbTrans('text_prefix_option')." ".$label;
+$default = ! empty($formInput['placeholder']) ? $formInput['placeholder'] : cbTrans('text_prefix_option')." ".$label;
 $query = str_random(5);
 \Cache::forget($query);
-\Cache::forever($query, $form['options']['query']);
+\Cache::forever($query, $formInput['options']['query']);
 ?>
-@if($form['options']['parent_select'])
+@if($formInput['options']['parent_select'])
     <script type="text/javascript">
         $(function () {
-            $('#{{$form['options']['parent_select']}}').change(function () {
-                var $current = $("#{{$form['name']}}");
+            $('#{{$formInput['options']['parent_select']}}').change(function () {
+                var $current = $("#{{$formInput['name']}}");
                 var parent_id = $(this).val();
-                var fk_name = "{{$form['options']['parent_select']}}";
+                var fk_name = "{{$formInput['options']['parent_select']}}";
                 var fk_value = $(this).val();
                 var value = "{{$value}}";
 
@@ -20,16 +20,16 @@ $query = str_random(5);
                         if (response.items.length > 0) {
                             $current.html("<option value=''>{{$default}}</option>");
                             $.each(response.items, function (i, obj) {
-                                var selected = (value && value == obj.{{$form['options']['field_value']}}) ? "selected" : "";
-                                var label = obj.{{$form['options']['field_label']}};
-                                var format = "{{$form['options']['format']}}";
+                                var selected = (value && value == obj.{{$formInput['options']['field_value']}}) ? "selected" : "";
+                                var label = obj.{{$formInput['options']['field_label']}};
+                                var format = "{{$formInput['options']['format']}}";
                                 if (format != '') {
                                     $.each(obj, function (e, o) {
                                         format.replace("[" + e + "]", o);
                                     })
                                     label = format;
                                 }
-                                $("<option " + selected + " value='" + obj.{{$form['options']['field_value']}}+ "'>" + label + "</option>").appendTo("#{{$form['name']}}");
+                                $("<option " + selected + " value='" + obj.{{$formInput['options']['field_value']}}+ "'>" + label + "</option>").appendTo("#{{$formInput['name']}}");
                             })
                             $current.trigger('change');
                         }
@@ -39,8 +39,8 @@ $query = str_random(5);
                 }
             })
 
-            $('#{{$form['options']['parent_select']}}').trigger('change');
-            $("#{{$form['name']}}").trigger('change');
+            $('#{{$formInput['options']['parent_select']}}').trigger('change');
+            $("#{{$formInput['name']}}").trigger('change');
         })
     </script>
 @endif

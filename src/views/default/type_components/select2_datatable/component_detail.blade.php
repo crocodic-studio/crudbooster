@@ -1,17 +1,17 @@
 <?php
-$field_value = $form['options']['field_value'];
-$field_label = $form['options']['field_label'];
+$field_value = $formInput['options']['field_value'];
+$field_label = $formInput['options']['field_label'];
 $rawvalue = $value;
-$data = DB::table($form['options']['table']);
-if (Schema::hasColumn($form['options']['table'], 'deleted_at')) {
+$data = DB::table($formInput['options']['table']);
+if (Schema::hasColumn($formInput['options']['table'], 'deleted_at')) {
     $data->whereNull('deleted_at');
 }
 $data = $data->get();
 foreach ($data as $d) {
     $option_value = $d->$field_value;
     $option_label = $d->$field_label;
-    if ($form['options']['multiple'] == true) {
-        switch ($form['options']['multiple_result_format']) {
+    if ($formInput['options']['multiple'] == true) {
+        switch ($formInput['options']['multiple_result_format']) {
             case 'JSON':
                 $value = json_decode($rawvalue, true) ?: [];
                 if (in_array($option_value, $value)) {

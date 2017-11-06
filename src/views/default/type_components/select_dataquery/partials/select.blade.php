@@ -1,24 +1,24 @@
 <?php
 $options = [];
-if (! $form['options']['parent_select'] && @$form['options']['query']):
-    foreach (DB::select(DB::raw($form['options']['query'])) as $index => $d) {
-        $options[$i]['select'] = ($value == $d->{$form['options']['field_value']}) ? "selected" : "";
-        if ($form['options']['format']) {
-            $options[$i]['label'] = $form['options']['format'];
+if (! $formInput['options']['parent_select'] && @$formInput['options']['query']):
+    foreach (DB::select(DB::raw($formInput['options']['query'])) as $index => $d) {
+        $options[$i]['select'] = ($value == $d->{$formInput['options']['field_value']}) ? "selected" : "";
+        if ($formInput['options']['format']) {
+            $options[$i]['label'] = $formInput['options']['format'];
             foreach ($d as $k => $v) {
                 $options[$i]['label'] = str_replace("[".$k."]", $v, $options[$i]['label']);
             }
         } else {
-            $options[$i]['label'] = $d->{$form['options']['field_label']};
+            $options[$i]['label'] = $d->{$formInput['options']['field_label']};
         }
-        $options[$i]['value'] = $d->{$form['options']['field_value']};
+        $options[$i]['value'] = $d->{$formInput['options']['field_value']};
     }
 endif;
 ?>
 
 
 <div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}'
-     style="{{@$form['style']}}">
+     style="{{@$formInput['style']}}">
     <label class='control-label col-sm-2'>{{$label}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
 
     <div class="{{$col_width?:'col-sm-10'}}">
@@ -31,6 +31,6 @@ endif;
             @endforeach
         </select>
         <div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
-        <p class='help-block'>{{ @$form['help'] }}</p>
+        <p class='help-block'>{{ @$formInput['help'] }}</p>
     </div>
 </div>

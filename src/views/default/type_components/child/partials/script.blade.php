@@ -23,7 +23,7 @@
             currentRow = p;
             p.addClass('warning');
             $('#btn-add-table-{{$name}}').val('{{cbTrans("save_changes")}}');
-            @foreach($form['columns'] as $c)
+            @foreach($formInput['columns'] as $c)
             @if($c['type']=='select')
             $('#{{$name.$c["name"]}}').val(p.find(".{{$c['name']}} input").val()).trigger("change");
                     @elseif($c['type']=='radio')
@@ -69,7 +69,7 @@
             }
 
             var trRow = '<tr>';
-            @foreach($form['columns'] as $c)
+            @foreach($formInput['columns'] as $c)
                     @if($c['type']=='select')
                 trRow += "<td class='{{$c['name']}}'>" + $('#{{$name.$c["name"]}} option:selected').text() +
                 "<input type='hidden' name='{{$name}}-{{$c['name']}}[]' value='" + $('#{{$name.$c["name"]}}').val() + "'/>" +

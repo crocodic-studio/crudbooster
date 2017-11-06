@@ -1,7 +1,7 @@
 <?php
-if ($form['options']['value']) {
-    foreach ($form['options']['enum'] as $i => $e) {
-        if ($form['options']['value'][$i] == $value) {
+if ($formInput['options']['value']) {
+    foreach ($formInput['options']['enum'] as $i => $e) {
+        if ($formInput['options']['value'][$i] == $value) {
             echo $e;
             break;
         }

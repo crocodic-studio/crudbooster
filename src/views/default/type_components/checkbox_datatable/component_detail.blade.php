@@ -1,8 +1,8 @@
 <?php
 
-$field_value = $form['options']['field_value'];
-$field_label = $form['options']['field_label'];
-switch ($form['options']['result_format']) {
+$field_value = $formInput['options']['field_value'];
+$field_label = $formInput['options']['field_label'];
+switch ($formInput['options']['result_format']) {
     case 'JSON':
         $valueFormat = json_decode($value, true);
         break;
@@ -17,7 +17,7 @@ switch ($form['options']['result_format']) {
 
 $result = [];
 foreach ($valueFormat as $d) {
-    $q = DB::table($form['options']['table'])->where($field_value, $d)->first();
+    $q = DB::table($formInput['options']['table'])->where($field_value, $d)->first();
     $result[] = $q->$field_label;
 }
 echo implode(', ', $result);

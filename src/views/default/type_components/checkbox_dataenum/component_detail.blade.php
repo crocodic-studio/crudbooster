@@ -1,8 +1,8 @@
 <?php
-if ($form['options']['value']){
-    $dataEnum = explode(';', $form['options']['enum']);
+if ($formInput['options']['value']){
+    $dataEnum = explode(';', $formInput['options']['enum']);
     $result = [];
-    foreach (explode(';', $form['options']['value']) as $i => $v) {
+    foreach (explode(';', $formInput['options']['value']) as $i => $v) {
         if (in_array($v, explode(';', $value))) {
             $result[] = $dataEnum[$i];
         }
