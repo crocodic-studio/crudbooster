@@ -6,7 +6,7 @@
         <input type="text" title="{{$label}}"
                {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class="form-control inputMoney"
                name="{{$name}}" id="{{$name}}" value="{{$value}}">
-        <div class="text-danger">{!! $errors->first($name)?'<i class="fa fa-info-circle"></i> '.$errors->first($name):'' !!}</div>
-        <p class="help-block">{{ @$formInput['help'] }}</p>
+
+        @include('crudbooster::default._form_body.underField', ['help' => $formInput['help'], 'error' => $errors->first($name)])
     </div>
 </div>

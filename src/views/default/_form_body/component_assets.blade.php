@@ -3,6 +3,7 @@
     'type' => 'text',
     'required' => '',
     'readonly' => '',
+    'help' => '',
     'disabled' => '',
     'value' => '',
     'validation' => [],

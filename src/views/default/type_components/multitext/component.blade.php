@@ -16,8 +16,7 @@
                             class='fa fa-plus'></i></button></span>
         </div>
 
-        <div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
-        <p class='help-block'>{{ @$formInput['help'] }}</p>
+        @include('crudbooster::default._form_body.underField', ['help' => $formInput['help'], 'error' => $errors->first($name)])
 
     </div>
 

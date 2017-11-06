@@ -4,24 +4,27 @@
 
     <div class="{{$col_width?:'col-sm-10'}}">
         @if($value)
-            <?php
-            if(Storage::exists($value)):
-            $url = asset($value);
-            $ext = strtolower(pathinfo($value, PATHINFO_EXTENSION));
-            $images_type = array('jpg', 'png', 'gif', 'jpeg', 'bmp', 'tiff');
-            if(in_array($ext, $images_type)):
-            ?>
-            <p><a data-lightbox='roadtrip' href='{{$url}}'><img style='max-width:160px'
-                                                                title="Image For {{$label}}"
-                                                                src='{{$url}}'/></a></p>
-            <?php else:?>
-            <p><a href='{{$url}}'>{{cbTrans("button_download_file")}}</a></p>
-            <?php endif;
-            echo "<input type='hidden' name='_$name' value='$value'/>";
-            else:
-                echo "<p class='text-danger'><i class='fa fa-exclamation-triangle'></i> ".cbTrans("file_broken")."</p>";
-            endif;
-            ?>
+            @if(Storage::exists($value))
+                <?php
+                $url = asset($value);
+                $ext = strtolower(pathinfo($value, PATHINFO_EXTENSION));
+                $images_type = array('jpg', 'png', 'gif', 'jpeg', 'bmp', 'tiff');
+                ?>
+
+                    @if(in_array($ext, $images_type))
+                <p>
+                    <a data-lightbox='roadtrip' href='{{$url}}'>
+                        <img style='max-width:160px' title="Image For {{$label}}" src='{{$url}}'/></a>
+                </p>
+                @else
+                    <p><a href='{{$url}}'>{{cbTrans("button_download_file")}}</a></p>
+                @endif
+
+                <input type='hidden' name='_$name' value='{!! $value !!}'/>
+            @else
+                <p class='text-danger'><i class='fa fa-exclamation-triangle'></i> {!! cbTrans("file_broken") !!}</p>
+            @endif
+
             @if(!$readonly || !$disabled)
                 <p><a class='btn btn-danger btn-delete btn-sm'
                       onclick="if(!confirm('{{cbTrans("delete_title_confirm")}}')) return false"
@@ -36,7 +39,7 @@
         @else
             <p class='text-muted'><em>{{cbTrans("notice_delete_file_upload")}}</em></p>
         @endif
-        <div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
+        @include('crudbooster::default._form_body.underField', ['help' => $formInput['help'], 'error' => $errors->first($name)])
 
     </div>
 

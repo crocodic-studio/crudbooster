@@ -14,12 +14,11 @@
 
             $validation = makeValidationForHTML($formInput['validation']);
 
-
             if(isset($formInput['callback'])) {
                 $value = call_user_func($formInput['callback'],$row);
             }
 
-           ($formInput['required'] || @strpos($formInput['validation'], 'required'))? 'required' : '';
+             $required = ($formInput['required'] || @strpos($formInput['validation'], 'required') !== false)? 'required' : '';
 
             $type = $formInput['type'];
             $readonly = $formInput['readonly'] ? 'readonly' : '';

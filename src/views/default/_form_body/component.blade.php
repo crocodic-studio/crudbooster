@@ -4,6 +4,7 @@
     'required' => '',
     'readonly' => '',
     'disabled' => '',
+    'help' => '',
     'value' => '',
     'validation' => [],
     'width' => 'col-sm-9'
