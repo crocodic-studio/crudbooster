@@ -15,7 +15,7 @@ class InActiveMenus
         $menu_inactive = app('db')->table('cms_menus')->where('parent_id', 0)->where('is_active', 0)->orderby('sorting', 'asc')->get();
 
         foreach ($menu_inactive as $menu) {
-            $child = app('db')->table('cms_menus')->where('is_active', 1)->where('parent_id', $menu->id)->orderby('sorting', 'asc')->get();
+            $child = app('db')->table('cms_menus')->where('is_active', 0)->where('parent_id', $menu->id)->orderby('sorting', 'asc')->get();
             if (count($child)) {
                 $menu->children = $child;
             }
