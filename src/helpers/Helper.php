@@ -450,3 +450,17 @@ if (! function_exists('findSelected')) {
         return $selected;
     }
 }
+if (! function_exists('array_get_keys')) {
+
+    /**
+     * @param array $array
+     * @param array $keys
+     * @param null $default
+     * @return string
+     */
+    function array_get_keys(array $array, array $keys, $default = null)
+    {
+        $_defaults = array_fill_keys($keys, $default);
+        return array_merge($_defaults, array_intersect_key($array, $_defaults));
+    }
+}

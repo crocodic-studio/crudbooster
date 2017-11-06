@@ -119,13 +119,7 @@ class AdminPrivilegesController extends CBController
         foreach (Request::input("privileges", []) as $id_modul => $data) {
             //Check Menu
             //$module = DB::table('cms_moduls')->where('id', $id_modul)->first();
-            $arrs = [];
-            $arrs['is_visible'] = @$data['is_visible'] ?: 0;
-            $arrs['is_create'] = @$data['is_create'] ?: 0;
-            $arrs['is_read'] = @$data['is_read'] ?: 0;
-            $arrs['is_edit'] = @$data['is_edit'] ?: 0;
-            $arrs['is_delete'] = @$data['is_delete'] ?: 0;
-
+            $arrs = array_get_keys($data, ['is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete',], 0);
             $this->savePermissions($id, $id_modul, $arrs);
         }
 
