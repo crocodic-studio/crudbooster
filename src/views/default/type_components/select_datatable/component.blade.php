@@ -1,4 +1,4 @@
-<?php $default = ! empty($form['placeholder']) ? $form['placeholder'] : cbTrans('text_prefix_option')." ".$form['label'];?>
+<?php $default = ! empty($form['placeholder']) ? $form['placeholder'] : cbTrans('text_prefix_option')." ".$label;?>
 @if($form['options']['parent_select'])
     <script type="text/javascript">
         $(function () {
@@ -12,7 +12,7 @@
                 var value = "{{$value}}";
 
                 if (fk_value != '') {
-                    $current.html("<option value=''>{{cbTrans('text_loading')}} {{$form['label']}}");
+                    $current.html("<option value=''>{{cbTrans('text_loading')}} {{$label}}");
                     $.get("{{CRUDBooster::mainpath('data-table')}}?table=" + table + "&label=" + label + "&fk_name=" + fk_name + "&fk_value=" + fk_value, function (response) {
                         if (response) {
                             $current.html("<option value=''>{{$default}}");

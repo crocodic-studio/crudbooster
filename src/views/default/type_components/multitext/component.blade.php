@@ -3,12 +3,12 @@
 @endif
 <div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}'
      style="{{@$form['style']}}">
-    <label class='control-label col-sm-2'>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
+    <label class='control-label col-sm-2'>{{$label}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
 
     <div class="{{$col_width?:'col-sm-10'}} input_fields_wrap {{$name}}">
 
         <div class="input-group">
-            <input type='text' title="{{$form['label']}}"
+            <input type='text' title="{{$label}}"
                    {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} {{$validation['max']?"maxlength=$validation[max]":""}} class='form-control {{$name}} first_value'
                    name="{{$name}}[]" id="{{$name}}" value='{{$value}}'/> <span class="input-group-addon"
                                                                                 style="padding: 1px;"><button

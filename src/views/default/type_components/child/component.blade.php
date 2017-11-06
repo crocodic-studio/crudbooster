@@ -1,5 +1,5 @@
 <?php
-$name = str_slug($form['label'], '');
+$name = str_slug($label, '');
 ?>
 @push('bottom')
     <script type="text/javascript">
@@ -15,7 +15,7 @@ $name = str_slug($form['label'], '');
 
             <div id='panel-form-{{$name}}' class="panel panel-default">
                 <div class="panel-heading">
-                    <i class='fa fa-bars'></i> {{$form['label']}}
+                    <i class='fa fa-bars'></i> {{$label}}
                 </div>
                 <div class="panel-body">
 

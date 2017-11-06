@@ -63,7 +63,7 @@
                 @include('crudbooster::default.type_components.'.$type.'.component_detail')
             @else
                 <tr>
-                    <td>{{$form['label']}}</td>
+                    <td>{{$label}}</td>
                     <td>@include('crudbooster::default.type_components.'.$type.'.component_detail')</td>
                 </tr>
             @endif
@@ -73,7 +73,7 @@
                 @include('vendor.crudbooster.type_components.'.$type.'.component_detail')
             @else
                 <tr>
-                    <td>{{$form['label']}}</td>
+                    <td>{{$label}}</td>
                     <td>@include('vendor.crudbooster.type_components.'.$type.'.component_detail')</td>
                 </tr>
             @endif

@@ -1,5 +1,5 @@
 @if($form['options']['multiple']==false)
-    <option value=''>{{cbTrans('text_prefix_option')}} {{$form['label']}}</option>
+    <option value=''>{{cbTrans('text_prefix_option')}} {{$label}}</option>
 @endif
 <?php
 

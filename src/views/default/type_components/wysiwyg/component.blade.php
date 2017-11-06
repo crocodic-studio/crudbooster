@@ -34,7 +34,7 @@
 @endpush
 
 <div class='form-group' id='form-group-{{$name}}' style="{{@$form['style']}}">
-    <label class='control-label col-sm-2'>{{$form['label']}}</label>
+    <label class='control-label col-sm-2'>{{$label}}</label>
 
     <div class="{{$col_width?:'col-sm-10'}}">
         <textarea id='textarea_{{$name}}' id="{{$name}}"

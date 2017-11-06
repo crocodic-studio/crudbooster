@@ -1,4 +1,4 @@
-<?php $default = ! empty($form['default']) ? $form['default'] : trans('crudbooster.text_prefix_option')." ".$form['label'];?>
+<?php $default = ! empty($form['default']) ? $form['default'] : trans('crudbooster.text_prefix_option')." ".$label;?>
 @if($form['parent_select'])
 
     @push('bottom')
@@ -16,7 +16,7 @@
                     var value = "{{$value}}";
 
                     if (fk_value != '') {
-                        $current.html("<option value=''>{{trans('crudbooster.text_loading')}} {{$form['label']}}");
+                        $current.html("<option value=''>{{trans('crudbooster.text_loading')}} {{$label}}");
                         $.get("{{CRUDBooster::mainpath('data-table')}}?table=" + table + "&label=" + label + "&fk_name=" + fk_name + "&fk_value=" + fk_value + "&datatable_where=" + encodeURI(datatableWhere), function (response) {
                             if (response) {
                                 $current.html("<option value=''>{{$default}}");
@@ -40,7 +40,7 @@
 
 @endif
 <div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-    <label class='control-label col-sm-2'>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
+    <label class='control-label col-sm-2'>{{$label}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
 
     <div class="{{$col_width?:'col-sm-10'}}">
         <select class='form-control' id="{{$name}}" data-value='{{$value}}' {{$required}} {!!$placeholder!!} {{$readonly}} {{$disabled}} name="{{$name}}">

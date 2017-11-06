@@ -1,6 +1,6 @@
 <div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}'
      style="{{@$form['style']}}">
-    <label class='col-sm-2 control-label'>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
+    <label class='col-sm-2 control-label'>{{$label}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
 
     <div class="{{$col_width?:'col-sm-10'}}">
         @if($value)
@@ -12,7 +12,7 @@
             if(in_array($ext, $images_type)):
             ?>
             <p><a data-lightbox='roadtrip' href='{{$url}}'><img style='max-width:160px'
-                                                                title="Image For {{$form['label']}}"
+                                                                title="Image For {{$label}}"
                                                                 src='{{$url}}'/></a></p>
             <?php else:?>
             <p><a href='{{$url}}'>{{cbTrans("button_download_file")}}</a></p>
@@ -30,7 +30,7 @@
             @endif
         @endif
         @if(!$value)
-            <input type='file' id="{{$name}}" title="{{$form['label']}}"
+            <input type='file' id="{{$name}}" title="{{$label}}"
                    {{$required}} {{$readonly}} {{$disabled}} class='form-control' name="{{$name}}"/>
             <p class='help-block'>{{ @$form['help'] }}</p>
         @else

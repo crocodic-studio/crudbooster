@@ -4,6 +4,7 @@
 
     @foreach($forms as $index => $formInput)
         @php
+            $label = $formInput['label'];
             $name = $formInput['name'];
             $join = $formInput['join'];
             $value= $formInput['value'] ?: '';

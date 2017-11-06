@@ -3,7 +3,7 @@
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                <i class='fa fa-bars'></i> {{$form['label']}}
+                <i class='fa fa-bars'></i> {{$label}}
             </div>
             <div class="panel-body">
                 <table id='table-{{$name}}' class='table table-striped table-bordered'>
