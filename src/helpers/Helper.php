@@ -453,14 +453,14 @@ if (! function_exists('findSelected')) {
 if (! function_exists('array_get_keys')) {
 
     /**
-     * @param array $array
+     * @param array $_array
      * @param array $keys
      * @param null $default
      * @return string
      */
-    function array_get_keys(array $array, array $keys, $default = null)
+    function array_get_keys(array $_array, array $keys, $default = null)
     {
         $_defaults = array_fill_keys($keys, $default);
-        return array_merge($_defaults, array_intersect_key($array, $_defaults));
+        return array_merge($_defaults, array_intersect_key($_array, $_defaults));
     }
 }
