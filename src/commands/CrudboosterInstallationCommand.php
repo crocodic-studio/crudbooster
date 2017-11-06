@@ -112,7 +112,7 @@ class CrudboosterInstallationCommand extends Command {
 			if (!class_exists('CBSeeder')) {
 	            require_once __DIR__.'/../database/seeds/CBSeeder.php';
 	        }
-			$this->callSilent('db:seed',['--class' => 'CBSeeder']);			
+			$this->call('db:seed',['--class' => 'CBSeeder']);			
 			$this->call('config:clear');		
 			$this->call('optimize');
 			
