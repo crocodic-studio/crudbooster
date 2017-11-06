@@ -17,7 +17,7 @@
             if(isset($formInput['callback'])) {
                 $value = call_user_func($formInput['callback'],$row);
             }
-            if($formInput['required'] || strpos($formInput['validation'], 'required')!==false){
+            if($formInput['required'] || @strpos($formInput['validation'], 'required')!==false){
                 $required = 'required';
             }
 

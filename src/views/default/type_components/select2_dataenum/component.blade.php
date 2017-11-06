@@ -26,7 +26,7 @@
             @endif
 
             @php
-                @$enum = $form['options']['enum'];
+                @$enum = $form['options']['enum'] ?: [];
                 @$enumValue = $form['options']['value'];
             @endphp
             @foreach($enum as $i=>$e)
