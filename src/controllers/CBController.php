@@ -504,9 +504,7 @@ class CBController extends Controller
             $name = $di['name'];
             $type = $di['type'];
 
-            if (! $name || ! isset($request_all[$name])) {
-                continue;
-            }
+            if (! $name) {continue;}
 
             if ($di['required'] && ! Request::hasFile($name)) {
                 $ai[] = 'required';
