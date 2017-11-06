@@ -39,7 +39,7 @@ $name = str_slug($label, '');
                                                 @if($col['type']=='text')
                                                     <input id='{{$name_column}}'
                                                            type='text'
-                                                           {{ ($col['max'])?"maxlength='$col[max]'":"" }}
+                                                           {{ ($col['max'])?"maxlength='{$col['max']}'":"" }}
                                                            name='child-{{$col["name"]}}'
                                                            class='form-control {{$col['required']?"required":""}}'
                                                            {{($col['readonly']===true)?"readonly":""}}
@@ -50,7 +50,7 @@ $name = str_slug($label, '');
                                                     @include('crudbooster::default.type_components.child.partials.dataModal', ['name' => $name, 'col' => $col])
                                                 @elseif($col['type']=='number')
                                                     <input id='{{$name_column}}' type='number'
-                                                           {{ ($col['min'])?"min='$col[min]'":"" }} {{ ($col['max'])?"max='$col[max]'":"" }} name='child-{{$col["name"]}}'
+                                                           {{ ($col['min'])?"min='$col[min]'":"" }} {{ ($col['max'])?"max='{$col['max']}'":"" }} name='child-{{$col["name"]}}'
                                                            class='form-control {{$col['required']?"required":""}}'
                                                             {{($col['readonly']===true)?"readonly":""}}
                                                     />
