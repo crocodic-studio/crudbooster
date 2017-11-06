@@ -27,7 +27,7 @@ class MenusForm
                 'sql_where' => null,
                 'sql_orderby' => null,
                 'limit' => null,
-                'ajax_mode' => true,
+                'ajax_mode' => false,
                 'allow_clear' => true,
                 'multiple' => false,
                 'multiple_result_format' => 'JSON',
