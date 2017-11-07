@@ -48,15 +48,7 @@
                             @include('CbPrivilege::_privileges.bottom_js')
                         @endpush
 
-
-                        <table class='table table-striped table-hover table-bordered'>
-                            <thead>
-                                @include('CbPrivilege::_privileges.thead')
-                            </thead>
-                            <tbody>
-                                @widget('\crocodicstudio\crudbooster\Modules\PrivilegeModule\PrivilegeTableWidget', ['roleId' => $id])
-                            </tbody>
-                        </table>
+                        @widget('\crocodicstudio\crudbooster\Modules\PrivilegeModule\PrivilegeTableWidget', ['roleId' => $id])
 
 
                     </div>
