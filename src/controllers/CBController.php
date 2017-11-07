@@ -76,6 +76,7 @@ class CBController extends Controller {
 	public $parent_id 			  = NULL;
 	public $hide_form			  = array();
 	public $index_return 		  = FALSE; //for export
+	public $option_id			  = FALSE;
 
 
 	public function cbLoader() {
