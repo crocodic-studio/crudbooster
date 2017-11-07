@@ -65,8 +65,7 @@ class AdminPrivilegesController extends CBController
 
     public function postAddSave()
     {
-        //$this->cbLoader();
-
+        $this->cbInit();
         $this->validation();
         $this->inputAssignment();
 
@@ -103,8 +102,7 @@ class AdminPrivilegesController extends CBController
 
     public function postEditSave($id)
     {
-        //$this->cbLoader();
-
+        $this->cbInit();
         $row = CRUDBooster::first($this->table, $id);
 
         $this->validation($id);
