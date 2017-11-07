@@ -96,10 +96,10 @@ class CrudboosterInstallationCommand extends Command {
 		//if($this->confirm('Do you have setting the database configuration at .env ?')) {
 
 			$this->info('Publishing CRUDBooster needs file...');
-			$this->callSilent('vendor:publish');	
-			$this->callSilent('vendor:publish',['--tag'=>'cb_migration','--force'=>true]);
-			$this->callSilent('vendor:publish',['--tag'=>'cb_lfm','--force'=>true]);	
-			$this->callSilent('vendor:publish',['--tag'=>'cb_localization','--force'=>true]);		
+			$this->call('vendor:publish');	
+			$this->call('vendor:publish',['--tag'=>'cb_migration','--force'=>true]);
+			$this->call('vendor:publish',['--tag'=>'cb_lfm','--force'=>true]);	
+			$this->call('vendor:publish',['--tag'=>'cb_localization','--force'=>true]);		
 			
 			$this->info('Dumping the autoloaded files and reloading all new files...');
 			$composer = $this->findComposer();
