@@ -3,13 +3,13 @@
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                <i class='fa fa-bars'></i> {{$form['label']}}
+                <i class='fa fa-bars'></i> {{$label}}
             </div>
             <div class="panel-body">
                 <table id='table-{{$name}}' class='table table-striped table-bordered'>
                     <thead>
                     <tr>
-                        @foreach($form['columns'] as $col)
+                        @foreach($formInput['columns'] as $col)
                             <th>{{$col['label']}}</th>
                         @endforeach
 
@@ -19,9 +19,9 @@
 
                     <?php
                     $columns_tbody = [];
-                    $data_child = DB::table($form['table'])->where($form['foreign_key'], $id);
-                    foreach ($form['columns'] as $i => $c) {
-                        $data_child->addselect($form['table'].'.'.$c['name']);
+                    $data_child = DB::table($formInput['table'])->where($formInput['foreign_key'], $id);
+                    foreach ($formInput['columns'] as $i => $c) {
+                        $data_child->addselect($formInput['table'].'.'.$c['name']);
 
                         if ($c['type'] == 'datamodal') {
                             $datamodal_title = explode(',', $c['datamodal_columns'])[0];
@@ -38,11 +38,11 @@
                         }
                     }
 
-                    $data_child = $data_child->orderby($form['table'].'.id', 'desc')->get();
-                    foreach($data_child as $d):
+                    $data_child = $data_child->orderby($formInput['table'].'.id', 'desc')->get();
                     ?>
+                    @foreach($data_child as $d)
                     <tr>
-                        @foreach($form['columns'] as $col)
+                        @foreach($formInput['columns'] as $col)
                             <td class="{{$col['name']}}">
                                 <?php
                                 if ($col['type'] == 'select') {
@@ -88,11 +88,11 @@
 
                     </tr>
 
-                    <?php endforeach;?>
+                    @endforeach
 
                     @if(count($data_child)==0)
                         <tr class="trNull">
-                            <td colspan="{{count($form['columns'])+1}}"
+                            <td colspan="{{count($formInput['columns'])+1}}"
                                 align="center">{{cbTrans('table_data_not_found')}}</td>
                         </tr>
                     @endif

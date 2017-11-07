@@ -74,7 +74,7 @@ Route::group([
     if (Request::is(cbConfig('ADMIN_PATH'))) {
         $menus = DB::table('cms_menus')->where('is_dashboard', 1)->first();
         if (! $menus) {
-            CRUDBooster::routeController('/', '\crocodicstudio\crudbooster\AuthModule\AuthController');
+            CRUDBooster::routeController('/', '\crocodicstudio\crudbooster\Modules\AuthModule\AuthController');
         }
     }
 
@@ -104,10 +104,7 @@ Route::group([
     'prefix' => cbConfig('ADMIN_PATH'),
     'namespace' => $namespace,
 ], function () use ($namespace) {
-    CRUDBooster::routeController('modules', 'AdminModulesController', $namespace);
-    CRUDBooster::routeController('statistic-builder', 'AdminStatisticBuilderController', '\crocodicstudio\crudbooster\StatisticModule');
-    CRUDBooster::routeController('file-manager', 'AdminFileManagerController', $namespace);
-    CRUDBooster::routeController('menus', 'AdminMenusController', $namespace);
+    //CRUDBooster::routeController('file-manager', 'AdminFileManagerController', $namespace);
     CRUDBooster::routeController('email-templates', 'AdminEmailTemplatesController', $namespace);
     CRUDBooster::routeController('logs', 'AdminLogsController', $namespace);
 });

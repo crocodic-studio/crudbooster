@@ -38,9 +38,9 @@
                     <div class="box-body" id="parent-form-area">
 
                         @if($command == 'detail')
-                            @include("crudbooster::default.form_detail")
+                            @include("crudbooster::default.form_detail", ['forms' => $forms])
                         @else
-                            @include("crudbooster::default.form_body")
+                            @include("crudbooster::default.form_body", ['forms' => $forms])
                         @endif
                     </div><!-- /.box-body -->
 

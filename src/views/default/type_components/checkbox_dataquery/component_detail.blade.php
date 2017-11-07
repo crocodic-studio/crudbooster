@@ -1,8 +1,8 @@
 <?php
-$data = DB::select(DB::raw($form['options']['query']));
-$field_value = $form['options']['field_value'];
-$field_label = $form['options']['field_label'];
-switch ($form['options']['result_format']) {
+$data = DB::select(DB::raw($formInput['options']['query']));
+$field_value = $formInput['options']['field_value'];
+$field_label = $formInput['options']['field_label'];
+switch ($formInput['options']['result_format']) {
     case 'JSON':
         $valueFormat = json_decode($value, true);
         $result = [];

@@ -2,6 +2,7 @@
 
 namespace crocodicstudio\crudbooster\helpers;
 
+use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator;
 use Session;
 use Request;
 use Schema;
@@ -1005,7 +1006,7 @@ class CRUDBooster
 
     public static function generateAPI($controller_name, $table_name, $permalink, $method_type = 'post')
     {
-        $php = '<?php '.view('crudbooster::file_stubs.api_stub', compact('controller_name', 'table_name', 'permalink', 'method_type'))->render();
+        $php = '<?php '.view('CbApiGen::api_stub', compact('controller_name', 'table_name', 'permalink', 'method_type'))->render();
         $path = base_path(controllers_dir());
         file_put_contents($path.'Api'.$controller_name.'Controller.php', $php);
     }
@@ -1164,5 +1165,10 @@ class CRUDBooster
                 return (bool) $role->{$verb};
             }
         }
+    }
+
+    public static function componentsTypePath()
+    {
+        return base_path('vendor/crocodicstudio/crudbooster/src/views/default/type_components/');
     }
 }

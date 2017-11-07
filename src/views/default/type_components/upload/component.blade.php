@@ -1,27 +1,30 @@
 <div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}'
-     style="{{@$form['style']}}">
-    <label class='col-sm-2 control-label'>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
+     style="{{@$formInput['style']}}">
+    <label class='col-sm-2 control-label'>{{$label}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
 
     <div class="{{$col_width?:'col-sm-10'}}">
         @if($value)
-            <?php
-            if(Storage::exists($value)):
-            $url = asset($value);
-            $ext = strtolower(pathinfo($value, PATHINFO_EXTENSION));
-            $images_type = array('jpg', 'png', 'gif', 'jpeg', 'bmp', 'tiff');
-            if(in_array($ext, $images_type)):
-            ?>
-            <p><a data-lightbox='roadtrip' href='{{$url}}'><img style='max-width:160px'
-                                                                title="Image For {{$form['label']}}"
-                                                                src='{{$url}}'/></a></p>
-            <?php else:?>
-            <p><a href='{{$url}}'>{{cbTrans("button_download_file")}}</a></p>
-            <?php endif;
-            echo "<input type='hidden' name='_$name' value='$value'/>";
-            else:
-                echo "<p class='text-danger'><i class='fa fa-exclamation-triangle'></i> ".cbTrans("file_broken")."</p>";
-            endif;
-            ?>
+            @if(Storage::exists($value))
+                <?php
+                $url = asset($value);
+                $ext = strtolower(pathinfo($value, PATHINFO_EXTENSION));
+                $images_type = array('jpg', 'png', 'gif', 'jpeg', 'bmp', 'tiff');
+                ?>
+
+                    @if(in_array($ext, $images_type))
+                <p>
+                    <a data-lightbox='roadtrip' href='{{$url}}'>
+                        <img style='max-width:160px' title="Image For {{$label}}" src='{{$url}}'/></a>
+                </p>
+                @else
+                    <p><a href='{{$url}}'>{{cbTrans("button_download_file")}}</a></p>
+                @endif
+
+                <input type='hidden' name='_$name' value='{!! $value !!}'/>
+            @else
+                <p class='text-danger'><i class='fa fa-exclamation-triangle'></i> {!! cbTrans("file_broken") !!}</p>
+            @endif
+
             @if(!$readonly || !$disabled)
                 <p><a class='btn btn-danger btn-delete btn-sm'
                       onclick="if(!confirm('{{cbTrans("delete_title_confirm")}}')) return false"
@@ -30,13 +33,13 @@
             @endif
         @endif
         @if(!$value)
-            <input type='file' id="{{$name}}" title="{{$form['label']}}"
+            <input type='file' id="{{$name}}" title="{{$label}}"
                    {{$required}} {{$readonly}} {{$disabled}} class='form-control' name="{{$name}}"/>
-            <p class='help-block'>{{ @$form['help'] }}</p>
+            <p class='help-block'>{{ @$formInput['help'] }}</p>
         @else
             <p class='text-muted'><em>{{cbTrans("notice_delete_file_upload")}}</em></p>
         @endif
-        <div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
+        @include('crudbooster::default._form_body.underField', ['help' => $formInput['help'], 'error' => $errors->first($name)])
 
     </div>
 

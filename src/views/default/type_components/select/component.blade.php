@@ -1,28 +1,28 @@
-<?php $default = ! empty($form['default']) ? $form['default'] : trans('crudbooster.text_prefix_option')." ".$form['label'];?>
-@if($form['parent_select'])
+<?php $default = ! empty($formInput['default']) ? $formInput['default'] : trans('crudbooster.text_prefix_option')." ".$label;?>
+@if($formInput['parent_select'])
 
     @push('bottom')
         <script type="text/javascript">
             $(function () {
-                $('#{{$form['parent_select']}}, input:radio[name={{$form['parent_select']}}]').change(function () {
-                    var $current = $("#{{$form['name']}}");
+                $('#{{$formInput['parent_select']}}, input:radio[name={{$formInput['parent_select']}}]').change(function () {
+                    var $current = $("#{{$formInput['name']}}");
                     var parent_id = $(this).val();
-                    var fk_name = "{{$form['parent_select']}}";
+                    var fk_name = "{{$formInput['parent_select']}}";
                     var fk_value = $(this).val();
-                    var datatable = "{{$form['datatable']}}".split(',');
-                    var datatableWhere = "{{$form['datatable_where']}}";
+                    var datatable = "{{$formInput['datatable']}}".split(',');
+                    var datatableWhere = "{{$formInput['datatable_where']}}";
                     var table = datatable[0].trim('');
                     var label = datatable[1].trim('');
                     var value = "{{$value}}";
 
                     if (fk_value != '') {
-                        $current.html("<option value=''>{{trans('crudbooster.text_loading')}} {{$form['label']}}");
+                        $current.html("<option value=''>{{trans('crudbooster.text_loading')}} {{$label}}");
                         $.get("{{CRUDBooster::mainpath('data-table')}}?table=" + table + "&label=" + label + "&fk_name=" + fk_name + "&fk_value=" + fk_value + "&datatable_where=" + encodeURI(datatableWhere), function (response) {
                             if (response) {
                                 $current.html("<option value=''>{{$default}}");
                                 $.each(response, function (i, obj) {
                                     var selected = (value && value == obj.select_value) ? "selected" : "";
-                                    $("<option " + selected + " value='" + obj.select_value + "'>" + obj.select_label + "</option>").appendTo("#{{$form['name']}}");
+                                    $("<option " + selected + " value='" + obj.select_value + "'>" + obj.select_label + "</option>").appendTo("#{{$formInput['name']}}");
                                 })
                                 $current.trigger('change');
                             }
@@ -32,24 +32,24 @@
                     }
                 })
 
-                $('#{{$form['parent_select']}}').trigger('change');
-                $("#{{$form['name']}}").trigger('change');
+                $('#{{$formInput['parent_select']}}').trigger('change');
+                $("#{{$formInput['name']}}").trigger('change');
             })
         </script>
     @endpush
 
 @endif
-<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-    <label class='control-label col-sm-2'>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
+<div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$formInput['style']}}">
+    <label class='control-label col-sm-2'>{{$label}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
 
     <div class="{{$col_width?:'col-sm-10'}}">
         <select class='form-control' id="{{$name}}" data-value='{{$value}}' {{$required}} {!!$placeholder!!} {{$readonly}} {{$disabled}} name="{{$name}}">
             <option value=''>{{$default}}</option>
             <?php
-            if (! $form['parent_select']) {
-                if (@$form['dataquery']):
+            if (! $formInput['parent_select']) {
+                if (@$formInput['dataquery']):
 
-                    $query = DB::select(DB::raw($form['dataquery']));
+                    $query = DB::select(DB::raw($formInput['dataquery']));
                     if ($query) {
                         foreach ($query as $q) {
                             $selected = ($value == $q->value) ? "selected" : "";
@@ -59,8 +59,8 @@
 
                 endif;
 
-                if (@$form['dataenum']):
-                    $dataenum = $form['dataenum'];
+                if (@$formInput['dataenum']):
+                    $dataenum = $formInput['dataenum'];
                     $dataenum = (is_array($dataenum)) ? $dataenum : explode(";", $dataenum);
 
                     foreach ($dataenum as $d) {
@@ -80,9 +80,9 @@
                     }
                 endif;
 
-                if (@$form['datatable']):
-                    $raw = explode(",", $form['datatable']);
-                    $format = $form['datatable_format'];
+                if (@$formInput['datatable']):
+                    $raw = explode(",", $formInput['datatable']);
+                    $format = $formInput['datatable_format'];
                     $table1 = $raw[0];
                     $column1 = $raw[1];
 
@@ -98,8 +98,8 @@
                         $selects_data->where($table1.'.deleted_at', NULL);
                     }
 
-                    if (@$form['datatable_where']) {
-                        $selects_data->whereraw($form['datatable_where']);
+                    if (@$formInput['datatable_where']) {
+                        $selects_data->whereraw($formInput['datatable_where']);
                     }
 
                     if ($table1 && $column1) {
@@ -139,7 +139,6 @@
             } //end if not parent select
             ?>
         </select>
-        <div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
-        <p class='help-block'>{{ @$form['help'] }}</p>
+        @include('crudbooster::default._form_body.underField', ['help' => $formInput['help'], 'error' => $errors->first($name)])
     </div>
 </div>

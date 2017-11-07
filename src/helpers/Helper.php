@@ -9,6 +9,35 @@
 |
 */
 
+if (! function_exists('is_checked')) {
+    /**
+     * @param $format
+     * @param $value
+     * @param $option_value
+     * @return string
+     */
+    function is_checked($format, $value, $option_value)
+    {
+        switch ($format) {
+            case 'JSON':
+                $valueFormat = json_decode($value, true);
+                $checked = (in_array($option_value, $valueFormat)) ? "checked" : "";
+                break;
+            default:
+            case 'COMMA_SEPARATOR':
+                $valueFormat = explode(', ', $value);
+                $checked = (in_array($option_value, $valueFormat)) ? "checked" : "";
+                break;
+            case 'SEMICOLON_SEPARATOR':
+                $valueFormat = explode('; ', $value);
+                $checked = (in_array($option_value, $valueFormat)) ? "checked" : "";
+                break;
+        }
+
+        return $checked;
+    }
+}
+
 if (! function_exists('parseControllerConfigToArray')) {
     function parseControllerConfigToArray($code)
     {
@@ -41,14 +70,17 @@ if (! function_exists('getTablesList')) {
     function getTablesList()
     {
         $tables_list = [];
-        foreach (CRUDBooster::listTables() as $table) {
-            unset($table['migrations']);
-            foreach ($table as $key => $label) {
-                if (substr($label, 0, 4) == 'cms_' && $label != 'cms_users') {
-                    continue;
-                }
-                $tables_list[] = $label;
+        foreach (CRUDBooster::listTables() as $tableObj) {
+
+            $tableName = $tableObj->TABLE_NAME;
+            if ($tableName == config('database.migrations')) {
+                continue;
             }
+            if (substr($tableName, 0, 4) == 'cms_' && $tableName != 'cms_users') {
+                continue;
+            }
+
+            $tables_list[] = $tableName;
         }
 
         return $tables_list;
@@ -227,7 +259,7 @@ if (! function_exists('writeMethodContent')) {
 if (! function_exists('rrmdir')) {
     function rrmdir($dir)
     {
-        if (!is_dir($dir)) {
+        if (! is_dir($dir)) {
             return;
         }
         $objects = scandir($dir);
@@ -290,7 +322,7 @@ if (! function_exists('g')) {
 if (! function_exists('min_var_export')) {
     function min_var_export($input, $indent = "")
     {
-        if (!is_array($input)) {
+        if (! is_array($input)) {
             return var_export($input, true);
         }
         $buffer = [];
@@ -300,6 +332,7 @@ if (! function_exists('min_var_export')) {
         if (count($buffer) == 0) {
             return "[]";
         }
+
         return "[\n".implode(",\n", $buffer)."\n$indent]";
     }
 }
@@ -310,7 +343,7 @@ if (! function_exists('rrmdir')) {
     */
     function rrmdir($dir)
     {
-        if (!is_dir($dir)) {
+        if (! is_dir($dir)) {
             return;
         }
         $objects = scandir($dir);
@@ -360,5 +393,74 @@ if (! function_exists('cbConfig')) {
     function cbConfig($key, $default = null)
     {
         return config('crudbooster.'.$key, $default);
+    }
+}
+if (! function_exists('makeValidationForHTML')) {
+    function makeValidationForHTML($rules)
+    {
+        $validation = [];
+        $validation_raw = $rules ? explode('|', $rules) : [];
+        foreach ($validation_raw as $vr) {
+            $vr_a = explode(':', $vr);
+            if ($vr_a[1]) {
+                $validation[$vr_a[0]] = $vr_a[1];
+            } else {
+                $validation[$vr] = true;
+            }
+        }
+
+        return $validation;
+    }
+}
+
+if (! function_exists('findSelected')) {
+    /**
+     * @param $rawvalue
+     * @param $form
+     * @param $option_value
+     * @param $value
+     * @return string
+     */
+    function findSelected($rawvalue, $form, $option_value)
+    {
+        $value = $rawvalue;
+        if (! $rawvalue) {
+            return '';
+        }
+
+        if ($form['options']['multiple'] !== true) {
+            return ($option_value == $value) ? "selected" : "";
+        }
+
+        switch ($form['options']['multiple_result_format']) {
+            case 'JSON':
+                $value = json_decode($rawvalue, true) ?: [];
+                $selected = (in_array($option_value, $value)) ? "selected" : "";
+                break;
+            default:
+            case 'COMMA_SEPARATOR':
+                $value = explode(', ', $rawvalue);
+                $selected = (in_array($option_value, $value)) ? "selected" : "";
+                break;
+            case 'SEMICOLON_SEPARATOR':
+                $value = explode('; ', $rawvalue);
+                $selected = (in_array($option_value, $value)) ? "selected" : "";
+                break;
+        }
+        return $selected;
+    }
+}
+if (! function_exists('array_get_keys')) {
+
+    /**
+     * @param array $_array
+     * @param array $keys
+     * @param null $default
+     * @return string
+     */
+    function array_get_keys(array $_array, array $keys, $default = null)
+    {
+        $_defaults = array_fill_keys($keys, $default);
+        return array_merge($_defaults, array_intersect_key($_array, $_defaults));
     }
 }

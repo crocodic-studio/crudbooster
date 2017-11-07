@@ -1,17 +1,17 @@
 <div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}'
-     style="{{@$form['style']}}">
-    <label class='control-label col-sm-2'>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
+     style="{{@$formInput['style']}}">
+    <label class='control-label col-sm-2'>{{$label}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
     <div class="{{$col_width?:'col-sm-10'}}">
 
-        @if(!$form['dataenum'] && !$form['datatable'] && !$form['dataquery'])
+        @if(!$formInput['dataenum'] && !$formInput['datatable'] && !$formInput['dataquery'])
             <em>{{cbTrans('there_is_no_option')}}</em>
         @endif
 
-        @if($form['dataenum']!='')
+        @if($formInput['dataenum']!='')
             <?php
             @$value = explode(";", $value);
             @array_walk($value, 'trim');
-            $dataenum = $form['dataenum'];
+            $dataenum = $formInput['dataenum'];
             $dataenum = (is_array($dataenum)) ? $dataenum : explode(";", $dataenum);
             ?>
             @foreach($dataenum as $k=>$d)
@@ -34,8 +34,8 @@
 
         <?php
 
-        if (@$form['datatable']):
-            $datatable_array = explode(",", $form['datatable']);
+        if (@$formInput['datatable']):
+            $datatable_array = explode(",", $formInput['datatable']);
             $datatable_tab = $datatable_array[0];
             $datatable_field = $datatable_array[1];
 
@@ -46,8 +46,8 @@
                 $selects_data->where('deleted_at', NULL);
             }
 
-            if (@$form['datatable_where']) {
-                $selects_data->whereraw($form['datatable_where']);
+            if (@$formInput['datatable_where']) {
+                $selects_data->whereraw($formInput['datatable_where']);
             }
 
             if (count($tables)) {
@@ -82,8 +82,8 @@
             }
 
         endif;
-        if ($form['dataquery']) {
-            $query = DB::select(DB::raw($form['dataquery']));
+        if ($formInput['dataquery']) {
+            $query = DB::select(DB::raw($formInput['dataquery']));
             if ($query) {
                 foreach ($query as $q) {
                     $checked = ($value == $q->value) ? "checked" : "";
@@ -98,7 +98,6 @@
             }
         }
         ?>
-        <div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
-        <p class='help-block'>{{ @$form['help'] }}</p>
+        @include('crudbooster::default._form_body.underField', ['help' => $formInput['help'], 'error' => $errors->first($name)])
     </div>
 </div>

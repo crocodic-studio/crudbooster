@@ -1,4 +1,4 @@
-@if($form['options']['latitude'] && $form['options']['longitude'])
+@if($formInput['options']['latitude'] && $formInput['options']['longitude'])
     <a href='javascript:void(0)' onclick='showModalMap{{$name}}()' title="Click to view the map">
         <i class='fa fa-map-marker'></i> {{$value}}
     </a>
@@ -40,19 +40,19 @@
         });
 
         function initMap {{$name}}() {
-                    @if($row->{$form['options']['latitude']} && $row->{$form['options']['longitude']})
+                    @if($row->{$formInput['options']['latitude']} && $row->{$formInput['options']['longitude']})
             var map = new google.maps.Map(document.getElementById('map-{{$name}}'), {
                     center: {
-                        lat: <?php echo $row->{$form['options']['latitude']} ?: 0;?>,
-                        lng: <?php echo $row->{$form['options']['longitude']} ?: 0;?> },
+                        lat: <?php echo $row->{$formInput['options']['latitude']} ?: 0;?>,
+                        lng: <?php echo $row->{$formInput['options']['longitude']} ?: 0;?> },
                     zoom: 12
                 });
             var infoWindow = new google.maps.InfoWindow();
 
             var marker = new google.maps.Marker({
                 position: {
-                    lat: <?php echo $row->{$form['options']['latitude']} ?: 0;?>,
-                    lng: <?php echo $row->{$form['options']['longitude']} ?: 0;?> },
+                    lat: <?php echo $row->{$formInput['options']['latitude']} ?: 0;?>,
+                    lng: <?php echo $row->{$formInput['options']['longitude']} ?: 0;?> },
                 map: map,
                 title: '{{$value}}'
             });

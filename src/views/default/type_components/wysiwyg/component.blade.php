@@ -2,7 +2,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#textarea_{{$name}}').summernote({
-                height: {{ ($form['options']['height'])?:"($(window).height() - 300)"}},
+                height: {{ ($formInput['options']['height'])?:"($(window).height() - 300)"}},
                 callbacks: {
                     onImageUpload: function (image) {
                         uploadImage{{$name}}(image[0]);
@@ -33,14 +33,13 @@
     </script>
 @endpush
 
-<div class='form-group' id='form-group-{{$name}}' style="{{@$form['style']}}">
-    <label class='control-label col-sm-2'>{{$form['label']}}</label>
+<div class='form-group' id='form-group-{{$name}}' style="{{@$formInput['style']}}">
+    <label class='control-label col-sm-2'>{{$label}}</label>
 
     <div class="{{$col_width?:'col-sm-10'}}">
         <textarea id='textarea_{{$name}}' id="{{$name}}"
-                  {{$required}} {{$readonly}} {{$disabled}} name="{{$form['name']}}" class='form-control'
+                  {{$required}} {{$readonly}} {{$disabled}} name="{{$formInput['name']}}" class='form-control'
                   rows='5'>{{ $value }}</textarea>
-        <div class="text-danger">{{ $errors->first($name) }}</div>
-        <p class='help-block'>{{ @$form['help'] }}</p>
+        @include('crudbooster::default._form_body.underField', ['help' => $formInput['help'], 'error' => $errors->first($name)])
     </div>
 </div>

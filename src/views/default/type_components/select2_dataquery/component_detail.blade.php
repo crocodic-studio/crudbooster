@@ -1,13 +1,13 @@
 <?php
-$field_value = $form['options']['field_value'];
-$field_label = $form['options']['field_label'];
+$field_value = $formInput['options']['field_value'];
+$field_label = $formInput['options']['field_label'];
 $rawvalue = $value;
-$data = DB::select(DB::raw($form['options']['query']));
+$data = DB::select(DB::raw($formInput['options']['query']));
 foreach ($data as $d) {
     $option_value = $d->$field_value;
     $option_label = $d->$field_label;
-    if ($form['options']['multiple'] == true) {
-        switch ($form['options']['multiple_result_format']) {
+    if ($formInput['options']['multiple'] == true) {
+        switch ($formInput['options']['multiple_result_format']) {
             case 'JSON':
                 $value = json_decode($rawvalue, true) ?: [];
                 if (in_array($option_value, $value)) {

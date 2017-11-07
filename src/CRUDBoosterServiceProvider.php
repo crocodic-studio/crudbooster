@@ -1,11 +1,14 @@
-<?php namespace crocodicstudio\crudbooster;
+<?php
+namespace crocodicstudio\crudbooster;
 
-use crocodicstudio\crudbooster\ApiGeneratorModule\CbApiGeneratorServiceProvider;
-use crocodicstudio\crudbooster\AuthModule\CbAuthServiceProvider;
-use crocodicstudio\crudbooster\PrivilegeModule\CbPrivilegesServiceProvider;
-use crocodicstudio\crudbooster\SettingModule\CbSettingsServiceProvider;
-use crocodicstudio\crudbooster\StatisticModule\CbStatisticsServiceProvider;
-use Illuminate\Support\Facades\Artisan;
+use crocodicstudio\crudbooster\Modules\ApiGeneratorModule\CbApiGeneratorServiceProvider;
+use crocodicstudio\crudbooster\Modules\AuthModule\CbAuthServiceProvider;
+use crocodicstudio\crudbooster\Modules\FileManagerModule\CbFileManagerServiceProvider;
+use crocodicstudio\crudbooster\Modules\MenuModule\CbMenuServiceProvider;
+use crocodicstudio\crudbooster\Modules\ModuleGenerator\CbModulesGeneratorServiceProvider;
+use crocodicstudio\crudbooster\Modules\PrivilegeModule\CbPrivilegesServiceProvider;
+use crocodicstudio\crudbooster\Modules\SettingModule\CbSettingsServiceProvider;
+use crocodicstudio\crudbooster\Modules\StatisticModule\CbStatisticsServiceProvider;
 use Illuminate\Support\ServiceProvider;
 use crocodicstudio\crudbooster\commands\CrudboosterInstallationCommand;
 use crocodicstudio\crudbooster\commands\CrudboosterUpdateCommand;
@@ -89,8 +92,6 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->app->register('Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider');
         $this->app->register('Intervention\Image\ImageServiceProvider');
         $this->app->register('Imanghafoori\Widgets\WidgetsServiceProvider');
-        $this->app->register(CbAuthServiceProvider::class);
-        $this->app->register(CbApiGeneratorServiceProvider::class);
 
         $loader = AliasLoader::getInstance();
         $loader->alias('PDF', 'Barryvdh\DomPDF\Facade');
@@ -98,9 +99,14 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $loader->alias('Image', 'Intervention\Image\Facades\Image');
         $loader->alias('CRUDBooster', 'crocodicstudio\crudbooster\helpers\CRUDBooster');
         $loader->alias('CB', 'crocodicstudio\crudbooster\helpers\CB');
+        $this->app->register(CbAuthServiceProvider::class);
+        $this->app->register(CbApiGeneratorServiceProvider::class);
+        $this->app->register(CbModulesGeneratorServiceProvider::class);
         $this->app->register(CbSettingsServiceProvider::class);
         $this->app->register(CbStatisticsServiceProvider::class);
         $this->app->register(CbPrivilegesServiceProvider::class);
+        $this->app->register(CbMenuServiceProvider::class);
+        $this->app->register(CbFileManagerServiceProvider::class);
     }
 
     private function registerCrudboosterCommand()

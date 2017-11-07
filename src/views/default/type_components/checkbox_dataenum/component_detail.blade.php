@@ -1,16 +1,15 @@
 <?php
-if ($form['options']['value']) {
-    $valueExplode = explode(';', $value);
-    $dataValue = explode(';', $form['options']['value']);
-    $dataEnum = explode(';', $form['options']['enum']);
+if ($formInput['options']['value']){
+    $dataEnum = explode(';', $formInput['options']['enum']);
     $result = [];
-    foreach ($dataValue as $i => $v) {
-        if (in_array($v, $valueExplode)) {
+    foreach (explode(';', $formInput['options']['value']) as $i => $v) {
+        if (in_array($v, explode(';', $value))) {
             $result[] = $dataEnum[$i];
         }
     }
-    echo implode(', ', $result);
+    $result = implode(', ', $result);
 } else {
-    echo str_replace(";", ", ", $value);
+    $result = str_replace(";", ", ", $value);
 }
 ?>
+{!! $result !!}
