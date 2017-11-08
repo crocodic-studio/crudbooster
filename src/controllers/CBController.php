@@ -499,7 +499,7 @@ class CBController extends Controller
         $array_input = [];
         $componentPath = implode(DIRECTORY_SEPARATOR, ["vendor", "crocodicstudio", "crudbooster", "src", "views", "default", "type_components", ""]);
 
-        foreach ($this->data_inputan as $di) {
+        foreach ($this->form as $di) {
             $ai = [];
             $name = $di['name'];
             $type = $di['type'];
@@ -586,7 +586,7 @@ class CBController extends Controller
         $hide_form = (request('hide_form')) ? unserialize(request('hide_form')) : [];
         $componentPath = implode(DIRECTORY_SEPARATOR, ["vendor", "crocodicstudio", "crudbooster", "src", "views", "default", 'type_components', '']);
 
-        foreach ($this->data_inputan as $ro) {
+        foreach ($this->form as $ro) {
             $name = $ro['name'];
             $type = $ro['type'] ?: 'text';
             $inputdata = request($name);

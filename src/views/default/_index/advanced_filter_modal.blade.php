@@ -33,13 +33,14 @@
                                 <div class='row between-group'
                                      style="{{ (CRUDBooster::getTypeFilter($col["field_with"]) == 'between')?"display:block":"display:none" }}">
 
-                                    <?php $value = CRUDBooster::getValueFilter($col["field_with"]); ?>
+                                    <?php
+                                    $value = CRUDBooster::getValueFilter($col["field_with"]);
+                                    $_arr = array_only($col, ['field_with', 'type_data', 'label'])
+                                    ?>
 
-                                    @include('crudbooster::default._index.advanced_filter_modal.datePicker',
-                                        ['dir' => 'from', 'value' => $value[0]] + array_only($col, ['field_with', 'type_data', 'label']))
+                                    @include('crudbooster::default._index.advanced_filter_modal.datePicker', ['dir' => 'from', 'value' => $value[0]] + $_arr)
 
-                                    @include('crudbooster::default._index.advanced_filter_modal.datePicker',
-                                        ['dir' => 'to',   'value' => $value[1]] + array_only($col, ['field_with', 'type_data', 'label']))
+                                    @include('crudbooster::default._index.advanced_filter_modal.datePicker', ['dir' => 'to',   'value' => $value[1]] + $_arr)
 
                                 </div>
                             </div><!--END COL_SM_6-->
