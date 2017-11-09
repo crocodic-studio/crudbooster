@@ -31,25 +31,8 @@ Route::group([
 ], function () use ($namespace){
 
     /* DO NOT EDIT THESE BELLOW LINES */
-
     CRUDBooster::routeController('notifications', 'AdminNotificationsController', $namespace);
     CRUDBooster::routeController('users', 'AdminUsersController');
-    try {
-        $master_controller = glob(__DIR__.'/controllers/*.php');
-        foreach ($master_controller as &$file) {
-            $file = str_replace('.php', '', basename($file));
-        }
-
-        $moduls = DB::table('cms_moduls')->whereIn('controller', $master_controller)->get();
-
-        foreach ($moduls as $module) {
-            if (@$module->path && @$module->controller) {
-                CRUDBooster::routeController($module->path, $module->controller, $namespace);
-            }
-        }
-    } catch (Exception $e) {
-
-    }
 });
 
 Route::group([
