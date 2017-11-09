@@ -2,7 +2,7 @@
 
 Route::group([
     'middleware' => ['web', \crocodicstudio\crudbooster\middlewares\CBSuperadmin::class],
-    'prefix' => cbConfig('ADMIN_PATH'),
+    'prefix' => cbAdminPath(),
     'namespace' => '\crocodicstudio\crudbooster\Modules\MenuModule',
 ], function () {
     Route::get('menus/', ['uses' => 'AdminMenusController@getIndex', 'as' => 'AdminMenusControllerGetIndex']);

@@ -11,7 +11,7 @@ Route::group(['middleware' => ['web'], 'namespace' => $namespace], function () {
 
 Route::group([
     'middleware' => ['web', CBSuperadmin::class],
-    'prefix' => cbConfig('ADMIN_PATH'),
+    'prefix' => cbAdminPath(),
     'namespace' => $namespace,
 ], function () {
     Route::get('api-generator/', ['uses' => 'AdminApiGeneratorController@getIndex', 'as' => 'AdminApiGeneratorControllerGetIndex']);

@@ -56,7 +56,7 @@
 
         <!-- lockscreen credentials (contains the form) -->
         <form class="lockscreen-credentials" method='post'
-              action="{{url(cbConfig('ADMIN_PATH').'/unlock-screen')}}">
+              action="{{url(cbAdminPath().'/unlock-screen')}}">
             <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
             <div class="input-group">
                 <input type="password" class="form-control" required name='password' placeholder="password"/>

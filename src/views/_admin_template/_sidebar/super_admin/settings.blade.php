@@ -3,7 +3,7 @@
         <span>{{ cbTrans('settings') }}</span> {!! CB::icon('angle-right pull-right') !!}
     </a>
     <ul class="treeview-menu">
-        <li class="{{ (Request::is(cbConfig('ADMIN_PATH').'/settings/add*')) ? 'active' : '' }}">
+        <li class="{{ (Request::is(cbAdminPath().'/settings/add*')) ? 'active' : '' }}">
             <a href='{{route("AdminSettingsControllerGetAdd")}}'>
                 {!! CB::icon('plus') !!} {{ cbTrans('Add_New_Setting') }}
             </a>

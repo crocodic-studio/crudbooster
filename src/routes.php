@@ -30,11 +30,11 @@ Route::group(['middleware' => ['web'], 'namespace' => $namespace], function () {
 // ROUTER FOR OWN CONTROLLER FROM CB
 Route::group([
     'middleware' => ['web', '\crocodicstudio\crudbooster\middlewares\CBBackend'],
-    'prefix' => cbConfig('ADMIN_PATH'),
+    'prefix' => cbAdminPath(),
     'namespace' => 'App\Http\Controllers',
 ], function () {
 
-    if (Request::is(cbConfig('ADMIN_PATH'))) {
+    if (Request::is(cbAdminPath())) {
         $menus = DB::table('cms_menus')->where('is_dashboard', 1)->first();
         if ($menus) {
             if ($menus->type == 'Statistic') {
@@ -66,12 +66,12 @@ Route::group([
 /* ROUTER FOR BACKEND CRUDBOOSTER */
 Route::group([
     'middleware' => ['web', \crocodicstudio\crudbooster\middlewares\CBBackend::class],
-    'prefix' => cbConfig('ADMIN_PATH'),
+    'prefix' => cbAdminPath(),
     'namespace' => $namespace,
 ], function () use ($namespace){
 
     /* DO NOT EDIT THESE BELLOW LINES */
-    if (Request::is(cbConfig('ADMIN_PATH'))) {
+    if (Request::is(cbAdminPath())) {
         $menus = DB::table('cms_menus')->where('is_dashboard', 1)->first();
         if (! $menus) {
             CRUDBooster::routeController('/', '\crocodicstudio\crudbooster\Modules\AuthModule\AuthController');
@@ -101,7 +101,7 @@ Route::group([
 
 Route::group([
     'middleware' => ['web', \crocodicstudio\crudbooster\middlewares\CBSuperadmin::class],
-    'prefix' => cbConfig('ADMIN_PATH'),
+    'prefix' => cbAdminPath(),
     'namespace' => $namespace,
 ], function () use ($namespace) {
     //CRUDBooster::routeController('file-manager', 'AdminFileManagerController', $namespace);

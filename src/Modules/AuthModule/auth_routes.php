@@ -1,6 +1,6 @@
 <?php
 $namespace = '\crocodicstudio\crudbooster\Modules\AuthModule';
-$prefix = cbConfig('ADMIN_PATH');
+$prefix = cbAdminPath();
 
 Route::group(['middleware' => ['web'], 'prefix' => $prefix, 'namespace' => $namespace], function () {
     Route::get('/', ['uses' => 'AuthController@getIndex', 'as' => 'AuthControllerGetIndex']);

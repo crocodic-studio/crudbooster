@@ -223,7 +223,7 @@ class CRUDBooster
 
     public static function adminPath($path = null)
     {
-        return url(cbConfig('ADMIN_PATH').'/'.$path);
+        return url(cbAdminPath().'/'.$path);
     }
 
     public static function sidebarMenu()
