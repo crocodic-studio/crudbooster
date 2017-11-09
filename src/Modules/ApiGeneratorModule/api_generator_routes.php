@@ -50,3 +50,22 @@ Route::group([
     Route::post('api-generator/upload-summernote', ['uses' => 'AdminApiGeneratorController@postUploadSummernote', 'as' => 'AdminApiGeneratorControllerPostUploadSummernote',]);
     Route::post('api-generator/upload-file', ['uses' => 'AdminApiGeneratorController@postUploadFile', 'as' => 'AdminApiGeneratorControllerPostUploadFile',]);
 });
+
+
+/* ROUTER FOR API GENERATOR */
+
+Route::group(['middleware' => ['api', '\crocodicstudio\crudbooster\middlewares\CBAuthAPI'], 'namespace' => ctrlNamespace()], function () {
+    //Router for custom api defeault
+
+    $dir = scandir(base_path(controllers_dir()));
+    foreach ($dir as $Ctrl) {
+        $Ctrl = str_replace('.php', '', $Ctrl);
+        $names = array_filter(preg_split('/(?=[A-Z])/', str_replace('Controller', '', $Ctrl)));
+        $names = strtolower(implode('_', $names));
+
+        if (substr($names, 0, 4) == 'api_') {
+            $names = str_replace('api_', '', $names);
+            Route::any('api/'.$names, $Ctrl.'@execute_api');
+        }
+    }
+});

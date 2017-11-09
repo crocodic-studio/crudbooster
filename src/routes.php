@@ -1,24 +1,5 @@
 <?php
 
-/* ROUTER FOR API GENERATOR */
-$namespace = '\crocodicstudio\crudbooster\controllers';
-
-Route::group(['middleware' => ['api', '\crocodicstudio\crudbooster\middlewares\CBAuthAPI'], 'namespace' => 'App\Http\Controllers'], function () {
-    //Router for custom api defeault
-
-    $dir = scandir(base_path(controllers_dir()));
-    foreach ($dir as $v) {
-        $v = str_replace('.php', '', $v);
-        $names = array_filter(preg_split('/(?=[A-Z])/', str_replace('Controller', '', $v)));
-        $names = strtolower(implode('_', $names));
-
-        if (substr($names, 0, 4) == 'api_') {
-            $names = str_replace('api_', '', $names);
-            Route::any('api/'.$names, $v.'@execute_api');
-        }
-    }
-});
-
 /* ROUTER FOR UPLOADS */
 Route::group(['middleware' => ['web'], 'namespace' => $namespace], function () {
     Route::get('uploads/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'FileController@getPreview', 'as' => 'fileControllerPreview']);
