@@ -12,7 +12,7 @@ Route::group(['middleware' => ['web'], 'namespace' => $namespace], function () {
 Route::group([
     'middleware' => ['web', '\crocodicstudio\crudbooster\middlewares\CBBackend'],
     'prefix' => cbAdminPath(),
-    'namespace' => 'App\Http\Controllers',
+    'namespace' => ctrlNamespace(),
 ], function () {
 
     if (Request::is(cbAdminPath())) {

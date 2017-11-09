@@ -15,6 +15,13 @@ if (! function_exists('cbAdminPath')) {
     }
 }
 
+if (! function_exists('ctrlNamespace')) {
+    function ctrlNamespace()
+    {
+        return 'App\Http\Controllers';
+    }
+}
+
 if (! function_exists('is_checked')) {
     /**
      * @param $format
