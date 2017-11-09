@@ -14,9 +14,9 @@ class CreateNullableCmsApicustom extends Migration
     {
         Schema::table('cms_apicustom', function (Blueprint $table) {
             $table->string('permalink')->nullable()->change();
-            $table->string('tabel')->nullable()->change();
+            $table->string('tabel', 50)->nullable()->change();
             $table->string('aksi')->nullable()->change();
-            $table->string('kolom')->nullable()->change();
+            $table->string('kolom', 50)->nullable()->change();
             $table->string('orderby')->nullable()->change();
             $table->string('sub_query_1')->nullable()->change();
             $table->string('sql_where')->nullable()->change();
