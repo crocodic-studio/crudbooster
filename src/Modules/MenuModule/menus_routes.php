@@ -32,3 +32,31 @@ Route::group([
     Route::post('menus/upload-file', ['uses' => 'AdminMenusController@postUploadFile', 'as' => 'AdminMenusControllerPostUploadFile',]);
 });
 
+// ROUTER FOR OWN CONTROLLER FROM CB
+Route::group([
+    'middleware' => ['web', \crocodicstudio\crudbooster\middlewares\CBBackend::class],
+    'prefix' => cbAdminPath(),
+    'namespace' => ctrlNamespace(),
+], function () {
+    if (!Request::is(cbAdminPath())) {
+        return ;
+    }
+    $menus = DB::table('cms_menus')->where('is_dashboard', 1)->first();
+    if (!$menus) {
+        return ;
+    }
+    if ($menus->type == 'Statistic') {
+        Route::get('/', '\\crocodicstudio\\crudbooster\\StatisticModule\\AdminStatisticBuilderController@getDashboard');
+    } elseif ($menus->type == 'Module') {
+        $module = CRUDBooster::first('cms_moduls', ['path' => $menus->path]);
+        Route::get('/', $module->controller.'@getIndex');
+    } elseif ($menus->type == 'Route') {
+        $action = str_replace("Controller", "Controller@", $menus->path);
+        $action = str_replace(['Get', 'Post'], ['get', 'post'], $action);
+        Route::get('/', $action);
+    } elseif ($menus->type == 'Controller & Method') {
+        Route::get('/', $menus->path);
+    } elseif ($menus->type == 'URL') {
+        redirect($menus->path);
+    }
+});
