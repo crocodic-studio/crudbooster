@@ -31,12 +31,6 @@ Route::group([
 ], function () use ($namespace){
 
     /* DO NOT EDIT THESE BELLOW LINES */
-    if (Request::is(cbAdminPath())) {
-        $menus = DB::table('cms_menus')->where('is_dashboard', 1)->first();
-        if (! $menus) {
-            CRUDBooster::routeController('/', '\crocodicstudio\crudbooster\Modules\AuthModule\AuthController');
-        }
-    }
 
     CRUDBooster::routeController('notifications', 'AdminNotificationsController', $namespace);
     CRUDBooster::routeController('users', 'AdminUsersController');
