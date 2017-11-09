@@ -38,7 +38,6 @@ Route::group([
         }
     }
 
-    CRUDBooster::routeController('file-manager', $namespace);
     CRUDBooster::routeController('notifications', 'AdminNotificationsController', $namespace);
     CRUDBooster::routeController('users', 'AdminUsersController');
     try {
