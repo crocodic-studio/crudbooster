@@ -80,7 +80,7 @@ Route::group([
 
     CRUDBooster::routeController('file-manager', $namespace);
     CRUDBooster::routeController('notifications', 'AdminNotificationsController', $namespace);
-    CRUDBooster::routeController('users', 'AdminUsersController', $namespace);
+    CRUDBooster::routeController('users', 'AdminUsersController');
     try {
         $master_controller = glob(__DIR__.'/controllers/*.php');
         foreach ($master_controller as &$file) {
