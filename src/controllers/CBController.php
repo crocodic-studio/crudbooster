@@ -1114,8 +1114,9 @@ class CBController extends Controller {
 		$page_title      = trans("crudbooster.add_data_page_title",['module'=>CRUDBooster::getCurrentModule()->name]);
 		$page_menu       = Route::getCurrentRoute()->getActionName();
 		$command 		 = 'add';
+		$option_id		 = $this->option_id;
 
-		return view('crudbooster::default.form',compact('page_title','page_menu','command'));
+		return view('crudbooster::default.form',compact('page_title','page_menu','command','option_id'));
 	}
 
 	public function postAddSave() {
@@ -1255,7 +1256,9 @@ class CBController extends Controller {
 		$page_title 	 = trans("crudbooster.edit_data_page_title",['module'=>CRUDBooster::getCurrentModule()->name,'name'=>$row->{$this->title_field}]);
 		$command 		 = 'edit';
 		Session::put('current_row_id',$id);
-		return view('crudbooster::default.form',compact('id','row','page_menu','page_title','command'));
+		$option_id		 = $this->option_id;
+
+		return view('crudbooster::default.form',compact('id','row','page_menu','page_title','command','option_id'));
 	}
 
 	public function postEditSave($id) {
