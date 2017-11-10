@@ -1,5 +1,9 @@
 <?php
 
+
+use crocodicstudio\crudbooster\middlewares\CBBackend;
+
+$namespace = '\crocodicstudio\crudbooster\controllers';
 /* ROUTER FOR UPLOADS */
 Route::group(['middleware' => ['web'], 'namespace' => $namespace], function () {
     Route::get('uploads/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'FileController@getPreview', 'as' => 'fileControllerPreview']);
@@ -10,14 +14,14 @@ Route::group(['middleware' => ['web'], 'namespace' => $namespace], function () {
 
 // ROUTER FOR OWN CONTROLLER FROM CB
 Route::group([
-    'middleware' => ['web', '\crocodicstudio\crudbooster\middlewares\CBBackend'],
+    'middleware' => ['web', CBBackend::class],
     'prefix' => cbAdminPath(),
     'namespace' => ctrlNamespace(),
 ], function () {
     try {
-        $moduls = DB::table('cms_moduls')->where('path', '!=', '')->where('controller', '!=', '')->where('is_protected', 0)->get();
-        foreach ($moduls as $v) {
-            CRUDBooster::routeController($v->path, $v->controller);
+        $modules = DB::table('cms_moduls')->where('path', '!=', '')->where('controller', '!=', '')->where('is_protected', 0)->get();
+        foreach ($modules as $module) {
+            CRUDBooster::routeController($module->path, $module->controller);
         }
     } catch (Exception $e) {
     }
@@ -25,7 +29,7 @@ Route::group([
 
 /* ROUTER FOR BACKEND CRUDBOOSTER */
 Route::group([
-    'middleware' => ['web', \crocodicstudio\crudbooster\middlewares\CBBackend::class],
+    'middleware' => ['web', CBBackend::class],
     'prefix' => cbAdminPath(),
     'namespace' => $namespace,
 ], function () use ($namespace){
