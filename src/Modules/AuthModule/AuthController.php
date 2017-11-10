@@ -43,7 +43,7 @@ class AuthController extends Controller
     public function getLogin()
     {
         if (CRUDBooster::myId()) {
-            return redirect(cbConfig('ADMIN_PATH'));
+            return redirect(cbAdminPath());
         }
 
         return view('CbAuth::login');

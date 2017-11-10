@@ -15,7 +15,7 @@ class CbSettingsServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->app['view']->addNamespace('CbSettings', __DIR__.'/views');
-        require __DIR__.'/settings_routes.php';
+        $this->loadRoutesFrom( __DIR__.'/settings_routes.php');
     }
 
     /**

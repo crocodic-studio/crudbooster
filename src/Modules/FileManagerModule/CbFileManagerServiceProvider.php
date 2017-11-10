@@ -14,7 +14,7 @@ class CbFileManagerServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->app['view']->addNamespace('CbFileManager', __DIR__.'/views');
-        require __DIR__.'/file_manager_routes.php';
+        $this->loadRoutesFrom( __DIR__.'/file_manager_routes.php');
     }
 
     /**

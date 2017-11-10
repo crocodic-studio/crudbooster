@@ -223,7 +223,7 @@ class CRUDBooster
 
     public static function adminPath($path = null)
     {
-        return url(cbConfig('ADMIN_PATH').'/'.$path);
+        return url(cbAdminPath().'/'.$path);
     }
 
     public static function sidebarMenu()
@@ -297,7 +297,7 @@ class CRUDBooster
 
     public static function getCurrentMethod()
     {
-        $action = str_replace("App\Http\Controllers", "", Route::currentRouteAction());
+        $action = str_replace(ctrlNamespace(), "", Route::currentRouteAction());
         $atloc = strpos($action, '@') + 1;
         $method = substr($action, $atloc);
 
@@ -1090,7 +1090,7 @@ class CRUDBooster
 
         $prefix = trim($prefix, '/').'/';
 
-        $namespace = ($namespace) ?: 'App\Http\Controllers';
+        $namespace = ($namespace) ?: ctrlNamespace();
 
         try {
             Route::get($prefix, ['uses' => $controller.'@getIndex', 'as' => $controller.'GetIndex']);

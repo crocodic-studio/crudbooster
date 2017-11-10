@@ -4,7 +4,7 @@ $namespace = '\crocodicstudio\crudbooster\Modules\ModuleGenerator';
 
 Route::group([
     'middleware' => ['web', \crocodicstudio\crudbooster\middlewares\CBSuperadmin::class],
-    'prefix' => cbConfig('ADMIN_PATH'),
+    'prefix' => cbAdminPath(),
     'namespace' => $namespace,
 ], function () use ($namespace) {
     Route::get('modules/', ['uses' => 'AdminModulesController@getIndex', 'as' => 'AdminModulesControllerGetIndex']);

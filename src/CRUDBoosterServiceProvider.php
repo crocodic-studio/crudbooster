@@ -60,7 +60,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         }
 
         require __DIR__.'/validations/validation.php';
-        require __DIR__.'/routes.php';
+        $this->loadRoutesFrom( __DIR__.'/routes.php');
     }
 
     /**

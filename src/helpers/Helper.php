@@ -8,6 +8,19 @@
 | ---------------------------------------------------------------------------------------------------------------
 |
 */
+if (! function_exists('cbAdminPath')) {
+    function cbAdminPath()
+    {
+        return cbConfig('ADMIN_PATH');
+    }
+}
+
+if (! function_exists('ctrlNamespace')) {
+    function ctrlNamespace()
+    {
+        return 'App\Http\Controllers';
+    }
+}
 
 if (! function_exists('is_checked')) {
     /**

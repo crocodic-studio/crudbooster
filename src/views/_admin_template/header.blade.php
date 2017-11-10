@@ -2,7 +2,7 @@
 <header class="main-header">
 
     <!-- Logo -->
-    <a href="{{url(cbConfig('ADMIN_PATH'))}}"
+    <a href="{{url(cbAdminPath())}}"
        title='{{CRUDBooster::getSetting('appname')}}'
        class="logo">{{CRUDBooster::getSetting('appname')}}</a>
 

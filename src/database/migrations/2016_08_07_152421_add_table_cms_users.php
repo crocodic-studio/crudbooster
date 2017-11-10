@@ -15,9 +15,9 @@ class AddTableCmsUsers extends Migration
         Schema::create('cms_users', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->string('name')->nullable();
+            $table->string('name', 50)->nullable();
             $table->string('photo')->nullable();
-            $table->string('email')->nullable();
+            $table->string('email', 50)->nullable();
             $table->string('password')->nullable();
             $table->integer('id_cms_privileges')->nullable();
 

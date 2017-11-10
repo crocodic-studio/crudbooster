@@ -15,7 +15,7 @@ class CbAuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->app['view']->addNamespace('CbAuth', __DIR__.'/views');
-        require __DIR__.'/auth_routes.php';
+        $this->loadRoutesFrom( __DIR__.'/auth_routes.php');
     }
 
     /**

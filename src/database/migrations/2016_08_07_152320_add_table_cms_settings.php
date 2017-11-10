@@ -15,7 +15,7 @@ class AddTableCmsSettings extends Migration
         Schema::create('cms_settings', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->string('name')->nullable();
+            $table->string('name', 50)->nullable();
             $table->text('content')->nullable();
             $table->string('content_input_type')->nullable();
             $table->string('dataenum')->nullable();

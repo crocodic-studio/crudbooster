@@ -59,7 +59,7 @@ class AdminNotificationsController extends CBController
 
     private function makeColumns()
     {
-        $read_notification_url = url(cbConfig('ADMIN_PATH')).'/notifications/read';
+        $read_notification_url = url(cbAdminPath()).'/notifications/read';
 
         $this->col = [];
         $this->col[] = ["label" => "Content", "name" => "content", "callback_php" => '"<a href=\"'.$read_notification_url.'/$row->id\">$row->content</a>"'];

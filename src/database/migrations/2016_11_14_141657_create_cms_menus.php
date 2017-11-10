@@ -14,11 +14,11 @@ class CreateCmsMenus extends Migration
     {
         Schema::create('cms_menus', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->nullable();
-            $table->string('type')->default('url');
-            $table->string('path')->nullable();
-            $table->string('color')->nullable();
-            $table->string('icon')->nullable();
+            $table->string('name', 30)->nullable();
+            $table->string('type', 30)->default('url');
+            $table->string('path', 50)->nullable();
+            $table->string('color', 30)->nullable();
+            $table->string('icon', 30)->nullable();
             $table->integer('parent_id')->nullable();
             $table->boolean('is_active')->default(1);
             $table->boolean('is_dashboard')->default(0);

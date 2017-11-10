@@ -1,8 +1,11 @@
 <?php
 
+use crocodicstudio\crudbooster\middlewares\CBBackend;
+use crocodicstudio\crudbooster\middlewares\CBSuperadmin;
+
 Route::group([
-    'middleware' => ['web', \crocodicstudio\crudbooster\middlewares\CBSuperadmin::class],
-    'prefix' => cbConfig('ADMIN_PATH'),
+    'middleware' => ['web', CBSuperadmin::class],
+    'prefix' => cbAdminPath(),
     'namespace' => '\crocodicstudio\crudbooster\Modules\MenuModule',
 ], function () {
     Route::get('menus/', ['uses' => 'AdminMenusController@getIndex', 'as' => 'AdminMenusControllerGetIndex']);
@@ -26,9 +29,50 @@ Route::group([
     Route::post('menus/find-data', ['uses' => 'AdminMenusController@postFindData', 'as' => 'AdminMenusControllerPostFindData',]);
     Route::post('menus/done-import', ['uses' => 'AdminMenusController@postDoneImport', 'as' => 'AdminMenusControllerPostDoneImport',]);
     Route::post('menus/do-import-chunk', ['uses' => 'AdminMenusController@postDoImportChunk', 'as' => 'AdminMenusControllerPostDoImportChunk',]);
-    Route::post('menus/do-upload-import-data', ['uses' => 'AdminMenusController@postDoUploadImportData', 'as' => 'AdminMenusControllerPostDoUploadImportData',]);
+    Route::post('menus/do-upload-import-data', [
+        'uses' => 'AdminMenusController@postDoUploadImportData',
+        'as' => 'AdminMenusControllerPostDoUploadImportData',
+    ]);
     Route::post('menus/action-selected', ['uses' => 'AdminMenusController@postActionSelected', 'as' => 'AdminMenusControllerPostActionSelected',]);
     Route::post('menus/upload-summernote', ['uses' => 'AdminMenusController@postUploadSummernote', 'as' => 'AdminMenusControllerPostUploadSummernote',]);
     Route::post('menus/upload-file', ['uses' => 'AdminMenusController@postUploadFile', 'as' => 'AdminMenusControllerPostUploadFile',]);
 });
 
+if (! Request::is(cbAdminPath())) {
+    return;
+}
+
+$dashboard_menu = DB::table('cms_menus')->where('is_dashboard', 1)->first();
+// ROUTER FOR OWN CONTROLLER FROM CB
+Route::group(['middleware' => ['web', CBBackend::class], 'prefix' => cbAdminPath(), 'namespace' => ctrlNamespace(),
+], function () use ($dashboard_menu) {
+
+    $dashboard_type = $dashboard_menu->type;
+    $path = $dashboard_menu->path;
+
+    if (! $dashboard_menu) {
+        return;
+    }
+
+    if ($dashboard_type == 'Statistic') {
+        Route::get('/', '\\crocodicstudio\\crudbooster\\StatisticModule\\AdminStatisticBuilderController@getDashboard');
+    } elseif ($dashboard_type == 'Module') {
+        $module = CRUDBooster::first('cms_moduls', ['path' => $path]);
+        Route::get('/', $module->controller.'@getIndex');
+    } elseif ($dashboard_type == 'Route') {
+        $action = str_replace("Controller", "Controller@", $path);
+        $action = str_replace(['Get', 'Post'], ['get', 'post'], $action);
+        Route::get('/', $action);
+    } elseif ($dashboard_type == 'Controller & Method') {
+        Route::get('/', $path);
+    } elseif ($dashboard_type == 'URL') {
+        redirect($path);
+    }
+});
+
+Route::group(['middleware' => ['web', CBBackend::class], 'prefix' => cbAdminPath(), 'namespace' => $namespace,
+], function () use ($namespace, $dashboard_menu) {
+    if (! $dashboard_menu) {
+        CRUDBooster::routeController('/', '\crocodicstudio\crudbooster\Modules\AuthModule\AuthController');
+    }
+});

@@ -14,7 +14,7 @@ class AddGroupSetting extends Migration
     {
         Schema::table('cms_settings', function (Blueprint $table) {
             //
-            $table->string('group_setting')->nullable();
+            $table->string('group_setting', 50)->nullable();
         });
     }
 

@@ -1,5 +1,5 @@
 <li data-id='{{$dashboard->id}}'
-    class="{{ (Request::is(cbConfig('ADMIN_PATH'))) ? 'active' : '' }}">
+    class="{{ (Request::is(cbAdminPath())) ? 'active' : '' }}">
     <a href='{!! $dashboard->url !!}'
        class='{{($dashboard->color)?"text-".$dashboard->color:""}}'>
         {!! CB::icon('dashboard') !!}

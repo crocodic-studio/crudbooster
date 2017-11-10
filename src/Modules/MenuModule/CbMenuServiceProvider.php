@@ -15,7 +15,7 @@ class CbMenuServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->app['view']->addNamespace('CbMenu', __DIR__.'/views');
-        require __DIR__.'/menus_routes.php';
+        $this->loadRoutesFrom( __DIR__.'/menus_routes.php');
     }
 
     /**
