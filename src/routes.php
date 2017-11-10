@@ -18,6 +18,7 @@ Route::group([
     'prefix' => cbAdminPath(),
     'namespace' => ctrlNamespace(),
 ], function () {
+    CRUDBooster::routeController('users', 'AdminUsersController');
     try {
         $modules = DB::table('cms_moduls')->where('path', '!=', '')->where('controller', '!=', '')->where('is_protected', 0)->get();
         foreach ($modules as $module) {
@@ -36,7 +37,7 @@ Route::group([
 
     /* DO NOT EDIT THESE BELLOW LINES */
     CRUDBooster::routeController('notifications', 'AdminNotificationsController', $namespace);
-    CRUDBooster::routeController('users', 'AdminUsersController');
+
 });
 
 Route::group([
