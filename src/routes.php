@@ -30,14 +30,8 @@ Route::group([
 
 /* ROUTER FOR BACKEND CRUDBOOSTER */
 Route::group([
-    'middleware' => ['web', CBBackend::class],
-    'prefix' => cbAdminPath(),
-    'namespace' => $namespace,
-], function () use ($namespace){
-
-    /* DO NOT EDIT THESE BELLOW LINES */
+    'middleware' => ['web', CBBackend::class], 'prefix' => cbAdminPath(), 'namespace' => $namespace,], function () use ($namespace){
     CRUDBooster::routeController('notifications', 'AdminNotificationsController', $namespace);
-
 });
 
 Route::group([
@@ -45,6 +39,10 @@ Route::group([
     'prefix' => cbAdminPath(),
     'namespace' => $namespace,
 ], function () use ($namespace) {
+    Route::post('{module}/do-upload-import-data', [
+        'uses' => 'FileController@uploadImportData',
+        'as' => 'UploadImportData',
+    ]);
     CRUDBooster::routeController('email-templates', 'AdminEmailTemplatesController', $namespace);
     CRUDBooster::routeController('logs', 'AdminLogsController', $namespace);
 });

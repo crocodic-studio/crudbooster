@@ -781,23 +781,6 @@ class CBController extends Controller
         return response()->json(['status' => true]);
     }
 
-    public function postDoUploadImportData()
-    {
-        $import = app(IndexImport::class);
-        $this->cbLoader();
-        if (! Request::hasFile('userfile')) {
-            return redirect()->back();
-        }
-        $file = Request::file('userfile');
-        $validator = $import->validateForImport($file);
-        if ($validator->fails()) {
-            return CB::backWithMsg(implode('<br/>', $validator->errors()->all()), 'warning');
-        }
-        $url = $import->uploadImportData($file);
-
-        return redirect($url);
-    }
-
     public function postActionSelected()
     {
         $this->cbLoader();

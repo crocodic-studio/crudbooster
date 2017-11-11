@@ -114,10 +114,10 @@ Route::group([
         'as' => 'AdminFileManagerControllerPostDoImportChunk',
     ]);
 
-    Route::post('file-manager/do-upload-import-data', [
+ /*   Route::post('file-manager/do-upload-import-data', [
         'uses' => 'AdminFileManagerController@postDoUploadImportData',
         'as' => 'AdminFileManagerControllerPostDoUploadImportData',
-    ]);
+    ]);*/
 
     Route::post('file-manager/action-selected', [
         'uses' => 'AdminFileManagerController@postActionSelected',

@@ -36,7 +36,7 @@ Route::group([
     Route::post('statistic-builder/edit-save/{one?}', ['uses' => 'AdminStatisticBuilderController@postEditSave', 'as' => 'AdminStatisticBuilderControllerPostEditSave',]);
     Route::post('statistic-builder/done-import', ['uses' => 'AdminStatisticBuilderController@postDoneImport', 'as' => 'AdminStatisticBuilderControllerPostDoneImport',]);
     Route::post('statistic-builder/do-import-chunk', ['uses' => 'AdminStatisticBuilderController@postDoImportChunk', 'as' => 'AdminStatisticBuilderControllerPostDoImportChunk',]);
-    Route::post('statistic-builder/do-upload-import-data', ['uses' => 'AdminStatisticBuilderController@postDoUploadImportData', 'as' => 'AdminStatisticBuilderControllerPostDoUploadImportData',]);
+    //Route::post('statistic-builder/do-upload-import-data', ['uses' => 'AdminStatisticBuilderController@postDoUploadImportData', 'as' => 'AdminStatisticBuilderControllerPostDoUploadImportData',]);
     Route::post('statistic-builder/action-selected', ['uses' => 'AdminStatisticBuilderController@postActionSelected', 'as' => 'AdminStatisticBuilderControllerPostActionSelected',]);
     Route::post('statistic-builder/upload-summernote', ['uses' => 'AdminStatisticBuilderController@postUploadSummernote', 'as' => 'AdminStatisticBuilderControllerPostUploadSummernote',]);
     Route::post('statistic-builder/upload-file', ['uses' => 'AdminStatisticBuilderController@postUploadFile', 'as' => 'AdminStatisticBuilderControllerPostUploadFile',]);
