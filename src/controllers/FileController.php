@@ -2,8 +2,7 @@
 
 namespace crocodicstudio\crudbooster\controllers;
 
-use crocodicstudio\crudbooster\controllers\Controller;
-
+use crocodicstudio\crudbooster\CBCoreModule\FileUploader;
 use crocodicstudio\crudbooster\controllers\Helpers\IndexImport;
 use Storage;
 use Response;
@@ -162,5 +161,13 @@ class FileController extends Controller
         $isCachedByBrowser = ($h1 || $h2);
 
         return [$headers, $isCachedByBrowser];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function doneImport()
+    {
+        return app(IndexImport::class)->doneImport();
     }
 }

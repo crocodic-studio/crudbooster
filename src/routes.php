@@ -1,6 +1,5 @@
 <?php
 
-
 use crocodicstudio\crudbooster\middlewares\CBBackend;
 
 $namespace = '\crocodicstudio\crudbooster\controllers';
@@ -8,9 +7,6 @@ $namespace = '\crocodicstudio\crudbooster\controllers';
 Route::group(['middleware' => ['web'], 'namespace' => $namespace], function () {
     Route::get('uploads/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'FileController@getPreview', 'as' => 'fileControllerPreview']);
 });
-
-/* ROUTER FOR WEB */
-
 
 // ROUTER FOR OWN CONTROLLER FROM CB
 Route::group([
@@ -42,6 +38,7 @@ Route::group([
     Route::post('{module}/do-upload-import-data', ['uses' => 'FileController@uploadImportData', 'as' => 'UploadImportData',]);
     Route::post('{module}/upload-summernote', ['uses' => 'FileController@uploadSummernote', 'as' => 'UploadImportData',]);
     Route::post('{module}/upload-file', ['uses' => 'FileController@uploadFile', 'as' => 'UploadImportData',]);
+    Route::post('{module}/done-import', ['uses' => 'FileController@doneImport', 'as' => 'doneImportData',]);
     CRUDBooster::routeController('email-templates', 'AdminEmailTemplatesController', $namespace);
     CRUDBooster::routeController('logs', 'AdminLogsController', $namespace);
 });

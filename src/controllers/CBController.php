@@ -751,14 +751,6 @@ class CBController extends Controller
         return view('crudbooster::import', $data);
     }
 
-    public function postDoneImport()
-    {
-        $importer = app(IndexImport::class);
-        $this->cbLoader();
-
-        return $importer->doneImport();
-    }
-
     public function postDoImportChunk()
     {
         $import = app(IndexImport::class);

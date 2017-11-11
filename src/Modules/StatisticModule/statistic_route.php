@@ -34,7 +34,7 @@ Route::group([
     Route::post('statistic-builder/find-data-old', ['uses' => 'AdminStatisticBuilderController@postFindDataOld', 'as' => 'AdminStatisticBuilderControllerPostFindDataOld',]);
     Route::post('statistic-builder/add-save', ['uses' => 'AdminStatisticBuilderController@postAddSave', 'as' => 'AdminStatisticBuilderControllerPostAddSave',]);
     Route::post('statistic-builder/edit-save/{one?}', ['uses' => 'AdminStatisticBuilderController@postEditSave', 'as' => 'AdminStatisticBuilderControllerPostEditSave',]);
-    Route::post('statistic-builder/done-import', ['uses' => 'AdminStatisticBuilderController@postDoneImport', 'as' => 'AdminStatisticBuilderControllerPostDoneImport',]);
+    //Route::post('statistic-builder/done-import', ['uses' => 'AdminStatisticBuilderController@postDoneImport', 'as' => 'AdminStatisticBuilderControllerPostDoneImport',]);
     Route::post('statistic-builder/do-import-chunk', ['uses' => 'AdminStatisticBuilderController@postDoImportChunk', 'as' => 'AdminStatisticBuilderControllerPostDoImportChunk',]);
     //Route::post('statistic-builder/do-upload-import-data', ['uses' => 'AdminStatisticBuilderController@postDoUploadImportData', 'as' => 'AdminStatisticBuilderControllerPostDoUploadImportData',]);
     Route::post('statistic-builder/action-selected', ['uses' => 'AdminStatisticBuilderController@postActionSelected', 'as' => 'AdminStatisticBuilderControllerPostActionSelected',]);

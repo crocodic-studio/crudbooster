@@ -104,10 +104,10 @@ Route::group([
         'as' => 'AdminFileManagerControllerGetImportData',
     ]);
 
-    Route::post('file-manager/done-import', [
+/*    Route::post('file-manager/done-import', [
         'uses' => 'AdminFileManagerController@postDoneImport',
         'as' => 'AdminFileManagerControllerPostDoneImport',
-    ]);
+    ]);*/
 
     Route::post('file-manager/do-import-chunk', [
         'uses' => 'AdminFileManagerController@postDoImportChunk',
