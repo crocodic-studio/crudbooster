@@ -6,6 +6,7 @@ use crocodicstudio\crudbooster\Modules\AuthModule\CbAuthServiceProvider;
 use crocodicstudio\crudbooster\Modules\FileManagerModule\CbFileManagerServiceProvider;
 use crocodicstudio\crudbooster\Modules\MenuModule\CbMenuServiceProvider;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\CbModulesGeneratorServiceProvider;
+use crocodicstudio\crudbooster\Modules\PrivilegeModule\CbNotificationsServiceProvider;
 use crocodicstudio\crudbooster\Modules\PrivilegeModule\CbPrivilegesServiceProvider;
 use crocodicstudio\crudbooster\Modules\SettingModule\CbSettingsServiceProvider;
 use crocodicstudio\crudbooster\Modules\StatisticModule\CbStatisticsServiceProvider;
@@ -107,6 +108,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->app->register(CbPrivilegesServiceProvider::class);
         $this->app->register(CbMenuServiceProvider::class);
         $this->app->register(CbFileManagerServiceProvider::class);
+        $this->app->register(CbNotificationsServiceProvider::class);
     }
 
     private function registerCrudboosterCommand()
