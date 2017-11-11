@@ -14,6 +14,16 @@ use CB;
 
 class FileController extends Controller
 {
+    public function uploadSummernote()
+    {
+        echo asset(app( FileUploader::class)->uploadFile('userfile'));
+    }
+
+    public function uploadFile()
+    {
+        echo app(FileUploader::class)->uploadFile('userfile');
+    }
+
     public function doUploadImportData()
     {
         $import = app(IndexImport::class);

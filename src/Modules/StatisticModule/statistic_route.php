@@ -38,8 +38,8 @@ Route::group([
     Route::post('statistic-builder/do-import-chunk', ['uses' => 'AdminStatisticBuilderController@postDoImportChunk', 'as' => 'AdminStatisticBuilderControllerPostDoImportChunk',]);
     //Route::post('statistic-builder/do-upload-import-data', ['uses' => 'AdminStatisticBuilderController@postDoUploadImportData', 'as' => 'AdminStatisticBuilderControllerPostDoUploadImportData',]);
     Route::post('statistic-builder/action-selected', ['uses' => 'AdminStatisticBuilderController@postActionSelected', 'as' => 'AdminStatisticBuilderControllerPostActionSelected',]);
-    Route::post('statistic-builder/upload-summernote', ['uses' => 'AdminStatisticBuilderController@postUploadSummernote', 'as' => 'AdminStatisticBuilderControllerPostUploadSummernote',]);
-    Route::post('statistic-builder/upload-file', ['uses' => 'AdminStatisticBuilderController@postUploadFile', 'as' => 'AdminStatisticBuilderControllerPostUploadFile',]);
+    //Route::post('statistic-builder/upload-summernote', ['uses' => 'AdminStatisticBuilderController@postUploadSummernote', 'as' => 'AdminStatisticBuilderControllerPostUploadSummernote',]);
+    //Route::post('statistic-builder/upload-file', ['uses' => 'AdminStatisticBuilderController@postUploadFile', 'as' => 'AdminStatisticBuilderControllerPostUploadFile',]);
 
 });
 

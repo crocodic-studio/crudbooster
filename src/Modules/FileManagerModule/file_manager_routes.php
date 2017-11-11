@@ -129,7 +129,7 @@ Route::group([
         'as' => 'AdminFileManagerControllerGetDeleteImage',
     ]);
 
-    Route::post('file-manager/upload-summernote', [
+/*    Route::post('file-manager/upload-summernote', [
         'uses' => 'AdminFileManagerController@postUploadSummernote',
         'as' => 'AdminFileManagerControllerPostUploadSummernote',
     ]);
@@ -137,6 +137,6 @@ Route::group([
     Route::post('file-manager/upload-file', [
         'uses' => 'AdminFileManagerController@postUploadFile',
         'as' => 'AdminFileManagerControllerPostUploadFile',
-    ]);
+    ]);*/
 
 });

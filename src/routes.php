@@ -39,10 +39,9 @@ Route::group([
     'prefix' => cbAdminPath(),
     'namespace' => $namespace,
 ], function () use ($namespace) {
-    Route::post('{module}/do-upload-import-data', [
-        'uses' => 'FileController@uploadImportData',
-        'as' => 'UploadImportData',
-    ]);
+    Route::post('{module}/do-upload-import-data', ['uses' => 'FileController@uploadImportData', 'as' => 'UploadImportData',]);
+    Route::post('{module}/upload-summernote', ['uses' => 'FileController@uploadSummernote', 'as' => 'UploadImportData',]);
+    Route::post('{module}/upload-file', ['uses' => 'FileController@uploadFile', 'as' => 'UploadImportData',]);
     CRUDBooster::routeController('email-templates', 'AdminEmailTemplatesController', $namespace);
     CRUDBooster::routeController('logs', 'AdminLogsController', $namespace);
 });

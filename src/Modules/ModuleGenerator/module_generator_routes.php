@@ -47,6 +47,6 @@ Route::group([
     Route::post('modules/do-import-chunk', ['uses' => 'AdminModulesController@postDoImportChunk', 'as' => 'AdminModulesControllerPostDoImportChunk',]);
     //Route::post('modules/do-upload-import-data', ['uses' => 'AdminModulesController@postDoUploadImportData', 'as' => 'AdminModulesControllerPostDoUploadImportData',]);
     Route::post('modules/action-selected', ['uses' => 'AdminModulesController@postActionSelected', 'as' => 'AdminModulesControllerPostActionSelected',]);
-    Route::post('modules/upload-summernote', ['uses' => 'AdminModulesController@postUploadSummernote', 'as' => 'AdminModulesControllerPostUploadSummernote',]);
-    Route::post('modules/upload-file', ['uses' => 'AdminModulesController@postUploadFile', 'as' => 'AdminModulesControllerPostUploadFile',]);
+    //Route::post('modules/upload-summernote', ['uses' => 'AdminModulesController@postUploadSummernote', 'as' => 'AdminModulesControllerPostUploadSummernote',]);
+    //Route::post('modules/upload-file', ['uses' => 'AdminModulesController@postUploadFile', 'as' => 'AdminModulesControllerPostUploadFile',]);
 });

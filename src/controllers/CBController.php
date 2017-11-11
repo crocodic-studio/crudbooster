@@ -860,20 +860,6 @@ class CBController extends Controller
         CB::redirect(Request::server('HTTP_REFERER'), trans('crudbooster.alert_delete_data_success'), 'success');
     }
 
-    public function postUploadSummernote()
-    {
-        $uploader = app( FileUploader::class);
-        $this->cbLoader();
-        echo asset($uploader->uploadFile('userfile'));
-    }
-
-    public function postUploadFile()
-    {
-        $uploader = app(FileUploader::class);
-        $this->cbLoader();
-        echo $uploader->uploadFile('userfile');
-    }
-
     /**
      * @param $validator
      */
