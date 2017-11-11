@@ -49,6 +49,7 @@ class DataSaver
         //Looping Data Input Again After Insert
         $this->insertIntoRelatedTables($id);
     }
+
     /**
      * @param $id
      */
@@ -105,7 +106,6 @@ class DataSaver
         }
     }
 
-
     /**
      * @param $row
      * @param $id
@@ -154,9 +154,8 @@ class DataSaver
         }
 
         foreach ($inputData as $input_id) {
-            $relationship_table_pk = CB::pk($row['relationship_table']);
             DB::table($row['relationship_table'])->insert([
-                $relationship_table_pk => CRUDBooster::newId($row['relationship_table']),
+                CB::pk($row['relationship_table']) => CRUDBooster::newId($row['relationship_table']),
                 $foreignKey => $id,
                 $foreignKey2 => $input_id,
             ]);
