@@ -55,7 +55,7 @@ Route::group(['middleware' => ['web', CBBackend::class], 'prefix' => cbAdminPath
 
 
     if ($dashboard_type == 'Statistic') {
-        Route::get('/', '\\crocodicstudio\\crudbooster\\StatisticModule\\AdminStatisticBuilderController@getDashboard');
+        Route::get('/', '\\crocodicstudio\\crudbooster\\Modules\\StatisticModule\\AdminStatisticBuilderController@getDashboard');
     } elseif ($dashboard_type == 'Module') {
         $module = CRUDBooster::first('cms_moduls', ['path' => $path]);
         Route::get('/', $module->controller.'@getIndex');
