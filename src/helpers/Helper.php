@@ -34,18 +34,18 @@ if (! function_exists('is_checked')) {
         switch ($format) {
             case 'JSON':
                 $valueFormat = json_decode($value, true);
-                $checked = (in_array($option_value, $valueFormat)) ? "checked" : "";
                 break;
-            default:
             case 'COMMA_SEPARATOR':
                 $valueFormat = explode(', ', $value);
-                $checked = (in_array($option_value, $valueFormat)) ? "checked" : "";
                 break;
             case 'SEMICOLON_SEPARATOR':
                 $valueFormat = explode('; ', $value);
-                $checked = (in_array($option_value, $valueFormat)) ? "checked" : "";
+                break;
+            default:
+                $valueFormat = [];
                 break;
         }
+        $checked = (in_array($option_value, $valueFormat)) ? "checked" : "";
 
         return $checked;
     }
@@ -107,21 +107,17 @@ if (! function_exists('readMethodContent')) {
 
         $codeArray = explode("\n", $code);
         $tagBuka = 0;
-        $tagTutup = 0;
         $tagPembukas = [];
         $tagPentutups = [];
         $methodIndex = [];
-        $indentCount = 0;
         $methodAccessCandidate = ['public', 'private'];
 
         $e = 0;
         foreach ($codeArray as &$line) {
 
-            // if($line=='') continue;
 
             if (strpos($line, 'function '.$functionToFind.'(') !== false) {
                 $tagBuka = $e;
-                $indentCount = substr_count($line, "\t");
             }
 
             if (stripos($line, '}') !== false) {
@@ -153,7 +149,6 @@ if (! function_exists('readMethodContent')) {
         $totalMethodIndex = count($methodIndex) - 1;
         $methodNextIndex = ($totalMethodIndex == $keyTagBukaInMethodIndex) ? $keyTagBukaInMethodIndex : $keyTagBukaInMethodIndex + 1;
 
-        $findIndexPenutup = 0;
         $tagPentutups = array_values($tagPentutups);
 
         if ($tagBuka == end($methodIndex)) {
