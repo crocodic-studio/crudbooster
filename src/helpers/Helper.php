@@ -8,6 +8,13 @@
 | ---------------------------------------------------------------------------------------------------------------
 |
 */
+if (! function_exists('cbModulesNS')) {
+    function cbModulesNS($path = '')
+    {
+        return '\crocodicstudio\crudbooster\Modules\\'.$path;
+    }
+}
+
 if (! function_exists('cbAdminPath')) {
     function cbAdminPath()
     {

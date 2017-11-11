@@ -5,7 +5,7 @@ use crocodicstudio\crudbooster\middlewares\CBBackend;
 Route::group([
     'middleware' => ['web', CBBackend::class],
     'prefix' => cbAdminPath(),
-    'namespace' => '\crocodicstudio\crudbooster\Modules\NotificationsModule',
+    'namespace' => cbModulesNS('NotificationsModule'),
 ], function () {
     Route::get('notifications/', ['uses' => 'AdminNotificationsController@getIndex', 'as' => 'AdminNotificationsControllerGetIndex']);
     Route::get('notifications/latest-json', ['uses' => 'AdminNotificationsController@getLatestJson', 'as' => 'AdminNotificationsControllerGetLatestJson']);

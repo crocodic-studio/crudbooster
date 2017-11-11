@@ -3,7 +3,7 @@
 Route::group([
     'middleware' => ['web', \crocodicstudio\crudbooster\middlewares\CBSuperadmin::class],
     'prefix' => cbAdminPath(),
-    'namespace' => '\crocodicstudio\crudbooster\Modules\StatisticModule',
+    'namespace' => cbModulesNS('StatisticModule'),
 ], function () {
     Route::get('statistic-builder/', ['uses' => 'AdminStatisticBuilderController@getIndex', 'as' => 'AdminStatisticBuilderControllerGetIndex']);
     Route::get('statistic-builder/show-dashboard', ['uses' => 'AdminStatisticBuilderController@getShowDashboard', 'as' => 'AdminStatisticBuilderControllerGetShowDashboard']);

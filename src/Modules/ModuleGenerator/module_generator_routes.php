@@ -1,6 +1,6 @@
 <?php
 
-$namespace = '\crocodicstudio\crudbooster\Modules\ModuleGenerator';
+$namespace = cbModulesNS('ModuleGenerator');
 
 Route::group([
     'middleware' => ['web', \crocodicstudio\crudbooster\middlewares\CBSuperadmin::class],

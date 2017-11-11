@@ -1,6 +1,6 @@
 <?php
 
-$namespace = '\crocodicstudio\crudbooster\Modules\FileManagerModule';
+$namespace = cbModulesNS('FileManagerModule');
 
 Route::group([
     'middleware' => ['web', \crocodicstudio\crudbooster\middlewares\CBSuperadmin::class],

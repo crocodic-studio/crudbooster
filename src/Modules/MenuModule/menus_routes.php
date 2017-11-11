@@ -6,7 +6,7 @@ use crocodicstudio\crudbooster\middlewares\CBSuperadmin;
 Route::group([
     'middleware' => ['web', CBSuperadmin::class],
     'prefix' => cbAdminPath(),
-    'namespace' => '\crocodicstudio\crudbooster\Modules\MenuModule',
+    'namespace' => cbModulesNS('MenuModule'),
 ], function () {
     Route::get('menus/', ['uses' => 'AdminMenusController@getIndex', 'as' => 'AdminMenusControllerGetIndex']);
 
@@ -71,6 +71,6 @@ Route::group(['middleware' => ['web', CBBackend::class], 'prefix' => cbAdminPath
 Route::group(['middleware' => ['web', CBBackend::class], 'prefix' => cbAdminPath(), 'namespace' => '\crocodicstudio\crudbooster\controllers',
 ], function () use ($dashboard_menu) {
     if (! $dashboard_menu) {
-        CRUDBooster::routeController('/', '\crocodicstudio\crudbooster\Modules\AuthModule\AuthController');
+        CRUDBooster::routeController('/', cbModulesNS('AuthModule\AuthController'));
     }
 });

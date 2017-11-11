@@ -5,7 +5,7 @@ use crocodicstudio\crudbooster\middlewares\CBSuperadmin;
 Route::group([
     'middleware' => ['web', CBSuperadmin::class],
     'prefix' => cbAdminPath(),
-    'namespace' => '\\crocodicstudio\\crudbooster\\Modules\\SettingModule',
+    'namespace' => cbModulesNS('SettingModule'),
 ], function () {
     Route::get('settings/', ['uses' => 'AdminSettingsController@getIndex', 'as' => 'AdminSettingsControllerGetIndex']);
     Route::get('settings/show', ['uses' => 'AdminSettingsController@getShow', 'as' => 'AdminSettingsControllerGetShow']);

@@ -35,12 +35,12 @@
         <div class="col-sm-5">
 
             <div class="panel panel-success">
-                @widget('\crocodicstudio\crudbooster\Modules\MenuModule\widgets\ActiveMenus')
+                @widget(cbModulesNS('MenuModule\widgets\ActiveMenus'))
             </div>
 
 
             <div class="panel panel-danger">
-                @widget('\crocodicstudio\crudbooster\Modules\MenuModule\widgets\InActiveMenus')
+                @widget(cbModulesNS('MenuModule\widgets\InActiveMenus')
             </div>
 
         </div>

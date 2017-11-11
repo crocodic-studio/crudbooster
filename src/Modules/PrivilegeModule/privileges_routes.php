@@ -2,7 +2,7 @@
 Route::group([
     'middleware' => ['web', \crocodicstudio\crudbooster\middlewares\CBSuperadmin::class],
     'prefix' => cbAdminPath(),
-    'namespace' => '\crocodicstudio\crudbooster\Modules\PrivilegeModule',
+    'namespace' => cbModulesNS('PrivilegeModule'),
 ], function () {
     Route::get('privileges/', ['uses' => 'AdminPrivilegesController@getIndex', 'as' => 'AdminPrivilegesControllerGetIndex']);
     Route::get('privileges/add', ['uses' => 'AdminPrivilegesController@getAdd', 'as' => 'AdminPrivilegesControllerGetAdd']);
