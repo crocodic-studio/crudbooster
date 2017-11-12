@@ -115,7 +115,7 @@
 			// $data_result = preg_replace('/"([a-zA-Z_]+[a-zA-Z0-9_]*)":/','$1:',$data_result);
 
 		?>
-		<div id="chartContainer-{{$componentID}}" style="height: 250px;"></div>
+		<!--<div id="chartContainer-{{$componentID}}" style="height: 250px;"></div>-->
 		<div id="container-{{$componentID}}" style="width: 75%;margin-left:auto;margin-right:auto;">
         	<canvas id="canvas-{{$componentID}}"></canvas>
     	</div>
