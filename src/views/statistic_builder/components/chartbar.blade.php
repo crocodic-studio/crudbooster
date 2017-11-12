@@ -116,9 +116,28 @@
 
 		?>
 		<div id="chartContainer-{{$componentID}}" style="height: 250px;"></div>
+		<div id="container-{{$componentID}}" style="width: 75%;">
+        	<canvas id="canvas"></canvas>
+    	</div>
 		
 		<script type="text/javascript">
-		
+		var color = Chart.helpers.color;
+        var barChartData = {
+            labels: ["","FB","Web"],
+            datasets: [{
+                label: 'Dataset 2',
+                backgroundColor: color('#36a2eb').alpha(0.5).rgbString(),
+                borderColor: '#36a2eb',
+                borderWidth: 1,
+                data: [
+                    173629,
+                    52427,
+                    52224
+                ]
+            }]
+
+        };
+        
 		$(function() {
 			var arr_datapts = $.parseJSON("{!! $dataPointsJS !!}")[0];
 			var arr_labels = {!! $data_labelsjs !!};
@@ -137,7 +156,23 @@
 			  @endif
 			  behaveLikeLine:true,
 		      hideHover: 'auto'
-			});				
+			});			
+
+			var ctx = document.getElementById("canvas").getContext("2d");
+            window.myBar = new Chart(ctx, {
+                type: 'bar',
+                data: barChartData,
+                options: {
+                    responsive: true,
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Chart.js Bar Chart'
+                    }
+                }
+            });	
 		})				
 		</script>
 	@else
