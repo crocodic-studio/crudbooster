@@ -5,6 +5,7 @@ use crocodicstudio\crudbooster\Modules\ApiGeneratorModule\CbApiGeneratorServiceP
 use crocodicstudio\crudbooster\Modules\AuthModule\CbAuthServiceProvider;
 use crocodicstudio\crudbooster\Modules\EmailTemplates\CbEmailTemplatesServiceProvider;
 use crocodicstudio\crudbooster\Modules\FileManagerModule\CbFileManagerServiceProvider;
+use crocodicstudio\crudbooster\Modules\LogsModule\CbLogsServiceProvider;
 use crocodicstudio\crudbooster\Modules\MenuModule\CbMenuServiceProvider;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\CbModulesGeneratorServiceProvider;
 use crocodicstudio\crudbooster\Modules\NotificationsModule\CbNotificationsServiceProvider;
@@ -111,6 +112,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->app->register(CbFileManagerServiceProvider::class);
         $this->app->register(CbNotificationsServiceProvider::class);
         $this->app->register(CbEmailTemplatesServiceProvider::class);
+        $this->app->register(CbLogsServiceProvider::class);
     }
 
     private function registerCrudboosterCommand()
