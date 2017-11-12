@@ -39,7 +39,6 @@ Route::group([
     Route::post('{module}/upload-summernote', ['uses' => 'FileController@uploadSummernote', 'as' => 'UploadImportData',]);
     Route::post('{module}/upload-file', ['uses' => 'FileController@uploadFile', 'as' => 'UploadImportData',]);
     Route::post('{module}/done-import', ['uses' => 'FileController@doneImport', 'as' => 'doneImportData',]);
-    CRUDBooster::routeController('email-templates', 'AdminEmailTemplatesController', $namespace);
     CRUDBooster::routeController('logs', 'AdminLogsController', $namespace);
 });
 
