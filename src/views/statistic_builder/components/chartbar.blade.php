@@ -121,7 +121,7 @@
 		
 		$(function() {
 			console.log($.parseJSON("{!! $dataPointsJS !!}")[0]);
-			console.log($.parseJSON("{!! $data_labelsjs !!}"));
+			var arr_labels = {!! $data_labelsjs !!};
 			console.log("{!! addslashes($data_result) !!}");
 			new Morris.Bar({
 			  element: 'chartContainer-{{$componentID}}',
