@@ -5,7 +5,6 @@ namespace crocodicstudio\crudbooster\controllers;
 error_reporting(E_ALL ^ E_NOTICE);
 
 use crocodicstudio\crudbooster\CBCoreModule\DataSaver;
-use crocodicstudio\crudbooster\CBCoreModule\FileUploader;
 use crocodicstudio\crudbooster\CBCoreModule\Hooks;
 use crocodicstudio\crudbooster\CBCoreModule\Index;
 use crocodicstudio\crudbooster\CBCoreModule\Search;
@@ -17,7 +16,6 @@ use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\PDF;
 use Maatwebsite\Excel\Facades\Excel;
 use CRUDBooster;
@@ -345,101 +343,6 @@ class CBController extends Controller
         return response()->json(['items' => $items]);
     }
 
-    public function postFindDataOld()
-    {
-        $q = request('q');
-        $id = request('id');
-        $format = request('format');
-
-        $table1 = request('table1', $this->table);
-        $table1PK = CB::pk($table1);
-        $column1 = request('column1', $this->title_field);
-
-        $table2 = request('table2');
-        $column2 = request('column2');
-
-        $table3 = request('table3');
-        $column3 = request('column3');
-
-        $where = request('where');
-
-        $fk = request('fk');
-        $fk_value = request('fk_value');
-
-        if (! $q && ! $id && ! $table1) {
-            $result = [];
-            $result['items'] = [];
-
-            return response()->json($result);
-        }
-
-        $rows = DB::table($table1);
-        $rows->select($table1.'.*');
-        $rows->take(request('limit', 10));
-
-        if (Schema::hasColumn($table1, 'deleted_at')) {
-            $rows->where($table1.'.deleted_at', null);
-        }
-
-        if ($fk && $fk_value) {
-            $rows->where($table1.'.'.$fk, $fk_value);
-        }
-
-        if ($table1 && $column1) {
-
-            $orderby_table = $table1;
-            $orderby_column = $column1;
-        }
-
-        if ($table2 && $column2) {
-            $table2PK = CB::pk($table2);
-            $rows->join($table2, $table2.'.'.$table2PK, '=', $table1.'.'.$column1);
-            $columns = CB::getTableColumns($table2);
-            foreach ($columns as $col) {
-                $rows->addselect($table2.".".$col." as ".$table2."_".$col);
-            }
-            $orderby_table = $table2;
-            $orderby_column = $column2;
-        }
-
-        if ($table3 && $column3) {
-            $table3PK = CB::pk($table3);
-            $rows->join($table3, $table3.'.'.$table3PK, '=', $table2.'.'.$column2);
-            $columns = CB::getTableColumns($table3);
-            foreach ($columns as $col) {
-                $rows->addselect($table3.".".$col." as ".$table3."_".$col);
-            }
-            $orderby_table = $table3;
-            $orderby_column = $column3;
-        }
-
-        if ($id) {
-            $rows->where($table1.".".$table1PK, $id);
-        }
-
-        if ($where) {
-            $rows->whereraw($where);
-        }
-
-        if ($format) {
-            $format = str_replace('&#039;', "'", $format);
-            $rows->addselect(DB::raw("CONCAT($format) as text"));
-            if ($q) {
-                $rows->whereraw("CONCAT($format) like '%".$q."%'");
-            }
-        } else {
-            $rows->addselect($orderby_table.'.'.$orderby_column.' as text');
-            if ($q) {
-                $rows->where($orderby_table.'.'.$orderby_column, 'like', '%'.$q.'%');
-            }
-        }
-
-        $result = [];
-        $result['items'] = $rows->get();
-
-        return response()->json($result);
-    }
-
     public function getAdd()
     {
         $this->cbLoader();
@@ -456,7 +359,7 @@ class CBController extends Controller
         $saver = app(DataSaver::class);
         $this->cbLoader();
 
-        $this->validation();
+        app(FormValidator::class)->validate(null, $this->form, $this->table);
         $this->inputAssignment();
 
         if (Schema::hasColumn($this->table, 'created_at')) {
@@ -486,96 +389,9 @@ class CBController extends Controller
         CB::redirect(CB::mainpath(), trans("crudbooster.alert_add_data_success"), 'success');
     }
 
-    public function validation($id = null)
-    {
-        $request_all = Request::all();
-        $array_input = [];
-        $componentPath = implode(DIRECTORY_SEPARATOR, ["vendor", "crocodicstudio", "crudbooster", "src", "views", "default", "type_components", ""]);
-
-        foreach ($this->form as $di) {
-            $ai = [];
-            $name = $di['name'];
-            $type = $di['type'];
-
-            if (! $name) {continue;}
-
-            if ($di['required'] && ! Request::hasFile($name)) {
-                $ai[] = 'required';
-            }
-
-            if (file_exists(base_path($componentPath.$type.DIRECTORY_SEPARATOR.'hookInputValidation.php'))) {
-                require_once(base_path($componentPath.$type.DIRECTORY_SEPARATOR.'hookInputValidation.php'));
-            }
-
-            if (@$di['validation']) {
-                $array_input[$name] = $this->prepareValidationRules($id, $di);
-            } else {
-                $array_input[$name] = implode('|', $ai);
-            }
-        }
-
-        $validator = Validator::make($request_all, $array_input);
-
-        if (! $validator->fails()) {
-            return null;
-        }
-
-        $this->sendFailedValidationResponse($validator);
-    }
-
-    /**
-     * @param $id
-     * @param $di
-     * @return array
-     */
-    private function prepareValidationRules($id, $di)
-    {
-        $exp = explode('|', $di['validation']);
-
-        if (! count($exp)) {
-            return '';
-        }
-
-        foreach ($exp as &$validationItem) {
-            if (substr($validationItem, 0, 6) !== 'unique') {
-                continue;
-            }
-
-            $parseUnique = explode(',', str_replace('unique:', '', $validationItem));
-            $uniqueTable = ($parseUnique[0]) ?: $this->table;
-            $uniqueColumn = ($parseUnique[1]) ?: $di['name'];
-            $uniqueIgnoreId = ($parseUnique[2]) ?: (($id) ?: '');
-
-            //Make sure table name
-            $uniqueTable = CB::parseSqlTable($uniqueTable)['table'];
-
-            //Rebuild unique rule
-            $uniqueRebuild = [];
-            $uniqueRebuild[] = $uniqueTable;
-            $uniqueRebuild[] = $uniqueColumn;
-
-            if ($uniqueIgnoreId) {
-                $uniqueRebuild[] = $uniqueIgnoreId;
-            } else {
-                $uniqueRebuild[] = 'NULL';
-            }
-
-            //Check whether deleted_at exists or not
-            if (Schema::hasColumn($uniqueTable, 'deleted_at')) {
-                $uniqueRebuild[] = CB::findPrimaryKey($uniqueTable);
-                $uniqueRebuild[] = 'deleted_at';
-                $uniqueRebuild[] = 'NULL';
-            }
-            $uniqueRebuild = array_filter($uniqueRebuild);
-            $validationItem = 'unique:'.implode(',', $uniqueRebuild);
-        }
-
-        return implode('|', $exp);
-    }
 
     public function inputAssignment($id = null)
     {
-
         $hide_form = (request('hide_form')) ? unserialize(request('hide_form')) : [];
         $componentPath = implode(DIRECTORY_SEPARATOR, ["vendor", "crocodicstudio", "crudbooster", "src", "views", "default", 'type_components', '']);
 
@@ -650,7 +466,7 @@ class CBController extends Controller
         $this->cbLoader();
         //$row = $this->findRow($id)->first();
 
-        $this->validation($id);
+        app(FormValidator::class)->validate($id, $this->form, $this->table);
         $this->inputAssignment($id);
 
         if (Schema::hasColumn($this->table, 'updated_at')) {
@@ -850,29 +666,5 @@ class CBController extends Controller
         ]));
 
         CB::redirect(Request::server('HTTP_REFERER'), trans('crudbooster.alert_delete_data_success'), 'success');
-    }
-
-    /**
-     * @param $validator
-     */
-    private function sendFailedValidationResponse($validator)
-    {
-        $message = $validator->messages();
-        $message_all = $message->all();
-
-        if (Request::ajax()) {
-            response()->json([
-                'message' => trans('crudbooster.alert_validation_error', ['error' => implode(', ', $message_all)]),
-                'message_type' => 'warning',
-            ])->send();
-            exit;
-        }
-
-        redirect()->back()->with("errors", $message)->with([
-            'message' => trans('crudbooster.alert_validation_error', ['error' => implode(', ', $message_all)]),
-            'message_type' => 'warning',
-        ])->withInput()->send();
-        \Session::driver()->save();
-        exit;
     }
 }

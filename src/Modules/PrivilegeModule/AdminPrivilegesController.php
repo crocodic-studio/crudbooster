@@ -3,6 +3,7 @@
 namespace crocodicstudio\crudbooster\Modules\PrivilegeModule;
 
 use crocodicstudio\crudbooster\controllers\CBController;
+use crocodicstudio\crudbooster\controllers\FormValidator;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -66,7 +67,7 @@ class AdminPrivilegesController extends CBController
     public function postAddSave()
     {
         $this->cbInit();
-        $this->validation();
+        app(FormValidator::class)->validate(null, $this->form, $this->table);
         $this->inputAssignment();
 
         DB::table($this->table)->insert($this->arr);
@@ -105,7 +106,7 @@ class AdminPrivilegesController extends CBController
         $this->cbInit();
         $row = CRUDBooster::first($this->table, $id);
 
-        $this->validation($id);
+        app(FormValidator::class)->validate($id, $this->form, $this->table);
         $this->inputAssignment($id);
 
         $this->findRow($id)->update($this->arr);

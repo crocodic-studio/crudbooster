@@ -3,6 +3,7 @@
 namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
 use crocodicstudio\crudbooster\controllers\CBController;
+use crocodicstudio\crudbooster\controllers\FormValidator;
 use crocodicstudio\crudbooster\controllers\Helpers\FontAwesome;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Request;
@@ -145,8 +146,7 @@ class AdminModulesController extends CBController
     public function postAddSave()
     {
         $this->cbLoader();
-
-        $this->validation();
+        app(FormValidator::class)->validate(null, $this->form, $this->table);
         $this->inputAssignment();
 
         //Generate Controller 
@@ -197,7 +197,7 @@ class AdminModulesController extends CBController
 
         $row = $this->table()->where($this->primary_key, $id)->first();
 
-        $this->validation();
+        app(FormValidator::class)->validate($id, $this->form, $this->table);
         $this->inputAssignment();
 
         //Generate Controller 
