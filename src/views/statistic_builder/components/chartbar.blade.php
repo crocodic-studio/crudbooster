@@ -116,7 +116,7 @@
 
 		?>
 		<div id="chartContainer-{{$componentID}}" style="height: 250px;"></div>
-		<div id="container-{{$componentID}}" style="width: 100%;">
+		<div id="container-{{$componentID}}" style="width: 75%;margin-left:auto;margin-right:auto;">
         	<canvas id="canvas-{{$componentID}}"></canvas>
     	</div>
 		
@@ -127,7 +127,7 @@
         var barChartData = {
             labels: arr_labels,
             datasets: [{
-                label: '',
+                label: 'Data',
                 backgroundColor: color('#36a2eb').alpha(0.5).rgbString(),
                 borderColor: '#36a2eb',
                 borderWidth: 1,
@@ -138,9 +138,9 @@
 
 		$(function() {
 			
-			console.log(arr_labels);
-			console.log(arr_datapts);
-			new Morris.Bar({
+			//console.log(arr_labels);
+			//console.log(arr_datapts);
+			/*new Morris.Bar({
 			  element: 'chartContainer-{{$componentID}}',
 			  data: $.parseJSON("{!! addslashes($data_result) !!}"),
 			  xkey: 'y',
@@ -153,7 +153,7 @@
 			  @endif
 			  behaveLikeLine:true,
 		      hideHover: 'auto'
-			});			
+			});*/			
 
 			var ctx = document.getElementById("canvas-{{$componentID}}").getContext("2d");
             window.myBar = new Chart(ctx, {
