@@ -24,11 +24,11 @@ class CRUDBoosterServiceProvider extends ServiceProvider
 
     public function boot()
     {
-
         $this->loadViewsFrom(__DIR__.'/views', 'crudbooster');
         $this->publishes([__DIR__.'/configs/crudbooster.php' => config_path('crudbooster.php')], 'cb_config');
         $this->publishes([__DIR__.'/localization' => resource_path('lang')], 'cb_localization');
-        $this->publishes([__DIR__.'/database' => base_path('database')], 'cb_migration');
+        $this->publishes([__DIR__.'/database/migrations' => base_path('database/migrations/crudbooster')], 'cb_migration');
+        $this->publishes([__DIR__.'/database/seeds' => base_path('database/seeds')], 'cb_migration');
 
         /* Integrate LFM to CRUDBooster */
         $this->publishes([

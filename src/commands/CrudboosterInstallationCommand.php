@@ -249,7 +249,7 @@ class CrudboosterInstallationCommand extends Command
         $process->setWorkingDirectory(base_path())->run();
 
         $this->info('Migrating database...');
-        $this->call('migrate');
+        $this->call('migrate', ['--path'=> '\database\migrations\crudbooster']);
 
         if (! class_exists('CBSeeder')) {
             require_once __DIR__.'/../database/seeds/CBSeeder.php';

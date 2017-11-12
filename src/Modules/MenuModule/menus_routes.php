@@ -47,15 +47,15 @@ $dashboard_menu = DB::table('cms_menus')->where('is_dashboard', 1)->first();
 Route::group(['middleware' => ['web', CBBackend::class], 'prefix' => cbAdminPath(), 'namespace' => ctrlNamespace(),
 ], function () use ($dashboard_menu) {
 
-    $dashboard_type = $dashboard_menu->type;
-    $path = $dashboard_menu->path;
-
     if (! $dashboard_menu) {
         return;
     }
+    $dashboard_type = $dashboard_menu->type;
+    $path = $dashboard_menu->path;
+
 
     if ($dashboard_type == 'Statistic') {
-        Route::get('/', '\\crocodicstudio\\crudbooster\\StatisticModule\\AdminStatisticBuilderController@getDashboard');
+        Route::get('/', '\\crocodicstudio\\crudbooster\\Modules\\StatisticModule\\AdminStatisticBuilderController@getDashboard');
     } elseif ($dashboard_type == 'Module') {
         $module = CRUDBooster::first('cms_moduls', ['path' => $path]);
         Route::get('/', $module->controller.'@getIndex');
@@ -70,8 +70,8 @@ Route::group(['middleware' => ['web', CBBackend::class], 'prefix' => cbAdminPath
     }
 });
 
-Route::group(['middleware' => ['web', CBBackend::class], 'prefix' => cbAdminPath(), 'namespace' => $namespace,
-], function () use ($namespace, $dashboard_menu) {
+Route::group(['middleware' => ['web', CBBackend::class], 'prefix' => cbAdminPath(), 'namespace' => '\crocodicstudio\crudbooster\controllers',
+], function () use ($dashboard_menu) {
     if (! $dashboard_menu) {
         CRUDBooster::routeController('/', '\crocodicstudio\crudbooster\Modules\AuthModule\AuthController');
     }
