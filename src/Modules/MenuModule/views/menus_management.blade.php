@@ -40,7 +40,7 @@
 
 
             <div class="panel panel-danger">
-                @widget(cbModulesNS('MenuModule\widgets\InActiveMenus')
+                @widget(cbModulesNS('MenuModule\widgets\InActiveMenus'))
             </div>
 
         </div>
