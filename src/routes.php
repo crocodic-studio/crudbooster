@@ -34,11 +34,10 @@ Route::group([
     'middleware' => ['web', \crocodicstudio\crudbooster\middlewares\CBSuperadmin::class],
     'prefix' => cbAdminPath(),
     'namespace' => $namespace,
-], function () use ($namespace) {
+], function () {
     Route::post('{module}/do-upload-import-data', ['uses' => 'FileController@uploadImportData', 'as' => 'UploadImportData',]);
     Route::post('{module}/upload-summernote', ['uses' => 'FileController@uploadSummernote', 'as' => 'UploadImportData',]);
     Route::post('{module}/upload-file', ['uses' => 'FileController@uploadFile', 'as' => 'UploadImportData',]);
     Route::post('{module}/done-import', ['uses' => 'FileController@doneImport', 'as' => 'doneImportData',]);
-    CRUDBooster::routeController('logs', 'AdminLogsController', $namespace);
 });
 
