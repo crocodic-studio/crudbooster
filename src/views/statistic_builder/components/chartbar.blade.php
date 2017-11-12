@@ -137,24 +137,7 @@
         };
 
 		$(function() {
-			
-			//console.log(arr_labels);
-			//console.log(arr_datapts);
-			/*new Morris.Bar({
-			  element: 'chartContainer-{{$componentID}}',
-			  data: $.parseJSON("{!! addslashes($data_result) !!}"),
-			  xkey: 'y',
-			  ykeys: {!! json_encode($area_name_safe) !!},
-			  labels: {!! json_encode($area_name) !!},
-			  resize: true,
-			  parseTime: false,
-			  @if($config->goals)
-			  	goals: [{{$config->goals}}],
-			  @endif
-			  behaveLikeLine:true,
-		      hideHover: 'auto'
-			});*/			
-
+					
 			var ctx = document.getElementById("canvas-{{$componentID}}").getContext("2d");
             window.myBar = new Chart(ctx, {
                 type: 'bar',
