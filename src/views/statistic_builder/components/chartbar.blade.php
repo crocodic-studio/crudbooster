@@ -104,7 +104,7 @@
 				foreach($area_name as $e=>$name) {
 					$name = str_slug($name,'_');
 					$dr[$name] = $dataPoints[$e][$i];
-					$data_labels[] = $dataPoints[$e][$i];
+					$data_labels[] = $name;
 				}
 				$data_resultcjs[] = $dr;
 			}	
