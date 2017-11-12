@@ -117,7 +117,7 @@
 		?>
 		<div id="chartContainer-{{$componentID}}" style="height: 250px;"></div>
 		<div id="container-{{$componentID}}" style="width: 75%;">
-        	<canvas id="canvas"></canvas>
+        	<canvas id="canvas-{{$componentID}}"></canvas>
     	</div>
 		
 		<script type="text/javascript">
@@ -158,7 +158,7 @@
 		      hideHover: 'auto'
 			});			
 
-			var ctx = document.getElementById("canvas").getContext("2d");
+			var ctx = document.getElementById("canvas-{{$componentID}}").getContext("2d");
             window.myBar = new Chart(ctx, {
                 type: 'bar',
                 data: barChartData,
