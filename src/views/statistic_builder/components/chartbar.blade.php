@@ -81,6 +81,8 @@
 				$a = str_slug($a,'_');
 			}
 
+			$dataPointsJS = json_encode($dataPoints);
+
 			$data_result = array();
 			foreach($datax as $i=>$d) {				
 				$dr = array();
@@ -114,7 +116,7 @@
 		<script type="text/javascript">
 		
 		$(function() {
-			console.log("{!! $dataPoints !!}");
+			console.log("{!! $dataPointsJS !!}");
 			new Morris.Bar({
 			  element: 'chartContainer-{{$componentID}}',
 			  data: $.parseJSON("{!! addslashes($data_result) !!}"),
