@@ -104,10 +104,12 @@
 				foreach($area_name as $e=>$name) {
 					$name = str_slug($name,'_');
 					$dr[$name] = $dataPoints[$e][$i];
+					$data_labels[] = $dataPoints[$e][$i];
 				}
 				$data_resultcjs[] = $dr;
 			}	
 			$data_resultcjs = json_encode($data_resultcjs);
+			$data_labelsjs = json_encode($data_labels);
 
 			// $data_result = preg_replace('/"([a-zA-Z_]+[a-zA-Z0-9_]*)":/','$1:',$data_result);
 
