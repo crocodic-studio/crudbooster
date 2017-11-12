@@ -106,6 +106,8 @@
 					$dr[$name] = $dataPoints[$e][$i];
 					//$data_labels[] = $name;
 				}
+				if ($d=="")
+					$d="Unknown data";
 				$data_labels[] = $d;
 				$data_resultcjs[] = $dr;
 			}	
