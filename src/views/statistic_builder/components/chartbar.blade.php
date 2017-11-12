@@ -104,8 +104,9 @@
 				foreach($area_name as $e=>$name) {
 					$name = str_slug($name,'_');
 					$dr[$name] = $dataPoints[$e][$i];
-					$data_labels[] = $name;
+					//$data_labels[] = $name;
 				}
+				$data_labels[] = $d;
 				$data_resultcjs[] = $dr;
 			}	
 			$data_resultcjs = json_encode($data_resultcjs);
@@ -120,6 +121,7 @@
 		
 		$(function() {
 			console.log($.parseJSON("{!! $dataPointsJS !!}")[0]);
+			console.log($.parseJSON("{!! $data_labelsjs !!}"));
 			console.log("{!! addslashes($data_result) !!}");
 			new Morris.Bar({
 			  element: 'chartContainer-{{$componentID}}',
