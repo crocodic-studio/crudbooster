@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\NotificationsModule;
+namespace crocodicstudio\crudbooster\Modules\NotificationsModule;
 
 use crocodicstudio\crudbooster\controllers\CBController;
 use CRUDBooster;

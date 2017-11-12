@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\PrivilegeModule;
+namespace crocodicstudio\crudbooster\Modules\NotificationsModule;
 
 use Illuminate\Support\ServiceProvider;
 
