@@ -93,7 +93,6 @@
 			}			
 
 			$data_result = json_encode($data_result);
-			console.log($data_result);
 			// $data_result = preg_replace('/"([a-zA-Z_]+[a-zA-Z0-9_]*)":/','$1:',$data_result);
 
 		?>
@@ -102,6 +101,7 @@
 		<script type="text/javascript">
 		
 		$(function() {
+			console.log("{!! addslashes($data_result) !!}");
 			new Morris.Bar({
 			  element: 'chartContainer-{{$componentID}}',
 			  data: $.parseJSON("{!! addslashes($data_result) !!}"),
