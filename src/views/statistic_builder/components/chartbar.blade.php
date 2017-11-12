@@ -116,31 +116,28 @@
 
 		?>
 		<div id="chartContainer-{{$componentID}}" style="height: 250px;"></div>
-		<div id="container-{{$componentID}}" style="width: 75%;">
+		<div id="container-{{$componentID}}" style="width: 100%;">
         	<canvas id="canvas-{{$componentID}}"></canvas>
     	</div>
 		
 		<script type="text/javascript">
 		var color = Chart.helpers.color;
+		var arr_datapts = $.parseJSON("{!! $dataPointsJS !!}")[0];
+		var arr_labels = {!! $data_labelsjs !!};
         var barChartData = {
-            labels: ["","FB","Web"],
+            labels: arr_labels,
             datasets: [{
-                label: 'Dataset 2',
+                label: '',
                 backgroundColor: color('#36a2eb').alpha(0.5).rgbString(),
                 borderColor: '#36a2eb',
                 borderWidth: 1,
-                data: [
-                    173629,
-                    52427,
-                    52224
-                ]
+                data: arr_datapts
             }]
 
         };
-        
+
 		$(function() {
-			var arr_datapts = $.parseJSON("{!! $dataPointsJS !!}")[0];
-			var arr_labels = {!! $data_labelsjs !!};
+			
 			console.log(arr_labels);
 			console.log(arr_datapts);
 			new Morris.Bar({
@@ -168,8 +165,8 @@
                         position: 'top',
                     },
                     title: {
-                        display: true,
-                        text: 'Chart.js Bar Chart'
+                        display: false,
+                        //text: 'Chart.js Bar Chart'
                     }
                 }
             });	
