@@ -96,6 +96,7 @@
 
 			$data_result = json_encode($data_result);
 
+			$data_labels = array();
 			$data_resultcjs = array();
 			foreach($datax as $i=>$d) {				
 				$dr = array();
