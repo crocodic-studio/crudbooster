@@ -93,6 +93,7 @@
 			}			
 
 			$data_result = json_encode($data_result);
+			console.log($data_result);
 			// $data_result = preg_replace('/"([a-zA-Z_]+[a-zA-Z0-9_]*)":/','$1:',$data_result);
 
 		?>
