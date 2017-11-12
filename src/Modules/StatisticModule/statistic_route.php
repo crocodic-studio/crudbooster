@@ -31,7 +31,6 @@ Route::group([
     Route::post('statistic-builder/export-data', ['uses' => 'AdminStatisticBuilderController@postExportData', 'as' => 'AdminStatisticBuilderControllerPostExportData',]);
     Route::post('statistic-builder/add-component', ['uses' => 'AdminStatisticBuilderController@postAddComponent', 'as' => 'AdminStatisticBuilderControllerPostAddComponent',]);
     Route::post('statistic-builder/find-data', ['uses' => 'AdminStatisticBuilderController@postFindData', 'as' => 'AdminStatisticBuilderControllerPostFindData',]);
-    Route::post('statistic-builder/find-data-old', ['uses' => 'AdminStatisticBuilderController@postFindDataOld', 'as' => 'AdminStatisticBuilderControllerPostFindDataOld',]);
     Route::post('statistic-builder/add-save', ['uses' => 'AdminStatisticBuilderController@postAddSave', 'as' => 'AdminStatisticBuilderControllerPostAddSave',]);
     Route::post('statistic-builder/edit-save/{one?}', ['uses' => 'AdminStatisticBuilderController@postEditSave', 'as' => 'AdminStatisticBuilderControllerPostEditSave',]);
     Route::post('statistic-builder/done-import', ['uses' => 'AdminStatisticBuilderController@postDoneImport', 'as' => 'AdminStatisticBuilderControllerPostDoneImport',]);

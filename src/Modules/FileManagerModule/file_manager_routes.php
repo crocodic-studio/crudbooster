@@ -64,11 +64,6 @@ Route::group([
         'as' => 'AdminFileManagerControllerPostFindData',
     ]);
 
-    Route::post('file-manager/find-data-old', [
-        'uses' => 'AdminFileManagerController@postFindDataOld',
-        'as' => 'AdminFileManagerControllerPostFindDataOld',
-    ]);
-
     Route::get('file-manager/add', [
         'uses' => 'AdminFileManagerController@getAdd',
         'as' => 'AdminFileManagerControllerGetAdd',
