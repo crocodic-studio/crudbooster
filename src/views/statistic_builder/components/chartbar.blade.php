@@ -120,6 +120,7 @@
 		
 		$(function() {
 			console.log($.parseJSON("{!! $dataPointsJS !!}")[0]);
+			console.log($.parseJSON("{!! $data_labelsjs !!}"));
 			new Morris.Bar({
 			  element: 'chartContainer-{{$componentID}}',
 			  data: $.parseJSON("{!! addslashes($data_result) !!}"),
