@@ -40,7 +40,6 @@ Route::group([
     Route::post('api-generator/export-data', ['uses' => 'AdminApiGeneratorController@postExportData', 'as' => 'AdminApiGeneratorControllerPostExportData',]);
     Route::post('api-generator/save-api-custom', ['uses' => 'AdminApiGeneratorController@postSaveApiCustom', 'as' => 'AdminApiGeneratorControllerPostSaveApiCustom',]);
     Route::post('api-generator/find-data', ['uses' => 'AdminApiGeneratorController@postFindData', 'as' => 'AdminApiGeneratorControllerPostFindData',]);
-    Route::post('api-generator/find-data-old', ['uses' => 'AdminApiGeneratorController@postFindDataOld', 'as' => 'AdminApiGeneratorControllerPostFindDataOld',]);
     Route::post('api-generator/add-save', ['uses' => 'AdminApiGeneratorController@postAddSave', 'as' => 'AdminApiGeneratorControllerPostAddSave',]);
     Route::post('api-generator/edit-save/{id?}', ['uses' => 'AdminApiGeneratorController@postEditSave', 'as' => 'AdminApiGeneratorControllerPostEditSave',]);
     Route::post('api-generator/done-import', ['uses' => 'AdminApiGeneratorController@postDoneImport', 'as' => 'AdminApiGeneratorControllerPostDoneImport',]);

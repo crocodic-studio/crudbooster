@@ -42,7 +42,6 @@ Route::group([
     Route::post('modules/edit-save/{one?}', ['uses' => 'AdminModulesController@postEditSave', 'as' => 'AdminModulesControllerPostEditSave',]);
     Route::post('modules/export-data', ['uses' => 'AdminModulesController@postExportData', 'as' => 'AdminModulesControllerPostExportData',]);
     Route::post('modules/find-data', ['uses' => 'AdminModulesController@postFindData', 'as' => 'AdminModulesControllerPostFindData',]);
-    Route::post('modules/find-data-old', ['uses' => 'AdminModulesController@postFindDataOld', 'as' => 'AdminModulesControllerPostFindDataOld',]);
     Route::post('modules/done-import', ['uses' => 'AdminModulesController@postDoneImport', 'as' => 'AdminModulesControllerPostDoneImport',]);
     Route::post('modules/do-import-chunk', ['uses' => 'AdminModulesController@postDoImportChunk', 'as' => 'AdminModulesControllerPostDoImportChunk',]);
     Route::post('modules/do-upload-import-data', ['uses' => 'AdminModulesController@postDoUploadImportData', 'as' => 'AdminModulesControllerPostDoUploadImportData',]);
