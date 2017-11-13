@@ -5,9 +5,11 @@
     <div class="{{$col_width?:'col-sm-10'}}">
         <div class="input-group">
 
-            <span class="input-group-addon"><a href='javascript:void(0)'
-                                               onclick='$("#{{$name}}").data("daterangepicker").toggle()'><i
-                            class='fa fa-calendar'></i></a></span>
+            <span class="input-group-addon">
+                <a href='javascript:void(0)' onclick='$("#{{$name}}").data("daterangepicker").toggle()'>
+                    <i class='fa fa-calendar'></i>
+                </a>
+            </span>
 
             <input type='text' title="{{$label}}" readonly
                    {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control notfocus datetimepicker'
@@ -16,4 +18,5 @@
 
         @include('crudbooster::default._form_body.underField', ['help' => $formInput['help'], 'error' => $errors->first($name)])
     </div>
+    <br>
 </div>
