@@ -235,9 +235,9 @@
         			if(response.components) {
         				
         				$.each(response.components,function(i,obj) {
-                            console.log("{{CRUDBooster::mainpath('view-component')}}/"+obj.componentID);
+                            console.log("{{CRUDBooster::mainpath('view-component-dates')}}/"+obj.componentID);
         					$('#'+areaname).append("<div id='area-loading-"+obj.componentID+"' class='area-loading'><i class='fa fa-spin fa-spinner'></i></div>");
-        					$.get("{{CRUDBooster::mainpath('view-component')}}/"+obj.componentID,function(view) {
+        					$.get("{{CRUDBooster::mainpath('view-component-dates')}}/"+obj.componentID,function(view) {
         						console.log('View For CID '+view.componentID);
         						$('#area-loading-'+obj.componentID).remove();
         						$('#'+areaname).append(view.layout);
