@@ -335,13 +335,13 @@
             <div class="col-sm-3">
                 <div class="input-group">                               
                     <span class="input-group-addon open-datetimepicker"><a><i class='fa fa-calendar '></i></a></span>
-                    <input type='text' title="Date From" readonly class='form-control notfocus input_date' name="testdate1" id="testdate1" value='1970-01-01 00:00:00'/>                       
+                    <input type='text' title="Date From" readonly class='form-control notfocus input_date' name="testdate1" id="testdate1" value='1970-01-01'/>                       
                 </div>
             </div>
             <div class="col-sm-3">
                 <div class="input-group">                               
                     <span class="input-group-addon open-datetimepicker"><a><i class='fa fa-calendar '></i></a></span>
-                    <input type='text' title="Date From" readonly class='form-control notfocus input_date' name="testdate2" id="testdate2" value='1970-01-01 00:00:00'/>                       
+                    <input type='text' title="Date To" readonly class='form-control notfocus input_date' name="testdate2" id="testdate2" value='1970-01-01'/>                       
                 </div>
             </div>
             <br>
