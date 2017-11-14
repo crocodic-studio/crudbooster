@@ -214,6 +214,30 @@
     </script>
 
     <script type="text/javascript">
+
+        function runSortables() 
+        {
+            $('.connectedSortable').each(function() {
+                var areaname = $(this).attr('id');
+                
+                $.get("{{CRUDBooster::mainpath('list-component')}}/"+id_cms_statistics+"/"+areaname,function(response) {            
+                    if(response.components) {
+                        
+                        $.each(response.components,function(i,obj) {
+                            console.log("{{CRUDBooster::mainpath('view-component-dates')}}/"+obj.componentID+"/"+$('#testdate1').val()+"/"+$('#testdate2').val());
+                            $('#'+areaname).append("<div id='area-loading-"+obj.componentID+"' class='area-loading'><i class='fa fa-spin fa-spinner'></i></div>");
+                            $.get("{{CRUDBooster::mainpath('view-component-dates')}}/"+obj.componentID+"/"+$('#testdate1').val()+"/"+$('#testdate2').val(),function(view) {
+                                console.log('View For CID '+view.componentID);
+                                $('#area-loading-'+obj.componentID).remove();
+                                $('#'+areaname).append(view.layout);
+                                
+                            })
+                        })                      
+                    }                   
+                })
+            })
+        }
+
         $(function() {
             var d = new Date();
             d.setMonth(d.getMonth() - 1);
@@ -226,33 +250,18 @@
                 @endif
                 language: lang,
                 changeYear: true,
-                changeMonth: true
+                changeMonth: true,
+                onSelect: function(dateText) {
+                    runSortables();
+                  }
             });
             
             $('.open-datetimepicker').click(function() {
                   $(this).next('.input_date').datepicker('show');
             });
 
-        	$('.connectedSortable').each(function() {
-        		var areaname = $(this).attr('id');
-        		
-        		$.get("{{CRUDBooster::mainpath('list-component')}}/"+id_cms_statistics+"/"+areaname,function(response) {       		
-        			if(response.components) {
-        				
-        				$.each(response.components,function(i,obj) {
-                            console.log("{{CRUDBooster::mainpath('view-component-dates')}}/"+obj.componentID+"/"+$('#testdate1').val()+"/"+$('#testdate2').val());
-        					$('#'+areaname).append("<div id='area-loading-"+obj.componentID+"' class='area-loading'><i class='fa fa-spin fa-spinner'></i></div>");
-        					$.get("{{CRUDBooster::mainpath('view-component-dates')}}/"+obj.componentID+"/"+$('#testdate1').val()+"/"+$('#testdate2').val(),function(view) {
-        						console.log('View For CID '+view.componentID);
-        						$('#area-loading-'+obj.componentID).remove();
-        						$('#'+areaname).append(view.layout);
-        						
-        					})
-        				})        				
-        			}       			
-        		})
-        	})
-        	       
+        	
+        	runSortables();
             
             $(document).on('click','.btn-delete-component',function() {
             	var componentID = $(this).data('componentid');
