@@ -131,6 +131,7 @@
 	    				{
 	    					$pos = strpos ( $value, ' ' ,strpos($value,'FROM ') );
 	    					$value = substr_replace($value, " WHERE m_date>='".$startdate."' AND m_date<='".$enddate."' ", $pos, 0); 
+	    					$sqlstring = $value;
 	    				}
 	    			}
 	    			if($value) {
@@ -141,7 +142,7 @@
 	    		}
 	    	}	    	
 
-	    	return response()->json(compact('componentID','layout'));
+	    	return response()->json(compact('componentID','layout','sqlstring'));
 	    }
 
 	    public function postAddComponent() {
