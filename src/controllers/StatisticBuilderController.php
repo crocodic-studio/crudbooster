@@ -124,11 +124,13 @@
 	    			{
 	    				if (strpos($value,"WHERE")!==false)
 	    				{
+
 	    					$value .= " AND m_date>='".$startdate."' AND m_date<='".$enddate."'"; 
 	    				}
 	    				else
 	    				{
-	    					$value .= " WHERE m_date>='".$startdate."' AND m_date<='".$enddate."'"; 
+	    					$pos = strpos ( $value, ' ' ,strpos($value,'FROM ') )
+	    					$value = substr_replace($value, " WHERE m_date>='".$startdate."' AND m_date<='".$enddate."' ", $pos, 0); 
 	    				}
 	    			}
 	    			if($value) {
