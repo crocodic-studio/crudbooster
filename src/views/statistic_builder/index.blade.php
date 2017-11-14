@@ -331,7 +331,10 @@
 
     <div id='statistic-area'>
 
-
+        <div class="input-group">                               
+            <span class="input-group-addon open-datetimepicker"><a><i class='fa fa-calendar '></i></a></span>
+            <input type='text' title="Date From" readonly class='form-control notfocus input_date' name="testdate1" id="testdate1" value='1970-01-01 00:00:00'/>                       
+        </div>
         <div class="statistic-row row">
             <div id='area1' class="col-sm-3 connectedSortable">            	
 
