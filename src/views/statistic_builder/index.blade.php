@@ -215,13 +215,18 @@
 
     <script type="text/javascript">
         $(function() {
+            var d = new Date();
+            d.setMonth(d.getMonth() - 1);
+            $('#testdate1').val(d.toJSON().slice(0,10));
         	$('#testdate2').val(new Date().toJSON().slice(0,10));
             $('.input_date').datepicker({
                 dateFormat: 'yy-mm-dd',
                 @if (App::getLocale() == 'ar')
                 rtl: true,
                 @endif
-                language: lang
+                language: lang,
+                changeYear: true,
+                changeMonth: true
             });
             
             $('.open-datetimepicker').click(function() {
