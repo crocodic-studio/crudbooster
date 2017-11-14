@@ -120,6 +120,17 @@
 	    	$config = json_decode($component->config);
 	    	if($config) {
 	    		foreach($config as $key=>$value) {
+	    			if ($key=="sql")
+	    			{
+	    				if (strpos($value,"WHERE")!==false)
+	    				{
+	    					$value .= " AND m_date>='" + $startdate + "' AND m_date<='" + $enddate +"'"; 
+	    				}
+	    				else
+	    				{
+	    					$value .= " WHERE m_date>='" + $startdate + "' AND m_date<='" + $enddate +"'"; 
+	    				}
+	    			}
 	    			if($value) {
     					$command = 'showFunction';
     					$value = view('crudbooster::statistic_builder.components.'.$component_name,compact('command','value','key','config','componentID'))->render();
