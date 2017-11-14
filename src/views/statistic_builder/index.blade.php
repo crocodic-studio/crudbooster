@@ -252,6 +252,7 @@
                 changeYear: true,
                 changeMonth: true,
                 onSelect: function(dateText) {
+                    $('.connectedSortable').empty();
                     runSortables();
                   }
             });
