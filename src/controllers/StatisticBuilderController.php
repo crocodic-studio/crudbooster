@@ -124,11 +124,11 @@
 	    			{
 	    				if (strpos($value,"WHERE")!==false)
 	    				{
-	    					$value .= " AND m_date>='" + $startdate + "' AND m_date<='" + $enddate +"'"; 
+	    					$value .= " AND m_date>='".$startdate."' AND m_date<='".$enddate."'"; 
 	    				}
 	    				else
 	    				{
-	    					$value .= " WHERE m_date>='" + $startdate + "' AND m_date<='" + $enddate +"'"; 
+	    					$value .= " WHERE m_date>='".$startdate."' AND m_date<='".$enddate."'"; 
 	    				}
 	    			}
 	    			if($value) {
