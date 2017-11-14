@@ -109,7 +109,7 @@
 
 	    	return response()->json(compact('componentID','layout'));
 	    }
-	    public function getViewComponent($componentID,$startdate,$enddate) {
+	    public function getViewComponentDates($componentID,$startdate,$enddate) {
 	    	$component = CRUDBooster::first('cms_statistic_components',['componentID'=>$componentID]);	
 
 	    	$command = 'layout';	    	
