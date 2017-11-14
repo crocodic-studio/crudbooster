@@ -7,8 +7,9 @@
     <script type="text/javascript">
         var lang = '{{App::getLocale()}}';
         $(function() {
+            $('#testdate2').value(new Date().toJSON().slice(0,10));
             $('.input_date').datepicker({
-                dateFormat: 'yyyy-mm-dd',
+                dateFormat: 'yy-mm-dd',
                 @if (App::getLocale() == 'ar')
                 rtl: true,
                 @endif
