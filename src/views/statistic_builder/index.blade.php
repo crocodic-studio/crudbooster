@@ -6,21 +6,6 @@
 
     <script type="text/javascript">
         var lang = '{{App::getLocale()}}';
-        $(function() {
-            $('#testdate2').val(new Date().toJSON().slice(0,10));
-            $('.input_date').datepicker({
-                dateFormat: 'yy-mm-dd',
-                @if (App::getLocale() == 'ar')
-                rtl: true,
-                @endif
-                language: lang
-            });
-            
-            $('.open-datetimepicker').click(function() {
-                  $(this).next('.input_date').datepicker('show');
-            });
-            
-        });
 
     </script>
 
@@ -230,7 +215,19 @@
 
     <script type="text/javascript">
         $(function() {
-        	
+        	$('#testdate2').val(new Date().toJSON().slice(0,10));
+            $('.input_date').datepicker({
+                dateFormat: 'yy-mm-dd',
+                @if (App::getLocale() == 'ar')
+                rtl: true,
+                @endif
+                language: lang
+            });
+            
+            $('.open-datetimepicker').click(function() {
+                  $(this).next('.input_date').datepicker('show');
+            });
+
         	$('.connectedSortable').each(function() {
         		var areaname = $(this).attr('id');
         		
@@ -238,6 +235,7 @@
         			if(response.components) {
         				
         				$.each(response.components,function(i,obj) {
+                            console.log("{{CRUDBooster::mainpath('view-component')}}/"+obj.componentID);
         					$('#'+areaname).append("<div id='area-loading-"+obj.componentID+"' class='area-loading'><i class='fa fa-spin fa-spinner'></i></div>");
         					$.get("{{CRUDBooster::mainpath('view-component')}}/"+obj.componentID,function(view) {
         						console.log('View For CID '+view.componentID);
