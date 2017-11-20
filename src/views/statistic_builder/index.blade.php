@@ -396,7 +396,7 @@
         
         <div class="row" style="padding-bottom:15px;">
 
-            <div class="col-sm-1 dropdown" style="display:inline-block;">
+            <div class="col-sm-2 dropdown" style="display:inline-block;">
               <button style="width:100%" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="daterange"><span id="txtDateRange">All</span>
               <span class="caret"></span></button>
               <ul class="dropdown-menu">
@@ -405,12 +405,14 @@
               </ul>
             </div>
             <div class="col-sm-2 datestuff" style="display:none;">
+                Date From:
                 <div class="input-group">                               
                     <span class="input-group-addon open-datetimepicker"><a><i class='fa fa-calendar '></i></a></span>
                     <input type='text' title="Date From" readonly class='form-control notfocus input_date' name="testdate1" id="testdate1" value='1970-01-01'/>                       
                 </div>
             </div>
             <div class="col-sm-2 datestuff" style="display:none;">
+                Date To:
                 <div class="input-group">                               
                     <span class="input-group-addon open-datetimepicker"><a><i class='fa fa-calendar '></i></a></span>
                     <input type='text' title="Date To" readonly class='form-control notfocus input_date' name="testdate2" id="testdate2" value='1970-01-01'/>                       
