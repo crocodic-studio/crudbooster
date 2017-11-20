@@ -378,7 +378,7 @@
     <div id='statistic-area'>
 
         <div class="row" style="padding-bottom:15px;">
-            <div class="col-sm-3">
+            <div class="col-sm-2">
                 <div class="dropdown">
                   <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Date Range
                   <span class="caret"></span></button>
