@@ -376,31 +376,32 @@
 	</div><!-- /.modal -->
 
     <div id='statistic-area'>
-
+        
         <div class="row" style="padding-bottom:15px;">
-            <div class="col-sm-2">
-                <div class="dropdown">
-                  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Date Range
-                  <span class="caret"></span></button>
-                  <ul class="dropdown-menu">
-                    <li><a href="#">All</a></li>
-                    <li><a href="#">Date</a></li>
-                  </ul>
+            <div class="panel panel-default">
+              <div class="panel-heading">Control Panel</div>
+              <div class="panel-body">
+                <div class="col-sm-8">
+                    <div class="dropdown">
+                      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="daterange">Date Range
+                      <span class="caret"></span></button>
+                      <ul class="dropdown-menu">
+                        <li><a href="#">All</a></li>
+                        <li><a href="#">Date</a></li>
+                      </ul>
+                    </div>
+                    <div class="input-group">                               
+                        <span class="input-group-addon open-datetimepicker"><a><i class='fa fa-calendar '></i></a></span>
+                        <input type='text' title="Date From" readonly class='form-control notfocus input_date' name="testdate1" id="testdate1" value='1970-01-01'/>                       
+                    </div>
+                    <div class="input-group">                               
+                        <span class="input-group-addon open-datetimepicker"><a><i class='fa fa-calendar '></i></a></span>
+                        <input type='text' title="Date To" readonly class='form-control notfocus input_date' name="testdate2" id="testdate2" value='1970-01-01'/>                       
+                    </div>
                 </div>
+              </div>
             </div>
-            <div class="col-sm-3">
-                <div class="input-group">                               
-                    <span class="input-group-addon open-datetimepicker"><a><i class='fa fa-calendar '></i></a></span>
-                    <input type='text' title="Date From" readonly class='form-control notfocus input_date' name="testdate1" id="testdate1" value='1970-01-01'/>                       
-                </div>
-            </div>
-            <div class="col-sm-3">
-                <div class="input-group">                               
-                    <span class="input-group-addon open-datetimepicker"><a><i class='fa fa-calendar '></i></a></span>
-                    <input type='text' title="Date To" readonly class='form-control notfocus input_date' name="testdate2" id="testdate2" value='1970-01-01'/>                       
-                </div>
-            </div>
-            <br>
+
         </div>
         <div class="statistic-row row">
             <div id='area1' class="col-sm-3 connectedSortable">            	
