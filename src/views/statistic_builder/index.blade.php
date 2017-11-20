@@ -394,6 +394,7 @@
                     <li><a href="#">Date</a></li>
                   </ul>
                 </div>
+            </div>
             <div class="col-sm-2">
                 <div class="input-group">                               
                     <span class="input-group-addon open-datetimepicker"><a><i class='fa fa-calendar '></i></a></span>
