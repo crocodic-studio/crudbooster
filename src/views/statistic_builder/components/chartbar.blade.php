@@ -132,15 +132,28 @@
                 label: 'Data',
                 backgroundColor: 
                 [
-                    window.chartColors.blue,
+                    color(window.chartColors.blue).alpha(0.5).rgbString(),
+                    color(window.chartColors.green).alpha(0.5).rgbString(),
+                    color(window.chartColors.red).alpha(0.5).rgbString(),
+                    color(window.chartColors.orange).alpha(0.5).rgbString(),
+                    color(window.chartColors.purple).alpha(0.5).rgbString(),
+                    color(window.chartColors.grey).alpha(0.5).rgbString(),
                     window.chartColors.green,
                     window.chartColors.red,
                     window.chartColors.orange,
                     window.chartColors.purple,
                     window.chartColors.grey
                 ],
-                /*borderColor: '#000000',
-                borderWidth: 1,*/
+                borderColor: 
+                [
+                    color(window.chartColors.blue).rgbString(),
+                    color(window.chartColors.green).rgbString(),
+                    color(window.chartColors.red).rgbString(),
+                    color(window.chartColors.orange).rgbString(),
+                    color(window.chartColors.purple).rgbString(),
+                    color(window.chartColors.grey).rgbString()
+                ],
+                borderWidth: 1,
                 data: arr_datapts
             }]
 
