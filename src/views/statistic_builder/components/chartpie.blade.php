@@ -127,7 +127,6 @@
         var barChartData = {
             labels: arr_labels,
             datasets: [{
-                label: 'Data',
                 backgroundColor: 
                 [
                     color(window.chartColors.blue).alpha(0.5).rgbString(),
@@ -166,7 +165,7 @@
                 options: {
                     responsive: true,
                     legend: {
-                        display:false,
+                        position: 'top',
                     },
                     title: {
                         display: false,
