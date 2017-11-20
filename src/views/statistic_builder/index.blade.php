@@ -166,7 +166,16 @@
     <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script type="text/javascript">
-    $(function() {             	       
+    $(function() {             	      
+        window.chartColors = {
+            red: '#FF4136',
+            orange: '#FF851B',
+            yellow: '#FFDC00',
+            green: '#2ECC40',
+            blue: '#0074D9',
+            purple: '#B10DC9',
+            grey: '#AAAAAA'
+        }; 
 
         var cloneSidebar = $('.control-sidebar').clone();
 

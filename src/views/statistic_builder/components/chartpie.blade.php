@@ -128,8 +128,16 @@
             labels: arr_labels,
             datasets: [{
                 label: 'Data',
-                /*backgroundColor: color('#36a2eb').alpha(0.5).rgbString(),
-                borderColor: '#36a2eb',
+                backgroundColor: 
+                [
+                    window.chartColors.blue,
+                    window.chartColors.green,
+                    window.chartColors.red,
+                    window.chartColors.orange,
+                    window.chartColors.purple,
+                    window.chartColors.grey
+                ],
+                /*borderColor: '#36a2eb',
                 borderWidth: 1,*/
                 data: arr_datapts
             }]
@@ -145,7 +153,7 @@
                 options: {
                     responsive: true,
                     legend: {
-                        position: 'top',
+                        display:false,
                     },
                     title: {
                         display: false,
