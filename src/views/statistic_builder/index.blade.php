@@ -66,6 +66,8 @@
         ::-webkit-scrollbar-thumb {
             background: #333333;          
         }
+
+        .ui-datepicker{ z-index: 99999 !important;}
     </style>
 
 	<!-- ADDITION FUNCTION FOR BUTTON -->
