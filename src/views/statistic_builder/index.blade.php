@@ -396,7 +396,7 @@
         
         <div class="row" style="padding-bottom:15px;">
 
-            <div class="col-sm-2 dropdown" style="display:inline-block;">
+            <div class="col-sm-2 dropdown" style="display:inline-block;margin-top:20px;">
               <button style="width:100%" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="daterange"><span id="txtDateRange">All</span>
               <span class="caret"></span></button>
               <ul class="dropdown-menu">
