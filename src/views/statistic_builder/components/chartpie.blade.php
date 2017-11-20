@@ -128,9 +128,9 @@
             labels: arr_labels,
             datasets: [{
                 label: 'Data',
-                backgroundColor: color('#36a2eb').alpha(0.5).rgbString(),
+                /*backgroundColor: color('#36a2eb').alpha(0.5).rgbString(),
                 borderColor: '#36a2eb',
-                borderWidth: 1,
+                borderWidth: 1,*/
                 data: arr_datapts
             }]
 
@@ -140,7 +140,7 @@
 					
 			var ctx = document.getElementById("canvas-{{$componentID}}").getContext("2d");
             window.myBar = new Chart(ctx, {
-                type: 'bar',
+                type: 'pie',
                 data: barChartData,
                 options: {
                     responsive: true,
