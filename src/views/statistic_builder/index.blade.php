@@ -244,6 +244,16 @@
 
         function runSortables() 
         {
+            if ($('#txtDateRange').text()=='All')
+            {
+                var viewlink = "{{CRUDBooster::mainpath('view-component')}}/";
+                var addon = "";
+            }
+            else
+            {
+                var viewlink = "{{CRUDBooster::mainpath('view-component-dates')}}/";
+                var addon = "/"+$('#testdate1').val()+"/"+$('#testdate2').val();
+            }
             $('.connectedSortable').each(function() {
                 var areaname = $(this).attr('id');
                 
@@ -251,9 +261,8 @@
                     if(response.components) {
                         
                         $.each(response.components,function(i,obj) {
-                            console.log("{{CRUDBooster::mainpath('view-component-dates')}}/"+obj.componentID+"/"+$('#testdate1').val()+"/"+$('#testdate2').val());
                             $('#'+areaname).append("<div id='area-loading-"+obj.componentID+"' class='area-loading'><i class='fa fa-spin fa-spinner'></i></div>");
-                            $.get("{{CRUDBooster::mainpath('view-component-dates')}}/"+obj.componentID+"/"+$('#testdate1').val()+"/"+$('#testdate2').val(),function(view) {
+                            $.get(viewlink+obj.componentID+addon,function(view) {
                                 console.log('View For CID '+view.componentID);
                                 $('#area-loading-'+obj.componentID).remove();
                                 $('#'+areaname).append(view.layout);
