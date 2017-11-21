@@ -181,6 +181,9 @@
             $('.datestuff').show();
           }
 
+          $('.connectedSortable').empty();
+          runSortables();
+
        });       	      
         window.chartColors = {
             red: '#FF4136',
