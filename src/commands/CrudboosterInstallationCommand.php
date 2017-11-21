@@ -35,13 +35,13 @@ class CrudboosterInstallationCommand extends Command {
 	public function handle()
 	{
 		
-		$this->header();
+		/*$this->header();
 
 		$this->checkRequirements();
 		
-		$this->info('Installing: ');
+		$this->info('Installing: ');*/
 		/* Removing the default user and password reset, it makes you ambigous when using CRUDBooster */
-        $this->info('I remove some default migration files from laravel...');  
+        //$this->info('I remove some default migration files from laravel...');  
         if(file_exists(base_path('database/migrations/2014_10_12_000000_create_users_table.php'))) {        
             @unlink(base_path('database/migrations/2014_10_12_000000_create_users_table.php'));
         }
@@ -50,63 +50,63 @@ class CrudboosterInstallationCommand extends Command {
         }
 
         //Create vendor folder at public
-        $this->info('Checking public/vendor directory...');  
+        //$this->info('Checking public/vendor directory...');  
         if(!file_exists(public_path('vendor'))) {
             mkdir(public_path('vendor'),0777);
         }else{
         	if(!is_writable(public_path('vendor'))) {
-        		$this->info('Setup aborted !');
-        		$this->info('Please set public/vendor directory to writable 0777');
+        		//$this->info('Setup aborted !');
+        		//$this->info('Please set public/vendor directory to writable 0777');
         		return false;
         	}
         }
 
 
         //Create symlink for uploads path
-        $this->info('Checking public/uploads symlink...');  
+        //$this->info('Checking public/uploads symlink...');  
         if(file_exists(public_path('uploads'))) {          
             $uploadPath = public_path('uploads');
-        	$this->info('Upload Path: '.$uploadPath);        
+        	//$this->info('Upload Path: '.$uploadPath);        
         	if(realpath($uploadPath) == $uploadPath) {
-	            $this->info('Remove the existing uploads dir, and create a symlink for it...');                                                                     
+	            //$this->info('Remove the existing uploads dir, and create a symlink for it...');                                                                     
 	                rrmdir(public_path('uploads'));
 	                app('files')->link(storage_path('app'), public_path('uploads'));              
         	}
         }else{
-        	$this->info('Creating public/uploads symlink...');  
+        	//$this->info('Creating public/uploads symlink...');  
             app('files')->link(storage_path('app'), public_path('uploads'));
         }
 
 
         //Crate symlink for assets
-        $this->info('Checking public/vendor/crudbooster symlink...');  
+        //$this->info('Checking public/vendor/crudbooster symlink...');  
         if(file_exists(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'))) {                      
             $vendorpath = public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster');
-            $this->info('Vendor Path: '.$vendorpath);   
+            //$this->info('Vendor Path: '.$vendorpath);   
             if(realpath($vendorpath) == $vendorpath) {                   	
-	            $this->info('Removing public/vendor/crudbooster dir, instead of creating a symlink...');                               
+	            //$this->info('Removing public/vendor/crudbooster dir, instead of creating a symlink...');                               
 	                rrmdir(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'));
 	                app('files')->link(__DIR__.'/../assets',public_path('vendor/crudbooster'));
             }            
         }else{            
-        	$this->info('Creating public/vendor/crudbooster symlink...');  
+        	//$this->info('Creating public/vendor/crudbooster symlink...');  
             app('files')->link(__DIR__.'/../assets',public_path('vendor/crudbooster'));
         }
 
 		//if($this->confirm('Do you have setting the database configuration at .env ?')) {
 
-			$this->info('Publishing CRUDBooster needs file...');
+			//$this->info('Publishing CRUDBooster needs file...');
 			$this->call('vendor:publish');	
 			$this->call('vendor:publish',['--tag'=>'cb_migration','--force'=>true]);
 			$this->call('vendor:publish',['--tag'=>'cb_lfm','--force'=>true]);	
 			$this->call('vendor:publish',['--tag'=>'cb_localization','--force'=>true]);		
 			
-			$this->info('Dumping the autoloaded files and reloading all new files...');
+			//$this->info('Dumping the autoloaded files and reloading all new files...');
 			$composer = $this->findComposer();
 	        $process = new Process($composer.' dumpautoload');
 	        $process->setWorkingDirectory(base_path())->run();
 
-			$this->info('Migrating database...');				
+			//$this->info('Migrating database...');				
 			$this->call('migrate',['--force' => true]);
 
 			if (!class_exists('CBSeeder')) {
@@ -116,13 +116,13 @@ class CrudboosterInstallationCommand extends Command {
 			$this->call('config:clear');		
 			$this->call('optimize');
 			
-			$this->info('Installing CRUDBooster Is Completed ! Thank You :)');
+			//$this->info('Installing CRUDBooster Is Completed ! Thank You :)');
 		/*}else{
 			$this->info('Setup Aborted !');
 			$this->info('Please setting the database configuration for first !');
 		}*/
 
-		$this->footer();
+		//$this->footer();
 	}
 
 	private function header() {
