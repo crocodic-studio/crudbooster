@@ -168,6 +168,15 @@
     <script type="text/javascript">
     $(function() {      
         var color = Chart.helpers.color;
+        window.chartColors = {
+            red: '#FF4136',
+            orange: '#FF851B',
+            yellow: '#FFDC00',
+            green: '#2ECC40',
+            blue: '#0074D9',
+            purple: '#B10DC9',
+            grey: '#AAAAAA'
+        }; 
         var fillColorsData = [
                 color(window.chartColors.blue).alpha(0.5).rgbString(),
                 color(window.chartColors.green).alpha(0.5).rgbString(),
@@ -266,15 +275,7 @@
           runSortables();
 
        });       	      
-        window.chartColors = {
-            red: '#FF4136',
-            orange: '#FF851B',
-            yellow: '#FFDC00',
-            green: '#2ECC40',
-            blue: '#0074D9',
-            purple: '#B10DC9',
-            grey: '#AAAAAA'
-        }; 
+        
 
         var cloneSidebar = $('.control-sidebar').clone();
 
