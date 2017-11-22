@@ -167,6 +167,7 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script type="text/javascript">
     $(function() {      
+        var color = Chart.helpers.color;
         var fillColorsData = [
                 color(window.chartColors.blue).alpha(0.5).rgbString(),
                 color(window.chartColors.green).alpha(0.5).rgbString(),
