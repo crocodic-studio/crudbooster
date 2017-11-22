@@ -124,7 +124,7 @@
 		
 		<script type="text/javascript">
 		var color = Chart.helpers.color;
-		var arr_datapts = $.parseJSON("{!! $dataPointsJS !!}")[0];
+		var arr_datapts = $.parseJSON('{!! $dataPointsJS !!}')[0];
 		var arr_labels = {!! $data_labelsjs !!};
         var barChartData = {
             labels: arr_labels,
