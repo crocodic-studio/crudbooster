@@ -480,6 +480,9 @@ a:focus {
 .user-panel:after {
   clear: both;
 }
+.user-panel > .image {
+  min-height: 45px;
+}
 .user-panel > .image > img {
   width: 100%;
   max-width: 45px;
