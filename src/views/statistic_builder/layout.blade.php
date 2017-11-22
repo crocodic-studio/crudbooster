@@ -158,6 +158,14 @@
                 </a>
             </div>
         </li>
+        <li class='connectedSortable' title='Drag To Main Area'>
+            <div id='btn-chartarea' class='button-widget-area'>
+                <a href="#" data-component='chartdoughnut' class='btn-add-widget add-chart-pie'>
+                <img src='{{asset("vendor/crudbooster/assets/statistic_builder/chartpie.png")}}'/>
+                <div class='title'>Chart Doughnut</div>
+                </a>
+            </div>
+        </li>
       </ul>
     </aside>
     <!-- The sidebar's background -->
