@@ -155,6 +155,7 @@ return [
     'Menu_Management'     => 'Menu Management',
     'menu_filemanager'    => 'File Manager',
     'Add_New_Setting'     => 'Add New Setting',
+    'Update_Setting'      => 'Your setting has been saved !',
     'Add_New_Module'      => 'Add New Module',
     'List_Module'         => 'List Module',
     'Add_New_Statistic'   => 'Add New Statistic',
