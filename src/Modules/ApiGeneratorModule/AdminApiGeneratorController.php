@@ -58,10 +58,8 @@ class AdminApiGeneratorController extends CBController
             'schema' => 'https://schema.getpostman.com/json/collection/v2.0.0/collection.json',
         ];
         $items = [];
-        $apis = $this->table()->orderby('nama', 'asc')->get();
-
-        foreach ($apis as $a) {
-            $parameters = unserialize($a->parameters);
+        foreach ($this->table()->orderby('nama', 'asc')->get() as $api) {
+            $parameters = unserialize($api->parameters);
             $formdata = [];
             $httpbuilder = [];
             if ($parameters) {
@@ -75,23 +73,23 @@ class AdminApiGeneratorController extends CBController
                 }
             }
 
-            if (strtolower($a->method_type) == 'get' && $httpbuilder) {
+            if (strtolower($api->method_type) == 'get' && $httpbuilder) {
                 $httpbuilder = "?".http_build_query($httpbuilder);
             }else{
                 $httpbuilder = '';
             }
 
             $items[] = [
-                'name' => $a->nama,
+                'name' => $api->nama,
                 'request' => [
-                    'url' => url('api/'.$a->permalink).$httpbuilder,
-                    'method' => $a->method_type ?: 'GET',
+                    'url' => url('api/'.$api->permalink).$httpbuilder,
+                    'method' => $api->method_type ?: 'GET',
                     'header' => [],
                     'body' => [
                         'mode' => 'formdata',
                         'formdata' => $formdata,
                     ],
-                    'description' => $a->keterangan,
+                    'description' => $api->keterangan,
                 ],
             ];
         }
