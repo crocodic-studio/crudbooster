@@ -18,11 +18,7 @@ class FileManipulator
             $methodIndex = self::methodIndex($line, $i, $methodIndex);
         }
 
-        $methodIndex = array_values(array_unique($methodIndex));
-
-        $keyTagBukaInMethodIndex = array_search($tagBuka, $methodIndex);
-        $totalMethodIndex = count($methodIndex) - 1;
-        $methodNextIndex = ($totalMethodIndex == $keyTagBukaInMethodIndex) ? $keyTagBukaInMethodIndex : $keyTagBukaInMethodIndex + 1;
+        list($methodIndex, $methodNextIndex) = self::tagBuka($methodIndex, $tagBuka);
 
         $tagPentutups = array_values($tagPentutups);
 
@@ -52,11 +48,7 @@ class FileManipulator
             $methodIndex = self::methodIndex($line, $i, $methodIndex);
         }
 
-        $methodIndex = array_values(array_unique($methodIndex)); //reset keys
-
-        $keyTagBukaInMethodIndex = array_search($tagBuka, $methodIndex);
-        $totalMethodIndex = count($methodIndex) - 1;
-        $methodNextIndex = ($totalMethodIndex == $keyTagBukaInMethodIndex) ? $keyTagBukaInMethodIndex : $keyTagBukaInMethodIndex + 1;
+        list($methodIndex, $methodNextIndex) = self::tagBuka($methodIndex, $tagBuka);
 
         $tagPentutups = array_values($tagPentutups);
 
@@ -166,5 +158,21 @@ class FileManipulator
         }
 
         return $methodIndex;
+    }
+
+    /**
+     * @param $methodIndex
+     * @param $tagBuka
+     * @return array
+     */
+    private static function tagBuka($methodIndex, $tagBuka)
+    {
+        $methodIndex = array_values(array_unique($methodIndex));
+
+        $keyTagBukaInMethodIndex = array_search($tagBuka, $methodIndex);
+        $totalMethodIndex = count($methodIndex) - 1;
+        $methodNextIndex = ($totalMethodIndex == $keyTagBukaInMethodIndex) ? $keyTagBukaInMethodIndex : $keyTagBukaInMethodIndex + 1;
+
+        return [$methodIndex, $methodNextIndex];
     }
 }
