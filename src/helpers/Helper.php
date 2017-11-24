@@ -447,17 +447,14 @@ if (! function_exists('findSelected')) {
 
         switch ($form['options']['multiple_result_format']) {
             case 'JSON':
-                $value = json_decode($rawvalue, true) ?: [];
-                $selected = (in_array($option_value, $value)) ? "selected" : "";
+                $selected = (in_array($option_value, json_decode($rawvalue, true) ?: [])) ? "selected" : "";
                 break;
             default:
             case 'COMMA_SEPARATOR':
-                $value = explode(', ', $rawvalue);
-                $selected = (in_array($option_value, $value)) ? "selected" : "";
+                $selected = (in_array($option_value, explode(', ', $rawvalue))) ? "selected" : "";
                 break;
             case 'SEMICOLON_SEPARATOR':
-                $value = explode('; ', $rawvalue);
-                $selected = (in_array($option_value, $value)) ? "selected" : "";
+                $selected = (in_array($option_value, explode('; ', $rawvalue))) ? "selected" : "";
                 break;
         }
         return $selected;
@@ -474,6 +471,7 @@ if (! function_exists('array_get_keys')) {
     function array_get_keys(array $_array, array $keys, $default = null)
     {
         $_defaults = array_fill_keys($keys, $default);
+
         return array_merge($_defaults, array_intersect_key($_array, $_defaults));
     }
 }
