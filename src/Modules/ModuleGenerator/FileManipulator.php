@@ -4,10 +4,8 @@ namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
 class FileManipulator
 {
-    static function readMethodContent($code, $findMethod)
+    static function readMethodContent($code, $functionToFind)
     {
-        $functionToFind = $findMethod;
-
         $codeArray = explode("\n", $code);
         $tagBuka = 0;
         $tagPentutups = [];
@@ -36,11 +34,8 @@ class FileManipulator
     }
 
 
-    static function writeMethodContent($code, $findMethod, $stringContent)
+    static function writeMethodContent($code, $functionToFind, $stringToInsert)
     {
-        $functionToFind = $findMethod;
-        $stringToInsert = $stringContent;
-
         $codeArray = explode("\n", $code);
         $tagBuka = 0;
         $tagPentutups = [];
@@ -57,8 +52,7 @@ class FileManipulator
             $methodIndex = self::methodIndex($line, $i, $methodIndex);
         }
 
-        $methodIndex = array_unique($methodIndex);
-        $methodIndex = array_values($methodIndex); //reset keys
+        $methodIndex = array_values(array_unique($methodIndex)); //reset keys
 
         $keyTagBukaInMethodIndex = array_search($tagBuka, $methodIndex);
         $totalMethodIndex = count($methodIndex) - 1;
@@ -137,7 +131,6 @@ class FileManipulator
      * @param $line
      * @param $e
      * @param $tagPentutups
-     * @param $tagPembukas
      * @return mixed
      */
     private static function tagPentutups($line, $e, $tagPentutups)
@@ -154,7 +147,6 @@ class FileManipulator
     }
 
     /**
-     * @param $methodAccessCandidate
      * @param $line
      * @param $i
      * @param $methodIndex
