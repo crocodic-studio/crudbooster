@@ -137,7 +137,7 @@ class AdminPrivilegesController extends CBController
         $this->findRow($id)->delete();
         DB::table("cms_privileges_roles")->where("id_cms_privileges", $row->id)->delete();
 
-        CRUDBooster::redirect(CRUDBooster::mainpath(), trans("crudbooster.alert_delete_data_success"), 'success');
+        CRUDBooster::redirect(CRUDBooster::mainpath(), cbTrans('alert_delete_data_success'), 'success');
     }
 
     /**
