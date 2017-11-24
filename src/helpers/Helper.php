@@ -361,15 +361,14 @@ if (! function_exists('rrmdir')) {
         if (! is_dir($dir)) {
             return;
         }
-        $objects = scandir($dir);
-        foreach ($objects as $object) {
-            if ($object == "." || $object == "..") {
+        foreach (scandir($dir) as $object) {
+            if (in_array($object, ['.', '..'])) {
                 continue;
             }
-            if (is_dir($dir."/".$object)) {
-                rrmdir($dir."/".$object);
+            if (is_dir($dir.'/'.$object)) {
+                rrmdir($dir.'/'.$object);
             } else {
-                unlink($dir."/".$object);
+                unlink($dir.'/'.$object);
             }
         }
         rmdir($dir);
@@ -433,7 +432,6 @@ if (! function_exists('findSelected')) {
      * @param $rawvalue
      * @param $form
      * @param $option_value
-     * @param $value
      * @return string
      */
     function findSelected($rawvalue, $form, $option_value)
