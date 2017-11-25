@@ -373,7 +373,6 @@ class CRUDBooster
 
     public static function sendEmail($config = [])
     {
-
         Config::set('mail.driver', SettingRepo::getSetting('smtp_driver'));
         Config::set('mail.host', SettingRepo::getSetting('smtp_host'));
         Config::set('mail.port', SettingRepo::getSetting('smtp_port'));
@@ -578,14 +577,6 @@ class CRUDBooster
 
         return true;
     }
-
-/*    public static function newId($table)
-    {
-        $key = CRUDBooster::findPrimaryKey($table);
-        $id = DB::table($table)->max($key) + 1;
-
-        return $id;
-    }*/
 
     public static function getForeignKey($parent_table, $child_table)
     {
