@@ -129,8 +129,16 @@
 	    				}
 	    				else
 	    				{
-	    					$pos = strpos ( $value, ' ' ,strpos($value,'FROM ')+5 );
-	    					$value = substr_replace($value, " WHERE m_date>='".$startdate."' AND m_date<='".$enddate."' ", $pos, 0); 
+	    					if (strpos($value,"[datescondition]")!==false)
+	    					{
+	    						$value = str_replace("[datescondition]", " WHERE m_date>='".$startdate."' AND m_date<='".$enddate."' ",$value); 	
+	    					}
+	    					else
+	    					{
+	    						$pos = strpos ( $value, ' ' ,strpos($value,'FROM ')+5 );
+	    						$value = substr_replace($value, " WHERE m_date>='".$startdate."' AND m_date<='".$enddate."' ", $pos, 0); 	
+	    					}
+	    					
 	    					$sqlstring = $value;
 	    				}
 	    			}
