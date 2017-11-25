@@ -660,7 +660,7 @@ class CBController extends Controller
 
         $this->findRow($id)->update([$column => null]);
 
-        CB::insertLog(trans("crudbooster.log_delete_image", [
+        CB::insertLog(cbTrans('log_delete_image', [
             'name' => $row->{$this->title_field},
             'module' => CB::getCurrentModule()->name,
         ]));

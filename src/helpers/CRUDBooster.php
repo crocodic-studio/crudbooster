@@ -680,11 +680,12 @@ class CRUDBooster
     {
         $parent_table = CRUDBooster::parseSqlTable($parent_table)['table'];
         $child_table = CRUDBooster::parseSqlTable($child_table)['table'];
+
         if (self::isColumnExists($child_table, 'id_'.$parent_table)) {
             return 'id_'.$parent_table;
-        } else {
-            return $parent_table.'_id';
         }
+        return $parent_table.'_id';
+
     }
 
     public static function isColumnExists($table, $field)

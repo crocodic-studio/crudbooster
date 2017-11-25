@@ -163,25 +163,27 @@ class DataSaver
     }
 
     /**
-     * @param $ro
+     * @param $row
      * @param $id
      * @param $inputdata
      * @return null
      */
-    private function _handleCheckbox($ro, $id, $inputdata)
+    private function _handleCheckbox($row, $id, $inputdata)
     {
-        $datatable = explode(",", $ro['datatable'])[0];
-        $foreignKey2 = CRUDBooster::getForeignKey($datatable, $ro['relationship_table']);
-        $foreignKey = CRUDBooster::getForeignKey($this->Cb->table, $ro['relationship_table']);
-        DB::table($ro['relationship_table'])->where($foreignKey, $id)->delete();
+        $pivotTableName = $row['relationship_table'];
+        $datatable = explode(",", $row['datatable'])[0];
+
+        $foreignKey2 = CRUDBooster::getForeignKey($datatable, $pivotTableName);
+        $foreignKey = CRUDBooster::getForeignKey($this->Cb->table, $pivotTableName);
+        DB::table($pivotTableName)->where($foreignKey, $id)->delete();
 
         if (! $inputdata) {
             return null;
         }
-        $relationship_table_pk = CB::pk($ro['relationship_table']);
+        $relationship_table_pk = CB::pk($pivotTableName);
         foreach ($inputdata as $input_id) {
-            DB::table($ro['relationship_table'])->insert([
-                $relationship_table_pk => CRUDBooster::newId($ro['relationship_table']),
+            DB::table($pivotTableName)->insert([
+                $relationship_table_pk => CRUDBooster::newId($pivotTableName),
                 $foreignKey => $id,
                 $foreignKey2 => $input_id,
             ]);
