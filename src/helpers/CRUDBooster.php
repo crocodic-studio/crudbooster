@@ -801,22 +801,7 @@ class CRUDBooster
 
     public static function getFieldType($table, $field)
     {
-        $field = 'field_type_'.$table.'_'.$field;
-
-        return Cache::rememberForever($field, function () use ($table, $field) {
-            try {
-                //MySQL & SQL Server
-                $typedata = DB::select(DB::raw("select DATA_TYPE from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='$table' and COLUMN_NAME = '$field'"))[0]->DATA_TYPE;
-            } catch (\Exception $e) {
-
-            }
-
-            if (! $typedata) {
-                $typedata = 'varchar';
-            }
-
-            return $typedata;
-        });
+        return DbInspector::getFieldTypes($table, $field);
     }
 
     public static function backWithMsg($msg, $type = 'success')
