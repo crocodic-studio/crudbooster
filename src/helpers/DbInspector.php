@@ -4,6 +4,7 @@ namespace crocodicstudio\crudbooster\helpers;
 
 use Cache;
 use DB;
+use Schema;
 
 class DbInspector
 {
@@ -198,5 +199,28 @@ class DbInspector
 
             return $typedata;
         });
+    }
+
+    /**
+     * @param $fieldName
+     * @return bool
+     */
+    public static function isForeignKeey($fieldName)
+    {
+        $table = CRUDBooster::getTableForeignKey($fieldName);
+        $cacheKey = 'isForeignKey_'.$fieldName;
+
+        if (Cache::has($cacheKey)) {
+            return Cache::get($cacheKey);
+        }
+
+        if (! $table) {
+            return false;
+        }
+
+        $hasTable = Schema::hasTable($table);
+        Cache::forever($cacheKey, $hasTable);
+
+        return $hasTable;
     }
 }

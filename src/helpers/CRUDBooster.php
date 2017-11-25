@@ -544,20 +544,7 @@ class CRUDBooster
 
     public static function isForeignKey($fieldName)
     {
-        $table = self::getTableForeignKey($fieldName);
-        $cacheKey = 'isForeignKey_'.$fieldName;
-
-        if (Cache::has($cacheKey)) {
-            return Cache::get($cacheKey);
-        }
-
-        if (!$table) {
-            return false;
-        }
-
-        $hasTable = Schema::hasTable($table);
-        Cache::forever($cacheKey, $hasTable);
-        return $hasTable;
+        return DbInspector::isForeignKeey($fieldName);
     }
 
     public static function urlFilterColumn($key, $type, $value = '', $singleSorting = true)
