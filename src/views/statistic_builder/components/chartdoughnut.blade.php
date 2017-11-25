@@ -28,14 +28,14 @@
 			<label>SQL Query Line</label>
 			<textarea name='config[sql]' required rows="4" class='form-control'>{{@$config->sql}}</textarea>
 			<div class="block-help">
-				Use column name 'label' as line chart label. Use name 'value' as value of line chart. Sparate with ; each sql line. Use [SESSION_NAME] to use alias session.
+				Use column name 'label' as line chart label. Use name 'value' as value of line chart. Sparate with ; each sql line. Use [SESSION_NAME] to use alias session.  Use [datesconditions] as placehoder to add date filtering.
 			</div>
 		</div>
 
 		<div class="form-group">
 			<label>Bar Area Name</label>
 			<input class="form-control" required name='config[area_name]' type='text' value='{{@$config->area_name}}'/>
-			<div class="block-help">You can naming each line area. Write name sparate with ;</div>
+			<div class="block-help">You can naming each line area. Write name separate with ;</div>
 		</div>
 
 		<div class="form-group">
