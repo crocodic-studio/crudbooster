@@ -2,6 +2,7 @@
 
 namespace crocodicstudio\crudbooster\helpers;
 
+use crocodicstudio\crudbooster\Modules\LogsModule\LogsRepository;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator;
 use Session;
 use Request;
@@ -794,15 +795,7 @@ class CRUDBooster
 
     public static function insertLog($description)
     {
-        $log = [
-            'created_at' => date('Y-m-d H:i:s'),
-            'ipaddress' => $_SERVER['REMOTE_ADDR'],
-            'useragent' => $_SERVER['HTTP_USER_AGENT'],
-            'url' => Request::url(),
-            'description' => $description,
-            'id_cms_users' => self::myId(),
-        ];
-        DB::table('cms_logs')->insert($log);
+        LogsRepository::insertLog($description, self::myId());
     }
 
     public static function myId()
