@@ -183,43 +183,9 @@ class CRUDBooster
         return request('m');
     }
 
-    public static function sidebarDashboard()
-    {
-
-        $menu = DB::table('cms_menus')->where('cms_privileges', self::myPrivilegeId())->where('is_dashboard', 1)->where('is_active', 1)->first() ?: new \stdClass();
-
-        $menu->url = self::menuUrl($menu);
-
-        return $menu;
-    }
-
     public static function myPrivilegeId()
     {
         return session('admin_privileges');
-    }
-
-    private static function menuUrl($menu)
-    {
-        $menu->is_broken = false;
-        if ($menu->type == 'Route') {
-            return route($menu->path);
-        }
-
-        if ($menu->type == 'URL') {
-            return $menu->path;
-        }
-
-        if ($menu->type == 'Controller & Method') {
-            return action($menu->path);
-        }
-
-        if ($menu->type == 'Module' || $menu->type == 'Statistic') {
-            return self::adminPath($menu->path);
-        }
-
-        $menu->is_broken = true;
-
-        return '#';
     }
 
     public static function adminPath($path = null)

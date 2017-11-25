@@ -19,7 +19,7 @@ class MenuRepo
 
         foreach ($menu_active as &$menu) {
 
-            $url = CRUDBooster::menuUrl($menu);
+            $url = self::menuUrl($menu);
 
             $menu->url = $url;
             $menu->url_path = trim(str_replace(url('/'), '', $url), "/");
@@ -35,7 +35,7 @@ class MenuRepo
 
             if (count($child)) {
                 foreach ($child as &$c) {
-                    $url = CRUDBooster::menuUrl($c);
+                    $url = self::menuUrl($c);
                     $c->url = $url;
                     $c->url_path = trim(str_replace(url('/'), '', $url), "/");
                 }
@@ -45,5 +45,38 @@ class MenuRepo
         }
 
         return $menu_active;
+    }
+
+    private static function menuUrl($menu)
+    {
+        $menu->is_broken = false;
+        if ($menu->type == 'Route') {
+            return route($menu->path);
+        }
+
+        if ($menu->type == 'URL') {
+            return $menu->path;
+        }
+
+        if ($menu->type == 'Controller & Method') {
+            return action($menu->path);
+        }
+
+        if ($menu->type == 'Module' || $menu->type == 'Statistic') {
+            return CRUDBooster::adminPath($menu->path);
+        }
+
+        $menu->is_broken = true;
+
+        return '#';
+    }
+
+    public static function sidebarDashboard()
+    {
+        $menu = DB::table('cms_menus')->where('cms_privileges', CRUDBooster::myPrivilegeId())->where('is_dashboard', 1)->where('is_active', 1)->first() ?: new \stdClass();
+
+        $menu->url = self::menuUrl($menu);
+
+        return $menu;
     }
 }

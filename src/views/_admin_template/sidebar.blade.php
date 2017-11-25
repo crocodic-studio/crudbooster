@@ -9,7 +9,7 @@
             <ul class="sidebar-menu">
                 <li class="header">{{cbTrans("menu_navigation")}}</li>
                 <!-- Optionally, you can add icons to the links -->
-                @includeWhen(CRUDBooster::sidebarDashboard(), 'crudbooster::_admin_template._sidebar.dashboard')
+                @includeWhen(\crocodicstudio\crudbooster\Modules\MenuModule\MenuRepo::sidebarDashboard(), 'crudbooster::_admin_template._sidebar.dashboard')
                 @include('crudbooster::_admin_template._sidebar.dynamic_menus')
                 @if(CRUDBooster::isSuperadmin())
                     <li class="header">{{ cbTrans('SUPERADMIN') }}</li>

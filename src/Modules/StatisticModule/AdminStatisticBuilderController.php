@@ -3,6 +3,7 @@
 namespace crocodicstudio\crudbooster\Modules\StatisticModule;
 
 use crocodicstudio\crudbooster\controllers\CBController;
+use crocodicstudio\crudbooster\Modules\MenuModule\MenuRepo;
 use Illuminate\Support\Facades\DB;
 use CRUDBooster;
 
@@ -30,7 +31,7 @@ class AdminStatisticBuilderController extends CBController
     public function getShowDashboard()
     {
         $this->cbLoader();
-        $m = CRUDBooster::sidebarDashboard();
+        $m = MenuRepo::sidebarDashboard();
         $m->path = str_replace("statistic_builder/show/", "", $m->path);
         if ($m->type != 'Statistic') {
             redirect('/');
