@@ -4,6 +4,7 @@ namespace crocodicstudio\crudbooster\helpers;
 
 use crocodicstudio\crudbooster\Modules\LogsModule\LogsRepository;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator;
+use crocodicstudio\crudbooster\Modules\SettingModule\SettingRepo;
 use Session;
 use Request;
 use Schema;
@@ -332,11 +333,11 @@ class CRUDBooster
 
     public static function sendEmailQueue($queue)
     {
-        Config::set('mail.driver', self::getSetting('smtp_driver'));
-        Config::set('mail.host', self::getSetting('smtp_host'));
-        Config::set('mail.port', self::getSetting('smtp_port'));
-        Config::set('mail.username', self::getSetting('smtp_username'));
-        Config::set('mail.password', self::getSetting('smtp_password'));
+        Config::set('mail.driver', SettingRepo::getSetting('smtp_driver'));
+        Config::set('mail.host', SettingRepo::getSetting('smtp_host'));
+        Config::set('mail.port', SettingRepo::getSetting('smtp_port'));
+        Config::set('mail.username', SettingRepo::getSetting('smtp_username'));
+        Config::set('mail.password', SettingRepo::getSetting('smtp_password'));
 
         $html = $queue->email_content;
         $to = $queue->email_recipient;
@@ -370,26 +371,14 @@ class CRUDBooster
         });
     }
 
-    public static function getSetting($name)
-    {
-        if (Cache::has('setting_'.$name)) {
-            return Cache::get('setting_'.$name);
-        }
-
-        $query = DB::table('cms_settings')->where('name', $name)->first();
-        Cache::forever('setting_'.$name, $query->content);
-
-        return $query->content;
-    }
-
     public static function sendEmail($config = [])
     {
 
-        Config::set('mail.driver', self::getSetting('smtp_driver'));
-        Config::set('mail.host', self::getSetting('smtp_host'));
-        Config::set('mail.port', self::getSetting('smtp_port'));
-        Config::set('mail.username', self::getSetting('smtp_username'));
-        Config::set('mail.password', self::getSetting('smtp_password'));
+        Config::set('mail.driver', SettingRepo::getSetting('smtp_driver'));
+        Config::set('mail.host', SettingRepo::getSetting('smtp_host'));
+        Config::set('mail.port', SettingRepo::getSetting('smtp_port'));
+        Config::set('mail.username', SettingRepo::getSetting('smtp_username'));
+        Config::set('mail.password', SettingRepo::getSetting('smtp_password'));
 
         $to = $config['to'];
         $data = $config['data'];
@@ -408,8 +397,8 @@ class CRUDBooster
             $queue = [
                 'send_at' => $config['send_at'],
                 'email_recipient' => $to,
-                'email_from_email' => $template->from_email ?: CRUDBooster::getSetting('email_sender'),
-                'email_from_name' => $template->from_name ?: CRUDBooster::getSetting('appname'),
+                'email_from_email' => $template->from_email ?: SettingRepo::getSetting('email_sender'),
+                'email_from_name' => $template->from_name ?: SettingRepo::getSetting('appname'),
                 'email_cc_email' => $template->cc_email,
                 'email_subject' => $subject,
                 'email_content' => $html,
@@ -426,7 +415,7 @@ class CRUDBooster
             $message->to($to);
 
             if ($template->from_email) {
-                $from_name = ($template->from_name) ?: CRUDBooster::getSetting('appname');
+                $from_name = ($template->from_name) ?: SettingRepo::getSetting('appname');
                 $message->from($template->from_email, $from_name);
             }
 
@@ -779,7 +768,7 @@ class CRUDBooster
 
     public static function authAPI()
     {
-        if (self::getSetting('api_debug_mode') !== 'false') {
+        if (SettingRepo::getSetting('api_debug_mode') !== 'false') {
             return ;
         }
 
@@ -868,7 +857,7 @@ class CRUDBooster
             return 'title , content null !';
         }
 
-        $apikey = CRUDBooster::getSetting('google_fcm_key');
+        $apikey = SettingRepo::getSetting('google_fcm_key');
         $url = 'https://fcm.googleapis.com/fcm/send';
         $fields = [
             'registration_ids' => $regID,
