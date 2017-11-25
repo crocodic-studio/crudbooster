@@ -267,11 +267,7 @@ class CRUDBooster
 
     public static function clearCache($name)
     {
-        if (Cache::forget($name)) {
-            return true;
-        }
-
-        return false;
+        return Cache::forget($name);
     }
 
     public static function isColumnNULL($table, $field)
@@ -628,13 +624,13 @@ class CRUDBooster
         return true;
     }
 
-    public static function newId($table)
+/*    public static function newId($table)
     {
         $key = CRUDBooster::findPrimaryKey($table);
         $id = DB::table($table)->max($key) + 1;
 
         return $id;
-    }
+    }*/
 
     public static function getForeignKey($parent_table, $child_table)
     {
