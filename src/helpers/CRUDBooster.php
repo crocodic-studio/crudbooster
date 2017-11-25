@@ -722,12 +722,9 @@ class CRUDBooster
 
     public static function getTableForeignKey($fieldName)
     {
-        $table = null;
         if (substr($fieldName, 0, 3) == 'id_' || substr($fieldName, -3) == '_id') {
-            $table = str_replace(['_id', 'id_'], '', $fieldName);
+            return str_replace(['_id', 'id_'], '', $fieldName);
         }
-
-        return $table;
     }
 
     public static function isForeignKey($fieldName)
@@ -743,13 +740,9 @@ class CRUDBooster
             return false;
         }
 
-        if (Schema::hasTable($table)) {
-            Cache::forever($cacheKey, true);
-            return true;
-        }
-
-        Cache::forever($cacheKey, false);
-        return false;
+        $hasTable = Schema::hasTable($table);
+        Cache::forever($cacheKey, $hasTable);
+        return $hasTable;
     }
 
     public static function urlFilterColumn($key, $type, $value = '', $singleSorting = true)
