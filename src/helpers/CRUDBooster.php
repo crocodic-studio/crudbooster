@@ -667,9 +667,9 @@ class CRUDBooster
 
         if (isset($params)) {
             return $mainpath.'?'.http_build_query($params);
-        } else {
-            return $mainpath.'?filter_column['.$key.']['.$type.']='.$value;
         }
+        return $mainpath.'?filter_column['.$key.']['.$type.']='.$value;
+
     }
 
     public static function mainpath($path = null)
@@ -822,26 +822,6 @@ class CRUDBooster
         Cache::put($sender_token, $user_agent, $expired_token);
     }
 
-    public static function sendNotification($config = [])
-    {
-        $content = $config['content'];
-        $to = $config['to'];
-        $id_cms_users = $config['id_cms_users'];
-        $id_cms_users = ($id_cms_users) ?: [CRUDBooster::myId()];
-        foreach ($id_cms_users as $id) {
-            $notif = [
-                'created_at' => date('Y-m-d H:i:s'),
-                'id_cms_users' => $id,
-                'content' => $content,
-                'is_read' => 0,
-                'url' => $to,
-            ];
-            DB::table('cms_notifications')->insert($notif);
-        }
-
-        return true;
-    }
-
     public static function sendFCM($regID = [], $data)
     {
         if (! $data['title'] || ! $data['content']) {
@@ -891,13 +871,6 @@ class CRUDBooster
         }
 
         return false;
-    }
-
-    public static function generateAPI($controller_name, $table_name, $permalink, $method_type = 'post')
-    {
-        $php = '<?php '.view('CbApiGen::api_stub', compact('controller_name', 'table_name', 'permalink', 'method_type'))->render();
-        $path = base_path(controllers_dir());
-        file_put_contents($path.'Api'.$controller_name.'Controller.php', $php);
     }
 
     public static function generateController($table, $name = null)

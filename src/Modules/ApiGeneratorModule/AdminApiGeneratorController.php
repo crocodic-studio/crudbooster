@@ -341,8 +341,15 @@ class AdminApiGeneratorController extends CBController
 
         $controllerName = ucwords(str_replace('_', ' ', $a['permalink']));
         $controllerName = str_replace(' ', '', $controllerName);
-        CRUDBooster::generateAPI($controllerName, $a['tabel'], $a['permalink'], $a['method_type']);
+        $this->generateAPI($controllerName, $a['tabel'], $a['permalink'], $a['method_type']);
 
         return $this->table()->insert($a);
+    }
+
+    private function generateAPI($controller_name, $table_name, $permalink, $method_type = 'post')
+    {
+        $php = '<?php '.view('CbApiGen::api_stub', compact('controller_name', 'table_name', 'permalink', 'method_type'))->render();
+        $path = base_path(controllers_dir());
+        file_put_contents($path.'Api'.$controller_name.'Controller.php', $php);
     }
 }
