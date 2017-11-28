@@ -50,7 +50,11 @@ class CrudboosterInstallationCommand extends Command {
         }
              
 
-		if($this->confirm('Do you have setting the database configuration at .env ?')) {			
+		if($this->confirm('Do you have setting the database configuration at .env ?')) {	
+
+			if(!file_exists(public_path('vendor'))) {            
+	            mkdir(public_path('vendor'),0777);
+	        }		
 
 			$this->info('Publishing CRUDBooster needs file...');
 			$this->call('vendor:publish');	

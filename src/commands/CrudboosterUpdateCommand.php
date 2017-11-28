@@ -38,7 +38,11 @@ class CrudboosterUpdateCommand extends Command {
 		$this->header();
 		$this->checkRequirements();
 
-		$this->info('Updating: ');								 
+		$this->info('Updating: ');	
+
+		if(!file_exists(public_path('vendor'))) {            
+            mkdir(public_path('vendor'),0777);
+        }							 
 
 		$this->info('Publishing CRUDBooster needs file...');
 		$this->call('vendor:publish');		
