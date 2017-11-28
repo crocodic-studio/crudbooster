@@ -682,7 +682,9 @@ class CRUDBooster  {
 			$table = CRUDBooster::parseSqlTable($table);
 
 			if(!$table['table']) throw new \Exception("parseSqlTable can't determine the table");							
-			$query = "select * from information_schema.COLUMNS where TABLE_SCHEMA = '$table[database]' and TABLE_NAME = '$table[table]' and COLUMN_KEY = 'PRI'";
+			$query = config('database.connections.' . config('database.default') . '.driver') == 'pgsql' ?
+                     "select * from information_schema.key_column_usage WHERE TABLE_NAME = '$table[table]'":
+                     "select * from information_schema.COLUMNS where TABLE_SCHEMA = '$table[database]' and TABLE_NAME = '$table[table]' and COLUMN_KEY = 'PRI'";
 			$keys = DB::select($query);
 			$primary_key = $keys[0]->COLUMN_NAME;
 			if($primary_key) {				

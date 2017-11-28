@@ -32,8 +32,8 @@
 					</div>
 
 					<div class='form-group'>
-						<label>{{trans('crudbooster.set_as_superadmin')}}</label><br/>
-						<div id='set_as_superadmin' class='radio inline'>
+						<label>{{trans('crudbooster.set_as_superadmin')}}</label>
+						<div id='set_as_superadmin' class='radio'>
 							<label><input required {{ (@$row->is_superadmin==1)?'checked':'' }} type='radio' name='is_superadmin' value='1'/> {{trans('crudbooster.confirmation_yes')}}</label> &nbsp;&nbsp;
 							<label><input {{ (@$row->is_superadmin==0)?'checked':'' }} type='radio' name='is_superadmin' value='0'/> {{trans('crudbooster.confirmation_no')}}</label>
 						</div>
