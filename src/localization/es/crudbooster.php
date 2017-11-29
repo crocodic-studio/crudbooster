@@ -68,6 +68,7 @@ return [
 	'alert_required' 				=>'Asegurate que has rellenado todos los campos obligatorios',
 	'alert_error_ajax'				=>'Parece que tenemos problemas en el sistema, vamos a intentar corregirlo lo antes posible !',
 	'alert_validation_error'		=>'Rellena el formulario correctamente : :error',
+	'alert_select_a_data'			=>'Por favor, seleccione al menos un registro',
 
 	'add_data_page_title'    => 'Añadir :module',
 	'edit_data_page_title'   => 'Editar :module',    'button_add_to_table'    =>'Agregar a la Tabla',
