@@ -197,7 +197,9 @@ class AdminModulesController extends CBController
 
         $row = $this->table()->where($this->primary_key, $id)->first();
 
+
         app(FormValidator::class)->validate($id, $this->form, $this->table);
+
         $this->inputAssignment();
 
         //Generate Controller 

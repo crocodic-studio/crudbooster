@@ -25,8 +25,8 @@ Route::group([
     Route::post('privileges/action-selected', ['uses' => 'AdminPrivilegesController@postActionSelected', 'as' => 'AdminPrivilegesControllerPostActionSelected',]);
     Route::post('privileges/export-data', ['uses' => 'AdminPrivilegesController@postExportData', 'as' => 'AdminPrivilegesControllerPostExportData',]);
     Route::post('privileges/find-data', ['uses' => 'AdminPrivilegesController@postFindData', 'as' => 'AdminPrivilegesControllerPostFindData',]);
-    //Route::post('privileges/upload-summernote', ['uses' => 'AdminPrivilegesController@postUploadSummernote', 'as' => 'AdminPrivilegesControllerPostUploadSummernote',]);
-    //Route::post('privileges/upload-file', ['uses' => 'AdminPrivilegesController@postUploadFile', 'as' => 'AdminPrivilegesControllerPostUploadFile',]);
-    Route::post('privileges/find-data-old', ['uses' => 'AdminPrivilegesController@postFindDataOld', 'as' => 'AdminPrivilegesControllerPostFindDataOld',]);
+
+    Route::post('privileges/upload-summernote', ['uses' => 'AdminPrivilegesController@postUploadSummernote', 'as' => 'AdminPrivilegesControllerPostUploadSummernote',]);
+    Route::post('privileges/upload-file', ['uses' => 'AdminPrivilegesController@postUploadFile', 'as' => 'AdminPrivilegesControllerPostUploadFile',]);
 
 });

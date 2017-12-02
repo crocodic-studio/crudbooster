@@ -27,7 +27,9 @@ Route::group([
     Route::get('menus/delete-image', ['uses' => 'AdminMenusController@getDeleteImage', 'as' => 'AdminMenusControllerGetDeleteImage']);
 
     Route::post('menus/save-menu', ['uses' => 'AdminMenusController@postSaveMenu', 'as' => 'AdminMenusControllerPostSaveMenu',]);
-    Route::post('menus/find-data-old', ['uses' => 'AdminMenusController@postFindDataOld', 'as' => 'AdminMenusControllerPostFindDataOld',]);
+
+    Route::post('menus/export-data', ['uses' => 'AdminMenusController@postExportData', 'as' => 'AdminMenusControllerPostExportData',]);
+
     Route::post('menus/add-save', ['uses' => 'AdminMenusController@postAddSave', 'as' => 'AdminMenusControllerPostAddSave',]);
     Route::post('menus/edit-save/{id?}', ['uses' => 'AdminMenusController@postEditSave', 'as' => 'AdminMenusControllerPostEditSave',]);
     Route::post('menus/find-data', ['uses' => 'AdminMenusController@postFindData', 'as' => 'AdminMenusControllerPostFindData',]);
@@ -53,7 +55,7 @@ Route::group(['middleware' => ['web', CBBackend::class], 'prefix' => cbAdminPath
 
 
     if ($dashboard_type == 'Statistic') {
-        Route::get('/', '\\crocodicstudio\\crudbooster\\StatisticModule\\AdminStatisticBuilderController@getDashboard');
+        Route::get('/', '\\crocodicstudio\\crudbooster\\Modules\\StatisticModule\\AdminStatisticBuilderController@getDashboard');
     } elseif ($dashboard_type == 'Module') {
         $module = CRUDBooster::first('cms_moduls', ['path' => $path]);
         Route::get('/', $module->controller.'@getIndex');

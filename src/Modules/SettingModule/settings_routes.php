@@ -22,8 +22,9 @@ Route::group([
     Route::get('settings/import-data', ['uses' => 'AdminSettingsController@getImportData', 'as' => 'AdminSettingsControllerGetImportData']);
     Route::get('settings/delete-image', ['uses' => 'AdminSettingsController@getDeleteImage', 'as' => 'AdminSettingsControllerGetDeleteImage']);
 
-    Route::post('settings/find-data-old', ['uses' => 'AdminSettingsController@postFindDataOld', 'as' => 'AdminSettingsControllerPostFindDataOld',]);
+
     //Route::post('settings/done-import', ['uses' => 'AdminSettingsController@postDoneImport', 'as' => 'AdminSettingsControllerPostDoneImport',]);
+
     Route::post('settings/find-data', ['uses' => 'AdminSettingsController@postFindData', 'as' => 'AdminSettingsControllerPostFindData',]);
     Route::post('settings/save-setting', ['uses' => 'AdminSettingsController@postSaveSetting', 'as' => 'AdminSettingsControllerPostSaveSetting',]);
     Route::post('settings/export-data', ['uses' => 'AdminSettingsController@postExportData', 'as' => 'AdminSettingsControllerPostExportData',]);
