@@ -1,10 +1,10 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\MenuModule;
+namespace crocodicstudio\crudbooster\Modules\EmailTemplates;
 
 use Illuminate\Support\ServiceProvider;
 
-class CbMenuServiceProvider extends ServiceProvider
+class CbEmailTemplatesServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
@@ -13,8 +13,8 @@ class CbMenuServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app['view']->addNamespace('CbMenu', __DIR__.'/views');
-        $this->loadRoutesFrom( __DIR__.'/menus_routes.php');
+        //$this->app['view']->addNamespace('CbMenu', __DIR__.'/views');
+        $this->loadRoutesFrom( __DIR__.'/email_templates_routes.php');
     }
 
     /**

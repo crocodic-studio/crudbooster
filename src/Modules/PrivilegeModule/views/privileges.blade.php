@@ -48,7 +48,7 @@
                             @include('CbPrivilege::_privileges.bottom_js')
                         @endpush
 
-                        @widget('\crocodicstudio\crudbooster\Modules\PrivilegeModule\PrivilegeTableWidget', ['roleId' => $id])
+                        @widget(cbModulesNS('PrivilegeModule\PrivilegeTableWidget'), ['roleId' => $id])
 
 
                     </div>

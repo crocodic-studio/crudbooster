@@ -1,8 +1,8 @@
 <?php
 
-namespace crocodicstudio\crudbooster\controllers;
+namespace crocodicstudio\crudbooster\Modules\EmailTemplates;
 
-use crocodicstudio\crudbooster\controllers\Forms\EmailTemplateForm;
+use crocodicstudio\crudbooster\controllers\CBController;
 use CRUDBooster;
 
 class AdminEmailTemplatesController extends CBController
@@ -17,9 +17,7 @@ class AdminEmailTemplatesController extends CBController
 
         $this->setButtons();
 
-        $this->col = [];
-        $this->col[] = ["label" => "Template Name", "name" => "name"];
-        $this->col[] = ["label" => "Slug", "name" => "slug"];
+        $this->setColumns();
 
         $this->form = EmailTemplateForm::makeForm();
     }
@@ -36,6 +34,13 @@ class AdminEmailTemplatesController extends CBController
         $this->button_filter = true;
         $this->button_export = false;
         $this->button_import = false;
+    }
+
+    private function setColumns()
+    {
+        $this->col = [];
+        $this->col[] = ["label" => "Template Name", "name" => "name"];
+        $this->col[] = ["label" => "Slug", "name" => "slug"];
     }
     //By the way, you can still create your own method in here... :)
 

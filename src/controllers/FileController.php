@@ -2,16 +2,44 @@
 
 namespace crocodicstudio\crudbooster\controllers;
 
-use crocodicstudio\crudbooster\controllers\Controller;
-
+use crocodicstudio\crudbooster\CBCoreModule\FileUploader;
+use crocodicstudio\crudbooster\controllers\Helpers\IndexImport;
 use Storage;
 use Response;
 use Image;
 use File;
 use Illuminate\Support\Facades\Request;
+use CB;
 
 class FileController extends Controller
 {
+    public function uploadSummernote()
+    {
+        echo asset(app( FileUploader::class)->uploadFile('userfile'));
+    }
+
+    public function uploadFile()
+    {
+        echo app(FileUploader::class)->uploadFile('userfile');
+    }
+
+    public function doUploadImportData()
+    {
+        $import = app(IndexImport::class);
+        //$this->cbLoader();
+        if (! Request::hasFile('userfile')) {
+            return redirect()->back();
+        }
+        $file = Request::file('userfile');
+        $validator = $import->validateForImport($file);
+        if ($validator->fails()) {
+            return CB::backWithMsg(implode('<br/>', $validator->errors()->all()), 'warning');
+        }
+        $url = $import->uploadImportData($file);
+
+        return redirect($url);
+    }
+
     public function getPreview($one, $two = null, $three = null, $four = null, $five = null)
     {
         // array_filter() filters out the falsy values from array.
@@ -88,10 +116,8 @@ class FileController extends Controller
     }
 
     /**
-     * @param $fullStoragePath
      * @param $imageFileSize
      * @param $fullFilePath
-     * @param $lifetime
      * @param $filename
      * @return array
      */
@@ -135,5 +161,13 @@ class FileController extends Controller
         $isCachedByBrowser = ($h1 || $h2);
 
         return [$headers, $isCachedByBrowser];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function doneImport()
+    {
+        return app(IndexImport::class)->doneImport();
     }
 }

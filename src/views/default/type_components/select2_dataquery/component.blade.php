@@ -21,7 +21,7 @@
                         var query = {
                             q: params.term,
                             _token: '{{csrf_token()}}',
-                            data: "<?php echo base64_encode(json_encode($formInput['options'])) ?>",
+                            data: "{!! base64_encode(json_encode($formInput['options'])) !!}",
                         }
                         return query;
                     },

@@ -58,10 +58,8 @@ class AdminApiGeneratorController extends CBController
             'schema' => 'https://schema.getpostman.com/json/collection/v2.0.0/collection.json',
         ];
         $items = [];
-        $apis = $this->table()->orderby('nama', 'asc')->get();
-
-        foreach ($apis as $a) {
-            $parameters = unserialize($a->parameters);
+        foreach ($this->table()->orderby('nama', 'asc')->get() as $api) {
+            $parameters = unserialize($api->parameters);
             $formdata = [];
             $httpbuilder = [];
             if ($parameters) {
@@ -75,23 +73,23 @@ class AdminApiGeneratorController extends CBController
                 }
             }
 
-            if (strtolower($a->method_type) == 'get' && $httpbuilder) {
+            if (strtolower($api->method_type) == 'get' && $httpbuilder) {
                 $httpbuilder = "?".http_build_query($httpbuilder);
             }else{
                 $httpbuilder = '';
             }
 
             $items[] = [
-                'name' => $a->nama,
+                'name' => $api->nama,
                 'request' => [
-                    'url' => url('api/'.$a->permalink).$httpbuilder,
-                    'method' => $a->method_type ?: 'GET',
+                    'url' => url('api/'.$api->permalink).$httpbuilder,
+                    'method' => $api->method_type ?: 'GET',
                     'header' => [],
                     'body' => [
                         'mode' => 'formdata',
                         'formdata' => $formdata,
                     ],
-                    'description' => $a->keterangan,
+                    'description' => $api->keterangan,
                 ],
             ];
         }
@@ -220,18 +218,17 @@ class AdminApiGeneratorController extends CBController
                 continue;
             }
             $table2 = substr($ro, 3);
-            $t2 = DB::getSchemaBuilder()->getColumnListing($table2);
-            foreach ($t2 as $t) {
-                if (in_array($t, ['id', 'created_at', 'updated_at', 'deleted_at'])) {
+            foreach (DB::getSchemaBuilder()->getColumnListing($table2) as $col) {
+                if (in_array($col, ['id', 'created_at', 'updated_at', 'deleted_at'])) {
                     continue;
                 }
-                if (substr($t, 0, 3) == 'id_') {
+                if (substr($col, 0, 3) == 'id_') {
                     continue;
                 }
 
-                $type_field = CRUDBooster::getFieldType($table2, $t);
-                $t = str_replace("_$table2", "", $t);
-                $new_result[] = ['name' => $table2.'_'.$t, 'type' => $type_field];
+                $type_field = CRUDBooster::getFieldType($table2, $col);
+                $col = str_replace("_$table2", "", $col);
+                $new_result[] = ['name' => $table2.'_'.$col, 'type' => $type_field];
             }
         }
 
@@ -243,70 +240,26 @@ class AdminApiGeneratorController extends CBController
         $this->cbLoader();
         $posts = Request::all();
 
-        $a = [];
+        $_data = [];
 
-        $a['nama'] = g('nama');
-        $a['tabel'] = $posts['tabel'];
-        $a['aksi'] = $posts['aksi'];
-        $a['permalink'] = g('permalink');
-        $a['method_type'] = g('method_type');
+        $_data['nama'] = g('nama');
+        $_data['tabel'] = $posts['tabel'];
+        $_data['aksi'] = $posts['aksi'];
+        $_data['permalink'] = g('permalink');
+        $_data['method_type'] = g('method_type');
 
-        $params_name = g('params_name');
-        $params_type = g('params_type');
-        $params_config = g('params_config');
-        $params_required = g('params_required');
-        $params_used = g('params_used');
-        $json = [];
+        $json = $this->json(g('params_name'), g('params_type'), g('params_config'), g('params_required'), g('params_used'));
 
-        for ($i = 0, $_count = count($params_name); $i <= $_count; $i++) {
-            if (!$params_name[$i]) {
-                continue;
-            }
-            $json[] = [
-                'name' => $params_name[$i],
-                'type' => $params_type[$i],
-                'config' => $params_config[$i],
-                'required' => $params_required[$i],
-                'used' => $params_used[$i],
-            ];
-        }
+        $_data['parameters'] = serialize(array_filter($json));
 
+        $_data['sql_where'] = g('sql_where');
+
+        $json = $this->json2(g('responses_name'), g('responses_type'), g('responses_subquery'), g('responses_used'));
         $json = array_filter($json);
-        $a['parameters'] = serialize($json);
+        $_data['responses'] = serialize($json);
+        $_data['keterangan'] = g('keterangan');
 
-        $a['sql_where'] = g('sql_where');
-
-        $responses_name = g('responses_name');
-        $responses_type = g('responses_type');
-        $responses_subquery = g('responses_subquery');
-        $responses_used = g('responses_used');
-        $json = [];
-        for ($i = 0,$_count = count($responses_name); $i <= $_count; $i++) {
-            if (!$responses_name[$i]) {
-                continue;
-            }
-            $json[] = [
-                'name' => $responses_name[$i],
-                'type' => $responses_type[$i],
-                'subquery' => $responses_subquery[$i],
-                'used' => $responses_used[$i],
-            ];
-        }
-
-        $json = array_filter($json);
-        $a['responses'] = serialize($json);
-        $a['keterangan'] = g('keterangan');
-
-        if (request('id')) {
-            $this->findRow(g('id'))->update($a);
-        } else {
-
-            $controllerName = ucwords(str_replace('_', ' ', $a['permalink']));
-            $controllerName = str_replace(' ', '', $controllerName);
-            CRUDBooster::generateAPI($controllerName, $a['tabel'], $a['permalink'], $a['method_type']);
-
-            $this->table()->insert($a);
-        }
+        $this->saveToDB($_data);
 
         return redirect(CRUDBooster::mainpath())->with(['message' => 'Yeay, your api has been saved successfully !', 'message_type' => 'success']);
     }
@@ -322,5 +275,81 @@ class AdminApiGeneratorController extends CBController
         @unlink(base_path(controllers_dir()."Api".$controllername."Controller.php"));
 
         return response()->json(['status' => 1]);
+    }
+
+    /**
+     * @param $params_name
+     * @param $params_type
+     * @param $params_config
+     * @param $params_required
+     * @param $params_used
+     * @param $json
+     * @return array
+     */
+    private function json($params_name, $params_type, $params_config, $params_required, $params_used, $json)
+    {
+        $json = [];
+        for ($i = 0, $_count = count($params_name); $i <= $_count; $i++) {
+            if (! $params_name[$i]) {
+                continue;
+            }
+            $json[] = [
+                'name' => $params_name[$i],
+                'type' => $params_type[$i],
+                'config' => $params_config[$i],
+                'required' => $params_required[$i],
+                'used' => $params_used[$i],
+            ];
+        }
+
+        return $json;
+    }
+
+    /**
+     * @param $responses_name
+     * @param $responses_type
+     * @param $responses_subquery
+     * @param $responses_used
+     * @return array
+     */
+    private function json2($responses_name, $responses_type, $responses_subquery, $responses_used)
+    {
+        $json = [];
+        for ($i = 0, $_count = count($responses_name); $i <= $_count; $i++) {
+            if (! $responses_name[$i]) {
+                continue;
+            }
+            $json[] = [
+                'name' => $responses_name[$i],
+                'type' => $responses_type[$i],
+                'subquery' => $responses_subquery[$i],
+                'used' => $responses_used[$i],
+            ];
+        }
+
+        return $json;
+    }
+
+    /**
+     * @param $a
+     */
+    private function saveToDB($a)
+    {
+        if (request('id')) {
+            return $this->findRow(g('id'))->update($a);
+        }
+
+        $controllerName = ucwords(str_replace('_', ' ', $a['permalink']));
+        $controllerName = str_replace(' ', '', $controllerName);
+        $this->generateAPI($controllerName, $a['tabel'], $a['permalink'], $a['method_type']);
+
+        return $this->table()->insert($a);
+    }
+
+    private function generateAPI($controller_name, $table_name, $permalink, $method_type = 'post')
+    {
+        $php = '<?php '.view('CbApiGen::api_stub', compact('controller_name', 'table_name', 'permalink', 'method_type'))->render();
+        $path = base_path(controllers_dir());
+        file_put_contents($path.'Api'.$controller_name.'Controller.php', $php);
     }
 }

@@ -1,4 +1,4 @@
-@foreach(CRUDBooster::sidebarMenu() as $menu)
+@foreach(\crocodicstudio\crudbooster\Modules\MenuModule\MenuRepo::sidebarMenu() as $menu)
     <li data-id='{{$menu->id}}'
         class='{{(count($menu->children))?"treeview":""}} {{ (Request::is($menu->url_path."*"))?"active":""}}'>
         <a href='{{ ($menu->is_broken)?"javascript:alert('".cbTrans('controller_route_404')."')":$menu->url }}'

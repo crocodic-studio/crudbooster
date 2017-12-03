@@ -1,6 +1,6 @@
 <?php
 
-$namespace = '\crocodicstudio\crudbooster\Modules\FileManagerModule';
+$namespace = cbModulesNS('FileManagerModule');
 
 Route::group([
     'middleware' => ['web', \crocodicstudio\crudbooster\middlewares\CBSuperadmin::class],
@@ -99,20 +99,20 @@ Route::group([
         'as' => 'AdminFileManagerControllerGetImportData',
     ]);
 
-    Route::post('file-manager/done-import', [
+/*    Route::post('file-manager/done-import', [
         'uses' => 'AdminFileManagerController@postDoneImport',
         'as' => 'AdminFileManagerControllerPostDoneImport',
-    ]);
+    ]);*/
 
     Route::post('file-manager/do-import-chunk', [
         'uses' => 'AdminFileManagerController@postDoImportChunk',
         'as' => 'AdminFileManagerControllerPostDoImportChunk',
     ]);
 
-    Route::post('file-manager/do-upload-import-data', [
+ /*   Route::post('file-manager/do-upload-import-data', [
         'uses' => 'AdminFileManagerController@postDoUploadImportData',
         'as' => 'AdminFileManagerControllerPostDoUploadImportData',
-    ]);
+    ]);*/
 
     Route::post('file-manager/action-selected', [
         'uses' => 'AdminFileManagerController@postActionSelected',
@@ -124,7 +124,7 @@ Route::group([
         'as' => 'AdminFileManagerControllerGetDeleteImage',
     ]);
 
-    Route::post('file-manager/upload-summernote', [
+/*    Route::post('file-manager/upload-summernote', [
         'uses' => 'AdminFileManagerController@postUploadSummernote',
         'as' => 'AdminFileManagerControllerPostUploadSummernote',
     ]);
@@ -132,6 +132,6 @@ Route::group([
     Route::post('file-manager/upload-file', [
         'uses' => 'AdminFileManagerController@postUploadFile',
         'as' => 'AdminFileManagerControllerPostUploadFile',
-    ]);
+    ]);*/
 
 });

@@ -1,5 +1,5 @@
 <?php
-$namespace = '\crocodicstudio\crudbooster\Modules\AuthModule';
+$namespace = cbModulesNS('AuthModule');
 $prefix = cbAdminPath();
 
 Route::group(['middleware' => ['web'], 'prefix' => $prefix, 'namespace' => $namespace], function () {

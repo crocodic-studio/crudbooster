@@ -1,6 +1,6 @@
 <?php
 
-$namespace = '\crocodicstudio\crudbooster\Modules\ModuleGenerator';
+$namespace = cbModulesNS('ModuleGenerator');
 
 Route::group([
     'middleware' => ['web', \crocodicstudio\crudbooster\middlewares\CBSuperadmin::class],
@@ -42,10 +42,12 @@ Route::group([
     Route::post('modules/edit-save/{one?}', ['uses' => 'AdminModulesController@postEditSave', 'as' => 'AdminModulesControllerPostEditSave',]);
     Route::post('modules/export-data', ['uses' => 'AdminModulesController@postExportData', 'as' => 'AdminModulesControllerPostExportData',]);
     Route::post('modules/find-data', ['uses' => 'AdminModulesController@postFindData', 'as' => 'AdminModulesControllerPostFindData',]);
-    Route::post('modules/done-import', ['uses' => 'AdminModulesController@postDoneImport', 'as' => 'AdminModulesControllerPostDoneImport',]);
+
+    //Route::post('modules/done-import', ['uses' => 'AdminModulesController@postDoneImport', 'as' => 'AdminModulesControllerPostDoneImport',]);
+
     Route::post('modules/do-import-chunk', ['uses' => 'AdminModulesController@postDoImportChunk', 'as' => 'AdminModulesControllerPostDoImportChunk',]);
-    Route::post('modules/do-upload-import-data', ['uses' => 'AdminModulesController@postDoUploadImportData', 'as' => 'AdminModulesControllerPostDoUploadImportData',]);
+    //Route::post('modules/do-upload-import-data', ['uses' => 'AdminModulesController@postDoUploadImportData', 'as' => 'AdminModulesControllerPostDoUploadImportData',]);
     Route::post('modules/action-selected', ['uses' => 'AdminModulesController@postActionSelected', 'as' => 'AdminModulesControllerPostActionSelected',]);
-    Route::post('modules/upload-summernote', ['uses' => 'AdminModulesController@postUploadSummernote', 'as' => 'AdminModulesControllerPostUploadSummernote',]);
-    Route::post('modules/upload-file', ['uses' => 'AdminModulesController@postUploadFile', 'as' => 'AdminModulesControllerPostUploadFile',]);
+    //Route::post('modules/upload-summernote', ['uses' => 'AdminModulesController@postUploadSummernote', 'as' => 'AdminModulesControllerPostUploadSummernote',]);
+    //Route::post('modules/upload-file', ['uses' => 'AdminModulesController@postUploadFile', 'as' => 'AdminModulesControllerPostUploadFile',]);
 });

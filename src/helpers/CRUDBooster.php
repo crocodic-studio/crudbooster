@@ -2,7 +2,9 @@
 
 namespace crocodicstudio\crudbooster\helpers;
 
+use crocodicstudio\crudbooster\Modules\LogsModule\LogsRepository;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator;
+use crocodicstudio\crudbooster\Modules\SettingModule\SettingRepo;
 use Session;
 use Request;
 use Schema;
@@ -182,88 +184,14 @@ class CRUDBooster
         return request('m');
     }
 
-    public static function sidebarDashboard()
-    {
-
-        $menu = DB::table('cms_menus')->where('cms_privileges', self::myPrivilegeId())->where('is_dashboard', 1)->where('is_active', 1)->first() ?: new \stdClass();
-
-        $menu->url = self::menuUrl($menu);
-
-        return $menu;
-    }
-
     public static function myPrivilegeId()
     {
         return session('admin_privileges');
     }
 
-    private static function menuUrl($menu)
-    {
-        $menu->is_broken = false;
-        if ($menu->type == 'Route') {
-            return route($menu->path);
-        }
-
-        if ($menu->type == 'URL') {
-            return $menu->path;
-        }
-
-        if ($menu->type == 'Controller & Method') {
-            return action($menu->path);
-        }
-
-        if ($menu->type == 'Module' || $menu->type == 'Statistic') {
-            return self::adminPath($menu->path);
-        }
-
-        $menu->is_broken = true;
-
-        return '#';
-    }
-
     public static function adminPath($path = null)
     {
         return url(cbAdminPath().'/'.$path);
-    }
-
-    public static function sidebarMenu()
-    {
-        $menu_active = DB::table('cms_menus')
-            ->where('cms_privileges', self::myPrivilegeId())
-            ->where('parent_id', 0)->where('is_active', 1)
-            ->where('is_dashboard', 0)
-            ->orderby('sorting', 'asc')
-            ->select('cms_menus.*')
-            ->get();
-
-        foreach ($menu_active as &$menu) {
-
-            $url = self::menuUrl($menu);
-
-            $menu->url = $url;
-            $menu->url_path = trim(str_replace(url('/'), '', $url), "/");
-
-            $child = DB::table('cms_menus')
-                ->where('is_dashboard', 0)
-                ->where('is_active', 1)
-                ->where('cms_privileges', 'like', '%"'.self::myPrivilegeName().'"%')
-                ->where('parent_id', $menu->id)
-                ->select('cms_menus.*')
-                ->orderby('sorting', 'asc')
-                ->get();
-
-            if (count($child)) {
-                foreach ($child as &$c) {
-                    $url = self::menuUrl($c);
-                    $c->url = $url;
-                    $c->url_path = trim(str_replace(url('/'), '', $url), "/");
-                }
-
-                $menu->children = $child;
-            }
-        }
-
-        return $menu_active;
     }
 
     public static function myPrivilegeName()
@@ -306,31 +234,12 @@ class CRUDBooster
 
     public static function clearCache($name)
     {
-        if (Cache::forget($name)) {
-            return true;
-        }
-
-        return false;
+        return Cache::forget($name);
     }
 
     public static function isColumnNULL($table, $field)
     {
-        $cacheKey = 'field_isNull_'.$table.'_'.$field;
-
-        if (Cache::has($cacheKey)) {
-            return Cache::get($cacheKey);
-        }
-
-        try {
-            //MySQL & SQL Server
-            $isNULL = DB::select(DB::raw("select IS_NULLABLE from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='$table' and COLUMN_NAME = '$field'"))[0]->IS_NULLABLE;
-            $isNULL = ($isNULL == 'YES') ? true : false;
-        } catch (\Exception $e) {
-            $isNULL = false;
-        }
-        Cache::forever($cacheKey, $isNULL);
-
-        return $isNULL;
+        return DbInspector::isColNull($table, $field);
     }
 
     public static function getValueFilter($field)
@@ -409,11 +318,11 @@ class CRUDBooster
 
     public static function sendEmailQueue($queue)
     {
-        Config::set('mail.driver', self::getSetting('smtp_driver'));
-        Config::set('mail.host', self::getSetting('smtp_host'));
-        Config::set('mail.port', self::getSetting('smtp_port'));
-        Config::set('mail.username', self::getSetting('smtp_username'));
-        Config::set('mail.password', self::getSetting('smtp_password'));
+        Config::set('mail.driver', SettingRepo::getSetting('smtp_driver'));
+        Config::set('mail.host', SettingRepo::getSetting('smtp_host'));
+        Config::set('mail.port', SettingRepo::getSetting('smtp_port'));
+        Config::set('mail.username', SettingRepo::getSetting('smtp_username'));
+        Config::set('mail.password', SettingRepo::getSetting('smtp_password'));
 
         $html = $queue->email_content;
         $to = $queue->email_recipient;
@@ -447,26 +356,13 @@ class CRUDBooster
         });
     }
 
-    public static function getSetting($name)
-    {
-        if (Cache::has('setting_'.$name)) {
-            return Cache::get('setting_'.$name);
-        }
-
-        $query = DB::table('cms_settings')->where('name', $name)->first();
-        Cache::forever('setting_'.$name, $query->content);
-
-        return $query->content;
-    }
-
     public static function sendEmail($config = [])
     {
-
-        Config::set('mail.driver', self::getSetting('smtp_driver'));
-        Config::set('mail.host', self::getSetting('smtp_host'));
-        Config::set('mail.port', self::getSetting('smtp_port'));
-        Config::set('mail.username', self::getSetting('smtp_username'));
-        Config::set('mail.password', self::getSetting('smtp_password'));
+        Config::set('mail.driver', SettingRepo::getSetting('smtp_driver'));
+        Config::set('mail.host', SettingRepo::getSetting('smtp_host'));
+        Config::set('mail.port', SettingRepo::getSetting('smtp_port'));
+        Config::set('mail.username', SettingRepo::getSetting('smtp_username'));
+        Config::set('mail.password', SettingRepo::getSetting('smtp_password'));
 
         $to = $config['to'];
         $data = $config['data'];
@@ -485,8 +381,8 @@ class CRUDBooster
             $queue = [
                 'send_at' => $config['send_at'],
                 'email_recipient' => $to,
-                'email_from_email' => $template->from_email ?: CRUDBooster::getSetting('email_sender'),
-                'email_from_name' => $template->from_name ?: CRUDBooster::getSetting('appname'),
+                'email_from_email' => $template->from_email ?: SettingRepo::getSetting('email_sender'),
+                'email_from_name' => $template->from_name ?: SettingRepo::getSetting('appname'),
                 'email_cc_email' => $template->cc_email,
                 'email_subject' => $subject,
                 'email_content' => $html,
@@ -503,7 +399,7 @@ class CRUDBooster
             $message->to($to);
 
             if ($template->from_email) {
-                $from_name = ($template->from_name) ?: CRUDBooster::getSetting('appname');
+                $from_name = ($template->from_name) ?: SettingRepo::getSetting('appname');
                 $message->from($template->from_email, $from_name);
             }
 
@@ -545,52 +441,7 @@ class CRUDBooster
 
     public static function findPrimaryKey($table)
     {
-        if (! $table) {
-            return 'id';
-        }
-
-        if (self::getCache('table_'.$table, 'primary_key')) {
-            return self::getCache('table_'.$table, 'primary_key');
-        }
-        $table = CRUDBooster::parseSqlTable($table);
-
-        if (! $table['table']) {
-            throw new \Exception("parseSqlTable can't determine the table");
-        }
-
-        if (env('DB_CONNECTION') == 'sqlsrv') {
-            try {
-                $query = "
-						SELECT Col.Column_Name,Col.Table_Name from 
-						    INFORMATION_SCHEMA.TABLE_CONSTRAINTS Tab, 
-						    INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE Col 
-						WHERE 
-						    Col.Constraint_Name = Tab.Constraint_Name
-						    AND Col.Table_Name = Tab.Table_Name
-						    AND Constraint_Type = 'PRIMARY KEY'
-							AND Col.Table_Name = '$table[table]' 
-					";
-                $keys = DB::select($query);
-                $primary_key = $keys[0]->Column_Name;
-            } catch (\Exception $e) {
-                $primary_key = null;
-            }
-        } else {
-            try {
-                $query = "select * from information_schema.COLUMNS where TABLE_SCHEMA = '$table[database]' and TABLE_NAME = '$table[table]' and COLUMN_KEY = 'PRI'";
-                $keys = DB::select($query);
-                $primary_key = $keys[0]->COLUMN_NAME;
-            } catch (\Exception $e) {
-                $primary_key = null;
-            }
-        }
-
-        if (! $primary_key) {
-            return 'id';
-        }
-        self::putCache('table_'.$table, 'primary_key', $primary_key);
-
-        return $primary_key;
+        return DbInspector::findPK($table);
     }
 
     public static function getCache($section, $cache_name)
@@ -667,88 +518,33 @@ class CRUDBooster
         return true;
     }
 
-    public static function newId($table)
-    {
-        $key = CRUDBooster::findPrimaryKey($table);
-        $id = DB::table($table)->max($key) + 1;
-
-        return $id;
-    }
-
     public static function getForeignKey($parent_table, $child_table)
     {
         $parent_table = CRUDBooster::parseSqlTable($parent_table)['table'];
         $child_table = CRUDBooster::parseSqlTable($child_table)['table'];
+
         if (self::isColumnExists($child_table, 'id_'.$parent_table)) {
             return 'id_'.$parent_table;
-        } else {
-            return $parent_table.'_id';
         }
+        return $parent_table.'_id';
+
     }
 
     public static function isColumnExists($table, $field)
     {
-
-        if (! $table) {
-            throw new Exception("\$table is empty !", 1);
-        }
-        if (! $field) {
-            throw new Exception("\$field is empty !", 1);
-        }
-
-        $table = CRUDBooster::parseSqlTable($table);
-
-        if (self::getCache('table_'.$table, 'column_'.$field)) {
-            return self::getCache('table_'.$table, 'column_'.$field);
-        }
-
-        $result = DB::select('SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :database AND TABLE_NAME = :table AND COLUMN_NAME = :field', [
-                'database' => $table['database'],
-                'table' => $table['table'],
-                'field' => $field,
-            ]);
-
-        if (count($result) > 0) {
-            self::putCache('table_'.$table, 'column_'.$field, 1);
-
-            return true;
-        }
-
-        self::putCache('table_'.$table, 'column_'.$field, 0);
-
-        return false;
+        return DbInspector::colExists($table, $field);
     }
 
     public static function getTableForeignKey($fieldName)
     {
-        $table = null;
         if (substr($fieldName, 0, 3) == 'id_' || substr($fieldName, -3) == '_id') {
-            $table = str_replace(['_id', 'id_'], '', $fieldName);
+            return str_replace(['_id', 'id_'], '', $fieldName);
         }
-
-        return $table;
     }
 
     public static function isForeignKey($fieldName)
     {
-        $table = self::getTableForeignKey($fieldName);
-        $cacheKey = 'isForeignKey_'.$fieldName;
-
-        if (Cache::has($cacheKey)) {
-            return Cache::get($cacheKey);
-        }
-
-        if (!$table) {
-            return false;
-        }
-
-        if (Schema::hasTable($table)) {
-            Cache::forever($cacheKey, true);
-            return true;
-        }
-
-        Cache::forever($cacheKey, false);
-        return false;
+        return DbInspector::isForeignKeey($fieldName);
     }
 
     public static function urlFilterColumn($key, $type, $value = '', $singleSorting = true)
@@ -770,9 +566,9 @@ class CRUDBooster
 
         if (isset($params)) {
             return $mainpath.'?'.http_build_query($params);
-        } else {
-            return $mainpath.'?filter_column['.$key.']['.$type.']='.$value;
         }
+        return $mainpath.'?filter_column['.$key.']['.$type.']='.$value;
+
     }
 
     public static function mainpath($path = null)
@@ -794,15 +590,7 @@ class CRUDBooster
 
     public static function insertLog($description)
     {
-        $log = [
-            'created_at' => date('Y-m-d H:i:s'),
-            'ipaddress' => $_SERVER['REMOTE_ADDR'],
-            'useragent' => $_SERVER['HTTP_USER_AGENT'],
-            'url' => Request::url(),
-            'description' => $description,
-            'id_cms_users' => self::myId(),
-        ];
-        DB::table('cms_logs')->insert($log);
+        LogsRepository::insertLog($description, self::myId());
     }
 
     public static function myId()
@@ -817,8 +605,7 @@ class CRUDBooster
 
     public static function listTables()
     {
-        $multiple_db = cbConfig('MULTIPLE_DATABASE_MODULE');
-        $multiple_db = ($multiple_db) ? $multiple_db : [];
+        $multiple_db = cbConfig('MULTIPLE_DATABASE_MODULE') ?: [];
         $db_database = cbConfig('MAIN_DB_DATABASE');
 
         if ($multiple_db) {
@@ -870,7 +657,7 @@ class CRUDBooster
 
     public static function authAPI()
     {
-        if (self::getSetting('api_debug_mode') !== 'false') {
+        if (SettingRepo::getSetting('api_debug_mode') !== 'false') {
             return ;
         }
 
@@ -933,33 +720,13 @@ class CRUDBooster
         Cache::put($sender_token, $user_agent, $expired_token);
     }
 
-    public static function sendNotification($config = [])
-    {
-        $content = $config['content'];
-        $to = $config['to'];
-        $id_cms_users = $config['id_cms_users'];
-        $id_cms_users = ($id_cms_users) ?: [CRUDBooster::myId()];
-        foreach ($id_cms_users as $id) {
-            $notif = [
-                'created_at' => date('Y-m-d H:i:s'),
-                'id_cms_users' => $id,
-                'content' => $content,
-                'is_read' => 0,
-                'url' => $to,
-            ];
-            DB::table('cms_notifications')->insert($notif);
-        }
-
-        return true;
-    }
-
     public static function sendFCM($regID = [], $data)
     {
         if (! $data['title'] || ! $data['content']) {
             return 'title , content null !';
         }
 
-        $apikey = CRUDBooster::getSetting('google_fcm_key');
+        $apikey = SettingRepo::getSetting('google_fcm_key');
         $url = 'https://fcm.googleapis.com/fcm/send';
         $fields = [
             'registration_ids' => $regID,
@@ -1004,13 +771,6 @@ class CRUDBooster
         return false;
     }
 
-    public static function generateAPI($controller_name, $table_name, $permalink, $method_type = 'post')
-    {
-        $php = '<?php '.view('CbApiGen::api_stub', compact('controller_name', 'table_name', 'permalink', 'method_type'))->render();
-        $path = base_path(controllers_dir());
-        file_put_contents($path.'Api'.$controller_name.'Controller.php', $php);
-    }
-
     public static function generateController($table, $name = null)
     {
         return ControllerGenerator::generateController($table, $name);
@@ -1018,66 +778,17 @@ class CRUDBooster
 
     public static function getTableColumns($table)
     {
-        //$cols = DB::getSchemaBuilder()->getColumnListing($table);
-        $table = CRUDBooster::parseSqlTable($table);
-        $cols = collect(DB::select('SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :database AND TABLE_NAME = :table', [
-                'database' => $table['database'],
-                'table' => $table['table'],
-            ]))->map(function ($x) {
-            return (array) $x;
-        })->toArray();
-
-        $result = $cols;
-
-        $new_result = [];
-        foreach ($result as $ro) {
-            $new_result[] = $ro['COLUMN_NAME'];
-        }
-
-        return $new_result;
+        return DbInspector::getTableCols($table);
     }
 
     public static function getNameTable($columns)
     {
-        $name_col_candidate = cbConfig('NAME_FIELDS_CANDIDATE');
-        $name_col_candidate = explode(',', $name_col_candidate);
-        $name_col = '';
-        foreach ($columns as $c) {
-            foreach ($name_col_candidate as $cc) {
-                if (strpos($c, $cc) !== false) {
-                    $name_col = $c;
-                    break;
-                }
-            }
-            if ($name_col) {
-                break;
-            }
-        }
-        if ($name_col == '') {
-            $name_col = 'id';
-        }
-
-        return $name_col;
+        return DbInspector::colName($columns);
     }
 
     public static function getFieldType($table, $field)
     {
-        $field = 'field_type_'.$table.'_'.$field;
-
-        return Cache::rememberForever($field, function () use ($table, $field) {
-            try {
-                //MySQL & SQL Server
-                $typedata = DB::select(DB::raw("select DATA_TYPE from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='$table' and COLUMN_NAME = '$field'"))[0]->DATA_TYPE;
-            } catch (\Exception $e) {
-
-            }
-
-            if (! $typedata) {
-                $typedata = 'varchar';
-            }
-
-            return $typedata;
-        });
+        return DbInspector::getFieldTypes($table, $field);
     }
 
     public static function backWithMsg($msg, $type = 'success')

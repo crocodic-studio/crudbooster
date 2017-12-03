@@ -49,6 +49,7 @@ class DataSaver
         //Looping Data Input Again After Insert
         $this->insertIntoRelatedTables($id);
     }
+
     /**
      * @param $id
      */
@@ -81,13 +82,13 @@ class DataSaver
                 $fk = $row['foreign_key'];
 
                 DB::table($childtable)->where($fk, $id)->delete();
-                $lastId = CRUDBooster::newId($childtable);
-                $childtablePK = CB::pk($childtable);
+                //$lastId = CRUDBooster::newId($childtable);
+                //$childtablePK = CB::pk($childtable);
 
                 for ($i = 0; $i <= $count_input_data; $i++) {
 
                     $column_data = [];
-                    $column_data[$childtablePK] = $lastId;
+                    //$column_data[$childtablePK] = $lastId;
                     $column_data[$fk] = $id;
                     foreach ($columns as $col) {
                         $colname = $col['name'];
@@ -95,16 +96,13 @@ class DataSaver
                     }
                     $child_array[] = $column_data;
 
-                    $lastId++;
+                    //$lastId++;
                 }
 
-                $child_array = array_reverse($child_array);
-
-                DB::table($childtable)->insert($child_array);
+                DB::table($childtable)->insert(array_reverse($child_array));
             }
         }
     }
-
 
     /**
      * @param $row
@@ -145,18 +143,19 @@ class DataSaver
     private function _updateRelations($row, $id, $inputData)
     {
         $dataTable = explode(",", $row['datatable'])[0];
-        $foreignKey2 = CRUDBooster::getForeignKey($dataTable, $row['relationship_table']);
-        $foreignKey = CRUDBooster::getForeignKey($this->Cb->table, $row['relationship_table']);
-        DB::table($row['relationship_table'])->where($foreignKey, $id)->delete();
+        $pivotTable = $row['relationship_table'];
+
+        $foreignKey2 = CRUDBooster::getForeignKey($dataTable, $pivotTable);
+        $foreignKey = CRUDBooster::getForeignKey($this->Cb->table, $pivotTable);
+        DB::table($pivotTable)->where($foreignKey, $id)->delete();
 
         if (!$inputData) {
             return null;
         }
 
         foreach ($inputData as $input_id) {
-            $relationship_table_pk = CB::pk($row['relationship_table']);
-            DB::table($row['relationship_table'])->insert([
-                $relationship_table_pk => CRUDBooster::newId($row['relationship_table']),
+            DB::table($pivotTable)->insert([
+                //CB::pk($pivotTable) => CRUDBooster::newId($pivotTable),
                 $foreignKey => $id,
                 $foreignKey2 => $input_id,
             ]);
@@ -164,25 +163,27 @@ class DataSaver
     }
 
     /**
-     * @param $ro
+     * @param $row
      * @param $id
      * @param $inputdata
      * @return null
      */
-    private function _handleCheckbox($ro, $id, $inputdata)
+    private function _handleCheckbox($row, $id, $inputdata)
     {
-        $datatable = explode(",", $ro['datatable'])[0];
-        $foreignKey2 = CRUDBooster::getForeignKey($datatable, $ro['relationship_table']);
-        $foreignKey = CRUDBooster::getForeignKey($this->Cb->table, $ro['relationship_table']);
-        DB::table($ro['relationship_table'])->where($foreignKey, $id)->delete();
+        $pivotTableName = $row['relationship_table'];
+        $datatable = explode(",", $row['datatable'])[0];
+
+        $foreignKey2 = CRUDBooster::getForeignKey($datatable, $pivotTableName);
+        $foreignKey = CRUDBooster::getForeignKey($this->Cb->table, $pivotTableName);
+        DB::table($pivotTableName)->where($foreignKey, $id)->delete();
 
         if (! $inputdata) {
             return null;
         }
-        $relationship_table_pk = CB::pk($ro['relationship_table']);
+        //$relationship_table_pk = CB::pk($pivotTableName);
         foreach ($inputdata as $input_id) {
-            DB::table($ro['relationship_table'])->insert([
-                $relationship_table_pk => CRUDBooster::newId($ro['relationship_table']),
+            DB::table($pivotTableName)->insert([
+                //$relationship_table_pk => CRUDBooster::newId($pivotTableName),
                 $foreignKey => $id,
                 $foreignKey2 => $input_id,
             ]);
