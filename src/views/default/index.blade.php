@@ -2,6 +2,11 @@
 
 @section('content')
 <script src="{{ asset ('vendor/crudbooster/assets/js/jquery.doubleScroll.js') }}"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+     $('.table-responsive').doubleScroll({resetOnWindowResize: true});
+  });
+</script>
 
    @if($index_statistic)
       <div id='box-statistic' class='row'>
