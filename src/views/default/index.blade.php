@@ -1,6 +1,7 @@
 @extends('crudbooster::admin_template')
 
 @section('content')
+<script src="{{ asset ('vendor/crudbooster/assets/js/jquery.doubleScroll.js') }}"></script>
 
    @if($index_statistic)
       <div id='box-statistic' class='row'>
