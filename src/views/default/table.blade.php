@@ -123,10 +123,8 @@
                                   $color = $trc['color'];
                                   $row = $html_contents['data'][$i]; 
                                   foreach($row as $key=>$val) {
-                                    echo $key.$val."<br>";
                                     $query = str_replace("[".$key."]",'"'.$val.'"',$query);
                                   }
-                                  $tr_color = $query;
 
                                   @eval("if($query) {
                                       \$tr_color = \$color;
