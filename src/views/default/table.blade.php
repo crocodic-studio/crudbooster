@@ -129,6 +129,7 @@
                                   @eval("if($query) {
                                       \$tr_color = \$color;
                                   }");
+                                  $tr_color = $query;
                               ?>
                             @endforeach
                             <?php echo "<tr class='$tr_color'>";?>
