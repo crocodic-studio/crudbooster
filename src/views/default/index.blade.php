@@ -4,7 +4,7 @@
 <script src="{{ asset ('vendor/crudbooster/assets/js/jquery.doubleScroll.js') }}"></script>
 <script type="text/javascript">
   $(document).ready(function() {
-     $('.box-body').doubleScroll({resetOnWindowResize: true});
+     $('#form-table').doubleScroll({resetOnWindowResize: true});
   });
 </script>
 
