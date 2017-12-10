@@ -1549,7 +1549,7 @@ class CBController extends Controller {
 		$button_name = Request::input('button_name');
 
 		if(!$id_selected) {
-			CRUDBooster::redirect($_SERVER['HTTP_REFERER'],'Please select at least one data!','warning');
+			CRUDBooster::redirect($_SERVER['HTTP_REFERER'],trans("crudbooster.alert_select_a_data"),'warning');
 		}
 
 		if($button_name == 'delete') {

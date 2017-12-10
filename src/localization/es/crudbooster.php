@@ -50,7 +50,8 @@ return [
 	'log_forgot'		      =>'Alguien con la dirección IP :ip solicitó su contraseña por email a :email',
 	'log_logout'		      =>':email se desconectó',
 	'alert_delete_selected'         =>'¿Seguro que quieres eliminar todos los elementos seleccionados?',
-	'alert_delete_selected_success' =>'¡El borrado de los elementos seleccionados se ha completado con éxito!',
+	'alert_delete_selected_success' =>'¡El borrado de los elementos seleccionados se ha completado con éxito!',	
+	'alert_bulk_action_button'      =>'Está seguro que quiere',
 	'alert_action' 					=>'¡Has :action con éxito!',
 	'alert_add_data_success'        =>'¡Los datos han sido añadidos!',
 	'alert_add_data_failed'         =>'¡Algo ha fallado al grabar los datos!',
@@ -68,6 +69,7 @@ return [
 	'alert_required' 				=>'Asegurate que has rellenado todos los campos obligatorios',
 	'alert_error_ajax'				=>'Parece que tenemos problemas en el sistema, vamos a intentar corregirlo lo antes posible !',
 	'alert_validation_error'		=>'Rellena el formulario correctamente : :error',
+	'alert_select_a_data'			=>'Por favor, seleccione al menos un registro',
 
 	'add_data_page_title'    => 'Añadir :module',
 	'edit_data_page_title'   => 'Editar :module',    'button_add_to_table'    =>'Agregar a la Tabla',
