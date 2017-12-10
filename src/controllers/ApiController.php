@@ -554,7 +554,7 @@ class ApiController extends Controller {
 					if ( Request::hasFile( $name ) ) {
 						$file = Request::file( $name );
 						$ext  = $file->getClientOriginalExtension();
-						$filePath = 'uploads/'.CRUDBooster::myId().'/'.date('Y-m');
+						$filePath = 'uploads/'.date('Y-m');
 
 						//Create Directory Monthly 
 						Storage::makeDirectory($filePath);						
@@ -574,7 +574,7 @@ class ApiController extends Controller {
 					@$mime_type = $mime_type[1];
 					if($mime_type) {
 						if(in_array($mime_type, $uploads_format_candidate)) {
-							$filePath = 'uploads/'.CRUDBooster::myId().'/'.date('Y-m');
+							$filePath = 'uploads/'.date('Y-m');
 							Storage::makeDirectory($filePath);
 							$filename = md5(str_random(5)).'.'.$mime_type;
 							if(Storage::put($filePath.'/'.$filename,$filedata)) {								
@@ -668,7 +668,7 @@ class ApiController extends Controller {
 
 		$this->hook_after( $posts, $result );
 
-		return response()->json( $result, $result['api_http'] );
+		return response()->json( $result, 200 );
 	}
 
 	protected function isJSON( $theData ) {
