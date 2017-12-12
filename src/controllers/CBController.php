@@ -75,6 +75,7 @@ class CBController extends Controller {
 	public $parent_id 			  = NULL;
 	public $hide_form			  = array();
 	public $index_return 		  = FALSE; //for export
+	public $sidebar_mode		  = 'normal';
 
 
 	public function cbLoader() {
@@ -122,6 +123,16 @@ class CBController extends Controller {
 		$this->data['sub_module']            = $this->sub_module;
 		$this->data['parent_field'] 		 = (g('parent_field'))?:$this->parent_field;
 		$this->data['parent_id'] 		 	 = (g('parent_id'))?:$this->parent_id;
+
+		if($this->sidebar_mode=='mini') {
+			$this->data['sidebar_mode'] = 'sidebar-mini';
+		}elseif ($this->sidebar_mode == 'collapse') {
+			$this->data['sidebar_mode'] = 'sidebar-collapse';
+		}elseif ($this->sidebar_mode == 'collapse-mini') {
+			$this->data['sidebar_mode'] = 'sidebar-collapse sidebar-mini';
+		}else{
+			$this->data['sidebar_mode'] = '';
+		}
 
 		if(CRUDBooster::getCurrentMethod() == 'getProfile') {
 			Session::put('current_row_id',CRUDBooster::myId());
@@ -236,6 +247,8 @@ class CBController extends Controller {
 			if(isset($field_array[1])) {
 				$field = $field_array[1];
 				$table = $field_array[0];
+			}else{
+				$table = $this->table;
 			}
 
 			if($join) {

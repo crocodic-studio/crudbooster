@@ -1147,10 +1147,11 @@ class CRUDBooster  {
 			$this->button_export       = '.$button_export.';	        
 			$this->button_import       = '.$button_import.';
 			$this->button_bulk_action  = '.$button_bulk_action.';	
+			$this->sidebar_mode		   = "normal"; //normal,mini,collapse,collapse-mini
 			# END CONFIGURATION DO NOT REMOVE THIS LINE						      
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
-	        $this->col = array();
+	        $this->col = [];
 	';
 	        $coloms_col = array_slice($coloms,0,8);
 	        foreach($coloms_col as $c) {
