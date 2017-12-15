@@ -226,8 +226,8 @@
 		$(function() {
 					
 			var ctx = document.getElementById("canvas-{{$componentID}}").getContext("2d");
-            window.myBar = new Chart(ctx, {
-                type: 'pie',
+            window.myBar = new Chart.PolarArea(ctx, {
+                //type: 'pie',
                 data: barChartData,
                 options: {
                     responsive: true,
