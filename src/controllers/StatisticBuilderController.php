@@ -150,7 +150,7 @@
 	    		}
 	    	}	    	
 
-	    	return response()->json(compact('componentID','layout','sqlstring'));
+	    	return response()->json(compact('componentID','layout'));
 	    }
 
 	    public function postAddComponent() {
