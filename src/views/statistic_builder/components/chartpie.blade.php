@@ -237,11 +237,10 @@
                     title: {
                         display: false,
                         //text: 'Chart.js Bar Chart'
-                    },
-                    pieceLabel: {
-                        render: 'label'
-                      }
-
+                    }
+                },
+                pieceLabel: {
+                    render: 'label'
                 }
             });	
 		})				
