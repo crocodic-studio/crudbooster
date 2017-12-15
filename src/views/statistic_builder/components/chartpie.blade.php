@@ -237,6 +237,13 @@
                     title: {
                         display: false,
                         //text: 'Chart.js Bar Chart'
+                    },
+                   tooltips: {
+                        callbacks: {
+                            label: function (tooltipItem, data) {
+                                return 'label';
+                            }
+                        }
                     }
                 }
             });	
