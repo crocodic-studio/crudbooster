@@ -132,7 +132,7 @@
 								$val    = $d->id;
 							$select = ($value == $val)?"selected":"";							
 
-							echo "<option $select value='$val'>".$d->label."</option>";
+							echo "<option $select value=\"$val\">".$d->label."</option>";
 						}
 					endif;
 				} //end if not parent select
