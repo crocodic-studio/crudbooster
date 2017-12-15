@@ -44,6 +44,7 @@
 		</div>
 	</form>
 @elseif($command=='showFunction')
+    <script src="{{ asset ('vendor/crudbooster/assets/js/Chart.PieceLabel.js') }}"></script>
 	
 	@if($key == 'sql')
 		<?php 
