@@ -308,8 +308,7 @@
                 
             });	
 		})				
-		</script>
-        <script src="{{ asset ('vendor/crudbooster/assets/js/Chart.PieceLabel.js') }}"></script>
+		</script>        
 	@else
 
 		{!! $value !!}
