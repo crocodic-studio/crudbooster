@@ -43,8 +43,7 @@
 			<input class="form-control" name='config[goals]' type='number' value='{{@$config->goals}}'/>			
 		</div>
 	</form>
-@elseif($command=='showFunction')
-    <script src="{{ asset ('vendor/crudbooster/assets/js/Chart.PieceLabel.js') }}"></script>
+@elseif($command=='showFunction')    
 	
 	@if($key == 'sql')
 		<?php 
@@ -310,6 +309,7 @@
             });	
 		})				
 		</script>
+        <script src="{{ asset ('vendor/crudbooster/assets/js/Chart.PieceLabel.js') }}"></script>
 	@else
 
 		{!! $value !!}
