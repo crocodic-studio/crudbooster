@@ -230,6 +230,14 @@
                 //type: 'pie',
                 data: barChartData,
                 options: {
+                    layout: {
+                            padding: {
+                                    left: 150,
+                                    right: 150,
+                                    top: 150,
+                                    bottom: 150,
+                            },
+                    },
                     responsive: true,
                     legend: {
                         position: 'top',
