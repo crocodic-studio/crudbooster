@@ -298,11 +298,14 @@
                     title: {
                         display: false,
                         //text: 'Chart.js Bar Chart'
+                    },
+                    pieceLabel: {
+                        render: 'label',
+                        fontColor: '#000',
+                        position: 'outside'
                     }
                 },
-                pieceLabel: {
-                    render: 'label'
-                }
+                
             });	
 		})				
 		</script>
