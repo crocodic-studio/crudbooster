@@ -44,7 +44,8 @@
 		</div>
 	</form>
 @elseif($command=='showFunction')
-	
+	<script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.js"></script>
+    <script src="{{ asset ('vendor/crudbooster/assets/js/Chart.PieceLabel.js') }}"></script>
 	@if($key == 'sql')
 		<?php 
 			$sqls = explode(';',$value);
