@@ -238,18 +238,10 @@
                         display: false,
                         //text: 'Chart.js Bar Chart'
                     },
-                    tooltipEvents: [],
-                    showTooltips: true,
-                    onAnimationComplete: function() {
-                        this.showTooltip(this.segments, true);
-                    },
-                   tooltips: {
-                        callbacks: {
-                            label: function (tooltipItem, data) {
-                                return 'label';
-                            }
-                        }
-                    }
+                    pieceLabel: {
+                        render: 'label'
+                      }
+
                 }
             });	
 		})				
