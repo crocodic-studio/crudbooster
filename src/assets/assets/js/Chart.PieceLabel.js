@@ -26,6 +26,7 @@
 
   PieceLabel.prototype.afterDatasetsDraw = function (chartInstance) {
     if (!this.parseOptions(chartInstance)) {
+      console.warn('Can not find Chart object.');
       return;
     }
     this.labelBounds = [];
@@ -43,6 +44,7 @@
 
       //Skips label creation if value is zero and showZero is set
       if (view.circumference === 0 && !this.showZero) {
+        console.log("value is zero");
         continue;
       }
       switch (this.render) {
@@ -89,6 +91,7 @@
         }
       }
       if (!text) {
+        console.log("no text return break");
         return;
       }
       ctx.save();
@@ -205,6 +208,7 @@
         var x = potins[j][0];
         var y = potins[j][1];
         if (x >= bound.left && x <= bound.right && y >= bound.top && y <= bound.bottom) {
+          console.log("out of bounds");
           return false;
         }
       }
@@ -218,6 +222,7 @@
         var x = potins[j][0];
         var y = potins[j][1];
         if (x >= left && x <= right && y >= top && y <= bottom) {
+          console.log("out of bounds2");
           return false;
         }
       }
@@ -275,6 +280,7 @@
     var mertrics = this.measureText(str);
     startAngle += (endAngle - (mertrics.width / radius + startAngle)) / 2;
     if (!overlap && endAngle - startAngle > angleSize) {
+      console.log("overlap problem");
       ctx.restore();
       return;
     }
