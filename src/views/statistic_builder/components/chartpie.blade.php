@@ -299,6 +299,11 @@
                         display: false,
                         //text: 'Chart.js Bar Chart'
                     },
+                    tooltipEvents: [],
+                    showTooltips: true,
+                    onAnimationComplete: function() {
+                        this.showTooltip(this.segments, true);
+                    },
                     pieceLabel: {
                         render: 'label',
                         fontColor: '#000',
