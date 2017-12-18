@@ -47,6 +47,7 @@
         console.log("value is zero");
         continue;
       }
+      console.log(this.render);
       switch (this.render) {
         case 'value':
           var value = dataset.data[i];
