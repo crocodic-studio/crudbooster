@@ -46,8 +46,7 @@
       if (view.circumference === 0 && !this.showZero) {
         console.log("value is zero");
         continue;
-      }
-      console.log(this.render);
+      }      
       switch (this.render) {
         case 'value':
           var value = dataset.data[i];
@@ -56,8 +55,7 @@
           }
           text = value.toString();
           break;
-        case 'label':
-          console.log(chartInstance.config.data.labels[i]);
+        case 'label':          
           text = chartInstance.config.data.labels[i];
           break;
         case 'image':

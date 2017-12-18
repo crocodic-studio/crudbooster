@@ -305,7 +305,7 @@
                         this.showTooltip(this.segments, true);
                     },
                     pieceLabel: {
-                        render: 'value',
+                        render: 'percentage',
                         fontColor: '#000',
                         position: 'outside'
                     }
