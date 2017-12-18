@@ -57,6 +57,7 @@
           text = value.toString();
           break;
         case 'label':
+          console.log(chartInstance.config.data.labels[i]);
           text = chartInstance.config.data.labels[i];
           break;
         case 'image':
