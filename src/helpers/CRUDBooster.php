@@ -101,6 +101,19 @@ class CRUDBooster  {
 	        return Session::get('admin_lock');
 	    }
 
+	    public static function redirectBack($message,$type='warning') {
+
+			if(Request::ajax()) {
+				$resp = response()->json(['message'=>$message,'message_type'=>$type,'redirect_url'=>$_SERVER['HTTP_REFERER']])->send();
+				exit;
+			}else{
+				$resp = redirect()->back()->with(['message'=>$message,'message_type'=>$type]);
+				Session::driver()->save();
+				$resp->send();	
+				exit;
+			}						
+		}
+
 		public static function redirect($to,$message,$type='warning') {
 
 			if(Request::ajax()) {

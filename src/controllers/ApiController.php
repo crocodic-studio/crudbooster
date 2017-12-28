@@ -70,7 +70,7 @@ class ApiController extends Controller {
 				if ( ! Request::isMethod( $method_type ) ) {
 					$result['api_status']  = 0;
 					$result['api_message'] = "The requested method is not allowed!";
-					$result['api_http']    = 200;
+					$result['api_http']    = 401;
 					goto show;
 				}
 			}
@@ -175,7 +175,7 @@ class ApiController extends Controller {
 				$message               = implode( ', ', $message );
 				$result['api_status']  = 0;
 				$result['api_message'] = $message;
-				$result['api_http']    = 200;
+				$result['api_http']    = 401;
 				goto show;
 			}
 		}
