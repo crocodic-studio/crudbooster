@@ -5,7 +5,7 @@ return [
     'text_forgot_password'       => 'Password dimenticata ?',
     'page_title_login'           => 'Pagina di Login',
     'page_title_forgot'          => 'Password dimenticata',
-    'forgot_message'             => 'Enter your email address, to request password',
+    'forgot_message'             => 'Inserisci il tuo indirizzo email per richiedere la password',
     "forgot_text_try_again"      => "Riprovare il login?",
     'text_no_notification'       => "Hai 0 notifiche",
     'text_view_all_notification' => 'Vedi tutto',
@@ -129,7 +129,7 @@ return [
 
     'import_page_title'         => 'Importa dati :module',
     'dashboard_default_text'    => 'Benvenuto nella dashboard di :appname',
-    'form_back_to_list'         => 'Torna all\'elenco di :module',
+    'form_back_to_list'         => 'Torna all\'elenco :module',
     'not_logged_in'             => 'Non sei loggato!',
     'menu_navigation'           => "Menù di navigazione",
     'table_data_not_found'      => "Nessun dato",
