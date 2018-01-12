@@ -54,14 +54,6 @@
             width: 5px;
             height: 5px;
         }
-         
-        ::-webkit-scrollbar-track {            
-            background: #000000;
-        }
-         
-        ::-webkit-scrollbar-thumb {
-            background: #333333;          
-        }
     </style>
     @endpush
 
