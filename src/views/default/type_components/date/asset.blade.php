@@ -6,6 +6,7 @@
     $(function() {
         $('.input_date').datepicker({
             format: 'yyyy-mm-dd',
+            viewMode: 'years',
             @if (App::getLocale() == 'ar')
             rtl: true,
             @endif
