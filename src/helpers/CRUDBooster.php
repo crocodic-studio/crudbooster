@@ -874,6 +874,29 @@ class CRUDBooster  {
 		}
 
 		public static function authAPI() {
+
+			$allowedUserAgent = config('crudbooster.API_USER_AGENT_ALLOWED');
+            $user_agent = Request::header('User-Agent');
+            $time       = Request::header('X-Authorization-Time');
+
+
+            if($allowedUserAgent && count($allowedUserAgent)) {
+            	$userAgentValid = false;
+            	foreach($allowedUserAgent as $a) {
+            		if(stripos($user_agent, $a)!==FALSE) {
+            			$userAgentValid = true;
+            			break;
+            		}
+            	}
+            	if($userAgentValid==false) {
+            		$result['api_status']   = false;
+                    $result['api_message']  = "THE DEVICE AGENT IS INVALID";
+                    $res = response()->json($result,200);
+                    $res->send();
+                    exit;
+            	}
+            }
+
 	        if(self::getSetting('api_debug_mode') == 'false') {
 	              
 	            $result = array();
@@ -901,30 +924,6 @@ class CRUDBooster  {
 	                $res->send();
 	                exit;
 	            }
-
-	            $allowedUserAgent = config('crudbooster.API_USER_AGENT_ALLOWED');
-
-	            $user_agent = Request::header('User-Agent');
-	            $time       = Request::header('X-Authorization-Time'); 
-
-
-	            if($allowedUserAgent && count($allowedUserAgent)) {
-	            	$userAgentValid = false;
-	            	foreach($allowedUserAgent as $a) {
-	            		if(stripos($user_agent, $a)!==FALSE) {
-	            			$userAgentValid = true;
-	            			break;
-	            		}
-	            	}
-	            	if($userAgentValid==false) {
-	            		$result['api_status']   = false;
-	                    $result['api_message']  = "THE DEVICE AGENT IS INVALID";
-	                    $res = response()->json($result,200);
-	                    $res->send();
-	                    exit;
-	            	}
-	            }
-
 
 	            $keys = DB::table('cms_apikey')->where('status','active')->pluck('screetkey');
 	            $server_token = array();
