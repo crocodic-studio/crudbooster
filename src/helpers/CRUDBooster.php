@@ -902,8 +902,29 @@ class CRUDBooster  {
 	                exit;
 	            }
 
+	            $allowedUserAgent = config('crudbooster.API_USER_AGENT_ALLOWED');
+
 	            $user_agent = Request::header('User-Agent');
 	            $time       = Request::header('X-Authorization-Time'); 
+
+
+	            if($allowedUserAgent && count($allowedUserAgent)) {
+	            	$userAgentValid = false;
+	            	foreach($allowedUserAgent as $a) {
+	            		if(stripos($user_agent, $a)!==FALSE) {
+	            			$userAgentValid = true;
+	            			break;
+	            		}
+	            	}
+	            	if($userAgentValid==false) {
+	            		$result['api_status']   = false;
+	                    $result['api_message']  = "THE DEVICE AGENT IS INVALID";
+	                    $res = response()->json($result,200);
+	                    $res->send();
+	                    exit;
+	            	}
+	            }
+
 
 	            $keys = DB::table('cms_apikey')->where('status','active')->pluck('screetkey');
 	            $server_token = array();
@@ -919,8 +940,6 @@ class CRUDBooster  {
 	                if(!in_array($sender_token, $server_token)) {           
 	                    $result['api_status']   = false;
 	                    $result['api_message']  = "THE TOKEN IS NOT MATCH WITH SERVER TOKEN";
-	                    $result['sender_token'] = $sender_token;
-	                    $result['server_token'] = $server_token;
 	                    $res = response()->json($result,200);
 	                    $res->send();
 	                    exit;
@@ -929,8 +948,6 @@ class CRUDBooster  {
 	                if(Cache::get($sender_token) != $user_agent) {
 	                    $result['api_status']   = false;
 	                    $result['api_message']  = "THE TOKEN IS ALREADY BUT NOT MATCH WITH YOUR DEVICE";
-	                    $result['sender_token'] = $sender_token;
-	                    $result['server_token'] = $server_token;
 	                    $res = response()->json($result,200);
 	                    $res->send();
 	                    exit;

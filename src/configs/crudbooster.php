@@ -4,6 +4,12 @@ return [
 	
 	'ADMIN_PATH'                =>'admin',
 
+	/* 
+		To Allowed Specific User Agent Only
+		E.g : ['Android','OkHttp','Mozilla','Mac']
+	*/
+	'API_USER_AGENT_ALLOWED'	=> [], 
+
 	'USER_TABLE'				=>'cms_users',
 	
 	'IMAGE_FIELDS_CANDIDATE'    =>'image,picture,photo,photos,foto,gambar,thumbnail',
@@ -64,8 +70,6 @@ return [
 
 	/* 
 	* NOTE : 
-	* As a default, CRUDBooster making a cache for the configuration with command `php artisan config:cache`. It means any changes that you've made,
-	* would not make an effect, until you run `php artisan config:cache` again.
-	*
+	* Make sure yo clear your config cache by using command : php artisan config:clear
 	*/
 ];
