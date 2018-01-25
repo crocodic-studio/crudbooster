@@ -29,7 +29,8 @@
    @if(!is_null($pre_index_html) && !empty($pre_index_html))
        {!! $pre_index_html !!}
    @endif
-   {{$limit}}
+
+   <p><h5>{{$limit}} total records</h5></p>
 
 
     @if(g('return_url'))
