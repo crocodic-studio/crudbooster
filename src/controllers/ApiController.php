@@ -113,6 +113,10 @@ class ApiController extends Controller {
 				$used              = $param['used'];
 				$format_validation = array();
 
+				if( $used && !$required && $value == '' && !in_array($type, ['image','file'])) {
+					continue;
+				}
+
 				if ( $used == '0' ) {
 					continue;
 				}
