@@ -29,6 +29,7 @@
    @if(!is_null($pre_index_html) && !empty($pre_index_html))
        {!! $pre_index_html !!}
    @endif
+   {{$limit}}
 
 
     @if(g('return_url'))

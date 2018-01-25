@@ -539,7 +539,8 @@ class CBController extends Controller {
  		$html_contents = ['html'=>$html_contents,'data'=>$data['result']];
 
 		$data['html_contents'] = $html_contents;
-
+		$data['limit'] = $limit;
+	
 		return view("crudbooster::default.index",$data);
 	}
 
