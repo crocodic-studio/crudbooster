@@ -752,13 +752,16 @@ class CBController extends Controller {
 
 	public function validation($id=NULL, $isjs=false) {
 
+
 		$request_all = Request::all();
 		$array_input = array();
+
+
 		foreach($this->data_inputan as $di) {
 			$ai = array();
 			$name = $di['name'];			
 
-			if( !isset($request_all[$name]) ) continue;
+			if (( !isset($request_all[$name]) ) && ($isjs==false)) continue;
 
 			if($di['type'] != 'upload') {
 				if(@$di['required']) {
@@ -1129,9 +1132,6 @@ class CBController extends Controller {
 		$command 		 = 'add';
 		$option_id		 = $this->option_id;
 		$validator		 = $this->validation(NULL,true);
-
-		echo "validator text<br>";
-		echo "<pre>".print_r($validator,TRUE)."</pre>";
 
 		return view('crudbooster::default.form',compact('page_title','page_menu','command','option_id','validator'));
 	}
