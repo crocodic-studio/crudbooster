@@ -76,7 +76,7 @@
         @if($command != 'detail')
           <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
           <!-- validation code -->
-          {{ $validator }}
+          {!! $validator !!}
           <!-- validation code end -->
         @endif
 
