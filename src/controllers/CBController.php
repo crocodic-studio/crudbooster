@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Log;
 use CRUDBooster;
 use CB;
 use Schema;
+use JsValidator;
 
 class CBController extends Controller {
 
