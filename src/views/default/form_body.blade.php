@@ -84,7 +84,6 @@ foreach($forms as $form) {
 		@else
 			<p class='text-danger'>{{$type}} is not found in type component system</p><br/>
 		@endif
-		<script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js', '#form')}}"></script>
-		{!! $validator !!}
+		
 	<?php 
 	}        			                	
