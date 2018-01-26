@@ -851,7 +851,7 @@ class CBController extends Controller {
 
 		if ($isjs)
 		{
-			$validator = Validator::make($formarray,$array_input);
+			$validator = Validator::make($request_all,$array_input);
 			return $validator;
 		}
 		else
@@ -1127,7 +1127,7 @@ class CBController extends Controller {
 		$page_menu       = Route::getCurrentRoute()->getActionName();
 		$command 		 = 'add';
 		$option_id		 = $this->option_id;
-		$validator		 = $this->validation(NULL);
+		$validator		 = $this->validation(NULL,true);
 
 		return view('crudbooster::default.form',compact('page_title','page_menu','command','option_id'));
 	}
