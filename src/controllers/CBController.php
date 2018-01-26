@@ -852,7 +852,7 @@ class CBController extends Controller {
 
 		if ($isjs)
 		{
-			$validator = JsValidator::make($request_all,$array_input);
+			$validator = JsValidator::make($array_input);
 			return $validator;
 		}
 		else
