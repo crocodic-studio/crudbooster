@@ -869,7 +869,7 @@ class CBController extends Controller {
 		}
 	}
 
-	public function validationArray($formarray) {
+	public function validationArray($formarray, $isjs=false) {
 
 		$request_all = $formarray;
 		$array_input = array();
@@ -961,7 +961,10 @@ class CBController extends Controller {
 			}
 		}
 
-		$validator = Validator::make($formarray,$array_input);
+		if (!$isjs)
+			$validator = Validator::make($formarray,$array_input);
+		else
+			$validator = JsValidator::make($formarray,$array_input);
 
 		return $validator;
 	}
