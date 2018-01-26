@@ -1127,7 +1127,7 @@ class CBController extends Controller {
 		$page_menu       = Route::getCurrentRoute()->getActionName();
 		$command 		 = 'add';
 		$option_id		 = $this->option_id;
-		$validator		 = $this->validation(NULL,true);
+		$validator		 = $this->validation(NULL);
 
 		return view('crudbooster::default.form',compact('page_title','page_menu','command','option_id'));
 	}
