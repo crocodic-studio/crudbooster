@@ -857,9 +857,7 @@ class CBController extends Controller {
 		{
 			$validator = JsValidator::make($array_input);
 
-			echo "Test<br>";
-			echo "<pre>".print_r($array_input,TRUE)."</pre>";
-			return $array_input;
+			return $validator;
 		}
 		else
 		{
