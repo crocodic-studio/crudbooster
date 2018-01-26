@@ -1130,6 +1130,7 @@ class CBController extends Controller {
 		$option_id		 = $this->option_id;
 		$validator		 = $this->validation(NULL,true);
 
+		echo "validator text<br>";
 		echo "<pre>".print_r($validator,TRUE)."</pre>";
 
 		return view('crudbooster::default.form',compact('page_title','page_menu','command','option_id','validator'));
