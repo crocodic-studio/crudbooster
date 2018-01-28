@@ -35,41 +35,6 @@
         })
     </script>
     <style type="text/css">
-        .control-sidebar ul {
-            padding:0 0 0 0;
-            margin:0 0 0 0;            
-            list-style-type:none;
-        }
-        .control-sidebar ul li {
-            text-align: center;
-            padding: 10px;            
-            border-bottom: 1px solid #555555;
-        }
-        .control-sidebar ul li:hover {
-            background: #555555;
-        }
-        .control-sidebar ul li .title {
-            text-align: center;
-            color: #ffffff;            
-        }
-        .control-sidebar ul li img {
-            width: 100%;            
-        }
-
-        ::-webkit-scrollbar {
-            width: 5px;
-            height: 5px;
-        }
-         
-        ::-webkit-scrollbar-track {            
-            background: #000000;
-        }
-         
-        ::-webkit-scrollbar-thumb {
-            background: #333333;          
-        }
-
-        .ui-datepicker{ z-index: 99999 !important;}
 
         body {
 		  background: rgb(204,204,204); 
@@ -400,71 +365,27 @@
         })
     </script>
 
-    <div id='modal-statistic' class="modal fade" tabindex="-1" role="dialog">
-	  <div class="modal-dialog" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	        <h4 class="modal-title">Modal title</h4>
-	      </div>
-	      <div class="modal-body">
-	        <p>One fine body&hellip;</p>
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	        <button type="button" class="btn-submit btn btn-primary" data-loading-text="Saving..." autocomplete="off">Save changes</button>
-	      </div>
-	    </div><!-- /.modal-content -->
-	  </div><!-- /.modal-dialog -->
-	</div><!-- /.modal -->
-
     <div id='statistic-area'>
         
-        <div class="row" style="padding-bottom:15px;">
+        <!--<div class="statistic-row row">-->
+            <page size="A4" id='area1' class="col-sm-3 connectedSortable">            	
 
-            <div class="col-sm-2 dropdown" style="display:inline-block;margin-top:20px;">
-              <button style="width:100%" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="daterange"><span id="txtDateRange">All</span>
-              <span class="caret"></span></button>
-              <ul class="dropdown-menu">
-                <li><a href="#">All</a></li>
-                <li><a href="#">Date</a></li>
-              </ul>
-            </div>
-            <div class="col-sm-2 datestuff" style="display:none;">
-                Date From:
-                <div class="input-group">                               
-                    <span class="input-group-addon open-datetimepicker"><a><i class='fa fa-calendar '></i></a></span>
-                    <input type='text' title="Date From" readonly class='form-control notfocus input_date' name="testdate1" id="testdate1" value='1970-01-01'/>                       
-                </div>
-            </div>
-            <div class="col-sm-2 datestuff" style="display:none;">
-                Date To:
-                <div class="input-group">                               
-                    <span class="input-group-addon open-datetimepicker"><a><i class='fa fa-calendar '></i></a></span>
-                    <input type='text' title="Date To" readonly class='form-control notfocus input_date' name="testdate2" id="testdate2" value='1970-01-01'/>                       
-                </div>
-            </div>
-
-        </div>
-        <div class="statistic-row row">
-            <div id='area1' class="col-sm-3 connectedSortable">            	
-
-            </div>
-            <div id='area2' class="col-sm-3 connectedSortable">
+            </page>
+            <page size="A4" id='area2' class="col-sm-3 connectedSortable">
                
-            </div>
-            <div id='area3' class="col-sm-3 connectedSortable">
+            </page>
+            <page size="A4" id='area3' class="col-sm-3 connectedSortable">
 
-            </div>
-            <div id='area4' class="col-sm-3 connectedSortable">
+            </page>
+            <page size="A4" id='area4' class="col-sm-3 connectedSortable">
             	
-            </div>            
-        </div>
+            </page>            
+        <!--</div>
 
         <div class='statistic-row row'>
                 <div id='area5' class="col-sm-12 connectedSortable">
  
                 </div>
-        </div>
+        </div>-->
     
     </div><!--END STATISTIC AREA-->
