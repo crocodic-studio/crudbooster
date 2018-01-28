@@ -273,6 +273,11 @@
 	            	
 	            </div>    
             </page>            
+            <page size="A4" class="statistic-row row">
+            	<div id='area5' class="col-sm-12 connectedSortable">
+ 
+                </div>
+            </page>
         <!--</div>
 
         <div class='statistic-row row'>
