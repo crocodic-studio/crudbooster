@@ -152,7 +152,7 @@
                                     else 
                                     {
                                         loadcount = loadcount+1;
-                                        if ((loadcount % 3==0)&&(loadcount!=0)) $('#'+areaname).append("<br><br>");        
+                                        if ((loadcount % 4==0)&&(loadcount!=0)) $('#'+areaname).append("<br><br>");        
                                     }   
                                     
                                     console.log("loadcount");
