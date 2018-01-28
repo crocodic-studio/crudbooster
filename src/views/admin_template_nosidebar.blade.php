@@ -66,7 +66,7 @@
     
 
     <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
+    <div class="">
 
         <section class="content-header">
           <?php 
