@@ -90,7 +90,7 @@
 	    	return response()->json(['components'=>$rows]);
 	    }
 
-	    public function getPdf($id_cms_statistics,$startdate=NULL,$enddate=NULL) {
+	    public function getPdf($slug,$startdate=NULL,$enddate=NULL) {
 	    	$this->cbLoader();
 			$row               = CRUDBooster::first($this->table,['slug'=>$slug]);
 			$id_cms_statistics = $row->id;
