@@ -367,17 +367,11 @@
     
         
         <!--<div class="statistic-row row">-->
-            <page size="A4" id='area1' class="col-sm-3 connectedSortable">            	
-
-            </page>
-            <page size="A4" id='area2' class="col-sm-3 connectedSortable">
-               
-            </page>
-            <page size="A4" id='area3' class="col-sm-3 connectedSortable">
-
-            </page>
-            <page size="A4" id='area4' class="col-sm-3 connectedSortable">
-            	
+            <page size="A4"> 
+            	<div id='area1'></div>
+            	<div id='area2'></div>
+            	<div id='area3'></div>
+            	<div id='area4'></div>
             </page>            
         <!--</div>
 
