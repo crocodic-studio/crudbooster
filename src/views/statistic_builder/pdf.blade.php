@@ -49,7 +49,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+            background-color: rgba(0,0,0,0.7); /* Black background with opacity */
             z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
             cursor: pointer; /* Add a pointer on hover */
         }
@@ -202,6 +202,7 @@
                                 if (smallcount>=totalcount)
                                 {
                                     console.log("finished smallcount");
+                                    setTimeout(function(){ window.print(); }, 1500);
                                     //setTimeout(function(){ html2pdf(document.getElementById('pagereport'),{filename: makeid()+'.pdf',image:{ type: 'jpeg', quality: 1.00 },}); }, 2000);
                                     
                                 }
