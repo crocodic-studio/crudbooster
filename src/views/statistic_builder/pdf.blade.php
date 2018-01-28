@@ -173,7 +173,7 @@
                                 if (smallcount>=totalcount)
                                 {
                                     console.log("finished smallcount");
-                                    setTimeout(function(){ html2pdf(document.getElementById('pagereport'),{filename: makeid()+'.pdf',}); }, 2000);
+                                    setTimeout(function(){ html2pdf(document.getElementById('pagereport'),{filename: makeid()+'.pdf',image:{ type: 'png', quality: 0.98 },}); }, 2000);
                                     
                                 }
                                 
