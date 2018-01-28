@@ -94,7 +94,7 @@
 			$row               = CRUDBooster::first($this->table,['slug'=>$slug]);
 			$id_cms_statistics = $row->id;
 			$page_title        = $row->name;	    				
-	    	return view('crudbooster::statistic_builder.index',compact('page_title','id_cms_statistics'));
+	    	return view('crudbooster::statistic_builder.pdf',compact('page_title','id_cms_statistics'));
 	    }
 
 	    public function getViewComponent($componentID) {
