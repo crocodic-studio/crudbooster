@@ -364,8 +364,7 @@
             })
         })
     </script>
-
-    <div id='statistic-area'>
+    
         
         <!--<div class="statistic-row row">-->
             <page size="A4" id='area1' class="col-sm-3 connectedSortable">            	
@@ -388,4 +387,3 @@
                 </div>
         </div>-->
     
-    </div><!--END STATISTIC AREA-->
