@@ -1,6 +1,6 @@
 	<link rel="stylesheet" href="{{ asset ('vendor/crudbooster/assets/adminlte/bootstrap/css/bootstrap.min.css') }}">    
-	<script src="{{ asset ('vendor/crudbooster/assets/adminlte/bootstrap/js/bootstrap.min.js') }}"></script> 
 	<script src="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/jQuery/jQuery-2.1.4.min.js') }}"></script> 
+	<script src="{{ asset ('vendor/crudbooster/assets/adminlte/bootstrap/js/bootstrap.min.js') }}"></script> 
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">    
     <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
@@ -138,9 +138,12 @@
                     if(response.components) {
                 		totalcount = totalcount + response.components.length;
                 		console.log(totalcount);        
-                        $.each(response.components,function(i,obj) {
+                        $.each(response.components,function(i,obj) {                        	
                             $('#'+areaname).append("<div id='area-loading-"+obj.componentID+"' class='area-loading'><i class='fa fa-spin fa-spinner'></i></div>");
                             $.get(viewlink+obj.componentID+addon,function(view) {                                
+                            	loadcount = loadcount +1;
+                            	console.log("loadcount");
+                            	console.log(loadcount);
                                 $('#area-loading-'+obj.componentID).remove();
                                 $('#'+areaname).append(view.layout);
                                 
