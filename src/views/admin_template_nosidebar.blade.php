@@ -63,9 +63,7 @@
 </head>
 <body class="@php echo (Session::get('theme_color'))?:'skin-blue'; echo config('crudbooster.ADMIN_LAYOUT') @endphp">
 <div id='app' class="wrapper">    
-
-    <!-- Header -->
-    @include('crudbooster::header')
+    
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -162,9 +160,6 @@
             @yield('content')
         </section><!-- /.content -->
     </div><!-- /.content-wrapper -->
-
-    <!-- Footer -->
-    @include('crudbooster::footer')
 
 </div><!-- ./wrapper -->
 
