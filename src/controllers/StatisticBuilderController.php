@@ -11,7 +11,7 @@
 	use Illuminate\Support\Facades\Hash;
 	use Illuminate\Support\Facades\Cache;
 	use Illuminate\Support\Facades\Validator;
-	use Illuminate\Support\Facades\PDF;
+	//use Illuminate\Support\Facades\PDF;
 	use Illuminate\Support\Facades\Excel;
 	use CRUDBooster;
 	use PDF;
