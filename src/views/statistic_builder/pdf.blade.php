@@ -141,12 +141,23 @@
                         $.each(response.components,function(i,obj) {                        	
                             $('#'+areaname).append("<div id='area-loading-"+obj.componentID+"' class='area-loading'><i class='fa fa-spin fa-spinner'></i></div>");
                             $.get(viewlink+obj.componentID+addon,function(view) {                                
-                            	loadcount = loadcount +1;
-                            	console.log("loadcount");
-                            	console.log(loadcount);
-                            	if ((loadcount % 4==0)&&(loadcount!=0)) $('#'+areaname).append("<br><br>");
                                 $('#area-loading-'+obj.componentID).remove();
                                 $('#'+areaname).append(view.layout);
+                                if (areaname=="area5")
+                                {
+                                    if (loadcount==0)
+                                    {                                        
+                                        loadcount = loadcount +2;
+                                    }
+                                    else 
+                                    {
+                                        loadcount = loadcount+1;
+                                        if ((loadcount % 3==0)&&(loadcount!=0)) $('#'+areaname).append("<br><br>");        
+                                    }   
+                                    
+                                    console.log("loadcount");
+                                    console.log(loadcount);
+                                }
                                 
                             })
                         })                      
