@@ -89,7 +89,7 @@
 	    	return response()->json(['components'=>$rows]);
 	    }
 
-	    public function getPdf($id_cms_statistics, $area_name) {
+	    public function getPdf($id_cms_statistics,$startdate=NULL,$enddate=NULL) {
 	    	return "test";
 	    }
 
