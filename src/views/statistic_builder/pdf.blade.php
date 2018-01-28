@@ -11,29 +11,7 @@
     </script>
 
 
-    <script type="text/javascript">
-        Chart.defaults.global.colors = [ "#00988c", "#85cdde", "#bd1622", "#e74e0f" ];
-        $(function() {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $(document).ajaxStart(function() {
-                $('.btn-save-statistic').html("<i class='fa fa-spin fa-spinner'></i>");
-            })
-            $(document).ajaxStop(function() {
-                $('.btn-save-statistic').html("<i class='fa fa-save'></i> Auto Save Ready");
-            })
 
-            $('.btn-show-sidebar').click(function(e)  {
-                e.stopPropagation();
-            })
-            $('html,body').click(function() {
-                $('.control-sidebar').removeClass('control-sidebar-open');
-            })
-        })
-    </script>
     <style type="text/css">
 
         body {
@@ -56,104 +34,13 @@
 		}
     </style>
 
-	<!-- ADDITION FUNCTION FOR BUTTON -->
-	<script type="text/javascript">
-        var id_cms_statistics = '{{$id_cms_statistics}}';
-
-        function addWidget(id_cms_statistics,area,component) {      
-            var id = new Date().getTime();
-            $('#'+area).append("<div id='"+id+"' class='area-loading'><i class='fa fa-spin fa-spinner'></i></div>");
-
-            var sorting = $('#'+area+' .border-box').length;             
-            $.post("{{CRUDBooster::mainpath('add-component')}}",{component_name:component,id_cms_statistics:id_cms_statistics,sorting:sorting,area:area},function(response) {
-                $('#'+area).append(response.layout);   
-                $('#'+id).remove();                
-            })
-        }
-
-	</script>
-	<!--END HERE-->
 
 
-	<!-- jQuery UI 1.11.4 -->
-    <style type="text/css">
-        .sort-highlight {
-            border:3px dashed #cccccc;                    
-        }
-        .layout-grid {
-            border:1px dashed #cccccc;
-            min-height: 150px;
-        }
-        .layout-grid + .layout-grid {
-            border-left:1px dashed transparent;            
-        }
-        .border-box {        	
-        	position: relative;        	
-        }
-        .border-box .action {        	
-        	font-size: 20px;
-        	display: none;
-        	text-align: center;
-        	display: none;
-        	padding:3px 5px 3px 5px;
-        	background:#DD4B39;
-        	color:#ffffff;
-        	width: 70px;
-        	-webkit-border-bottom-right-radius: 5px;
-			-webkit-border-bottom-left-radius: 5px;
-			-moz-border-radius-bottomright: 5px;
-			-moz-border-radius-bottomleft: 5px;
-			border-bottom-right-radius: 5px;
-			border-bottom-left-radius: 5px;
-			position: absolute;
-			margin-top: -20px;			
-			right: 0;
-			z-index: 999;
-			opacity: 0.8;	
-        }
-        .border-box .action a {
-        	color: #ffffff;
-        }
-        
-        .border-box:hover {
-        	/*border:2px dotted #BC3F30;*/
-        }
-        
-        @if(CRUDBooster::getCurrentMethod() == 'getBuilder')
-        .border-box:hover .action {
-        	display: block;
-        }
-        .panel-heading, .inner-box, .box-header, .btn-add-widget {
-            cursor: move;
-        }
-        @endif
-        
-        .connectedSortable {
-        	position: relative;
-        }
-        .area-loading {        
-        	position: relative;	
-        	width: 100%;  
-        	height: 130px;      	
-        	background: #dedede;
-        	border: 4px dashed #cccccc;
-        	font-size: 50px;
-        	color: #aaaaaa;
-        	margin-bottom: 20px;
-        }
-        .area-loading i {        	
-        	position: absolute;
-        	left:45%;
-        	top:30%;        	
-        	transform: translate(-50%, -50%);        	      
-        }
-    </style>
     <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script type="text/javascript">
     $(function() {      
 
-        var chartColorsData = 
         $(".dropdown li a").click(function(){
 
           $(".btn:first-child #txtDateRange").text($(this).text());
