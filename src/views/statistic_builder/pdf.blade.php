@@ -154,7 +154,7 @@
                                     else 
                                     {
                                         loadcount = loadcount+1;
-                                        if ((loadcount % 4==0)&&(loadcount!=0)) $('#'+areaname).append("<br><br>");        
+                                        if ((loadcount % 3==0)&&(loadcount!=0)) $('#'+areaname).append('<div class="html2pdf__page-break"></div>');        
                                     }   
                                     
                                     console.log("loadcount");
@@ -163,8 +163,9 @@
                                 smallcount = smallcount + 1;
                                 if (smallcount>=totalcount)
                                 {
-                                    var element = document.getElementById('pagereport');
-                                    html2pdf(element);
+
+                                    setTimeout(function(){ html2pdf(document.getElementById('pagereport')); }, 2000);
+                                    
                                 }
                                 
                             })
