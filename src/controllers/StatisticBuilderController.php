@@ -90,7 +90,11 @@
 	    }
 
 	    public function getPdf($id_cms_statistics,$startdate=NULL,$enddate=NULL) {
-	    	return "test";
+	    	$this->cbLoader();
+			$row               = CRUDBooster::first($this->table,['slug'=>$slug]);
+			$id_cms_statistics = $row->id;
+			$page_title        = $row->name;	    				
+	    	return view('crudbooster::statistic_builder.index',compact('page_title','id_cms_statistics'));
 	    }
 
 	    public function getViewComponent($componentID) {
