@@ -113,6 +113,15 @@
     </script>
 
     <script type="text/javascript">
+    function makeid() {
+      var text = "";
+      var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+      for (var i = 0; i < 15; i++)
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+      return text;
+    }
 
         function runSortables() 
         {
@@ -164,7 +173,7 @@
                                 if (smallcount>=totalcount)
                                 {
                                     console.log("finished smallcount");
-                                    setTimeout(function(){ html2pdf(document.getElementById('pagereport')); }, 2000);
+                                    setTimeout(function(){ html2pdf(document.getElementById('pagereport'),{filename: makeid()+'.pdf',}); }, 2000);
                                     
                                 }
                                 
