@@ -1,6 +1,7 @@
 	<link rel="stylesheet" href="{{ asset ('vendor/crudbooster/assets/adminlte/bootstrap/css/bootstrap.min.css') }}">    
 	<script src="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/jQuery/jQuery-2.1.4.min.js') }}"></script> 
 	<script src="{{ asset ('vendor/crudbooster/assets/adminlte/bootstrap/js/bootstrap.min.js') }}"></script> 
+    <script src="{{ asset ('vendor/crudbooster/assets/js/html2pdf.bundle.min.js') }}"></script> 
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">    
     <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
@@ -118,6 +119,7 @@
         	var id_cms_statistics = '{{$id_cms_statistics}}';
         	var totalcount = 0;
         	var loadcount =0;
+            var smallcount=0;
             /*if ($('#txtDateRange').text()=='All')
             {
                 var viewlink = "{{CRUDBooster::mainpath('view-component')}}/";
@@ -158,6 +160,12 @@
                                     console.log("loadcount");
                                     console.log(loadcount);
                                 }
+                                smallcount = smallcount + 1;
+                                if (smallcount>=totalcount)
+                                {
+                                    var element = document.getElementById('pagereport');
+                                    html2pdf(element);
+                                }
                                 
                             })
                         })                      
@@ -176,7 +184,7 @@
     
         
         <!--<div class="statistic-row row">-->
-            <page size="A4" class="statistic-row row"> 
+            <page id="pagereport" size="A4" class="statistic-row row"> 
             	<H1>Test Report </h1>
             	<div id='area1' class="col-sm-12 connectedSortable">            	
 
