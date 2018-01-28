@@ -87,6 +87,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->app->register('Maatwebsite\Excel\ExcelServiceProvider');
         $this->app->register('Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider');
         $this->app->register('Intervention\Image\ImageServiceProvider');
+        $this->app->register('Proengsoft\JsValidation\JsValidationServiceProvider');
 
         $loader = AliasLoader::getInstance();
         $loader->alias('PDF', 'Barryvdh\DomPDF\Facade');
@@ -94,6 +95,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $loader->alias('Image', 'Intervention\Image\Facades\Image');
         $loader->alias('CRUDBooster', 'crocodicstudio\crudbooster\helpers\CRUDBooster');
         $loader->alias('CB', 'crocodicstudio\crudbooster\helpers\CB');
+        $loader->alias('JsValidator', 'Proengsoft\JsValidation\Facades\JsValidatorFacade');
     }
 
 
