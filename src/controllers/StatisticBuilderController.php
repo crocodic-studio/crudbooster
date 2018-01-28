@@ -88,6 +88,11 @@
 
 	    	return response()->json(['components'=>$rows]);
 	    }
+
+	    public function getPdf($id_cms_statistics, $area_name) {
+	    	return "test";
+	    }
+
 	    public function getViewComponent($componentID) {
 	    	$component = CRUDBooster::first('cms_statistic_components',['componentID'=>$componentID]);	
 
