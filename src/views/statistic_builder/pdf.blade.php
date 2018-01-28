@@ -163,7 +163,7 @@
                                 smallcount = smallcount + 1;
                                 if (smallcount>=totalcount)
                                 {
-
+                                    console.log("finished smallcount");
                                     setTimeout(function(){ html2pdf(document.getElementById('pagereport')); }, 2000);
                                     
                                 }
