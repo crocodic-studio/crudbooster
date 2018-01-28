@@ -117,6 +117,7 @@
         {
         	var id_cms_statistics = '{{$id_cms_statistics}}';
         	var totalcount = 0;
+        	var loadcount =0;
             /*if ($('#txtDateRange').text()=='All')
             {
                 var viewlink = "{{CRUDBooster::mainpath('view-component')}}/";
