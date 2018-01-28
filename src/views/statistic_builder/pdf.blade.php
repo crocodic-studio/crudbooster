@@ -163,7 +163,7 @@
                                     else 
                                     {
                                         loadcount = loadcount+1;
-                                        if ((loadcount % 3==0)&&(loadcount!=0)) $('#'+areaname).append('<div class="html2pdf__page-break"></div>');        
+                                        if ((loadcount % 4==0)&&(loadcount!=0)) $('#'+areaname).append('<br><br>');        
                                     }   
                                     
                                     console.log("loadcount");
@@ -173,7 +173,7 @@
                                 if (smallcount>=totalcount)
                                 {
                                     console.log("finished smallcount");
-                                    setTimeout(function(){ html2pdf(document.getElementById('pagereport'),{filename: makeid()+'.pdf',image:{ type: 'jpeg', quality: 1.00 },}); }, 2000);
+                                    //setTimeout(function(){ html2pdf(document.getElementById('pagereport'),{filename: makeid()+'.pdf',image:{ type: 'jpeg', quality: 1.00 },}); }, 2000);
                                     
                                 }
                                 
