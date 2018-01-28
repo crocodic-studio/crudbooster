@@ -39,6 +39,7 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script type="text/javascript">
     $(function() {      
+    	var id_cms_statistics = '{{$id_cms_statistics}}';
 
         $(".dropdown li a").click(function(){
 
