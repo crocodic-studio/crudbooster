@@ -30,7 +30,7 @@
        {!! $pre_index_html !!}
    @endif
 
-   <p style="padding:5px;"><h5>{{$limit}} total records</h5></p>
+   <div style="padding:5px;"><h5>{{$limit}} total records</h5></div>
 
 
     @if(g('return_url'))
@@ -130,7 +130,7 @@
       <div class="box-body table-responsive no-padding">
         @include("crudbooster::default.table")
       </div>
-      <p style="padding:5px;"><h5>{{$limit}} total records</h5></p>
+      <div style="padding:5px;"><h5>{{$limit}} total records</h5></div>
     </div>
 
    @if(!is_null($post_index_html) && !empty($post_index_html))
