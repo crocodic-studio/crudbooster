@@ -129,9 +129,9 @@
       </div>
       <div class="box-body table-responsive no-padding">
         @include("crudbooster::default.table")
-      </div>
-      <div style="padding:5px;"><h5>{{$limit}} total records</h5></div>
+      </div>      
     </div>
+    <div style="padding:5px;"><h5>{{$limit}} total records</h5></div>
 
    @if(!is_null($post_index_html) && !empty($post_index_html))
        {!! $post_index_html !!}
