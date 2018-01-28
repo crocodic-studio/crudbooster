@@ -113,6 +113,7 @@
 
         function runSortables() 
         {
+        	var id_cms_statistics = '{{$id_cms_statistics}}';
             /*if ($('#txtDateRange').text()=='All')
             {
                 var viewlink = "{{CRUDBooster::mainpath('view-component')}}/";
