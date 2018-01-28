@@ -14,6 +14,7 @@
 	use Illuminate\Support\Facades\PDF;
 	use Illuminate\Support\Facades\Excel;
 	use CRUDBooster;
+	use PDF;
 
 	class StatisticBuilderController extends CBController {
 
