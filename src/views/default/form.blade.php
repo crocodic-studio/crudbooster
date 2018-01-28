@@ -73,5 +73,11 @@
             </div>
         </div>
         </div><!--END AUTO MARGIN-->
+        @if($command != 'detail')
+          <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
+          <!-- validation code -->
+          {!! $validator !!}
+          <!-- validation code end -->
+        @endif
 
 @endsection

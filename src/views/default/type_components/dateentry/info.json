@@ -1,6 +1,6 @@
 {
-	"title":"Date Input",
-	"type":"date",
+	"title":"Date Data Entry",
+	"type":"dateentry",
 	"attribute":{
 		"optional": {
 			"style":"string inline stylesheet",

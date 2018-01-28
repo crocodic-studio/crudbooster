@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Log;
 use CRUDBooster;
 use CB;
 use Schema;
+use JsValidator;
 
 class CBController extends Controller {
 
@@ -539,6 +540,7 @@ class CBController extends Controller {
  		$html_contents = ['html'=>$html_contents,'data'=>$data['result']];
 
 		$data['html_contents'] = $html_contents;
+		$data['limit'] = $result->count();
 
 		return view("crudbooster::default.index",$data);
 	}
@@ -748,15 +750,18 @@ class CBController extends Controller {
 		return response()->json($result);
 	}
 
-	public function validation($id=NULL) {
+	public function validation($id=NULL, $isjs=false) {
+
 
 		$request_all = Request::all();
 		$array_input = array();
+
+
 		foreach($this->data_inputan as $di) {
 			$ai = array();
 			$name = $di['name'];			
 
-			if( !isset($request_all[$name]) ) continue;
+			if (( !isset($request_all[$name]) ) && ($isjs==false)) continue;
 
 			if($di['type'] != 'upload') {
 				if(@$di['required']) {
@@ -848,27 +853,36 @@ class CBController extends Controller {
 			}
 		}
 
-		$validator = Validator::make($request_all,$array_input);
-
-		if ($validator->fails())
+		if ($isjs)
 		{
-			$message = $validator->messages();
-			$message_all = $message->all();
+			$validator = JsValidator::make($array_input);
 
-			if(Request::ajax()) {
-				$res = response()->json(['message'=>trans('crudbooster.alert_validation_error',['error'=>implode(', ',$message_all)]),'message_type'=>'warning'])->send();
-				exit;
-			}else{
-				$res = redirect()->back()->with("errors",$message)->with(['message'=>trans('crudbooster.alert_validation_error',['error'=>implode(', ',$message_all)]),'message_type'=>'warning'])->withInput();
-				\Session::driver()->save();
-				$res->send();
-	        	exit;
+			return $validator;
+		}
+		else
+		{
+			$validator = Validator::make($request_all,$array_input);
+
+			if ($validator->fails())
+			{
+				$message = $validator->messages();
+				$message_all = $message->all();
+
+				if(Request::ajax()) {
+					$res = response()->json(['message'=>trans('crudbooster.alert_validation_error',['error'=>implode(', ',$message_all)]),'message_type'=>'warning'])->send();
+					exit;
+				}else{
+					$res = redirect()->back()->with("errors",$message)->with(['message'=>trans('crudbooster.alert_validation_error',['error'=>implode(', ',$message_all)]),'message_type'=>'warning'])->withInput();
+					\Session::driver()->save();
+					$res->send();
+		        	exit;
+				}
+
 			}
-
 		}
 	}
 
-	public function validationArray($formarray) {
+	public function validationArray($formarray, $isjs=false) {
 
 		$request_all = $formarray;
 		$array_input = array();
@@ -960,7 +974,10 @@ class CBController extends Controller {
 			}
 		}
 
-		$validator = Validator::make($formarray,$array_input);
+		if (!$isjs)
+			$validator = Validator::make($formarray,$array_input);
+		else
+			$validator = JsValidator::make($formarray,$array_input);
 
 		return $validator;
 	}
@@ -1115,8 +1132,9 @@ class CBController extends Controller {
 		$page_menu       = Route::getCurrentRoute()->getActionName();
 		$command 		 = 'add';
 		$option_id		 = $this->option_id;
+		$validator		 = $this->validation(NULL,true);
 
-		return view('crudbooster::default.form',compact('page_title','page_menu','command','option_id'));
+		return view('crudbooster::default.form',compact('page_title','page_menu','command','option_id','validator'));
 	}
 
 	public function postAddSave() {

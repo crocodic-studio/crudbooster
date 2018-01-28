@@ -84,5 +84,6 @@ foreach($forms as $form) {
 		@else
 			<p class='text-danger'>{{$type}} is not found in type component system</p><br/>
 		@endif
+		
 	<?php 
 	}        			                	
