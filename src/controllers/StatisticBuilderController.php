@@ -98,9 +98,13 @@
 			$page_title        = $row->name;	    			
 			$ispdf			   = true;				
 
-	    	return view('crudbooster::statistic_builder.show',compact('page_title','id_cms_statistics','ispdf'));
-	    	//$pdf = PDF::loadView('crudbooster::statistic_builder.show', compact('page_title','id_cms_statistics','ispdf'));
-			//return $pdf->download('invoice.pdf');
+	    	//return view('crudbooster::statistic_builder.show',compact('page_title','id_cms_statistics','ispdf'));
+	    	$pdf = PDF::loadView('crudbooster::statistic_builder.show', compact('page_title','id_cms_statistics','ispdf'));
+	    	$pdf->setOption('enable-javascript', true);
+			$pdf->setOption('javascript-delay', 3500);
+			$pdf->setOption('enable-smart-shrinking', true);
+			$pdf->setOption('no-stop-slow-scripts', true);
+			return $pdf->download('invoice.pdf');
 	    }
 
 	    public function getViewComponent($componentID) {
