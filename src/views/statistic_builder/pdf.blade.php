@@ -144,6 +144,7 @@
                             	loadcount = loadcount +1;
                             	console.log("loadcount");
                             	console.log(loadcount);
+                            	if ((loadcount % 4==0)&&(loadcount!=0)) $('#'+areaname).append("<br><br>");
                                 $('#area-loading-'+obj.componentID).remove();
                                 $('#'+areaname).append(view.layout);
                                 
