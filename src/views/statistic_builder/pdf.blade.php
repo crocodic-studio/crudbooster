@@ -368,6 +368,7 @@
         
         <!--<div class="statistic-row row">-->
             <page size="A4" class="statistic-row row"> 
+            	<H1>Test Report </h1>
             	<div id='area1' class="col-sm-12 connectedSortable">            	
 
 	            </div>
