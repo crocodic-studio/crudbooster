@@ -131,7 +131,7 @@
         @include("crudbooster::default.table")
       </div>      
     </div>
-    <div style="padding:5px;"><h5>{{$limit}} total records</h5></div>
+    <div style="padding:5px;margin-top:-15px;"><h5>{{$limit}} total records</h5></div>
 
    @if(!is_null($post_index_html) && !empty($post_index_html))
        {!! $post_index_html !!}
