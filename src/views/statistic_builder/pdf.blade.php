@@ -1,3 +1,4 @@
+	<script src="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/jQuery/jQuery-2.1.4.min.js') }}"></script> 
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">    
     <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
@@ -113,7 +114,7 @@
 
         function runSortables() 
         {
-            if ($('#txtDateRange').text()=='All')
+            /*if ($('#txtDateRange').text()=='All')
             {
                 var viewlink = "{{CRUDBooster::mainpath('view-component')}}/";
                 var addon = "";
@@ -122,8 +123,11 @@
             {
                 var viewlink = "{{CRUDBooster::mainpath('view-component-dates')}}/";
                 var addon = "/"+$('#testdate1').val()+"/"+$('#testdate2').val();
-            }
+            }*/
+            var viewlink = "{{CRUDBooster::mainpath('view-component')}}/";
+            var addon = "";
             $('.connectedSortable').each(function() {
+            	console.log("in sortable");
                 var areaname = $(this).attr('id');
                 
                 $.get("{{CRUDBooster::mainpath('list-component')}}/"+id_cms_statistics+"/"+areaname,function(response) {            
