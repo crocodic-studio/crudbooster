@@ -295,7 +295,7 @@
                 options: {
                     responsive: true,
                     legend: {
-                        position: 'top',
+                        display:true
                     },
                     title: {
                         display: false,
@@ -303,14 +303,14 @@
                     },
                     tooltipEvents: [],
                     showTooltips: true,
-                    /*onAnimationComplete: function() {
+                    onAnimationComplete: function() {
                         this.showTooltip(this.segments, true);
                     },
                     pieceLabel: {
                         render: 'percentage',
                         fontColor: '#000',
                         position: 'outside'
-                    }*/
+                    }
                 },
                 
             });	
