@@ -286,6 +286,8 @@
 
         };
 
+        console.log(barChartData);
+
 		$(function() {
 					
             $('#canvas-{{$componentID}}').remove(); // this is my <canvas> element
