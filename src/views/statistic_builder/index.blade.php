@@ -425,6 +425,9 @@
                     <input type='text' title="Date To" readonly class='form-control notfocus input_date' name="testdate2" id="testdate2" value='1970-01-01'/>                       
                 </div>
             </div>
+            <div class="col-sm-2" style="display:inline-block;margin-top:20px;">
+                <button type="button" class="btn btn-primary">Print</button>
+            </div>
 
         </div>
         <div class="statistic-row row">
