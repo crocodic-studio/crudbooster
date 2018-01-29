@@ -76,6 +76,7 @@
 			$datax = array_unique($datax);
 
 			$area_name = explode(';',$config->area_name);
+			$area_name = array_reverse ( $area_name);
 			$area_name_safe = $area_name;
 			foreach($area_name_safe as &$a) {
 				$a = str_slug($a,'_');
@@ -92,6 +93,7 @@
 				$data_result[] = $dr;
 			}			
 
+			$data_result = array_reverse ($data_result);
 			$data_result = json_encode($data_result);
 			// $data_result = preg_replace('/"([a-zA-Z_]+[a-zA-Z0-9_]*)":/','$1:',$data_result);
 
