@@ -65,9 +65,9 @@
 	    	$this->cbLoader();
 			$row               = CRUDBooster::first($this->table,['slug'=>$slug]);
 			$id_cms_statistics = $row->id;
-			$page_title        = $row->name;	
+			$page_title        = $row->name;				
 			$ispdf			   = false;	    				
-	    	return view('crudbooster::statistic_builder.show',compact('page_title','id_cms_statistics','ispdf'));
+	    	return view('crudbooster::statistic_builder.show',compact('page_title','id_cms_statistics','ispdf','slug'));
 	    }
 
 	    public function getBuilder($id_cms_statistics) {
