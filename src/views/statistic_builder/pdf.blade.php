@@ -224,7 +224,7 @@
     
         
             <div id="overlay" class="no-print">
-              <div id="text" class="no-print">Creating Report, if it takes longer than 5 seconds, print on browser.</div>
+              <div id="text" class="no-print">Creating Report, please wait...</div>
             </div>
         <!--<div class="statistic-row row">-->
             <page id="pagereport" size="A4" class="statistic-row row"> 
