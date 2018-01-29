@@ -122,7 +122,7 @@
     	</div>
 		
 		<script type="text/javascript">
-        function getBoxWidth(labelOpts, fontSize) {
+        /*function getBoxWidth(labelOpts, fontSize) {
           return labelOpts.usePointStyle ?
             fontSize * Math.SQRT2 :
           labelOpts.boxWidth;
@@ -181,7 +181,7 @@
               legend.handleEvent(e);
             }
           }
-        });
+        });*/
 
         var color = Chart.helpers.color;
         window.chartColors = {
