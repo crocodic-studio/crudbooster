@@ -228,7 +228,7 @@
             </div>
         <!--<div class="statistic-row row">-->
             <page id="pagereport" size="A4" class="statistic-row row"> 
-            	<H1>Test Report </h1>
+            	<H1>Report </h1>
             	<div id='area1' class="col-sm-12 connectedSortable">            	
 
 	            </div>
