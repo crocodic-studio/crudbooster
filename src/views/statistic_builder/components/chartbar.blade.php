@@ -239,6 +239,13 @@
                     title: {
                         display: false,
                         //text: 'Chart.js Bar Chart'
+                    },
+                    scales: {
+                        xAxes: [{
+                            ticks: {
+                                autoSkip: false
+                            }
+                        }]
                     }
                 }
             });	
