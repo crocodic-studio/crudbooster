@@ -111,6 +111,7 @@
 			}	
 			$data_resultcjs = json_encode($data_resultcjs);
 			$data_labelsjs = json_encode($data_labels);
+            print_r($data_labelsjs);
 
 			// $data_result = preg_replace('/"([a-zA-Z_]+[a-zA-Z0-9_]*)":/','$1:',$data_result);
 
