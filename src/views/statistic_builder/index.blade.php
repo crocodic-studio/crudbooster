@@ -426,7 +426,7 @@
                 </div>
             </div>
             <div class="col-sm-2" style="display:inline-block;margin-top:20px;">
-                <a href="{{CRUDBooster::mainpath('pdf')}}/{{$slug}}" class="btn btn-primary" style="width:100%;" role="button">Print/PDF</a>                
+                <a href="{{CRUDBooster::mainpath('pdf')}}/{{$slug}}" class="btn btn-primary" style="width:100%;" target="printout" role="button">Print/PDF</a>                
             </div>
 
         </div>
