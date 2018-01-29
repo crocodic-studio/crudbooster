@@ -426,7 +426,7 @@
                 </div>
             </div>
             <div class="col-sm-2" style="display:inline-block;margin-top:20px;">
-                <button type="button" class="btn btn-primary">Print</button>
+                <button type="button" id="printbtn" style="width:100%" class="btn btn-primary">Print/PDF</button>
             </div>
 
         </div>
