@@ -288,6 +288,8 @@
 
 		$(function() {
 					
+            $('#canvas-{{$componentID}}').remove(); // this is my <canvas> element
+            $('#container-{{$componentID}}').append('<canvas id="canvas-{{$componentID}}"><canvas>');
 			var ctx = document.getElementById("canvas-{{$componentID}}").getContext("2d");
             window.myBar = new Chart(ctx, {
                 type: 'pie',
