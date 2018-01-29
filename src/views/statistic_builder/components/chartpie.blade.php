@@ -274,6 +274,7 @@
             
 		var arr_datapts = $.parseJSON('{!! $dataPointsJS !!}')[0];
 		var arr_labels = {!! $data_labelsjs !!};
+        console.log(arr_labels);
         var barChartData = {
             labels: arr_labels,
             datasets: [{
