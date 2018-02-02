@@ -4,6 +4,7 @@
     <script src="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/datepicker/bootstrap-datepicker.js') }}" charset="UTF-8"></script>   
     <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.js"></script>
     <script src="{{ asset ('vendor/crudbooster/assets/js/Chart.PieceLabel.js') }}"></script> 
+    <script src="{{ asset ('vendor/crudbooster/assets/js/html2pdf.bundle.min.js') }}"></script> 
 
     <script type="text/javascript">
         var lang = '{{App::getLocale()}}';
@@ -298,7 +299,8 @@
             });
 
             $('#printpdf').click(function() {
-                  alert("pdf printed");
+                var element = document.getElementById('statistic-area');
+                html2pdf(element);
             });
         	
         	runSortables();
@@ -428,8 +430,8 @@
                     <input type='text' title="Date To" readonly class='form-control notfocus input_date' name="testdate2" id="testdate2" value='1970-01-01'/>                       
                 </div>
             </div>
-            <div class="col-sm-2" style="display:inline-block;margin-top:20px;"> <!-- {{CRUDBooster::mainpath('pdf')}}/{{$slug}} -->
-                <a href="#" id="printpdf" class="btn btn-primary" style="width:100%;" target="printout" role="button">Print/PDF</a>                
+            <div class="col-sm-2" style="display:inline-block;margin-top:20px;"> <!-- {{CRUDBooster::mainpath('pdf')}}/{{$slug}} target="printout" -->
+                <a href="#" id="printpdf" class="btn btn-primary" style="width:100%;" role="button">Print/PDF</a>                
             </div>
 
         </div>
