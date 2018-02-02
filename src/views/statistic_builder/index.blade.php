@@ -297,6 +297,9 @@
                   $(this).next('.input_date').datepicker('show');
             });
 
+            $('#printpdf').click(function() {
+                  alert("pdf printed");
+            });
         	
         	runSortables();
             
@@ -425,8 +428,8 @@
                     <input type='text' title="Date To" readonly class='form-control notfocus input_date' name="testdate2" id="testdate2" value='1970-01-01'/>                       
                 </div>
             </div>
-            <div class="col-sm-2" style="display:inline-block;margin-top:20px;">
-                <a href="{{CRUDBooster::mainpath('pdf')}}/{{$slug}}" class="btn btn-primary" style="width:100%;" target="printout" role="button">Print/PDF</a>                
+            <div class="col-sm-2" style="display:inline-block;margin-top:20px;"> <!-- {{CRUDBooster::mainpath('pdf')}}/{{$slug}} -->
+                <a href="#" id="printpdf" class="btn btn-primary" style="width:100%;" target="printout" role="button">Print/PDF</a>                
             </div>
 
         </div>

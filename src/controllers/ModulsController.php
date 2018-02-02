@@ -416,7 +416,7 @@ class ModulsController extends CBController {
 		$width = $post['width'];
 		$type = $post['type'];
 		$option = $post['option'];
-		$validation = $post['validation'];
+		$validation = $post['validation'];		
 
 		$row = DB::table('cms_moduls')->where('id',$id)->first();		
 
