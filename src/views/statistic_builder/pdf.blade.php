@@ -202,7 +202,10 @@
                                 if (smallcount>=totalcount)
                                 {
                                     console.log("finished smallcount");
-                                    setTimeout(function(){ window.print(); }, 1500);
+                                    setTimeout(function(){ 
+                                        $("#text").text("Report generated. Click print to print/PDF the report, or close this tab")
+                                        window.print(); 
+                                    }, 1500);
                                     //setTimeout(function(){ html2pdf(document.getElementById('pagereport'),{filename: makeid()+'.pdf',image:{ type: 'jpeg', quality: 1.00 },}); }, 2000);
                                     
                                 }
