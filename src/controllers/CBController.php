@@ -403,7 +403,7 @@ class CBController extends Controller {
 							$orderby_table = explode(".",$k)[0];
 							$k = explode(".",$k)[1];
 						}else{
-							$orderby_table = $table;
+							$orderby_table = $this->table;
 						}
 						$result->orderby($orderby_table.'.'.$k,$v);
 					}
@@ -416,7 +416,7 @@ class CBController extends Controller {
 						if(strpos($k, '.')!==FALSE) {
 							$orderby_table = explode(".",$k)[0];
 						}else{
-							$orderby_table = $table;
+							$orderby_table = $this->table;
 						}
 						$result->orderby($orderby_table.'.'.$k,$v);
 					}
