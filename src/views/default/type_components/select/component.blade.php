@@ -128,15 +128,11 @@
 						if (in_array($name, $options_fields))
 							$o = FALSE;
 						
-						foreach($selects_data as $d) {	
-							$o = ($option_id)
-							{
-
-							}										
-							if ($option_id)
+						foreach($selects_data as $d) {										
+							if ($o)
 								$val = $d->label;
 							else
-								$val    = $d->id;
+								$val = $d->id;
 							$select = ($value == $val)?"selected":"";							
 
 							echo "<option $select value=\"$val\">".$d->label."</option>";
