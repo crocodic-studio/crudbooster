@@ -124,9 +124,9 @@
 							$selects_data = $selects_data->orderby($orderby_table.'.'.$orderby_column,"asc")->get();
 						}										
 
-						$o = $option_id
-						/*if (in_array($name, $options_fields))
-							$o = FALSE;*/
+						$o = $option_id;
+						if (in_array($name, $options_fields))
+							$o = FALSE;
 						
 						foreach($selects_data as $d) {										
 							if ($o)
