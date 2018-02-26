@@ -124,8 +124,15 @@
 							$selects_data = $selects_data->orderby($orderby_table.'.'.$orderby_column,"asc")->get();
 						}										
 
+						$o = $option_id
+						if (in_array($name, $options_fields))
+							$o = FALSE;
 						
-						foreach($selects_data as $d) {											
+						foreach($selects_data as $d) {	
+							$o = ($option_id)
+							{
+
+							}										
 							if ($option_id)
 								$val = $d->label;
 							else

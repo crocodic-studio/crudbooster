@@ -78,6 +78,7 @@ class CBController extends Controller {
 	public $hide_form			  = array();
 	public $index_return 		  = FALSE; //for export
 	public $option_id			  = FALSE;
+	public $option_fields		  = array();
 
 
 	public function cbLoader() {
@@ -1072,7 +1073,7 @@ class CBController extends Controller {
 
 			if($ro['type']=='select' || $ro['type']=='select2') {
 				if($ro['datatable']) {
-					if(($inputdata=='') && ($this->option_id === FALSE)) {
+					if(($inputdata=='') && (($this->option_id === FALSE)||(in_array($name, $option_fields))) {
 						$this->arr[$name] = 0;
 					}
 				}				
@@ -1132,9 +1133,10 @@ class CBController extends Controller {
 		$page_menu       = Route::getCurrentRoute()->getActionName();
 		$command 		 = 'add';
 		$option_id		 = $this->option_id;
+		$option_fields	 = $this->option_fields;
 		$validator		 = $this->validation(NULL,true);
 
-		return view('crudbooster::default.form',compact('page_title','page_menu','command','option_id','validator'));
+		return view('crudbooster::default.form',compact('page_title','page_menu','command','option_id','validator','option_fields'));
 	}
 
 	public function postAddSave() {
@@ -1275,8 +1277,9 @@ class CBController extends Controller {
 		$command 		 = 'edit';
 		Session::put('current_row_id',$id);
 		$option_id		 = $this->option_id;
+		$option_fields	 = $this->option_fields;
 
-		return view('crudbooster::default.form',compact('id','row','page_menu','page_title','command','option_id'));
+		return view('crudbooster::default.form',compact('id','row','page_menu','page_title','command','option_id','option_fields'));
 	}
 
 	public function postEditSave($id) {
