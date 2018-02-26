@@ -125,7 +125,7 @@
 						}										
 
 						$o = $option_id;
-						if (in_array($name, $options_fields))
+						if (in_array($name, $option_fields))
 							$o = FALSE;
 						
 						foreach($selects_data as $d) {										
