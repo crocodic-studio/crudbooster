@@ -1073,7 +1073,7 @@ class CBController extends Controller {
 
 			if($ro['type']=='select' || $ro['type']=='select2') {
 				if($ro['datatable']) {
-					if(($inputdata=='') && (($this->option_id === FALSE)||(in_array($name, $option_fields)))) {
+					if(($inputdata=='') && (($this->option_id === FALSE)||(in_array($name, $this->option_fields)))) {
 						$this->arr[$name] = 0;
 					}
 				}				
