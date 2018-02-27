@@ -2,9 +2,11 @@
 
 @section('content')
 <script src="{{ asset ('vendor/crudbooster/assets/js/jquery.doubleScroll.js') }}"></script>
+<script src="{{ asset ('vendor/crudbooster/assets/js/jquery.stickytableheaders.js') }}"></script>
 <script type="text/javascript">
   $(document).ready(function() {
      $('#tablebody').doubleScroll({contentElement: $('#table_dashboard'), resetOnWindowResize: true});
+     $('#tablebody').stickyTableHeaders();
   });
 </script>
 
