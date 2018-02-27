@@ -4,7 +4,7 @@
 <script src="{{ asset ('vendor/crudbooster/assets/js/jquery.doubleScroll.js') }}"></script>
 <script type="text/javascript">
   $(document).ready(function() {
-     $('#table_dashboard').doubleScroll({resetOnWindowResize: true});
+     $('#tablebody').doubleScroll({resetOnWindowResize: true});
   });
 </script>
 
@@ -127,7 +127,7 @@
         <br style="clear:both"/>
 
       </div>
-      <div class="box-body table-responsive no-padding">
+      <div id="tablebody" class="box-body table-responsive no-padding">
         @include("crudbooster::default.table")
       </div>      
     </div>
