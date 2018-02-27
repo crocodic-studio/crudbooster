@@ -6,7 +6,7 @@
 <script type="text/javascript">
   $(document).ready(function() {
      $('#tablebody').doubleScroll({contentElement: $('#table_dashboard'), resetOnWindowResize: true});
-     //$('#tablebody').stickyTableHeaders();
+     //$('#tablebody').stickyTableHeaders({ scrollableArea: $(".box-body")[0], "fixedOffset": 2 });
   });
 </script>
 
