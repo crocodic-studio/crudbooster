@@ -562,6 +562,9 @@ class CBController extends Controller {
 	}
 
 	public function postExportData() {
+		ini_set('memory_limit', '1024M');
+		set_time_limit(180);
+		
 		$this->limit 		= Request::input('limit');
 		$this->index_return = TRUE;
 		$filetype 			= Request::input('fileformat');
