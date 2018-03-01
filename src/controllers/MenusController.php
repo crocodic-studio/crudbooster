@@ -201,11 +201,14 @@ use CRUDBooster;
 	  		}
 	  	}
 
+	  	$option_id		 = $this->option_id;
+		$option_fields	 = $this->option_fields;
+
 	  	$return_url = Request::fullUrl();
 
 	  	$page_title = 'Menu Management';
 
-	  	return view('crudbooster::menus_management',compact('menu_active','menu_inactive','privileges','id_cms_privileges','return_url','page_title'));
+	  	return view('crudbooster::menus_management',compact('menu_active','menu_inactive','privileges','id_cms_privileges','return_url','page_title','option_id','option_fields'));
 	  }
 
 	  public function hook_before_add(&$postdata) {
