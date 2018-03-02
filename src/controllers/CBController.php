@@ -1694,9 +1694,14 @@ class CBController extends Controller {
 		$action = ucwords($action);
 		$type = 'success';
 		$message = trans("crudbooster.alert_action",['action'=>$action]);
+		$custom_message=""
 
-		if($this->actionButtonSelected($id_selected,$button_name) === false) {
-		    $message = !empty($this->alert['message']) ? $this->alert['message'] : 'Error';
+		if($this->actionButtonSelected($id_selected,$button_name,$custom_message) === false) {
+			if ($custom_message == "")
+		    	$message = !empty($this->alert['message']) ? $this->alert['message'] : 'Error';
+		   	else
+		   		$message = $custom_message;
+		   	
 		    $type = !empty($this->alert['type']) ? $this->alert['type'] : 'danger';
 		}
 		
@@ -1767,7 +1772,7 @@ class CBController extends Controller {
 		}
 	}
 
-	public function actionButtonSelected($id_selected,$button_name) {
+	public function actionButtonSelected($id_selected,$button_name,&$custom_message="") {
     }
 
 	public function hook_query_index(&$query) {
