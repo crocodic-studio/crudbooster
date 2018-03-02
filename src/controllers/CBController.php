@@ -1770,7 +1770,7 @@ class CBController extends Controller {
 		}
 	}
 	//&$custom_message=""
-	public function actionButtonSelected($id_selected,$button_name,&custom_message) {
+	public function actionButtonSelected($id_selected,$button_name,&$custom_message) {
     }
 
 	public function hook_query_index(&$query) {
