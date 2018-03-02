@@ -1694,7 +1694,7 @@ class CBController extends Controller {
 		$action = ucwords($action);
 		$type = 'success';
 		$message = trans("crudbooster.alert_action",['action'=>$action]);
-		$custom_message=""
+		$custom_message="";
 
 		if($this->actionButtonSelected($id_selected,$button_name,$custom_message) === false) {
 		    $message = !empty($this->alert['message']) ? (($custom_message=="")?$this->alert['message']:$custom_message) : 'Error';
