@@ -1704,9 +1704,7 @@ class CBController extends Controller {
 		    $type = !empty($this->alert['type']) ? $this->alert['type'] : 'danger';
 		}
 		else
-		{
-			$message = (($custom_message=="")?$message:$custom_message)
-		}
+			$message = ($custom_message=="")?$message:$custom_message;
 		
 		return redirect()->back()->with(['message_type'=>$type,'message'=>$message]);
 	}
