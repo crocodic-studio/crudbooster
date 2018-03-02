@@ -1696,7 +1696,7 @@ class CBController extends Controller {
 		$message = trans("crudbooster.alert_action",['action'=>$action]);
 		$custom_message="";
 
-		if($this->actionButtonSelected($id_selected,$button_name) === false) {
+		if($this->actionButtonSelected($id_selected,$button_name,$custom_message) === false) {
 		    //$message = !empty($this->alert['message']) ? (($custom_message=="")?$this->alert['message']:$custom_message) : 'Error';
 		    $message = !empty($this->alert['message']) ? $this->alert['message'] : 'Error';
 
@@ -1770,7 +1770,7 @@ class CBController extends Controller {
 		}
 	}
 	//&$custom_message=""
-	public function actionButtonSelected($id_selected,$button_name) {
+	public function actionButtonSelected($id_selected,$button_name,&custom_message) {
     }
 
 	public function hook_query_index(&$query) {
