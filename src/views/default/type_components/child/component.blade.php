@@ -252,7 +252,7 @@
 													echo "<option value='$d->id'>".$d->$titleField."</option>";
 												}
 											}else{
-												$data = $col['dataenum'];
+												$data = explode(';' , $col['dataenum']); 
 												foreach($data as $d) {
 													$enum = explode('|',$d);
 													if(count($enum)==2) {
