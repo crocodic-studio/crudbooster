@@ -379,7 +379,7 @@
 										@if($c['type']=='select')
 											if ($('#{{$name.$c["name"]}} option:selected').text().startsWith('**'))
 											{
-												trRow += "<td class='{{$c['name']}}'>"
+												trRow += "<td class='{{$c['name']}}'>"+
 												"<input type='hidden' name='{{$name}}-{{$c['name']}}[]' value='"+$('#{{$name.$c["name"]}}').val()+"'/>"+
 												"</td>";
 											}
