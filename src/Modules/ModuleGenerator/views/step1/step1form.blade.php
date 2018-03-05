@@ -6,7 +6,7 @@
         <input type="hidden" name="id" value="{{$row->id}}">
 
         <div class="row">
-            <div class="col-md-3 form-group">
+            <div class="col-md-12 form-group">
                 <label for="">Table</label>
                 <select name="table" id="table" required class="select2 form-control" value="{{$row->table_name}}">
                     <option value="">{{cbTrans('text_prefix_option')}} Table</option>
@@ -24,13 +24,13 @@
         <div class="row">
 
 
-            <div class="col-md-3 form-group">
+            <div class="col-md-12 form-group">
                 <label for="">Module Name</label>
                 <input type="text" class="form-control" required name="name" value="{{$row->name}}">
             </div>
         </div>
         <div class="row">
-            <div class="col-md-3  form-group">
+            <div class="col-md-12  form-group">
                 <label for="">Icon</label>
                 <select name="icon" id="icon" required class="select2 form-control">
                     @php
@@ -43,7 +43,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-3 form-group">
+            <div class="col-md-12 form-group">
                 <label for="">Module Slug</label>
                 <input type="text" class="form-control" required name="path" value="{{$row->path}}">
                 <div class="help-block">
