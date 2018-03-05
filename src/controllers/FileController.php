@@ -15,7 +15,8 @@ class FileController extends Controller
     public function getPreview($one, $two = null, $three = null, $four = null, $five = null)
     {
         // array_filter() filters out the falsy values from array.
-        $filename = array_pop(array_filter([$one, $two, $three, $four, $five]));
+        $params = array_filter([$one, $two, $three, $four, $five]);        
+        $filename = array_pop($params);
         $fullFilePath = implode(DIRECTORY_SEPARATOR, array_filter(['uploads', $one, $two, $three, $four, $five]));
 
         $fullStoragePath = storage_path('app/'.$fullFilePath);
