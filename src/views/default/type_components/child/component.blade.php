@@ -377,9 +377,19 @@
 									var trRow = '<tr>';
 									@foreach($form['columns'] as $c)
 										@if($c['type']=='select')
-											trRow += "<td class='{{$c['name']}}'>"+$('#{{$name.$c["name"]}} option:selected').text()+
-											"<input type='hidden' name='{{$name}}-{{$c['name']}}[]' value='"+$('#{{$name.$c["name"]}}').val()+"'/>"+
-											"</td>";
+											if ($('#{{$name.$c["name"]}} option:selected').text().startsWith('**'))
+											{
+												trRow += "<td class='{{$c['name']}}'>"
+												"<input type='hidden' name='{{$name}}-{{$c['name']}}[]' value='"+$('#{{$name.$c["name"]}}').val()+"'/>"+
+												"</td>";
+											}
+											else
+											{
+												trRow += "<td class='{{$c['name']}}'>"+$('#{{$name.$c["name"]}} option:selected').text()+
+												"<input type='hidden' name='{{$name}}-{{$c['name']}}[]' value='"+$('#{{$name.$c["name"]}}').val()+"'/>"+
+												"</td>";		
+											}
+
 										@elseif($c['type']=='radio')
 											trRow += "<td class='{{$c['name']}}'><span class='td-label'>"+$('.{{$name.$c["name"]}}:checked').val()+"</span>"+
 											"<input type='hidden' name='{{$name}}-{{$c['name']}}[]' value='"+$('.{{$name.$c["name"]}}:checked').val()+"'/>"+
