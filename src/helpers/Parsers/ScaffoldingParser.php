@@ -14,7 +14,7 @@ class ScaffoldingParser
             $item = trim($item, '[');
             $item = trim($item, '];');
             $item = trim($item);
-            $item = trim(preg_replace("/[\n\r\t]/", "", $item));
+            $item = trim(preg_replace("/[\n\r\t]/", " ", $item));
             $strSplit = str_split($item);
             $innerCount = 0;
             foreach ($strSplit as $e => $s) {
@@ -44,6 +44,7 @@ class ScaffoldingParser
                     $val = trim(str_replace("'options'=>", "", $s));
                 } elseif (strpos($s, 'callback')) {
                     $key = 'callback';
+                    $s = str_replace("return","return ",$s);
                     $val = trim(str_replace(["'callback'=>function(\$row) {", "'callback'=>function(\$row){"], "", $s));
                     $val = substr($val, 0, -1); //to remove last }
                 } else {
