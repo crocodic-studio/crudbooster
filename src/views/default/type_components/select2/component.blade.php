@@ -160,7 +160,7 @@
 						?>
 					@else
 						@if($form['datatable_ajax'] == false)
-							<option value=''>{{trans('crudbooster.text_prefix_option')}} {{$form['label']}}</option>
+							<option value='0'>{{trans('crudbooster.text_prefix_option')}} {{$form['label']}}</option>
 							<?php 
 								$select_table = explode(',',$form['datatable'])[0];
 								$select_title = explode(',',$form['datatable'])[1];
