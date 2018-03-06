@@ -175,11 +175,8 @@
 
                   </form><!--END FORM TABLE-->
 
-            <p>{!! urldecode(str_replace("/?","?",$result->appends(Request::all())->render())) !!}</p>
-
-
-
-
+            <div class="col-md-8">{!! urldecode(str_replace("/?","?",$result->appends(Request::all())->render())) !!}</div>
+            <div class="col-md-4" style="margin:30px 0;"><span class="pull-right">{{ trans("crudbooster.filter_rows_total") }}: {{ $result->count() }} {{ trans("crudbooster.filter_rows_of") }} {{ $result->total() }}</span></div>
 
             @if($columns)
             @push('bottom')
