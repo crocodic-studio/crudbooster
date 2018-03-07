@@ -3,7 +3,7 @@
 Route::group([
     'middleware' => ['web', \crocodicstudio\crudbooster\middlewares\CBSuperadmin::class],
     'prefix' => cbAdminPath(),
-    'namespace' => '\crocodicstudio\crudbooster\Modules\StatisticModule',
+    'namespace' => cbModulesNS('StatisticModule'),
 ], function () {
     Route::get('statistic-builder/', ['uses' => 'AdminStatisticBuilderController@getIndex', 'as' => 'AdminStatisticBuilderControllerGetIndex']);
     Route::get('statistic-builder/show-dashboard', ['uses' => 'AdminStatisticBuilderController@getShowDashboard', 'as' => 'AdminStatisticBuilderControllerGetShowDashboard']);
@@ -33,12 +33,12 @@ Route::group([
     Route::post('statistic-builder/find-data', ['uses' => 'AdminStatisticBuilderController@postFindData', 'as' => 'AdminStatisticBuilderControllerPostFindData',]);
     Route::post('statistic-builder/add-save', ['uses' => 'AdminStatisticBuilderController@postAddSave', 'as' => 'AdminStatisticBuilderControllerPostAddSave',]);
     Route::post('statistic-builder/edit-save/{one?}', ['uses' => 'AdminStatisticBuilderController@postEditSave', 'as' => 'AdminStatisticBuilderControllerPostEditSave',]);
-    Route::post('statistic-builder/done-import', ['uses' => 'AdminStatisticBuilderController@postDoneImport', 'as' => 'AdminStatisticBuilderControllerPostDoneImport',]);
+    //Route::post('statistic-builder/done-import', ['uses' => 'AdminStatisticBuilderController@postDoneImport', 'as' => 'AdminStatisticBuilderControllerPostDoneImport',]);
     Route::post('statistic-builder/do-import-chunk', ['uses' => 'AdminStatisticBuilderController@postDoImportChunk', 'as' => 'AdminStatisticBuilderControllerPostDoImportChunk',]);
-    Route::post('statistic-builder/do-upload-import-data', ['uses' => 'AdminStatisticBuilderController@postDoUploadImportData', 'as' => 'AdminStatisticBuilderControllerPostDoUploadImportData',]);
+    //Route::post('statistic-builder/do-upload-import-data', ['uses' => 'AdminStatisticBuilderController@postDoUploadImportData', 'as' => 'AdminStatisticBuilderControllerPostDoUploadImportData',]);
     Route::post('statistic-builder/action-selected', ['uses' => 'AdminStatisticBuilderController@postActionSelected', 'as' => 'AdminStatisticBuilderControllerPostActionSelected',]);
-    Route::post('statistic-builder/upload-summernote', ['uses' => 'AdminStatisticBuilderController@postUploadSummernote', 'as' => 'AdminStatisticBuilderControllerPostUploadSummernote',]);
-    Route::post('statistic-builder/upload-file', ['uses' => 'AdminStatisticBuilderController@postUploadFile', 'as' => 'AdminStatisticBuilderControllerPostUploadFile',]);
+    //Route::post('statistic-builder/upload-summernote', ['uses' => 'AdminStatisticBuilderController@postUploadSummernote', 'as' => 'AdminStatisticBuilderControllerPostUploadSummernote',]);
+    //Route::post('statistic-builder/upload-file', ['uses' => 'AdminStatisticBuilderController@postUploadFile', 'as' => 'AdminStatisticBuilderControllerPostUploadFile',]);
 
 });
 

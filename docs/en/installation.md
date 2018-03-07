@@ -20,7 +20,7 @@ CRUDBooster is CRUD Generator for laravel, with the most important features web 
   - Tokenizer
   - FileInfo
 
-## Installation
+## How To Install
 1. Open the terminal, navigate to your project directory.
 ```php
 $ composer require crocodicstudio/crudbooster
@@ -43,7 +43,7 @@ DB_PASSWORD=**password**
 $ php artisan crudbooster:install
 ```
 
-## Update
+## How To Update
 - Open the terminal, navigate to your project directory.
 ```php
 $ composer require crocodicstudio/crudbooster

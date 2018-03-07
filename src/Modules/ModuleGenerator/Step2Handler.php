@@ -26,7 +26,7 @@ class Step2Handler
         $hooks = ['hookQueryIndex', 'hookRowIndex', 'hookBeforeAdd', 'hookAfterAdd',
             'hookBeforeEdit', 'hookAfterEdit', 'hookBeforeDelete', 'hookAfterDelete',];
         foreach($hooks as $hook){
-            $data[$hook] = readMethodContent($controllerCode, $hook);
+            $data[$hook] = FileManipulator::readMethodContent($controllerCode, $hook);
         }
 
         return view('CbModulesGen::step2', $data);
@@ -49,14 +49,14 @@ class Step2Handler
         $fileResult .= "\n            # END COLUMNS DO NOT REMOVE THIS LINE\n\n            ";
         $fileResult .= trim($rawAfter[1]);
 
-        $fileResult = writeMethodContent($fileResult, 'hookQueryIndex', g('hookQueryIndex'));
-        $fileResult = writeMethodContent($fileResult, 'hookRowIndex', g('hookRowIndex'));
-        $fileResult = writeMethodContent($fileResult, 'hookBeforeAdd', g('hookBeforeAdd'));
-        $fileResult = writeMethodContent($fileResult, 'hookAfterAdd', g('hookAfterAdd'));
-        $fileResult = writeMethodContent($fileResult, 'hookBeforeEdit', g('hookBeforeEdit'));
-        $fileResult = writeMethodContent($fileResult, 'hookAfterEdit', g('hookAfterEdit'));
-        $fileResult = writeMethodContent($fileResult, 'hookBeforeDelete', g('hookBeforeDelete'));
-        $fileResult = writeMethodContent($fileResult, 'hookAfterDelete', g('hookAfterDelete'));
+        $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookQueryIndex', g('hookQueryIndex'));
+        $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookRowIndex', g('hookRowIndex'));
+        $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookBeforeAdd', g('hookBeforeAdd'));
+        $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookAfterAdd', g('hookAfterAdd'));
+        $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookBeforeEdit', g('hookBeforeEdit'));
+        $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookAfterEdit', g('hookAfterEdit'));
+        $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookBeforeDelete', g('hookBeforeDelete'));
+        $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookAfterDelete', g('hookAfterDelete'));
 
         file_put_contents($controller_path, $fileResult);
 

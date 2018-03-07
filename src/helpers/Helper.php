@@ -8,6 +8,13 @@
 | ---------------------------------------------------------------------------------------------------------------
 |
 */
+if (! function_exists('cbModulesNS')) {
+    function cbModulesNS($path = '')
+    {
+        return '\crocodicstudio\crudbooster\Modules\\'.$path;
+    }
+}
+
 if (! function_exists('cbAdminPath')) {
     function cbAdminPath()
     {
@@ -34,18 +41,18 @@ if (! function_exists('is_checked')) {
         switch ($format) {
             case 'JSON':
                 $valueFormat = json_decode($value, true);
-                $checked = (in_array($option_value, $valueFormat)) ? "checked" : "";
                 break;
-            default:
             case 'COMMA_SEPARATOR':
                 $valueFormat = explode(', ', $value);
-                $checked = (in_array($option_value, $valueFormat)) ? "checked" : "";
                 break;
             case 'SEMICOLON_SEPARATOR':
                 $valueFormat = explode('; ', $value);
-                $checked = (in_array($option_value, $valueFormat)) ? "checked" : "";
+                break;
+            default:
+                $valueFormat = [];
                 break;
         }
+        $checked = (in_array($option_value, $valueFormat)) ? "checked" : "";
 
         return $checked;
     }
@@ -97,175 +104,6 @@ if (! function_exists('getTablesList')) {
         }
 
         return $tables_list;
-    }
-}
-
-if (! function_exists('readMethodContent')) {
-    function readMethodContent($code, $findMethod)
-    {
-        $functionToFind = $findMethod;
-
-        $codeArray = explode("\n", $code);
-        $tagBuka = 0;
-        $tagTutup = 0;
-        $tagPembukas = [];
-        $tagPentutups = [];
-        $methodIndex = [];
-        $indentCount = 0;
-        $methodAccessCandidate = ['public', 'private'];
-
-        $e = 0;
-        foreach ($codeArray as &$line) {
-
-            // if($line=='') continue;
-
-            if (strpos($line, 'function '.$functionToFind.'(') !== false) {
-                $tagBuka = $e;
-                $indentCount = substr_count($line, "\t");
-            }
-
-            if (stripos($line, '}') !== false) {
-                $tagPentutups[$e] = $e;
-            }
-
-            if (stripos($line, '{') !== false) {
-                $tagPembukas[$e] = $e;
-            }
-
-            foreach ($methodAccessCandidate as $m) {
-                if (strpos($line, $m) !== false) {
-                    $methodIndex[] = $e;
-                    break;
-                }
-            }
-
-            if (strpos($line, ' function ') !== false) {
-                $methodIndex[] = $e;
-            }
-
-            $e++;
-        }
-
-        $methodIndex = array_unique($methodIndex);
-        $methodIndex = array_values($methodIndex); //reset keys
-
-        $keyTagBukaInMethodIndex = array_search($tagBuka, $methodIndex);
-        $totalMethodIndex = count($methodIndex) - 1;
-        $methodNextIndex = ($totalMethodIndex == $keyTagBukaInMethodIndex) ? $keyTagBukaInMethodIndex : $keyTagBukaInMethodIndex + 1;
-
-        $findIndexPenutup = 0;
-        $tagPentutups = array_values($tagPentutups);
-
-        if ($tagBuka == end($methodIndex)) {
-            $finalTagPenutup = $tagPentutups[count($tagPentutups) - 2];
-        } else {
-            foreach ($tagPentutups as $i => $tp) {
-                if ($tp > $methodIndex[$methodNextIndex]) {
-                    $finalTagPenutup = $tagPentutups[$i - 1];
-                    break;
-                }
-            }
-        }
-
-        $content = [];
-        foreach ($codeArray as $i => $c) {
-            if ($i > $tagBuka && $i < $finalTagPenutup) {
-                $content[] = $c;
-            }
-        }
-
-        return implode("\n", $content);
-    }
-}
-
-if (! function_exists('writeMethodContent')) {
-    function writeMethodContent($code, $findMethod, $stringContent)
-    {
-        $functionToFind = $findMethod;
-        $stringToInsert = $stringContent;
-
-        $codeArray = explode("\n", $code);
-        $tagBuka = 0;
-        $tagTutup = 0;
-        $tagPembukas = [];
-        $tagPentutups = [];
-        $methodIndex = [];
-        $indentCount = 0;
-        $methodAccessCandidate = ['public', 'private'];
-
-        $e = 0;
-        foreach ($codeArray as &$a) {
-
-            // if($a=='') continue;
-
-            if (strpos($a, 'function '.$functionToFind.'(') !== false) {
-                $tagBuka = $e;
-                $indentCount = substr_count($a, "\t");
-            }
-
-            if (stripos($a, '}') !== false) {
-                $tagPentutups[$e] = $e;
-            }
-
-            if (stripos($a, '{') !== false) {
-                $tagPembukas[$e] = $e;
-            }
-
-            foreach ($methodAccessCandidate as $m) {
-                if (strpos($a, $m) !== false) {
-                    $methodIndex[] = $e;
-                    break;
-                }
-            }
-
-            if (strpos($a, ' function ') !== false) {
-                $methodIndex[] = $e;
-            }
-
-            $e++;
-        }
-
-        $methodIndex = array_unique($methodIndex);
-        $methodIndex = array_values($methodIndex); //reset keys
-
-        $keyTagBukaInMethodIndex = array_search($tagBuka, $methodIndex);
-        $totalMethodIndex = count($methodIndex) - 1;
-        $methodNextIndex = ($totalMethodIndex == $keyTagBukaInMethodIndex) ? $keyTagBukaInMethodIndex : $keyTagBukaInMethodIndex + 1;
-
-        $findIndexPenutup = 0;
-        $tagPentutups = array_values($tagPentutups);
-        if ($tagBuka == end($methodIndex)) {
-            $finalTagPenutup = $tagPentutups[count($tagPentutups) - 2];
-        } else {
-            foreach ($tagPentutups as $i => $tp) {
-                if ($tp > $methodIndex[$methodNextIndex]) {
-                    $finalTagPenutup = $tagPentutups[$i - 1];
-                    break;
-                }
-            }
-        }
-
-        //Removing Content Of Method
-        foreach ($codeArray as $i => $c) {
-            if ($i > $tagBuka && $i < $finalTagPenutup) {
-                unset($codeArray[$i]);
-            }
-        }
-
-        //Insert Content To Method
-        $stringToInsertArray = explode("\n", trim($stringToInsert));
-        foreach ($stringToInsertArray as $i => &$s) {
-            $s = str_repeat("\t", $indentCount + 2).trim($s);
-        }
-
-        $stringToInsert = implode("\n", $stringToInsertArray);
-        foreach ($codeArray as $i => $c) {
-            if ($i == $tagBuka) {
-                array_splice($codeArray, $i + 1, 0, [$stringToInsert]);
-            }
-        }
-
-        return implode("\n", $codeArray);
     }
 }
 
@@ -359,15 +197,14 @@ if (! function_exists('rrmdir')) {
         if (! is_dir($dir)) {
             return;
         }
-        $objects = scandir($dir);
-        foreach ($objects as $object) {
-            if ($object == "." || $object == "..") {
+        foreach (scandir($dir) as $object) {
+            if (in_array($object, ['.', '..'])) {
                 continue;
             }
-            if (is_dir($dir."/".$object)) {
-                rrmdir($dir."/".$object);
+            if (is_dir($dir.'/'.$object)) {
+                rrmdir($dir.'/'.$object);
             } else {
-                unlink($dir."/".$object);
+                unlink($dir.'/'.$object);
             }
         }
         rmdir($dir);
@@ -431,7 +268,6 @@ if (! function_exists('findSelected')) {
      * @param $rawvalue
      * @param $form
      * @param $option_value
-     * @param $value
      * @return string
      */
     function findSelected($rawvalue, $form, $option_value)
@@ -447,17 +283,14 @@ if (! function_exists('findSelected')) {
 
         switch ($form['options']['multiple_result_format']) {
             case 'JSON':
-                $value = json_decode($rawvalue, true) ?: [];
-                $selected = (in_array($option_value, $value)) ? "selected" : "";
+                $selected = (in_array($option_value, json_decode($rawvalue, true) ?: [])) ? "selected" : "";
                 break;
             default:
             case 'COMMA_SEPARATOR':
-                $value = explode(', ', $rawvalue);
-                $selected = (in_array($option_value, $value)) ? "selected" : "";
+                $selected = (in_array($option_value, explode(', ', $rawvalue))) ? "selected" : "";
                 break;
             case 'SEMICOLON_SEPARATOR':
-                $value = explode('; ', $rawvalue);
-                $selected = (in_array($option_value, $value)) ? "selected" : "";
+                $selected = (in_array($option_value, explode('; ', $rawvalue))) ? "selected" : "";
                 break;
         }
         return $selected;
@@ -474,6 +307,7 @@ if (! function_exists('array_get_keys')) {
     function array_get_keys(array $_array, array $keys, $default = null)
     {
         $_defaults = array_fill_keys($keys, $default);
+
         return array_merge($_defaults, array_intersect_key($_array, $_defaults));
     }
 }

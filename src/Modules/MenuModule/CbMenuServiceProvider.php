@@ -3,7 +3,6 @@
 namespace crocodicstudio\crudbooster\Modules\MenuModule;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Foundation\AliasLoader;
 
 class CbMenuServiceProvider extends ServiceProvider
 {

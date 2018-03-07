@@ -23,7 +23,7 @@
 
             <div class="panel-body" style="padding:20px 0px 0px 0px">
                 <?php
-                $action = (@$row) ? CRUDBooster::mainpath("edit-save/$row->id") : CRUDBooster::mainpath("add-save");
+                $action = (@$row) ? CRUDBooster::mainpath("edit-save/$id") : CRUDBooster::mainpath("add-save");
                 $return_url = ($return_url) ?: request('return_url');
                 ?>
                 <form class='form-horizontal' method='post' id="form" enctype="multipart/form-data"
@@ -44,8 +44,9 @@
                         @endif
                     </div><!-- /.box-body -->
 
+                    <br><br><br><br><br>
                     <div class="box-footer" style="background: #F5F5F5">
-
+                        <br>
                         <div class="form-group">
                             <label class="control-label col-sm-2"></label>
                             <div class="col-sm-10">
