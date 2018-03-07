@@ -1,8 +1,8 @@
 <?php
 
-namespace crocodicstudio\crudbooster\controllers;
+namespace crocodicstudio\crudbooster\Modules\NotificationsModule;
 
-use crocodicstudio\crudbooster\controllers\Forms\NotificationForm;
+use crocodicstudio\crudbooster\controllers\CBController;
 use CRUDBooster;
 
 class AdminNotificationsController extends CBController
@@ -44,9 +44,7 @@ class AdminNotificationsController extends CBController
             ->take(25)
             ->get();
 
-        $total = count($rows);
-
-        return response()->json(['items' => $rows, 'total' => $total]);
+        return response()->json(['items' => $rows, 'total' => count($rows)]);
     }
 
     public function getRead($id)

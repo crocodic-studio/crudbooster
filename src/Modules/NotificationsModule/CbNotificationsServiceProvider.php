@@ -1,10 +1,10 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\MenuModule;
+namespace crocodicstudio\crudbooster\Modules\NotificationsModule;
 
 use Illuminate\Support\ServiceProvider;
 
-class CbMenuServiceProvider extends ServiceProvider
+class CbNotificationsServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
@@ -13,8 +13,7 @@ class CbMenuServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app['view']->addNamespace('CbMenu', __DIR__.'/views');
-        $this->loadRoutesFrom( __DIR__.'/menus_routes.php');
+        $this->loadRoutesFrom( __DIR__.'/notifications_routes.php');
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\controllers\Forms;
+namespace crocodicstudio\crudbooster\Modules\EmailTemplates;
 
 class EmailTemplateForm
 {

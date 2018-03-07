@@ -44,8 +44,9 @@
                         @endif
                     </div><!-- /.box-body -->
 
+                    <br><br><br><br><br>
                     <div class="box-footer" style="background: #F5F5F5">
-
+                        <br>
                         <div class="form-group">
                             <label class="control-label col-sm-2"></label>
                             <div class="col-sm-10">

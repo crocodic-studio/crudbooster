@@ -2,7 +2,7 @@
 
 use crocodicstudio\crudbooster\middlewares\CBSuperadmin;
 
-$namespace = '\crocodicstudio\crudbooster\Modules\ApiGeneratorModule';
+$namespace = cbModulesNS('ApiGeneratorModule');
 
 Route::group(['middleware' => ['web'], 'namespace' => $namespace], function () {
     Route::get('api/doc', ['uses' => 'AdminApiGeneratorController@apiDocumentation', 'as' => 'apiDocumentation']);
@@ -42,12 +42,12 @@ Route::group([
     Route::post('api-generator/find-data', ['uses' => 'AdminApiGeneratorController@postFindData', 'as' => 'AdminApiGeneratorControllerPostFindData',]);
     Route::post('api-generator/add-save', ['uses' => 'AdminApiGeneratorController@postAddSave', 'as' => 'AdminApiGeneratorControllerPostAddSave',]);
     Route::post('api-generator/edit-save/{id?}', ['uses' => 'AdminApiGeneratorController@postEditSave', 'as' => 'AdminApiGeneratorControllerPostEditSave',]);
-    Route::post('api-generator/done-import', ['uses' => 'AdminApiGeneratorController@postDoneImport', 'as' => 'AdminApiGeneratorControllerPostDoneImport',]);
+    //Route::post('api-generator/done-import', ['uses' => 'AdminApiGeneratorController@postDoneImport', 'as' => 'AdminApiGeneratorControllerPostDoneImport',]);
     Route::post('api-generator/do-import-chunk', ['uses' => 'AdminApiGeneratorController@postDoImportChunk', 'as' => 'AdminApiGeneratorControllerPostDoImportChunk',]);
-    Route::post('api-generator/do-upload-import-data', ['uses' => 'AdminApiGeneratorController@postDoUploadImportData', 'as' => 'AdminApiGeneratorControllerPostDoUploadImportData',]);
+    //Route::post('api-generator/do-upload-import-data', ['uses' => 'AdminApiGeneratorController@postDoUploadImportData', 'as' => 'AdminApiGeneratorControllerPostDoUploadImportData',]);
     Route::post('api-generator/action-selected', ['uses' => 'AdminApiGeneratorController@postActionSelected', 'as' => 'AdminApiGeneratorControllerPostActionSelected',]);
-    Route::post('api-generator/upload-summernote', ['uses' => 'AdminApiGeneratorController@postUploadSummernote', 'as' => 'AdminApiGeneratorControllerPostUploadSummernote',]);
-    Route::post('api-generator/upload-file', ['uses' => 'AdminApiGeneratorController@postUploadFile', 'as' => 'AdminApiGeneratorControllerPostUploadFile',]);
+    //Route::post('api-generator/upload-summernote', ['uses' => 'AdminApiGeneratorController@postUploadSummernote', 'as' => 'AdminApiGeneratorControllerPostUploadSummernote',]);
+    //Route::post('api-generator/upload-file', ['uses' => 'AdminApiGeneratorController@postUploadFile', 'as' => 'AdminApiGeneratorControllerPostUploadFile',]);
 });
 
 
