@@ -758,6 +758,7 @@ class CBController extends Controller {
 			}else{
 				$rows->addselect($orderby_table.'.'.$orderby_column.' as text');
 				if($q) $rows->where($orderby_table.'.'.$orderby_column,'like','%'.$q.'%');
+				$rows->orderBy($orderby_table.'.'.$orderby_column,'asc');
 			}
 
 			$result          = array();
