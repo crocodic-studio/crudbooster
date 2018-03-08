@@ -1469,7 +1469,7 @@ class CRUDBooster  {
 	    | @button_name = the name of button
 	    |
 	    */
-	    public function actionButtonSelected($id_selected,$button_name) {
+	    public function actionButtonSelected($id_selected,$button_name,&$custom_message = "") {
 	        //Your code here
 	            
 	    }
