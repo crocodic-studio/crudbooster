@@ -37,14 +37,14 @@
                         $pic_small = $pic;
                         ?>
                         @if (request('fileformat') == 'pdf')
-                            <td><a data-lightbox='roadtrip' rel='group_{{$table}}' title='{!! $col['label'] !!}: {!! $title !!}' href='"{!! $pic !!}"' >
-                            <img class='img-circle' width='40px' height='40px' src='"{!! $pic_small !!}"'/></a></td>
+                            <td><a data-lightbox='roadtrip' rel='group_{{$table}}' title='{!! $col['label'] !!}: {!! $title !!}' href='"{!! $pic !!}"'>
+                                    <img class='img-circle' width='40px' height='40px' src='"{!! $pic_small !!}"'/></a></td>
                         @else
                             <td>{!! $pic !!}</td>
                         @endif
                     @elseif (@$col['download'])
                         <?php $url = (strpos($value, 'http://') !== FALSE) ? $value : asset($value); ?>
-                        <td><a class='btn btn-sm btn-primary' href='{!! $url !!}' target='_blank' title='Download File'>Download</a> </td>
+                        <td><a class='btn btn-sm btn-primary' href='{!! $url !!}' target='_blank' title='Download File'>Download</a></td>
                     @else
                         <?php
                         //limit character
@@ -56,24 +56,21 @@
                         if ($col['nl2br']) {
                             $value = nl2br($value);
                         }
-
-                        if (Request::input('fileformat') == 'pdf') {
-                            if (! empty($col['callback_php'])) {
-
+                        ?>
+                        @if (Request::input('fileformat') == 'pdf')
+                            @if (! empty($col['callback_php']))
+                                <?php
                                 foreach ($row as $k => $v) {
                                     $col['callback_php'] = str_replace("[".$k."]", $v, $col['callback_php']);
                                 }
                                 @eval("\$value = ".$col['callback_php'].";");
-                            }
+                                ?>
+                            @endif
+                            {{--New method for callback--}}
+                            @if (isset($col['callback'])) <?php $value = call_user_func($col['callback'], $row); ?> @endif
+                        @endif
 
-                            //New method for callback
-                            if (isset($col['callback'])) {
-                                $value = call_user_func($col['callback'], $row);
-                            }
-                        }
-
-                ?>
-                    <td>{!! $value !!}</td>
+                        <td>{!! $value !!}</td>
                     @endif
                 @endforeach
             </tr>
