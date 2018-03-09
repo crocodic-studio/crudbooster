@@ -229,16 +229,7 @@ class ExecuteApi
                         }
                     }
 
-                    foreach ($rows as $k => $v) {
-                        $ext = \File::extension($v);
-                        if (in_array($ext, $uploads_format_candidate)) {
-                            $rows->$k = asset($v);
-                        }
-
-                        if (! in_array($k, $responses_fields)) {
-                            unset($row[$k]);
-                        }
-                    }
+                    $this->handleFile($rows, $uploads_format_candidate, $responses_fields, $row);
 
                     $result['api_status'] = 1;
                     $result['api_message'] = 'success';
@@ -530,5 +521,25 @@ class ExecuteApi
         }
 
         return $this->show($result, $debug_mode_message, $posts);
+    }
+
+    /**
+     * @param $rows
+     * @param $uploads_format_candidate
+     * @param $responses_fields
+     * @param $row
+     */
+    private function handleFile($rows, $uploads_format_candidate, $responses_fields, $row)
+    {
+        foreach ($rows as $k => $v) {
+            $ext = \File::extension($v);
+            if (in_array($ext, $uploads_format_candidate)) {
+                $rows->$k = asset($v);
+            }
+
+            if (! in_array($k, $responses_fields)) {
+                unset($row[$k]);
+            }
+        }
     }
 }
