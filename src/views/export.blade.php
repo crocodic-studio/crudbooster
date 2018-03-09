@@ -4,18 +4,12 @@
 <table border='1' width='100%' cellpadding='3' cellspacing="0" style='border-collapse: collapse;font-size:12px'>
     <thead>
     <tr>
-        <?php
-        foreach ($columns as $col) {
-
-            if (Request::get('columns')) {
-                if (! in_array($col['name'], Request::get('columns'))) {
-                    continue;
-                }
-            }
-            $colname = $col['label'];
-            echo "<th style='background:#eeeeee'>$colname</th>";
-        }
-        ?>
+        @foreach ($columns as $col)
+            @if (request('columns') && ! in_array($col['name'], request('columns')))
+                @continue
+            @endif
+            <th style='background:#eeeeee'>{!! $col['label'] !!}</th>
+        @endforeach
     </tr>
     </thead>
     <tbody>
@@ -26,15 +20,11 @@
     @else
         @foreach($result as $row)
             <tr>
+                @foreach ($columns as $col)
+                    @if (request('columns') && ! in_array($col['name'], request('columns')))
+                        @continue
+                    @endif
                 <?php
-                foreach ($columns as $col) {
-
-                    if (Request::get('columns')) {
-                        if (! in_array($col['name'], Request::get('columns'))) {
-                            continue;
-                        }
-                    }
-
                     $value = @$row->{$col['field']};
                     $title = @$row->{$title_field};
 
@@ -45,21 +35,14 @@
                         $pic = (strpos($value, 'http://') !== FALSE) ? $value : asset($value);
                         $pic_small = $pic;
                         if (Request::input('fileformat') == 'pdf') {
-                            echo "
-                <td><a data-lightbox='roadtrip' rel='group_{{$table}}' title='$col[label]: $title' href='".$pic."'><img
-                                class='img-circle' width='40px' height='40px' src='".$pic_small."'/></a></td>
-                ";
+                            echo " <td><a data-lightbox='roadtrip' rel='group_{{$table}}' title='$col[label]: $title' href='".$pic."' >
+                            <img class='img-circle' width='40px' height='40px' src='".$pic_small."'/></a></td> ";
                         } else {
-                            echo "
-                <td>$pic</td>
-                ";
+                            echo " <td>$pic</td> ";
                         }
                     } elseif (@$col['download']) {
                         $url = (strpos($value, 'http://') !== FALSE) ? $value : asset($value);
-                        echo "
-                <td><a class='btn btn-sm btn-primary' href='$url' target='_blank' title='Download File'>Download</a>
-                </td>
-                ";
+                        echo " <td><a class='btn btn-sm btn-primary' href='$url' target='_blank' title='Download File'>Download</a> </td> ";
                     } else {
 
                         //limit character
@@ -87,12 +70,10 @@
                             }
                         }
 
-                        echo "
-                <td>".$value."</td>
-                ";
+                        echo " <td>".$value."</td> ";
                     }
-                }
                 ?>
+                @endforeach
             </tr>
         @endforeach
     @endif
