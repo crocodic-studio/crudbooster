@@ -183,14 +183,10 @@ class DbInspector
                 //MySQL & SQL Server
                 $typedata = DB::select(DB::raw("select DATA_TYPE from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='$table' and COLUMN_NAME = '$field'"))[0]->DATA_TYPE;
             } catch (\Exception $e) {
-
+                $typedata = null;
             }
 
-            if (! $typedata) {
-                $typedata = 'varchar';
-            }
-
-            return $typedata;
+            return $typedata ?: 'varchar';
         });
     }
 
