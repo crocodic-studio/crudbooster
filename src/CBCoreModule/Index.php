@@ -2,6 +2,7 @@
 
 namespace crocodicstudio\crudbooster\CBCoreModule;
 
+use crocodicstudio\crudbooster\CBCoreModule\Index\FilterIndexRows;
 use crocodicstudio\crudbooster\controllers\CBController;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
@@ -68,7 +69,7 @@ class Index
 
         $filter_is_orderby = false;
         if (request('filter_column')) {
-            $filter_is_orderby = $this->_filterIndexRows($result);
+            $filter_is_orderby = app(FilterIndexRows::class)->filterIndexRows($result, request('filter_column'));
         }
 
         $data = $this->_orderAndPaginate($filter_is_orderby, $result, $limit, $data, $table);
@@ -305,69 +306,6 @@ class Index
             return ;
         }
         $result->where($this->table.'.deleted_at', '=', null);
-    }
-
-
-    /**
-     * @param $result
-     * @return array
-     */
-    private function _filterIndexRows($result)
-    {
-        $filter_is_orderby = false;
-        $filter_column = request('filter_column');
-        $result->where(function ($query) use ($filter_column) {
-            foreach ($filter_column as $key => $fc) {
-
-                $value = @$fc['value'];
-                $type = @$fc['type'];
-
-                if ($type == 'empty') {
-                    $query->whereNull($key)->orWhere($key, '');
-                    continue;
-                }
-
-                if ($type == 'between') {
-                    continue;
-                }
-                if (!$value || !$key || !$type) {
-                    continue;
-                }
-                switch ($type) {
-                    default:
-                        $query->where($key, $type, $value);
-                        break;
-                    case 'like':
-                    case 'not like':
-                        $query->where($key, $type, '%'.$value.'%');
-                        break;
-                    case 'in':
-                    case 'not in':
-                        $value = explode(',', $value);
-                        if ($value) {
-                            $query->whereIn($key, $value);
-                        }
-                    break;
-                }
-            }
-        });
-
-        foreach ($filter_column as $key => $fc) {
-            $value = @$fc['value'];
-            $type = @$fc['type'];
-            $sorting = @$fc['sorting'];
-
-            if ($sorting != '' && $key) {
-                $result->orderby($key, $sorting);
-                $filter_is_orderby = true;
-            }
-
-            if ($type == 'between' && $key && $value) {
-                $result->whereBetween($key, $value);
-            }
-        }
-
-        return $filter_is_orderby;
     }
 
 
