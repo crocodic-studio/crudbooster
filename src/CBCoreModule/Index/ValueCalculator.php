@@ -16,11 +16,17 @@ class ValueCalculator
         $title = @$row->{$this->cb->title_field};
         $label = $col['label'];
 
-        list($col, $value) = $this->image($col, $table, $value, $label, $title);
+        if (isset($col['image'])) {
+            list($col, $value) = $this->image($col, $table, $value, $label, $title);
+        }
 
-        list($col, $value) = $this->download($col, $value);
+        if (isset($col['download'])) {
+            list($col, $value) = $this->download($col, $value);
+        }
 
-        $value = $this->str_limit($col, $value);
+        if ($col['str_limit']) {
+            $value = $this->str_limit($col, $value);
+        }
 
         if ($col['nl2br']) {
             $value = nl2br($value);
@@ -56,9 +62,6 @@ class ValueCalculator
      */
     private function image($col, $table, $value, $label, $title)
     {
-        if (!isset($col['image'])) {
-            return [$col, $value];
-        }
         if ($value == '') {
             $value = "<a  data-lightbox='roadtrip' rel='group_{{$table}}' title='$label: $title' href='".asset('vendor/crudbooster/avatar.jpg')."'><img width='40px' height='40px' src='".asset('vendor/crudbooster/avatar.jpg')."'/></a>";
         } else {
@@ -76,9 +79,6 @@ class ValueCalculator
      */
     private function download($col, $value)
     {
-        if (!isset($col['download'])) {
-            return [$col, $value];
-        }
         $url = (strpos($value, 'http://')) ? $value : asset($value).'?download=1';
         if ($value) {
             $value = "<a class='btn btn-xs btn-primary' href='$url' target='_blank' title='Download File'><i class='fa fa-download'></i> Download</a>";
@@ -96,11 +96,6 @@ class ValueCalculator
      */
     private function str_limit($col, $value)
     {
-        if ($col['str_limit']) {
-            $value = trim(strip_tags($value));
-            $value = str_limit($value, $col['str_limit']);
-        }
-
-        return $value;
+        return str_limit(trim(strip_tags($value)), $col['str_limit']);
     }
 }
