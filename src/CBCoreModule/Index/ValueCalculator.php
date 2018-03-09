@@ -36,10 +36,7 @@ class ValueCalculator
             $value = call_user_func($col['callback'], $row);
         }
 
-        $datavalue = @unserialize($value);
-        $value = $this->includeLabels($datavalue);
-
-        return $value;
+        return $this->includeLabels($value);
     }
 
     /**
@@ -90,21 +87,23 @@ class ValueCalculator
     }
 
     /**
-     * @param $datavalue
+     * @param $value
      * @return string
      */
-    private function includeLabels($datavalue)
+    private function includeLabels($value)
     {
-        if ($datavalue) {
-            $prevalue = [];
-            foreach ($datavalue as $d) {
-                if ($d['label']) {
-                    $prevalue[] = $d['label'];
-                }
+        $datavalue = @unserialize($value);
+        if (!$datavalue) {
+            return $value;
+        }
+        $preValue = [];
+        foreach ($datavalue as $d) {
+            if ($d['label']) {
+                $preValue[] = $d['label'];
             }
-            if (count($prevalue)) {
-                $value = implode(", ", $prevalue);
-            }
+        }
+        if (count($preValue)) {
+            $value = implode(", ", $preValue);
         }
 
         return $value;
