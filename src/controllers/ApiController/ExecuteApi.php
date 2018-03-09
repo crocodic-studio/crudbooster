@@ -115,15 +115,13 @@ class ExecuteApi
             }
         }
 
-        $responses_fields = [];
-        $responses_fields = $this->prepareResponses($responses, $responses_fields);
+        $responses_fields = $this->prepareResponses($responses);
 
         $this->ctrl->hook_before($posts);
 
         $limit = ($posts['limit']) ?: 20;
         $offset = ($posts['offset']) ?: 0;
         $orderby = ($posts['orderby']) ?: $table.'.id,desc';
-        $uploads_format_candidate = explode(',', cbConfig("UPLOAD_TYPES"));
 
         unset($posts['limit'], $posts['offset'], $posts['orderby']);
 
@@ -196,7 +194,7 @@ class ExecuteApi
 
             $this->ctrl->hook_query($data);
             if ($action_type == 'list') {
-                list($result, $row) = $this->handleListAction($table, $orderby, $data, $result, $debug_mode_message, $row, $uploads_format_candidate, $responses_fields);
+                list($result, $row) = $this->handleListAction($table, $orderby, $data, $result, $debug_mode_message, $row, $responses_fields);
             }
             if ($action_type == 'detail') {
                 $result['api_status'] = 0;
@@ -229,7 +227,7 @@ class ExecuteApi
                         }
                     }
 
-                    $this->handleFile($rows, $uploads_format_candidate, $responses_fields, $row);
+                    $this->handleFile($rows, $responses_fields, $row);
 
                     $result['api_status'] = 1;
                     $result['api_message'] = 'success';
@@ -274,18 +272,19 @@ class ExecuteApi
 
     /**
      * @param $responses
-     * @param $responses_fields
+     * @param $responsesFields
      * @return array
      */
-    private function prepareResponses($responses, $responses_fields)
+    private function prepareResponses($responses)
     {
+        $responsesFields = [];
         foreach ($responses as $r) {
             if ($r['used']) {
-                $responses_fields[] = $r['name'];
+                $responsesFields[] = $r['name'];
             }
         }
 
-        return $responses_fields;
+        return $responsesFields;
     }
 
     /**
@@ -296,13 +295,12 @@ class ExecuteApi
      * @param $result
      * @param $debug_mode_message
      * @param $row
-     * @param $uploads_format_candidate
      * @param $responses_fields
      * @return array
      */
-    private function handleListAction($table, $orderby, $data, $result, $debug_mode_message, $row, $uploads_format_candidate, $responses_fields)
+    private function handleListAction($table, $orderby, $data, $result, $debug_mode_message, $row, $responses_fields)
     {
-
+        $uploads_format_candidate = explode(',', cbConfig("UPLOAD_TYPES"));
         $orderby_col = $table.'.id';
         $orderby_val = 'desc';
 
@@ -525,12 +523,12 @@ class ExecuteApi
 
     /**
      * @param $rows
-     * @param $uploads_format_candidate
      * @param $responses_fields
      * @param $row
      */
-    private function handleFile($rows, $uploads_format_candidate, $responses_fields, $row)
+    private function handleFile($rows, $responses_fields, $row)
     {
+        $uploads_format_candidate = explode(',', cbConfig("UPLOAD_TYPES"));
         foreach ($rows as $k => $v) {
             $ext = \File::extension($v);
             if (in_array($ext, $uploads_format_candidate)) {
