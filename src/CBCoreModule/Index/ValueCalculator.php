@@ -37,17 +37,7 @@ class ValueCalculator
         }
 
         $datavalue = @unserialize($value);
-        if ($datavalue !== false && $datavalue) {
-            $prevalue = [];
-            foreach ($datavalue as $d) {
-                if ($d['label']) {
-                    $prevalue[] = $d['label'];
-                }
-            }
-            if (count($prevalue)) {
-                $value = implode(", ", $prevalue);
-            }
-        }
+        $value = $this->includeLabels($datavalue);
 
         return $value;
     }
@@ -97,5 +87,26 @@ class ValueCalculator
     private function str_limit($col, $value)
     {
         return str_limit(trim(strip_tags($value)), $col['str_limit']);
+    }
+
+    /**
+     * @param $datavalue
+     * @return string
+     */
+    private function includeLabels($datavalue)
+    {
+        if ($datavalue) {
+            $prevalue = [];
+            foreach ($datavalue as $d) {
+                if ($d['label']) {
+                    $prevalue[] = $d['label'];
+                }
+            }
+            if (count($prevalue)) {
+                $value = implode(", ", $prevalue);
+            }
+        }
+
+        return $value;
     }
 }
