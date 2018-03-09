@@ -21,7 +21,7 @@ class ValueCalculator
         }
 
         if (isset($col['download'])) {
-            list($col, $value) = $this->download($col, $value);
+            $value = $this->download($value);
         }
 
         if ($col['str_limit']) {
@@ -40,12 +40,24 @@ class ValueCalculator
     }
 
     /**
-     * @param $col
+     * @param $value
+     * @return string
+     */
+    private function download($value)
+    {
+        $url = (strpos($value, 'http://')) ? $value : asset($value).'?download=1';
+        if (! $value) {
+            return " - ";
+        }
+        return "<a class='btn btn-xs btn-primary' href='$url' target='_blank' title='Download File'><i class='fa fa-download'>".cbTrans('button_download_file')."</i></a>";
+    }
+
+    /**
      * @param $table
      * @param $value
      * @param $label
      * @param $title
-     * @return array
+     * @return string
      */
     private function image($table, $value, $label, $title)
     {
@@ -54,23 +66,6 @@ class ValueCalculator
         }
         $pic = (strpos($value, 'http://') !== false) ? $value : asset($value);
         return "<a data-lightbox='roadtrip'  rel='group_{{$table}}' title='$label: $title' href='".$pic."'><img width='40px' height='40px' src='".$pic."'/></a>";
-    }
-
-    /**
-     * @param $col
-     * @param $value
-     * @return array
-     */
-    private function download($col, $value)
-    {
-        $url = (strpos($value, 'http://')) ? $value : asset($value).'?download=1';
-        if ($value) {
-            $value = "<a class='btn btn-xs btn-primary' href='$url' target='_blank' title='Download File'><i class='fa fa-download'></i> Download</a>";
-        } else {
-            $value = " - ";
-        }
-
-        return [$col, $value];
     }
 
     /**
