@@ -200,13 +200,13 @@ class DbInspector
      */
     public static function isForeignKeey($fieldName)
     {
-        $table = CRUDBooster::getTableForeignKey($fieldName);
         $cacheKey = 'isForeignKey_'.$fieldName;
 
         if (Cache::has($cacheKey)) {
             return Cache::get($cacheKey);
         }
 
+        $table = CRUDBooster::getTableForeignKey($fieldName);
         if (! $table) {
             return false;
         }
