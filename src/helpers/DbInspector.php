@@ -28,32 +28,7 @@ class DbInspector
             throw new \Exception("parseSqlTable can't determine the table");
         }
 
-        if (env('DB_CONNECTION') == 'sqlsrv') {
-            try {
-                $query = "
-						SELECT Col.Column_Name,Col.Table_Name from 
-						    INFORMATION_SCHEMA.TABLE_CONSTRAINTS Tab, 
-						    INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE Col 
-						WHERE 
-						    Col.Constraint_Name = Tab.Constraint_Name
-						    AND Col.Table_Name = Tab.Table_Name
-						    AND Constraint_Type = 'PRIMARY KEY'
-							AND Col.Table_Name = '$table[table]' 
-					";
-                $keys = DB::select($query);
-                $primary_key = $keys[0]->Column_Name;
-            } catch (\Exception $e) {
-                $primary_key = null;
-            }
-        } else {
-            try {
-                $query = "select * from information_schema.COLUMNS where TABLE_SCHEMA = '$table[database]' and TABLE_NAME = '$table[table]' and COLUMN_KEY = 'PRI'";
-                $keys = DB::select($query);
-                $primary_key = $keys[0]->COLUMN_NAME;
-            } catch (\Exception $e) {
-                $primary_key = null;
-            }
-        }
+        $primary_key = self::findPKname($table);
 
         if (! $primary_key) {
             return 'id';
@@ -211,5 +186,50 @@ class DbInspector
         Cache::forever($cacheKey, $hasTable);
 
         return $hasTable;
+    }
+
+    /**
+     * @param $table
+     * @return null
+     */
+    private static function getPKforSqlServer($table)
+    {
+        try {
+            $query = "
+						SELECT Col.Column_Name,Col.Table_Name from 
+						    INFORMATION_SCHEMA.TABLE_CONSTRAINTS Tab, 
+						    INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE Col 
+						WHERE 
+						    Col.Constraint_Name = Tab.Constraint_Name
+						    AND Col.Table_Name = Tab.Table_Name
+						    AND Constraint_Type = 'PRIMARY KEY'
+							AND Col.Table_Name = '$table[table]' 
+					";
+            $keys = DB::select($query);
+            $primary_key = $keys[0]->Column_Name;
+        } catch (\Exception $e) {
+            $primary_key = null;
+        }
+
+        return $primary_key;
+    }
+
+    /**
+     * @param $table
+     * @return null
+     */
+    private static function findPKname($table)
+    {
+        if (env('DB_CONNECTION') == 'sqlsrv') {
+            return self::getPKforSqlServer($table);
+        }
+        try {
+            $query = "select * from information_schema.COLUMNS where TABLE_SCHEMA = '$table[database]' and TABLE_NAME = '$table[table]' and COLUMN_KEY = 'PRI'";
+            $keys = DB::select($query);
+            $primary_key = $keys[0]->COLUMN_NAME;
+        } catch (\Exception $e) {
+            $primary_key = null;
+        }
+        return $primary_key;
     }
 }
