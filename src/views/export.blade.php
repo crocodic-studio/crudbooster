@@ -24,27 +24,29 @@
                     @if (request('columns') && ! in_array($col['name'], request('columns')))
                         @continue
                     @endif
-                <?php
+                    <?php
                     $value = @$row->{$col['field']};
                     $title = @$row->{$title_field};
-
-                    if (@$col['image']) {
+                    ?>
+                    @if (@$col['image'])
+                        <?php
                         if ($value == '') {
                             $value = "http://placehold.it/50x50&text=NO+IMAGE";
                         }
                         $pic = (strpos($value, 'http://') !== FALSE) ? $value : asset($value);
                         $pic_small = $pic;
-                        if (Request::input('fileformat') == 'pdf') {
-                            echo " <td><a data-lightbox='roadtrip' rel='group_{{$table}}' title='$col[label]: $title' href='".$pic."' >
-                            <img class='img-circle' width='40px' height='40px' src='".$pic_small."'/></a></td> ";
-                        } else {
-                            echo " <td>$pic</td> ";
-                        }
-                    } elseif (@$col['download']) {
-                        $url = (strpos($value, 'http://') !== FALSE) ? $value : asset($value);
-                        echo " <td><a class='btn btn-sm btn-primary' href='$url' target='_blank' title='Download File'>Download</a> </td> ";
-                    } else {
-
+                        ?>
+                        @if (request('fileformat') == 'pdf')
+                            <td><a data-lightbox='roadtrip' rel='group_{{$table}}' title='{!! $col['label'] !!}: {!! $title !!}' href='"{!! $pic !!}"' >
+                            <img class='img-circle' width='40px' height='40px' src='"{!! $pic_small !!}"'/></a></td>
+                        @else
+                            <td>{!! $pic !!}</td>
+                        @endif
+                    @elseif (@$col['download'])
+                        <?php $url = (strpos($value, 'http://') !== FALSE) ? $value : asset($value); ?>
+                        <td><a class='btn btn-sm btn-primary' href='{!! $url !!}' target='_blank' title='Download File'>Download</a> </td>
+                    @else
+                        <?php
                         //limit character
                         if ($col['str_limit']) {
                             $value = trim(strip_tags($value));
@@ -70,9 +72,9 @@
                             }
                         }
 
-                        echo " <td>".$value."</td> ";
-                    }
                 ?>
+                    <td>{!! $value !!}</td>
+                    @endif
                 @endforeach
             </tr>
         @endforeach
