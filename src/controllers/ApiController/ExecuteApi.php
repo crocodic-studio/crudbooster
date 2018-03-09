@@ -39,7 +39,7 @@ class ExecuteApi
         if ($this->ctrl->validate) { // hook have to return true
             $result['api_status'] = 0;
             $result['api_message'] = "Failed to execute API !";
-            goto show;
+            return $this->show($result, $debug_mode_message, $posts);
         }
 
         /* 
@@ -53,7 +53,7 @@ class ExecuteApi
             if ($method_type && ! Request::isMethod($method_type)) {
                 $result['api_status'] = 0;
                 $result['api_message'] = "The request method is not allowed !";
-                goto show;
+                return $this->show($result, $debug_mode_message, $posts);
             }
 
             /* 
@@ -65,7 +65,7 @@ class ExecuteApi
             if (! $row_api) {
                 $result['api_status'] = 0;
                 $result['api_message'] = 'Sorry this API is no longer available, maybe has changed by admin, or please make sure api url is correct.';
-                goto show;
+                return $this->show($result, $debug_mode_message, $posts);
             }
 
             @$parameters = unserialize($row_api->parameters);
@@ -104,7 +104,7 @@ class ExecuteApi
                     $message = implode(', ', $message);
                     $result['api_status'] = 0;
                     $result['api_message'] = $message;
-                    goto show;
+                    return $this->show($result, $debug_mode_message, $posts);
                 }
             }
 
@@ -341,7 +341,7 @@ class ExecuteApi
                                 if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
                                     $result['api_authorization'] = $debug_mode_message;
                                 }
-                                goto show;
+                                return $this->show($result, $debug_mode_message, $posts);
                             }
 
                             if (! $required && $used && $value && ! Hash::check($value, $row->{$name})) {
@@ -350,7 +350,7 @@ class ExecuteApi
                                 if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
                                     $result['api_authorization'] = $debug_mode_message;
                                 }
-                                goto show;
+                                return $this->show($result, $debug_mode_message, $posts);
                             }
                         }
 
@@ -403,17 +403,27 @@ class ExecuteApi
                 }
             }
 
-            show:
-            $result['api_status'] = $this->ctrl->hook_api_status ?: $result['api_status'];
-            $result['api_message'] = $this->ctrl->hook_api_message ?: $result['api_message'];
-
-            if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
-                $result['api_authorization'] = $debug_mode_message;
-            }
-
-            $this->ctrl->hook_after($posts, $result);
-
-            return response()->json($result);
+            return $this->show($result, $debug_mode_message, $posts);
         }
+    }
+
+    /**
+     * @param $result
+     * @param $debug_mode_message
+     * @param $posts
+     * @return mixed
+     */
+    private function show($result, $debug_mode_message, $posts)
+    {
+        $result['api_status'] = $this->ctrl->hook_api_status ?: $result['api_status'];
+        $result['api_message'] = $this->ctrl->hook_api_message ?: $result['api_message'];
+
+        if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
+            $result['api_authorization'] = $debug_mode_message;
+        }
+
+        $this->ctrl->hook_after($posts, $result);
+
+        return response()->json($result);
     }
 }
