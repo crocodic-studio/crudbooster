@@ -1,12 +1,7 @@
 @include('crudbooster::components.action.add')
 
-@if($button_action_style == 'button_text')
-    @include('crudbooster::components.action.button_text')
-@elseif($button_action_style == 'button_icon_text')
-    @include('crudbooster::components.action.buttonIconText')
-
-@elseif($button_action_style == 'dropdown')
-    @include('crudbooster::components.action.dropDown')
+@if(in_array($button_action_style,['button_text', 'button_icon_text', 'dropdown']))
+    @include('crudbooster::components.action.'.$button_action_style)
 @else
     @include('crudbooster::components.action.default')
 @endif
