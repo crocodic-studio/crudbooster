@@ -8,7 +8,7 @@ class ValueCalculator
      * @param $col
      * @param $row
      * @param $table
-     * @return array
+     * @return string
      */
     function calculate($col, $row, $table)
     {
@@ -17,7 +17,7 @@ class ValueCalculator
         $label = $col['label'];
 
         if (isset($col['image'])) {
-            list($col, $value) = $this->image($col, $table, $value, $label, $title);
+            $value = $this->image($col, $table, $value, $label, $title);
         }
 
         if (isset($col['download'])) {
@@ -47,16 +47,13 @@ class ValueCalculator
      * @param $title
      * @return array
      */
-    private function image($col, $table, $value, $label, $title)
+    private function image($table, $value, $label, $title)
     {
         if ($value == '') {
-            $value = "<a  data-lightbox='roadtrip' rel='group_{{$table}}' title='$label: $title' href='".asset('vendor/crudbooster/avatar.jpg')."'><img width='40px' height='40px' src='".asset('vendor/crudbooster/avatar.jpg')."'/></a>";
-        } else {
-            $pic = (strpos($value, 'http://') !== false) ? $value : asset($value);
-            $value = "<a data-lightbox='roadtrip'  rel='group_{{$table}}' title='$label: $title' href='".$pic."'><img width='40px' height='40px' src='".$pic."'/></a>";
+            return "<a  data-lightbox='roadtrip' rel='group_{{$table}}' title='$label: $title' href='".asset('vendor/crudbooster/avatar.jpg')."'><img width='40px' height='40px' src='".asset('vendor/crudbooster/avatar.jpg')."'/></a>";
         }
-
-        return [$col, $value];
+        $pic = (strpos($value, 'http://') !== false) ? $value : asset($value);
+        return "<a data-lightbox='roadtrip'  rel='group_{{$table}}' title='$label: $title' href='".$pic."'><img width='40px' height='40px' src='".$pic."'/></a>";
     }
 
     /**
@@ -102,7 +99,7 @@ class ValueCalculator
                 $preValue[] = $d['label'];
             }
         }
-        if (count($preValue)) {
+        if (!empty($preValue)) {
             $value = implode(", ", $preValue);
         }
 
