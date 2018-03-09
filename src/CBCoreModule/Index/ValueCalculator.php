@@ -56,7 +56,7 @@ class ValueCalculator
      */
     private function image($col, $table, $value, $label, $title)
     {
-        if (isset($col['image'])) {
+        if (!isset($col['image'])) {
             return [$col, $value];
         }
         if ($value == '') {
@@ -76,13 +76,14 @@ class ValueCalculator
      */
     private function download($col, $value)
     {
-        if (isset($col['download'])) {
-            $url = (strpos($value, 'http://')) ? $value : asset($value).'?download=1';
-            if ($value) {
-                $value = "<a class='btn btn-xs btn-primary' href='$url' target='_blank' title='Download File'><i class='fa fa-download'></i> Download</a>";
-            } else {
-                $value = " - ";
-            }
+        if (!isset($col['download'])) {
+            return [$col, $value];
+        }
+        $url = (strpos($value, 'http://')) ? $value : asset($value).'?download=1';
+        if ($value) {
+            $value = "<a class='btn btn-xs btn-primary' href='$url' target='_blank' title='Download File'><i class='fa fa-download'></i> Download</a>";
+        } else {
+            $value = " - ";
         }
 
         return [$col, $value];
