@@ -23,10 +23,7 @@ class FilterIndexRows
                     continue;
                 }
 
-                if ($type == 'between') {
-                    continue;
-                }
-                if (!$value || !$key || !$type) {
+                if (($type == 'between') || !$value || !$key || !$type) {
                     continue;
                 }
                 switch ($type) {
