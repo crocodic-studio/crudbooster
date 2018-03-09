@@ -129,14 +129,7 @@ class DbInspector
             return (array) $x;
         })->toArray();
 
-        $result = $cols;
-
-        $new_result = [];
-        foreach ($result as $ro) {
-            $new_result[] = $ro['COLUMN_NAME'];
-        }
-
-        return $new_result;
+        return array_column($cols, 'COLUMN_NAME');
     }
 
     /**
