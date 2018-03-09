@@ -199,8 +199,6 @@ class ExecuteApi
                 list($result, $row) = $this->handleListAction($table, $orderby, $data, $result, $debug_mode_message, $row, $uploads_format_candidate, $responses_fields);
             }
             if ($action_type == 'detail') {
-
-
                 $result['api_status'] = 0;
                 $result['api_message'] = 'There is no data found !';
 
@@ -223,23 +221,11 @@ class ExecuteApi
                         }
 
                         if ($required && $type == 'password' && ! Hash::check($value, $rows->{$name})) {
-                            $result['api_status'] = 0;
-                            $result['api_message'] = 'Your password is wrong !';
-                            if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
-                                $result['api_authorization'] = $debug_mode_message;
-                            }
-
-                            return $this->show($result, $debug_mode_message, $posts);
+                            return $this->passwordError($result, $debug_mode_message, $posts);
                         }
 
                         if (! $required && $used && $value && ! Hash::check($value, $row->{$name})) {
-                            $result['api_status'] = 0;
-                            $result['api_message'] = 'Your password is wrong !';
-                            if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
-                                $result['api_authorization'] = $debug_mode_message;
-                            }
-
-                            return $this->show($result, $debug_mode_message, $posts);
+                            return $this->passwordError($result, $debug_mode_message, $posts);
                         }
                     }
 
@@ -527,5 +513,22 @@ class ExecuteApi
                 unset($row_assign[$name]);
             }
         }
+    }
+
+    /**
+     * @param $result
+     * @param $debug_mode_message
+     * @param $posts
+     * @return mixed
+     */
+    private function passwordError($result, $debug_mode_message, $posts)
+    {
+        $result['api_status'] = 0;
+        $result['api_message'] = 'Your password is wrong !';
+        if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
+            $result['api_authorization'] = $debug_mode_message;
+        }
+
+        return $this->show($result, $debug_mode_message, $posts);
     }
 }
