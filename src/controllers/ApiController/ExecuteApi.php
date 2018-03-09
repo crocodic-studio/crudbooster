@@ -126,58 +126,7 @@ class ExecuteApi
         unset($posts['limit'], $posts['offset'], $posts['orderby']);
 
         if (in_array($action_type, ['list', 'detail', 'delete'])) {
-            $name_tmp = [];
-            $data = DB::table($table);
-            $data->skip($offset);
-            $data->take($limit);
-
-            foreach ($responses as $resp) {
-                $name = $resp['name'];
-                $type = $resp['type'];
-                $subquery = $resp['subquery'];
-                $used = intval($resp['used']);
-
-                if ($used == 0 && ! CRUDBooster::isForeignKey($name)) {
-                    continue;
-                }
-
-                if (in_array($name, $name_tmp)) {
-                    continue;
-                }
-
-                if ($name == 'ref_id') {
-                    continue;
-                }
-
-                if ($type == 'custom') {
-                    continue;
-                }
-
-                if ($subquery) {
-                    $data->addSelect(DB::raw('('.$subquery.') as '.$name));
-                    $name_tmp[] = $name;
-                    continue;
-                }
-
-                if ($used) {
-                    $data->addSelect($table.'.'.$name);
-                }
-
-                $name_tmp[] = $name;
-                if (CRUDBooster::isForeignKey($name)) {
-                    $jointable = CRUDBooster::getTableForeignKey($name);
-                    $jointable_field = CRUDBooster::getTableColumns($jointable);
-
-                    $data->leftjoin($jointable, $jointable.'.id', '=', $table.'.'.$name);
-                    foreach ($jointable_field as $jf) {
-                        $jf_alias = $jointable.'_'.$jf;
-                        if (in_array($jf_alias, $responses_fields)) {
-                            $data->addselect($jointable.'.'.$jf.' as '.$jf_alias);
-                            $name_tmp[] = $jf_alias;
-                        }
-                    }
-                }
-            } //End Responses
+            $data = $this->responses($table, $offset, $limit, $responses, $responses_fields); //End Responses
 
             $this->params($parameters, $posts, $data, $table);
 
@@ -229,13 +178,7 @@ class ExecuteApi
 
                     $this->handleFile($rows, $responses_fields, $row);
 
-                    $result['api_status'] = 1;
-                    $result['api_message'] = 'success';
-                    if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
-                        $result['api_authorization'] = $debug_mode_message;
-                    }
-                    $rows = (array) $rows;
-                    $result = array_merge($result, $rows);
+                    $result = $this->success($result, $debug_mode_message, $rows);
                 }
             }
             if ($action_type == 'delete') {
@@ -288,7 +231,6 @@ class ExecuteApi
     }
 
     /**
-     * @param $action_type
      * @param $table
      * @param $orderby
      * @param $data
@@ -326,7 +268,6 @@ class ExecuteApi
     }
 
     /**
-     * @param $action_type
      * @param $table
      * @param $data
      * @param $result
@@ -539,5 +480,86 @@ class ExecuteApi
                 unset($row[$k]);
             }
         }
+    }
+
+    /**
+     * @param $table
+     * @param $offset
+     * @param $limit
+     * @param $responses
+     * @param $responses_fields
+     * @return array
+     */
+    private function responses($table, $offset, $limit, $responses, $responses_fields)
+    {
+        $name_tmp = [];
+        $data = DB::table($table);
+        $data->skip($offset);
+        $data->take($limit);
+
+        foreach ($responses as $resp) {
+            $name = $resp['name'];
+            $type = $resp['type'];
+            $subquery = $resp['subquery'];
+            $used = intval($resp['used']);
+
+            if ($used == 0 && ! CRUDBooster::isForeignKey($name)) {
+                continue;
+            }
+
+            if (in_array($name, $name_tmp)) {
+                continue;
+            }
+
+            if ($name == 'ref_id' || $type == 'custom') {
+                continue;
+            }
+
+            if ($subquery) {
+                $data->addSelect(DB::raw('('.$subquery.') as '.$name));
+                $name_tmp[] = $name;
+                continue;
+            }
+
+            if ($used) {
+                $data->addSelect($table.'.'.$name);
+            }
+
+            $name_tmp[] = $name;
+            if (CRUDBooster::isForeignKey($name)) {
+                $jointable = CRUDBooster::getTableForeignKey($name);
+                $jointable_field = CRUDBooster::getTableColumns($jointable);
+
+                $data->leftjoin($jointable, $jointable.'.id', '=', $table.'.'.$name);
+                foreach ($jointable_field as $jf) {
+                    $jf_alias = $jointable.'_'.$jf;
+                    if (in_array($jf_alias, $responses_fields)) {
+                        $data->addselect($jointable.'.'.$jf.' as '.$jf_alias);
+                        $name_tmp[] = $jf_alias;
+                    }
+                }
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param $result
+     * @param $debug_mode_message
+     * @param $rows
+     * @return array
+     */
+    private function success($result, $debug_mode_message, $rows)
+    {
+        $result['api_status'] = 1;
+        $result['api_message'] = 'success';
+        if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
+            $result['api_authorization'] = $debug_mode_message;
+        }
+        $rows = (array) $rows;
+        $result = array_merge($result, $rows);
+
+        return $result;
     }
 }
