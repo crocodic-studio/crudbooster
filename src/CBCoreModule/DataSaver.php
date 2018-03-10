@@ -73,28 +73,7 @@ class DataSaver
             }
 
             if ($row['type'] == 'child') {
-                $name = str_slug($row['label'], '');
-                $columns = $row['columns'];
-                $count_input_data = count(request($name.'-'.$columns[0]['name'])) - 1;
-                $child_array = [];
-
-                $childtable = CRUDBooster::parseSqlTable($row['table'])['table'];
-                $fk = $row['foreign_key'];
-
-                DB::table($childtable)->where($fk, $id)->delete();
-
-                for ($i = 0; $i <= $count_input_data; $i++) {
-
-                    $column_data = [];
-                    $column_data[$fk] = $id;
-                    foreach ($columns as $col) {
-                        $colname = $col['name'];
-                        $column_data[$colname] = request($name.'-'.$colname)[$i];
-                    }
-                    $child_array[] = $column_data;
-                }
-
-                DB::table($childtable)->insert(array_reverse($child_array));
+                $this->insertChildTable($id, $row);
             }
         }
     }
@@ -179,5 +158,35 @@ class DataSaver
                 $foreignKey2 => $input_id,
             ]);
         }
+    }
+
+    /**
+     * @param $id
+     * @param $row
+     * @return string
+     */
+    private function insertChildTable($id, $row)
+    {
+        $name = str_slug($row['label'], '');
+        $columns = $row['columns'];
+        $child_array = [];
+
+        $childtable = CRUDBooster::parseSqlTable($row['table'])['table'];
+        $fk = $row['foreign_key'];
+
+        DB::table($childtable)->where($fk, $id)->delete();
+
+        $count_input_data = count(request($name.'-'.$columns[0]['name'])) - 1;
+        for ($i = 0; $i <= $count_input_data; $i++) {
+            $column_data = [];
+            $column_data[$fk] = $id;
+            foreach ($columns as $col) {
+                $colname = $col['name'];
+                $column_data[$colname] = request($name.'-'.$colname)[$i];
+            }
+            $child_array[] = $column_data;
+        }
+
+        DB::table($childtable)->insert(array_reverse($child_array));
     }
 }
