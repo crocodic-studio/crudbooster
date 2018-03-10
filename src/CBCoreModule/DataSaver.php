@@ -29,7 +29,7 @@ class DataSaver
 
             //Insert Data Checkbox if Type Datatable
             if ($row['type'] == 'checkbox' && $row['relationship_table']) {
-                $this->_handleCheckbox($row, $id, $inputdata);
+                $this->_updateRelations($row, $id, $inputdata);
             }
 
             if ($row['type'] == 'select2' && $row['relationship_table']) {
@@ -65,7 +65,7 @@ class DataSaver
 
             //Insert Data Checkbox if Type Datatable
             if ($row['type'] == 'checkbox' && $row['relationship_table']) {
-                $this->_handleCheckbox($row, $id, $inputData);
+                $this->_updateRelations($row, $id, $inputData);
             }
 
             if ($row['type'] == 'select2' && $row['relationship_table']) {
@@ -121,22 +121,6 @@ class DataSaver
             return null;
         }
 
-        $this->insertIntoPivot($id, $inputData, $pivotTable, $foreignKey, $foreignKey2);
-    }
-
-    /**
-     * @param $row
-     * @param $id
-     * @param $inputData
-     * @return null
-     */
-    private function _handleCheckbox($row, $id, $inputData)
-    {
-        list($pivotTable, $foreignKey2, $foreignKey) = $this->deleteFromPivot($row, $id);
-
-        if (! $inputData) {
-            return null;
-        }
         $this->insertIntoPivot($id, $inputData, $pivotTable, $foreignKey, $foreignKey2);
     }
 
