@@ -87,22 +87,22 @@ class DataSaver
     {
         $name = str_slug($row['label'], '');
         $columns = $row['columns'];
-        $count_input_data = count(request($name.'-'.$columns[0]['name'])) - 1;
-        $child_array = [];
 
         $fk = $row['foreign_key'];
-        for ($i = 0; $i <= $count_input_data; $i++) {
+        $countInput = count(request($name.'-'.$columns[0]['name'])) - 1;
+        $childArray = [];
+        for ($i = 0; $i <= $countInput; $i++) {
             $column_data = [];
             $column_data[$fk] = $id;
             foreach ($columns as $col) {
                 $colName = $col['name'];
                 $column_data[$colName] = request($name.'-'.$colName)[$i];
             }
-            $child_array[] = $column_data;
+            $childArray[] = $column_data;
         }
 
         $childTable = CRUDBooster::parseSqlTable($row['table'])['table'];
-        DB::table($childTable)->insert($child_array);
+        DB::table($childTable)->insert($childArray);
 
         return $name;
     }
@@ -126,10 +126,10 @@ class DataSaver
             return null;
         }
 
-        foreach ($inputData as $input_id) {
+        foreach ($inputData as $inputId) {
             DB::table($pivotTable)->insert([
                 $foreignKey => $id,
-                $foreignKey2 => $input_id,
+                $foreignKey2 => $inputId,
             ]);
         }
     }
@@ -142,20 +142,20 @@ class DataSaver
      */
     private function _handleCheckbox($row, $id, $inputdata)
     {
-        $pivotTableName = $row['relationship_table'];
-        $datatable = explode(",", $row['datatable'])[0];
+        $pivotTable = $row['relationship_table'];
+        $dataTable = explode(",", $row['datatable'])[0];
 
-        $foreignKey2 = CRUDBooster::getForeignKey($datatable, $pivotTableName);
-        $foreignKey = CRUDBooster::getForeignKey($this->Cb->table, $pivotTableName);
-        DB::table($pivotTableName)->where($foreignKey, $id)->delete();
+        $foreignKey2 = CRUDBooster::getForeignKey($dataTable, $pivotTable);
+        $foreignKey = CRUDBooster::getForeignKey($this->Cb->table, $pivotTable);
+        DB::table($pivotTable)->where($foreignKey, $id)->delete();
 
         if (! $inputdata) {
             return null;
         }
-        foreach ($inputdata as $input_id) {
-            DB::table($pivotTableName)->insert([
+        foreach ($inputdata as $inputId) {
+            DB::table($pivotTable)->insert([
                 $foreignKey => $id,
-                $foreignKey2 => $input_id,
+                $foreignKey2 => $inputId,
             ]);
         }
     }
@@ -176,8 +176,8 @@ class DataSaver
 
         DB::table($childtable)->where($fk, $id)->delete();
 
-        $count_input_data = count(request($name.'-'.$columns[0]['name'])) - 1;
-        for ($i = 0; $i <= $count_input_data; $i++) {
+        $countInput = count(request($name.'-'.$columns[0]['name'])) - 1;
+        for ($i = 0; $i <= $countInput; $i++) {
             $column_data = [];
             $column_data[$fk] = $id;
             foreach ($columns as $col) {
