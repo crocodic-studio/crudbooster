@@ -368,15 +368,7 @@ class ExecuteApi
             $search_in = explode(',', $config);
 
             if ($required == '1' || ($used && $value)) {
-                $data->where(function ($w) use ($search_in, $value) {
-                    foreach ($search_in as $k => $field) {
-                        if ($k == 0) {
-                            $w->where($field, "like", "%$value%");
-                        } else {
-                            $w->orWhere($field, "like", "%$value%");
-                        }
-                    }
-                });
+                $this->applyLike($data, $search_in, $value);
             }
         }
     }
@@ -548,5 +540,23 @@ class ExecuteApi
         $result = array_merge($result, $rows);
 
         return $result;
+    }
+
+    /**
+     * @param $data
+     * @param $search_in
+     * @param $value
+     */
+    private function applyLike($data, $search_in, $value)
+    {
+        $data->where(function ($w) use ($search_in, $value) {
+            foreach ($search_in as $k => $field) {
+                if ($k == 0) {
+                    $w->where($field, "like", "%$value%");
+                } else {
+                    $w->orWhere($field, "like", "%$value%");
+                }
+            }
+        });
     }
 }
