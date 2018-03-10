@@ -115,12 +115,7 @@ class DataSaver
      */
     private function _updateRelations($row, $id, $inputData)
     {
-        $dataTable = explode(",", $row['datatable'])[0];
-        $pivotTable = $row['relationship_table'];
-
-        $foreignKey2 = CRUDBooster::getForeignKey($dataTable, $pivotTable);
-        $foreignKey = CRUDBooster::getForeignKey($this->Cb->table, $pivotTable);
-        DB::table($pivotTable)->where($foreignKey, $id)->delete();
+        list($pivotTable, $foreignKey2, $foreignKey) = $this->deleteFromPivot($row, $id);
 
         if (!$inputData) {
             return null;
@@ -137,12 +132,7 @@ class DataSaver
      */
     private function _handleCheckbox($row, $id, $inputData)
     {
-        $pivotTable = $row['relationship_table'];
-        $dataTable = explode(",", $row['datatable'])[0];
-
-        $foreignKey2 = CRUDBooster::getForeignKey($dataTable, $pivotTable);
-        $foreignKey = CRUDBooster::getForeignKey($this->Cb->table, $pivotTable);
-        DB::table($pivotTable)->where($foreignKey, $id)->delete();
+        list($pivotTable, $foreignKey2, $foreignKey) = $this->deleteFromPivot($row, $id);
 
         if (! $inputData) {
             return null;
@@ -195,5 +185,22 @@ class DataSaver
                 $foreignKey2 => $inputId,
             ]);
         }
+    }
+
+    /**
+     * @param $row
+     * @param $id
+     * @return array
+     */
+    private function deleteFromPivot($row, $id)
+    {
+        $pivotTable = $row['relationship_table'];
+        $dataTable = explode(",", $row['datatable'])[0];
+
+        $foreignKey2 = CRUDBooster::getForeignKey($dataTable, $pivotTable);
+        $foreignKey = CRUDBooster::getForeignKey($this->Cb->table, $pivotTable);
+        DB::table($pivotTable)->where($foreignKey, $id)->delete();
+
+        return [$pivotTable, $foreignKey2, $foreignKey];
     }
 }
