@@ -126,21 +126,16 @@ class DataSaver
             return null;
         }
 
-        foreach ($inputData as $inputId) {
-            DB::table($pivotTable)->insert([
-                $foreignKey => $id,
-                $foreignKey2 => $inputId,
-            ]);
-        }
+        $this->insertIntoPivot($id, $inputData, $pivotTable, $foreignKey, $foreignKey2);
     }
 
     /**
      * @param $row
      * @param $id
-     * @param $inputdata
+     * @param $inputData
      * @return null
      */
-    private function _handleCheckbox($row, $id, $inputdata)
+    private function _handleCheckbox($row, $id, $inputData)
     {
         $pivotTable = $row['relationship_table'];
         $dataTable = explode(",", $row['datatable'])[0];
@@ -149,15 +144,10 @@ class DataSaver
         $foreignKey = CRUDBooster::getForeignKey($this->Cb->table, $pivotTable);
         DB::table($pivotTable)->where($foreignKey, $id)->delete();
 
-        if (! $inputdata) {
+        if (! $inputData) {
             return null;
         }
-        foreach ($inputdata as $inputId) {
-            DB::table($pivotTable)->insert([
-                $foreignKey => $id,
-                $foreignKey2 => $inputId,
-            ]);
-        }
+        $this->insertIntoPivot($id, $inputData, $pivotTable, $foreignKey, $foreignKey2);
     }
 
     /**
@@ -188,5 +178,22 @@ class DataSaver
         }
 
         DB::table($childtable)->insert(array_reverse($child_array));
+    }
+
+    /**
+     * @param $id
+     * @param $inputData
+     * @param $pivotTable
+     * @param $foreignKey
+     * @param $foreignKey2
+     */
+    private function insertIntoPivot($id, $inputData, $pivotTable, $foreignKey, $foreignKey2)
+    {
+        foreach ($inputData as $inputId) {
+            DB::table($pivotTable)->insert([
+                $foreignKey => $id,
+                $foreignKey2 => $inputId,
+            ]);
+        }
     }
 }
