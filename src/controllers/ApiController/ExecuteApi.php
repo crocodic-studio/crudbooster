@@ -368,19 +368,7 @@ class ExecuteApi
             }
             $search_in = explode(',', $config);
 
-            if ($required == '1') {
-                $data->where(function ($w) use ($search_in, $value) {
-                    foreach ($search_in as $k => $field) {
-                        if ($k == 0) {
-                            $w->where($field, "like", "%$value%");
-                        } else {
-                            $w->orWhere($field, "like", "%$value%");
-                        }
-                    }
-                });
-                continue;
-            }
-            if ($used && $value) {
+            if ($required == '1' || ($used && $value)) {
                 $data->where(function ($w) use ($search_in, $value) {
                     foreach ($search_in as $k => $field) {
                         if ($k == 0) {
