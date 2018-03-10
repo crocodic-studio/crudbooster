@@ -215,7 +215,6 @@ class ExecuteApi
 
     /**
      * @param $responses
-     * @param $responsesFields
      * @return array
      */
     private function prepareResponses($responses)
