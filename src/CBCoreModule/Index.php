@@ -303,47 +303,46 @@ class Index
      * @param $data
      * @param $tablePK
      * @param $number
-     * @param $columns_table
+     * @param $columnsTable
      * @param $table
      * @param $addaction
-     * @param $html_contents
      * @return array
      */
-    private function htmlContents(CBController $CbCtrl, $data, $tablePK, $number, $columns_table, $table, $addaction, $html_contents)
+    private function htmlContents(CBController $CbCtrl, $data, $tablePK, $number, $columnsTable, $table, $addaction)
     {
+        $htmlContents = [];
         foreach ($data['result'] as $row) {
-            $html_content = [];
+            $htmlContent = [];
 
             if ($CbCtrl->button_bulk_action) {
-                $html_content[] = "<input type='checkbox' class='checkbox' name='checkbox[]' value='".$row->{$tablePK}."'/>";
+                $htmlContent[] = "<input type='checkbox' class='checkbox' name='checkbox[]' value='".$row->{$tablePK}."'/>";
             }
 
             if ($CbCtrl->show_numbering) {
-                $html_content[] = $number.'. ';
+                $htmlContent[] = $number.'. ';
                 $number++;
             }
 
-            foreach ($columns_table as $col) {
+            foreach ($columnsTable as $col) {
                 if ($col['visible'] === false) {
                     continue;
                 }
-
-                $html_content[] = app(ValueCalculator::class)->calculate($col, $row, $table);
-            } //end foreach columns_table
+                $htmlContent[] = app(ValueCalculator::class)->calculate($col, $row, $table);
+            }
 
             if ($CbCtrl->button_table_action) {
                 $button_action_style = $CbCtrl->button_action_style;
-                $html_content[] = "<div class='button_action' style='text-align:right'>".view('crudbooster::components.action', compact('addaction', 'row', 'button_action_style', 'parent_field'))->render()."</div>";
+                $htmlContent[] = "<div class='button_action' style='text-align:right'>".view('crudbooster::components.action', compact('addaction', 'row', 'button_action_style', 'parent_field'))->render()."</div>";
             }
 
-            foreach ($html_content as $i => $v) {
+            foreach ($htmlContent as $i => $v) {
                 $CbCtrl->hookRowIndex($i, $v);
-                $html_content[$i] = $v;
+                $htmlContent[$i] = $v;
             }
 
-            $html_contents[] = $html_content;
+            $htmlContents[] = $htmlContent;
         }
 
-        return $html_contents;
+        return $htmlContents;
     }
 }
