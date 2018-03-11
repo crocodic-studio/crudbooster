@@ -3,6 +3,7 @@
 namespace crocodicstudio\crudbooster\CBCoreModule;
 
 use crocodicstudio\crudbooster\CBCoreModule\Index\FilterIndexRows;
+use crocodicstudio\crudbooster\CBCoreModule\Index\OrderAndPaginate;
 use crocodicstudio\crudbooster\CBCoreModule\Index\ValueCalculator;
 use crocodicstudio\crudbooster\controllers\CBController;
 use Illuminate\Support\Facades\Request;
@@ -64,7 +65,7 @@ class Index
             $filter_is_orderby = app(FilterIndexRows::class)->filterIndexRows($result, request('filter_column'));
         }
 
-        $data = $this->_orderAndPaginate($filter_is_orderby, $result, $limit, $data, $table);
+        $data = (new OrderAndPaginate)->handle($filter_is_orderby, $result, $limit, $data, $table, $this);
 
         $data['columns'] = $columns_table;
 
@@ -209,73 +210,6 @@ class Index
                 $result->where($table.'.'.$k, $v);
             }
         }
-    }
-
-    /**
-     * @param $filter_is_orderby
-     * @param $result
-     * @param $limit
-     * @param $data
-     * @param $table
-     * @return array
-     */
-    private function _orderAndPaginate($filter_is_orderby, $result, $limit, $data, $table)
-    {
-        $orderby = $this->cb->orderby;
-        if ($filter_is_orderby !== true) {
-            $data['result'] = $result->paginate($limit);
-
-            return $data;
-        }
-
-        if (! $orderby) {
-            $data['result'] = $result->orderby($this->table.'.'.$this->cb->primary_key, 'desc')->paginate($limit);
-
-            return $data;
-        }
-
-        return $this->orderAndPaginate($result, $limit, $data, $table, $orderby);
-    }
-
-    /**
-     * @param $result
-     * @param $limit
-     * @param $data
-     * @param $table
-     * @param $orderby
-     * @return mixed
-     */
-    private function orderAndPaginate($result, $limit, $data, $table, $orderby)
-    {
-        if (is_array($orderby)) {
-            foreach ($orderby as $key => $value) {
-                $this->orderRows($result, $table, $key, $value);
-            }
-        } else {
-            foreach (explode(";", $orderby) as $o) {
-                $o = explode(",", $o);
-                $key = $o[0];
-                $value = $o[1];
-                $this->orderRows($result, $table, $key, $value);
-            }
-        }
-
-        $data['result'] = $result->paginate($limit);
-        return $data;
-    }
-
-    /**
-     * @param $result
-     * @param $table
-     * @param $key
-     * @param $value
-     */
-    private function orderRows($result, $table, $key, $value)
-    {
-        if (strpos($key, '.')) {
-            $table = explode(".", $key)[0];
-        }
-        $result->orderby($table.'.'.$key, $value);
     }
 
     /**
