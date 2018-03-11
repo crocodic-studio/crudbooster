@@ -39,15 +39,7 @@ class OrderAndPaginate
      */
     private function orderAndPaginate($result, $limit, $data, $table, $orderby)
     {
-        $x = [];
-        if (is_array($orderby)) {
-            $x = $orderby;
-        } elseif(is_string($orderby)) {
-            foreach (explode(";", $orderby) as $by) {
-                $by = explode(",", $by);
-                $x[$by[0]] = $by[1];
-            }
-        }
+        $x = $this->normalizeOrderBy($orderby);
 
         foreach ($x as $key => $value) {
             $this->orderRows($result, $table, $key, $value);
@@ -79,5 +71,24 @@ class OrderAndPaginate
     {
         $data['result'] = $result->paginate($limit);
         return $data;
+    }
+
+    /**
+     * @param $orderby
+     * @return array
+     */
+    private function normalizeOrderBy($orderby)
+    {
+        $x = [];
+        if (is_array($orderby)) {
+            $x = $orderby;
+        } elseif (is_string($orderby)) {
+            foreach (explode(";", $orderby) as $by) {
+                $by = explode(",", $by);
+                $x[$by[0]] = $by[1];
+            }
+        }
+
+        return $x;
     }
 }
