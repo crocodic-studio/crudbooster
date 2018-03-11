@@ -65,7 +65,10 @@ class Index
             $filter_is_orderby = app(FilterIndexRows::class)->filterIndexRows($result, request('filter_column'));
         }
 
-        $data = (new OrderAndPaginate)->handle($filter_is_orderby, $result, $limit, $data, $table, $this);
+        if ($filter_is_orderby === true) {
+            (new OrderAndPaginate)->handle($result, $table, $this);
+        }
+        $data['result'] = $result->paginate($limit);
 
         $data['columns'] = $columns_table;
 
@@ -87,6 +90,17 @@ class Index
         $html_contents = $this->htmlContents($CbCtrl, $data, $tablePK, $number, $columns_table, $table, $addAction); //end foreach data[result]
 
         $data['html_contents'] = ['html' => $html_contents, 'data' => $data['result']];
+
+        return $data;
+    }
+    /**
+     * @param $result
+     * @param $limit
+     * @param $data
+     * @return mixed
+     */
+    private function paginate($result, $limit, $data)
+    {
 
         return $data;
     }

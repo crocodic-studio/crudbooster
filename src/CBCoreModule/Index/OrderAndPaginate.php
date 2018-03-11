@@ -5,29 +5,20 @@ namespace crocodicstudio\crudbooster\CBCoreModule\Index;
 class OrderAndPaginate
 {
     /**
-     * @param $filterIsOrderby
      * @param $result
-     * @param $limit
-     * @param $data
      * @param $table
      * @param $index
-     * @return array
      */
-    function handle($filterIsOrderby, $result, $limit, $data, $table, $index)
+    function handle($result, $table, $index)
     {
         $orderby = $this->cb->orderby;
-        if ($filterIsOrderby !== true) {
-            return $this->paginate($result, $limit, $data);
-        }
-
         if (! $orderby) {
-            $result = $result->orderby($index->table.'.'.$index->cb->primary_key, 'desc');
-            return $this->paginate($result, $limit, $data);
+            $result->orderby($index->table.'.'.$index->cb->primary_key, 'desc');
+            return;
         }
 
         $orderby = $this->normalizeOrderBy($orderby);
         $this->orderRows($result, $table, $orderby);
-        return $this->paginate($result, $limit, $data);
     }
 
     /**
@@ -43,18 +34,6 @@ class OrderAndPaginate
             }
             $result->orderby($table.'.'.$key, $value);
         }
-    }
-
-    /**
-     * @param $result
-     * @param $limit
-     * @param $data
-     * @return mixed
-     */
-    private function paginate($result, $limit, $data)
-    {
-        $data['result'] = $result->paginate($limit);
-        return $data;
     }
 
     /**
