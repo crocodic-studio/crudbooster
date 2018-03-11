@@ -5,7 +5,7 @@ namespace crocodicstudio\crudbooster\CBCoreModule\Index;
 class OrderAndPaginate
 {
     /**
-     * @param $filter_is_orderby
+     * @param $filterIsOrderby
      * @param $result
      * @param $limit
      * @param $data
@@ -13,10 +13,10 @@ class OrderAndPaginate
      * @param $index
      * @return array
      */
-    function handle($filter_is_orderby, $result, $limit, $data, $table, $index)
+    function handle($filterIsOrderby, $result, $limit, $data, $table, $index)
     {
         $orderby = $this->cb->orderby;
-        if ($filter_is_orderby !== true) {
+        if ($filterIsOrderby !== true) {
             return $this->paginate($result, $limit, $data);
         }
 
