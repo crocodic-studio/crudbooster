@@ -21,30 +21,12 @@ class OrderAndPaginate
         }
 
         if (! $orderby) {
-            $data['result'] = $result->orderby($index->table.'.'.$index->cb->primary_key, 'desc')->paginate($limit);
-
-            return $data;
+            $result = $result->orderby($index->table.'.'.$index->cb->primary_key, 'desc');
+            return $this->paginate($result, $limit, $data);
         }
 
-        return $this->orderAndPaginate($result, $limit, $data, $table, $orderby);
-    }
-
-    /**
-     * @param $result
-     * @param $limit
-     * @param $data
-     * @param $table
-     * @param $orderby
-     * @return mixed
-     */
-    private function orderAndPaginate($result, $limit, $data, $table, $orderby)
-    {
         $orderby = $this->normalizeOrderBy($orderby);
-
-
         $this->orderRows($result, $table, $orderby);
-
-
         return $this->paginate($result, $limit, $data);
     }
 
