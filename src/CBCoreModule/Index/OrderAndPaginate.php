@@ -39,26 +39,28 @@ class OrderAndPaginate
      */
     private function orderAndPaginate($result, $limit, $data, $table, $orderby)
     {
-        $x = $this->normalizeOrderBy($orderby);
+        $orderby = $this->normalizeOrderBy($orderby);
 
-        foreach ($x as $key => $value) {
-            $this->orderRows($result, $table, $key, $value);
-        }
+
+        $this->orderRows($result, $table, $orderby);
+
 
         return $this->paginate($result, $limit, $data);
     }
+
     /**
      * @param $result
      * @param $table
-     * @param $key
-     * @param $value
+     * @param $orderby
      */
-    private function orderRows($result, $table, $key, $value)
+    private function orderRows($result, $table, $orderby)
     {
-        if (strpos($key, '.')) {
-            $table = explode(".", $key)[0];
+        foreach ($orderby as $key => $value) {
+            if (strpos($key, '.')) {
+                $table = explode(".", $key)[0];
+            }
+            $result->orderby($table.'.'.$key, $value);
         }
-        $result->orderby($table.'.'.$key, $value);
     }
 
     /**
