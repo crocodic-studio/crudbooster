@@ -73,18 +73,17 @@ class Index
         }
 
         //LISTING INDEX HTML
-        $addaction = $CbCtrl->data['addaction'];
+        $addAction = $CbCtrl->data['addaction'];
 
         if ($CbCtrl->sub_module) {
-            $addaction = $this->_handleSubModules($addaction);
+            $addAction = $this->_handleSubModules($addAction);
         }
 
         //$mainpath = CRUDBooster::mainpath();
         //$orig_mainpath = $CbCtrl->data['mainpath'];
         //$title_field = $CbCtrl->title_field;
-        $html_contents = [];
         $number = (request('page', 1) - 1) * $limit + 1;
-        $html_contents = $this->htmlContents($CbCtrl, $data, $tablePK, $number, $columns_table, $table, $addaction, $html_contents); //end foreach data[result]
+        $html_contents = $this->htmlContents($CbCtrl, $data, $tablePK, $number, $columns_table, $table, $addAction); //end foreach data[result]
 
         $data['html_contents'] = ['html' => $html_contents, 'data' => $data['result']];
 
