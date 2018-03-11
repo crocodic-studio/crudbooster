@@ -39,9 +39,7 @@ class Index
 
         $result = $CbCtrl->table()->select(DB::raw($CbCtrl->table.".".$CbCtrl->primary_key));
 
-
         $this->_filterForParent($result);
-
 
         $CbCtrl->hookQueryIndex($result);
 
@@ -96,6 +94,7 @@ class Index
         $html_contents = $this->htmlContents($CbCtrl, $data, $tablePK, $number, $columns_table, $table, $addaction, $html_contents); //end foreach data[result]
 
         $data['html_contents'] = ['html' => $html_contents, 'data' => $data['result']];
+
         return $data;
     }
 
@@ -112,7 +111,7 @@ class Index
             $data['parent_field'] = CB::getTableForeignKey(request('parent_table'), $this->table);
         }
 
-        if (!$data['parent_field']) {
+        if (! $data['parent_field']) {
             return $data;
         }
 
@@ -125,27 +124,30 @@ class Index
         return $data;
     }
 
-
     /**
-     * @param $addAction
-     * @return array
+     * @param $result
      */
-    private function _handleSubModules($addAction)
+    private function _filterForParent($result)
     {
-        foreach ($this->cb->sub_module as $module) {
-            $table_parent = CRUDBooster::parseSqlTable($this->table)['table'];
-            $addAction[] = [
-                'label' => $module['label'],
-                'icon' => $module['button_icon'],
-                'url' => CRUDBooster::adminPath($module['path']).'?parent_table='.$table_parent.'&parent_columns='.$module['parent_columns'].'&parent_columns_alias='.$module['parent_columns_alias'].'&parent_id=['.(! isset($module['custom_parent_id']) ? "id" : $module['custom_parent_id']).']&return_url='.urlencode(Request::fullUrl()).'&foreign_key='.$module['foreign_key'].'&label='.urlencode($module['label']),
-                'color' => $module['button_color'],
-                'showIf' => $module['showIf'],
-            ];
+        if (! request('parent_id')) {
+            return null;
         }
 
-        return $addAction;
+        $table_parent = CRUDBooster::parseSqlTable($this->table)['table'];
+        $result->where($table_parent.'.'.request('foreign_key'), request('parent_id'));
     }
 
+    /**
+     * @param $table_columns
+     * @param $result
+     */
+    private function _filterOutSoftDeleted($table_columns, $result)
+    {
+        if (! in_array('deleted_at', $table_columns)) {
+            return;
+        }
+        $result->where($this->table.'.deleted_at', '=', null);
+    }
 
     /**
      * @param $result
@@ -166,7 +168,6 @@ class Index
 
         return $columns_table;
     }
-
 
     /**
      * @param $columns_table
@@ -191,34 +192,6 @@ class Index
 
         return $columns_table;
     }
-
-
-    /**
-     * @param $result
-     */
-    private function _filterForParent($result)
-    {
-        if (!request('parent_id')) {
-            return null;
-        }
-
-        $table_parent = CRUDBooster::parseSqlTable($this->table)['table'];
-        $result->where($table_parent.'.'.request('foreign_key'), request('parent_id'));
-    }
-
-
-    /**
-     * @param $table_columns
-     * @param $result
-     */
-    private function _filterOutSoftDeleted($table_columns, $result)
-    {
-        if (!in_array('deleted_at', $table_columns)) {
-            return ;
-        }
-        $result->where($this->table.'.deleted_at', '=', null);
-    }
-
 
     /**
      * @param $result
@@ -246,7 +219,6 @@ class Index
         }
     }
 
-
     /**
      * @param $filter_is_orderby
      * @param $result
@@ -271,6 +243,68 @@ class Index
         }
 
         return $this->orderAndPaginate($result, $limit, $data, $table, $orderby);
+    }
+
+    /**
+     * @param $result
+     * @param $limit
+     * @param $data
+     * @param $table
+     * @param $orderby
+     * @return mixed
+     */
+    private function orderAndPaginate($result, $limit, $data, $table, $orderby)
+    {
+        if (is_array($orderby)) {
+            foreach ($orderby as $key => $value) {
+                $this->orderRows($result, $table, $key, $value);
+            }
+        } else {
+            foreach (explode(";", $orderby) as $o) {
+                $o = explode(",", $o);
+                $key = $o[0];
+                $value = $o[1];
+                $this->orderRows($result, $table, $key, $value);
+            }
+        }
+
+        $data['result'] = $result->paginate($limit);
+        return $data;
+    }
+
+    /**
+     * @param $result
+     * @param $table
+     * @param $key
+     * @param $value
+     */
+    private function orderRows($result, $table, $key, $value)
+    {
+        $orderby_table = $table;
+        if (strpos($key, '.')) {
+            $orderby_table = explode(".", $key)[0];
+        }
+        $result->orderby($orderby_table.'.'.$key, $value);
+    }
+
+    /**
+     * @param $addAction
+     * @return array
+     */
+    private function _handleSubModules($addAction)
+    {
+        foreach ($this->cb->sub_module as $module) {
+            $table_parent = CRUDBooster::parseSqlTable($this->table)['table'];
+            $addAction[] = [
+                'label' => $module['label'],
+                'icon' => $module['button_icon'],
+                'url' => CRUDBooster::adminPath($module['path']).'?parent_table='.$table_parent.'&parent_columns='.$module['parent_columns'].'&parent_columns_alias='.$module['parent_columns_alias'].'&parent_id=['.(! isset($module['custom_parent_id']) ? "id" : $module['custom_parent_id']).']&return_url='.urlencode(Request::fullUrl()).'&foreign_key='.$module['foreign_key'].'&label='.urlencode($module['label']),
+                'color' => $module['button_color'],
+                'showIf' => $module['showIf'],
+            ];
+        }
+
+        return $addAction;
     }
 
     /**
@@ -320,45 +354,5 @@ class Index
         }
 
         return $html_contents;
-    }
-
-    /**
-     * @param $result
-     * @param $limit
-     * @param $data
-     * @param $table
-     * @param $orderby
-     * @return mixed
-     */
-    private function orderAndPaginate($result, $limit, $data, $table, $orderby)
-    {
-        if (is_array($orderby)) {
-            foreach ($orderby as $key => $value) {
-                if (strpos($key, '.') !== false) {
-                    $orderby_table = explode(".", $key)[0];
-                } else {
-                    $orderby_table = $table;
-                }
-                $result->orderby($orderby_table.'.'.$key, $value);
-            }
-            $data['result'] = $result->paginate($limit);
-
-            return $data;
-        }
-
-        foreach (explode(";", $orderby) as $o) {
-            $o = explode(",", $o);
-            $key = $o[0];
-            $value = $o[1];
-
-            $orderby_table = $table;
-            if (strpos($key, '.')) {
-                $orderby_table = explode(".", $key)[0];
-            }
-            $result->orderby($orderby_table.'.'.$key, $value);
-        }
-        $data['result'] = $result->paginate($limit);
-
-        return $data;
     }
 }
