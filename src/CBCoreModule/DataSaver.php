@@ -64,11 +64,7 @@ class DataSaver
             $inputData = request($name);
 
             //Insert Data Checkbox if Type Datatable
-            if ($row['type'] == 'checkbox' && $row['relationship_table']) {
-                $this->_updateRelations($row, $id, $inputData);
-            }
-
-            if ($row['type'] == 'select2' && $row['relationship_table']) {
+            if (in_array($row['type'] , ['select2', 'checkbox']) && $row['relationship_table']) {
                 $this->_updateRelations($row, $id, $inputData);
             }
 
