@@ -39,17 +39,18 @@ class OrderAndPaginate
      */
     private function orderAndPaginate($result, $limit, $data, $table, $orderby)
     {
+        $x = [];
         if (is_array($orderby)) {
-            foreach ($orderby as $key => $value) {
-                $this->orderRows($result, $table, $key, $value);
+            $x = $orderby;
+        } elseif(is_string($orderby)) {
+            foreach (explode(";", $orderby) as $by) {
+                $by = explode(",", $by);
+                $x[$by[0]] = $by[1];
             }
-        } else {
-            foreach (explode(";", $orderby) as $o) {
-                $o = explode(",", $o);
-                $key = $o[0];
-                $value = $o[1];
-                $this->orderRows($result, $table, $key, $value);
-            }
+        }
+
+        foreach ($x as $key => $value) {
+            $this->orderRows($result, $table, $key, $value);
         }
 
         return $this->paginate($result, $limit, $data);
