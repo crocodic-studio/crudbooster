@@ -129,25 +129,25 @@ class DataSaver
     {
         $name = str_slug($row['label'], '');
         $columns = $row['columns'];
-        $child_array = [];
+        $childArray = [];
 
-        $childtable = CRUDBooster::parseSqlTable($row['table'])['table'];
+        $childTable = CRUDBooster::parseSqlTable($row['table'])['table'];
         $fk = $row['foreign_key'];
 
-        DB::table($childtable)->where($fk, $id)->delete();
+        DB::table($childTable)->where($fk, $id)->delete();
 
         $countInput = count(request($name.'-'.$columns[0]['name'])) - 1;
         for ($i = 0; $i <= $countInput; $i++) {
-            $column_data = [];
-            $column_data[$fk] = $id;
+            $columnData = [];
+            $columnData[$fk] = $id;
             foreach ($columns as $col) {
                 $colname = $col['name'];
-                $column_data[$colname] = request($name.'-'.$colname)[$i];
+                $columnData[$colname] = request($name.'-'.$colname)[$i];
             }
-            $child_array[] = $column_data;
+            $childArray[] = $columnData;
         }
 
-        DB::table($childtable)->insert(array_reverse($child_array));
+        DB::table($childTable)->insert(array_reverse($childArray));
     }
 
     /**
