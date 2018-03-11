@@ -16,8 +16,10 @@ class OrderAndPaginate
             $result->orderby($index->table.'.'.$index->cb->primary_key, 'desc');
             return;
         }
+        if (is_string($orderby)) {
+            $orderby = $this->normalizeOrderBy($orderby);
+        }
 
-        $orderby = $this->normalizeOrderBy($orderby);
         $this->orderRows($result, $table, $orderby);
     }
 
@@ -43,13 +45,9 @@ class OrderAndPaginate
     private function normalizeOrderBy($orderby)
     {
         $x = [];
-        if (is_array($orderby)) {
-            $x = $orderby;
-        } elseif (is_string($orderby)) {
-            foreach (explode(";", $orderby) as $by) {
-                $by = explode(",", $by);
-                $x[$by[0]] = $by[1];
-            }
+        foreach (explode(";", $orderby) as $by) {
+            $by = explode(",", $by);
+            $x[$by[0]] = $by[1];
         }
 
         return $x;
