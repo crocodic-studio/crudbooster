@@ -270,35 +270,7 @@ class Index
             return $data;
         }
 
-        if (is_array($orderby)) {
-            foreach ($orderby as $k => $v) {
-                if (strpos($k, '.') !== false) {
-                    $orderby_table = explode(".", $k)[0];
-                } else {
-                    $orderby_table = $table;
-                }
-                $result->orderby($orderby_table.'.'.$k, $v);
-            }
-            $data['result'] = $result->paginate($limit);
-
-            return $data;
-        }
-
-        foreach (explode(";", $orderby) as $o) {
-            $o = explode(",", $o);
-            $key = $o[0];
-            $value = $o[1];
-
-            $orderby_table = $table;
-            if (strpos($key, '.')) {
-                $orderby_table = explode(".", $key)[0];
-            }
-            $result->orderby($orderby_table.'.'.$key, $value);
-        }
-
-        $data['result'] = $result->paginate($limit);
-
-        return $data;
+        return $this->orderAndPaginate($result, $limit, $data, $table, $orderby);
     }
 
     /**
@@ -348,5 +320,45 @@ class Index
         }
 
         return $html_contents;
+    }
+
+    /**
+     * @param $result
+     * @param $limit
+     * @param $data
+     * @param $table
+     * @param $orderby
+     * @return mixed
+     */
+    private function orderAndPaginate($result, $limit, $data, $table, $orderby)
+    {
+        if (is_array($orderby)) {
+            foreach ($orderby as $key => $value) {
+                if (strpos($key, '.') !== false) {
+                    $orderby_table = explode(".", $key)[0];
+                } else {
+                    $orderby_table = $table;
+                }
+                $result->orderby($orderby_table.'.'.$key, $value);
+            }
+            $data['result'] = $result->paginate($limit);
+
+            return $data;
+        }
+
+        foreach (explode(";", $orderby) as $o) {
+            $o = explode(",", $o);
+            $key = $o[0];
+            $value = $o[1];
+
+            $orderby_table = $table;
+            if (strpos($key, '.')) {
+                $orderby_table = explode(".", $key)[0];
+            }
+            $result->orderby($orderby_table.'.'.$key, $value);
+        }
+        $data['result'] = $result->paginate($limit);
+
+        return $data;
     }
 }
