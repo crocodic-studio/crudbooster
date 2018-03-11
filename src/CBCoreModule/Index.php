@@ -280,11 +280,10 @@ class Index
      */
     private function orderRows($result, $table, $key, $value)
     {
-        $orderby_table = $table;
         if (strpos($key, '.')) {
-            $orderby_table = explode(".", $key)[0];
+            $table = explode(".", $key)[0];
         }
-        $result->orderby($orderby_table.'.'.$key, $value);
+        $result->orderby($table.'.'.$key, $value);
     }
 
     /**
