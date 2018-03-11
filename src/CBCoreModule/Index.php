@@ -289,7 +289,7 @@ class Index
             $addAction[] = [
                 'label' => $module['label'],
                 'icon' => $module['button_icon'],
-                'url' => CRUDBooster::adminPath($module['path']).'?parent_table='.$table_parent.'&parent_columns='.$module['parent_columns'].'&parent_columns_alias='.$module['parent_columns_alias'].'&parent_id=['.(! isset($module['custom_parent_id']) ? "id" : $module['custom_parent_id']).']&return_url='.urlencode(Request::fullUrl()).'&foreign_key='.$module['foreign_key'].'&label='.urlencode($module['label']),
+                'url' => $this->subModuleUrl($module, $table_parent),
                 'color' => $module['button_color'],
                 'showIf' => $module['showIf'],
             ];
@@ -344,5 +344,20 @@ class Index
         }
 
         return $htmlContents;
+    }
+
+    /**
+     * @param $module
+     * @param $table_parent
+     * @return string
+     */
+    private function subModuleUrl($module, $table_parent)
+    {
+        return CRUDBooster::adminPath($module['path']).'?parent_table='.$table_parent.'&parent_columns='
+            .$module['parent_columns'].'&parent_columns_alias='
+            .$module['parent_columns_alias'].'&parent_id=['
+            .(! isset($module['custom_parent_id']) ? "id" : $module['custom_parent_id'])
+            .']&return_url='.urlencode(Request::fullUrl()).'&foreign_key='
+            .$module['foreign_key'].'&label='.urlencode($module['label']);
     }
 }
