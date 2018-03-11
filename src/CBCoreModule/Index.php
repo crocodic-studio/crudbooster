@@ -45,16 +45,9 @@ class Index
 
         $this->_filterOutSoftDeleted($table_columns, $result);
 
-        //$alias = [];
-        //$join_alias_count = 0;
-        //$join_table_temp = [];
         $table = $CbCtrl->table;
         $columns_table = $CbCtrl->columns_table;
         foreach ($columns_table as $index => $coltab) {
-
-            //$join = @$coltab['join'];
-            //$join_where = @$coltab['join_where'];
-            //$join_id = @$coltab['join_id'];
             $field = @$coltab['name'];
 
             if (strpos($field, '.')) {
