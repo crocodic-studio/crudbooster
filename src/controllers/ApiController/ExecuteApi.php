@@ -101,7 +101,7 @@ class ExecuteApi
                 }
 
                 $input_validator[$name] = $value;
-                $data_validation[$name] = $this->ctrl->makeValidationRules($param, $type_except, $table);
+                $data_validation[$name] = app(ValidationRules::class)->make($param, $type_except, $table);
             }
 
             $validator = Validator::make($input_validator, $data_validation);
