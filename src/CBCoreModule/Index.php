@@ -94,18 +94,6 @@ class Index
         return $data;
     }
     /**
-     * @param $result
-     * @param $limit
-     * @param $data
-     * @return mixed
-     */
-    private function paginate($result, $limit, $data)
-    {
-
-        return $data;
-    }
-
-    /**
      * @return array
      */
     private function _handleParentTable()
