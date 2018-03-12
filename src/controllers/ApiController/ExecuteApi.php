@@ -244,7 +244,6 @@ class ExecuteApi
      */
     private function handleListAction($table, $orderby, $data, $result, $debug_mode_message, $row, $responses_fields)
     {
-        $uploads_format_candidate = explode(',', cbConfig("UPLOAD_TYPES"));
         $orderby_col = $table.'.id';
         $orderby_val = 'desc';
 
@@ -263,7 +262,7 @@ class ExecuteApi
         }
         $result['data'] = [];
         if ($rows) {
-            list($row, $result) = $this->handleRows($result, $debug_mode_message, $row, $uploads_format_candidate, $responses_fields, $rows);
+            list($row, $result) = $this->handleRows($result, $debug_mode_message, $row, $responses_fields, $rows);
         }
 
         return [$result, $row];
@@ -380,17 +379,17 @@ class ExecuteApi
      * @param $result
      * @param $debug_mode_message
      * @param $row
-     * @param $uploads_format_candidate
      * @param $responses_fields
      * @param $rows
      * @return array
      */
-    private function handleRows($result, $debug_mode_message, $row, $uploads_format_candidate, $responses_fields, $rows)
+    private function handleRows($result, $debug_mode_message, $row, $responses_fields, $rows)
     {
+        $uploadsFormatCandidate = explode(',', cbConfig("UPLOAD_TYPES"));
         foreach ($rows as &$row) {
             foreach ($row as $k => $v) {
                 $ext = \File::extension($v);
-                if (in_array($ext, $uploads_format_candidate)) {
+                if (in_array($ext, $uploadsFormatCandidate)) {
                     $row->$k = asset($v);
                 }
 
