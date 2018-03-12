@@ -2,7 +2,7 @@
 
 namespace crocodicstudio\crudbooster\CBCoreModule\Index;
 
-class OrderAndPaginate
+class Order
 {
     /**
      * @param $result
