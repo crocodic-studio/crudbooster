@@ -370,7 +370,7 @@ class CBController extends Controller
 
         $this->hookAfterAdd($this->arr[$this->primary_key]);
 
-        $this->return_url = request('return_url', $this->return_url);
+        $this->return_url = $this->return_url ?: request('return_url');
 
         //insert log
         CB::insertLog(cbTrans("log_add", ['name' => $this->arr[$this->title_field], 'module' => CB::getCurrentModule()->name]));
@@ -467,7 +467,7 @@ class CBController extends Controller
 
         $this->hookAfterEdit($id);
 
-        $this->return_url = ($this->return_url) ? $this->return_url : request('return_url');
+        $this->return_url = $this->return_url ?: request('return_url');
 
         //insert log
         CB::insertLog(cbTrans("log_update", ['name' => $this->arr[$this->title_field], 'module' => CB::getCurrentModule()->name]));
@@ -485,11 +485,7 @@ class CBController extends Controller
 
         $this->hookBeforeDelete($id);
 
-        if (Schema::hasColumn($this->table, 'deleted_at')) {
-            $this->findRow($id)->update(['deleted_at' => date('Y-m-d H:i:s')]);
-        } else {
-            $this->findRow($id)->delete();
-        }
+        $this->deleteIds([$id]);
 
         $this->hookAfterDelete($id);
 
@@ -583,23 +579,15 @@ class CBController extends Controller
     }
 
     /**
-     * @param $id_selected
+     * @param $selectedIds
      * @return mixed
      */
-    private function deleteFromDB($id_selected)
+    private function deleteFromDB($selectedIds)
     {
-        $this->hookBeforeDelete($id_selected);
-        $tablePK = CB::pk($this->table);
-
-        if (Schema::hasColumn($this->table, 'deleted_at')) {
-            $this->table()->whereIn($tablePK, $id_selected)->update(['deleted_at' => date('Y-m-d H:i:s')]);
-        } else {
-            $this->table()->whereIn($tablePK, $id_selected)->delete();
-        }
-
-        CB::insertLog(cbTrans("log_delete", ['name' => implode(',', $id_selected), 'module' => CB::getCurrentModule()->name]));
-
-        $this->hookAfterDelete($id_selected);
+        $this->hookBeforeDelete($selectedIds);
+        $this->deleteIds($selectedIds);
+        CB::insertLog(cbTrans("log_delete", ['name' => implode(',', $selectedIds), 'module' => CB::getCurrentModule()->name]));
+        $this->hookAfterDelete($selectedIds);
 
         return CB::backWithMsg(cbTrans("alert_delete_selected_success"));
     }
@@ -674,5 +662,19 @@ class CBController extends Controller
         }
 
         CB::redirect(CB::mainpath(), cbTrans("alert_update_data_success"), 'success');
+    }
+
+    /**
+     * @param $idsArray
+     * @param $tablePK
+     */
+    private function deleteIds($idsArray)
+    {
+        $query = $this->table()->whereIn($this->primary_key, $idsArray);
+        if (Schema::hasColumn($this->table, 'deleted_at')) {
+            $query->update(['deleted_at' => date('Y-m-d H:i:s')]);
+        } else {
+            $query->delete();
+        }
     }
 }
