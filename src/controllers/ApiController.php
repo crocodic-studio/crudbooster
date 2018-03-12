@@ -2,6 +2,7 @@
 
 namespace crocodicstudio\crudbooster\controllers;
 
+use crocodicstudio\crudbooster\controllers\ApiController\ApiHooks;
 use crocodicstudio\crudbooster\controllers\ApiController\ExecuteApi;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;
@@ -12,6 +13,7 @@ use CRUDBooster;
 
 class ApiController extends Controller
 {
+    use ApiHooks;
     var $method_type;
 
     var $permalink;
@@ -23,26 +25,6 @@ class ApiController extends Controller
     var $validate = false;
 
     var $last_id_tmp = [];
-
-    public function hook_before(&$postdata)
-    {
-
-    }
-
-    public function hook_after($postdata, &$result)
-    {
-
-    }
-
-    public function hook_validate(&$postdata)
-    {
-
-    }
-
-    public function hook_query(&$query)
-    {
-
-    }
 
     public function hook_api_status($boolean)
     {
