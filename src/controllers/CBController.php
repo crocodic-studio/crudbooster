@@ -389,10 +389,7 @@ class CBController extends Controller
             $type = $ro['type'] ?: 'text';
             $inputdata = request($name);
 
-            if (! $name) {
-                continue;
-            }
-            if ($ro['exception']) {
+            if (! $name || $ro['exception']) {
                 continue;
             }
 
@@ -400,9 +397,11 @@ class CBController extends Controller
                 continue;
             }
 
-            if (file_exists(base_path($componentPath.$type.DIRECTORY_SEPARATOR.'hookInputAssignment.php'))) {
-                require_once(base_path($componentPath.$type.DIRECTORY_SEPARATOR.'hookInputAssignment.php'));
+            $hookPath = base_path($componentPath.$type.DIRECTORY_SEPARATOR.'hookInputAssignment.php');
+            if (file_exists($hookPath)) {
+                require_once($hookPath);
             }
+            unset($hookPath);
 
             if (Request::hasFile($name)) {
                 continue;
@@ -413,7 +412,6 @@ class CBController extends Controller
                 if (CB::isColumnNULL($this->table, $name)) {
                     continue;
                 }
-
                 $this->arr[$name] = "";
             }
         }
@@ -562,18 +560,18 @@ class CBController extends Controller
     public function postActionSelected()
     {
         $this->cbLoader();
-        $id_selected = Request::input('checkbox');
+        $selectedIds = Request::input('checkbox');
         $button_name = Request::input('button_name');
 
-        if (! $id_selected) {
+        if (! $selectedIds) {
             CB::redirect($_SERVER['HTTP_REFERER'], 'Please select at least one data!', 'warning');
         }
 
         if ($button_name == 'delete') {
-            return $this->deleteFromDB($id_selected);
+            return $this->deleteFromDB($selectedIds);
         }
 
-        list($type, $message) = $this->_getMessageAndType($button_name, $id_selected);
+        list($type, $message) = $this->_getMessageAndType($button_name, $selectedIds);
 
         return CB::backWithMsg($message, $type);
     }
