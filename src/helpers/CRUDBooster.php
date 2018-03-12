@@ -853,7 +853,7 @@ class CRUDBooster
     public static function redirect($to, $message, $type = 'warning')
     {
         if (Request::ajax()) {
-            response()->json(['message' => $message, 'message_type' => $type, 'redirect_url' => $to])->send();
+            response()->json(['message' => $message, 'message_type' => $type, 'redirect_url' => $to])->prepare(request())->send();
             exit;
         }
         redirect($to)->with(['message' => $message, 'message_type' => $type])->prepare(request())->send();

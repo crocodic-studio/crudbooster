@@ -328,7 +328,7 @@ class CBController extends Controller
         $id = request('id');
         DB::table($table)->where(CB::pk($table), $id)->update([$column => $value]);
 
-        return CB::backWithMsg(trans('crudbooster.alert_delete_data_success'));
+        return CB::backWithMsg(cbTrans('alert_delete_data_success'));
     }
 
     public function postFindData()
@@ -347,7 +347,7 @@ class CBController extends Controller
     {
         $this->cbLoader();
 
-        $page_title = trans("crudbooster.add_data_page_title", ['module' => CB::getCurrentModule()->name]);
+        $page_title = cbTrans("add_data_page_title", ['module' => CB::getCurrentModule()->name]);
         $page_menu = Route::getCurrentRoute()->getActionName();
         $command = 'add';
 
@@ -375,18 +375,18 @@ class CBController extends Controller
         $this->return_url = ($this->return_url) ? $this->return_url : request('return_url');
 
         //insert log
-        CB::insertLog(trans("crudbooster.log_add", ['name' => $this->arr[$this->title_field], 'module' => CB::getCurrentModule()->name]));
+        CB::insertLog(cbTrans("log_add", ['name' => $this->arr[$this->title_field], 'module' => CB::getCurrentModule()->name]));
 
         if ($this->return_url) {
-            if (request('submit') == trans('crudbooster.button_save_more')) {
-                CB::redirect(Request::server('HTTP_REFERER'), trans("crudbooster.alert_add_data_success"), 'success');
+            if (request('submit') == cbTrans('button_save_more')) {
+                CB::redirect(Request::server('HTTP_REFERER'), cbTrans("alert_add_data_success"), 'success');
             }
-            CB::redirect($this->return_url, trans("crudbooster.alert_add_data_success"), 'success');
+            CB::redirect($this->return_url, cbTrans("alert_add_data_success"), 'success');
         }
-        if (request('submit') == trans('crudbooster.button_save_more')) {
-            CB::redirect(CB::mainpath('add'), trans("crudbooster.alert_add_data_success"), 'success');
+        if (request('submit') == cbTrans('button_save_more')) {
+            CB::redirect(CB::mainpath('add'), cbTrans("alert_add_data_success"), 'success');
         }
-        CB::redirect(CB::mainpath(), trans("crudbooster.alert_add_data_success"), 'success');
+        CB::redirect(CB::mainpath(), cbTrans("alert_add_data_success"), 'success');
     }
 
 
@@ -444,7 +444,7 @@ class CBController extends Controller
         $row = $this->findRow($id)->first();
 
         $page_menu = Route::getCurrentRoute()->getActionName();
-        $page_title = trans("crudbooster.edit_data_page_title", ['module' => CB::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
+        $page_title = cbTrans("edit_data_page_title", ['module' => CB::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
         $command = 'edit';
         Session::put('current_row_id', $id);
 
@@ -481,17 +481,17 @@ class CBController extends Controller
         $this->return_url = ($this->return_url) ? $this->return_url : request('return_url');
 
         //insert log
-        CB::insertLog(trans("crudbooster.log_update", ['name' => $this->arr[$this->title_field], 'module' => CB::getCurrentModule()->name]));
+        CB::insertLog(cbTrans("log_update", ['name' => $this->arr[$this->title_field], 'module' => CB::getCurrentModule()->name]));
 
         if ($this->return_url) {
-            CB::redirect($this->return_url, trans("crudbooster.alert_update_data_success"), 'success');
+            CB::redirect($this->return_url, cbTrans("alert_update_data_success"), 'success');
         }
 
-        if (request('submit') == trans('crudbooster.button_save_more')) {
-            CB::redirect(CB::mainpath('add'), trans("crudbooster.alert_update_data_success"), 'success');
+        if (request('submit') == cbTrans('button_save_more')) {
+            CB::redirect(CB::mainpath('add'), cbTrans("alert_update_data_success"), 'success');
         }
 
-        CB::redirect(CB::mainpath(), trans("crudbooster.alert_update_data_success"), 'success');
+        CB::redirect(CB::mainpath(), cbTrans("alert_update_data_success"), 'success');
     }
 
     public function getDelete($id)
@@ -500,7 +500,7 @@ class CBController extends Controller
         $row = $this->findRow($id)->first();
 
         //insert log
-        CB::insertLog(trans("crudbooster.log_delete", ['name' => $row->{$this->title_field}, 'module' => CB::getCurrentModule()->name]));
+        CB::insertLog(cbTrans("log_delete", ['name' => $row->{$this->title_field}, 'module' => CB::getCurrentModule()->name]));
 
         $this->hookBeforeDelete($id);
 
@@ -514,7 +514,7 @@ class CBController extends Controller
 
         $url = request('return_url') ?: CB::referer();
 
-        CB::redirect($url, trans("crudbooster.alert_delete_data_success"), 'success');
+        CB::redirect($url, cbTrans("alert_delete_data_success"), 'success');
     }
 
     public function getDetail($id)
@@ -523,7 +523,7 @@ class CBController extends Controller
         $row = $this->findRow($id)->first();
 
         $page_menu = Route::getCurrentRoute()->getActionName();
-        $page_title = trans("crudbooster.detail_data_page_title", ['module' => CB::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
+        $page_title = cbTrans("detail_data_page_title", ['module' => CB::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
         $command = 'detail';
 
         Session::put('current_row_id', $id);
@@ -616,11 +616,11 @@ class CBController extends Controller
             $this->table()->whereIn($tablePK, $id_selected)->delete();
         }
 
-        CB::insertLog(trans("crudbooster.log_delete", ['name' => implode(',', $id_selected), 'module' => CB::getCurrentModule()->name]));
+        CB::insertLog(cbTrans("log_delete", ['name' => implode(',', $id_selected), 'module' => CB::getCurrentModule()->name]));
 
         $this->hookAfterDelete($id_selected);
 
-        return CB::backWithMsg(trans("crudbooster.alert_delete_selected_success"));
+        return CB::backWithMsg(cbTrans("alert_delete_selected_success"));
     }
 
     /**
@@ -633,7 +633,7 @@ class CBController extends Controller
         $action = str_replace(['-', '_'], ' ', $button_name);
         $action = ucwords($action);
         $type = 'success';
-        $message = trans("crudbooster.alert_action", ['action' => $action]);
+        $message = cbTrans("alert_action", ['action' => $action]);
 
         if ($this->actionButtonSelected($id_selected, $button_name) === false) {
             $message = ! empty($this->alert['message']) ? $this->alert['message'] : 'Error';
@@ -665,6 +665,6 @@ class CBController extends Controller
             'module' => CB::getCurrentModule()->name,
         ]));
 
-        CB::redirect(Request::server('HTTP_REFERER'), trans('crudbooster.alert_delete_data_success'), 'success');
+        CB::redirect(Request::server('HTTP_REFERER'), cbTrans('alert_delete_data_success'), 'success');
     }
 }

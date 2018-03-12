@@ -93,8 +93,6 @@ class Search
     private function decode($data)
     {
         $data = base64_decode($data);
-        $data = json_decode($data, true);
-
-        return $data;
+        return json_decode($data, true);
     }
 }
