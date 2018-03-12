@@ -176,7 +176,12 @@
                   </form><!--END FORM TABLE-->
 
             <div class="col-md-8">{!! urldecode(str_replace("/?","?",$result->appends(Request::all())->render())) !!}</div>
-            <div class="col-md-4" style="margin:30px 0;"><span class="pull-right">{{ trans("crudbooster.filter_rows_total") }}: {{ $result->count() }} {{ trans("crudbooster.filter_rows_of") }} {{ $result->total() }}</span></div>
+            <?php 
+              $from = $result->count()?($result->perPage() * $result->currentPage() - $result->perPage() + 1):0;
+              $to = $result->perPage() * $result->currentPage() - $result->perPage() + $result->count();
+              $total = $result->total();
+            ?>
+            <div class="col-md-4" style="margin:30px 0;"><span class="pull-right">{{ trans("crudbooster.filter_rows_total") }}: {{ $from }} {{ trans("crudbooster.filter_rows_to") }} {{ $to }} {{ trans("crudbooster.filter_rows_of") }} {{ $total }}</span></div>
 
             @if($columns)
             @push('bottom')

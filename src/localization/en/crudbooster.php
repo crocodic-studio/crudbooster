@@ -221,6 +221,7 @@ return [
     'filter_to'                    => 'to',
     'filter_sorting'               => 'Sorting',
     'filter_rows_total'            => 'Total rows',
+    'filter_rows_to'               => 'to',
     'filter_rows_of'               => 'of',
     
     // confirmation

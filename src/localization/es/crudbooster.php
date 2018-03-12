@@ -209,6 +209,7 @@ return [
     'filter_to'                    => 'Hasta',
     'filter_sorting'               => 'Sorting',
     'filter_rows_total'            => 'Total de registros',
+    'filter_rows_to'               => 'a',
     'filter_rows_of'               => 'de',
     // confirmation
     'confirmation_yes'             => '¡Sí!',
