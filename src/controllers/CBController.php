@@ -356,7 +356,6 @@ class CBController extends Controller
 
     public function postAddSave()
     {
-        $saver = app(DataSaver::class);
         $this->cbLoader();
 
         app(FormValidator::class)->validate(null, $this->form, $this->table);
@@ -368,7 +367,7 @@ class CBController extends Controller
 
         $this->hookBeforeAdd($this->arr);
 
-        $saver->insert($this);
+        app(DataSaver::class)->insert($this);
 
         $this->hookAfterAdd($this->arr[$this->primary_key]);
 
@@ -377,16 +376,7 @@ class CBController extends Controller
         //insert log
         CB::insertLog(cbTrans("log_add", ['name' => $this->arr[$this->title_field], 'module' => CB::getCurrentModule()->name]));
 
-        if ($this->return_url) {
-            if (request('submit') == cbTrans('button_save_more')) {
-                CB::redirect(Request::server('HTTP_REFERER'), cbTrans("alert_add_data_success"), 'success');
-            }
-            CB::redirect($this->return_url, cbTrans("alert_add_data_success"), 'success');
-        }
-        if (request('submit') == cbTrans('button_save_more')) {
-            CB::redirect(CB::mainpath('add'), cbTrans("alert_add_data_success"), 'success');
-        }
-        CB::redirect(CB::mainpath(), cbTrans("alert_add_data_success"), 'success');
+        $this->sendResponseForAdd();
     }
 
 
@@ -666,5 +656,19 @@ class CBController extends Controller
         ]));
 
         CB::redirect(Request::server('HTTP_REFERER'), cbTrans('alert_delete_data_success'), 'success');
+    }
+
+    private function sendResponseForAdd()
+    {
+        if ($this->return_url) {
+            if (request('submit') == cbTrans('button_save_more')) {
+                CB::redirect(Request::server('HTTP_REFERER'), cbTrans("alert_add_data_success"), 'success');
+            }
+            CB::redirect($this->return_url, cbTrans("alert_add_data_success"), 'success');
+        }
+        if (request('submit') == cbTrans('button_save_more')) {
+            CB::redirect(CB::mainpath('add'), cbTrans("alert_add_data_success"), 'success');
+        }
+        CB::redirect(CB::mainpath(), cbTrans("alert_add_data_success"), 'success');
     }
 }
