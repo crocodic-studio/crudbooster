@@ -473,15 +473,7 @@ class CBController extends Controller
         //insert log
         CB::insertLog(cbTrans("log_update", ['name' => $this->arr[$this->title_field], 'module' => CB::getCurrentModule()->name]));
 
-        if ($this->return_url) {
-            CB::redirect($this->return_url, cbTrans("alert_update_data_success"), 'success');
-        }
-
-        if (request('submit') == cbTrans('button_save_more')) {
-            CB::redirect(CB::mainpath('add'), cbTrans("alert_update_data_success"), 'success');
-        }
-
-        CB::redirect(CB::mainpath(), cbTrans("alert_update_data_success"), 'success');
+        $this->sendResponseForUpdate();
     }
 
     public function getDelete($id)
@@ -670,5 +662,18 @@ class CBController extends Controller
             CB::redirect(CB::mainpath('add'), cbTrans("alert_add_data_success"), 'success');
         }
         CB::redirect(CB::mainpath(), cbTrans("alert_add_data_success"), 'success');
+    }
+
+    private function sendResponseForUpdate()
+    {
+        if ($this->return_url) {
+            CB::redirect($this->return_url, cbTrans("alert_update_data_success"), 'success');
+        }
+
+        if (request('submit') == cbTrans('button_save_more')) {
+            CB::redirect(CB::mainpath('add'), cbTrans("alert_update_data_success"), 'success');
+        }
+
+        CB::redirect(CB::mainpath(), cbTrans("alert_update_data_success"), 'success');
     }
 }
