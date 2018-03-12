@@ -208,7 +208,6 @@ class CBController extends Controller
 
     public function postExportData()
     {
-        $exporter = app(IndexExport::class);
         $this->limit = Request::input('limit');
         $this->index_return = true;
         $filename = Request::input('filename');
@@ -222,7 +221,7 @@ class CBController extends Controller
         $format = Request::input('fileformat');
         if(in_array($format, ['pdf', 'xls', 'csv']))
         {
-            return $exporter->{$format}($filename, $indexContent, $paperorientation, $papersize);
+            return app(IndexExport::class)->{$format}($filename, $indexContent, $paperorientation, $papersize);
         }
     }
 
