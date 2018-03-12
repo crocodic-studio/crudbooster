@@ -126,7 +126,10 @@ class ExecuteApi
         unset($posts['limit'], $posts['offset'], $posts['orderby']);
 
         if (in_array($action_type, ['list', 'detail', 'delete'])) {
-            $data = $this->responses($table, $offset, $limit, $responses, $responses_fields); //End Responses
+            $data = DB::table($table);
+            $data->skip($offset);
+            $data->take($limit);
+            $data = $this->responses($table, $data, $responses, $responses_fields); //End Responses
 
             $this->params($parameters, $posts, $data, $table);
 
@@ -463,19 +466,14 @@ class ExecuteApi
 
     /**
      * @param $table
-     * @param $offset
-     * @param $limit
+     * @param $data
      * @param $responses
      * @param $responses_fields
      * @return array
      */
-    private function responses($table, $offset, $limit, $responses, $responses_fields)
+    private function responses($table, $data, $responses, $responses_fields)
     {
         $name_tmp = [];
-        $data = DB::table($table);
-        $data->skip($offset);
-        $data->take($limit);
-
         foreach ($responses as $resp) {
             $name = $resp['name'];
             $type = $resp['type'];
@@ -505,19 +503,7 @@ class ExecuteApi
             }
 
             $name_tmp[] = $name;
-            if (CRUDBooster::isForeignKey($name)) {
-                $jointable = CRUDBooster::getTableForeignKey($name);
-                $jointable_field = CRUDBooster::getTableColumns($jointable);
-
-                $data->leftjoin($jointable, $jointable.'.id', '=', $table.'.'.$name);
-                foreach ($jointable_field as $jf) {
-                    $jf_alias = $jointable.'_'.$jf;
-                    if (in_array($jf_alias, $responses_fields)) {
-                        $data->addselect($jointable.'.'.$jf.' as '.$jf_alias);
-                        $name_tmp[] = $jf_alias;
-                    }
-                }
-            }
+            $name_tmp = $this->joinRelatedTables($table, $responses_fields, $name, $data, $name_tmp);
         }
 
         return $data;
@@ -558,5 +544,32 @@ class ExecuteApi
                 }
             }
         });
+    }
+
+    /**
+     * @param $table
+     * @param $responses_fields
+     * @param $name
+     * @param $data
+     * @param $name_tmp
+     * @return array
+     */
+    private function joinRelatedTables($table, $responses_fields, $name, $data, $name_tmp)
+    {
+        if (CRUDBooster::isForeignKey($name)) {
+            $jointable = CRUDBooster::getTableForeignKey($name);
+            $jointable_field = CRUDBooster::getTableColumns($jointable);
+
+            $data->leftjoin($jointable, $jointable.'.id', '=', $table.'.'.$name);
+            foreach ($jointable_field as $jf) {
+                $jf_alias = $jointable.'_'.$jf;
+                if (in_array($jf_alias, $responses_fields)) {
+                    $data->addselect($jointable.'.'.$jf.' as '.$jf_alias);
+                    $name_tmp[] = $jf_alias;
+                }
+            }
+        }
+
+        return $name_tmp;
     }
 }
