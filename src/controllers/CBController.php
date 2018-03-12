@@ -371,7 +371,7 @@ class CBController extends Controller
 
         $this->hookAfterAdd($this->arr[$this->primary_key]);
 
-        $this->return_url = ($this->return_url) ? $this->return_url : request('return_url');
+        $this->return_url = request('return_url', $this->return_url);
 
         //insert log
         CB::insertLog(cbTrans("log_add", ['name' => $this->arr[$this->title_field], 'module' => CB::getCurrentModule()->name]));
