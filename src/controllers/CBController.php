@@ -373,7 +373,7 @@ class CBController extends Controller
         $this->return_url = $this->return_url ?: request('return_url');
 
         //insert log
-        CB::insertLog(cbTrans("log_add", ['name' => $this->arr[$this->title_field], 'module' => CB::getCurrentModule()->name]));
+        $this->insertLog("log_add", $this->arr[$this->title_field]);
 
         $this->sendResponseForAdd();
     }
@@ -479,7 +479,7 @@ class CBController extends Controller
         $row = $this->findRow($id)->first();
 
         //insert log
-        CB::insertLog(cbTrans("log_delete", ['name' => $row->{$this->title_field}, 'module' => CB::getCurrentModule()->name]));
+        $this->insertLog("log_delete", $row->{$this->title_field});
 
         $this->performDeletion([$id]);
 
@@ -580,7 +580,7 @@ class CBController extends Controller
     {
         $this->performDeletion($idsArray);
 
-        CB::insertLog(cbTrans("log_delete", ['name' => implode(',', $idsArray), 'module' => CB::getCurrentModule()->name]));
+        $this->insertLog("log_delete", implode(',', $idsArray));
 
         return CB::backWithMsg(cbTrans("alert_delete_selected_success"));
     }
@@ -622,10 +622,7 @@ class CBController extends Controller
 
         $this->findRow($id)->update([$column => null]);
 
-        CB::insertLog(cbTrans('log_delete_image', [
-            'name' => $row->{$this->title_field},
-            'module' => CB::getCurrentModule()->name,
-        ]));
+        $this->insertLog('log_delete_image', $row->{$this->title_field});
 
         CB::redirect(Request::server('HTTP_REFERER'), cbTrans('alert_delete_data_success'), 'success');
     }
