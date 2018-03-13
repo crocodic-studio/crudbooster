@@ -230,6 +230,33 @@ class DbInspector
         } catch (\Exception $e) {
             $primary_key = null;
         }
+
         return $primary_key;
+    }
+
+    public static function listTables()
+    {
+        $multiple_db = cbConfig('MULTIPLE_DATABASE_MODULE') ?: [];
+        $db_database = cbConfig('MAIN_DB_DATABASE');
+
+        if ($multiple_db) {
+            try {
+                $multiple_db[] = cbConfig('MAIN_DB_DATABASE');
+                $query_table_schema = implode("','", $multiple_db);
+                $tables = DB::select("SELECT CONCAT(TABLE_SCHEMA,'.',TABLE_NAME) FROM INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA != 'mysql' AND TABLE_SCHEMA != 'performance_schema' AND TABLE_SCHEMA != 'information_schema' AND TABLE_SCHEMA != 'phpmyadmin' AND TABLE_SCHEMA IN ('$query_table_schema')");
+            } catch (\Exception $e) {
+                $tables = [];
+            }
+
+            return $tables;
+        }
+
+        try {
+            $tables = DB::select("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = '".$db_database."'");
+        } catch (\Exception $e) {
+            $tables = [];
+        }
+
+        return $tables;
     }
 }
