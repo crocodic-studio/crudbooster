@@ -481,11 +481,7 @@ class CBController extends Controller
         //insert log
         CB::insertLog(cbTrans("log_delete", ['name' => $row->{$this->title_field}, 'module' => CB::getCurrentModule()->name]));
 
-        $this->hookBeforeDelete($id);
-
-        $this->deleteIds([$id]);
-
-        $this->hookAfterDelete($id);
+        $this->performDeletion([$id]);
 
         $url = request('return_url') ?: CB::referer();
 
@@ -577,15 +573,14 @@ class CBController extends Controller
     }
 
     /**
-     * @param $selectedIds
+     * @param $idsArray
      * @return mixed
      */
-    private function deleteFromDB($selectedIds)
+    private function deleteFromDB($idsArray)
     {
-        $this->hookBeforeDelete($selectedIds);
-        $this->deleteIds($selectedIds);
-        CB::insertLog(cbTrans("log_delete", ['name' => implode(',', $selectedIds), 'module' => CB::getCurrentModule()->name]));
-        $this->hookAfterDelete($selectedIds);
+        $this->performDeletion($idsArray);
+        
+        CB::insertLog(cbTrans("log_delete", ['name' => implode(',', $idsArray), 'module' => CB::getCurrentModule()->name]));
 
         return CB::backWithMsg(cbTrans("alert_delete_selected_success"));
     }
@@ -674,5 +669,15 @@ class CBController extends Controller
         } else {
             $query->delete();
         }
+    }
+
+    /**
+     * @param $idsArray
+     */
+    private function performDeletion($idsArray)
+    {
+        $this->hookBeforeDelete($idsArray);
+        $this->deleteIds($idsArray);
+        $this->hookAfterDelete($idsArray);
     }
 }
