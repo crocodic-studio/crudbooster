@@ -347,10 +347,10 @@ class CBController extends Controller
         $this->cbLoader();
 
         $page_title = cbTrans('add_data_page_title', ['module' => CB::getCurrentModule()->name]);
-        $page_menu = Route::getCurrentRoute()->getActionName();
+
         $command = 'add';
 
-        return view('crudbooster::default.form', compact('page_title', 'page_menu', 'command'));
+        return view('crudbooster::default.form', compact('page_title', 'command'));
     }
 
     public function postAddSave()
@@ -427,12 +427,11 @@ class CBController extends Controller
         $this->cbLoader();
         $row = $this->findRow($id)->first();
 
-        $page_menu = Route::getCurrentRoute()->getActionName();
         $page_title = cbTrans("edit_data_page_title", ['module' => CB::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
         $command = 'edit';
         Session::put('current_row_id', $id);
 
-        return view('crudbooster::default.form', compact('id', 'row', 'page_menu', 'page_title', 'command'));
+        return view('crudbooster::default.form', compact('id', 'row', 'page_title', 'command'));
     }
 
     /**
@@ -448,7 +447,6 @@ class CBController extends Controller
     {
         $saver = app(DataSaver::class);
         $this->cbLoader();
-        //$row = $this->findRow($id)->first();
 
         app(FormValidator::class)->validate($id, $this->form, $this->table);
         $this->inputAssignment($id);
@@ -486,13 +484,13 @@ class CBController extends Controller
         $this->cbLoader();
         $row = $this->findRow($id)->first();
 
-        $page_menu = Route::getCurrentRoute()->getActionName();
+
         $page_title = cbTrans('detail_data_page_title', ['module' => CB::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
         $command = 'detail';
 
         Session::put('current_row_id', $id);
 
-        return view('crudbooster::default.form', compact('row', 'page_menu', 'page_title', 'command', 'id'));
+        return view('crudbooster::default.form', compact('row', 'page_title', 'command', 'id'));
     }
 
     public function getImportData()
