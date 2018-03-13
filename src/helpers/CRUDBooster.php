@@ -624,8 +624,7 @@ class CRUDBooster
         }
 
         $string_parameters = http_build_query($get);
-        $string_parameters_array = explode('&', $string_parameters);
-        foreach ($string_parameters_array as $s) {
+        foreach (explode('&', $string_parameters) as $s) {
             $part = explode('=', $s);
             $name = urldecode($part[0]);
             $value = urldecode($part[1]);
@@ -740,11 +739,13 @@ class CRUDBooster
 
     public static function isExistsController($table)
     {
-        $controllername = ucwords(str_replace('_', ' ', $table));
-        $controllername = str_replace(' ', '', $controllername).'Controller';
+        $ctrlName = ucwords(str_replace('_', ' ', $table));
+        $ctrlName = str_replace(' ', '', $ctrlName).'Controller';
         $path = base_path(controllers_dir());
         $path2 = base_path(controllers_dir()."ControllerMaster/");
-        if (file_exists($path.'Admin'.$controllername.'.php') || file_exists($path2.'Admin'.$controllername.'.php') || file_exists($path2.$controllername.'.php')) {
+
+        $ctrlName = $ctrlName.'.php';
+        if (file_exists($path.'Admin'.$ctrlName) || file_exists($path2.'Admin'.$ctrlName) || file_exists($path2.$ctrlName)) {
             return true;
         }
 
