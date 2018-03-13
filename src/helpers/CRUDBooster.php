@@ -250,20 +250,22 @@ class CRUDBooster
         }
     }
 
-    public static function getSortingFilter($field)
+    private static function getFilter($field, $index)
     {
         $filter = request('filter_column');
         if ($filter[$field]) {
-            return $filter[$field]['sorting'];
+            return $filter[$field][$index];
         }
+    }
+
+    public static function getSortingFilter($field)
+    {
+        return self::getFilter($field, 'sorting');
     }
 
     public static function getTypeFilter($field)
     {
-        $filter = request('filter_column');
-        if ($filter[$field]) {
-            return $filter[$field]['type'];
-        }
+        return self::getFilter($field, 'type');
     }
 
     public static function stringBetween($string, $start, $end)
