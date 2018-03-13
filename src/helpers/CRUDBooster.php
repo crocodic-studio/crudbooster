@@ -202,13 +202,13 @@ class CRUDBooster
     public static function deleteConfirm($redirectTo)
     {
         echo 'swal({   
-				title: "'.trans('crudbooster.delete_title_confirm').'",   
-				text: "'.trans('crudbooster.delete_description_confirm').'",   
+				title: "'.cbTrans('delete_title_confirm').'",   
+				text: "'.cbTrans('delete_description_confirm').'",   
 				type: "warning",   
 				showCancelButton: true,   
 				confirmButtonColor: "#ff0000",   
-				confirmButtonText: "'.trans('crudbooster.confirmation_yes').'",  
-				cancelButtonText: "'.trans('crudbooster.confirmation_no').'",  
+				confirmButtonText: "'.cbTrans('confirmation_yes').'",  
+				cancelButtonText: "'.cbTrans('confirmation_no').'",  
 				closeOnConfirm: false }, 
 				function(){  location.href="'.$redirectTo.'" });';
     }
@@ -847,7 +847,7 @@ class CRUDBooster
 
     public static function denyAccess()
     {
-        static::redirect(static::adminPath(), trans('crudbooster.denied_access'));
+        static::redirect(static::adminPath(), cbTrans('denied_access'));
     }
 
     public static function redirect($to, $message, $type = 'warning')
