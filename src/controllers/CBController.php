@@ -372,7 +372,6 @@ class CBController extends Controller
 
         $this->return_url = $this->return_url ?: request('return_url');
 
-        //insert log
         $this->insertLog("log_add", $this->arr[$this->title_field]);
 
         $this->sendResponseForAdd();
@@ -467,7 +466,6 @@ class CBController extends Controller
 
         $this->return_url = $this->return_url ?: request('return_url');
 
-        //insert log
         $this->insertLog("log_update", $this->arr[$this->title_field]);
 
         $this->sendResponseForUpdate();
@@ -478,7 +476,6 @@ class CBController extends Controller
         $this->cbLoader();
         $row = $this->findRow($id)->first();
 
-        //insert log
         $this->insertLog("log_delete", $row->{$this->title_field});
 
         $this->performDeletion([$id]);
@@ -656,7 +653,6 @@ class CBController extends Controller
 
     /**
      * @param $idsArray
-     * @param $tablePK
      */
     private function deleteIds($idsArray)
     {
