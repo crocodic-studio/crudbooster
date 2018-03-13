@@ -360,9 +360,7 @@ class CBController extends Controller
         app(FormValidator::class)->validate(null, $this->form, $this->table);
         $this->inputAssignment();
 
-        if (Schema::hasColumn($this->table, 'created_at')) {
-            $this->arr['created_at'] = date('Y-m-d H:i:s');
-        }
+        $this->setTimeStamps('created_at');
 
         $this->hookBeforeAdd($this->arr);
 
@@ -455,9 +453,7 @@ class CBController extends Controller
         app(FormValidator::class)->validate($id, $this->form, $this->table);
         $this->inputAssignment($id);
 
-        if (Schema::hasColumn($this->table, 'updated_at')) {
-            $this->arr['updated_at'] = date('Y-m-d H:i:s');
-        }
+        $this->setTimeStamps('updated_at');
 
         $this->hookBeforeEdit($this->arr, $id);
         $saver->update($id, $this);
@@ -677,5 +673,12 @@ class CBController extends Controller
     private function insertLog($msg, $name)
     {
         CB::insertLog(cbTrans($msg, ['module' => CB::getCurrentModule()->name, 'name' => $name]));
+    }
+
+    private function setTimeStamps($col)
+    {
+        if (Schema::hasColumn($this->table, $col)) {
+            $this->arr[$col] = date('Y-m-d H:i:s');
+        }
     }
 }
