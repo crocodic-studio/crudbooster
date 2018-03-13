@@ -468,7 +468,7 @@ class CBController extends Controller
         $this->return_url = $this->return_url ?: request('return_url');
 
         //insert log
-        CB::insertLog(cbTrans("log_update", ['name' => $this->arr[$this->title_field], 'module' => CB::getCurrentModule()->name]));
+        $this->insertLog("log_update", $this->arr[$this->title_field]);
 
         $this->sendResponseForUpdate();
     }
@@ -579,7 +579,7 @@ class CBController extends Controller
     private function deleteFromDB($idsArray)
     {
         $this->performDeletion($idsArray);
-        
+
         CB::insertLog(cbTrans("log_delete", ['name' => implode(',', $idsArray), 'module' => CB::getCurrentModule()->name]));
 
         return CB::backWithMsg(cbTrans("alert_delete_selected_success"));
@@ -679,5 +679,10 @@ class CBController extends Controller
         $this->hookBeforeDelete($idsArray);
         $this->deleteIds($idsArray);
         $this->hookAfterDelete($idsArray);
+    }
+
+    private function insertLog($msg, $name)
+    {
+        CB::insertLog(cbTrans($msg, ['module' => CB::getCurrentModule()->name, 'name' => $name]));
     }
 }
