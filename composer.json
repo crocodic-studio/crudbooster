@@ -24,7 +24,7 @@
         "unisharp/laravel-filemanager": "1.7.*",
         "intervention/imagecache":"2.*",
         "imanghafoori/laravel-widgetize":"1.8.*",
-        "imanghafoori/laravel-responder":"*"
+        "imanghafoori/laravel-responder":"dev-master"
     },
     "autoload": {
         "psr-4": {
