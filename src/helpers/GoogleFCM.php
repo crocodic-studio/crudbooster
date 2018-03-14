@@ -11,10 +11,8 @@ class GoogleFCM
             return 'title , content null !';
         }
 
-        $apikey = SettingRepo::getSetting('google_fcm_key');
-
         $fields = $this->getFields($regID, $data);
-        $headers = $this->getHeaders($apikey);
+        $headers = $this->getHeaders();
 
         return $this->sendRequest($headers, $fields);
     }
