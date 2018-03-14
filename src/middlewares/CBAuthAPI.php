@@ -28,15 +28,15 @@ class CBAuthAPI
             return;
         }
 
-        $result = $this->validateRequest();
+        $this->validateRequest();
 
         list($user_agent, $server_token, $server_token_screet) = $this->getTokens();
 
         $sender_token = Request::header('X-Authorization-Token');
 
-        $this->tokenMissMatchResponse($sender_token, $server_token, $result);
+        $this->tokenMissMatchResponse($sender_token, $server_token);
 
-        $this->tokenMissMatchDevice($sender_token, $user_agent, $result, $server_token);
+        $this->tokenMissMatchDevice($sender_token, $user_agent, $server_token);
 
         $id = array_search($sender_token, $server_token);
         $server_screet = $server_token_screet[$id];
@@ -53,7 +53,6 @@ class CBAuthAPI
      */
     private function validateRequest()
     {
-        $result = [];
         $validator = Validator::make([
 
             'X-Authorization-Token' => Request::header('X-Authorization-Token'),
@@ -64,13 +63,14 @@ class CBAuthAPI
             'X-Authorization-Time' => 'required',
             'useragent' => 'required',
         ]);
-
-        if ($validator->fails()) {
-            $message = $validator->errors()->all();
-            $result['api_status'] = 0;
-            $result['api_message'] = implode(', ', $message);
-            sendAndTerminate(response()->json($result, 200));
+        $result = [];
+        if (!$validator->fails()) {
+            return [];
         }
+        $message = $validator->errors()->all();
+        $result['api_status'] = 0;
+        $result['api_message'] = implode(', ', $message);
+        sendAndTerminate(response()->json($result, 200));
 
         return $result;
     }
@@ -97,14 +97,14 @@ class CBAuthAPI
     /**
      * @param $sender_token
      * @param $server_token
-     * @param $result
      * @return mixed
      */
-    private function tokenMissMatchResponse($sender_token, $server_token, $result)
+    private function tokenMissMatchResponse($sender_token, $server_token)
     {
         if (Cache::has($sender_token) || in_array($sender_token, $server_token)) {
             return;
         }
+        $result = [];
         $result['api_status'] = false;
         $result['api_message'] = "THE TOKEN IS NOT MATCH WITH SERVER TOKEN";
         $result['sender_token'] = $sender_token;
@@ -113,20 +113,20 @@ class CBAuthAPI
     }
 
     /**
-     * @param $sender_token
-     * @param $user_agent
-     * @param $result
-     * @param $server_token
+     * @param $senderToken
+     * @param $userAgent
+     * @param $serverToken
      */
-    private function tokenMissMatchDevice($sender_token, $user_agent, $result, $server_token)
+    private function tokenMissMatchDevice($senderToken, $userAgent, $serverToken)
     {
-        if (! Cache::has($sender_token) || Cache::get($sender_token) == $user_agent) {
+        if (! Cache::has($senderToken) || Cache::get($senderToken) == $userAgent) {
             return;
         }
+        $result = [];
         $result['api_status'] = false;
         $result['api_message'] = "THE TOKEN IS ALREADY BUT NOT MATCH WITH YOUR DEVICE";
-        $result['sender_token'] = $sender_token;
-        $result['server_token'] = $server_token;
+        $result['sender_token'] = $senderToken;
+        $result['server_token'] = $serverToken;
         sendAndTerminate(response()->json($result, 200));
     }
 }
