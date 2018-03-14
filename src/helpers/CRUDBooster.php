@@ -493,14 +493,11 @@ class CRUDBooster
             $result = [];
             $result['api_status'] = 0;
             $result['api_message'] = implode(', ', $message);
-            response()->json($result, 200)->send();
-            exit;
+            sendAndTerminate(response()->json($result, 200));
         }
 
         $res = redirect()->back()->with(['message' => implode('<br/>', $message), 'message_type' => 'warning'])->withInput();
-        \Session::driver()->save();
-        $res->send();
-        exit;
+        sendAndTerminate($res);
     }
 
     public static function flushCache()
@@ -837,9 +834,9 @@ class CRUDBooster
     }
 
     /*
-    | --------------------------------------------------------------------------------------------------------------
+    | -------------------------------------------------------------
     | Alternate route for Laravel Route::controller
-    | --------------------------------------------------------------------------------------------------------------
+    | -------------------------------------------------------------
     | $prefix       = path of route
     | $controller   = controller name
     | $namespace    = namespace of controller (optional)
@@ -854,12 +851,10 @@ class CRUDBooster
     public static function redirect($to, $message, $type = 'warning')
     {
         if (Request::ajax()) {
-            response()->json(['message' => $message, 'message_type' => $type, 'redirect_url' => $to])->prepare(request())->send();
-            exit;
+            sendAndTerminate(response()->json(['message' => $message, 'message_type' => $type, 'redirect_url' => $to]));
         }
-        redirect($to)->with(['message' => $message, 'message_type' => $type])->prepare(request())->send();
-        Session::driver()->save();
-        exit;
+
+        sendAndTerminate(redirect($to)->with(['message' => $message, 'message_type' => $type]));
     }
 
     public static function icon($icon)
