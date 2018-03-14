@@ -6,11 +6,7 @@ class Mailer
 {
     public function send($config)
     {
-        Config::set('mail.driver', SettingRepo::getSetting('smtp_driver'));
-        Config::set('mail.host', SettingRepo::getSetting('smtp_host'));
-        Config::set('mail.port', SettingRepo::getSetting('smtp_port'));
-        Config::set('mail.username', SettingRepo::getSetting('smtp_username'));
-        Config::set('mail.password', SettingRepo::getSetting('smtp_password'));
+        $this->setConfigs();
 
         $to = $config['to'];
         $data = $config['data'];
@@ -63,5 +59,14 @@ class Mailer
 
             $message->subject($subject);
         });
+    }
+
+    private function setConfigs()
+    {
+        Config::set('mail.driver', SettingRepo::getSetting('smtp_driver'));
+        Config::set('mail.host', SettingRepo::getSetting('smtp_host'));
+        Config::set('mail.port', SettingRepo::getSetting('smtp_port'));
+        Config::set('mail.username', SettingRepo::getSetting('smtp_username'));
+        Config::set('mail.password', SettingRepo::getSetting('smtp_password'));
     }
 }
