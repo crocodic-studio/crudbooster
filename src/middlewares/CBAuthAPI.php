@@ -30,20 +30,20 @@ class CBAuthAPI
 
         $this->validateRequest();
 
-        list($user_agent, $server_token, $server_token_screet) = $this->getTokens();
+        list($userAgent, $serverToken, $server_token_screet) = $this->getTokens();
 
-        $sender_token = Request::header('X-Authorization-Token');
+        $senderToken = Request::header('X-Authorization-Token');
 
-        $this->tokenMissMatchResponse($sender_token, $server_token);
+        $this->tokenMissMatchResponse($senderToken, $serverToken);
 
-        $this->tokenMissMatchDevice($sender_token, $user_agent, $server_token);
+        $this->tokenMissMatchDevice($senderToken, $userAgent, $serverToken);
 
-        $id = array_search($sender_token, $server_token);
+        $id = array_search($senderToken, $serverToken);
         $server_screet = $server_token_screet[$id];
         DB::table('cms_apikey')->where('screetkey', $server_screet)->increment('hit');
 
         $expired_token = date('Y-m-d H:i:s', strtotime('+5 seconds'));
-        Cache::put($sender_token, $user_agent, $expired_token);
+        Cache::put($senderToken, $userAgent, $expired_token);
 
         return $next($request);
     }
