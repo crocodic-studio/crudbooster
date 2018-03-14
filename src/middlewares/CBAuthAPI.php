@@ -80,18 +80,18 @@ class CBAuthAPI
      */
     private function getTokens()
     {
-        $user_agent = Request::header('User-Agent');
+        $userAgent = Request::header('User-Agent');
         $time = Request::header('X-Authorization-Time');
 
         $keys = DB::table('cms_apikey')->where('status', 'active')->pluck('screetkey');
-        $server_token = [];
-        $server_token_screet = [];
+        $serverToken = [];
+        $serverTokenSecret = [];
         foreach ($keys as $key) {
-            $server_token[] = md5($key.$time.$user_agent);
-            $server_token_screet[] = $key;
+            $serverToken[] = md5($key.$time.$userAgent);
+            $serverTokenSecret[] = $key;
         }
 
-        return [$user_agent, $server_token, $server_token_screet];
+        return [$userAgent, $serverToken, $serverTokenSecret];
     }
 
     /**
