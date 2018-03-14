@@ -320,42 +320,7 @@ class CRUDBooster
 
     public static function sendEmailQueue($queue)
     {
-        Config::set('mail.driver', SettingRepo::getSetting('smtp_driver'));
-        Config::set('mail.host', SettingRepo::getSetting('smtp_host'));
-        Config::set('mail.port', SettingRepo::getSetting('smtp_port'));
-        Config::set('mail.username', SettingRepo::getSetting('smtp_username'));
-        Config::set('mail.password', SettingRepo::getSetting('smtp_password'));
-
-        $html = $queue->email_content;
-        $to = $queue->email_recipient;
-        $subject = $queue->email_subject;
-        $from_email = $queue->email_from_email;
-        $from_name = $queue->email_from_name;
-        $cc_email = $queue->email_cc_email;
-        $attachments = unserialize($queue->email_attachments);
-
-        \Mail::send("crudbooster::emails.blank", ['content' => $html], function ($message) use (
-            $html,
-            $to,
-            $subject,
-            $from_email,
-            $from_name,
-            $cc_email,
-            $attachments
-        ) {
-            $message->priority(1);
-            $message->to($to);
-            $message->from($from_email, $from_name);
-            $message->cc($cc_email);
-
-            if (count($attachments)) {
-                foreach ($attachments as $attachment) {
-                    $message->attach($attachment);
-                }
-            }
-
-            $message->subject($subject);
-        });
+        return (new Mailer())->sendEmailQueue($queue);
     }
 
     public static function sendEmail($config = [])
