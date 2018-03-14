@@ -18,14 +18,14 @@ class CBAuthAPI
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
         if (SettingRepo::getSetting('api_debug_mode') !== 'false') {
-            return ;
+            return;
         }
 
         $result = $this->validateRequest();
@@ -76,6 +76,25 @@ class CBAuthAPI
     }
 
     /**
+     * @return array
+     */
+    private function getTokens()
+    {
+        $user_agent = Request::header('User-Agent');
+        $time = Request::header('X-Authorization-Time');
+
+        $keys = DB::table('cms_apikey')->where('status', 'active')->pluck('screetkey');
+        $server_token = [];
+        $server_token_screet = [];
+        foreach ($keys as $key) {
+            $server_token[] = md5($key.$time.$user_agent);
+            $server_token_screet[] = $key;
+        }
+
+        return [$user_agent, $server_token, $server_token_screet];
+    }
+
+    /**
      * @param $sender_token
      * @param $server_token
      * @param $result
@@ -83,13 +102,14 @@ class CBAuthAPI
      */
     private function tokenMissMatchResponse($sender_token, $server_token, $result)
     {
-        if (! Cache::has($sender_token) && ! in_array($sender_token, $server_token)) {
-            $result['api_status'] = false;
-            $result['api_message'] = "THE TOKEN IS NOT MATCH WITH SERVER TOKEN";
-            $result['sender_token'] = $sender_token;
-            $result['server_token'] = $server_token;
-            sendAndTerminate(response()->json($result, 200));
+        if (Cache::has($sender_token) || in_array($sender_token, $server_token)) {
+            return;
         }
+        $result['api_status'] = false;
+        $result['api_message'] = "THE TOKEN IS NOT MATCH WITH SERVER TOKEN";
+        $result['sender_token'] = $sender_token;
+        $result['server_token'] = $server_token;
+        sendAndTerminate(response()->json($result, 200));
     }
 
     /**
@@ -108,25 +128,5 @@ class CBAuthAPI
         $result['sender_token'] = $sender_token;
         $result['server_token'] = $server_token;
         sendAndTerminate(response()->json($result, 200));
-
-    }
-
-    /**
-     * @return array
-     */
-    private function getTokens()
-    {
-        $user_agent = Request::header('User-Agent');
-        $time = Request::header('X-Authorization-Time');
-
-        $keys = DB::table('cms_apikey')->where('status', 'active')->pluck('screetkey');
-        $server_token = [];
-        $server_token_screet = [];
-        foreach ($keys as $key) {
-            $server_token[] = md5($key.$time.$user_agent);
-            $server_token_screet[] = $key;
-        }
-
-        return [$user_agent, $server_token, $server_token_screet];
     }
 }
