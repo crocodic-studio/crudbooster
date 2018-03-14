@@ -104,27 +104,16 @@ class Mailer
     {
         $this->setConfigs();
 
-        $html = $queue->email_content;
-        $to = $queue->email_recipient;
-        $subject = $queue->email_subject;
-        $from_email = $queue->email_from_email;
-        $from_name = $queue->email_from_name;
-        $cc_email = $queue->email_cc_email;
         $attachments = unserialize($queue->email_attachments);
 
-        \Mail::send("crudbooster::emails.blank", ['content' => $html], function ($message) use (
-            $html,
-            $to,
-            $subject,
-            $from_email,
-            $from_name,
-            $cc_email,
+        \Mail::send("crudbooster::emails.blank", ['content' => $queue->email_content], function ($message) use (
+            $queue,
             $attachments
         ) {
             $message->priority(1);
-            $message->to($to);
-            $message->from($from_email, $from_name);
-            $message->cc($cc_email);
+            $message->to($queue->email_recipient);
+            $message->from($queue->email_from_email, $queue->email_from_name);
+            $message->cc($queue->email_cc_email);
 
             if (count($attachments)) {
                 foreach ($attachments as $attachment) {
@@ -132,7 +121,7 @@ class Mailer
                 }
             }
 
-            $message->subject($subject);
+            $message->subject($queue->email_subject);
         });
     }
 }
