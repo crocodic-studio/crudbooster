@@ -13,26 +13,10 @@ class GoogleFCM
 
         $apikey = SettingRepo::getSetting('google_fcm_key');
 
-        $fields = [
-            'registration_ids' => $regID,
-            'data' => $data,
-            'content_available' => true,
-            'notification' => [
-                'sound' => 'default',
-                'badge' => 0,
-                'title' => trim(strip_tags($data['title'])),
-                'body' => trim(strip_tags($data['content'])),
-            ],
-            'priority' => 'high',
-        ];
-        $headers = [
-            'Authorization:key='.$apikey,
-            'Content-Type:application/json',
-        ];
+        $fields = $this->getFields($regID, $data);
+        $headers = $this->getHeaders($apikey);
 
-        $chresult = $this->sendRequest($headers, $fields);
-
-        return $chresult;
+        return $this->sendRequest($headers, $fields);
     }
 
     /**
@@ -53,5 +37,42 @@ class GoogleFCM
         curl_close($ch);
 
         return $chresult;
+    }
+
+    /**
+     * @param $regID
+     * @param $data
+     * @return array
+     */
+    private function getFields($regID, $data)
+    {
+        $fields = [
+            'registration_ids' => $regID,
+            'data' => $data,
+            'content_available' => true,
+            'notification' => [
+                'sound' => 'default',
+                'badge' => 0,
+                'title' => trim(strip_tags($data['title'])),
+                'body' => trim(strip_tags($data['content'])),
+            ],
+            'priority' => 'high',
+        ];
+
+        return $fields;
+    }
+
+    /**
+     * @param $apikey
+     * @return array
+     */
+    private function getHeaders($apikey)
+    {
+        $headers = [
+            'Authorization:key='.$apikey,
+            'Content-Type:application/json',
+        ];
+
+        return $headers;
     }
 }
