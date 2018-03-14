@@ -100,13 +100,15 @@ class CBAuthAPI
      */
     private function tokenMissMatchDevice($sender_token, $user_agent, $result, $server_token)
     {
-        if (Cache::has($sender_token) && Cache::get($sender_token) != $user_agent) {
-            $result['api_status'] = false;
-            $result['api_message'] = "THE TOKEN IS ALREADY BUT NOT MATCH WITH YOUR DEVICE";
-            $result['sender_token'] = $sender_token;
-            $result['server_token'] = $server_token;
-            sendAndTerminate(response()->json($result, 200));
+        if (! Cache::has($sender_token) || Cache::get($sender_token) == $user_agent) {
+            return;
         }
+        $result['api_status'] = false;
+        $result['api_message'] = "THE TOKEN IS ALREADY BUT NOT MATCH WITH YOUR DEVICE";
+        $result['sender_token'] = $sender_token;
+        $result['server_token'] = $server_token;
+        sendAndTerminate(response()->json($result, 200));
+
     }
 
     /**
