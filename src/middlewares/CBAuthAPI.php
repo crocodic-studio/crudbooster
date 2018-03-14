@@ -49,12 +49,11 @@ class CBAuthAPI
     }
 
     /**
-     * @return array
+     * @return null
      */
     private function validateRequest()
     {
         $validator = Validator::make([
-
             'X-Authorization-Token' => Request::header('X-Authorization-Token'),
             'X-Authorization-Time' => Request::header('X-Authorization-Time'),
             'useragent' => Request::header('User-Agent'),
@@ -65,14 +64,12 @@ class CBAuthAPI
         ]);
         $result = [];
         if (!$validator->fails()) {
-            return [];
+            return;
         }
         $message = $validator->errors()->all();
         $result['api_status'] = 0;
         $result['api_message'] = implode(', ', $message);
         sendAndTerminate(response()->json($result, 200));
-
-        return $result;
     }
 
     /**
