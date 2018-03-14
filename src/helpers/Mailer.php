@@ -43,7 +43,6 @@ class Mailer
 
     /**
      * @param $config
-     * @param $to
      * @param $template
      * @param $subject
      * @param $html
@@ -52,10 +51,9 @@ class Mailer
      */
     private function putInQueue($config, $template, $subject, $html)
     {
-        $to = $config['to'];
         $queue = [
             'send_at' => $config['send_at'],
-            'email_recipient' => $to,
+            'email_recipient' => $this->reciever,
             'email_from_email' => $template->from_email ?: SettingRepo::getSetting('email_sender'),
             'email_from_name' => $template->from_name ?: SettingRepo::getSetting('appname'),
             'email_cc_email' => $template->cc_email,
@@ -64,6 +62,7 @@ class Mailer
             'email_attachments' => serialize($this->attachments),
             'is_sent' => 0,
         ];
+
         DB::table('cms_email_queues')->insert($queue);
 
         return true;
@@ -71,7 +70,6 @@ class Mailer
 
     /**
      * @param $html
-     * @param $to
      * @param $subject
      * @param $template
      */
@@ -79,7 +77,7 @@ class Mailer
     {
         \Mail::send("crudbooster::emails.blank", ['content' => $html], function ($message) use ($subject, $template) {
             $message->priority(1);
-            $message->to($to);
+            $message->to($this->reciever);
 
             if ($template->from_email) {
                 $from_name = ($template->from_name) ?: SettingRepo::getSetting('appname');
