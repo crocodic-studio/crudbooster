@@ -5,6 +5,7 @@ namespace crocodicstudio\crudbooster\helpers;
 class GoogleFCM
 {
     private $url = 'https://fcm.googleapis.com/fcm/send';
+    
     public function send($regID, $data)
     {
         if (! $data['title'] || ! $data['content']) {
@@ -61,11 +62,11 @@ class GoogleFCM
     }
 
     /**
-     * @param $apikey
      * @return array
      */
-    private function getHeaders($apikey)
+    private function getHeaders()
     {
+        $apikey = SettingRepo::getSetting('google_fcm_key');
         $headers = [
             'Authorization:key='.$apikey,
             'Content-Type:application/json',
