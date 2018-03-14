@@ -6,11 +6,13 @@ class Mailer
 {
     private $attachments;
 
+    private $reciever;
+
     public function send($config)
     {
         $this->setConfigs();
 
-        $to = $config['to'];
+        $this->reciever = $config['to'];
         $data = $config['data'];
         $template = $config['template'];
 
@@ -27,7 +29,7 @@ class Mailer
             return $this->putInQueue($config, $template, $subject, $html);
         }
 
-        $this->sendMail($html, $to, $subject, $template);
+        $this->sendMail($html, $subject, $template);
     }
 
     private function setConfigs()
@@ -45,10 +47,10 @@ class Mailer
      * @param $template
      * @param $subject
      * @param $html
-     * @param $attachments
+
      * @return bool
      */
-    private function putInQueue($config, $template, $subject, $html, $attachments)
+    private function putInQueue($config, $template, $subject, $html)
     {
         $to = $config['to'];
         $queue = [
@@ -59,7 +61,7 @@ class Mailer
             'email_cc_email' => $template->cc_email,
             'email_subject' => $subject,
             'email_content' => $html,
-            'email_attachments' => serialize($attachments),
+            'email_attachments' => serialize($this->attachments),
             'is_sent' => 0,
         ];
         DB::table('cms_email_queues')->insert($queue);
@@ -72,11 +74,10 @@ class Mailer
      * @param $to
      * @param $subject
      * @param $template
-     * @param $attachments
      */
-    private function sendMail($html, $to, $subject, $template, $attachments)
+    private function sendMail($html, $subject, $template)
     {
-        \Mail::send("crudbooster::emails.blank", ['content' => $html], function ($message) use ($to, $subject, $template, $attachments) {
+        \Mail::send("crudbooster::emails.blank", ['content' => $html], function ($message) use ($subject, $template) {
             $message->priority(1);
             $message->to($to);
 
@@ -89,8 +90,8 @@ class Mailer
                 $message->cc($template->cc_email);
             }
 
-            if (count($attachments)) {
-                foreach ($attachments as $attachment) {
+            if (count($this->attachments)) {
+                foreach ($this->attachments as $attachment) {
                     $message->attach($attachment);
                 }
             }
