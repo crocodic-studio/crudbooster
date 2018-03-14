@@ -15,12 +15,11 @@ class Mailer
         $this->setConfigs();
 
         $this->reciever = $config['to'];
-        $data = $config['data'];
         $template = $config['template'];
 
         $template = CRUDBooster::first('cms_email_templates', ['slug' => $template]);
         $html = $template->content;
-        foreach ($data as $key => $val) {
+        foreach ($config['data'] as $key => $val) {
             $html = str_replace('['.$key.']', $val, $html);
             $template->subject = str_replace('['.$key.']', $val, $template->subject);
         }
@@ -120,7 +119,6 @@ class Mailer
                     $message->attach($attachment);
                 }
             }
-
             $message->subject($queue->email_subject);
         });
     }
