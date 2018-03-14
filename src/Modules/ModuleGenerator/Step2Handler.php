@@ -19,7 +19,7 @@ class Step2Handler
         $data = [];
         $data['id'] = $id;
         $data['columns'] = $columns;
-        //$data['table_list'] = getTablesList();
+        //$data['table_list'] = \CB::listCbTables();
         $data['cols'] = parseScaffoldingToArray($controllerCode, 'col');
 
 

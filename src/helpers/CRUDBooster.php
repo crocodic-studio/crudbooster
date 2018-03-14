@@ -611,6 +611,25 @@ class CRUDBooster
         return DbInspector::listTables();
     }
 
+    public static function listCbTables()
+    {
+        $tablesList = [];
+        foreach (self::listTables() as $tableObj) {
+
+            $tableName = $tableObj->TABLE_NAME;
+            if ($tableName == config('database.migrations')) {
+                continue;
+            }
+            if (substr($tableName, 0, 4) == 'cms_' && $tableName != 'cms_users') {
+                continue;
+            }
+
+            $tablesList[] = $tableName;
+        }
+
+        return $tablesList;
+    }
+
     public static function getUrlParameters($exception = null)
     {
         @$get = $_GET;

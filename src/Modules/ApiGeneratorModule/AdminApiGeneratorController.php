@@ -116,7 +116,7 @@ class AdminApiGeneratorController extends CBController
         $this->cbLoader();
 
         $data['page_title'] = 'API Generator';
-        $data['tables'] = getTablesList();
+        $data['tables'] = \CB::listCbTables();
 
         return view('CbApiGen::api_generator', $data);
     }
@@ -132,7 +132,7 @@ class AdminApiGeneratorController extends CBController
         $data['responses'] = json_encode(unserialize($row->responses));
         $data['page_title'] = 'API Generator';
 
-        $data['tables'] = getTablesList();
+        $data['tables'] = \CB::listCbTables();
 
         return view('CbApiGen::api_generator', $data);
     }
