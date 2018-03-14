@@ -62,7 +62,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
             $this->publishes([__DIR__.'/userfiles/controllers/AdminUsersController.php' => app_path('Http/Controllers/AdminUsersController.php')], 'cb_user_controller');
         }
 
-        require __DIR__.'/validations/validation.php';
+        $this->defineValidationRules();
         $this->loadRoutesFrom( __DIR__.'/routes.php');
     }
 
@@ -95,6 +95,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->app->register('Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider');
         $this->app->register('Intervention\Image\ImageServiceProvider');
         $this->app->register('Imanghafoori\Widgets\WidgetsServiceProvider');
+        $this->app->register('Imanghafoori\Responder\LaravelResponderServiceProvider');
 
         $loader = AliasLoader::getInstance();
         $loader->alias('PDF', 'Barryvdh\DomPDF\Facade');
@@ -124,5 +125,14 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->app->singleton('crudboosterupdate', function () {
             return new CrudboosterUpdateCommand;
         });
+    }
+
+    private function defineValidationRules()
+    {
+        \Validator::extend('alpha_spaces', function ($attribute, $value) {
+            // This will only accept alpha and spaces.
+            // If you want to accept hyphens use: /^[\pL\s-]+$/u.
+            return preg_match('/^[\pL\s]+$/u', $value);
+        }, 'The :attribute should be letters only');
     }
 }
