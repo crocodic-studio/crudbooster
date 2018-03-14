@@ -102,11 +102,7 @@ class Mailer
 
     public function sendEmailQueue($queue)
     {
-        Config::set('mail.driver', SettingRepo::getSetting('smtp_driver'));
-        Config::set('mail.host', SettingRepo::getSetting('smtp_host'));
-        Config::set('mail.port', SettingRepo::getSetting('smtp_port'));
-        Config::set('mail.username', SettingRepo::getSetting('smtp_username'));
-        Config::set('mail.password', SettingRepo::getSetting('smtp_password'));
+        $this->setConfigs();
 
         $html = $queue->email_content;
         $to = $queue->email_recipient;
