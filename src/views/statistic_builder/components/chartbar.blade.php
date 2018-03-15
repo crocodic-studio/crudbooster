@@ -220,7 +220,11 @@
                 backgroundColor: fillColorsData,
                 borderColor: borderColorsData,
                 borderWidth: 1,
-                data: arr_datapts
+                data: arr_datapts,
+                datalabels: {
+                    align: 'end',
+                    anchor: 'start'
+                }
             }]
 
         };
