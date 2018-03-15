@@ -403,8 +403,8 @@
 											}
 
 											var d = new Date,
-												    dformat = [(d.getFullYear(),
-												    	       d.getMonth()+1).padLeft(),
+												    dformat = [d.getFullYear(),
+												    	       (d.getMonth()+1).padLeft(),
 												               d.getDate().padLeft()
 												               ].join('-') +' ' +
 												              [d.getHours().padLeft(),
