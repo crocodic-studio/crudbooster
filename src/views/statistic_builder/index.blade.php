@@ -13,6 +13,7 @@
 
     <script type="text/javascript">
         Chart.defaults.global.colors = [ "#00988c", "#85cdde", "#bd1622", "#e74e0f" ];
+        Chart.defaults.global.tooltips.enabled = false;
         $(function() {
             $.ajaxSetup({
                 headers: {
