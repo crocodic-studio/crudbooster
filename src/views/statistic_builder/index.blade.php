@@ -4,7 +4,7 @@
     <script src="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/datepicker/bootstrap-datepicker.js') }}" charset="UTF-8"></script>   
     <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.js"></script>
     <script src="{{ asset ('vendor/crudbooster/assets/js/Chart.PieceLabel.js') }}"></script> 
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@1.1.2 "></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
     <script type="text/javascript">
         var lang = '{{App::getLocale()}}';
