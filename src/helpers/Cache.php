@@ -28,5 +28,17 @@ class Cache
         return true;
     }
 
+    public static function forgetCache($section, $cache_name)
+    {
+        if (! Cache::has($section)) {
+            return false;
+        }
+        $open = Cache::get($section);
+        unset($open[$cache_name]);
+        Cache::forever($section, $open);
+
+        return true;
+    }
+
 
 }

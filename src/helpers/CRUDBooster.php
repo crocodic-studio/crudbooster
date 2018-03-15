@@ -355,9 +355,9 @@ class CRUDBooster
         return DbInspector::findPK($table);
     }
 
-    public static function getCache($section, $cache_name)
+    public static function getCache($section, $cacheName)
     {
-
+        return \crocodicstudio\crudbooster\helpers\Cache::get($section, $cacheName);
     }
 
     public static function putCache($section, $cacheName, $cacheValue)
@@ -400,16 +400,9 @@ class CRUDBooster
         Cache::flush();
     }
 
-    public static function forgetCache($section, $cache_name)
+    public static function forgetCache($section, $cacheName)
     {
-        if (! Cache::has($section)) {
-            return false;
-        }
-        $open = Cache::get($section);
-        unset($open[$cache_name]);
-        Cache::forever($section, $open);
-
-        return true;
+        return \crocodicstudio\crudbooster\helpers\Cache::forgetCache($section, $cacheName);
     }
 
     public static function getForeignKey($parent_table, $child_table)
