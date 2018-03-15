@@ -402,10 +402,11 @@
 											   return len > 0? new Array(len).join(chr || '0')+this : this;
 											}
 
-											var d = new Date,
-												    dformat = [(d.getMonth()+1).padLeft(),
-												               d.getDate().padLeft(),
-												               d.getFullYear()].join('/') +' ' +
+											var d = new Date.toISOString(),
+												    dformat = [(d.getFullYear(),
+												    	       d.getMonth()+1).padLeft(),
+												               d.getDate().padLeft()
+												               ].join('-') +' ' +
 												              [d.getHours().padLeft(),
 												               d.getMinutes().padLeft(),
 												               d.getSeconds().padLeft()].join(':');
