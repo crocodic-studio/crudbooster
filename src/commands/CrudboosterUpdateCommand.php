@@ -1,4 +1,6 @@
-<?php namespace crocodicstudio\crudbooster\commands;
+<?php
+
+namespace crocodicstudio\crudbooster\commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Inspiring;
