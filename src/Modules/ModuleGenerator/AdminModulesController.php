@@ -231,7 +231,7 @@ class AdminModulesController extends CBController
         $this->form = [];
         $this->form[] = ["label" => "Name", "name" => "name", "placeholder" => "Module name here", 'required' => true];
 
-        $tables_list = getTablesList();
+        $tables_list = \CB::listCbTables();
 
         $this->form[] = [
             "label" => "Table Name",

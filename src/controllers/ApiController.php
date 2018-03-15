@@ -2,6 +2,7 @@
 
 namespace crocodicstudio\crudbooster\controllers;
 
+use crocodicstudio\crudbooster\controllers\ApiController\ApiHooks;
 use crocodicstudio\crudbooster\controllers\ApiController\ExecuteApi;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;
@@ -12,6 +13,7 @@ use CRUDBooster;
 
 class ApiController extends Controller
 {
+    use ApiHooks;
     var $method_type;
 
     var $permalink;
@@ -23,26 +25,6 @@ class ApiController extends Controller
     var $validate = false;
 
     var $last_id_tmp = [];
-
-    public function hook_before(&$postdata)
-    {
-
-    }
-
-    public function hook_after($postdata, &$result)
-    {
-
-    }
-
-    public function hook_validate(&$postdata)
-    {
-
-    }
-
-    public function hook_query(&$query)
-    {
-
-    }
 
     public function hook_api_status($boolean)
     {
@@ -57,49 +39,6 @@ class ApiController extends Controller
     public function execute_api()
     {
         return (new ExecuteApi($this))->execute();
-    }
-    /**
-     * @param $param
-     * @param $type_except
-     * @param $table
-     * @return array
-     * @internal param $required
-     * @internal param $type
-     * @internal param $config
-     * @internal param $name
-     */
-    private function makeValidationRules($param, $type_except, $table)
-    {
-        $name = $param['name'];
-        $type = $param['type'];
-        $required = $param['required'];
-        $config = $param['config'];
-
-        $format_validation = [];
-
-        if ($required) {
-            $format_validation[] = 'required';
-        }
-
-        if (in_array($type, ['unique', 'exists'])) {
-            $config = explode(',', $config);
-            $table_exist = $config[0];
-            $table_exist = CRUDBooster::parseSqlTable($table_exist)['table'];
-            $field_exist = $config[1];
-            $config = ($field_exist) ? $table_exist.','.$field_exist : $table_exist;
-            $format_validation[] = $type.':'.$config;
-        } elseif (in_array($type, ['date_format','digits_between', 'in', 'mimes', 'min', 'max', 'not_in'])) {
-            $format_validation[] = $type.':'.$config;
-        } elseif (! in_array($type, $type_except)) {
-            $format_validation[] = $type;
-        }
-
-        if ($name == 'id') {
-            $table_exist = CRUDBooster::parseSqlTable($table)['table'];
-            $format_validation[] = 'exists:'.$table_exist.',id';
-        }
-
-        return implode('|', $format_validation);
     }
 
     /**

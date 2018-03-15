@@ -30,7 +30,6 @@ class AdminApiGeneratorController extends CBController
         $data = [];
 
         $data['page_title'] = 'API Generator';
-        $data['page_menu'] = Route::getCurrentRoute()->getActionName();
         $data['apis'] = $this->table()->orderby('nama', 'asc')->get();
 
         return view('CbApiGen::api_documentation', $data);
@@ -107,7 +106,6 @@ class AdminApiGeneratorController extends CBController
     {
         $this->cbLoader();
         $data['page_title'] = 'API Generator';
-        $data['page_menu'] = Route::getCurrentRoute()->getActionName();
         $data['apikeys'] = DB::table('cms_apikey')->get();
 
         return view('CbApiGen::api_key', $data);
@@ -118,8 +116,7 @@ class AdminApiGeneratorController extends CBController
         $this->cbLoader();
 
         $data['page_title'] = 'API Generator';
-        $data['page_menu'] = Route::getCurrentRoute()->getActionName();
-        $data['tables'] = getTablesList();
+        $data['tables'] = \CB::listCbTables();
 
         return view('CbApiGen::api_generator', $data);
     }
@@ -134,9 +131,8 @@ class AdminApiGeneratorController extends CBController
         $data['parameters'] = json_encode(unserialize($row->parameters));
         $data['responses'] = json_encode(unserialize($row->responses));
         $data['page_title'] = 'API Generator';
-        $data['page_menu'] = Route::getCurrentRoute()->getActionName();
 
-        $data['tables'] = getTablesList();
+        $data['tables'] = \CB::listCbTables();
 
         return view('CbApiGen::api_generator', $data);
     }

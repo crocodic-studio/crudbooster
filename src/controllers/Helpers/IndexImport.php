@@ -19,7 +19,6 @@ class IndexImport
     public function doneImport()
     {
         $data = [];
-        $data['page_menu'] = Route::getCurrentRoute()->getActionName();
         $data['page_title'] = trans('crudbooster.import_page_title', ['module' => \CRUDBooster::getCurrentModule()->name]);
         session()->put('select_column', request('select_column'));
 

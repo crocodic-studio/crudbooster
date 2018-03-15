@@ -86,27 +86,6 @@ if (! function_exists('controller_path')) {
     }
 }
 
-if (! function_exists('getTablesList')) {
-    function getTablesList()
-    {
-        $tables_list = [];
-        foreach (CRUDBooster::listTables() as $tableObj) {
-
-            $tableName = $tableObj->TABLE_NAME;
-            if ($tableName == config('database.migrations')) {
-                continue;
-            }
-            if (substr($tableName, 0, 4) == 'cms_' && $tableName != 'cms_users') {
-                continue;
-            }
-
-            $tables_list[] = $tableName;
-        }
-
-        return $tables_list;
-    }
-}
-
 if (! function_exists('rrmdir')) {
     function rrmdir($dir)
     {

@@ -3,7 +3,7 @@
 namespace crocodicstudio\crudbooster\CBCoreModule;
 
 use crocodicstudio\crudbooster\CBCoreModule\Index\FilterIndexRows;
-use crocodicstudio\crudbooster\CBCoreModule\Index\OrderAndPaginate;
+use crocodicstudio\crudbooster\CBCoreModule\Index\Order;
 use crocodicstudio\crudbooster\CBCoreModule\Index\ValueCalculator;
 use crocodicstudio\crudbooster\controllers\CBController;
 use Illuminate\Support\Facades\Request;
@@ -66,7 +66,7 @@ class Index
         }
 
         if ($filter_is_orderby === true) {
-            (new OrderAndPaginate)->handle($result, $table, $this);
+            (new Order)->handle($result, $table, $this);
         }
         $data['result'] = $result->paginate($limit);
 
@@ -93,18 +93,6 @@ class Index
 
         return $data;
     }
-    /**
-     * @param $result
-     * @param $limit
-     * @param $data
-     * @return mixed
-     */
-    private function paginate($result, $limit, $data)
-    {
-
-        return $data;
-    }
-
     /**
      * @return array
      */

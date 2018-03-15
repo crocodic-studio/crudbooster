@@ -202,13 +202,13 @@ class CRUDBooster
     public static function deleteConfirm($redirectTo)
     {
         echo 'swal({   
-				title: "'.trans('crudbooster.delete_title_confirm').'",   
-				text: "'.trans('crudbooster.delete_description_confirm').'",   
+				title: "'.cbTrans('delete_title_confirm').'",   
+				text: "'.cbTrans('delete_description_confirm').'",   
 				type: "warning",   
 				showCancelButton: true,   
 				confirmButtonColor: "#ff0000",   
-				confirmButtonText: "'.trans('crudbooster.confirmation_yes').'",  
-				cancelButtonText: "'.trans('crudbooster.confirmation_no').'",  
+				confirmButtonText: "'.cbTrans('confirmation_yes').'",  
+				cancelButtonText: "'.cbTrans('confirmation_no').'",  
 				closeOnConfirm: false }, 
 				function(){  location.href="'.$redirectTo.'" });';
     }
@@ -250,20 +250,22 @@ class CRUDBooster
         }
     }
 
-    public static function getSortingFilter($field)
+    private static function getFilter($field, $index)
     {
         $filter = request('filter_column');
         if ($filter[$field]) {
-            return $filter[$field]['sorting'];
+            return $filter[$field][$index];
         }
+    }
+
+    public static function getSortingFilter($field)
+    {
+        return self::getFilter($field, 'sorting');
     }
 
     public static function getTypeFilter($field)
     {
-        $filter = request('filter_column');
-        if ($filter[$field]) {
-            return $filter[$field]['type'];
-        }
+        return self::getFilter($field, 'type');
     }
 
     public static function stringBetween($string, $start, $end)
@@ -318,103 +320,12 @@ class CRUDBooster
 
     public static function sendEmailQueue($queue)
     {
-        Config::set('mail.driver', SettingRepo::getSetting('smtp_driver'));
-        Config::set('mail.host', SettingRepo::getSetting('smtp_host'));
-        Config::set('mail.port', SettingRepo::getSetting('smtp_port'));
-        Config::set('mail.username', SettingRepo::getSetting('smtp_username'));
-        Config::set('mail.password', SettingRepo::getSetting('smtp_password'));
-
-        $html = $queue->email_content;
-        $to = $queue->email_recipient;
-        $subject = $queue->email_subject;
-        $from_email = $queue->email_from_email;
-        $from_name = $queue->email_from_name;
-        $cc_email = $queue->email_cc_email;
-        $attachments = unserialize($queue->email_attachments);
-
-        \Mail::send("crudbooster::emails.blank", ['content' => $html], function ($message) use (
-            $html,
-            $to,
-            $subject,
-            $from_email,
-            $from_name,
-            $cc_email,
-            $attachments
-        ) {
-            $message->priority(1);
-            $message->to($to);
-            $message->from($from_email, $from_name);
-            $message->cc($cc_email);
-
-            if (count($attachments)) {
-                foreach ($attachments as $attachment) {
-                    $message->attach($attachment);
-                }
-            }
-
-            $message->subject($subject);
-        });
+        return (new Mailer())->sendEmailQueue($queue);
     }
 
     public static function sendEmail($config = [])
     {
-        Config::set('mail.driver', SettingRepo::getSetting('smtp_driver'));
-        Config::set('mail.host', SettingRepo::getSetting('smtp_host'));
-        Config::set('mail.port', SettingRepo::getSetting('smtp_port'));
-        Config::set('mail.username', SettingRepo::getSetting('smtp_username'));
-        Config::set('mail.password', SettingRepo::getSetting('smtp_password'));
-
-        $to = $config['to'];
-        $data = $config['data'];
-        $template = $config['template'];
-
-        $template = CRUDBooster::first('cms_email_templates', ['slug' => $template]);
-        $html = $template->content;
-        foreach ($data as $key => $val) {
-            $html = str_replace('['.$key.']', $val, $html);
-            $template->subject = str_replace('['.$key.']', $val, $template->subject);
-        }
-        $subject = $template->subject;
-        $attachments = ($config['attachments']) ?: [];
-
-        if ($config['send_at'] != null) {
-            $queue = [
-                'send_at' => $config['send_at'],
-                'email_recipient' => $to,
-                'email_from_email' => $template->from_email ?: SettingRepo::getSetting('email_sender'),
-                'email_from_name' => $template->from_name ?: SettingRepo::getSetting('appname'),
-                'email_cc_email' => $template->cc_email,
-                'email_subject' => $subject,
-                'email_content' => $html,
-                'email_attachments' => serialize($attachments),
-                'is_sent' => 0,
-            ];
-            DB::table('cms_email_queues')->insert($queue);
-
-            return true;
-        }
-
-        \Mail::send("crudbooster::emails.blank", ['content' => $html], function ($message) use ($to, $subject, $template, $attachments) {
-            $message->priority(1);
-            $message->to($to);
-
-            if ($template->from_email) {
-                $from_name = ($template->from_name) ?: SettingRepo::getSetting('appname');
-                $message->from($template->from_email, $from_name);
-            }
-
-            if ($template->cc_email) {
-                $message->cc($template->cc_email);
-            }
-
-            if (count($attachments)) {
-                foreach ($attachments as $attachment) {
-                    $message->attach($attachment);
-                }
-            }
-
-            $message->subject($subject);
-        });
+        return (new Mailer())->send($config);
     }
 
     public static function first($table, $id)
@@ -491,14 +402,11 @@ class CRUDBooster
             $result = [];
             $result['api_status'] = 0;
             $result['api_message'] = implode(', ', $message);
-            response()->json($result, 200)->send();
-            exit;
+            sendAndTerminate(response()->json($result, 200));
         }
 
         $res = redirect()->back()->with(['message' => implode('<br/>', $message), 'message_type' => 'warning'])->withInput();
-        \Session::driver()->save();
-        $res->send();
-        exit;
+        sendAndTerminate($res);
     }
 
     public static function flushCache()
@@ -527,7 +435,6 @@ class CRUDBooster
             return 'id_'.$parent_table;
         }
         return $parent_table.'_id';
-
     }
 
     public static function isColumnExists($table, $field)
@@ -606,28 +513,26 @@ class CRUDBooster
 
     public static function listTables()
     {
-        $multiple_db = cbConfig('MULTIPLE_DATABASE_MODULE') ?: [];
-        $db_database = cbConfig('MAIN_DB_DATABASE');
+        return DbInspector::listTables();
+    }
 
-        if ($multiple_db) {
-            try {
-                $multiple_db[] = cbConfig('MAIN_DB_DATABASE');
-                $query_table_schema = implode("','", $multiple_db);
-                $tables = DB::select("SELECT CONCAT(TABLE_SCHEMA,'.',TABLE_NAME) FROM INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA != 'mysql' AND TABLE_SCHEMA != 'performance_schema' AND TABLE_SCHEMA != 'information_schema' AND TABLE_SCHEMA != 'phpmyadmin' AND TABLE_SCHEMA IN ('$query_table_schema')");
-            } catch (\Exception $e) {
-                $tables = [];
+    public static function listCbTables()
+    {
+        $tablesList = [];
+        foreach (self::listTables() as $tableObj) {
+
+            $tableName = $tableObj->TABLE_NAME;
+            if ($tableName == config('database.migrations')) {
+                continue;
             }
-            return $tables;
+            if (substr($tableName, 0, 4) == 'cms_' && $tableName != 'cms_users') {
+                continue;
+            }
+
+            $tablesList[] = $tableName;
         }
 
-        try {
-            $tables = DB::select("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.Tables WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = '".$db_database."'");
-        } catch (\Exception $e) {
-            $tables = [];
-        }
-
-
-        return $tables;
+        return $tablesList;
     }
 
     public static function getUrlParameters($exception = null)
@@ -645,8 +550,7 @@ class CRUDBooster
         }
 
         $string_parameters = http_build_query($get);
-        $string_parameters_array = explode('&', $string_parameters);
-        foreach ($string_parameters_array as $s) {
+        foreach (explode('&', $string_parameters) as $s) {
             $part = explode('=', $s);
             $name = urldecode($part[0]);
             $value = urldecode($part[1]);
@@ -656,116 +560,20 @@ class CRUDBooster
         return $inputhtml;
     }
 
-    public static function authAPI()
-    {
-        if (SettingRepo::getSetting('api_debug_mode') !== 'false') {
-            return ;
-        }
-
-        $result = [];
-        $validator = Validator::make([
-
-            'X-Authorization-Token' => Request::header('X-Authorization-Token'),
-            'X-Authorization-Time' => Request::header('X-Authorization-Time'),
-            'useragent' => Request::header('User-Agent'),
-        ], [
-                'X-Authorization-Token' => 'required',
-                'X-Authorization-Time' => 'required',
-                'useragent' => 'required',
-            ]);
-
-        if ($validator->fails()) {
-            $message = $validator->errors()->all();
-            $result['api_status'] = 0;
-            $result['api_message'] = implode(', ', $message);
-           response()->json($result, 200)->send();
-            exit;
-        }
-
-        $user_agent = Request::header('User-Agent');
-        $time = Request::header('X-Authorization-Time');
-
-        $keys = DB::table('cms_apikey')->where('status', 'active')->pluck('screetkey');
-        $server_token = [];
-        $server_token_screet = [];
-        foreach ($keys as $key) {
-            $server_token[] = md5($key.$time.$user_agent);
-            $server_token_screet[] = $key;
-        }
-
-        $sender_token = Request::header('X-Authorization-Token');
-
-        if (! Cache::has($sender_token) && ! in_array($sender_token, $server_token)) {
-            $result['api_status'] = false;
-            $result['api_message'] = "THE TOKEN IS NOT MATCH WITH SERVER TOKEN";
-            $result['sender_token'] = $sender_token;
-            $result['server_token'] = $server_token;
-            response()->json($result, 200)->send();
-            exit;
-        }
-
-        if (Cache::has($sender_token) && Cache::get($sender_token) != $user_agent) {
-            $result['api_status'] = false;
-            $result['api_message'] = "THE TOKEN IS ALREADY BUT NOT MATCH WITH YOUR DEVICE";
-            $result['sender_token'] = $sender_token;
-            $result['server_token'] = $server_token;
-            response()->json($result, 200)->send();
-            exit;
-        }
-
-        $id = array_search($sender_token, $server_token);
-        $server_screet = $server_token_screet[$id];
-        DB::table('cms_apikey')->where('screetkey', $server_screet)->increment('hit');
-
-        $expired_token = date('Y-m-d H:i:s', strtotime('+5 seconds'));
-        Cache::put($sender_token, $user_agent, $expired_token);
-    }
-
     public static function sendFCM($regID = [], $data)
     {
-        if (! $data['title'] || ! $data['content']) {
-            return 'title , content null !';
-        }
-
-        $apikey = SettingRepo::getSetting('google_fcm_key');
-        $url = 'https://fcm.googleapis.com/fcm/send';
-        $fields = [
-            'registration_ids' => $regID,
-            'data' => $data,
-            'content_available' => true,
-            'notification' => [
-                'sound' => 'default',
-                'badge' => 0,
-                'title' => trim(strip_tags($data['title'])),
-                'body' => trim(strip_tags($data['content'])),
-            ],
-            'priority' => 'high',
-        ];
-        $headers = [
-            'Authorization:key='.$apikey,
-            'Content-Type:application/json',
-        ];
-
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $chresult = curl_exec($ch);
-        curl_close($ch);
-
-        return $chresult;
+        return (new GoogleFCM)->send($regID, $data);
     }
 
     public static function isExistsController($table)
     {
-        $controllername = ucwords(str_replace('_', ' ', $table));
-        $controllername = str_replace(' ', '', $controllername).'Controller';
+        $ctrlName = ucwords(str_replace('_', ' ', $table));
+        $ctrlName = str_replace(' ', '', $ctrlName).'Controller';
         $path = base_path(controllers_dir());
         $path2 = base_path(controllers_dir()."ControllerMaster/");
-        if (file_exists($path.'Admin'.$controllername.'.php') || file_exists($path2.'Admin'.$controllername.'.php') || file_exists($path2.$controllername.'.php')) {
+
+        $ctrlName = $ctrlName.'.php';
+        if (file_exists($path.'Admin'.$ctrlName) || file_exists($path2.'Admin'.$ctrlName) || file_exists($path2.$ctrlName)) {
             return true;
         }
 
@@ -799,7 +607,6 @@ class CRUDBooster
 
     public static function routeController($prefix, $controller, $namespace = null)
     {
-
         $prefix = trim($prefix, '/').'/';
 
         $namespace = ($namespace) ?: ctrlNamespace();
@@ -836,9 +643,9 @@ class CRUDBooster
     }
 
     /*
-    | --------------------------------------------------------------------------------------------------------------
+    | -------------------------------------------------------------
     | Alternate route for Laravel Route::controller
-    | --------------------------------------------------------------------------------------------------------------
+    | -------------------------------------------------------------
     | $prefix       = path of route
     | $controller   = controller name
     | $namespace    = namespace of controller (optional)
@@ -847,18 +654,16 @@ class CRUDBooster
 
     public static function denyAccess()
     {
-        static::redirect(static::adminPath(), trans('crudbooster.denied_access'));
+        static::redirect(static::adminPath(), cbTrans('denied_access'));
     }
 
     public static function redirect($to, $message, $type = 'warning')
     {
         if (Request::ajax()) {
-            response()->json(['message' => $message, 'message_type' => $type, 'redirect_url' => $to])->prepare(request())->send();
-            exit;
+            sendAndTerminate(response()->json(['message' => $message, 'message_type' => $type, 'redirect_url' => $to]));
         }
-        redirect($to)->with(['message' => $message, 'message_type' => $type])->prepare(request())->send();
-        Session::driver()->save();
-        exit;
+
+        sendAndTerminate(redirect($to)->with(['message' => $message, 'message_type' => $type]));
     }
 
     public static function icon($icon)

@@ -208,7 +208,6 @@ class CBController extends Controller
 
     public function postExportData()
     {
-        $exporter = app(IndexExport::class);
         $this->limit = Request::input('limit');
         $this->index_return = true;
         $filename = Request::input('filename');
@@ -222,7 +221,7 @@ class CBController extends Controller
         $format = Request::input('fileformat');
         if(in_array($format, ['pdf', 'xls', 'csv']))
         {
-            return $exporter->{$format}($filename, $indexContent, $paperorientation, $papersize);
+            return app(IndexExport::class)->{$format}($filename, $indexContent, $paperorientation, $papersize);
         }
     }
 
@@ -232,7 +231,7 @@ class CBController extends Controller
         $this->cbLoader();
         $data = $index->index($this);
 
-        return view("crudbooster::default.index", $data);
+        return view('crudbooster::default.index', $data);
     }
 
     public function getDataQuery()
@@ -246,13 +245,13 @@ class CBController extends Controller
         $fk_name = request('fk_name');
         $fk_value = request('fk_value');
 
-        $condition = " where ";
+        $condition = ' where ';
         if (strpos(strtolower($query), 'where') !== false) {
-            $condition = " and ";
+            $condition = ' and ';
         }
 
         if (strpos(strtolower($query), 'order by')) {
-            $query = str_replace("ORDER BY", "order by", $query);
+            $query = str_replace('ORDER BY', 'order by', $query);
             $qraw = explode('order by', $query);
             $query = $qraw[0].$condition.$fk_name." = '$fk_value' $qraw[1]";
         } else {
@@ -347,63 +346,47 @@ class CBController extends Controller
     {
         $this->cbLoader();
 
-        $page_title = cbTrans("add_data_page_title", ['module' => CB::getCurrentModule()->name]);
-        $page_menu = Route::getCurrentRoute()->getActionName();
+        $page_title = cbTrans('add_data_page_title', ['module' => CB::getCurrentModule()->name]);
+
         $command = 'add';
 
-        return view('crudbooster::default.form', compact('page_title', 'page_menu', 'command'));
+        return view('crudbooster::default.form', compact('page_title', 'command'));
     }
 
     public function postAddSave()
     {
-        $saver = app(DataSaver::class);
         $this->cbLoader();
 
         app(FormValidator::class)->validate(null, $this->form, $this->table);
         $this->inputAssignment();
 
-        if (Schema::hasColumn($this->table, 'created_at')) {
-            $this->arr['created_at'] = date('Y-m-d H:i:s');
-        }
+        $this->setTimeStamps('created_at');
 
         $this->hookBeforeAdd($this->arr);
 
-        $saver->insert($this);
+        app(DataSaver::class)->insert($this);
 
         $this->hookAfterAdd($this->arr[$this->primary_key]);
 
-        $this->return_url = ($this->return_url) ? $this->return_url : request('return_url');
+        $this->return_url = $this->return_url ?: request('return_url');
 
-        //insert log
-        CB::insertLog(cbTrans("log_add", ['name' => $this->arr[$this->title_field], 'module' => CB::getCurrentModule()->name]));
+        $this->insertLog('log_add', $this->arr[$this->title_field]);
 
-        if ($this->return_url) {
-            if (request('submit') == cbTrans('button_save_more')) {
-                CB::redirect(Request::server('HTTP_REFERER'), cbTrans("alert_add_data_success"), 'success');
-            }
-            CB::redirect($this->return_url, cbTrans("alert_add_data_success"), 'success');
-        }
-        if (request('submit') == cbTrans('button_save_more')) {
-            CB::redirect(CB::mainpath('add'), cbTrans("alert_add_data_success"), 'success');
-        }
-        CB::redirect(CB::mainpath(), cbTrans("alert_add_data_success"), 'success');
+        $this->sendResponseForAdd();
     }
 
 
     public function inputAssignment($id = null)
     {
         $hide_form = (request('hide_form')) ? unserialize(request('hide_form')) : [];
-        $componentPath = implode(DIRECTORY_SEPARATOR, ["vendor", "crocodicstudio", "crudbooster", "src", "views", "default", 'type_components', '']);
+        $componentPath = implode(DIRECTORY_SEPARATOR, ['vendor', 'crocodicstudio', 'crudbooster', 'src', 'views', 'default', 'type_components', '']);
 
         foreach ($this->form as $ro) {
             $name = $ro['name'];
             $type = $ro['type'] ?: 'text';
             $inputdata = request($name);
 
-            if (! $name) {
-                continue;
-            }
-            if ($ro['exception']) {
+            if (! $name || $ro['exception']) {
                 continue;
             }
 
@@ -411,9 +394,11 @@ class CBController extends Controller
                 continue;
             }
 
-            if (file_exists(base_path($componentPath.$type.DIRECTORY_SEPARATOR.'hookInputAssignment.php'))) {
-                require_once(base_path($componentPath.$type.DIRECTORY_SEPARATOR.'hookInputAssignment.php'));
+            $hookPath = base_path($componentPath.$type.DIRECTORY_SEPARATOR.'hookInputAssignment.php');
+            if (file_exists($hookPath)) {
+                require_once($hookPath);
             }
+            unset($hookPath);
 
             if (Request::hasFile($name)) {
                 continue;
@@ -424,8 +409,7 @@ class CBController extends Controller
                 if (CB::isColumnNULL($this->table, $name)) {
                     continue;
                 }
-
-                $this->arr[$name] = "";
+                $this->arr[$name] = '';
             }
         }
     }
@@ -443,12 +427,11 @@ class CBController extends Controller
         $this->cbLoader();
         $row = $this->findRow($id)->first();
 
-        $page_menu = Route::getCurrentRoute()->getActionName();
         $page_title = cbTrans("edit_data_page_title", ['module' => CB::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
         $command = 'edit';
         Session::put('current_row_id', $id);
 
-        return view('crudbooster::default.form', compact('id', 'row', 'page_menu', 'page_title', 'command'));
+        return view('crudbooster::default.form', compact('id', 'row', 'page_title', 'command'));
     }
 
     /**
@@ -464,34 +447,22 @@ class CBController extends Controller
     {
         $saver = app(DataSaver::class);
         $this->cbLoader();
-        //$row = $this->findRow($id)->first();
 
         app(FormValidator::class)->validate($id, $this->form, $this->table);
         $this->inputAssignment($id);
 
-        if (Schema::hasColumn($this->table, 'updated_at')) {
-            $this->arr['updated_at'] = date('Y-m-d H:i:s');
-        }
+        $this->setTimeStamps('updated_at');
 
         $this->hookBeforeEdit($this->arr, $id);
         $saver->update($id, $this);
 
         $this->hookAfterEdit($id);
 
-        $this->return_url = ($this->return_url) ? $this->return_url : request('return_url');
+        $this->return_url = $this->return_url ?: request('return_url');
 
-        //insert log
-        CB::insertLog(cbTrans("log_update", ['name' => $this->arr[$this->title_field], 'module' => CB::getCurrentModule()->name]));
+        $this->insertLog('log_update', $this->arr[$this->title_field]);
 
-        if ($this->return_url) {
-            CB::redirect($this->return_url, cbTrans("alert_update_data_success"), 'success');
-        }
-
-        if (request('submit') == cbTrans('button_save_more')) {
-            CB::redirect(CB::mainpath('add'), cbTrans("alert_update_data_success"), 'success');
-        }
-
-        CB::redirect(CB::mainpath(), cbTrans("alert_update_data_success"), 'success');
+        $this->sendResponseForUpdate();
     }
 
     public function getDelete($id)
@@ -499,22 +470,13 @@ class CBController extends Controller
         $this->cbLoader();
         $row = $this->findRow($id)->first();
 
-        //insert log
-        CB::insertLog(cbTrans("log_delete", ['name' => $row->{$this->title_field}, 'module' => CB::getCurrentModule()->name]));
+        $this->insertLog('log_delete', $row->{$this->title_field});
 
-        $this->hookBeforeDelete($id);
-
-        if (Schema::hasColumn($this->table, 'deleted_at')) {
-            $this->findRow($id)->update(['deleted_at' => date('Y-m-d H:i:s')]);
-        } else {
-            $this->findRow($id)->delete();
-        }
-
-        $this->hookAfterDelete($id);
+        $this->performDeletion([$id]);
 
         $url = request('return_url') ?: CB::referer();
 
-        CB::redirect($url, cbTrans("alert_delete_data_success"), 'success');
+        CB::redirect($url, cbTrans('alert_delete_data_success'), 'success');
     }
 
     public function getDetail($id)
@@ -522,13 +484,13 @@ class CBController extends Controller
         $this->cbLoader();
         $row = $this->findRow($id)->first();
 
-        $page_menu = Route::getCurrentRoute()->getActionName();
-        $page_title = cbTrans("detail_data_page_title", ['module' => CB::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
+
+        $page_title = cbTrans('detail_data_page_title', ['module' => CB::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
         $command = 'detail';
 
         Session::put('current_row_id', $id);
 
-        return view('crudbooster::default.form', compact('row', 'page_menu', 'page_title', 'command', 'id'));
+        return view('crudbooster::default.form', compact('row', 'page_title', 'command', 'id'));
     }
 
     public function getImportData()
@@ -585,42 +547,33 @@ class CBController extends Controller
     public function postActionSelected()
     {
         $this->cbLoader();
-        $id_selected = Request::input('checkbox');
+        $selectedIds = Request::input('checkbox');
         $button_name = Request::input('button_name');
 
-        if (! $id_selected) {
+        if (! $selectedIds) {
             CB::redirect($_SERVER['HTTP_REFERER'], 'Please select at least one data!', 'warning');
         }
 
         if ($button_name == 'delete') {
-            return $this->deleteFromDB($id_selected);
+            return $this->deleteFromDB($selectedIds);
         }
 
-        list($type, $message) = $this->_getMessageAndType($button_name, $id_selected);
+        list($type, $message) = $this->_getMessageAndType($button_name, $selectedIds);
 
         return CB::backWithMsg($message, $type);
     }
 
     /**
-     * @param $id_selected
+     * @param $idsArray
      * @return mixed
      */
-    private function deleteFromDB($id_selected)
+    private function deleteFromDB($idsArray)
     {
-        $this->hookBeforeDelete($id_selected);
-        $tablePK = CB::pk($this->table);
+        $this->performDeletion($idsArray);
 
-        if (Schema::hasColumn($this->table, 'deleted_at')) {
-            $this->table()->whereIn($tablePK, $id_selected)->update(['deleted_at' => date('Y-m-d H:i:s')]);
-        } else {
-            $this->table()->whereIn($tablePK, $id_selected)->delete();
-        }
+        $this->insertLog('log_delete', implode(',', $idsArray));
 
-        CB::insertLog(cbTrans("log_delete", ['name' => implode(',', $id_selected), 'module' => CB::getCurrentModule()->name]));
-
-        $this->hookAfterDelete($id_selected);
-
-        return CB::backWithMsg(cbTrans("alert_delete_selected_success"));
+        return CB::backWithMsg(cbTrans('alert_delete_selected_success'));
     }
 
     /**
@@ -633,7 +586,7 @@ class CBController extends Controller
         $action = str_replace(['-', '_'], ' ', $button_name);
         $action = ucwords($action);
         $type = 'success';
-        $message = cbTrans("alert_action", ['action' => $action]);
+        $message = cbTrans('alert_action', ['action' => $action]);
 
         if ($this->actionButtonSelected($id_selected, $button_name) === false) {
             $message = ! empty($this->alert['message']) ? $this->alert['message'] : 'Error';
@@ -660,11 +613,70 @@ class CBController extends Controller
 
         $this->findRow($id)->update([$column => null]);
 
-        CB::insertLog(cbTrans('log_delete_image', [
-            'name' => $row->{$this->title_field},
-            'module' => CB::getCurrentModule()->name,
-        ]));
+        $this->insertLog('log_delete_image', $row->{$this->title_field});
 
         CB::redirect(Request::server('HTTP_REFERER'), cbTrans('alert_delete_data_success'), 'success');
+    }
+
+    private function sendResponseForAdd()
+    {
+        if ($this->return_url) {
+            if (request('submit') == cbTrans('button_save_more')) {
+                CB::redirect(Request::server('HTTP_REFERER'), cbTrans('alert_add_data_success'), 'success');
+            }
+            CB::redirect($this->return_url, cbTrans('alert_add_data_success'), 'success');
+        }
+        if (request('submit') == cbTrans('button_save_more')) {
+            CB::redirect(CB::mainpath('add'), cbTrans('alert_add_data_success'), 'success');
+        }
+        CB::redirect(CB::mainpath(), cbTrans('alert_add_data_success'), 'success');
+    }
+
+    private function sendResponseForUpdate()
+    {
+        if ($this->return_url) {
+            CB::redirect($this->return_url, cbTrans('alert_update_data_success'), 'success');
+        }
+
+        if (request('submit') == cbTrans('button_save_more')) {
+            CB::redirect(CB::mainpath('add'), cbTrans('alert_update_data_success'), 'success');
+        }
+
+        CB::redirect(CB::mainpath(), cbTrans('alert_update_data_success'), 'success');
+    }
+
+    /**
+     * @param $idsArray
+     */
+    private function deleteIds($idsArray)
+    {
+        $query = $this->table()->whereIn($this->primary_key, $idsArray);
+        if (Schema::hasColumn($this->table, 'deleted_at')) {
+            $query->update(['deleted_at' => date('Y-m-d H:i:s')]);
+        } else {
+            $query->delete();
+        }
+    }
+
+    /**
+     * @param $idsArray
+     */
+    private function performDeletion($idsArray)
+    {
+        $this->hookBeforeDelete($idsArray);
+        $this->deleteIds($idsArray);
+        $this->hookAfterDelete($idsArray);
+    }
+
+    private function insertLog($msg, $name)
+    {
+        CB::insertLog(cbTrans($msg, ['module' => CB::getCurrentModule()->name, 'name' => $name]));
+    }
+
+    private function setTimeStamps($col)
+    {
+        if (Schema::hasColumn($this->table, $col)) {
+            $this->arr[$col] = date('Y-m-d H:i:s');
+        }
     }
 }

@@ -12,9 +12,7 @@ if (Request::hasFile($name)) {
             'message_type' => 'warning',
             'message' => 'The filesize for '.$name.' is to larger',
         ])->withInput();
-        Session::driver()->save();
-        $redir->send();
-        exit;
+        sendAndTerminate($redir);
     }
 
     if ($ro['options']['allowed_filetype'] && ! in_array($ext, $ro['options']['allowed_filetype'])) {
@@ -22,9 +20,7 @@ if (Request::hasFile($name)) {
             'message_type' => 'warning',
             'message' => 'The filetype for '.$name.' is not allowed',
         ])->withInput();
-        Session::driver()->save();
-        $redir->send();
-        exit;
+        sendAndTerminate($redir);
     }
 
     //Create Directory Monthly						

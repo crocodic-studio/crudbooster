@@ -9,7 +9,7 @@ class Step1Handler
 {
     public function showForm($id)
     {
-        $tables_list = getTablesList();
+        $tables_list = \CB::listCbTables();
         $row = CRUDBooster::first('cms_moduls', ['id' => $id]);
 
         return view("CbModulesGen::step1", compact("tables_list", "fontawesome", "row", "id"));

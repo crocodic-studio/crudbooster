@@ -101,7 +101,7 @@ class ExecuteApi
                 }
 
                 $input_validator[$name] = $value;
-                $data_validation[$name] = $this->ctrl->makeValidationRules($param, $type_except, $table);
+                $data_validation[$name] = app(ValidationRules::class)->make($param, $type_except, $table);
             }
 
             $validator = Validator::make($input_validator, $data_validation);
@@ -126,7 +126,10 @@ class ExecuteApi
         unset($posts['limit'], $posts['offset'], $posts['orderby']);
 
         if (in_array($action_type, ['list', 'detail', 'delete'])) {
-            $data = $this->responses($table, $offset, $limit, $responses, $responses_fields); //End Responses
+            $data = DB::table($table);
+            $data->skip($offset);
+            $data->take($limit);
+            $data = $this->responses($table, $data, $responses, $responses_fields); //End Responses
 
             $this->params($parameters, $posts, $data, $table);
 
@@ -241,7 +244,6 @@ class ExecuteApi
      */
     private function handleListAction($table, $orderby, $data, $result, $debug_mode_message, $row, $responses_fields)
     {
-        $uploads_format_candidate = explode(',', cbConfig("UPLOAD_TYPES"));
         $orderby_col = $table.'.id';
         $orderby_val = 'desc';
 
@@ -260,7 +262,7 @@ class ExecuteApi
         }
         $result['data'] = [];
         if ($rows) {
-            list($row, $result) = $this->handleRows($result, $debug_mode_message, $row, $uploads_format_candidate, $responses_fields, $rows);
+            list($row, $result) = $this->handleRows($result, $debug_mode_message, $row, $responses_fields, $rows);
         }
 
         return [$result, $row];
@@ -377,17 +379,17 @@ class ExecuteApi
      * @param $result
      * @param $debug_mode_message
      * @param $row
-     * @param $uploads_format_candidate
      * @param $responses_fields
      * @param $rows
      * @return array
      */
-    private function handleRows($result, $debug_mode_message, $row, $uploads_format_candidate, $responses_fields, $rows)
+    private function handleRows($result, $debug_mode_message, $row, $responses_fields, $rows)
     {
+        $uploadsFormatCandidate = explode(',', cbConfig("UPLOAD_TYPES"));
         foreach ($rows as &$row) {
             foreach ($row as $k => $v) {
                 $ext = \File::extension($v);
-                if (in_array($ext, $uploads_format_candidate)) {
+                if (in_array($ext, $uploadsFormatCandidate)) {
                     $row->$k = asset($v);
                 }
 
@@ -463,19 +465,14 @@ class ExecuteApi
 
     /**
      * @param $table
-     * @param $offset
-     * @param $limit
+     * @param $data
      * @param $responses
      * @param $responses_fields
      * @return array
      */
-    private function responses($table, $offset, $limit, $responses, $responses_fields)
+    private function responses($table, $data, $responses, $responses_fields)
     {
         $name_tmp = [];
-        $data = DB::table($table);
-        $data->skip($offset);
-        $data->take($limit);
-
         foreach ($responses as $resp) {
             $name = $resp['name'];
             $type = $resp['type'];
@@ -505,19 +502,7 @@ class ExecuteApi
             }
 
             $name_tmp[] = $name;
-            if (CRUDBooster::isForeignKey($name)) {
-                $jointable = CRUDBooster::getTableForeignKey($name);
-                $jointable_field = CRUDBooster::getTableColumns($jointable);
-
-                $data->leftjoin($jointable, $jointable.'.id', '=', $table.'.'.$name);
-                foreach ($jointable_field as $jf) {
-                    $jf_alias = $jointable.'_'.$jf;
-                    if (in_array($jf_alias, $responses_fields)) {
-                        $data->addselect($jointable.'.'.$jf.' as '.$jf_alias);
-                        $name_tmp[] = $jf_alias;
-                    }
-                }
-            }
+            $name_tmp = $this->joinRelatedTables($table, $responses_fields, $name, $data, $name_tmp);
         }
 
         return $data;
@@ -558,5 +543,32 @@ class ExecuteApi
                 }
             }
         });
+    }
+
+    /**
+     * @param $table
+     * @param $responses_fields
+     * @param $name
+     * @param $data
+     * @param $name_tmp
+     * @return array
+     */
+    private function joinRelatedTables($table, $responses_fields, $name, $data, $name_tmp)
+    {
+        if (CRUDBooster::isForeignKey($name)) {
+            $jointable = CRUDBooster::getTableForeignKey($name);
+            $jointable_field = CRUDBooster::getTableColumns($jointable);
+
+            $data->leftjoin($jointable, $jointable.'.id', '=', $table.'.'.$name);
+            foreach ($jointable_field as $jf) {
+                $jf_alias = $jointable.'_'.$jf;
+                if (in_array($jf_alias, $responses_fields)) {
+                    $data->addselect($jointable.'.'.$jf.' as '.$jf_alias);
+                    $name_tmp[] = $jf_alias;
+                }
+            }
+        }
+
+        return $name_tmp;
     }
 }

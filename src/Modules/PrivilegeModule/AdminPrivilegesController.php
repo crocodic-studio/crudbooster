@@ -96,9 +96,7 @@ class AdminPrivilegesController extends CBController
 
         $page_title = trans('crudbooster.edit_data_page_title', ['module' => 'Privilege', 'name' => $role->name]);
 
-        $page_menu = Route::getCurrentRoute()->getActionName();
-
-        return view('CbPrivilege::privileges', compact('role', 'page_title', 'page_menu', 'id'));
+        return view('CbPrivilege::privileges', compact('role', 'page_title', 'id'));
     }
 
     public function postEditSave($id)

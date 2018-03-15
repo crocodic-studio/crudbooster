@@ -108,18 +108,16 @@ class FormValidator
         $message_all = $message->all();
 
         if (Request::ajax()) {
-            response()->json([
+            $resp = response()->json([
                 'message' => trans('crudbooster.alert_validation_error', ['error' => implode(', ', $message_all)]),
                 'message_type' => 'warning',
-            ])->send();
-            exit;
+            ]);
+            sendAndTerminate($resp);
         }
 
-        redirect()->back()->with("errors", $message)->with([
+        sendAndTerminate(redirect()->back()->with("errors", $message)->with([
             'message' => trans('crudbooster.alert_validation_error', ['error' => implode(', ', $message_all)]),
             'message_type' => 'warning',
-        ])->withInput()->send();
-        \Session::driver()->save();
-        exit;
+        ])->withInput());
     }
 }

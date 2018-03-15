@@ -28,11 +28,7 @@ class DataSaver
             $inputdata = request($name);
 
             //Insert Data Checkbox if Type Datatable
-            if ($row['type'] == 'checkbox' && $row['relationship_table']) {
-                $this->_updateRelations($row, $id, $inputdata);
-            }
-
-            if ($row['type'] == 'select2' && $row['relationship_table']) {
+            if (in_array($row['type'], ['checkbox', 'select2']) && $row['relationship_table']) {
                 $this->_updateRelations($row, $id, $inputdata);
             }
 
@@ -88,13 +84,13 @@ class DataSaver
         $countInput = count(request($name.'-'.$columns[0]['name'])) - 1;
         $childArray = [];
         for ($i = 0; $i <= $countInput; $i++) {
-            $column_data = [];
-            $column_data[$fk] = $id;
+            $columnData = [];
+            $columnData[$fk] = $id;
             foreach ($columns as $col) {
                 $colName = $col['name'];
-                $column_data[$colName] = request($name.'-'.$colName)[$i];
+                $columnData[$colName] = request($name.'-'.$colName)[$i];
             }
-            $childArray[] = $column_data;
+            $childArray[] = $columnData;
         }
 
         $childTable = CRUDBooster::parseSqlTable($row['table'])['table'];

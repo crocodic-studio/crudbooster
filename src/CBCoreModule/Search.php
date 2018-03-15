@@ -25,7 +25,6 @@ class Search
         $this->rows->select($table.'.*');
 
         $this->orderRows($data, $fieldValue);
-
         $this->limitRows($data);
 
         if ($data['field_label']) {
@@ -38,9 +37,7 @@ class Search
 
         $this->filterRow($data, $q, $id, $fieldValue);
 
-        $items = $this->rows->get();
-
-        return $items;
+        return $this->rows->get();
     }
 
     /**
