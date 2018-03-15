@@ -268,6 +268,8 @@
 									</select>
 									@elseif($col['type']=='hidden')
 										<input type="{{$col['type']}}" id="{{$name.$col["name"]}}" name="{{$name.$col["name"]}}" value="{{$col["value"]}}">
+									@elseif($col['type']=='hiddendate')
+										<input type="hidden" id="{{$name.$col["name"]}}" name="{{$name.$col["name"]}}" value="{{$col["value"]}}">
 									@endif
 
 									@if($col['help']) 
@@ -393,6 +395,17 @@
 										@elseif($c['type']=='radio')
 											trRow += "<td class='{{$c['name']}}'><span class='td-label'>"+$('.{{$name.$c["name"]}}:checked').val()+"</span>"+
 											"<input type='hidden' name='{{$name}}-{{$c['name']}}[]' value='"+$('.{{$name.$c["name"]}}:checked').val()+"'/>"+
+											"</td>";
+										@elseif($c['type']=='hiddendate')
+											var d = new Date,
+												    dformat = [(d.getMonth()+1).padLeft(),
+												               d.getDate().padLeft(),
+												               d.getFullYear()].join('/') +' ' +
+												              [d.getHours().padLeft(),
+												               d.getMinutes().padLeft(),
+												               d.getSeconds().padLeft()].join(':');
+											trRow += "<td class='{{$c['name']}}'><span class='td-label'>"+d+"</span>"+
+											"<input type='hidden' name='{{$name}}-{{$c['name']}}[]' value='"+d+"'/>"+
 											"</td>";
 										@elseif($c['type']=='datamodal')
 											trRow += "<td class='{{$c['name']}}'><span class='td-label'>"+$('#{{$name.$c["name"]}} .input-label').val()+"</span>"+
