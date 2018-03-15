@@ -15,9 +15,8 @@ class GetCurrentX
 {
     public static function getCurrentId()
     {
-        $id = session('current_row_id');
-        $id = intval($id);
-        $id = (! $id) ? Request::segment(4) : $id;
+        $id = intval(session('current_row_id'));
+        $id = $id ?: Request::segment(4);
         $id = intval($id);
 
         return $id;
