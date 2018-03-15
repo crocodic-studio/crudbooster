@@ -2,40 +2,42 @@
 
 namespace crocodicstudio\crudbooster\helpers;
 
+use Cache as CacheFacade;
+
 class Cache
 {
     public static function get($section, $cacheName)
     {
-        if (! Cache::has($section)) {
+        if (! CacheFacade::has($section)) {
             return false;
         }
-        $cacheOpen = Cache::get($section);
+        $cacheOpen = CacheFacade::get($section);
 
         return $cacheOpen[$cacheName];
     }
 
     public static function put($section, $cache_name, $cacheValue)
     {
-        if (Cache::has($section)) {
-            $cacheOpen = Cache::get($section);
+        if (CacheFacade::has($section)) {
+            $cacheOpen = CacheFacade::get($section);
         } else {
-            Cache::forever($section, []);
-            $cacheOpen = Cache::get($section);
+            CacheFacade::forever($section, []);
+            $cacheOpen = CacheFacade::get($section);
         }
         $cacheOpen[$cache_name] = $cacheValue;
-        Cache::forever($section, $cacheOpen);
+        CacheFacade::forever($section, $cacheOpen);
 
         return true;
     }
 
     public static function forgetCache($section, $cache_name)
     {
-        if (! Cache::has($section)) {
+        if (! CacheFacade::has($section)) {
             return false;
         }
-        $open = Cache::get($section);
+        $open = CacheFacade::get($section);
         unset($open[$cache_name]);
-        Cache::forever($section, $open);
+        CacheFacade::forever($section, $open);
 
         return true;
     }
