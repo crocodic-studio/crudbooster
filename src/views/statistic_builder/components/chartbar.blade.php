@@ -226,6 +226,7 @@
         };
 
 		$(function() {
+
 					
 			var ctx = document.getElementById("canvas-{{$componentID}}").getContext("2d");
             window.myBar = new Chart(ctx, {
