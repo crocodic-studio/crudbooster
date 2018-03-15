@@ -37,7 +37,7 @@
 
         Chart.pluginService.register({
                 afterDraw: function(chartInstance) {
-                    if (chart.type!="pie")
+                    if (chartInstance.chart.type!="pie")
                     {
                         var ctx = chartInstance.chart.ctx;
 
