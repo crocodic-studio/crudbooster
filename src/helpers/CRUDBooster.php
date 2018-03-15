@@ -357,26 +357,12 @@ class CRUDBooster
 
     public static function getCache($section, $cache_name)
     {
-        if (! Cache::has($section)) {
-            return false;
-        }
-        $cache_open = Cache::get($section);
 
-        return $cache_open[$cache_name];
     }
 
-    public static function putCache($section, $cache_name, $cache_value)
+    public static function putCache($section, $cacheName, $cacheValue)
     {
-        if (Cache::has($section)) {
-            $cache_open = Cache::get($section);
-        } else {
-            Cache::forever($section, []);
-            $cache_open = Cache::get($section);
-        }
-        $cache_open[$cache_name] = $cache_value;
-        Cache::forever($section, $cache_open);
-
-        return true;
+        return \crocodicstudio\crudbooster\helpers\Cache::put($section, $cacheName, $cacheValue);
     }
 
     public static function valid($arr = [], $type = 'json')
