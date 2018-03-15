@@ -4,6 +4,7 @@
     <script src="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/datepicker/bootstrap-datepicker.js') }}" charset="UTF-8"></script>   
     <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.js"></script>
     <script src="{{ asset ('vendor/crudbooster/assets/js/Chart.PieceLabel.js') }}"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@1.1.2 "></script>
 
     <script type="text/javascript">
         var lang = '{{App::getLocale()}}';
@@ -35,10 +36,10 @@
             })
         })
 
-        Chart.pluginService.register({
+        /*Chart.pluginService.register({
                 afterDraw: function(chartInstance) {
-                    console.log(chartInstance.chart.type);
-                    if (chartInstance.chart.type!="pie")
+                    console.log(chartInstance.type);
+                    if (chartInstance.type!="pie")
                     {
                         var ctx = chartInstance.chart.ctx;
 
@@ -55,7 +56,7 @@
                         });
                     }
           }
-        });
+        });*/
     </script>
     <style type="text/css">
         .control-sidebar ul {
