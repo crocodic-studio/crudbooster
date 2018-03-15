@@ -45,31 +45,77 @@ class CBBackend
         }
 
         $url = $adminPath . '/' . $moduleName;
-        if($request->is($url .'*') && !CRUDBooster::canView()) {
-                CRUDBooster::insertLog(cbTrans('log_try_view',['module'=>$module->name]));
-                CRUDBooster::denyAccess();
-        }
-
-        if ($request->is($url.'/add*') && !CRUDBooster::canCreate()) {
-                CRUDBooster::insertLog(cbTrans('log_try_add',['module'=>$module->name]));
-                CRUDBooster::denyAccess();
-        }
-
-        if ($request->is($url.'/edit*') && !CRUDBooster::canUpdate()) {
-                CRUDBooster::insertLog(cbTrans('log_try_edit',['module'=>$module->name]));
-                CRUDBooster::denyAccess();
-        }
-
-        if ($request->is($url.'/delete*') && !CRUDBooster::canDelete()) {
-                CRUDBooster::insertLog(cbTrans('log_try_delete',['module'=>$module->name]));
-                CRUDBooster::denyAccess();
-        }
-
-        if ($request->is($url.'/detail*') && !CRUDBooster::canRead()) {
-                CRUDBooster::insertLog(cbTrans('log_try_view',['module'=>$module->name]));
-                CRUDBooster::denyAccess();
-        }
+        $this->guardView($request, $url, $module);
+        $this->guardCreate($request, $url, $module);
+        $this->guardUpdate($request, $url, $module);
+        $this->guardDelete($request, $url, $module);
+        $this->guardRead($request, $url, $module);
 
         return $next($request);
+    }
+
+    /**
+     * @param $request
+     * @param $url
+     * @param $module
+     */
+    private function guardView($request, $url, $module)
+    {
+        if ($request->is($url.'*') && ! CRUDBooster::canView()) {
+            CRUDBooster::insertLog(cbTrans('log_try_view', ['module' => $module->name]));
+            CRUDBooster::denyAccess();
+        }
+    }
+
+    /**
+     * @param $request
+     * @param $url
+     * @param $module
+     */
+    private function guardCreate($request, $url, $module)
+    {
+        if ($request->is($url.'/add*') && ! CRUDBooster::canCreate()) {
+            CRUDBooster::insertLog(cbTrans('log_try_add', ['module' => $module->name]));
+            CRUDBooster::denyAccess();
+        }
+    }
+
+    /**
+     * @param $request
+     * @param $url
+     * @param $module
+     */
+    private function guardUpdate($request, $url, $module)
+    {
+        if ($request->is($url.'/edit*') && ! CRUDBooster::canUpdate()) {
+            CRUDBooster::insertLog(cbTrans('log_try_edit', ['module' => $module->name]));
+            CRUDBooster::denyAccess();
+        }
+    }
+
+    /**
+     * @param $request
+     * @param $url
+     * @param $module
+     */
+    private function guardDelete($request, $url, $module)
+    {
+        if ($request->is($url.'/delete*') && ! CRUDBooster::canDelete()) {
+            CRUDBooster::insertLog(cbTrans('log_try_delete', ['module' => $module->name]));
+            CRUDBooster::denyAccess();
+        }
+    }
+
+    /**
+     * @param $request
+     * @param $url
+     * @param $module
+     */
+    private function guardRead($request, $url, $module)
+    {
+        if ($request->is($url.'/detail*') && ! CRUDBooster::canRead()) {
+            CRUDBooster::insertLog(cbTrans('log_try_view', ['module' => $module->name]));
+            CRUDBooster::denyAccess();
+        }
     }
 }
