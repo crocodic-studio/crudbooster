@@ -402,7 +402,7 @@
 											   return len > 0? new Array(len).join(chr || '0')+this : this;
 											}
 
-											var d = new Date.toISOString(),
+											var d = new Date,
 												    dformat = [(d.getFullYear(),
 												    	       d.getMonth()+1).padLeft(),
 												               d.getDate().padLeft()
