@@ -38,8 +38,8 @@
 
         Chart.pluginService.register({
                 afterDraw: function(chartInstance) {
-                    console.log(chartInstance);
-                    if (chartInstance.type!="pie")
+                    console.log(chartInstance.config.type);
+                    if (chartInstance.config.type!="pie")
                     {
                         var ctx = chartInstance.chart.ctx;
 
