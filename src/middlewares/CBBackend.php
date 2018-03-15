@@ -7,6 +7,10 @@ use CRUDBooster;
 
 class CBBackend
 {
+    private $module;
+
+    private $url;
+
     /**
      * Handle an incoming request.
      *
@@ -29,7 +33,7 @@ class CBBackend
         }
 
         $moduleName = $request->segment(2);
-        $module = CRUDBooster::getCurrentModule();
+        $this->module = CRUDBooster::getCurrentModule();
         $exception = ['notifications','users/profile','users/edit-save'];
 
         if(count($exception)) {
@@ -44,77 +48,68 @@ class CBBackend
             return $next($request);
         }
 
-        $url = $adminPath . '/' . $moduleName;
-        $this->guardView($request, $url, $module);
-        $this->guardCreate($request, $url, $module);
-        $this->guardUpdate($request, $url, $module);
-        $this->guardDelete($request, $url, $module);
-        $this->guardRead($request, $url, $module);
+        $this->url = $adminPath . '/' . $moduleName;
+
+        $this->guardView($request);
+        $this->guardCreate($request);
+        $this->guardUpdate($request);
+        $this->guardDelete($request);
+        $this->guardRead($request);
 
         return $next($request);
     }
 
     /**
      * @param $request
-     * @param $url
-     * @param $module
      */
-    private function guardView($request, $url, $module)
+    private function guardView($request)
     {
-        if ($request->is($url.'*') && ! CRUDBooster::canView()) {
-            CRUDBooster::insertLog(cbTrans('log_try_view', ['module' => $module->name]));
+        if ($request->is($this->url.'*') && ! CRUDBooster::canView()) {
+            CRUDBooster::insertLog(cbTrans('log_try_view', ['module' => $this->module->name]));
             CRUDBooster::denyAccess();
         }
     }
 
     /**
      * @param $request
-     * @param $url
-     * @param $module
      */
-    private function guardCreate($request, $url, $module)
+    private function guardCreate($request)
     {
-        if ($request->is($url.'/add*') && ! CRUDBooster::canCreate()) {
-            CRUDBooster::insertLog(cbTrans('log_try_add', ['module' => $module->name]));
+        if ($request->is($this->url.'/add*') && ! CRUDBooster::canCreate()) {
+            CRUDBooster::insertLog(cbTrans('log_try_add', ['module' => $this->module->name]));
             CRUDBooster::denyAccess();
         }
     }
 
     /**
      * @param $request
-     * @param $url
-     * @param $module
      */
-    private function guardUpdate($request, $url, $module)
+    private function guardUpdate($request)
     {
-        if ($request->is($url.'/edit*') && ! CRUDBooster::canUpdate()) {
-            CRUDBooster::insertLog(cbTrans('log_try_edit', ['module' => $module->name]));
+        if ($request->is($this->url.'/edit*') && ! CRUDBooster::canUpdate()) {
+            CRUDBooster::insertLog(cbTrans('log_try_edit', ['module' => $this->module->name]));
             CRUDBooster::denyAccess();
         }
     }
 
     /**
      * @param $request
-     * @param $url
-     * @param $module
      */
-    private function guardDelete($request, $url, $module)
+    private function guardDelete($request)
     {
-        if ($request->is($url.'/delete*') && ! CRUDBooster::canDelete()) {
-            CRUDBooster::insertLog(cbTrans('log_try_delete', ['module' => $module->name]));
+        if ($request->is($this->url.'/delete*') && ! CRUDBooster::canDelete()) {
+            CRUDBooster::insertLog(cbTrans('log_try_delete', ['module' => $this->module->name]));
             CRUDBooster::denyAccess();
         }
     }
 
     /**
      * @param $request
-     * @param $url
-     * @param $module
      */
-    private function guardRead($request, $url, $module)
+    private function guardRead($request)
     {
-        if ($request->is($url.'/detail*') && ! CRUDBooster::canRead()) {
-            CRUDBooster::insertLog(cbTrans('log_try_view', ['module' => $module->name]));
+        if ($request->is($this->url.'/detail*') && ! CRUDBooster::canRead()) {
+            CRUDBooster::insertLog(cbTrans('log_try_view', ['module' => $this->module->name]));
             CRUDBooster::denyAccess();
         }
     }
