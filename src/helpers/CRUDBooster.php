@@ -4,7 +4,6 @@ namespace crocodicstudio\crudbooster\helpers;
 
 use crocodicstudio\crudbooster\Modules\LogsModule\LogsRepository;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator;
-use crocodicstudio\crudbooster\Modules\SettingModule\SettingRepo;
 use Session;
 use Request;
 use Schema;

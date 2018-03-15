@@ -2,6 +2,8 @@
 
 namespace crocodicstudio\crudbooster\helpers;
 
+use crocodicstudio\crudbooster\Modules\SettingModule\SettingRepo;
+
 class GoogleFCM
 {
     private $url = 'https://fcm.googleapis.com/fcm/send';
