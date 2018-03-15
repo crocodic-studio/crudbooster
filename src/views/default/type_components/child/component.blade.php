@@ -397,6 +397,11 @@
 											"<input type='hidden' name='{{$name}}-{{$c['name']}}[]' value='"+$('.{{$name.$c["name"]}}:checked').val()+"'/>"+
 											"</td>";
 										@elseif($c['type']=='hiddendate')
+											Number.prototype.padLeft = function(base,chr){
+											   var  len = (String(base || 10).length - String(this).length)+1;
+											   return len > 0? new Array(len).join(chr || '0')+this : this;
+											}
+											
 											var d = new Date,
 												    dformat = [(d.getMonth()+1).padLeft(),
 												               d.getDate().padLeft(),
