@@ -401,7 +401,7 @@
 											   var  len = (String(base || 10).length - String(this).length)+1;
 											   return len > 0? new Array(len).join(chr || '0')+this : this;
 											}
-											
+
 											var d = new Date,
 												    dformat = [(d.getMonth()+1).padLeft(),
 												               d.getDate().padLeft(),
@@ -409,8 +409,8 @@
 												              [d.getHours().padLeft(),
 												               d.getMinutes().padLeft(),
 												               d.getSeconds().padLeft()].join(':');
-											trRow += "<td class='{{$c['name']}}'><span class='td-label'>"+d+"</span>"+
-											"<input type='hidden' name='{{$name}}-{{$c['name']}}[]' value='"+d+"'/>"+
+											trRow += "<td class='{{$c['name']}}'><span class='td-label'>"+dformat+"</span>"+
+											"<input type='hidden' name='{{$name}}-{{$c['name']}}[]' value='"+dformat+"'/>"+
 											"</td>";
 										@elseif($c['type']=='datamodal')
 											trRow += "<td class='{{$c['name']}}'><span class='td-label'>"+$('#{{$name.$c["name"]}} .input-label').val()+"</span>"+
