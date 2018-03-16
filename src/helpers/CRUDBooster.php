@@ -4,7 +4,6 @@ namespace crocodicstudio\crudbooster\helpers;
 
 use crocodicstudio\crudbooster\Modules\LogsModule\LogsRepository;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator;
-use crocodicstudio\crudbooster\Modules\SettingModule\SettingRepo;
 use Session;
 use Request;
 use Schema;
@@ -154,34 +153,17 @@ class CRUDBooster
 
     public static function getCurrentModule()
     {
-        $modulepath = self::getModulePath();
-        if (Cache::has('moduls_'.$modulepath)) {
-            return Cache::get('moduls_'.$modulepath);
-        }
-
-        return DB::table('cms_moduls')->where('path', self::getModulePath())->first();
+        return GetCurrentX::getCurrentModule();
     }
 
     public static function getCurrentDashboardId()
     {
-        if (request('d') == null) {
-            return session('currentDashboardId');
-        }
-        Session::put('currentDashboardId', request('d'));
-        Session::put('currentMenuId', 0);
-
-        return request('d');
+        return GetCurrentX::getCurrentDashboardId();
     }
 
     public static function getCurrentMenuId()
     {
-        if (request('m') == null) {
-            return session('currentMenuId');
-        }
-        Session::put('currentMenuId', request('m'));
-        Session::put('currentDashboardId', 0);
-
-        return request('m');
+        return GetCurrentX::getCurrentMenuId();
     }
 
     public static function myPrivilegeId()
@@ -215,21 +197,12 @@ class CRUDBooster
 
     public static function getCurrentId()
     {
-        $id = session('current_row_id');
-        $id = intval($id);
-        $id = (! $id) ? Request::segment(4) : $id;
-        $id = intval($id);
-
-        return $id;
+        return GetCurrentX::getCurrentId();
     }
 
     public static function getCurrentMethod()
     {
-        $action = str_replace(ctrlNamespace(), "", Route::currentRouteAction());
-        $atloc = strpos($action, '@') + 1;
-        $method = substr($action, $atloc);
-
-        return $method;
+        return GetCurrentX::getCurrentMethod();
     }
 
     public static function clearCache($name)
@@ -355,28 +328,14 @@ class CRUDBooster
         return DbInspector::findPK($table);
     }
 
-    public static function getCache($section, $cache_name)
+    public static function getCache($section, $cacheName)
     {
-        if (! Cache::has($section)) {
-            return false;
-        }
-        $cache_open = Cache::get($section);
-
-        return $cache_open[$cache_name];
+        return \crocodicstudio\crudbooster\helpers\Cache::get($section, $cacheName);
     }
 
-    public static function putCache($section, $cache_name, $cache_value)
+    public static function putCache($section, $cacheName, $cacheValue)
     {
-        if (Cache::has($section)) {
-            $cache_open = Cache::get($section);
-        } else {
-            Cache::forever($section, []);
-            $cache_open = Cache::get($section);
-        }
-        $cache_open[$cache_name] = $cache_value;
-        Cache::forever($section, $cache_open);
-
-        return true;
+        return \crocodicstudio\crudbooster\helpers\Cache::put($section, $cacheName, $cacheValue);
     }
 
     public static function valid($arr = [], $type = 'json')
@@ -414,16 +373,9 @@ class CRUDBooster
         Cache::flush();
     }
 
-    public static function forgetCache($section, $cache_name)
+    public static function forgetCache($section, $cacheName)
     {
-        if (! Cache::has($section)) {
-            return false;
-        }
-        $open = Cache::get($section);
-        unset($open[$cache_name]);
-        Cache::forever($section, $open);
-
-        return true;
+        return \crocodicstudio\crudbooster\helpers\Cache::forgetCache($section, $cacheName);
     }
 
     public static function getForeignKey($parent_table, $child_table)
