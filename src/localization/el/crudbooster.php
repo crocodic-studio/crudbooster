@@ -39,22 +39,6 @@ return [
                 * Ίσως η σελίδα που ψάχνετε έχει διαγραφεί από τον διαχειριστή<br/>
                 * Μπορείτε να πάτε πίσω πατώντας το "πίσω" στον φυλλομετρητή σας<br/>',
 
-    'log_try_view'            => 'Προσπάθεια προβολής :name σε :module',
-    'log_try_edit'            => 'Προσπάθεια επεξεργασίας :name σε :module',
-    'log_try_add'             => 'Προσπάθεια προσθήκης σε :module',
-    'log_try_add_save'        => 'Προσπάθεια προσθήκης :name σε :module',
-    'log_try_delete'          => 'Προσπάθεια διαγραφής :name σε :module',
-    'log_try_delete_selected' => 'Προσπάθεια διαγραφής επιλεγμένου σε :module',
-    'log_try_delete_image'    => 'Προσπάθεια διαγραφής εικόινας :name σε :module',
-    'log_try_update'          => 'Προσπάθεια ανανέωσης :name σε :module',
-    'log_add'                 => 'Προσθήκη :name σε :module',
-    'log_update'              => 'Ανανέωση :name σε :module',
-    'log_delete'              => 'Διαγραφή :name σε :module',
-    'log_delete_image'        => 'Διαγραφή εικόνας :name σε :module',
-    'log_login'               => ':email είσοδος με διεύθυνση IP :ip',
-    'log_forgot'              => 'Κάποιος με IP :ip ζήτησε κωδικό για :email',
-    'log_logout'              => ':email έξοδος',
-
     'alert_delete_selected'         => 'Είστε σίγουρος/η πως θέλετε να διεγράψετε όλα τα επιλεγμένα στοιχεία;',
     'alert_delete_selected_success' => 'Επιτυχής διαγραφή επιλεγμένων!',
     'alert_bulk_action_button'      => 'Σίγουρα θέλετε να',    
@@ -233,24 +217,6 @@ return [
     'confirmation_title'            => 'Επιβεβαίωση',
     'confirmation_text'             => 'Είστε σίγουροι πως θέλετε να ολοκληρώσετε αυτή την ενέργεια;',
     'confirmButtonText'             => 'Ναι',
-
-    
-    // privilege
-    'privileges_name'               =>'Ονομασία δικαιώματος',
-    'privileges_super_admin'        =>'Super Admin',
-    'privileges_standart_user'      =>'Απλός χρήστης',
-    'privileges_ID'                 =>'ID',
-    'set_as_superadmin'             =>'Ορισμός Superadmin',
-    'chose_theme_color_select'      =>'** Επιλέξτε χρώμα backend',
-    'chose_theme_color'             =>' Χρώμα θέματος',
-    'privileges_configuration'      =>'Ρυθμίσεις δικαιωμάτων',
-    'privileges_module_list_no'     =>'Όχι.',
-    'privileges_module_list_mod_names'=>'Ονομασία Module',
-    'privileges_module_list_view'   =>'Προβολή',
-    'privileges_module_list_create' =>'Δημιουργία',
-    'privileges_module_list_read'   =>'Ανάγνωση',
-    'privileges_module_list_update' =>'Επεξεργασία',
-    'privileges_module_list_delete' =>'Διαγραφή',
 
     //datamodal 
     'datamodal_select'=>'Επιλογή',

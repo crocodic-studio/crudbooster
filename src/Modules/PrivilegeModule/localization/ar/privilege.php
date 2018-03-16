@@ -1,6 +1,5 @@
 <?php
 return [
-
     // privilege
     'privileges_name' => 'Privilege Name',
     'privileges_super_admin' => 'Super Admin',

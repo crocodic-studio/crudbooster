@@ -1,12 +1,10 @@
 <?php
 return [
-
     // privilege
     'privileges_name' => 'Nome do Privilégio',
     'privileges_super_admin' => 'Super Admin',
     'privileges_standart_user' => 'Usuário Padrão',
     'privileges_ID' => 'ID',
-
     'set_as_superadmin' => 'Configurar como Superadmin',
     'chose_theme_color_select' => '** Escolha a cor de fundo do tema',
     'chose_theme_color' => ' Cor do Tema',

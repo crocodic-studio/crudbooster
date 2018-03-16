@@ -15,5 +15,5 @@ return [
     'privileges_module_list_create' => 'افزودن',
     'privileges_module_list_read' => 'خواندن',
     'privileges_module_list_update' => 'بروزرسانی',
-    'privileges_module_list_delete' => 'حزف',
+    'privileges_module_list_delete' => 'حذف',
 ];

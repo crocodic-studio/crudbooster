@@ -16,5 +16,4 @@ return [
     'privileges_module_list_read' => 'Ανάγνωση',
     'privileges_module_list_update' => 'Επεξεργασία',
     'privileges_module_list_delete' => 'Διαγραφή',
-
 ];

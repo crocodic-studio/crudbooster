@@ -1,6 +1,5 @@
 <?php
 return [
-
     // privilege
     'privileges_name' => '角色名称',
     'privileges_super_admin' => '超级管理员',

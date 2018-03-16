@@ -14,6 +14,7 @@ class CbLogsServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadRoutesFrom( __DIR__.'/logs_routes.php');
+        $this->publishes([__DIR__.'/localization' => resource_path('lang/crudbooster')], 'cb_localization');
     }
 
     /**
