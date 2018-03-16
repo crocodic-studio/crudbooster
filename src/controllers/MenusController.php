@@ -36,6 +36,10 @@ use CRUDBooster;
 			$this->button_import       = FALSE;	       
 
 			$id = CRUDBooster::getCurrentId();
+			if(Request::segment(3)=='edit') {
+				$id = Request::segment(4);
+				Session::put('current_row_id',$id);
+			}
 			$row = CRUDBooster::first($this->table,$id);
 			$row = (Request::segment(3) == 'edit')?$row:null;
 

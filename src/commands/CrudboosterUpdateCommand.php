@@ -38,13 +38,17 @@ class CrudboosterUpdateCommand extends Command {
 		$this->header();
 		$this->checkRequirements();
 
-		$this->info('Updating: ');								 
+		$this->info('Updating: ');	
+
+		if(!file_exists(public_path('vendor'))) {            
+            mkdir(public_path('vendor'),0777);
+        }							 
 
 		$this->info('Publishing CRUDBooster needs file...');
-		$this->callSilent('vendor:publish');		
-		$this->callSilent('vendor:publish',['--tag'=>'cb_migration','--force'=>true]);
-		$this->callSilent('vendor:publish',['--tag'=>'cb_lfm','--force'=>true]);	
-		$this->callSilent('vendor:publish',['--tag'=>'cb_localization','--force'=>true]);				  
+		$this->call('vendor:publish');		
+		$this->call('vendor:publish',['--tag'=>'cb_migration','--force'=>true]);
+		$this->call('vendor:publish',['--tag'=>'cb_lfm','--force'=>true]);	
+		$this->call('vendor:publish',['--tag'=>'cb_localization','--force'=>true]);				  
 
 		$configLFM = config_path('lfm.php');
 		$configLFM = file_get_contents($configLFM);
@@ -70,7 +74,7 @@ class CrudboosterUpdateCommand extends Command {
 		if (!class_exists('CBSeeder')) {
             require_once __DIR__.'/../database/seeds/CBSeeder.php';
         }
-		$this->callSilent('db:seed',['--class' => 'CBSeeder']);
+		$this->call('db:seed',['--class' => 'CBSeeder']);
 		
 		$this->info('Clearing Cache...');
 		Cache::flush();

@@ -82,6 +82,7 @@ class SettingsController extends CBController {
 	function getDeleteFileSetting() {
 		$id = g('id');
 		$row = CRUDBooster::first('cms_settings',$id);
+		Cache::forget('setting_'.$row->name);
 		if(Storage::exists($row->content)) Storage::delete($row->content);
 		DB::table('cms_settings')->where('id',$id)->update(['content'=>NULL]);
 		CRUDBooster::redirect(Request::server('HTTP_REFERER'),trans('alert_delete_data_success'),'success');		

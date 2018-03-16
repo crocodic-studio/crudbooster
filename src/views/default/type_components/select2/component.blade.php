@@ -188,6 +188,9 @@
 								if($select_where) {
 									$result->whereraw($select_where);
 								}
+								if(CRUDBooster::isColumnExists($select_table,'deleted_at')) {
+									$result->whereNull('deleted_at');
+								}
 								$result = $result->orderby($select_title,'asc')->get();
 
 								foreach($result as $r) {

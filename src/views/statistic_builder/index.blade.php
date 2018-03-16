@@ -54,14 +54,6 @@
             width: 5px;
             height: 5px;
         }
-         
-        ::-webkit-scrollbar-track {            
-            background: #000000;
-        }
-         
-        ::-webkit-scrollbar-thumb {
-            background: #333333;          
-        }
     </style>
     @endpush
 
@@ -82,6 +74,10 @@
         }
 
 	</script>
+	<!--DATATABLE-->	
+  	<link rel="stylesheet" href="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/datatables/dataTables.bootstrap.css')}}">
+	<script src="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/datatables/jquery.dataTables.min.js')}}"></script>
+	<script src="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/datatables/dataTables.bootstrap.min.js')}}"></script>
 	<!--END HERE-->
     @endpush
 

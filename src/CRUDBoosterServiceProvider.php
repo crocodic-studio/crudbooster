@@ -33,10 +33,11 @@ class CRUDBoosterServiceProvider extends ServiceProvider
 
         if(!file_exists(app_path('Http/Controllers/AdminCmsUsersController.php'))) {
             $this->publishes([__DIR__.'/userfiles/controllers/AdminCmsUsersController.php' => app_path('Http/Controllers/AdminCmsUsersController.php')],'cb_user_controller');
-        }
+        }        
 
-        /* Symlink Fixed If Missing */
-        $this->symlinkFixed();
+        $this->publishes([
+            __DIR__.'/assets'=>public_path('vendor/crudbooster')
+        ],'cb_asset');  
                     
         require __DIR__.'/validations/validation.php';        
         require __DIR__.'/routes.php';                        
@@ -67,7 +68,6 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->commands('crudboosterinstall');
         $this->commands('crudboosterupdate');
 
-
         $this->app->register('Barryvdh\DomPDF\ServiceProvider');
         $this->app->register('Maatwebsite\Excel\ExcelServiceProvider');
         $this->app->register('Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider');
@@ -91,37 +91,5 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->app->singleton('crudboosterupdate',function() {
             return new CrudboosterUpdateCommand;
         });        
-    }
-
-    private function symlinkFixed() {
-        //Create vendor folder at public        
-        if(!file_exists(public_path('vendor'))) {            
-            mkdir(public_path('vendor'),0777);
-        }
-
-        //Create symlink for uploads path        
-        //Deprecated for a while, because uploads now handled by FileController.php
-        // if(file_exists(public_path('uploads'))) {              
-        //     $uploadPath = public_path('uploads');                        
-        //     if(realpath($uploadPath) == $uploadPath) {                            
-        //         // rrmdir(public_path('uploads'));
-        //         rename(public_path('uploads'),'uploads.old.'.str_random(5));
-        //         app('files')->link(storage_path('app'), public_path('uploads'));   
-        //     }           
-        // }else{            
-        //     app('files')->link(storage_path('app'), public_path('uploads'));
-        // }      
-        
-        //Crate symlink for assets        
-        if(file_exists(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'))) { 
-            $vendorpath = public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster');                        
-            if(realpath($vendorpath) == $vendorpath) {                                     
-                // rrmdir(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'));
-                rename(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'),'crudbooster.old.'.str_random(5));
-                app('files')->link(__DIR__.'/assets',public_path('vendor/crudbooster'));     
-            }        
-        }else{                        
-            app('files')->link(__DIR__.'/assets',public_path('vendor/crudbooster'));
-        }
-    }
+    }    
 }

@@ -101,6 +101,19 @@ class CRUDBooster  {
 	        return Session::get('admin_lock');
 	    }
 
+	    public static function redirectBack($message,$type='warning') {
+
+			if(Request::ajax()) {
+				$resp = response()->json(['message'=>$message,'message_type'=>$type,'redirect_url'=>$_SERVER['HTTP_REFERER']])->send();
+				exit;
+			}else{
+				$resp = redirect()->back()->with(['message'=>$message,'message_type'=>$type]);
+				Session::driver()->save();
+				$resp->send();	
+				exit;
+			}						
+		}
+
 		public static function redirect($to,$message,$type='warning') {
 
 			if(Request::ajax()) {
@@ -285,7 +298,8 @@ class CRUDBooster  {
 		  		$menu->url_path = trim(str_replace(url('/'),'',$url),"/");
 
 		  		$child = DB::table('cms_menus')
-		  		->where('is_dashboard',0)
+                ->whereRaw("cms_menus.id IN (select id_cms_menus from cms_menus_privileges where id_cms_privileges = '".self::myPrivilegeId()."')")
+                ->where('is_dashboard',0)
 		  		->where('is_active',1)
 		  		->where('parent_id',$menu->id)
 		  		->select('cms_menus.*')
@@ -681,7 +695,9 @@ class CRUDBooster  {
 			$table = CRUDBooster::parseSqlTable($table);
 
 			if(!$table['table']) throw new \Exception("parseSqlTable can't determine the table");							
-			$query = "select * from information_schema.COLUMNS where TABLE_SCHEMA = '$table[database]' and TABLE_NAME = '$table[table]' and COLUMN_KEY = 'PRI'";
+			$query = config('database.connections.' . config('database.default') . '.driver') == 'pgsql' ?
+                     "select * from information_schema.key_column_usage WHERE TABLE_NAME = '$table[table]'":
+                     "select * from information_schema.COLUMNS where TABLE_SCHEMA = '$table[database]' and TABLE_NAME = '$table[table]' and COLUMN_KEY = 'PRI'";
 			$keys = DB::select($query);
 			$primary_key = $keys[0]->COLUMN_NAME;
 			if($primary_key) {				
@@ -848,7 +864,9 @@ class CRUDBooster  {
 		            $part = explode('=',$s);
 		            $name = urldecode($part[0]);      
 		            $value = urldecode($part[1]);      
-		            $inputhtml .= "<input type='hidden' name='$name' value='$value'/>";
+		            if($name) {		            	
+			            $inputhtml .= "<input type='hidden' name='$name' value='$value'/>\n";
+		            }
 		        }                                                           
 		    }
 
@@ -856,6 +874,29 @@ class CRUDBooster  {
 		}
 
 		public static function authAPI() {
+
+			$allowedUserAgent = config('crudbooster.API_USER_AGENT_ALLOWED');
+            $user_agent = Request::header('User-Agent');
+            $time       = Request::header('X-Authorization-Time');
+
+
+            if($allowedUserAgent && count($allowedUserAgent)) {
+            	$userAgentValid = false;
+            	foreach($allowedUserAgent as $a) {
+            		if(stripos($user_agent, $a)!==FALSE) {
+            			$userAgentValid = true;
+            			break;
+            		}
+            	}
+            	if($userAgentValid==false) {
+            		$result['api_status']   = false;
+                    $result['api_message']  = "THE DEVICE AGENT IS INVALID";
+                    $res = response()->json($result,200);
+                    $res->send();
+                    exit;
+            	}
+            }
+
 	        if(self::getSetting('api_debug_mode') == 'false') {
 	              
 	            $result = array();
@@ -884,9 +925,6 @@ class CRUDBooster  {
 	                exit;
 	            }
 
-	            $user_agent = Request::header('User-Agent');
-	            $time       = Request::header('X-Authorization-Time'); 
-
 	            $keys = DB::table('cms_apikey')->where('status','active')->pluck('screetkey');
 	            $server_token = array();
 	            $server_token_screet = array();
@@ -901,8 +939,6 @@ class CRUDBooster  {
 	                if(!in_array($sender_token, $server_token)) {           
 	                    $result['api_status']   = false;
 	                    $result['api_message']  = "THE TOKEN IS NOT MATCH WITH SERVER TOKEN";
-	                    $result['sender_token'] = $sender_token;
-	                    $result['server_token'] = $server_token;
 	                    $res = response()->json($result,200);
 	                    $res->send();
 	                    exit;
@@ -911,8 +947,6 @@ class CRUDBooster  {
 	                if(Cache::get($sender_token) != $user_agent) {
 	                    $result['api_status']   = false;
 	                    $result['api_message']  = "THE TOKEN IS ALREADY BUT NOT MATCH WITH YOUR DEVICE";
-	                    $result['sender_token'] = $sender_token;
-	                    $result['server_token'] = $server_token;
 	                    $res = response()->json($result,200);
 	                    $res->send();
 	                    exit;
@@ -1142,10 +1176,11 @@ class CRUDBooster  {
 			$this->button_export       = '.$button_export.';	        
 			$this->button_import       = '.$button_import.';
 			$this->button_bulk_action  = '.$button_bulk_action.';	
+			$this->sidebar_mode		   = "normal"; //normal,mini,collapse,collapse-mini
 			# END CONFIGURATION DO NOT REMOVE THIS LINE						      
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
-	        $this->col = array();
+	        $this->col = [];
 	';
 	        $coloms_col = array_slice($coloms,0,8);
 	        foreach($coloms_col as $c) {

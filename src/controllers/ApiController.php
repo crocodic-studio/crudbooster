@@ -54,6 +54,7 @@ class ApiController extends Controller {
 
 		$action_type = $row_api->aksi;
 		$table       = $row_api->tabel;
+		$pk 		 = CRUDBooster::pk($table);
 
 		$debug_mode_message = 'You are in debug mode !';
 
@@ -91,6 +92,7 @@ class ApiController extends Controller {
 		@$parameters = unserialize( $row_api->parameters );
 		@$responses = unserialize( $row_api->responses );
 
+
 		/* 
 		| ----------------------------------------------
 		| User Data Validation
@@ -111,15 +113,19 @@ class ApiController extends Controller {
 				$used              = $param['used'];
 				$format_validation = array();
 
-				if ( $used == 0 ) {
+				if( $used && !$required && $value == '' && !in_array($type, ['image','file'])) {
 					continue;
 				}
 
-				if ( $param['config'] && substr( $param['config'], 0, 1 ) != '*' ) {
+				if ( $used == '0' ) {
 					continue;
 				}
 
-				if ( $required ) {
+				if ( $config && substr( $config, 0, 1 ) == '*' ) {
+					continue;
+				}
+
+				if ( $required == '1' ) {
 					$format_validation[] = 'required';
 				}
 
@@ -159,13 +165,14 @@ class ApiController extends Controller {
 
 				if ( $name == 'id' ) {
 					$table_exist         = CRUDBooster::parseSqlTable( $table )['table'];
-					$format_validation[] = 'exists:' . $table_exist . ',id';
+					$table_exist_pk		 = CRUDBooster::pk($table_exist);
+					$format_validation[] = 'exists:' . $table_exist . ','.$table_exist_pk;
 				}
 
-				$input_validator[ $name ] = $value;
-				$data_validation[ $name ] = implode( '|', $format_validation );
+				$input_validator[ $name ] = trim($value);
+				if(count($format_validation)) $data_validation[ $name ] = implode( '|', $format_validation );
 			}
-
+			
 			$validator = Validator::make( $input_validator, $data_validation );
 			if ( $validator->fails() ) {
 				$message               = $validator->errors()->all();
@@ -188,7 +195,7 @@ class ApiController extends Controller {
 
 		$limit                    = ( $posts['limit'] ) ?: 20;
 		$offset                   = ( $posts['offset'] ) ?: 0;
-		$orderby                  = ( $posts['orderby'] ) ?: $table . '.id,desc';
+		$orderby                  = ( $posts['orderby'] ) ?: $table . '.'.$pk.',desc';
 		$uploads_format_candidate = explode( ',', config( "crudbooster.UPLOAD_TYPES" ) );
 		$uploads_candidate        = explode( ',', config( 'crudbooster.IMAGE_FIELDS_CANDIDATE' ) );
 		$password_candidate       = explode( ',', config( 'crudbooster.PASSWORD_FIELDS_CANDIDATE' ) );
@@ -201,7 +208,7 @@ class ApiController extends Controller {
 		if ( $action_type == 'list' || $action_type == 'detail' || $action_type == 'delete' ) {
 			$name_tmp = array();
 			$data     = DB::table( $table );
-			$data->skip( $offset );
+			if($offset) $data->skip( $offset );
 			$data->take( $limit );
 			foreach ( $responses as $resp ) {
 				$name     = $resp['name'];
@@ -241,8 +248,8 @@ class ApiController extends Controller {
 				if ( CRUDBooster::isForeignKey( $name ) ) {
 					$jointable       = CRUDBooster::getTableForeignKey( $name );
 					$jointable_field = CRUDBooster::getTableColumns( $jointable );
-
-					$data->leftjoin( $jointable, $jointable . '.id', '=', $table . '.' . $name );
+					$jointablePK = CRUDBooster::pk($jointable);
+					$data->leftjoin( $jointable, $jointable . '.'. $jointablePK , '=', $table . '.' . $name );
 					foreach ( $jointable_field as $jf ) {
 						$jf_alias = $jointable . '_' . $jf;
 						if ( in_array( $jf_alias, $responses_fields ) ) {
@@ -312,10 +319,6 @@ class ApiController extends Controller {
 						continue;
 					}
 
-					if ( $param['config'] != '' && substr( $param['config'], 0, 1 ) != '*' ) {
-						$value = $param['config'];
-					}
-
 					if ( $required == '1' ) {
 						if ( CRUDBooster::isColumnExists( $table, $name ) ) {
 							$w->where( $table . '.' . $name, $value );
@@ -377,7 +380,7 @@ class ApiController extends Controller {
 					$orderby_col = $orderby_raw[0];
 					$orderby_val = $orderby_raw[1];
 				} else {
-					$orderby_col = $table . '.id';
+					$orderby_col = $table . '.'.$pk;
 					$orderby_val = 'desc';
 				}
 
@@ -424,11 +427,6 @@ class ApiController extends Controller {
 						$value    = $posts[ $name ];
 						$used     = $param['used'];
 						$required = $param['required'];
-
-						if ( $param['config'] != '' && substr( $param['config'], 0, 1 ) != '*' ) {
-							$value = $param['config'];
-						}
-
 
 						if ( $required ) {
 							if ( $type == 'password' ) {
@@ -546,15 +544,11 @@ class ApiController extends Controller {
 					continue;
 				}
 
-				if ( substr( $param['config'], 0, 1 ) != '*' ) {
-					$value = $param['config'];
-				}
-
 				if ( $type == 'file' || $type == 'image' ) {
 					if ( Request::hasFile( $name ) ) {
 						$file = Request::file( $name );
 						$ext  = $file->getClientOriginalExtension();
-						$filePath = 'uploads/'.CRUDBooster::myId().'/'.date('Y-m');
+						$filePath = 'uploads/'.date('Y-m');
 
 						//Create Directory Monthly 
 						Storage::makeDirectory($filePath);						
@@ -574,7 +568,7 @@ class ApiController extends Controller {
 					@$mime_type = $mime_type[1];
 					if($mime_type) {
 						if(in_array($mime_type, $uploads_format_candidate)) {
-							$filePath = 'uploads/'.CRUDBooster::myId().'/'.date('Y-m');
+							$filePath = 'uploads/'.date('Y-m');
 							Storage::makeDirectory($filePath);
 							$filename = md5(str_random(5)).'.'.$mime_type;
 							if(Storage::put($filePath.'/'.$filename,$filedata)) {								
@@ -668,7 +662,7 @@ class ApiController extends Controller {
 
 		$this->hook_after( $posts, $result );
 
-		return response()->json( $result, $result['api_http'] );
+		return response()->json( $result, 200 );
 	}
 
 	protected function isJSON( $theData ) {

@@ -175,11 +175,13 @@
 
                   </form><!--END FORM TABLE-->
 
-            <p>{!! urldecode(str_replace("/?","?",$result->appends(Request::all())->render())) !!}</p>
-
-
-
-
+            <div class="col-md-8">{!! urldecode(str_replace("/?","?",$result->appends(Request::all())->render())) !!}</div>
+            <?php 
+              $from = $result->count()?($result->perPage() * $result->currentPage() - $result->perPage() + 1):0;
+              $to = $result->perPage() * $result->currentPage() - $result->perPage() + $result->count();
+              $total = $result->total();
+            ?>
+            <div class="col-md-4" style="margin:30px 0;"><span class="pull-right">{{ trans("crudbooster.filter_rows_total") }}: {{ $from }} {{ trans("crudbooster.filter_rows_to") }} {{ $to }} {{ trans("crudbooster.filter_rows_of") }} {{ $total }}</span></div>
 
             @if($columns)
             @push('bottom')
@@ -387,6 +389,7 @@
                       <button class="btn btn-default btn-reset" type="reset" onclick='location.href="{{Request::get("lasturl")}}"' >{{trans("crudbooster.button_reset")}}</button>
                       <button class="btn btn-primary btn-submit" type="submit">{{trans("crudbooster.button_submit")}}</button>
                     </div>
+                    {!! CRUDBooster::getUrlParameters(['filter_column','lasturl']) !!}
                     <input type="hidden" name="lasturl" value="{{Request::get('lasturl')?:Request::fullUrl()}}">
                   </form>
                 </div>

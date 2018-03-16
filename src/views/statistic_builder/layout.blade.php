@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>{{ ($page_title)?CRUDBooster::getSetting('appname').': '.strip_tags($page_title):"Admin Area" }}</title>
+    <title>{{ ($page_title)?Session::get('appname').': '.strip_tags($page_title):"Admin Area" }}</title>
 	<meta name="csrf-token" content="{{ csrf_token() }}" />
 	<meta name='generator' content='CRUDBooster.com'/>
     <meta name='robots' content='noindex,nofollow'/>
@@ -49,7 +49,7 @@
     <nav class="navbar navbar-static-top">
       <div class="container">
         <div class="navbar-header">          
-          <a href="{{url(config('crudbooster.ADMIN_PATH'))}}" title='{{CRUDBooster::getSetting('appname')}}' class="navbar-brand">{{CRUDBooster::getSetting('appname')}}</a>
+          <a href="{{url(config('crudbooster.ADMIN_PATH'))}}" title='{{Session::get('appname')}}' class="navbar-brand">{{CRUDBooster::getSetting('appname')}}</a>
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
             <i class="fa fa-bars"></i>
           </button>
@@ -160,7 +160,7 @@
     <footer class="main-footer">
         <!-- To the right -->
         <div class="pull-right hidden-xs"> 
-            Powered By {{CRUDBooster::getSetting('appname')}}
+            Powered By {{Session::get('appname')}}
         </div>
         <!-- Default to the left -->
         <strong>Copyright &copy; <?php echo date('Y') ?>. All rights reserved.</strong>

@@ -75,6 +75,7 @@ return [
     'alert_required'                => 'Please make sure to fill out all the required fields correctly',
     'alert_error_ajax'              => 'Okay, It is embarasing, something went wrong, we will fix it soon !',
     'alert_validation_error'        => 'Please fill out the form correctly : :error',
+    'alert_select_a_data'			=> 'Please select at least one data!',
 
     'add_data_page_title'    => 'Add :module',
     'edit_data_page_title'   => 'Edit :module',
@@ -219,6 +220,9 @@ return [
     'filter_from'                  => 'from',
     'filter_to'                    => 'to',
     'filter_sorting'               => 'Sorting',
+    'filter_rows_total'            => 'Total rows',
+    'filter_rows_to'               => 'to',
+    'filter_rows_of'               => 'of',
     
     // confirmation
     'confirmation_yes'             => 'Yes!',

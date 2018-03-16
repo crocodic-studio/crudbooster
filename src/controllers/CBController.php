@@ -75,6 +75,7 @@ class CBController extends Controller {
 	public $parent_id 			  = NULL;
 	public $hide_form			  = array();
 	public $index_return 		  = FALSE; //for export
+	public $sidebar_mode		  = 'normal';
 
 
 	public function cbLoader() {
@@ -122,6 +123,16 @@ class CBController extends Controller {
 		$this->data['sub_module']            = $this->sub_module;
 		$this->data['parent_field'] 		 = (g('parent_field'))?:$this->parent_field;
 		$this->data['parent_id'] 		 	 = (g('parent_id'))?:$this->parent_id;
+
+		if($this->sidebar_mode=='mini') {
+			$this->data['sidebar_mode'] = 'sidebar-mini';
+		}elseif ($this->sidebar_mode == 'collapse') {
+			$this->data['sidebar_mode'] = 'sidebar-collapse';
+		}elseif ($this->sidebar_mode == 'collapse-mini') {
+			$this->data['sidebar_mode'] = 'sidebar-collapse sidebar-mini';
+		}else{
+			$this->data['sidebar_mode'] = '';
+		}
 
 		if(CRUDBooster::getCurrentMethod() == 'getProfile') {
 			Session::put('current_row_id',CRUDBooster::myId());
@@ -236,6 +247,8 @@ class CBController extends Controller {
 			if(isset($field_array[1])) {
 				$field = $field_array[1];
 				$table = $field_array[0];
+			}else{
+				$table = $this->table;
 			}
 
 			if($join) {
@@ -390,7 +403,7 @@ class CBController extends Controller {
 							$orderby_table = explode(".",$k)[0];
 							$k = explode(".",$k)[1];
 						}else{
-							$orderby_table = $table;
+							$orderby_table = $this->table;
 						}
 						$result->orderby($orderby_table.'.'.$k,$v);
 					}
@@ -403,7 +416,7 @@ class CBController extends Controller {
 						if(strpos($k, '.')!==FALSE) {
 							$orderby_table = explode(".",$k)[0];
 						}else{
-							$orderby_table = $table;
+							$orderby_table = $this->table;
 						}
 						$result->orderby($orderby_table.'.'.$k,$v);
 					}
@@ -549,6 +562,9 @@ class CBController extends Controller {
 	}
 
 	public function postExportData() {
+		ini_set('memory_limit', '1024M');
+		set_time_limit(180);
+		
 		$this->limit 		= Request::input('limit');
 		$this->index_return = TRUE;
 		$filetype 			= Request::input('fileformat');
@@ -742,6 +758,7 @@ class CBController extends Controller {
 			}else{
 				$rows->addselect($orderby_table.'.'.$orderby_column.' as text');
 				if($q) $rows->where($orderby_table.'.'.$orderby_column,'like','%'.$q.'%');
+				$rows->orderBy($orderby_table.'.'.$orderby_column,'asc');
 			}
 
 			$result          = array();
@@ -1549,7 +1566,7 @@ class CBController extends Controller {
 		$button_name = Request::input('button_name');
 
 		if(!$id_selected) {
-			CRUDBooster::redirect($_SERVER['HTTP_REFERER'],'Please select at least one data!','warning');
+			CRUDBooster::redirect($_SERVER['HTTP_REFERER'],trans("crudbooster.alert_select_a_data"),'warning');
 		}
 
 		if($button_name == 'delete') {
