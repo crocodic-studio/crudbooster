@@ -34,6 +34,7 @@ $this->sub_module[] = ['label'=>'Photos','path'=>'photos','parent_columns'=>'nam
 | button_icon | Specify the icon. You can find out at Font Awesome |
 | custom_parent_id | Specify the id field. |
 | custom_parent_alias | Specify the  field alias. |
+| showIf | Specify the condition when the sub module must be shown. Use field alias. e.g : [id] == 1. Shown by default. |
 
 ## What's Next
 - [How To Implement A Many To Many Relationship To Form (E.g : Film -> R <- Actors)](./how-to-many-to-many.md)
