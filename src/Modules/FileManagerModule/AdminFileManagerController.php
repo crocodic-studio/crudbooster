@@ -51,16 +51,16 @@ class AdminFileManagerController extends CBController
             return null;
         }
 
-        $filename = $file->getClientOriginalName();
+        $fileName = $file->getClientOriginalName();
         $isAllowed = in_array($file->getClientOriginalExtension(), $allowedExtension);
 
         if (! $isAllowed) {
-            return CRUDBooster::backWithMsg('The file '.$filename.' type is not allowed!', 'warning');
+            return CRUDBooster::backWithMsg('The file '.$fileName.' type is not allowed!', 'warning');
         }
 
-        Storage::putFileAs($path, $file, $filename);
+        Storage::putFileAs($path, $file, $fileName);
 
-        return CRUDBooster::backWithMsg('The file '.$filename.' has been uploaded!');
+        return CRUDBooster::backWithMsg('The file '.$fileName.' has been uploaded!');
     }
 
     public function getDeleteDirectory($dir)
