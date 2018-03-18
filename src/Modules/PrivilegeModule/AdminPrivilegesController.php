@@ -47,8 +47,8 @@ class AdminPrivilegesController extends CBController
         $this->cbLoader();
 
         $id = 0;
-        $data['page_title'] = "Add Data";
-        $data['moduls'] = DB::table("cms_moduls")
+        $data['page_title'] = 'Add Data';
+        $data['moduls'] = $this->table('cms_moduls')
             ->where('is_protected', 0)
             ->select('cms_moduls.*',
                 DB::raw("(select is_visible from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id') as is_visible"),
@@ -70,7 +70,7 @@ class AdminPrivilegesController extends CBController
         app(FormValidator::class)->validate(null, $this->form, $this->table);
         $this->inputAssignment();
 
-        DB::table($this->table)->insert($this->arr);
+        $this->table()->insert($this->arr);
         $id = $this->arr[$this->primary_key];
 
         $this->setTheme();
@@ -79,20 +79,20 @@ class AdminPrivilegesController extends CBController
             $arrs = array_get_keys($data, ['is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete'], 0);
             $arrs['id_cms_privileges'] = $id;
             $arrs['id_cms_moduls'] = $id_modul;
-            DB::table("cms_privileges_roles")->insert($arrs);
+            $this->table('cms_privileges_roles')->insert($arrs);
             //$module = DB::table('cms_moduls')->where('id', $id_modul)->first();
         }
 
         $this->refreshSessionRoles();
 
-        CRUDBooster::redirect(CRUDBooster::mainpath(), trans("crudbooster.alert_add_data_success"), 'success');
+        CRUDBooster::redirect(CRUDBooster::mainpath(), trans('crudbooster.alert_add_data_success'), 'success');
     }
 
     public function getEdit($id)
     {
         $this->cbLoader();
 
-        $role = DB::table($this->table)->where("id", $id)->first() ?: new \stdClass();
+        $role = $this->findRow($id)->first() ?: new \stdClass();
 
         $page_title = trans('crudbooster.edit_data_page_title', ['module' => 'Privilege', 'name' => $role->name]);
 
@@ -108,11 +108,11 @@ class AdminPrivilegesController extends CBController
         $this->inputAssignment($id);
 
         $this->findRow($id)->update($this->arr);
-        foreach (Request::input("privileges", []) as $id_modul => $data) {
+        foreach (Request::input('privileges', []) as $moduleId => $data) {
             //Check Menu
-            //$module = DB::table('cms_moduls')->where('id', $id_modul)->first();
+
             $arrs = array_get_keys($data, ['is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete',], 0);
-            $this->savePermissions($id, $id_modul, $arrs);
+            $this->savePermissions($id, $moduleId, $arrs);
         }
 
         if ($id == CRUDBooster::myPrivilegeId()) {
@@ -133,7 +133,7 @@ class AdminPrivilegesController extends CBController
         $row = $this->findRow($id)->first();
 
         $this->findRow($id)->delete();
-        DB::table("cms_privileges_roles")->where("id_cms_privileges", $row->id)->delete();
+        $this->table('cms_privileges_roles')->where('id_cms_privileges', $row->id)->delete();
 
         CRUDBooster::redirect(CRUDBooster::mainpath(), cbTrans('alert_delete_data_success'), 'success');
     }
@@ -142,28 +142,28 @@ class AdminPrivilegesController extends CBController
      */
     private function refreshSessionRoles()
     {
-        $roles = DB::table('cms_privileges_roles')->where('id_cms_privileges', CRUDBooster::myPrivilegeId())->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')->get();
+        $roles = $this->table('cms_privileges_roles')->where('id_cms_privileges', CRUDBooster::myPrivilegeId())->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')->get();
         session()->put('admin_privileges_roles', $roles);
     }
 
     /**
      * @param $id
-     * @param $id_modul
+     * @param $moduleId
      * @param $arrs
      * @return mixed
      */
-    private function savePermissions($id, $id_modul, $arrs)
+    private function savePermissions($id, $moduleId, $arrs)
     {
-        $currentPermission = DB::table('cms_privileges_roles')->where('id_cms_moduls', $id_modul)->where('id_cms_privileges', $id)->first();
+        $currentPermission = $this->table('cms_privileges_roles')->where('id_cms_moduls', $moduleId)->where('id_cms_privileges', $id)->first();
 
         if ($currentPermission) {
-            return DB::table('cms_privileges_roles')->where('id', $currentPermission->id)->update($arrs);
+            return $this->table('cms_privileges_roles')->where('id', $currentPermission->id)->update($arrs);
         }
 
-        $arrs['id'] = DB::table('cms_privileges_roles')->max('id') + 1;
+        $arrs['id'] = $this->table('cms_privileges_roles')->max('id') + 1;
         $arrs['id_cms_privileges'] = $id;
-        $arrs['id_cms_moduls'] = $id_modul;
-        DB::table("cms_privileges_roles")->insert($arrs);
+        $arrs['id_cms_moduls'] = $moduleId;
+        $this->table('cms_privileges_roles')->insert($arrs);
         return $arrs;
     }
 
