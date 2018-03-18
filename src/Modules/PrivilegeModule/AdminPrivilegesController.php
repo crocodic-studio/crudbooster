@@ -26,20 +26,20 @@ class AdminPrivilegesController extends CBController
         $this->setButtons();
 
         $this->col = [];
-        $this->col[] = ["label" => "ID", "name" => "id"];
-        $this->col[] = ["label" => "Name", "name" => "name"];
+        $this->col[] = ['label' => 'ID', 'name' => 'id'];
+        $this->col[] = ['label' => 'Name', 'name' => 'name'];
         $this->col[] = [
-            "label" => "Superadmin",
-            "name" => "is_superadmin",
-            "callback" => function ($row) {
+            'label' => 'Superadmin',
+            'name' => 'is_superadmin',
+            'callback' => function ($row) {
                 return ($row->is_superadmin) ? "<span class='label label-success'>Superadmin</span>" : "<span class='label label-default'>Standard</span>";
             },
         ];
 
         $this->form = [];
-        $this->form[] = ["label" => "Name", "name" => "name", 'required' => true];
-        $this->form[] = ["label" => "Is Superadmin", "name" => "is_superadmin", 'required' => true];
-        $this->form[] = ["label" => "Theme Color", "name" => "theme_color", 'required' => true];
+        $this->form[] = ['label' => 'Name', 'name' => 'name', 'required' => true];
+        $this->form[] = ['label' => 'Is Superadmin', 'name' => 'is_superadmin', 'required' => true];
+        $this->form[] = ['label' => 'Theme Color', 'name' => 'theme_color', 'required' => true];
     }
 
     public function getAdd()
@@ -50,13 +50,13 @@ class AdminPrivilegesController extends CBController
         $data['page_title'] = "Add Data";
         $data['moduls'] = DB::table("cms_moduls")
             ->where('is_protected', 0)
-            ->select("cms_moduls.*",
+            ->select('cms_moduls.*',
                 DB::raw("(select is_visible from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id') as is_visible"),
                 DB::raw("(select is_create  from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id') as is_create"),
                 DB::raw("(select is_read    from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id') as is_read"),
                 DB::raw("(select is_edit    from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id') as is_edit"),
                 DB::raw("(select is_delete  from cms_privileges_roles where id_cms_moduls  = cms_moduls.id and id_cms_privileges = '$id') as is_delete"))
-            ->orderby("name", "asc")
+            ->orderby('name', 'asc')
             ->get();
 
         $data['page_menu'] = Route::getCurrentRoute()->getActionName();
@@ -75,7 +75,7 @@ class AdminPrivilegesController extends CBController
 
         $this->setTheme();
 
-        foreach (Request::input("privileges", []) as $id_modul => $data) {
+        foreach (Request::input('privileges', []) as $id_modul => $data) {
             $arrs = array_get_keys($data, ['is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete'], 0);
             $arrs['id_cms_privileges'] = $id;
             $arrs['id_cms_moduls'] = $id_modul;
@@ -120,8 +120,8 @@ class AdminPrivilegesController extends CBController
             $this->setTheme();
         }
 
-        CRUDBooster::redirect(CRUDBooster::mainpath(), trans("crudbooster.alert_update_data_success", [
-            'module' => "Privilege",
+        CRUDBooster::redirect(CRUDBooster::mainpath(), trans('crudbooster.alert_update_data_success', [
+            'module' => 'Privilege',
             'title' => $row->name,
         ]), 'success');
     }
