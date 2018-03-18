@@ -75,12 +75,12 @@ class AdminPrivilegesController extends CBController
 
         $this->setTheme();
 
-        foreach (Request::input('privileges', []) as $id_modul => $data) {
+        foreach (Request::input('privileges', []) as $moduleId => $data) {
             $arrs = array_get_keys($data, ['is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete'], 0);
             $arrs['id_cms_privileges'] = $id;
-            $arrs['id_cms_moduls'] = $id_modul;
+            $arrs['id_cms_moduls'] = $moduleId;
             $this->table('cms_privileges_roles')->insert($arrs);
-            //$module = DB::table('cms_moduls')->where('id', $id_modul)->first();
+            //$module = DB::table('cms_moduls')->where('id', $moduleId)->first();
         }
 
         $this->refreshSessionRoles();
