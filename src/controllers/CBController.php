@@ -415,11 +415,13 @@ class CBController extends Controller
     }
 
     /**
+     * @param null $tableName
      * @return mixed
      */
-    public function table()
+    public function table($tableName = null)
     {
-        return \DB::table($this->table);
+        $tableName = $tableName ?: $this->table;
+        return \DB::table($tableName);
     }
 
     public function getEdit($id)
