@@ -30,8 +30,8 @@ class AdminMenusController extends CBController
 
         $this->setCols();
 
-        list($statistic_id, $module_id) = $this->getMenuId($row);
-        $this->form = MenusForm::makeForm($statistic_id, $module_id, $row);
+        list($statisticId, $moduleId) = $this->getMenuId($row);
+        $this->form = MenusForm::makeForm($statisticId, $moduleId, $row);
     }
 
     public function getIndex()
@@ -45,39 +45,39 @@ class AdminMenusController extends CBController
         return view('CbMenu::menus_management', compact('privileges', 'return_url', 'page_title'));
     }
 
-    public function hookBeforeAdd(&$postdata)
+    public function hookBeforeAdd(&$postData)
     {
-        $postdata['parent_id'] = 0;
+        $postData['parent_id'] = 0;
 
-        $postdata['path'] = $this->getMenuPath($postdata);
+        $postData['path'] = $this->getMenuPath($postData);
 
-        unset($postdata['module_slug']);
-        unset($postdata['statistic_slug']);
+        unset($postData['module_slug']);
+        unset($postData['statistic_slug']);
 
-        if ($postdata['is_dashboard'] == 1) {
+        if ($postData['is_dashboard'] == 1) {
             //If set dashboard, so unset for first all dashboard
-            DB::table($this->table)->where('is_dashboard', 1)->update(['is_dashboard' => 0]);
+            $this->table()->where('is_dashboard', 1)->update(['is_dashboard' => 0]);
             Cache::forget('sidebarDashboard'.CRUDBooster::myPrivilegeId());
         }
     }
 
-    public function hookBeforeEdit(&$postdata, $id)
+    public function hookBeforeEdit(&$postData, $id)
     {
-        if ($postdata['is_dashboard'] == 1) {
+        if ($postData['is_dashboard'] == 1) {
             //If set dashboard, so unset for first all dashboard
-            DB::table($this->table)->where('is_dashboard', 1)->update(['is_dashboard' => 0]);
+            $this->table()->where('is_dashboard', 1)->update(['is_dashboard' => 0]);
             Cache::forget('sidebarDashboard'.CRUDBooster::myPrivilegeId());
         }
 
-        $postdata['path'] = $this->getMenuPath($postdata);
+        $postData['path'] = $this->getMenuPath($postData);
 
-        unset($postdata['module_slug']);
-        unset($postdata['statistic_slug']);
+        unset($postData['module_slug']);
+        unset($postData['statistic_slug']);
     }
 
     public function hookAfterDelete($id)
     {
-        DB::table($this->table)->where('parent_id', $id)->delete();
+        $this->table()->where('parent_id', $id)->delete();
     }
 
     public function postSaveMenu()
