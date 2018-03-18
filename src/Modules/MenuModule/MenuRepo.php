@@ -50,19 +50,20 @@ class MenuRepo
     private static function menuUrl($menu)
     {
         $menu->is_broken = false;
-        if ($menu->type == 'Route') {
+        $menuType = $menu->type;
+        if ($menuType == 'Route') {
             return route($menu->path);
         }
 
-        if ($menu->type == 'URL') {
+        if ($menuType == 'URL') {
             return $menu->path;
         }
 
-        if ($menu->type == 'Controller & Method') {
+        if ($menuType == 'Controller & Method') {
             return action($menu->path);
         }
 
-        if ($menu->type == 'Module' || $menu->type == 'Statistic') {
+        if ($menuType == 'Module' || $menuType == 'Statistic') {
             return CRUDBooster::adminPath($menu->path);
         }
 
