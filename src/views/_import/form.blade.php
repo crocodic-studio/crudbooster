@@ -16,8 +16,8 @@
         <table class='table table-bordered' style="width:130%">
             <thead>
             <tr class='success'>
-                @foreach($table_columns as $k=>$column)
-                    @if (in_array($column, ['id', 'created_at', 'updated_at', 'deleted_at']))
+                @foreach($table_columns as $k => $column)
+                    @if (crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector::isExceptional($column))
                         @continue
                     @endif
                     <?php
@@ -34,8 +34,8 @@
             <tbody>
 
             <tr>
-                @foreach($table_columns as $k=>$column)
-                    @if (in_array($column, ['id', 'created_at', 'updated_at', 'deleted_at']))
+                @foreach($table_columns as $k => $column)
+                    @if (crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector::isExceptional($column))
                         @continue
                     @endif
                     <td data-no-column='{{$k}}'>

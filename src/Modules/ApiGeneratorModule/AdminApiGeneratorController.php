@@ -216,7 +216,7 @@ class AdminApiGeneratorController extends CBController
             }
             $table2 = substr($ro, 3);
             foreach (DB::getSchemaBuilder()->getColumnListing($table2) as $col) {
-                if (in_array($col, ['id', 'created_at', 'updated_at', 'deleted_at'])) {
+                if (FieldDetector::isExceptional($col)) {
                     continue;
                 }
                 if (substr($col, 0, 3) == 'id_') {
