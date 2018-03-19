@@ -9,7 +9,7 @@ class MenuRepo
 {
     public static function sidebarMenu()
     {
-        $menu_active = DB::table('cms_menus')
+        $menu_active = self::table()
             ->where('cms_privileges', CRUDBooster::myPrivilegeId())
             ->where('parent_id', 0)->where('is_active', 1)
             ->where('is_dashboard', 0)
@@ -24,7 +24,7 @@ class MenuRepo
             $menu->url = $url;
             $menu->url_path = trim(str_replace(url('/'), '', $url), "/");
 
-            $child = DB::table('cms_menus')
+            $child = self::table()
                 ->where('is_dashboard', 0)
                 ->where('is_active', 1)
                 ->where('cms_privileges', 'like', '%"'.CRUDBooster::myPrivilegeName().'"%')
@@ -74,12 +74,18 @@ class MenuRepo
 
     public static function sidebarDashboard()
     {
-        $menu = DB::table('cms_menus')->where('cms_privileges', CRUDBooster::myPrivilegeId())
+        $menu = self::table()
+            ->where('cms_privileges', CRUDBooster::myPrivilegeId())
             ->where('is_dashboard', 1)
             ->where('is_active', 1)->first() ?: new \stdClass();
 
         $menu->url = self::menuUrl($menu);
 
         return $menu;
+    }
+
+    private function table()
+    {
+        return DB::table('cms_menus');
     }
 }

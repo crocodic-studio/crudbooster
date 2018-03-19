@@ -16,7 +16,7 @@ class Cache
         return $cacheOpen[$cacheName];
     }
 
-    public static function put($section, $cache_name, $cacheValue)
+    public static function put($section, $cacheName, $cacheValue)
     {
         if (CacheFacade::has($section)) {
             $cacheOpen = CacheFacade::get($section);
@@ -24,7 +24,7 @@ class Cache
             CacheFacade::forever($section, []);
             $cacheOpen = CacheFacade::get($section);
         }
-        $cacheOpen[$cache_name] = $cacheValue;
+        $cacheOpen[$cacheName] = $cacheValue;
         CacheFacade::forever($section, $cacheOpen);
 
         return true;
