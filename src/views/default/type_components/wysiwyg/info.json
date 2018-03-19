@@ -1,12 +1,12 @@
 {
-  "title": "Wysiwyg Input",
-  "type": "wysiwyg",
+  'title': "Wysiwyg Input",
+  'type': "wysiwyg",
   "options": [
     {
-      "label": "Height (px)",
-      "name": "height",
-      "type": "text",
-      "required": 0
+      'label': "Height (px)",
+      'name': "height",
+      'type': "text",
+      'required': 0
     }
   ]
 }
