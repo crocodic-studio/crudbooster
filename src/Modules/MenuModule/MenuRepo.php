@@ -51,19 +51,19 @@ class MenuRepo
     {
         $menu->is_broken = false;
         $menuType = $menu->type;
-        if ($menuType == 'Route') {
+        if ($menuType == MenuTypes::route) {
             return route($menu->path);
         }
 
-        if ($menuType == 'URL') {
+        if ($menuType == MenuTypes::url) {
             return $menu->path;
         }
 
-        if ($menuType == 'Controller & Method') {
+        if ($menuType == MenuTypes::ControllerMethod) {
             return action($menu->path);
         }
 
-        if ($menuType == 'Module' || $menuType == 'Statistic') {
+        if (in_array($menuType, [MenuTypes::Module, MenuTypes::Statistic])) {
             return CRUDBooster::adminPath($menu->path);
         }
 

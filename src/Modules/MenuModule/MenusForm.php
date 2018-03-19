@@ -46,8 +46,8 @@ class MenusForm
             'name' => 'type',
             'type' => 'radio',
             'required' => true,
-            'dataenum' => ['Module', 'Statistic', 'URL', 'Controller & Method', 'Route'],
-            'value' => 'Module',
+            'dataenum' => MenuTypes::all(),
+            'value' => MenuTypes::Module,
         ];
 
         $form[] = [
