@@ -67,12 +67,12 @@ class Step2Handler
      */
     private function makeColumnPhpCode()
     {
-        $labels = Request::input('column');
-        $name = Request::input('name');
-        $isImage = Request::input('is_image');
-        $isDownload = Request::input('is_download');
-        $callback = Request::input('callback');
-        $width = Request::input('width');
+        $labels = request('column');
+        $name = request('name');
+        $isImage = request('is_image');
+        $isDownload = request('is_download');
+        $callback = request('callback');
+        $width = request('width');
 
         $columnScript = [];
         foreach ($labels as $i => $label) {

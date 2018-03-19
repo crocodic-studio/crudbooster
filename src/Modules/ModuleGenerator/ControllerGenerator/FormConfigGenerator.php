@@ -2,6 +2,8 @@
 
 namespace crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator;
 
+use CB;
+
 class FormConfigGenerator
 {
     /**
@@ -28,7 +30,7 @@ class FormConfigGenerator
                 continue;
             }
 
-            $typedata = CRUDBooster::getFieldType($table, $field);
+            $typedata = CB::getFieldType($table, $field);
 
             switch ($typedata) {
                 default:
@@ -76,8 +78,8 @@ class FormConfigGenerator
             if (FieldDetector::isForeignKey($field)) {
                 $jointable = str_replace(['id_', '_id'], '', $field);
                 if (Schema::hasTable($jointable)) {
-                    $joincols = CRUDBooster::getTableColumns($jointable);
-                    $joinname = CRUDBooster::getNameTable($joincols);
+                    $joincols = CB::getTableColumns($jointable);
+                    $joinname = CB::getNameTable($joincols);
                     $jointablePK = CB::pk($jointable);
                     $type = 'select2_datatable';
                     $options = [
