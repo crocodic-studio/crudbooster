@@ -31,7 +31,7 @@ class AuthController extends Controller
     {
         if (! CRUDBooster::myId()) {
             Session::flush();
-            return redirect()->route('getLogin')->with('message', trans('crudbooster.alert_session_expired'));
+            return redirect()->route('getLogin')->with('message', cbTrans('alert_session_expired'));
         }
 
         Session::put('admin_lock', 1);
@@ -47,7 +47,7 @@ class AuthController extends Controller
 
             return redirect()->route('AuthControllerGetIndex');
         }
-        echo "<script>alert('".trans('crudbooster.alert_password_wrong')."');history.go(-1);</script>";
+        echo "<script>alert('".cbTrans('alert_password_wrong')."');history.go(-1);</script>";
     }
 
     public function getLogin()
@@ -77,7 +77,7 @@ class AuthController extends Controller
         $users = $this->table('cms_users')->where("email", $email)->first();
 
         if (! \Hash::check($password, $users->password)) {
-            return redirect()->route('getLogin')->with('message', trans('crudbooster.alert_password_wrong'));
+            return redirect()->route('getLogin')->with('message', cbTrans('alert_password_wrong'));
         }
 
         $priv = $this->table('cms_privileges')->where('id', $users->id_cms_privileges)->first();
@@ -96,7 +96,7 @@ class AuthController extends Controller
         Session::put('theme_color', $priv->theme_color);
         Session::put('appname', CRUDBooster::getSetting('appname'));
 
-        CRUDBooster::insertLog(trans('crudbooster.log_login', ['email' => $users->email, 'ip' => Request::server('REMOTE_ADDR')]));
+        CRUDBooster::insertLog(cbTrans('log_login', ['email' => $users->email, 'ip' => Request::server('REMOTE_ADDR')]));
 
         $cbHookSession = new \App\Http\Controllers\CBHook;
         $cbHookSession->afterLogin();
@@ -130,16 +130,16 @@ class AuthController extends Controller
         $user->password = $randString;
         CRUDBooster::sendEmail(['to' => $user->email, 'data' => $user, 'template' => 'forgot_password_backend']);
 
-        CRUDBooster::insertLog(trans('crudbooster.log_forgot', ['email' => request('email'), 'ip' => Request::server('REMOTE_ADDR')]));
+        CRUDBooster::insertLog(cbTrans('log_forgot', ['email' => request('email'), 'ip' => Request::server('REMOTE_ADDR')]));
 
-        return redirect()->route('getLogin')->with('message', trans('crudbooster.message_forgot_password'));
+        return redirect()->route('getLogin')->with('message', cbTrans('message_forgot_password'));
     }
 
     public function getLogout()
     {
-        CRUDBooster::insertLog(trans('crudbooster.log_logout', ['email' => CRUDBooster::me()->email]));
+        CRUDBooster::insertLog(cbTrans('log_logout', ['email' => CRUDBooster::me()->email]));
         Session::flush();
 
-        return redirect()->route('getLogin')->with('message', trans('crudbooster.message_after_logout'));
+        return redirect()->route('getLogin')->with('message', cbTrans('message_after_logout'));
     }
 }
