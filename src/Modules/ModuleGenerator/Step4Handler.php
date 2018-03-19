@@ -24,24 +24,24 @@ class Step4Handler
     public function handleFormSubmit()
     {
         $id = Request::input('id');
-        $row = DB::table('cms_moduls')->where('id', $id)->first();
+        $module = DB::table('cms_moduls')->where('id', $id)->first();
 
-        $post = Request::all();
+        $data = Request::all();
 
-        $post['table'] = $row->table_name;
+        $data['table'] = $module->table_name;
 
         $script_config = [];
         $exception = ['_token', 'id', 'submit'];
         $i = 0;
-        foreach ($post as $key => $val) {
+        foreach ($data as $key => $val) {
             if (in_array($key, $exception)) {
                 continue;
             }
 
-            if ($val != 'true' && $val != 'false') {
-                $value = '"'.$val.'"';
-            } else {
+            if ($val == 'true' || $val == 'false') {
                 $value = $val;
+            } else {
+                $value = '"'.$val.'"';
             }
 
             $script_config[$i] = "            ".'$this->'.$key.' = '.$value.';';
@@ -49,7 +49,7 @@ class Step4Handler
         }
 
         $scripts = implode("\n", $script_config);
-        $raw = file_get_contents(controller_path($row->controller));
+        $raw = file_get_contents(controller_path($module->controller));
         $raw = explode("# START CONFIGURATION DO NOT REMOVE THIS LINE", $raw);
         $rraw = explode("# END CONFIGURATION DO NOT REMOVE THIS LINE", $raw[1]);
 
@@ -59,7 +59,7 @@ class Step4Handler
         $file_controller .= "            # END CONFIGURATION DO NOT REMOVE THIS LINE\n\n";
         $file_controller .= "            ".trim($rraw[1]);
 
-        file_put_contents(controller_path($row->controller), $file_controller);
+        file_put_contents(controller_path($module->controller), $file_controller);
 
         return redirect()->route('AdminModulesControllerGetIndex')->with([
             'message' => trans('crudbooster.alert_update_data_success'),
