@@ -16,7 +16,7 @@ class AdminModulesController extends CBController
     {
         $this->table = 'cms_moduls';
         $this->primary_key = 'id';
-        $this->title_field = "name";
+        $this->title_field = 'name' ;
         $this->limit = 100;
         $this->button_add = false;
         $this->button_export = false;
@@ -28,11 +28,11 @@ class AdminModulesController extends CBController
         $this->orderby = ['is_protected' => 'asc', 'name' => 'asc'];
 
         $this->col = [];
-        $this->col[] = ["label" => "Name", "name" => "name"];
-        $this->col[] = ["label" => "Table", "name" => "table_name"];
-        $this->col[] = ["label" => "Path", "name" => "path"];
-        $this->col[] = ["label" => "Controller", "name" => "controller"];
-        $this->col[] = ["label" => "Protected", "name" => "is_protected", "visible" => false];
+        $this->col[] = ['label' => 'name', 'name' => 'name' ];
+        $this->col[] = ['label' => "Table", 'name' => "table_name"];
+        $this->col[] = ['label' => "Path", 'name' => "path"];
+        $this->col[] = ['label' => "Controller", 'name' => "controller"];
+        $this->col[] = ['label' => "Protected", 'name' => "is_protected", "visible" => false];
 
         $this->makeForm();
 
@@ -183,12 +183,12 @@ class AdminModulesController extends CBController
 
         $ref_parameter = Request::input('ref_parameter');
         if (request('return_url')) {
-            CRUDBooster::redirect(request('return_url'), trans("crudbooster.alert_add_data_success"), 'success');
+            CRUDBooster::redirect(request('return_url'), cbTrans("alert_add_data_success"), 'success');
         } 
-        if (request('submit') == trans('crudbooster.button_save_more')) {
-            CRUDBooster::redirect(CRUDBooster::mainpath('add'), trans("crudbooster.alert_add_data_success"), 'success');
+        if (request('submit') == cbTrans('button_save_more')) {
+            CRUDBooster::redirect(CRUDBooster::mainpath('add'), cbTrans('alert_add_data_success'), 'success');
         }
-        CRUDBooster::redirect(CRUDBooster::mainpath(), trans("crudbooster.alert_add_data_success"), 'success');
+        CRUDBooster::redirect(CRUDBooster::mainpath(), cbTrans('alert_add_data_success'), 'success');
     }
 
     public function postEditSave($id)
@@ -214,7 +214,7 @@ class AdminModulesController extends CBController
         $roles = DB::table('cms_privileges_roles')->where('id_cms_privileges', CRUDBooster::myPrivilegeId())->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')->get();
         Session::put('admin_privileges_roles', $roles);
 
-        CRUDBooster::redirect(Request::server('HTTP_REFERER'), trans('crudbooster.alert_update_data_success'), 'success');
+        CRUDBooster::redirect(Request::server('HTTP_REFERER'), cbTrans('alert_update_data_success'), 'success');
     }
 
     public function getTest()
@@ -229,14 +229,14 @@ class AdminModulesController extends CBController
     private function makeForm()
     {
         $this->form = [];
-        $this->form[] = ["label" => "Name", "name" => "name", "placeholder" => "Module name here", 'required' => true];
+        $this->form[] = ['label' => 'Name', 'name' => 'name', 'placeholder' => 'Module name here', 'required' => true];
 
         $tables_list = \CB::listCbTables();
 
         $this->form[] = [
-            "label" => "Table Name",
-            "name" => "table_name",
-            "type" => "select2_dataenum",
+            'label' => "Table Name",
+            'name' => "table_name",
+            'type' => "select2_dataenum",
             "options" => ['enum' => $tables_list],
             'required' => true,
         ];
@@ -246,100 +246,100 @@ class AdminModulesController extends CBController
         $custom = view('crudbooster::components.list_icon', compact('fontawesome', 'row'))->render();
         $this->form[] = ['label' => 'Icon', 'name' => 'icon', 'type' => 'custom_html', 'options' => ['html' => $custom], 'required' => true];
 
-        $this->form[] = ["label" => "Path", "name" => "path", "required" => true, 'placeholder' => 'Optional'];
-        $this->form[] = ["label" => "Controller", "name" => "controller", "type" => "text", "placeholder" => "(Optional) Auto Generated"];
+        $this->form[] = ['label' => 'Path', 'name' => 'path', 'required' => true, 'placeholder' => 'Optional'];
+        $this->form[] = ['label' => 'Controller', 'name' => 'controller', 'type' => 'text', 'placeholder' => '(Optional) Auto Generated'];
 
         if (in_array(CRUDBooster::getCurrentMethod(), ['getAdd', 'postAddSave'])) {
             return ;
         }
 
         $this->form[] = [
-            "label" => "Global Privilege",
-            "name" => "global_privilege",
-            "type" => "radio",
-            "dataenum" => ['0|No', '1|Yes'],
+            'label' => "Global Privilege",
+            'name' => "global_privilege",
+            'type' => "radio",
+            'dataenum' => ['0|No', '1|Yes'],
             'value' => 0,
             'help' => 'Global Privilege allows you to make the module to be accessible by all privileges',
             'exception' => true,
         ];
 
         $this->form[] = [
-            "label" => "Button Action Style",
-            "name" => "button_action_style",
-            "type" => "radio",
-            "dataenum" => ['button_icon', 'button_icon_text', 'button_text', 'dropdown'],
+            'label' => 'Button Action Style',
+            'name' => 'button_action_style',
+            'type' => 'radio',
+            'dataenum' => ['button_icon', 'button_icon_text', 'button_text', 'dropdown'],
             'value' => 'button_icon',
             'exception' => true,
         ];
         $this->form[] = [
-            "label" => "Button Table Action",
-            "name" => "button_table_action",
-            "type" => "radio",
-            "dataenum" => ['Yes', 'No'],
+            'label' => "Button Table Action",
+            'name' => "button_table_action",
+            'type' => "radio",
+            'dataenum' => ['Yes', 'No'],
             'value' => 'Yes',
             'exception' => true,
         ];
         $this->form[] = [
-            "label" => "Button Add",
-            "name" => "button_add",
-            "type" => "radio",
-            "dataenum" => ['Yes', 'No'],
+            'label' => "Button Add",
+            'name' => "button_add",
+            'type' => "radio",
+            'dataenum' => ['Yes', 'No'],
             'value' => 'Yes',
             'exception' => true,
         ];
         $this->form[] = [
-            "label" => "Button Delete",
-            "name" => "button_delete",
-            "type" => "radio",
-            "dataenum" => ['Yes', 'No'],
+            'label' => "Button Delete",
+            'name' => "button_delete",
+            'type' => "radio",
+            'dataenum' => ['Yes', 'No'],
             'value' => 'Yes',
             'exception' => true,
         ];
         $this->form[] = [
-            "label" => "Button Edit",
-            "name" => "button_edit",
-            "type" => "radio",
-            "dataenum" => ['Yes', 'No'],
+            'label' => "Button Edit",
+            'name' => "button_edit",
+            'type' => "radio",
+            'dataenum' => ['Yes', 'No'],
             'value' => 'Yes',
             'exception' => true,
         ];
         $this->form[] = [
-            "label" => "Button Detail",
-            "name" => "button_detail",
-            "type" => "radio",
-            "dataenum" => ['Yes', 'No'],
+            'label' => "Button Detail",
+            'name' => "button_detail",
+            'type' => "radio",
+            'dataenum' => ['Yes', 'No'],
             'value' => 'Yes',
             'exception' => true,
         ];
         $this->form[] = [
-            "label" => "Button Show",
-            "name" => "button_show",
-            "type" => "radio",
-            "dataenum" => ['Yes', 'No'],
+            'label' => "Button Show",
+            'name' => "button_show",
+            'type' => "radio",
+            'dataenum' => ['Yes', 'No'],
             'value' => 'Yes',
             'exception' => true,
         ];
         $this->form[] = [
-            "label" => "Button Filter",
-            "name" => "button_filter",
-            "type" => "radio",
-            "dataenum" => ['Yes', 'No'],
+            'label' => "Button Filter",
+            'name' => "button_filter",
+            'type' => "radio",
+            'dataenum' => ['Yes', 'No'],
             'value' => 'Yes',
             'exception' => true,
         ];
         $this->form[] = [
-            "label" => "Button Export",
-            "name" => "button_export",
-            "type" => "radio",
-            "dataenum" => ['Yes', 'No'],
+            'label' => 'Button Export',
+            'name' => 'button_export',
+            'type' => 'radio',
+            'dataenum' => ['Yes', 'No'],
             'value' => 'No',
             'exception' => true,
         ];
         $this->form[] = [
-            "label" => "Button Import",
-            "name" => "button_import",
-            "type" => "radio",
-            "dataenum" => ['Yes', 'No'],
+            'label' => 'Button Import',
+            'name' => 'button_import',
+            'type' => 'radio',
+            'dataenum' => ['Yes', 'No'],
             'value' => 'No',
             'exception' => true,
         ];
@@ -370,14 +370,14 @@ class AdminModulesController extends CBController
         ];
 
         DB::table('cms_menus')->insert([
-            'name' => trans("crudbooster.text_default_add_new_module", ['module' => $this->arr['name']]),
+            'name' => cbTrans('text_default_add_new_module', ['module' => $this->arr['name']]),
             'icon' => 'fa fa-plus',
             'path' => $this->arr['controller'].'GetAdd',
             'sorting' => 1,
         ] + $arr);
 
         DB::table('cms_menus')->insert([
-            'name' => trans("crudbooster.text_default_list_module", ['module' => $this->arr['name']]),
+            'name' => cbTrans('text_default_list_module', ['module' => $this->arr['name']]),
             'icon' => 'fa fa-bars',
             'path' => $this->arr['controller'].'GetIndex',
             'cms_privileges' => CRUDBooster::myPrivilegeId(),
