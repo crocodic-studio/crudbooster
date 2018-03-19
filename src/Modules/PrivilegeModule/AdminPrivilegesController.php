@@ -85,7 +85,7 @@ class AdminPrivilegesController extends CBController
 
         $this->refreshSessionRoles();
 
-        CRUDBooster::redirect(CRUDBooster::mainpath(), trans('crudbooster.alert_add_data_success'), 'success');
+        CRUDBooster::redirect(CRUDBooster::mainpath(), cbTrans('alert_add_data_success'), 'success');
     }
 
     public function getEdit($id)
@@ -94,7 +94,7 @@ class AdminPrivilegesController extends CBController
 
         $role = $this->findRow($id)->first() ?: new \stdClass();
 
-        $page_title = trans('crudbooster.edit_data_page_title', ['module' => 'Privilege', 'name' => $role->name]);
+        $page_title = cbTrans('edit_data_page_title', ['module' => 'Privilege', 'name' => $role->name]);
 
         return view('CbPrivilege::privileges', compact('role', 'page_title', 'id'));
     }
@@ -120,7 +120,7 @@ class AdminPrivilegesController extends CBController
             $this->setTheme();
         }
 
-        CRUDBooster::redirect(CRUDBooster::mainpath(), trans('crudbooster.alert_update_data_success', [
+        CRUDBooster::redirect(CRUDBooster::mainpath(), cbTrans('alert_update_data_success', [
             'module' => 'Privilege',
             'title' => $row->name,
         ]), 'success');

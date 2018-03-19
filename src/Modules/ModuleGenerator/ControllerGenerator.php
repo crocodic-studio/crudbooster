@@ -144,12 +144,12 @@ class ControllerGenerator
             if (self::isPassword($field)) {
                 $type = 'password';
                 $validation = ['min:3', 'max:32'];
-                $help = trans("crudbooster.text_default_help_password");
+                $help = cbTrans("text_default_help_password");
             }
 
             if (self::isImage($field)) {
                 $type = 'upload';
-                $help = trans('crudbooster.text_default_help_upload');
+                $help = cbTrans('text_default_help_upload');
                 $validation = ['required|image'];
             }
 
@@ -160,23 +160,23 @@ class ControllerGenerator
             if (self::isPhone($field)) {
                 $type = 'number';
                 $validation = ['required', 'numeric'];
-                $placeholder = trans('crudbooster.text_default_help_number');
+                $placeholder = cbTrans('text_default_help_number');
             }
 
             if (self::isEmail($field)) {
                 $type = 'email';
                 $validation[] = 'email|unique:'.$table;
-                $placeholder = trans('crudbooster.text_default_help_email');
+                $placeholder = cbTrans('text_default_help_email');
             }
 
             if ($type == 'text' && self::isNameField($field)) {
-                $placeholder = trans('crudbooster.text_default_help_text');
+                $placeholder = cbTrans('text_default_help_text');
                 $validation = ['required', 'string', 'min:3', 'max:70'];
             }
 
             if ($type == 'text' && self::isUrlField($field)) {
                 $validation = ['required', 'url'];
-                $placeholder = trans('crudbooster.text_default_help_url');
+                $placeholder = cbTrans('text_default_help_url');
             }
 
             $validation = implode('|', $validation);
