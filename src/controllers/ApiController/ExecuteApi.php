@@ -2,6 +2,8 @@
 
 namespace crocodicstudio\crudbooster\controllers\ApiController;
 
+use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
+
 class ExecuteApi
 {
     private $ctrl;
@@ -450,10 +452,9 @@ class ExecuteApi
      */
     private function handleFile($rows, $responses_fields, $row)
     {
-        $uploads_format_candidate = explode(',', cbConfig("UPLOAD_TYPES"));
         foreach ($rows as $k => $v) {
             $ext = \File::extension($v);
-            if (in_array($ext, $uploads_format_candidate)) {
+            if (FieldDetector::isUploadField($ext)) {
                 $rows->$k = asset($v);
             }
 

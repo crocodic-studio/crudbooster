@@ -84,4 +84,9 @@ class FieldDetector
     {
         return in_array($field, explode(',', cbConfig("URL_FIELDS_CANDIDATE")));
     }
+
+    static function isUploadField($field)
+    {
+        return in_array($field, explode(',', cbConfig("UPLOAD_TYPES")));
+    }
 }
