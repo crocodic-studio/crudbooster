@@ -76,18 +76,7 @@ class FormConfigGenerator
             }
 
             if (FieldDetector::isForeignKey($field)) {
-                $jointable = str_replace(['id_', '_id'], '', $field);
-                if (Schema::hasTable($jointable)) {
-                    $joincols = CB::getTableColumns($jointable);
-                    $joinname = CB::getNameTable($joincols);
-                    $jointablePK = CB::pk($jointable);
-                    $type = 'select2_datatable';
-                    $options = [
-                        'table' => $jointable,
-                        'field_label' => $joinname,
-                        'field_value' => $jointablePK,
-                    ];
-                }
+                list($type, $options) = self::handleForeignKey($field);
             }
 
             if (substr($field, 0, 3) == 'is_') {
@@ -155,4 +144,25 @@ class FormConfigGenerator
         return $formArrayString;
     }
 
+    /**
+     * @param $field
+     * @return array
+     */
+    private static function handleForeignKey($field)
+    {
+        $jointable = str_replace(['id_', '_id'], '', $field);
+        if (Schema::hasTable($jointable)) {
+            $joincols = CB::getTableColumns($jointable);
+            $joinname = CB::getNameTable($joincols);
+            $jointablePK = CB::pk($jointable);
+            $type = 'select2_datatable';
+            $options = [
+                'table' => $jointable,
+                'field_label' => $joinname,
+                'field_value' => $jointablePK,
+            ];
+        }
+
+        return [$type, $options];
+    }
 }
