@@ -31,7 +31,7 @@ class FormValidator
      * @param $di
      * @return array
      */
-    private function prepareValidationRules($id, $di)
+    private function parseValidationRules($id, $di)
     {
         $exp = explode('|', $di['validation']);
 
@@ -81,20 +81,17 @@ class FormValidator
     private function sendFailedValidationResponse($validator)
     {
         $message = $validator->messages();
-        $messageAll = $message->all();
+        $msg = [
+            'message' => cbTrans('alert_validation_error', ['error' => implode(', ', $message->all())]),
+            'message_type' => 'warning',
+        ];
 
         if (Request::ajax()) {
-            $resp = response()->json([
-                'message' => cbTrans('alert_validation_error', ['error' => implode(', ', $messageAll)]),
-                'message_type' => 'warning',
-            ]);
+        $resp = response()->json($msg);
             sendAndTerminate($resp);
         }
-
-        sendAndTerminate(redirect()->back()->with("errors", $message)->with([
-            'message' => cbTrans('alert_validation_error', ['error' => implode(', ', $messageAll)]),
-            'message_type' => 'warning',
-        ])->withInput());
+        $resp = redirect()->back()->with("errors", $message)->with($msg)->withnput();
+        sendAndTerminate($resp);
     }
 
     /**
@@ -106,26 +103,25 @@ class FormValidator
     {
         $componentPath = implode(DIRECTORY_SEPARATOR, ["vendor", "crocodicstudio", "crudbooster", "src", "views", "default", "type_components", ""]);
         $rules = [];
-        foreach ($form as $di) {
-            $ai = [];
-            $name = $di['name'];
-            $type = $di['type'];
-
+        foreach ($form as $formInput) {
+            $name = $formInput['name'];
             if (! $name) {
                 continue;
             }
 
-            if ($di['required'] && ! Request::hasFile($name)) {
+            $ai = [];
+            if ($formInput['required'] && ! Request::hasFile($name)) {
                 $ai[] = 'required';
             }
-            $hookInputValidation = base_path($componentPath.$type.DIRECTORY_SEPARATOR.'hookInputValidation.php');
-            if (file_exists($hookInputValidation)) {
-                require_once($hookInputValidation);
-            }
-            unset($hookInputValidation);
 
-            if (@$di['validation']) {
-                $rules[$name] = $this->prepareValidationRules($id, $di);
+            $hookValidationPath = base_path($componentPath.$formInput['type'].DIRECTORY_SEPARATOR.'hookInputValidation.php');
+            if (file_exists($hookValidationPath)) {
+                require_once($hookValidationPath);
+            }
+            unset($hookValidationPath);
+
+            if (@$formInput['validation']) {
+                $rules[$name] = $this->parseValidationRules($id, $formInput);
             } else {
                 $rules[$name] = implode('|', $ai);
             }
