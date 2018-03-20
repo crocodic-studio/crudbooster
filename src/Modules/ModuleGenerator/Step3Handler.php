@@ -55,23 +55,23 @@ class Step3Handler
         return redirect(Route("AdminModulesControllerGetStep4", ["id" => request('id')]));
     }
     /**
-     * @param $file_controller
-     * @param $current_scaffolding_form
+     * @param $fileContent
+     * @param $current_scaffolding
      * @return string
      */
-    private function backupOldTagScaffold($file_controller, $current_scaffolding_form)
+    private function backupOldTagScaffold($fileContent, $current_scaffolding)
     {
-        $current_scaffolding_form = preg_split("/\\r\\n|\\r|\\n/", $current_scaffolding_form);
-        foreach ($current_scaffolding_form as &$c) {
+        $current_scaffolding = preg_split("/\\r\\n|\\r|\\n/", $current_scaffolding);
+        foreach ($current_scaffolding as &$c) {
             $c = "            //".trim($c);
         }
-        $current_scaffolding_form = implode("\n", $current_scaffolding_form);
+        $current_scaffolding = implode("\n", $current_scaffolding);
 
-        $file_controller .= "            # OLD START FORM\n";
-        $file_controller .= $current_scaffolding_form."\n";
-        $file_controller .= "            # OLD END FORM\n\n";
+        $fileContent .= "            # OLD START FORM\n";
+        $fileContent .= $current_scaffolding."\n";
+        $fileContent .= "            # OLD END FORM\n\n";
 
-        return $file_controller;
+        return $fileContent;
     }
 
     /**
@@ -155,22 +155,5 @@ class Step3Handler
         }
 
         return $script_form;
-    }
-
-    /**
-     * @param $raw
-     * @param $mark
-     * @return array
-     */
-    private function replaceBetweenMark($raw, $mark)
-    {
-        $raw = explode("# START $mark DO NOT REMOVE THIS LINE", $raw);
-        $rraw = explode("# END $mark DO NOT REMOVE THIS LINE", $raw[1]);
-
-        $top_script = trim($raw[0]);
-        $current_scaffolding_form = trim($rraw[0]);
-        $bottom_script = trim($rraw[1]);
-
-        return [$top_script, $current_scaffolding_form, $bottom_script];
     }
 }

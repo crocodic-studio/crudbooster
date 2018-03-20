@@ -38,7 +38,7 @@ class Step2Handler
         $controller = DB::table('cms_moduls')->where('id', $id)->first()->controller;
 
         $code = readCtrlContent($controller);
-        $newCode = '            $this->col = [];'."\n".implode("\n", $this->makeColumnPhpCode());
+        $newCode = '            $this->col = [];'."\n".$this->makeColumnPhpCode();
         $fileResult = \CB::replaceBetweenMark($code, 'COLUMNS', $newCode);
 
         $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookQueryIndex', g('hookQueryIndex'));
@@ -89,7 +89,6 @@ class Step2Handler
 
             $columnScript[] = '            $this->col[] = ['.implode(", ", $colProperties).'];';
         }
-
-        return $columnScript;
+        return implode("\n", $columnScript);
     }
 }
