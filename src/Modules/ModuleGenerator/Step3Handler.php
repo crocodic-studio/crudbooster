@@ -49,7 +49,9 @@ class Step3Handler
         $file_controller .= "            # END FORM DO NOT REMOVE THIS LINE\n\n";
 
         //CREATE A BACKUP SCAFFOLDING TO OLD TAG
-        $file_controller = $this->backupOldTagScaffold($file_controller, $current_scaffolding_form);
+        if ($current_scaffolding_form) {
+            $file_controller = $this->backupOldTagScaffold($file_controller, $current_scaffolding_form);
+        }
 
         $file_controller .= "            ".trim($bottom_script);
 
@@ -61,21 +63,19 @@ class Step3Handler
     /**
      * @param $file_controller
      * @param $current_scaffolding_form
-     * @return array
+     * @return string
      */
     private function backupOldTagScaffold($file_controller, $current_scaffolding_form)
     {
-        if ($current_scaffolding_form) {
-            $current_scaffolding_form = preg_split("/\\r\\n|\\r|\\n/", $current_scaffolding_form);
-            foreach ($current_scaffolding_form as &$c) {
-                $c = "            //".trim($c);
-            }
-            $current_scaffolding_form = implode("\n", $current_scaffolding_form);
-
-            $file_controller .= "            # OLD START FORM\n";
-            $file_controller .= $current_scaffolding_form."\n";
-            $file_controller .= "            # OLD END FORM\n\n";
+        $current_scaffolding_form = preg_split("/\\r\\n|\\r|\\n/", $current_scaffolding_form);
+        foreach ($current_scaffolding_form as &$c) {
+            $c = "            //".trim($c);
         }
+        $current_scaffolding_form = implode("\n", $current_scaffolding_form);
+
+        $file_controller .= "            # OLD START FORM\n";
+        $file_controller .= $current_scaffolding_form."\n";
+        $file_controller .= "            # OLD END FORM\n\n";
 
         return $file_controller;
     }
