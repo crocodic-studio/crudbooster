@@ -234,32 +234,30 @@ if (! function_exists('findSelected')) {
     /**
      * @param $rawvalue
      * @param $form
-     * @param $option_value
+     * @param $optionValue
      * @return string
      */
-    function findSelected($rawvalue, $form, $option_value)
+    function findSelected($rawvalue, $form, $optionValue)
     {
-        $value = $rawvalue;
         if (! $rawvalue) {
             return '';
         }
+        $value = $rawvalue;
 
         if ($form['options']['multiple'] !== true) {
-            return ($option_value == $value) ? "selected" : "";
+            return ($optionValue == $value) ? "selected" : "";
         }
 
-        switch ($form['options']['multiple_result_format']) {
-            case 'JSON':
-                $selected = (in_array($option_value, json_decode($rawvalue, true) ?: [])) ? "selected" : "";
-                break;
-            default:
-            case 'COMMA_SEPARATOR':
-                $selected = (in_array($option_value, explode(', ', $rawvalue))) ? "selected" : "";
-                break;
-            case 'SEMICOLON_SEPARATOR':
-                $selected = (in_array($option_value, explode('; ', $rawvalue))) ? "selected" : "";
-                break;
+        $val = $form['options']['multiple_result_format'];
+        if ($val == 'JSON') {
+            $selected = (json_decode($rawvalue, true) ?: []);
+        } elseif ($val == 'SEMICOLON_SEPARATOR') {
+            $selected = explode('; ', $rawvalue);
+        } else {
+            $selected = explode(', ', $rawvalue);
         }
+        in_array($optionValue, $selected) ? "selected" : "";
+
         return $selected;
     }
 }
