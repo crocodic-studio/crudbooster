@@ -50,7 +50,7 @@ class Step3Handler
         //CREATE FILE CONTROLLER
         file_put_contents(controller_path($controller), $fileContent);
 
-        return redirect(Route("AdminModulesControllerGetStep4", ["id" => request('id')]));
+        return redirect()->route('AdminModulesControllerGetStep4', ['id' => request('id')]);
     }
     /**
      * @param $fileContent
@@ -85,20 +85,20 @@ class Step3Handler
         return $types;
     }
     /**
-     * @param $bottom_script
+     * @param $bottomScript
      * @return mixed
      */
-    private function clearOldBackup($bottom_script)
+    private function clearOldBackup($bottomScript)
     {
-        if (strpos($bottom_script, '# OLD START FORM') !== false) {
-            $line_start_old = strpos($bottom_script, '# OLD START FORM');
-            $line_end_old = strpos($bottom_script, '# OLD END FORM') + strlen('# OLD END FORM');
-
-            $get_string = substr($bottom_script, $line_start_old, $line_end_old);
-            $bottom_script = str_replace($get_string, '', $bottom_script);
+        if (strpos($bottomScript, '# OLD START FORM') === false) {
+            return $bottomScript;
         }
+        $lineStart = strpos($bottomScript, '# OLD START FORM');
+        $lineEnd = strpos($bottomScript, '# OLD END FORM') + strlen('# OLD END FORM');
 
-        return $bottom_script;
+        $getString = substr($bottomScript, $lineStart, $lineEnd);
+
+        return str_replace($getString, '', $bottomScript);
     }
 
     /**
