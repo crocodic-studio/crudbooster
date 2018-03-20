@@ -48,7 +48,7 @@ class Step3Handler
         $fileContent .= "            ".($bottom);
 
         //CREATE FILE CONTROLLER
-        file_put_contents(controller_path($controller), $fileContent);
+        putCtrlContent($controller, $fileContent);
 
         return redirect()->route('AdminModulesControllerGetStep4', ['id' => request('id')]);
     }

@@ -34,7 +34,7 @@ class Step4Handler
         $newCode = $this->getScriptConfig($data);
         $rawCode = readCtrlContent($module->controller);
         $fileController = \CB::replaceBetweenMark($rawCode, 'CONFIGURATION', $newCode);
-        file_put_contents(controller_path($module->controller), $fileController);
+        putCtrlContent($module->controller, $fileController);
 
         return redirect()->route('AdminModulesControllerGetIndex')->with([
             'message' => cbTrans('alert_update_data_success'),

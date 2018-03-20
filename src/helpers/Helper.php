@@ -81,6 +81,13 @@ if (! function_exists('readCtrlContent')) {
     }
 }
 
+if (! function_exists('putCtrlContent')) {
+    function putCtrlContent($ctrl)
+    {
+        return file_put_contents(controller_path($ctrl));
+    }
+}
+
 if (! function_exists('rrmdir')) {
     function rrmdir($dir)
     {
