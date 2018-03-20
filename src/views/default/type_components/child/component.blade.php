@@ -65,7 +65,7 @@
 											
 												<span class="input-group-addon"><a href='javascript:void(0)' onclick='$("#{{$name_column}}").data("daterangepicker").toggle()'><i class='fa fa-calendar'></i></a></span>
 												
-												<input type='text' title="{{$form['label']}}" readonly {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control notfocus datetimepicker' name="{{$name_column}}" id="{{$name_column}}}" value='{{$value}}'/>	
+												<input type='text' title="{{$form['label']}}" readonly {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control notfocus datetimepicker' name="{{$name_column}}" id="{{$name_column}}" value='{{$value}}'/>	
 
 
 											</div>	
