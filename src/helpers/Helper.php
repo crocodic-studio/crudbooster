@@ -38,19 +38,14 @@ if (! function_exists('is_checked')) {
      */
     function is_checked($format, $value, $option_value)
     {
-        switch ($format) {
-            case 'JSON':
-                $valueFormat = json_decode($value, true);
-                break;
-            case 'COMMA_SEPARATOR':
-                $valueFormat = explode(', ', $value);
-                break;
-            case 'SEMICOLON_SEPARATOR':
-                $valueFormat = explode('; ', $value);
-                break;
-            default:
-                $valueFormat = [];
-                break;
+        if ($format == 'JSON') {
+            $valueFormat = json_decode($value, true);
+        } elseif ($format == 'COMMA_SEPARATOR') {
+            $valueFormat = explode(', ', $value);
+        } elseif ($format == 'SEMICOLON_SEPARATOR') {
+            $valueFormat = explode('; ', $value);
+        } else {
+            $valueFormat = [];
         }
         $checked = (in_array($option_value, $valueFormat)) ? "checked" : "";
 
