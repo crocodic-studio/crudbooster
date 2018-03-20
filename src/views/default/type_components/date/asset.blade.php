@@ -7,6 +7,8 @@
         $('.input_date').datepicker({
             format: 'yyyy-mm-dd',
             viewMode: 'years',
+            autoclose: true,
+            startDate: '1990-01-01',
             @if (App::getLocale() == 'ar')
             rtl: true,
             @endif
