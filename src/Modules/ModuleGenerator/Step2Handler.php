@@ -37,8 +37,8 @@ class Step2Handler
         $id = Request::input('id');
         $controller = DB::table('cms_moduls')->where('id', $id)->first()->controller;
 
+        $newCode = $this->makeColumnPhpCode();
         $code = readCtrlContent($controller);
-        $newCode = '            $this->col = [];'."\n".$this->makeColumnPhpCode();
         $fileResult = \CB::replaceBetweenMark($code, 'COLUMNS', $newCode);
 
         $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookQueryIndex', g('hookQueryIndex'));
@@ -67,6 +67,7 @@ class Step2Handler
         $width = request('width');
 
         $columnScript = [];
+        $columnScript[] = '            $this->col[] = [];';
         foreach ($labels as $i => $label) {
 
             if (! $name[$i]) {
