@@ -31,44 +31,44 @@ class Step3Handler
         $row = DB::table('cms_moduls')->where('id', request('id'))->first();
         $scripts = implode("\n", $script_form);
         $rawCode = readCtrlContent($row->controller);
-        list($top, $current_scaffolding, $bottom) = \CB::extractBetween($rawCode, "FORM");
+        list($top, $currentScaffold, $bottom) = \CB::extractBetween($rawCode, "FORM");
 
         //IF FOUND OLD, THEN CLEAR IT
         $bottom = $this->clearOldBackup($bottom);
 
         //ARRANGE THE FULL SCRIPT
-        $file_controller = $top."\n\n";
-        $file_controller .= "            # START FORM DO NOT REMOVE THIS LINE\n";
-        $file_controller .= '            $this->form = [];'."\n".$scripts."\n";
-        $file_controller .= "            # END FORM DO NOT REMOVE THIS LINE\n\n";
+        $fileContent = $top."\n\n";
+        $fileContent .= "            # START FORM DO NOT REMOVE THIS LINE\n";
+        $fileContent .= '            $this->form = [];'."\n".$scripts."\n";
+        $fileContent .= "            # END FORM DO NOT REMOVE THIS LINE\n\n";
 
         //CREATE A BACKUP SCAFFOLDING TO OLD TAG
-        if ($current_scaffolding) {
-            $file_controller = $this->backupOldTagScaffold($file_controller, $current_scaffolding);
+        if ($currentScaffold) {
+            $fileContent = $this->backupOldTagScaffold($fileContent, $currentScaffold);
         }
 
-        $file_controller .= "            ".trim($bottom);
+        $fileContent .= "            ".($bottom);
 
         //CREATE FILE CONTROLLER
-        file_put_contents(controller_path($row->controller), $file_controller);
+        file_put_contents(controller_path($row->controller), $fileContent);
 
         return redirect(Route("AdminModulesControllerGetStep4", ["id" => request('id')]));
     }
     /**
      * @param $fileContent
-     * @param $current_scaffolding
+     * @param $middle
      * @return string
      */
-    private function backupOldTagScaffold($fileContent, $current_scaffolding)
+    private function backupOldTagScaffold($fileContent, $middle)
     {
-        $current_scaffolding = preg_split("/\\r\\n|\\r|\\n/", $current_scaffolding);
-        foreach ($current_scaffolding as &$c) {
+        $middle = preg_split("/\\r\\n|\\r|\\n/", $middle);
+        foreach ($middle as &$c) {
             $c = "            //".trim($c);
         }
-        $current_scaffolding = implode("\n", $current_scaffolding);
+        $middle = implode("\n", $middle);
 
         $fileContent .= "            # OLD START FORM\n";
-        $fileContent .= $current_scaffolding."\n";
+        $fileContent .= $middle."\n";
         $fileContent .= "            # OLD END FORM\n\n";
 
         return $fileContent;
