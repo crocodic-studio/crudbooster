@@ -36,18 +36,16 @@ class Step2Handler
     {
         $id = Request::input('id');
         $controller = DB::table('cms_moduls')->where('id', $id)->first()->controller;
-        $controller_path = controller_path($controller);
 
-        $code = file_get_contents($controller_path);
-        $rawBefore = explode("# START COLUMNS DO NOT REMOVE THIS LINE", $code);
-        $rawAfter = explode("# END COLUMNS DO NOT REMOVE THIS LINE", $rawBefore[1]);
+        $code = readCtrlContent($controller);
 
-        $fileResult = trim($rawBefore[0]);
+        list($top, $current_scaffolding, $bottom) = \CB::extractBetween($code, 'COLUMNS');
+        $fileResult = trim($top);
         $fileResult .= "\n\n            # START COLUMNS DO NOT REMOVE THIS LINE\n";
         $fileResult .= "            \$this->col = [];\n";
         $fileResult .= implode("\n", $this->makeColumnPhpCode());
         $fileResult .= "\n            # END COLUMNS DO NOT REMOVE THIS LINE\n\n            ";
-        $fileResult .= trim($rawAfter[1]);
+        $fileResult .= trim($bottom);
 
         $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookQueryIndex', g('hookQueryIndex'));
         $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookRowIndex', g('hookRowIndex'));
@@ -58,7 +56,7 @@ class Step2Handler
         $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookBeforeDelete', g('hookBeforeDelete'));
         $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookAfterDelete', g('hookAfterDelete'));
 
-        file_put_contents($controller_path, $fileResult);
+        file_put_contents(controller_path($controller), $fileResult);
 
         return redirect()->route("AdminModulesControllerGetStep3", ["id" => $id]);
     }

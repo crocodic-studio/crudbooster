@@ -640,4 +640,14 @@ class CRUDBooster
     {
         return base_path('vendor/crocodicstudio/crudbooster/src/views/default/type_components/');
     }
+
+    public static function extractBetween($raw, $mark)
+    {
+        $START = "# START $mark DO NOT REMOVE THIS LINE";
+        $END = "# END $mark DO NOT REMOVE THIS LINE";
+        list($before, $rest) = explode($START, $raw);
+        list($_middle, $after) = explode($END, $rest);
+
+        return [$before, $_middle, $after];
+    }
 }

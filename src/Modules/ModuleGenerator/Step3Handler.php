@@ -30,30 +30,25 @@ class Step3Handler
         $script_form = $this->setFormScript($post);
         $row = DB::table('cms_moduls')->where('id', request('id'))->first();
         $scripts = implode("\n", $script_form);
-        $raw = (readCtrlContent($row->controller));
-        $raw = explode("# START FORM DO NOT REMOVE THIS LINE", $raw);
-        $rraw = explode("# END FORM DO NOT REMOVE THIS LINE", $raw[1]);
-
-        $top_script = trim($raw[0]);
-        $current_scaffolding_form = trim($rraw[0]);
-        $bottom_script = trim($rraw[1]);
+        $rawCode = readCtrlContent($row->controller);
+        list($top, $current_scaffolding, $bottom) = \CB::extractSections($rawCode, "FORM");
 
         //IF FOUND OLD, THEN CLEAR IT
-        $bottom_script = $this->clearOldBackup($bottom_script);
+        $bottom = $this->clearOldBackup($bottom);
 
         //ARRANGE THE FULL SCRIPT
-        $file_controller = $top_script."\n\n";
+        $file_controller = $top."\n\n";
         $file_controller .= "            # START FORM DO NOT REMOVE THIS LINE\n";
         $file_controller .= "            ".'$this->form = [];'."\n";
         $file_controller .= $scripts."\n";
         $file_controller .= "            # END FORM DO NOT REMOVE THIS LINE\n\n";
 
         //CREATE A BACKUP SCAFFOLDING TO OLD TAG
-        if ($current_scaffolding_form) {
-            $file_controller = $this->backupOldTagScaffold($file_controller, $current_scaffolding_form);
+        if ($current_scaffolding) {
+            $file_controller = $this->backupOldTagScaffold($file_controller, $current_scaffolding);
         }
 
-        $file_controller .= "            ".trim($bottom_script);
+        $file_controller .= "            ".trim($bottom);
 
         //CREATE FILE CONTROLLER
         file_put_contents(controller_path($row->controller), $file_controller);
@@ -163,5 +158,20 @@ class Step3Handler
         return $script_form;
     }
 
+    /**
+     * @param $raw
+     * @param $mark
+     * @return array
+     */
+    private function extractSections($raw, $mark)
+    {
+        $raw = explode("# START $mark DO NOT REMOVE THIS LINE", $raw);
+        $rraw = explode("# END $mark DO NOT REMOVE THIS LINE", $raw[1]);
 
+        $top_script = trim($raw[0]);
+        $current_scaffolding_form = trim($rraw[0]);
+        $bottom_script = trim($rraw[1]);
+
+        return [$top_script, $current_scaffolding_form, $bottom_script];
+    }
 }
