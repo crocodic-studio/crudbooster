@@ -14,7 +14,7 @@ class Step3Handler
 
         $columns = CRUDBooster::getTableColumns($row->table_name);
 
-        $code = (readCtrlContent($row->controller));
+        $code = readCtrlContent($row->controller);
 
         $forms = parseScaffoldingToArray($code, 'form');
 

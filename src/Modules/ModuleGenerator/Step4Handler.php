@@ -32,9 +32,7 @@ class Step4Handler
         $data['table'] = $module->table_name;
 
         $newCode = $this->getScriptConfig($data);
-        $rawCode = readCtrlContent($module->controller);
-        $fileController = \CB::replaceBetweenMark($rawCode, 'CONFIGURATION', $newCode);
-        putCtrlContent($module->controller, $fileController);
+        $this->replaceInFile($module->controller, 'CONFIGURATION', $newCode);
 
         return redirect()->route('AdminModulesControllerGetIndex')->with([
             'message' => cbTrans('alert_update_data_success'),
@@ -82,5 +80,17 @@ class Step4Handler
         $_code .= '            '.$after;
 
         return $_code;
+    }
+
+    /**
+     * @param $module
+     * @param $mark
+     * @param $newCode
+     */
+    private function replaceInFile($controller, $mark, $newCode)
+    {
+        $rawCode = readCtrlContent($controller);
+        $fileController = \CB::replaceBetweenMark($rawCode, $mark, $newCode);
+        putCtrlContent($controller, $fileController);
     }
 }

@@ -20,7 +20,6 @@ class FormConfigGenerator
             $validation[] = 'required';
             $placeholder = '';
             $help = '';
-            $options = [];
 
             $label = str_replace("id_", "", $c);
             $label = ucwords(str_replace("_", " ", $label));
@@ -32,48 +31,7 @@ class FormConfigGenerator
 
             $typedata = CB::getFieldType($table, $field);
 
-            switch ($typedata) {
-                default:
-                case 'varchar':
-                case 'char':
-                    $type = "text";
-                    $validation[] = "min:1|max:255";
-                    break;
-                case 'text':
-                case 'longtext':
-                    $type = 'textarea';
-                    $validation[] = "string|min:5";
-                    break;
-                case 'date':
-                    $type = 'date';
-                    $validation[] = "date";
-                    $options = [
-                        'php_format' => 'M, d Y',
-                        'datepicker_format' => 'M, dd YYYY',
-                    ];
-                    break;
-                case 'datetime':
-                case 'timestamp':
-                    $type = 'datetime';
-                    $validation[] = "date_format:Y-m-d H:i:s";
-                    $options = [
-                        'php_format' => 'M, d Y H:i',
-                    ];
-                    break;
-                case 'time':
-                    $type = 'time';
-                    $validation[] = 'date_format:H:i:s';
-                    break;
-                case 'double':
-                    $type = 'money';
-                    $validation[] = "integer|min:0";
-                    break;
-                case 'int':
-                case 'integer':
-                    $type = 'number';
-                    $validation[] = 'integer|min:0';
-                    break;
-            }
+            list($type, $validation, $options) = self::parseFieldType($typedata, $validation);
 
             if (FieldDetector::isForeignKey($field)) {
                 list($type, $options) = self::handleForeignKey($field);
@@ -81,10 +39,10 @@ class FormConfigGenerator
 
             if (substr($field, 0, 3) == 'is_') {
                 $type = 'radio_dataenum';
-                $label_field = ucwords(substr($field, 3));
+                $label = ucwords(substr($field, 3));
                 $validation = ['required|integer'];
                 $options = [
-                    'enum' => ['In '.$label_field, $label_field],
+                    'enum' => ['In '.$label, $label],
                     'value' => [0, 1],
                 ];
             }
@@ -164,5 +122,41 @@ class FormConfigGenerator
         }
 
         return [$type, $options];
+    }
+
+    /**
+     * @param $typeData
+     * @param $validation
+     * @return array
+     */
+    private static function parseFieldType($typeData, $validation)
+    {
+        $options = [];
+        if ($typeData == 'text' || $typeData == 'longtext') {
+            $type = 'textarea';
+            $validation[] = "string|min:5";
+        } elseif ($typeData == 'date') {
+            $type = 'date';
+            $validation[] = "date";
+            $options = ['php_format' => 'M, d Y', 'datepicker_format' => 'M, dd YYYY',];
+        } elseif ($typeData == 'datetime' || $typeData == 'timestamp') {
+            $type = 'datetime';
+            $validation[] = "date_format:Y-m-d H:i:s";
+            $options = ['php_format' => 'M, d Y H:i',];
+        } elseif ($typeData == 'time') {
+            $type = 'time';
+            $validation[] = 'date_format:H:i:s';
+        } elseif ($typeData == 'double') {
+            $type = 'money';
+            $validation[] = "integer|min:0";
+        } elseif ($typeData == 'int' || $typeData == 'integer') {
+            $type = 'number';
+            $validation[] = 'integer|min:0';
+        } else {
+            $type = "text";
+            $validation[] = "min:1|max:255";
+        }
+
+        return [$type, $validation, $options];
     }
 }
