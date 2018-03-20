@@ -400,7 +400,13 @@ class CRUDBooster  {
 
 	            }
 
-	            if(!$typedata) $typedata = 'varchar';
+	            if(!$typedata) 
+	            {
+	            	if (strpos(strtolower($typedata),'date'))
+	            		$typedata = 'date';
+	            	else
+	            		$typedata = 'varchar';
+	            }
 
 	            return $typedata;
 	        });
