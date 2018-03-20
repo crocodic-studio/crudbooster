@@ -61,10 +61,16 @@
 										<?php endif;?>
 
 									@elseif($col['type']=='datetime')	
-										<span class="input-group-addon"><a href='javascript:void(0)' onclick='$("#{{$name_column}}").data("daterangepicker").toggle()'><i class='fa fa-calendar'></i></a></span>
-										<input id='{{$name_column}}' type='text' {{ ($col['max'])?"maxlength='$col[max]'":"" }} name='{{$col["name"]}}' class='form-control {{$col['required']?"required":""}}' 										
-										{{($col['readonly']===true)?"readonly":""}} 
-										/>
+
+										<div class="input-group">  			
+										
+											<span class="input-group-addon"><a href='javascript:void(0)' onclick='$("#{{$name_column}}").data("daterangepicker").toggle()'><i class='fa fa-calendar'></i></a></span>
+											
+											<input type='text' title="{{$form['label']}}" readonly {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control notfocus datetimepicker' name="{{$name}}" id="{{$name_column}}}" value='{{$value}}'/>	
+
+
+										</div>
+
 									@elseif($col['type']=='datamodal')			
 											
 									<div id='{{$name_column}}' class="input-group">
