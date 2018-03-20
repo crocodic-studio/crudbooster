@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Request;
 use CRUDBooster;
 
-
 class FormValidator
 {
     private $table;
@@ -26,6 +25,43 @@ class FormValidator
 
         $this->sendFailedValidationResponse($validator);
     }
+
+    /**
+     * @param $id
+     * @param $form
+     * @return mixed
+     */
+    private function getRules($id, $form)
+    {
+        $componentPath = implode(DIRECTORY_SEPARATOR, ["vendor", "crocodicstudio", "crudbooster", "src", "views", "default", "type_components", ""]);
+        $rules = [];
+        foreach ($form as $formInput) {
+            $name = $formInput['name'];
+            if (! $name) {
+                continue;
+            }
+
+            $ai = [];
+            if ($formInput['required'] && ! Request::hasFile($name)) {
+                $ai[] = 'required';
+            }
+
+            $hookValidationPath = base_path($componentPath.$formInput['type'].DIRECTORY_SEPARATOR.'hookInputValidation.php');
+            if (file_exists($hookValidationPath)) {
+                require_once($hookValidationPath);
+            }
+            unset($hookValidationPath);
+
+            if (@$formInput['validation']) {
+                $rules[$name] = $this->parseValidationRules($id, $formInput);
+            } else {
+                $rules[$name] = implode('|', $ai);
+            }
+        }
+
+        return $rules;
+    }
+
     /**
      * @param $id
      * @param $di
@@ -75,6 +111,7 @@ class FormValidator
 
         return implode('|', $exp);
     }
+
     /**
      * @param $validator
      */
@@ -87,46 +124,10 @@ class FormValidator
         ];
 
         if (Request::ajax()) {
-        $resp = response()->json($msg);
+            $resp = response()->json($msg);
             sendAndTerminate($resp);
         }
         $resp = redirect()->back()->with("errors", $message)->with($msg)->withnput();
         sendAndTerminate($resp);
-    }
-
-    /**
-     * @param $id
-     * @param $form
-     * @return mixed
-     */
-    private function getRules($id, $form)
-    {
-        $componentPath = implode(DIRECTORY_SEPARATOR, ["vendor", "crocodicstudio", "crudbooster", "src", "views", "default", "type_components", ""]);
-        $rules = [];
-        foreach ($form as $formInput) {
-            $name = $formInput['name'];
-            if (! $name) {
-                continue;
-            }
-
-            $ai = [];
-            if ($formInput['required'] && ! Request::hasFile($name)) {
-                $ai[] = 'required';
-            }
-
-            $hookValidationPath = base_path($componentPath.$formInput['type'].DIRECTORY_SEPARATOR.'hookInputValidation.php');
-            if (file_exists($hookValidationPath)) {
-                require_once($hookValidationPath);
-            }
-            unset($hookValidationPath);
-
-            if (@$formInput['validation']) {
-                $rules[$name] = $this->parseValidationRules($id, $formInput);
-            } else {
-                $rules[$name] = implode('|', $ai);
-            }
-        }
-
-        return $rules;
     }
 }
