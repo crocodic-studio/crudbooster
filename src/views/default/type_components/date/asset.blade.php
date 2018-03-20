@@ -9,6 +9,7 @@
             viewMode: 'years',
             autoclose: true,
             startDate: '1990-01-01',
+            clearBtn:true,
             @if (App::getLocale() == 'ar')
             rtl: true,
             @endif

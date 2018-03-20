@@ -59,6 +59,11 @@
 										</label>
 										<?php endforeach;?>
 										<?php endif;?>
+
+									@elseif($col['type']=='datetime')	
+										<input id='{{$name_column}}' type='text' {{ ($col['max'])?"maxlength='$col[max]'":"" }} name='{{$col["name"]}}' class='form-control {{$col['required']?"required":""}}' 										
+										{{($col['readonly']===true)?"readonly":""}} 
+										/>
 									@elseif($col['type']=='datamodal')			
 											
 									<div id='{{$name_column}}' class="input-group">
