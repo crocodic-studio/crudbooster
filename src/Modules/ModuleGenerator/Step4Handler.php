@@ -31,23 +31,7 @@ class Step4Handler
 
         $data['table'] = $module->table_name;
 
-        $script_config = [];
-        $exception = ['_token', 'id', 'submit'];
-        $i = 0;
-        foreach ($data as $key => $val) {
-            if (in_array($key, $exception)) {
-                continue;
-            }
-
-            if ($val == 'true' || $val == 'false') {
-                $value = $val;
-            } else {
-                $value = '"'.$val.'"';
-            }
-
-            $script_config[$i] = "            ".'$this->'.$key.' = '.$value.';';
-            $i++;
-        }
+        $script_config = $this->getScriptConfig($data);
 
         $scripts = implode("\n", $script_config);
         $raw = file_get_contents(controller_path($module->controller));
@@ -66,5 +50,28 @@ class Step4Handler
             'message' => trans('crudbooster.alert_update_data_success'),
             'message_type' => 'success',
         ]);
+    }
+
+    /**
+     * @param $data
+     * @return array
+     */
+    private function getScriptConfig($data)
+    {
+        $scriptConfig = [];
+        $i = 0;
+        $data = array_diff_key($data, array_flip(['_token', 'id', 'submit'])); // remove keys
+        foreach ($data as $key => $val) {
+            if ($val == 'true' || $val == 'false') {
+                $value = $val;
+            } else {
+                $value = "'$val'";
+            }
+
+            $scriptConfig[$i] = '            $this->'.$key.' = '.$value.';';
+            $i++;
+        }
+
+        return $scriptConfig;
     }
 }
