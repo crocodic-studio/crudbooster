@@ -42,8 +42,7 @@ class Step2Handler
         list($top, $current_scaffolding, $bottom) = \CB::extractBetween($code, 'COLUMNS');
         $fileResult = trim($top);
         $fileResult .= "\n\n            # START COLUMNS DO NOT REMOVE THIS LINE\n";
-        $fileResult .= "            \$this->col = [];\n";
-        $fileResult .= implode("\n", $this->makeColumnPhpCode());
+        $fileResult .= '            $this->col = [];'."\n".implode("\n", $this->makeColumnPhpCode());
         $fileResult .= "\n            # END COLUMNS DO NOT REMOVE THIS LINE\n\n            ";
         $fileResult .= trim($bottom);
 

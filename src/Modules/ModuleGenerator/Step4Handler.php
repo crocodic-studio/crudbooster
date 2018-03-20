@@ -67,35 +67,23 @@ class Step4Handler
     }
 
     /**
-     * @param $raw
+     * @param $phpCode
      * @param $scripts
      * @return string
      */
-    private function replaceConfigSection($raw, $scripts)
+    private function replaceConfigSection($phpCode, $scripts)
     {
-        $fileContent = $this->replaceBetween($raw, $scripts, 'CONFIGURATION');
-
-        return $fileContent;
-    }
-
-    /**
-     * @param $raw
-     * @param $scripts
-     * @param $mark
-     * @return string
-     */
-    private function replaceBetween($raw, $scripts, $mark)
-    {
-        list($before, $_middle, $after) = \CB::extractBetween($raw, $mark);
+        $mark = 'CONFIGURATION';
+        list($before, $_middle, $after) = \CB::extractBetween($phpCode, $mark);
 
         $START = "# START $mark DO NOT REMOVE THIS LINE";
         $END = "# END $mark DO NOT REMOVE THIS LINE";
 
-        $fileContent = trim($before)."\n\n";
+        $fileContent = $before."\n\n";
         $fileContent .= "            $START\n";
         $fileContent .= $scripts."\n";
         $fileContent .= "            $END\n\n";
-        $fileContent .= '            '.trim($after);
+        $fileContent .= '            '.$after;
 
         return $fileContent;
     }

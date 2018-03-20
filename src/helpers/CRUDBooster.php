@@ -648,6 +648,6 @@ class CRUDBooster
         list($before, $rest) = explode($START, $raw);
         list($_middle, $after) = explode($END, $rest);
 
-        return [$before, $_middle, $after];
+        return [trim($before), $_middle, trim($after)];
     }
 }
