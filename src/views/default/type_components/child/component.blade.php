@@ -61,6 +61,7 @@
 										<?php endif;?>
 
 									@elseif($col['type']=='datetime')	
+										<span class="input-group-addon"><a href='javascript:void(0)' onclick='$("#{{$name_column}}").data("daterangepicker").toggle()'><i class='fa fa-calendar'></i></a></span>
 										<input id='{{$name_column}}' type='text' {{ ($col['max'])?"maxlength='$col[max]'":"" }} name='{{$col["name"]}}' class='form-control {{$col['required']?"required":""}}' 										
 										{{($col['readonly']===true)?"readonly":""}} 
 										/>
