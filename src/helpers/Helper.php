@@ -58,13 +58,6 @@ if (! function_exists('is_checked')) {
     }
 }
 
-if (! function_exists('parseControllerConfigToArray')) {
-    function parseControllerConfigToArray($code)
-    {
-        return \crocodicstudio\crudbooster\helpers\Parsers\ControllerConfigParser::parse($code);
-    }
-}
-
 if (! function_exists('controllers_dir')) {
     function controllers_dir()
     {

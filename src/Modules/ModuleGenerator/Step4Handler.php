@@ -2,6 +2,7 @@
 
 namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
+use crocodicstudio\crudbooster\helpers\Parsers\ControllerConfigParser;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
 
@@ -14,8 +15,8 @@ class Step4Handler
         $data = [];
         $data['id'] = $id;
         if (file_exists(controller_path($controller))) {
-            $response = file_get_contents(controller_path($controller));
-            $data['config'] = parseControllerConfigToArray($response);
+            $fileContent = file_get_contents(controller_path($controller));
+            $data['config'] = ControllerConfigParser::parse($fileContent);
         }
 
         return view('CbModulesGen::step4', $data);
