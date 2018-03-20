@@ -17,20 +17,19 @@ class CBSuperadmin
      */
     public function handle($request, Closure $next)
     {   
-        $admin_path = cbConfig('ADMIN_PATH', 'admin');
+        $adminPath = cbConfig('ADMIN_PATH', 'admin');
 
         if(CRUDBooster::myId()==''){
-            $url = url($admin_path.'/login'); 
-            return redirect($url)->with('message',trans('crudbooster.not_logged_in'));
+            $url = url($adminPath.'/login');
+            return redirect($url)->with('message', cbTrans('not_logged_in'));
         }
 
         if(!CRUDBooster::isSuperadmin()) {
-            return redirect($admin_path)->with(['message'=>trans('crudbooster.denied_access'),'message_type'=>'warning']);
+            return redirect($adminPath)->with(['message'=> cbTrans('denied_access'),'message_type'=>'warning']);
         }
 
         if(CRUDBooster::isLocked()){
-            $url = url($admin_path.'/lock-screen');
-            return redirect($url);
+            return redirect(url($adminPath.'/lock-screen'));
         }
 
         return $next($request);

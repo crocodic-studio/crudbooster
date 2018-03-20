@@ -9,7 +9,7 @@ class MenuRepo
 {
     public static function sidebarMenu()
     {
-        $menu_active = self::table()
+        $menuActive = self::table()
             ->where('cms_privileges', CRUDBooster::myPrivilegeId())
             ->where('parent_id', 0)->where('is_active', 1)
             ->where('is_dashboard', 0)
@@ -17,7 +17,7 @@ class MenuRepo
             ->select('cms_menus.*')
             ->get();
 
-        foreach ($menu_active as &$menu) {
+        foreach ($menuActive as &$menu) {
 
             $url = self::menuUrl($menu);
 
@@ -44,7 +44,7 @@ class MenuRepo
             }
         }
 
-        return $menu_active;
+        return $menuActive;
     }
 
     private static function menuUrl($menu)
