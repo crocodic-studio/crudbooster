@@ -33,7 +33,7 @@ class FormValidator
      */
     private function getRules($id, $form)
     {
-        $componentPath = implode(DIRECTORY_SEPARATOR, ["vendor", "crocodicstudio", "crudbooster", "src", "views", "default", "type_components", ""]);
+        $cmpPath = implode(DIRECTORY_SEPARATOR, ["vendor", "crocodicstudio", "crudbooster", "src", "views", "default", "type_components", ""]);
         $rules = [];
         foreach ($form as $formInput) {
             $name = $formInput['name'];
@@ -46,7 +46,7 @@ class FormValidator
                 $ai[] = 'required';
             }
 
-            $hookValidationPath = base_path($componentPath.$formInput['type'].DIRECTORY_SEPARATOR.'hookInputValidation.php');
+            $hookValidationPath = base_path($cmpPath.$formInput['type'].DIRECTORY_SEPARATOR.'hookInputValidation.php');
             if (file_exists($hookValidationPath)) {
                 require_once($hookValidationPath);
             }
