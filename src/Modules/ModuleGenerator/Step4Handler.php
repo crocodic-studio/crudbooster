@@ -38,7 +38,7 @@ class Step4Handler
         file_put_contents(controller_path($module->controller), $fileController);
 
         return redirect()->route('AdminModulesControllerGetIndex')->with([
-            'message' => trans('crudbooster.alert_update_data_success'),
+            'message' => cbTrans('alert_update_data_success'),
             'message_type' => 'success',
         ]);
     }
