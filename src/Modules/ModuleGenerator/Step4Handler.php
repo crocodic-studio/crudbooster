@@ -31,20 +31,11 @@ class Step4Handler
 
         $data['table'] = $module->table_name;
 
-        $script_config = $this->getScriptConfig($data);
-
-        $scripts = implode("\n", $script_config);
+        $scripts = implode("\n", $this->getScriptConfig($data));
         $raw = file_get_contents(controller_path($module->controller));
-        $raw = explode("# START CONFIGURATION DO NOT REMOVE THIS LINE", $raw);
-        $rraw = explode("# END CONFIGURATION DO NOT REMOVE THIS LINE", $raw[1]);
 
-        $file_controller = trim($raw[0])."\n\n";
-        $file_controller .= "            # START CONFIGURATION DO NOT REMOVE THIS LINE\n";
-        $file_controller .= $scripts."\n";
-        $file_controller .= "            # END CONFIGURATION DO NOT REMOVE THIS LINE\n\n";
-        $file_controller .= "            ".trim($rraw[1]);
-
-        file_put_contents(controller_path($module->controller), $file_controller);
+        $fileController = $this->replaceConfigSection($raw, $scripts);
+        file_put_contents(controller_path($module->controller), $fileController);
 
         return redirect()->route('AdminModulesControllerGetIndex')->with([
             'message' => trans('crudbooster.alert_update_data_success'),
@@ -73,5 +64,40 @@ class Step4Handler
         }
 
         return $scriptConfig;
+    }
+
+    /**
+     * @param $raw
+     * @param $scripts
+     * @return string
+     */
+    private function replaceConfigSection($raw, $scripts)
+    {
+        $START = '# START CONFIGURATION DO NOT REMOVE THIS LINE';
+        $END = "# END CONFIGURATION DO NOT REMOVE THIS LINE";
+        $fileContent = $this->replaceBetween($raw, $scripts, $START, $END);
+
+        return $fileContent;
+    }
+
+    /**
+     * @param $raw
+     * @param $scripts
+     * @param $START
+     * @param $END
+     * @return string
+     */
+    private function replaceBetween($raw, $scripts, $START, $END)
+    {
+        list($before, $rest) = explode($START, $raw);
+        list($_middle, $after) = explode($END, $rest);
+
+        $fileContent = trim($before)."\n\n";
+        $fileContent .= "            $START\n";
+        $fileContent .= $scripts."\n";
+        $fileContent .= "            $END\n\n";
+        $fileContent .= "            ".trim($after);
+
+        return $fileContent;
     }
 }
