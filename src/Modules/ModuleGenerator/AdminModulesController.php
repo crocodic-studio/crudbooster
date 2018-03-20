@@ -219,7 +219,7 @@ class AdminModulesController extends CBController
 
     public function getTest()
     {
-        $code = file_get_contents(controller_path('AdminCustomersController.php'));
+        $code = (readCtrlContent('AdminCustomersController.php'));
 
         $forms = parseFormToArray($code);
         echo '<pre>';

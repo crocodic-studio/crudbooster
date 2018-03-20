@@ -15,7 +15,7 @@ class Step4Handler
         $data = [];
         $data['id'] = $id;
         if (file_exists(controller_path($controller))) {
-            $fileContent = file_get_contents(controller_path($controller));
+            $fileContent = (readCtrlContent($controller));
             $data['config'] = ControllerConfigParser::parse($fileContent);
         }
 
@@ -31,8 +31,8 @@ class Step4Handler
 
         $data['table'] = $module->table_name;
 
-        $scripts = implode("\n", $this->getScriptConfig($data));
-        $raw = file_get_contents(controller_path($module->controller));
+        $scripts = $this->getScriptConfig($data);
+        $raw = (readCtrlContent($module->controller));
 
         $fileController = $this->replaceConfigSection($raw, $scripts);
         file_put_contents(controller_path($module->controller), $fileController);
@@ -63,7 +63,7 @@ class Step4Handler
             $i++;
         }
 
-        return $scriptConfig;
+        return implode("\n", $scriptConfig);
     }
 
     /**

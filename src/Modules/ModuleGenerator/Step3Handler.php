@@ -14,7 +14,7 @@ class Step3Handler
 
         $columns = CRUDBooster::getTableColumns($row->table_name);
 
-        $code = file_get_contents(controller_path($row->controller));
+        $code = (readCtrlContent($row->controller));
 
         $forms = parseScaffoldingToArray($code, 'form');
 
@@ -30,7 +30,7 @@ class Step3Handler
         $script_form = $this->setFormScript($post);
         $row = DB::table('cms_moduls')->where('id', request('id'))->first();
         $scripts = implode("\n", $script_form);
-        $raw = file_get_contents(controller_path($row->controller));
+        $raw = (readCtrlContent($row->controller));
         $raw = explode("# START FORM DO NOT REMOVE THIS LINE", $raw);
         $rraw = explode("# END FORM DO NOT REMOVE THIS LINE", $raw[1]);
 

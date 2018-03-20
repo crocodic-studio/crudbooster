@@ -14,7 +14,7 @@ class Step2Handler
 
         $columns = CRUDBooster::getTableColumns($module->table_name);
 
-        $controllerCode = file_get_contents(controller_path($module->controller));
+        $controllerCode = (readCtrlContent($module->controller));
 
         $data = [];
         $data['id'] = $id;
