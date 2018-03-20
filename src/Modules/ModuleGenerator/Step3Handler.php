@@ -31,7 +31,7 @@ class Step3Handler
         $row = DB::table('cms_moduls')->where('id', request('id'))->first();
         $scripts = implode("\n", $script_form);
         $rawCode = readCtrlContent($row->controller);
-        list($top, $current_scaffolding, $bottom) = \CB::extractSections($rawCode, "FORM");
+        list($top, $current_scaffolding, $bottom) = \CB::extractBetween($rawCode, "FORM");
 
         //IF FOUND OLD, THEN CLEAR IT
         $bottom = $this->clearOldBackup($bottom);
@@ -39,8 +39,7 @@ class Step3Handler
         //ARRANGE THE FULL SCRIPT
         $file_controller = $top."\n\n";
         $file_controller .= "            # START FORM DO NOT REMOVE THIS LINE\n";
-        $file_controller .= "            ".'$this->form = [];'."\n";
-        $file_controller .= $scripts."\n";
+        $file_controller .= '            $this->form = [];'."\n".$scripts."\n";
         $file_controller .= "            # END FORM DO NOT REMOVE THIS LINE\n\n";
 
         //CREATE A BACKUP SCAFFOLDING TO OLD TAG
@@ -163,7 +162,7 @@ class Step3Handler
      * @param $mark
      * @return array
      */
-    private function extractSections($raw, $mark)
+    private function replaceBetweenMark($raw, $mark)
     {
         $raw = explode("# START $mark DO NOT REMOVE THIS LINE", $raw);
         $rraw = explode("# END $mark DO NOT REMOVE THIS LINE", $raw[1]);

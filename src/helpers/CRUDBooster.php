@@ -643,29 +643,28 @@ class CRUDBooster
 
     public static function extractBetween($raw, $mark)
     {
-        $START = "# START $mark DO NOT REMOVE THIS LINE";
-        $END = "# END $mark DO NOT REMOVE THIS LINE";
-        list($before, $rest) = explode($START, $raw);
-        list($_middle, $after) = explode($END, $rest);
+        list($before, $_rest) = explode("# START $mark DO NOT REMOVE THIS LINE", $raw);
+        list($_middle, $after) = explode("# END $mark DO NOT REMOVE THIS LINE", $_rest);
 
-        return [trim($before), $_middle, trim($after)];
+        return [trim($before), trim($_middle), trim($after)];
     }
 
     /**
-     * @param $code
+     * @param $phpCode
      * @param $mark
      * @param $newCode
      * @return string
      */
-    public static function replaceBetweenMark($code, $mark, $newCode)
+    public static function replaceBetweenMark($phpCode, $mark, $newCode)
     {
-        list($top, $current_scaffolding, $bottom) = self::extractBetween($code, $mark);
-        $fileResult = $top;
-        $fileResult .= "\n\n            # START $mark DO NOT REMOVE THIS LINE\n";
-        $fileResult .= $newCode;
-        $fileResult .= "\n            # END $mark DO NOT REMOVE THIS LINE\n\n            ";
-        $fileResult .= $bottom;
+        list($top, $_middle, $bottom) = self::extractBetween($phpCode, $mark);
 
-        return $fileResult;
+        $_code = $top."\n\n";
+        $_code .= "            # START $mark DO NOT REMOVE THIS LINE\n";
+        $_code .= $newCode."\n";
+        $_code .= "            # END $mark DO NOT REMOVE THIS LINE\n\n";
+        $_code .= '            '.$bottom;
+
+        return $_code;
     }
 }

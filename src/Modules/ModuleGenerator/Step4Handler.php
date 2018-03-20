@@ -31,10 +31,9 @@ class Step4Handler
 
         $data['table'] = $module->table_name;
 
-        $scripts = $this->getScriptConfig($data);
+        $newCode = $this->getScriptConfig($data);
         $rawCode = readCtrlContent($module->controller);
-
-        $fileController = $this->replaceConfigSection($rawCode, $scripts);
+        $fileController = \CB::replaceBetweenMark($rawCode, 'CONFIGURATION', $newCode);
         file_put_contents(controller_path($module->controller), $fileController);
 
         return redirect()->route('AdminModulesControllerGetIndex')->with([
@@ -68,23 +67,20 @@ class Step4Handler
 
     /**
      * @param $phpCode
-     * @param $scripts
+     * @param $mark
+     * @param $newCode
      * @return string
      */
-    private function replaceConfigSection($phpCode, $scripts)
+    private function replaceConfigSection($phpCode, $mark, $newCode)
     {
-        $mark = 'CONFIGURATION';
         list($before, $_middle, $after) = \CB::extractBetween($phpCode, $mark);
 
-        $START = "# START $mark DO NOT REMOVE THIS LINE";
-        $END = "# END $mark DO NOT REMOVE THIS LINE";
+        $_code = $before."\n\n";
+        $_code .= "            # START $mark DO NOT REMOVE THIS LINE\n";
+        $_code .= $newCode."\n";
+        $_code .= "            # END $mark DO NOT REMOVE THIS LINE\n\n";
+        $_code .= '            '.$after;
 
-        $fileContent = $before."\n\n";
-        $fileContent .= "            $START\n";
-        $fileContent .= $scripts."\n";
-        $fileContent .= "            $END\n\n";
-        $fileContent .= '            '.$after;
-
-        return $fileContent;
+        return $_code;
     }
 }
