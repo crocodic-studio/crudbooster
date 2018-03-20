@@ -650,4 +650,22 @@ class CRUDBooster
 
         return [trim($before), $_middle, trim($after)];
     }
+
+    /**
+     * @param $code
+     * @param $mark
+     * @param $newCode
+     * @return string
+     */
+    public static function replaceBetweenMark($code, $mark, $newCode)
+    {
+        list($top, $current_scaffolding, $bottom) = self::extractBetween($code, $mark);
+        $fileResult = $top;
+        $fileResult .= "\n\n            # START $mark DO NOT REMOVE THIS LINE\n";
+        $fileResult .= $newCode;
+        $fileResult .= "\n            # END $mark DO NOT REMOVE THIS LINE\n\n            ";
+        $fileResult .= $bottom;
+
+        return $fileResult;
+    }
 }

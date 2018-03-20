@@ -38,13 +38,8 @@ class Step2Handler
         $controller = DB::table('cms_moduls')->where('id', $id)->first()->controller;
 
         $code = readCtrlContent($controller);
-
-        list($top, $current_scaffolding, $bottom) = \CB::extractBetween($code, 'COLUMNS');
-        $fileResult = trim($top);
-        $fileResult .= "\n\n            # START COLUMNS DO NOT REMOVE THIS LINE\n";
-        $fileResult .= '            $this->col = [];'."\n".implode("\n", $this->makeColumnPhpCode());
-        $fileResult .= "\n            # END COLUMNS DO NOT REMOVE THIS LINE\n\n            ";
-        $fileResult .= trim($bottom);
+        $newCode = '            $this->col = [];'."\n".implode("\n", $this->makeColumnPhpCode());
+        $fileResult = \CB::replaceBetweenMark($code, 'COLUMNS', $newCode);
 
         $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookQueryIndex', g('hookQueryIndex'));
         $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookRowIndex', g('hookRowIndex'));
