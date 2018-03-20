@@ -25,13 +25,11 @@ class Step3Handler
 
     public function handleFormSubmit()
     {
-        $post = Request::all();
+        $scripts = $this->setFormScript(Request::all());
 
-        $script_form = $this->setFormScript($post);
-        $row = DB::table('cms_moduls')->where('id', request('id'))->first();
-        $scripts = implode("\n", $script_form);
-        $rawCode = readCtrlContent($row->controller);
-        list($top, $currentScaffold, $bottom) = \CB::extractBetween($rawCode, "FORM");
+        $controller = DB::table('cms_moduls')->where('id', request('id'))->first()->controller;
+        $phpCode = readCtrlContent($controller);
+        list($top, $currentScaffold, $bottom) = \CB::extractBetween($phpCode, "FORM");
 
         //IF FOUND OLD, THEN CLEAR IT
         $bottom = $this->clearOldBackup($bottom);
@@ -39,8 +37,8 @@ class Step3Handler
         //ARRANGE THE FULL SCRIPT
         $fileContent = $top."\n\n";
         $fileContent .= "            # START FORM DO NOT REMOVE THIS LINE\n";
-        $fileContent .= '            $this->form = [];'."\n".$scripts."\n";
-        $fileContent .= "            # END FORM DO NOT REMOVE THIS LINE\n\n";
+        $fileContent .= $scripts;
+        $fileContent .= "\n            # END FORM DO NOT REMOVE THIS LINE\n\n";
 
         //CREATE A BACKUP SCAFFOLDING TO OLD TAG
         if ($currentScaffold) {
@@ -50,7 +48,7 @@ class Step3Handler
         $fileContent .= "            ".($bottom);
 
         //CREATE FILE CONTROLLER
-        file_put_contents(controller_path($row->controller), $fileContent);
+        file_put_contents(controller_path($controller), $fileContent);
 
         return redirect(Route("AdminModulesControllerGetStep4", ["id" => request('id')]));
     }
@@ -118,7 +116,8 @@ class Step3Handler
         $style = $post['style'];
         $validation = $post['validation'];
 
-        $script_form = [];
+        $scriptForm = [];
+        $scriptForm[] = "            ".'$this->form = [];';
         foreach ($labels as $i => $label) {
             if ($label == '') {
                 continue;
@@ -151,9 +150,9 @@ class Step3Handler
                 $form['options'] = $options;
             }
 
-            $script_form[] = "            ".'$this->form[] = '.min_var_export($form, "            ").";";
+            $scriptForm[] = "            ".'$this->form[] = '.min_var_export($form, "            ").";";
         }
 
-        return $script_form;
+        return implode("\n", $scriptForm);
     }
 }
