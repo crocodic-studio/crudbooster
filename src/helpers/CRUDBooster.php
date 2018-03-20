@@ -402,7 +402,7 @@ class CRUDBooster  {
 
 	            if(!$typedata) 
 	            {
-	            	if (strpos(strtolower($typedata),'date'))
+	            	if (strpos(strtolower($typedata),'date')!== FALSE)
 	            		$typedata = 'date';
 	            	else
 	            		$typedata = 'varchar';
