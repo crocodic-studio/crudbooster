@@ -2,7 +2,6 @@
 
 namespace crocodicstudio\crudbooster\CBCoreModule;
 
-use crocodicstudio\crudbooster\controllers\CBController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\PDF;
 use CRUDBooster;
@@ -13,12 +12,27 @@ class DataSaver
 {
     private $Cb;
 
-    public function insert(CBController $cbCtrl)
+    public function save($table, $id, $data)
     {
-        $this->Cb = $cbCtrl;
-        $this->Cb->arr[$cbCtrl->primary_key] = $id = $this->Cb->table()->insertGetId($this->Cb->arr);
+        $this->table = $table;
         //Looping Data Input Again After Insert
-        $this->insertIntoRelatedTables($id);
+        foreach ($data as $row) {
+            $name = $row['name'];
+            if (! $name) {
+                continue;
+            }
+
+            $inputData = request($name);
+
+            //Insert Data Checkbox if Type Datatable
+            if ($this->isRelationship($row)) {
+                $this->updateRelations($row, $id, $inputData);
+            }
+
+            if ($row['type'] == 'child') {
+                $this->insertChildTable($id, $row);
+            }
+        }
     }
 
     /**
@@ -75,38 +89,6 @@ class DataSaver
     {
         foreach ($inputData as $inputId) {
             DB::table($pivotTable)->insert([$foreignKey => $id, $foreignKey2 => $inputId]);
-        }
-    }
-
-    public function update($id, CBController $cbCtrl)
-    {
-        $this->Cb = $cbCtrl;
-        $cbCtrl->findRow($id)->update($cbCtrl->arr);
-        //Looping Data Input Again After Insert
-        $this->insertIntoRelatedTables($id);
-    }
-
-    /**
-     * @param $id
-     */
-    private function insertIntoRelatedTables($id)
-    {
-        foreach ($this->Cb->data_inputan as $row) {
-            $name = $row['name'];
-            if (! $name) {
-                continue;
-            }
-
-            $inputData = request($name);
-
-            //Insert Data Checkbox if Type Datatable
-            if ($this->isRelationship($row)) {
-                $this->updateRelations($row, $id, $inputData);
-            }
-
-            if ($row['type'] == 'child') {
-                $this->insertChildTable($id, $row);
-            }
         }
     }
 

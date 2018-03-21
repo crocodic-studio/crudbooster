@@ -364,7 +364,8 @@ class CBController extends Controller
 
         $this->hookBeforeAdd($this->arr);
 
-        app(DataSaver::class)->insert($this);
+        $this->arr[$this->primary_key] = $id = $this->table()->insertGetId($this->arr);
+        app(DataSaver::class)->save($this->table, $id, $this->data_inputan);
 
         $this->hookAfterAdd($this->arr[$this->primary_key]);
 
@@ -447,7 +448,6 @@ class CBController extends Controller
 
     public function postEditSave($id)
     {
-        $saver = app(DataSaver::class);
         $this->cbLoader();
 
         app(FormValidator::class)->validate($id, $this->form, $this->table);
@@ -456,7 +456,8 @@ class CBController extends Controller
         $this->setTimeStamps('updated_at');
 
         $this->hookBeforeEdit($this->arr, $id);
-        $saver->update($id, $this);
+        $this->findRow($id)->update($this->arr);
+        app(DataSaver::class)->save($this->table, $id, $this->data_inputan);
 
         $this->hookAfterEdit($id);
 
