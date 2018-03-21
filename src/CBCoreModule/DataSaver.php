@@ -17,25 +17,8 @@ class DataSaver
     {
         $this->Cb = $cbCtrl;
         $this->Cb->arr[$cbCtrl->primary_key] = $id = $this->Cb->table()->insertGetId($this->Cb->arr);
-
         //Looping Data Input Again After Insert
-        foreach ($this->Cb->data_inputan as $row) {
-            $name = $row['name'];
-            if (! $name) {
-                continue;
-            }
-
-            $inputdata = request($name);
-
-            //Insert Data Checkbox if Type Datatable
-            if ($this->isRelationship($row)) {
-                $this->_updateRelations($row, $id, $inputdata);
-            }
-
-            if ($row['type'] == 'child') {
-                $this->_updateChildTable($row, $id);
-            }
-        }
+        $this->insertIntoRelatedTables($id);
     }
 
     /**
@@ -53,7 +36,7 @@ class DataSaver
      * @param $inputData
      * @return array
      */
-    private function _updateRelations($row, $id, $inputData)
+    private function updateRelations($row, $id, $inputData)
     {
         list($pivotTable, $foreignKey2, $foreignKey) = $this->deleteFromPivot($row, $id);
 
@@ -95,35 +78,6 @@ class DataSaver
         }
     }
 
-    /**
-     * @param $row
-     * @param $id
-     * @return string
-     */
-    private function _updateChildTable($row, $id)
-    {
-        $name = str_slug($row['label'], '');
-        $columns = $row['columns'];
-
-        $fk = $row['foreign_key'];
-        $countInput = count(request($name.'-'.$columns[0]['name'])) - 1;
-        $childArray = [];
-        for ($i = 0; $i <= $countInput; $i++) {
-            $columnData = [];
-            $columnData[$fk] = $id;
-            foreach ($columns as $col) {
-                $colName = $col['name'];
-                $columnData[$colName] = request($name.'-'.$colName)[$i];
-            }
-            $childArray[] = $columnData;
-        }
-
-        $childTable = CRUDBooster::parseSqlTable($row['table'])['table'];
-        DB::table($childTable)->insert($childArray);
-
-        return $name;
-    }
-
     public function update($id, CBController $cbCtrl)
     {
         $this->Cb = $cbCtrl;
@@ -147,7 +101,7 @@ class DataSaver
 
             //Insert Data Checkbox if Type Datatable
             if ($this->isRelationship($row)) {
-                $this->_updateRelations($row, $id, $inputData);
+                $this->updateRelations($row, $id, $inputData);
             }
 
             if ($row['type'] == 'child') {
@@ -163,17 +117,14 @@ class DataSaver
      */
     private function insertChildTable($id, $row)
     {
+        $fk = $row['foreign_key'];
         $columns = $row['columns'];
+        $name = str_slug($row['label'], '');
+        $childArray = $this->childArray($id, $name, $columns, $fk);
 
         $childTable = CRUDBooster::parseSqlTable($row['table'])['table'];
-        $fk = $row['foreign_key'];
-
         DB::table($childTable)->where($fk, $id)->delete();
-
-        $name = str_slug($row['label'], '');
-        $childArray = $this->newData($id, $name, $columns, $fk);
-
-        DB::table($childTable)->insert(array_reverse($childArray));
+        DB::table($childTable)->insert($childArray);
     }
 
     /**
@@ -183,7 +134,7 @@ class DataSaver
      * @param $fk
      * @return array
      */
-    private function newData($id, $name, $columns, $fk)
+    private function childArray($id, $name, $columns, $fk)
     {
         $countInput = count(request($name.'-'.$columns[0]['name'])) - 1;
         $childArray = [];
@@ -191,8 +142,8 @@ class DataSaver
             $columnData = [];
             $columnData[$fk] = $id;
             foreach ($columns as $col) {
-                $colname = $col['name'];
-                $columnData[$colname] = request($name.'-'.$colname)[$i];
+                $colName = $col['name'];
+                $columnData[$colName] = request($name.'-'.$colName)[$i];
             }
             $childArray[] = $columnData;
         }
