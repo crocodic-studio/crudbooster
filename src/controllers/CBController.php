@@ -332,12 +332,7 @@ class CBController extends Controller
 
     public function postFindData()
     {
-        $search = app( Search::class);
-        $q = request('q');
-        $data = request('data');
-        $id = request('id');
-
-        $items = $search->searchData($data, $q, $id);
+        $items = app(Search::class)->searchData(request('data'), request('q'), request('id'));
 
         return response()->json(['items' => $items]);
     }
@@ -368,8 +363,6 @@ class CBController extends Controller
         app(DataSaver::class)->save($this->table, $id, $this->data_inputan);
 
         $this->hookAfterAdd($this->arr[$this->primary_key]);
-
-        $this->return_url = $this->return_url ?: request('return_url');
 
         $this->insertLog('log_add', $this->arr[$this->title_field]);
 
@@ -459,8 +452,6 @@ class CBController extends Controller
         app(DataSaver::class)->save($this->table, $id, $this->data_inputan);
 
         $this->hookAfterEdit($id);
-
-        $this->return_url = $this->return_url ?: request('return_url');
 
         $this->insertLog('log_update', $this->arr[$this->title_field]);
 
@@ -622,6 +613,7 @@ class CBController extends Controller
 
     private function sendResponseForSave($msg)
     {
+        $this->return_url = $this->return_url ?: request('return_url');
         if ($this->return_url) {
             if (request('submit') == cbTrans('button_save_more')) {
                 CB::redirect(Request::server('HTTP_REFERER'), cbTrans($msg), 'success');
