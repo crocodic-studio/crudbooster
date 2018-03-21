@@ -38,6 +38,92 @@ class DataSaver
         }
     }
 
+    /**
+     * @param $row
+     * @return bool
+     */
+    private function isRelationship($row)
+    {
+        return in_array($row['type'], ['checkbox', 'select2']) && $row['relationship_table'];
+    }
+
+    /**
+     * @param $row
+     * @param $id
+     * @param $inputData
+     * @return array
+     */
+    private function _updateRelations($row, $id, $inputData)
+    {
+        list($pivotTable, $foreignKey2, $foreignKey) = $this->deleteFromPivot($row, $id);
+
+        if (! $inputData) {
+            return null;
+        }
+
+        $this->insertIntoPivot($id, $inputData, $pivotTable, $foreignKey, $foreignKey2);
+    }
+
+    /**
+     * @param $row
+     * @param $id
+     * @return array
+     */
+    private function deleteFromPivot($row, $id)
+    {
+        $pivotTable = $row['relationship_table'];
+        $dataTable = explode(",", $row['datatable'])[0];
+
+        $foreignKey2 = CRUDBooster::getForeignKey($dataTable, $pivotTable);
+        $foreignKey = CRUDBooster::getForeignKey($this->Cb->table, $pivotTable);
+        DB::table($pivotTable)->where($foreignKey, $id)->delete();
+
+        return [$pivotTable, $foreignKey2, $foreignKey];
+    }
+
+    /**
+     * @param $id
+     * @param $inputData
+     * @param $pivotTable
+     * @param $foreignKey
+     * @param $foreignKey2
+     */
+    private function insertIntoPivot($id, $inputData, $pivotTable, $foreignKey, $foreignKey2)
+    {
+        foreach ($inputData as $inputId) {
+            DB::table($pivotTable)->insert([$foreignKey => $id, $foreignKey2 => $inputId]);
+        }
+    }
+
+    /**
+     * @param $row
+     * @param $id
+     * @return string
+     */
+    private function _updateChildTable($row, $id)
+    {
+        $name = str_slug($row['label'], '');
+        $columns = $row['columns'];
+
+        $fk = $row['foreign_key'];
+        $countInput = count(request($name.'-'.$columns[0]['name'])) - 1;
+        $childArray = [];
+        for ($i = 0; $i <= $countInput; $i++) {
+            $columnData = [];
+            $columnData[$fk] = $id;
+            foreach ($columns as $col) {
+                $colName = $col['name'];
+                $columnData[$colName] = request($name.'-'.$colName)[$i];
+            }
+            $childArray[] = $columnData;
+        }
+
+        $childTable = CRUDBooster::parseSqlTable($row['table'])['table'];
+        DB::table($childTable)->insert($childArray);
+
+        return $name;
+    }
+
     public function update($id, CBController $cbCtrl)
     {
         $this->Cb = $cbCtrl;
@@ -71,52 +157,6 @@ class DataSaver
     }
 
     /**
-     * @param $row
-     * @param $id
-     * @return string
-     */
-    private function _updateChildTable($row, $id)
-    {
-        $name = str_slug($row['label'], '');
-        $columns = $row['columns'];
-
-        $fk = $row['foreign_key'];
-        $countInput = count(request($name.'-'.$columns[0]['name'])) - 1;
-        $childArray = [];
-        for ($i = 0; $i <= $countInput; $i++) {
-            $columnData = [];
-            $columnData[$fk] = $id;
-            foreach ($columns as $col) {
-                $colName = $col['name'];
-                $columnData[$colName] = request($name.'-'.$colName)[$i];
-            }
-            $childArray[] = $columnData;
-        }
-
-        $childTable = CRUDBooster::parseSqlTable($row['table'])['table'];
-        DB::table($childTable)->insert($childArray);
-
-        return $name;
-    }
-
-    /**
-     * @param $row
-     * @param $id
-     * @param $inputData
-     * @return array
-     */
-    private function _updateRelations($row, $id, $inputData)
-    {
-        list($pivotTable, $foreignKey2, $foreignKey) = $this->deleteFromPivot($row, $id);
-
-        if (! $inputData) {
-            return null;
-        }
-
-        $this->insertIntoPivot($id, $inputData, $pivotTable, $foreignKey, $foreignKey2);
-    }
-
-    /**
      * @param $id
      * @param $row
      * @return string
@@ -134,37 +174,6 @@ class DataSaver
         $childArray = $this->newData($id, $name, $columns, $fk);
 
         DB::table($childTable)->insert(array_reverse($childArray));
-    }
-
-    /**
-     * @param $id
-     * @param $inputData
-     * @param $pivotTable
-     * @param $foreignKey
-     * @param $foreignKey2
-     */
-    private function insertIntoPivot($id, $inputData, $pivotTable, $foreignKey, $foreignKey2)
-    {
-        foreach ($inputData as $inputId) {
-            DB::table($pivotTable)->insert([$foreignKey => $id, $foreignKey2 => $inputId]);
-        }
-    }
-
-    /**
-     * @param $row
-     * @param $id
-     * @return array
-     */
-    private function deleteFromPivot($row, $id)
-    {
-        $pivotTable = $row['relationship_table'];
-        $dataTable = explode(",", $row['datatable'])[0];
-
-        $foreignKey2 = CRUDBooster::getForeignKey($dataTable, $pivotTable);
-        $foreignKey = CRUDBooster::getForeignKey($this->Cb->table, $pivotTable);
-        DB::table($pivotTable)->where($foreignKey, $id)->delete();
-
-        return [$pivotTable, $foreignKey2, $foreignKey];
     }
 
     /**
@@ -189,13 +198,5 @@ class DataSaver
         }
 
         return $childArray;
-    }
-    /**
-     * @param $row
-     * @return bool
-     */
-    private function isRelationship($row)
-    {
-        return in_array($row['type'], ['checkbox', 'select2']) && $row['relationship_table'];
     }
 }
