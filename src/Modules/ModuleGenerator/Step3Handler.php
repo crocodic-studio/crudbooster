@@ -78,7 +78,7 @@ class Step3Handler
     private function getComponentTypes()
     {
         $types = [];
-        foreach (glob(CRUDBooster::componentsTypePath().'*', GLOB_ONLYDIR) as $dir) {
+        foreach (glob(CRUDBooster::componentsPath().'*', GLOB_ONLYDIR) as $dir) {
             $types[] = basename($dir);
         }
 
@@ -133,7 +133,7 @@ class Step3Handler
             $form['help'] = $help[$i];
             $form['style'] = $style[$i];
 
-            $info = file_get_contents(CRUDBooster::componentsTypePath().$type[$i].'/info.json');
+            $info = file_get_contents(CRUDBooster::componentsPath($type[$i]).'/info.json');
             $info = json_decode($info, true);
             if (count($info['options'])) {
                 $options = [];

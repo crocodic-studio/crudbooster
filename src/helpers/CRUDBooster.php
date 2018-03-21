@@ -636,9 +636,9 @@ class CRUDBooster
         }
     }
 
-    public static function componentsTypePath()
+    public static function componentsPath($type = '')
     {
-        return base_path('vendor/crocodicstudio/crudbooster/src/views/default/type_components/');
+        return base_path('vendor/crocodicstudio/crudbooster/src/views/default/type_components/'.$type);
     }
 
     public static function extractBetween($raw, $mark)
