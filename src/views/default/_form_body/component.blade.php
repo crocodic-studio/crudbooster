@@ -15,7 +15,7 @@
 
 @if(file_exists(CB::componentsPath($type).'/component.blade.php')))
     @include('crudbooster::default.type_components.'.$type.'.component')
-@elseif(file_exists(resource_path('views/vendor/crudbooster/type_components/'.$type.'/component.blade.php')))
+@elseif(file_exists(CB::PublishedComponentsPath($type).'/component.blade.php')))
     @include('vendor.crudbooster.type_components.'.$type.'.component')
 @else
     <p class='text-danger'>{{$type}} is not found in type component system</p><br/>

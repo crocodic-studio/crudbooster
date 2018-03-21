@@ -641,6 +641,11 @@ class CRUDBooster
         return base_path('vendor/crocodicstudio/crudbooster/src/views/default/type_components/'.$type);
     }
 
+    public static function PublishedComponentsPath($type = '')
+    {
+        return resource_path('views/vendor/crudbooster/type_components/'.$type);
+    }
+
     public static function extractBetween($raw, $mark)
     {
         list($before, $_rest) = explode("# START $mark DO NOT REMOVE THIS LINE", $raw);
