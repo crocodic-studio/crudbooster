@@ -2,6 +2,7 @@
 
 namespace crocodicstudio\crudbooster\helpers;
 
+use crocodicstudio\crudbooster\helpers\Cache as LaravelCache;
 use crocodicstudio\crudbooster\Modules\LogsModule\LogsRepository;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator;
 use Session;
@@ -330,12 +331,12 @@ class CRUDBooster
 
     public static function getCache($section, $cacheName)
     {
-        return \crocodicstudio\crudbooster\helpers\Cache::get($section, $cacheName);
+        return LaravelCache::get($section, $cacheName);
     }
 
     public static function putCache($section, $cacheName, $cacheValue)
     {
-        return \crocodicstudio\crudbooster\helpers\Cache::put($section, $cacheName, $cacheValue);
+        return LaravelCache::put($section, $cacheName, $cacheValue);
     }
 
     public static function valid($arr = [], $type = 'json')
@@ -375,7 +376,7 @@ class CRUDBooster
 
     public static function forgetCache($section, $cacheName)
     {
-        return \crocodicstudio\crudbooster\helpers\Cache::forgetCache($section, $cacheName);
+        return LaravelCache::forgetCache($section, $cacheName);
     }
 
     public static function getForeignKey($parent_table, $child_table)
