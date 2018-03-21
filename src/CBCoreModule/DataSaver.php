@@ -28,7 +28,7 @@ class DataSaver
             $inputdata = request($name);
 
             //Insert Data Checkbox if Type Datatable
-            if (in_array($row['type'], ['checkbox', 'select2']) && $row['relationship_table']) {
+            if ($this->isRelationship($row)) {
                 $this->_updateRelations($row, $id, $inputdata);
             }
 
@@ -60,7 +60,7 @@ class DataSaver
             $inputData = request($name);
 
             //Insert Data Checkbox if Type Datatable
-            if (in_array($row['type'] , ['select2', 'checkbox']) && $row['relationship_table']) {
+            if ($this->isRelationship($row)) {
                 $this->_updateRelations($row, $id, $inputData);
             }
 
@@ -109,7 +109,7 @@ class DataSaver
     {
         list($pivotTable, $foreignKey2, $foreignKey) = $this->deleteFromPivot($row, $id);
 
-        if (!$inputData) {
+        if (! $inputData) {
             return null;
         }
 
@@ -123,25 +123,15 @@ class DataSaver
      */
     private function insertChildTable($id, $row)
     {
-        $name = str_slug($row['label'], '');
         $columns = $row['columns'];
-        $childArray = [];
 
         $childTable = CRUDBooster::parseSqlTable($row['table'])['table'];
         $fk = $row['foreign_key'];
 
         DB::table($childTable)->where($fk, $id)->delete();
 
-        $countInput = count(request($name.'-'.$columns[0]['name'])) - 1;
-        for ($i = 0; $i <= $countInput; $i++) {
-            $columnData = [];
-            $columnData[$fk] = $id;
-            foreach ($columns as $col) {
-                $colname = $col['name'];
-                $columnData[$colname] = request($name.'-'.$colname)[$i];
-            }
-            $childArray[] = $columnData;
-        }
+        $name = str_slug($row['label'], '');
+        $childArray = $this->newData($id, $name, $columns, $fk);
 
         DB::table($childTable)->insert(array_reverse($childArray));
     }
@@ -156,10 +146,7 @@ class DataSaver
     private function insertIntoPivot($id, $inputData, $pivotTable, $foreignKey, $foreignKey2)
     {
         foreach ($inputData as $inputId) {
-            DB::table($pivotTable)->insert([
-                $foreignKey => $id,
-                $foreignKey2 => $inputId,
-            ]);
+            DB::table($pivotTable)->insert([$foreignKey => $id, $foreignKey2 => $inputId]);
         }
     }
 
@@ -178,5 +165,37 @@ class DataSaver
         DB::table($pivotTable)->where($foreignKey, $id)->delete();
 
         return [$pivotTable, $foreignKey2, $foreignKey];
+    }
+
+    /**
+     * @param $id
+     * @param $name
+     * @param $columns
+     * @param $fk
+     * @return array
+     */
+    private function newData($id, $name, $columns, $fk)
+    {
+        $countInput = count(request($name.'-'.$columns[0]['name'])) - 1;
+        $childArray = [];
+        for ($i = 0; $i <= $countInput; $i++) {
+            $columnData = [];
+            $columnData[$fk] = $id;
+            foreach ($columns as $col) {
+                $colname = $col['name'];
+                $columnData[$colname] = request($name.'-'.$colname)[$i];
+            }
+            $childArray[] = $columnData;
+        }
+
+        return $childArray;
+    }
+    /**
+     * @param $row
+     * @return bool
+     */
+    private function isRelationship($row)
+    {
+        return in_array($row['type'], ['checkbox', 'select2']) && $row['relationship_table'];
     }
 }
