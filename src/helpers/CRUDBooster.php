@@ -638,7 +638,9 @@ class CRUDBooster
 
     public static function componentsPath($type = '')
     {
-        return base_path('vendor/crocodicstudio/crudbooster/src/views/default/type_components/'.$type);
+        $componentPath = implode(DIRECTORY_SEPARATOR, ['vendor', 'crocodicstudio', 'crudbooster', 'src', 'views', 'default', 'type_components', $type]);
+        return base_path($componentPath);
+
     }
 
     public static function PublishedComponentsPath($type = '')

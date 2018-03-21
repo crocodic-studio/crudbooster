@@ -380,7 +380,6 @@ class CBController extends Controller
     public function inputAssignment($id = null)
     {
         $hide_form = (request('hide_form')) ? unserialize(request('hide_form')) : [];
-        $componentPath = implode(DIRECTORY_SEPARATOR, ['vendor', 'crocodicstudio', 'crudbooster', 'src', 'views', 'default', 'type_components', '']);
 
         foreach ($this->form as $ro) {
             $name = $ro['name'];
@@ -395,7 +394,7 @@ class CBController extends Controller
                 continue;
             }
 
-            $hookPath = base_path($componentPath.$type.DIRECTORY_SEPARATOR.'hookInputAssignment.php');
+            $hookPath = \CB::componentsPath($type).DIRECTORY_SEPARATOR.'hookInputAssignment.php';
             if (file_exists($hookPath)) {
                 require_once($hookPath);
             }
