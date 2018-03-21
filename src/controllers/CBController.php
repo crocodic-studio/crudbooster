@@ -373,7 +373,7 @@ class CBController extends Controller
 
         $this->insertLog('log_add', $this->arr[$this->title_field]);
 
-        $this->sendResponseForAdd();
+        $this->sendResponseForSave('alert_add_data_success');
     }
 
 
@@ -465,7 +465,7 @@ class CBController extends Controller
 
         $this->insertLog('log_update', $this->arr[$this->title_field]);
 
-        $this->sendResponseForUpdate();
+        $this->sendResponseForSave('alert_update_data_success');
     }
 
     public function getDelete($id)
@@ -621,31 +621,18 @@ class CBController extends Controller
         CB::redirect(Request::server('HTTP_REFERER'), cbTrans('alert_delete_data_success'), 'success');
     }
 
-    private function sendResponseForAdd()
+    private function sendResponseForSave($msg)
     {
         if ($this->return_url) {
             if (request('submit') == cbTrans('button_save_more')) {
-                CB::redirect(Request::server('HTTP_REFERER'), cbTrans('alert_add_data_success'), 'success');
+                CB::redirect(Request::server('HTTP_REFERER'), cbTrans($msg), 'success');
             }
-            CB::redirect($this->return_url, cbTrans('alert_add_data_success'), 'success');
+            CB::redirect($this->return_url, cbTrans($msg), 'success');
         }
         if (request('submit') == cbTrans('button_save_more')) {
-            CB::redirect(CB::mainpath('add'), cbTrans('alert_add_data_success'), 'success');
+            CB::redirect(CB::mainpath('add'), cbTrans($msg), 'success');
         }
-        CB::redirect(CB::mainpath(), cbTrans('alert_add_data_success'), 'success');
-    }
-
-    private function sendResponseForUpdate()
-    {
-        if ($this->return_url) {
-            CB::redirect($this->return_url, cbTrans('alert_update_data_success'), 'success');
-        }
-
-        if (request('submit') == cbTrans('button_save_more')) {
-            CB::redirect(CB::mainpath('add'), cbTrans('alert_update_data_success'), 'success');
-        }
-
-        CB::redirect(CB::mainpath(), cbTrans('alert_update_data_success'), 'success');
+        CB::redirect(CB::mainpath(), cbTrans($msg), 'success');
     }
 
     /**
