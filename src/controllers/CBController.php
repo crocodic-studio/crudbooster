@@ -149,7 +149,7 @@ class CBController extends Controller
         $this->data['addaction'] = ($this->show_addaction) ? $this->addaction : null;
         $this->data['table'] = $this->table;
         $this->data['title_field'] = $this->title_field;
-        $this->data['appname'] = CB::getSetting('appname');
+        $this->data['appname'] = cbGetsetting('appname');
         $this->data['alerts'] = $this->alert;
         $this->data['index_button'] = $this->index_button;
         $this->data['show_numbering'] = $this->show_numbering;
@@ -182,7 +182,7 @@ class CBController extends Controller
         $this->data['parent_id'] = (request('parent_id')) ?: $this->parent_id;
 
         if (CB::getCurrentMethod() == 'getProfile') {
-            Session::put('current_row_id', CB::myId());
+            session()->put('current_row_id', CB::myId());
             $this->data['return_url'] = Request::fullUrl();
         }
 
@@ -424,7 +424,7 @@ class CBController extends Controller
 
         $page_title = cbTrans("edit_data_page_title", ['module' => CB::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
         $command = 'edit';
-        Session::put('current_row_id', $id);
+        session()->put('current_row_id', $id);
 
         return view('crudbooster::default.form', compact('id', 'row', 'page_title', 'command'));
     }
@@ -481,7 +481,7 @@ class CBController extends Controller
         $page_title = cbTrans('detail_data_page_title', ['module' => CB::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
         $command = 'detail';
 
-        Session::put('current_row_id', $id);
+        session()->put('current_row_id', $id);
 
         return view('crudbooster::default.form', compact('row', 'page_title', 'command', 'id'));
     }
@@ -502,7 +502,7 @@ class CBController extends Controller
         $rows = Excel::load($file, function ($reader) {
         })->get();
 
-        Session::put('total_data_import', count($rows));
+        session()->put('total_data_import', count($rows));
 
         $data_import_column = [];
         foreach ($rows as $value) {
@@ -540,8 +540,8 @@ class CBController extends Controller
     public function postActionSelected()
     {
         $this->cbLoader();
-        $selectedIds = Request::input('checkbox');
-        $button_name = Request::input('button_name');
+        $selectedIds = request('checkbox');
+        $button_name = request('button_name');
 
         if (! $selectedIds) {
             CB::redirect($_SERVER['HTTP_REFERER'], 'Please select at least one data!', 'warning');

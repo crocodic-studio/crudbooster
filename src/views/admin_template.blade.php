@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{{ ($page_title)?CRUDBooster::getSetting('appname').': '.strip_tags($page_title):"Admin Area" }}</title>
+    <title>{{ ($page_title)?cbGetsetting('appname').': '.strip_tags($page_title):"Admin Area" }}</title>
     @include('crudbooster::_admin_template.meta')
     @include('crudbooster::_admin_template.css')
 
@@ -63,7 +63,7 @@
                     <li class="active">{{$module->name}}</li>
                 </ol>
             @else
-                <h1>{{CRUDBooster::getSetting('appname')}}
+                <h1>{{cbGetsetting('appname')}}
                     <small>Information</small>
                 </h1>
             @endif

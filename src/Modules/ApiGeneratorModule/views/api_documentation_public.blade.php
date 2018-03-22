@@ -19,7 +19,7 @@
 <body>
 <div class="container">
     <div class="page-header">
-        <h1>API Documentation {{CRUDBooster::getSetting('appname')}}</h1>
+        <h1>API Documentation {{cbGetsetting('appname')}}</h1>
     </div>
 
     <div class='box'>

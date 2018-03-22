@@ -52,7 +52,7 @@ class AdminApiGeneratorController extends CBController
         $data = [];
         $data['variables'] = [];
         $data['info'] = [
-            'name' => CRUDBooster::getSetting('appname').' - API',
+            'name' => cbGetsetting('appname').' - API',
             '_postman_id' => "1765dd11-73d1-2978-ae11-36921dc6263d",
             'description' => '',
             'schema' => 'https://schema.getpostman.com/json/collection/v2.0.0/collection.json',
@@ -99,7 +99,7 @@ class AdminApiGeneratorController extends CBController
 
         return \Response::make($json, 200, [
             'Content-Type' => 'application/json',
-            'Content-Disposition' => 'attachment; filename='.CRUDBooster::getSetting('appname').' - API For POSTMAN.json',
+            'Content-Disposition' => 'attachment; filename='.cbGetsetting('appname').' - API For POSTMAN.json',
         ]);
     }
 

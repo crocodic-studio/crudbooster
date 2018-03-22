@@ -1,5 +1,5 @@
 @push('bottom')
-    <script src="https://maps.googleapis.com/maps/api/js?key={{CRUDBooster::getSetting('google_api_key')}}&libraries=places"
+    <script src="https://maps.googleapis.com/maps/api/js?key={{cbGetsetting('google_api_key')}}&libraries=places"
             async defer></script>
 @endpush
 
