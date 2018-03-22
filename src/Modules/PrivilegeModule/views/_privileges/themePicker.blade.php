@@ -1,6 +1,6 @@
-<label>{{ cbTrans('chose_theme_color')}}</label>
+<label>{{ trans('privilege.chose_theme_color')}}</label>
 <select name='theme_color' class='form-control' required>
-    <option value=''>{{ cbTrans('chose_theme_color_select')}}</option>
+    <option value=''>{{ trans('privilege.chose_theme_color')}}</option>
     <?php
     $skins = array(
         'skin-blue',
