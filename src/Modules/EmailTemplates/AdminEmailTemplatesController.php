@@ -9,10 +9,10 @@ class AdminEmailTemplatesController extends CBController
 {
     public function cbInit()
     {
-        $this->table = "cms_email_templates";
-        $this->title_field = "name";
+        $this->table = 'cms_email_templates';
+        $this->title_field = 'name';
         $this->limit = 20;
-        $this->orderby = ["id" => "desc"];
+        $this->orderby = ['id' => 'desc'];
         $this->global_privilege = false;
 
         $this->setButtons();
@@ -25,7 +25,7 @@ class AdminEmailTemplatesController extends CBController
     private function setButtons()
     {
         $this->button_table_action = true;
-        $this->button_action_style = "button_icon";
+        $this->button_action_style = 'button_icon';
         $this->button_add = true;
         $this->button_delete = true;
         $this->button_edit = true;
@@ -39,8 +39,8 @@ class AdminEmailTemplatesController extends CBController
     private function setColumns()
     {
         $this->col = [];
-        $this->col[] = ["label" => "Template Name", "name" => "name"];
-        $this->col[] = ["label" => "Slug", "name" => "slug"];
+        $this->col[] = ['label' => 'Template Name', 'name' => 'name'];
+        $this->col[] = ['label' => 'Slug', 'name' => 'slug'];
     }
     //By the way, you can still create your own method in here... :)
 

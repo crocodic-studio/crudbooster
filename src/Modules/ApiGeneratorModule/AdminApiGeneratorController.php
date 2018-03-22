@@ -3,6 +3,7 @@
 namespace crocodicstudio\crudbooster\Modules\ApiGeneratorModule;
 
 use crocodicstudio\crudbooster\controllers\CBController;
+use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -201,9 +202,9 @@ class AdminApiGeneratorController extends CBController
 
             $type_field = CRUDBooster::getFieldType($table, $ro);
 
-            $type_field = (array_search($ro, explode(',', cbConfig('EMAIL_FIELDS_CANDIDATE')))) ? "email" : $type_field;
-            $type_field = (array_search($ro, explode(',', cbConfig('IMAGE_FIELDS_CANDIDATE')))) ? "image" : $type_field;
-            $type_field = (array_search($ro, explode(',', cbConfig('PASSWORD_FIELDS_CANDIDATE')))) ? "password" : $type_field;
+            $type_field = FieldDetector::isEmail($ro) ? "email" : $type_field;
+            $type_field = FieldDetector::isImage($ro) ? "image" : $type_field;
+            $type_field = FieldDetector::isPassword($ro) ? "password" : $type_field;
 
             $type_field = (substr($ro, -3) == '_id') ? "integer" : $type_field;
             $type_field = (substr($ro, 0, 3) == 'id_') ? "integer" : $type_field;
@@ -215,7 +216,7 @@ class AdminApiGeneratorController extends CBController
             }
             $table2 = substr($ro, 3);
             foreach (DB::getSchemaBuilder()->getColumnListing($table2) as $col) {
-                if (in_array($col, ['id', 'created_at', 'updated_at', 'deleted_at'])) {
+                if (FieldDetector::isExceptional($col)) {
                     continue;
                 }
                 if (substr($col, 0, 3) == 'id_') {

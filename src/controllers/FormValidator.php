@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Request;
 use CRUDBooster;
 
-
 class FormValidator
 {
     private $table;
@@ -16,33 +15,9 @@ class FormValidator
     public function validate($id = null, $form, $table)
     {
         $this->table = $table;
-        $request_all = Request::all();
-        $array_input = [];
-        $componentPath = implode(DIRECTORY_SEPARATOR, ["vendor", "crocodicstudio", "crudbooster", "src", "views", "default", "type_components", ""]);
+        $rules = $this->getRules($id, $form);
 
-        foreach ($form as $di) {
-            $ai = [];
-            $name = $di['name'];
-            $type = $di['type'];
-
-            if (! $name) {continue;}
-
-            if ($di['required'] && ! Request::hasFile($name)) {
-                $ai[] = 'required';
-            }
-
-            if (file_exists(base_path($componentPath.$type.DIRECTORY_SEPARATOR.'hookInputValidation.php'))) {
-                require_once(base_path($componentPath.$type.DIRECTORY_SEPARATOR.'hookInputValidation.php'));
-            }
-
-            if (@$di['validation']) {
-                $array_input[$name] = $this->prepareValidationRules($id, $di);
-            } else {
-                $array_input[$name] = implode('|', $ai);
-            }
-        }
-
-        $validator = Validator::make($request_all, $array_input);
+        $validator = Validator::make(Request::all(), $rules);
 
         if (! $validator->fails()) {
             return null;
@@ -50,12 +25,49 @@ class FormValidator
 
         $this->sendFailedValidationResponse($validator);
     }
+
+    /**
+     * @param $id
+     * @param $form
+     * @return mixed
+     */
+    private function getRules($id, $form)
+    {
+        $cmpPath = implode(DIRECTORY_SEPARATOR, ["vendor", "crocodicstudio", "crudbooster", "src", "views", "default", "type_components", ""]);
+        $rules = [];
+        foreach ($form as $formInput) {
+            $name = $formInput['name'];
+            if (! $name) {
+                continue;
+            }
+
+            $ai = [];
+            if ($formInput['required'] && ! Request::hasFile($name)) {
+                $ai[] = 'required';
+            }
+
+            $hookValidationPath = base_path($cmpPath.$formInput['type'].DIRECTORY_SEPARATOR.'hookInputValidation.php');
+            if (file_exists($hookValidationPath)) {
+                require_once($hookValidationPath);
+            }
+            unset($hookValidationPath);
+
+            if (@$formInput['validation']) {
+                $rules[$name] = $this->parseValidationRules($id, $formInput);
+            } else {
+                $rules[$name] = implode('|', $ai);
+            }
+        }
+
+        return $rules;
+    }
+
     /**
      * @param $id
      * @param $di
      * @return array
      */
-    private function prepareValidationRules($id, $di)
+    private function parseValidationRules($id, $di)
     {
         $exp = explode('|', $di['validation']);
 
@@ -99,25 +111,23 @@ class FormValidator
 
         return implode('|', $exp);
     }
+
     /**
      * @param $validator
      */
     private function sendFailedValidationResponse($validator)
     {
         $message = $validator->messages();
-        $message_all = $message->all();
+        $msg = [
+            'message' => cbTrans('alert_validation_error', ['error' => implode(', ', $message->all())]),
+            'message_type' => 'warning',
+        ];
 
         if (Request::ajax()) {
-            $resp = response()->json([
-                'message' => trans('crudbooster.alert_validation_error', ['error' => implode(', ', $message_all)]),
-                'message_type' => 'warning',
-            ]);
+            $resp = response()->json($msg);
             sendAndTerminate($resp);
         }
-
-        sendAndTerminate(redirect()->back()->with("errors", $message)->with([
-            'message' => trans('crudbooster.alert_validation_error', ['error' => implode(', ', $message_all)]),
-            'message_type' => 'warning',
-        ])->withInput());
+        $resp = redirect()->back()->with("errors", $message)->with($msg)->withnput();
+        sendAndTerminate($resp);
     }
 }

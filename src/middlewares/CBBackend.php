@@ -14,41 +14,36 @@ class CBBackend
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
      * @return mixed
      */
     public function handle($request, Closure $next)
-    {   
+    {
         $adminPath = cbConfig('ADMIN_PATH', 'admin');
 
-        if(CRUDBooster::myId()==''){
-            $url = url($adminPath.'/login'); 
-            return redirect($url)->with('message',cbTrans('not_logged_in'));
+        if (CRUDBooster::myId() == '') {
+            return redirect(url($adminPath.'/login'))->with('message', cbTrans('not_logged_in'));
         }
 
-        if(CRUDBooster::isLocked()){
-            $url = url($adminPath.'/lock-screen');
-            return redirect($url);
+        if (CRUDBooster::isLocked()) {
+            return redirect(url($adminPath.'/lock-screen'));
         }
 
         $moduleName = $request->segment(2);
         $this->module = CRUDBooster::getCurrentModule();
-        $exception = ['notifications','users/profile','users/edit-save'];
 
-        if(count($exception)) {
-            foreach($exception as $e) {                
-                if($request->is($adminPath.'/'.$e.'*')) {
-                    return $next($request);
-                }
+        foreach (['notifications', 'users/profile', 'users/edit-save'] as $e) {
+            if ($request->is($adminPath.'/'.$e.'*')) {
+                return $next($request);
             }
         }
 
-        if($request->is($adminPath)) {
+        if ($request->is($adminPath)) {
             return $next($request);
         }
 
-        $this->url = $adminPath . '/' . $moduleName;
+        $this->url = $adminPath.'/'.$moduleName;
 
         $this->guardView($request);
         $this->guardCreate($request);
@@ -65,7 +60,7 @@ class CBBackend
     private function guardView($request)
     {
         if ($request->is($this->url.'*') && ! CRUDBooster::canView()) {
-            CRUDBooster::insertLog(cbTrans('log_try_view', ['module' => $this->module->name]));
+            $this->logIt('log_try_view');
             CRUDBooster::denyAccess();
         }
     }
@@ -76,7 +71,7 @@ class CBBackend
     private function guardCreate($request)
     {
         if ($request->is($this->url.'/add*') && ! CRUDBooster::canCreate()) {
-            CRUDBooster::insertLog(cbTrans('log_try_add', ['module' => $this->module->name]));
+            $this->logIt('log_try_add');
             CRUDBooster::denyAccess();
         }
     }
@@ -87,7 +82,7 @@ class CBBackend
     private function guardUpdate($request)
     {
         if ($request->is($this->url.'/edit*') && ! CRUDBooster::canUpdate()) {
-            CRUDBooster::insertLog(cbTrans('log_try_edit', ['module' => $this->module->name]));
+            $this->logIt('log_try_edit');
             CRUDBooster::denyAccess();
         }
     }
@@ -98,7 +93,7 @@ class CBBackend
     private function guardDelete($request)
     {
         if ($request->is($this->url.'/delete*') && ! CRUDBooster::canDelete()) {
-            CRUDBooster::insertLog(cbTrans('log_try_delete', ['module' => $this->module->name]));
+            $this->logIt('log_try_delete');
             CRUDBooster::denyAccess();
         }
     }
@@ -109,8 +104,16 @@ class CBBackend
     private function guardRead($request)
     {
         if ($request->is($this->url.'/detail*') && ! CRUDBooster::canRead()) {
-            CRUDBooster::insertLog(cbTrans('log_try_view', ['module' => $this->module->name]));
+            $this->logIt('log_try_view');
             CRUDBooster::denyAccess();
         }
+    }
+
+    /**
+     * @param $key
+     */
+    private function logIt($key)
+    {
+        CRUDBooster::insertLog(cbTrans($key, ['module' => $this->module->name]));
     }
 }

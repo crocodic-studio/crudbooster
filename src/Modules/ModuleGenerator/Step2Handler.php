@@ -14,7 +14,7 @@ class Step2Handler
 
         $columns = CRUDBooster::getTableColumns($module->table_name);
 
-        $controllerCode = file_get_contents(controller_path($module->controller));
+        $controllerCode = (readCtrlContent($module->controller));
 
         $data = [];
         $data['id'] = $id;
@@ -36,18 +36,10 @@ class Step2Handler
     {
         $id = Request::input('id');
         $controller = DB::table('cms_moduls')->where('id', $id)->first()->controller;
-        $controller_path = controller_path($controller);
 
-        $code = file_get_contents($controller_path);
-        $rawBefore = explode("# START COLUMNS DO NOT REMOVE THIS LINE", $code);
-        $rawAfter = explode("# END COLUMNS DO NOT REMOVE THIS LINE", $rawBefore[1]);
-
-        $fileResult = trim($rawBefore[0]);
-        $fileResult .= "\n\n            # START COLUMNS DO NOT REMOVE THIS LINE\n";
-        $fileResult .= "            \$this->col = [];\n";
-        $fileResult .= implode("\n", $this->makeColumnPhpCode());
-        $fileResult .= "\n            # END COLUMNS DO NOT REMOVE THIS LINE\n\n            ";
-        $fileResult .= trim($rawAfter[1]);
+        $newCode = $this->makeColumnPhpCode();
+        $code = readCtrlContent($controller);
+        $fileResult = \CB::replaceBetweenMark($code, 'COLUMNS', $newCode);
 
         $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookQueryIndex', g('hookQueryIndex'));
         $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookRowIndex', g('hookRowIndex'));
@@ -58,7 +50,7 @@ class Step2Handler
         $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookBeforeDelete', g('hookBeforeDelete'));
         $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookAfterDelete', g('hookAfterDelete'));
 
-        file_put_contents($controller_path, $fileResult);
+        putCtrlContent($controller, $fileResult);
 
         return redirect()->route("AdminModulesControllerGetStep3", ["id" => $id]);
     }
@@ -67,14 +59,15 @@ class Step2Handler
      */
     private function makeColumnPhpCode()
     {
-        $labels = Request::input('column');
-        $name = Request::input('name');
-        $isImage = Request::input('is_image');
-        $isDownload = Request::input('is_download');
-        $callback = Request::input('callback');
-        $width = Request::input('width');
+        $labels = request('column');
+        $name = request('name');
+        $isImage = request('is_image');
+        $isDownload = request('is_download');
+        $callback = request('callback');
+        $width = request('width');
 
         $columnScript = [];
+        $columnScript[] = '            $this->col[] = [];';
         foreach ($labels as $i => $label) {
 
             if (! $name[$i]) {
@@ -97,7 +90,6 @@ class Step2Handler
 
             $columnScript[] = '            $this->col[] = ['.implode(", ", $colProperties).'];';
         }
-
-        return $columnScript;
+        return implode("\n", $columnScript);
     }
 }

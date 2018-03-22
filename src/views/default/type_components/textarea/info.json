@@ -1,5 +1,5 @@
 {
-  "title": "Text Area Input",
-  "type": "textarea",
+  'title': "Text Area Input",
+  'type': "textarea",
   "options": []
 }

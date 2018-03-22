@@ -38,30 +38,18 @@ if (! function_exists('is_checked')) {
      */
     function is_checked($format, $value, $option_value)
     {
-        switch ($format) {
-            case 'JSON':
-                $valueFormat = json_decode($value, true);
-                break;
-            case 'COMMA_SEPARATOR':
-                $valueFormat = explode(', ', $value);
-                break;
-            case 'SEMICOLON_SEPARATOR':
-                $valueFormat = explode('; ', $value);
-                break;
-            default:
-                $valueFormat = [];
-                break;
+        if ($format == 'JSON') {
+            $valueFormat = json_decode($value, true);
+        } elseif ($format == 'COMMA_SEPARATOR') {
+            $valueFormat = explode(', ', $value);
+        } elseif ($format == 'SEMICOLON_SEPARATOR') {
+            $valueFormat = explode('; ', $value);
+        } else {
+            $valueFormat = [];
         }
         $checked = (in_array($option_value, $valueFormat)) ? "checked" : "";
 
         return $checked;
-    }
-}
-
-if (! function_exists('parseControllerConfigToArray')) {
-    function parseControllerConfigToArray($code)
-    {
-        return \crocodicstudio\crudbooster\helpers\Parsers\ControllerConfigParser::parse($code);
     }
 }
 
@@ -83,6 +71,20 @@ if (! function_exists('controller_path')) {
     function controller_path($controller)
     {
         return app_path('Http/Controllers/'.$controller.'.php');
+    }
+}
+
+if (! function_exists('readCtrlContent')) {
+    function readCtrlContent($ctrl)
+    {
+        return file_get_contents(controller_path($ctrl));
+    }
+}
+
+if (! function_exists('putCtrlContent')) {
+    function putCtrlContent($ctrl)
+    {
+        return file_put_contents(controller_path($ctrl));
     }
 }
 
@@ -246,32 +248,30 @@ if (! function_exists('findSelected')) {
     /**
      * @param $rawvalue
      * @param $form
-     * @param $option_value
+     * @param $optionValue
      * @return string
      */
-    function findSelected($rawvalue, $form, $option_value)
+    function findSelected($rawvalue, $form, $optionValue)
     {
-        $value = $rawvalue;
         if (! $rawvalue) {
             return '';
         }
+        $value = $rawvalue;
 
         if ($form['options']['multiple'] !== true) {
-            return ($option_value == $value) ? "selected" : "";
+            return ($optionValue == $value) ? "selected" : "";
         }
 
-        switch ($form['options']['multiple_result_format']) {
-            case 'JSON':
-                $selected = (in_array($option_value, json_decode($rawvalue, true) ?: [])) ? "selected" : "";
-                break;
-            default:
-            case 'COMMA_SEPARATOR':
-                $selected = (in_array($option_value, explode(', ', $rawvalue))) ? "selected" : "";
-                break;
-            case 'SEMICOLON_SEPARATOR':
-                $selected = (in_array($option_value, explode('; ', $rawvalue))) ? "selected" : "";
-                break;
+        $val = $form['options']['multiple_result_format'];
+        if ($val == 'JSON') {
+            $selected = (json_decode($rawvalue, true) ?: []);
+        } elseif ($val == 'SEMICOLON_SEPARATOR') {
+            $selected = explode('; ', $rawvalue);
+        } else {
+            $selected = explode(', ', $rawvalue);
         }
+        in_array($optionValue, $selected) ? "selected" : "";
+
         return $selected;
     }
 }
@@ -281,7 +281,7 @@ if (! function_exists('array_get_keys')) {
      * @param array $_array
      * @param array $keys
      * @param null $default
-     * @return string
+     * @return array
      */
     function array_get_keys(array $_array, array $keys, $default = null)
     {

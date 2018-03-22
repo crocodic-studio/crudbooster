@@ -332,12 +332,7 @@ class CBController extends Controller
 
     public function postFindData()
     {
-        $search = app( Search::class);
-        $q = request('q');
-        $data = request('data');
-        $id = request('id');
-
-        $items = $search->searchData($data, $q, $id);
+        $items = app(Search::class)->searchData(request('data'), request('q'), request('id'));
 
         return response()->json(['items' => $items]);
     }
@@ -364,22 +359,20 @@ class CBController extends Controller
 
         $this->hookBeforeAdd($this->arr);
 
-        app(DataSaver::class)->insert($this);
+        $this->arr[$this->primary_key] = $id = $this->table()->insertGetId($this->arr);
+        app(DataSaver::class)->save($this->table, $id, $this->data_inputan);
 
         $this->hookAfterAdd($this->arr[$this->primary_key]);
 
-        $this->return_url = $this->return_url ?: request('return_url');
-
         $this->insertLog('log_add', $this->arr[$this->title_field]);
 
-        $this->sendResponseForAdd();
+        $this->sendResponseForSave('alert_add_data_success');
     }
 
 
     public function inputAssignment($id = null)
     {
         $hide_form = (request('hide_form')) ? unserialize(request('hide_form')) : [];
-        $componentPath = implode(DIRECTORY_SEPARATOR, ['vendor', 'crocodicstudio', 'crudbooster', 'src', 'views', 'default', 'type_components', '']);
 
         foreach ($this->form as $ro) {
             $name = $ro['name'];
@@ -394,7 +387,7 @@ class CBController extends Controller
                 continue;
             }
 
-            $hookPath = base_path($componentPath.$type.DIRECTORY_SEPARATOR.'hookInputAssignment.php');
+            $hookPath = \CB::componentsPath($type).DIRECTORY_SEPARATOR.'hookInputAssignment.php';
             if (file_exists($hookPath)) {
                 require_once($hookPath);
             }
@@ -415,11 +408,13 @@ class CBController extends Controller
     }
 
     /**
+     * @param null $tableName
      * @return mixed
      */
-    public function table()
+    public function table($tableName = null)
     {
-        return \DB::table($this->table);
+        $tableName = $tableName ?: $this->table;
+        return \DB::table($tableName);
     }
 
     public function getEdit($id)
@@ -445,7 +440,6 @@ class CBController extends Controller
 
     public function postEditSave($id)
     {
-        $saver = app(DataSaver::class);
         $this->cbLoader();
 
         app(FormValidator::class)->validate($id, $this->form, $this->table);
@@ -454,15 +448,14 @@ class CBController extends Controller
         $this->setTimeStamps('updated_at');
 
         $this->hookBeforeEdit($this->arr, $id);
-        $saver->update($id, $this);
+        $this->findRow($id)->update($this->arr);
+        app(DataSaver::class)->save($this->table, $id, $this->data_inputan);
 
         $this->hookAfterEdit($id);
 
-        $this->return_url = $this->return_url ?: request('return_url');
-
         $this->insertLog('log_update', $this->arr[$this->title_field]);
 
-        $this->sendResponseForUpdate();
+        $this->sendResponseForSave('alert_update_data_success');
     }
 
     public function getDelete($id)
@@ -618,31 +611,19 @@ class CBController extends Controller
         CB::redirect(Request::server('HTTP_REFERER'), cbTrans('alert_delete_data_success'), 'success');
     }
 
-    private function sendResponseForAdd()
+    private function sendResponseForSave($msg)
     {
+        $this->return_url = $this->return_url ?: request('return_url');
         if ($this->return_url) {
             if (request('submit') == cbTrans('button_save_more')) {
-                CB::redirect(Request::server('HTTP_REFERER'), cbTrans('alert_add_data_success'), 'success');
+                CB::redirect(Request::server('HTTP_REFERER'), cbTrans($msg), 'success');
             }
-            CB::redirect($this->return_url, cbTrans('alert_add_data_success'), 'success');
+            CB::redirect($this->return_url, cbTrans($msg), 'success');
         }
         if (request('submit') == cbTrans('button_save_more')) {
-            CB::redirect(CB::mainpath('add'), cbTrans('alert_add_data_success'), 'success');
+            CB::redirect(CB::mainpath('add'), cbTrans($msg), 'success');
         }
-        CB::redirect(CB::mainpath(), cbTrans('alert_add_data_success'), 'success');
-    }
-
-    private function sendResponseForUpdate()
-    {
-        if ($this->return_url) {
-            CB::redirect($this->return_url, cbTrans('alert_update_data_success'), 'success');
-        }
-
-        if (request('submit') == cbTrans('button_save_more')) {
-            CB::redirect(CB::mainpath('add'), cbTrans('alert_update_data_success'), 'success');
-        }
-
-        CB::redirect(CB::mainpath(), cbTrans('alert_update_data_success'), 'success');
+        CB::redirect(CB::mainpath(), cbTrans($msg), 'success');
     }
 
     /**

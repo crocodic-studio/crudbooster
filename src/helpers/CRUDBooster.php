@@ -2,6 +2,7 @@
 
 namespace crocodicstudio\crudbooster\helpers;
 
+use crocodicstudio\crudbooster\helpers\Cache as LaravelCache;
 use crocodicstudio\crudbooster\Modules\LogsModule\LogsRepository;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator;
 use Session;
@@ -330,12 +331,12 @@ class CRUDBooster
 
     public static function getCache($section, $cacheName)
     {
-        return \crocodicstudio\crudbooster\helpers\Cache::get($section, $cacheName);
+        return LaravelCache::get($section, $cacheName);
     }
 
     public static function putCache($section, $cacheName, $cacheValue)
     {
-        return \crocodicstudio\crudbooster\helpers\Cache::put($section, $cacheName, $cacheValue);
+        return LaravelCache::put($section, $cacheName, $cacheValue);
     }
 
     public static function valid($arr = [], $type = 'json')
@@ -375,7 +376,7 @@ class CRUDBooster
 
     public static function forgetCache($section, $cacheName)
     {
-        return \crocodicstudio\crudbooster\helpers\Cache::forgetCache($section, $cacheName);
+        return LaravelCache::forgetCache($section, $cacheName);
     }
 
     public static function getForeignKey($parent_table, $child_table)
@@ -636,8 +637,42 @@ class CRUDBooster
         }
     }
 
-    public static function componentsTypePath()
+    public static function componentsPath($type = '')
     {
-        return base_path('vendor/crocodicstudio/crudbooster/src/views/default/type_components/');
+        $componentPath = implode(DIRECTORY_SEPARATOR, ['vendor', 'crocodicstudio', 'crudbooster', 'src', 'views', 'default', 'type_components', $type]);
+        return base_path($componentPath);
+
+    }
+
+    public static function PublishedComponentsPath($type = '')
+    {
+        return resource_path('views/vendor/crudbooster/type_components/'.$type);
+    }
+
+    public static function extractBetween($raw, $mark)
+    {
+        list($before, $_rest) = explode("# START $mark DO NOT REMOVE THIS LINE", $raw);
+        list($_middle, $after) = explode("# END $mark DO NOT REMOVE THIS LINE", $_rest);
+
+        return [trim($before), trim($_middle), trim($after)];
+    }
+
+    /**
+     * @param $phpCode
+     * @param $mark
+     * @param $newCode
+     * @return string
+     */
+    public static function replaceBetweenMark($phpCode, $mark, $newCode)
+    {
+        list($top, $_middle, $bottom) = self::extractBetween($phpCode, $mark);
+
+        $_code = $top."\n\n";
+        $_code .= "            # START $mark DO NOT REMOVE THIS LINE\n";
+        $_code .= $newCode."\n";
+        $_code .= "            # END $mark DO NOT REMOVE THIS LINE\n\n";
+        $_code .= '            '.$bottom;
+
+        return $_code;
     }
 }

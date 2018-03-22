@@ -37,21 +37,6 @@ return [
                 * Mungkin halaman yang anda kunjungi telah dihapus oleh Admin<br/>
                 * Anda tetap bisa kembali ke halaman sebelumnya dengan menekan tombol back pada browser anda<br/>',
 
-    'log_try_view'            => 'Mencoba melihat data :name pada :module',
-    'log_try_edit'            => 'Mencoba mengubah data :name pada :module',
-    'log_try_add'             => 'Mencoba menambah data :module',
-    'log_try_add_save'        => 'Mencoba menambah data :name pada :module',
-    'log_try_delete'          => 'Mencoba menghapus :name data pada :module',
-    'log_try_delete_selected' => 'Mencoba menghapus data terpilih :module',
-    'log_try_delete_image'    => 'Mencoba menghapus gambar :name data pada :module',
-    'log_try_update'          => 'Mencoba mengubah :name data pada :module',
-    'log_add'                 => 'Tambah data baru :name pada :module',
-    'log_update'              => 'Memperbaharui data :name pada :module',
-    'log_delete'              => 'Menghapus data :name pada :module',
-    'log_delete_image'        => 'Menghapus gambar :name pada :module',
-    'log_login'               => ':email login dengan IP Address :ip',
-    'log_forgot'              => 'Seseorang dengan IP :ip meminta password ulang :email',
-    'log_logout'              => ':email keluar',
 
     'alert_delete_selected'         => 'Apakah anda yakin ingin menghapus data yang terpilih ?',
     'alert_delete_selected_success' => 'Menghapus data terpilih berhasil !',
@@ -228,23 +213,6 @@ return [
     'confirmation_title'            => 'Konfirmasi',
     'confirmation_text'             => 'Apakah anda yakin akan melakukan aksi ini?',
     'confirmButtonText'             => 'Ya',
-
-        // privilege
-    'privileges_name'               =>'Privilege Name',
-    'privileges_super_admin'        =>'Super Admin',
-    'privileges_standart_user'      =>'Standart user',
-    'privileges_ID'                 =>'ID',
-    'set_as_superadmin'             =>'Set as Superadmin',
-    'chose_theme_color_select'      =>'** Choose Backend Theme Color',
-    'chose_theme_color'             =>' Theme Color',
-    'privileges_configuration'      =>'Privileges Configuration',
-    'privileges_module_list_no'     =>'No.',
-    'privileges_module_list_mod_names'=>'Module\'s Name',
-    'privileges_module_list_view'   =>'View',
-    'privileges_module_list_create' =>'Create',
-    'privileges_module_list_read'   =>'Read',
-    'privileges_module_list_update' =>'Update',
-    'privileges_module_list_delete' =>'Delete',
     
     //datamodal 
     'datamodal_select'=>'Select',

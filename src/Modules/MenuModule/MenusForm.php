@@ -7,20 +7,20 @@ use crocodicstudio\crudbooster\controllers\Helpers\FontAwesome;
 class MenusForm
 {
     /**
-     * @param $module_id
-     * @param $statistic_id
+     * @param $moduleId
+     * @param $statisticId
      * @param $row
      * @return array
      */
-    static function makeForm($statistic_id, $module_id, $row)
+    static function makeForm($statisticId, $moduleId, $row)
     {
         $form = [];
         $form[] = [
-            "label" => "Privilege(s)",
-            "name" => "cms_privileges",
-            "type" => "select2_datatable",
-            "placeholder" => "** You can choose multiple privileges",
-            "options" => [
+            'label' => 'Privilege(s)',
+            'name' => 'cms_privileges',
+            'type' => 'select2_datatable',
+            'placeholder' => '** You can choose multiple privileges',
+            'options' => [
                 'table' => 'cms_privileges',
                 'field_label' => 'name',
                 'field_value' => 'name',
@@ -34,55 +34,55 @@ class MenusForm
             ],
         ];
         $form[] = [
-            "label" => "Name",
-            "name" => "name",
-            "type" => "text",
-            "required" => true,
-            "validation" => "required|min:3|max:255|alpha_spaces",
-            "placeholder" => "You can only enter the letter only",
+            'label' => 'Name',
+            'name' => 'name',
+            'type' => 'text',
+            'required' => true,
+            'validation' => 'required|min:3|max:255|alpha_spaces',
+            'placeholder' => 'You can only enter the letter only',
         ];
         $form[] = [
-            "label" => "Type",
-            "name" => "type",
-            "type" => "radio",
-            "required" => true,
-            'dataenum' => ['Module', 'Statistic', 'URL', 'Controller & Method', 'Route'],
-            'value' => 'Module',
+            'label' => 'Type',
+            'name' => 'type',
+            'type' => 'radio',
+            'required' => true,
+            'dataenum' => MenuTypes::all(),
+            'value' => MenuTypes::Module,
         ];
 
         $form[] = [
-            "label" => "Module",
-            "name" => "module_slug",
-            "type" => "select2_datatable",
-            "options" => [
-                "table" => "cms_moduls",
-                "field_label" => "name",
-                "field_value" => "id",
-                "sql_where" => "is_protected = 0",
+            'label' => 'Module',
+            'name' => 'module_slug',
+            'type' => 'select2_datatable',
+            'options' => [
+                'table' => 'cms_moduls',
+                'field_label' => 'name',
+                'field_value' => 'id',
+                'sql_where' => 'is_protected = 0',
             ],
-            "value" => $module_id,
+            'value' => $moduleId,
         ];
 
         $form[] = [
-            "label" => "Statistic",
-            "name" => "statistic_slug",
-            "type" => "select2_datatable",
-            "options" => [
-                "table" => "cms_statistics",
-                "field_label" => "name",
-                "field_value" => "id",
+            'label' => 'Statistic',
+            'name' => 'statistic_slug',
+            'type' => 'select2_datatable',
+            'options' => [
+                'table' => 'cms_statistics',
+                'field_label' => 'name',
+                'field_value' => 'id',
             ],
-            "style" => "display:none",
-            "value" => $statistic_id,
+            'style' => 'display:none',
+            'value' => $statisticId,
         ];
 
         $form[] = [
-            "label" => "Value",
-            "name" => "path",
-            "type" => "text",
+            'label' => 'Value',
+            'name' => 'path',
+            'type' => 'text',
             'help' => 'If you select type controller, you can fill this field with controller name, you may include the method also',
             'placeholder' => 'NameController or NameController@methodName',
-            "style" => "display:none",
+            'style' => 'display:none',
         ];
 
         $fontawesome = FontAwesome::cssClass();
@@ -112,22 +112,22 @@ class MenusForm
         ];
 
         $form[] = [
-            "label" => "Active",
-            "name" => "is_active",
-            "type" => "radio",
-            "required" => true,
-            "validation" => "required|integer",
-            "dataenum" => ['1|Active', '0|InActive'],
+            'label' => 'Active',
+            'name' => 'is_active',
+            'type' => 'radio',
+            'required' => true,
+            'validation' => 'required|integer',
+            'dataenum' => ['1|Active', '0|InActive'],
             'value' => '1',
         ];
 
         $form[] = [
-            "label" => "Dashboard",
-            "name" => "is_dashboard",
-            "type" => "radio",
-            "required" => true,
-            "validation" => "required|integer",
-            "dataenum" => ['1|Yes', '0|No'],
+            'label' => 'Dashboard',
+            'name' => 'is_dashboard',
+            'type' => 'radio',
+            'required' => true,
+            'validation' => 'required|integer',
+            'dataenum' => ['1|Yes', '0|No'],
             'value' => '0',
         ];
 

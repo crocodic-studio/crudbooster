@@ -36,21 +36,6 @@ return [
                 * ربما تم حذف الصفحة<br/>
                 * يمكنك العودة للخلف وتجربة رابط اخر<br/>',
 
-    'log_try_view'            => 'حاول عرض  :name في :module',
-    'log_try_edit'            => 'حاول تعديل بيانات :name في :module',
-    'log_try_add'             => 'حاول اضافة بيانات في :module',
-    'log_try_add_save'        => 'حاول اضافة بيانات :name data في :module',
-    'log_try_delete'          => 'حاول حذف :name data في :module',
-    'log_try_delete_selected' => 'حاول حذف في :module',
-    'log_try_delete_image'    => 'حاول حذف الصور من :name data في :module',
-    'log_try_update'          => 'حاول تعديل الاسم :name data في :module',
-    'log_add'                 => 'اضافة بيانات جديدة :name في :module',
-    'log_update'              => 'تعديل :name في :module',
-    'log_delete'              => 'حذف :name في :module',
-    'log_delete_image'        => 'حذف الصورة :name في :module',
-    'log_login'               => ':email سجل دخل من رقم آيبي :ip',
-    'log_forgot'              => 'شخصا ما من الآيبي :ip طلب اعاة تعيين كلمة المرور :email',
-    'log_logout'              => ':email تسجيل خروج',
 
     'alert_delete_selected'         => 'هل آنت متآكد من حئف كافة البيانات المحددة ?',
     'alert_delete_selected_success' => 'البيانات المحددة تم حذفها بنجاح !',
@@ -221,23 +206,6 @@ return [
     //filemanager
     'chose_an_image'               => 'اختر صورة ',
     'chose_an_file'                => 'اختر ملف ',
-
-        // privilege
-    'privileges_name'               =>'Privilege Name',
-    'privileges_super_admin'        =>'Super Admin',
-    'privileges_standart_user'      =>'Standart user',
-    'privileges_ID'                 =>'ID',
-    'set_as_superadmin'             =>'Set as Superadmin',
-    'chose_theme_color_select'      =>'** Choose Backend Theme Color',
-    'chose_theme_color'             =>' Theme Color',
-    'privileges_configuration'      =>'Privileges Configuration',
-    'privileges_module_list_no'     =>'No.',
-    'privileges_module_list_mod_names'=>'Module\'s Name',
-    'privileges_module_list_view'   =>'View',
-    'privileges_module_list_create' =>'Create',
-    'privileges_module_list_read'   =>'Read',
-    'privileges_module_list_update' =>'Update',
-    'privileges_module_list_delete' =>'Delete',
 
      //datamodal 
     'datamodal_select'=>'Select',

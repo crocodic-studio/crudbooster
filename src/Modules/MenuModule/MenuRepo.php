@@ -9,7 +9,7 @@ class MenuRepo
 {
     public static function sidebarMenu()
     {
-        $menu_active = DB::table('cms_menus')
+        $menuActive = self::table()
             ->where('cms_privileges', CRUDBooster::myPrivilegeId())
             ->where('parent_id', 0)->where('is_active', 1)
             ->where('is_dashboard', 0)
@@ -17,14 +17,14 @@ class MenuRepo
             ->select('cms_menus.*')
             ->get();
 
-        foreach ($menu_active as &$menu) {
+        foreach ($menuActive as &$menu) {
 
             $url = self::menuUrl($menu);
 
             $menu->url = $url;
             $menu->url_path = trim(str_replace(url('/'), '', $url), "/");
 
-            $child = DB::table('cms_menus')
+            $child = self::table()
                 ->where('is_dashboard', 0)
                 ->where('is_active', 1)
                 ->where('cms_privileges', 'like', '%"'.CRUDBooster::myPrivilegeName().'"%')
@@ -44,25 +44,26 @@ class MenuRepo
             }
         }
 
-        return $menu_active;
+        return $menuActive;
     }
 
     private static function menuUrl($menu)
     {
         $menu->is_broken = false;
-        if ($menu->type == 'Route') {
+        $menuType = $menu->type;
+        if ($menuType == MenuTypes::route) {
             return route($menu->path);
         }
 
-        if ($menu->type == 'URL') {
+        if ($menuType == MenuTypes::url) {
             return $menu->path;
         }
 
-        if ($menu->type == 'Controller & Method') {
+        if ($menuType == MenuTypes::ControllerMethod) {
             return action($menu->path);
         }
 
-        if ($menu->type == 'Module' || $menu->type == 'Statistic') {
+        if (in_array($menuType, [MenuTypes::Module, MenuTypes::Statistic])) {
             return CRUDBooster::adminPath($menu->path);
         }
 
@@ -73,12 +74,18 @@ class MenuRepo
 
     public static function sidebarDashboard()
     {
-        $menu = DB::table('cms_menus')->where('cms_privileges', CRUDBooster::myPrivilegeId())
+        $menu = self::table()
+            ->where('cms_privileges', CRUDBooster::myPrivilegeId())
             ->where('is_dashboard', 1)
             ->where('is_active', 1)->first() ?: new \stdClass();
 
         $menu->url = self::menuUrl($menu);
 
         return $menu;
+    }
+
+    private function table()
+    {
+        return DB::table('cms_menus');
     }
 }

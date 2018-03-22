@@ -39,22 +39,6 @@ return [
                 * Belki aradığınız sayfa Admin tarafından silindi<br/>
                 * Geri  Düğmesine tıklayın <br/>',
 
-    'log_try_view'            => 'Verileri görüntülemeyi denedi :name / :module',
-    'log_try_edit'            => 'Verileri düzenlemeyi denedi :name at :module',
-    'log_try_add'             => 'Veri eklemeyi denedi :module',
-    'log_try_add_save'        => 'Veri eklemeyi denedi :name / :module',
-    'log_try_delete'          => 'Veri silmem denendi :name verisi ile ( :module ) ',
-    'log_try_delete_selected' => 'Seçileni silme denendi :module',
-    'log_try_delete_image'    => 'Resim silme denendi :name / :module',
-    'log_try_update'          => 'Veri güncelleme denendi :name / :module',
-    'log_add'                 => 'Veri Eklendi :name / :module',
-    'log_update'              => 'Veri Güncellendi :name / :module',
-    'log_delete'              => 'Veri Silindi :name / :module',
-    'log_delete_image'        => 'Resim silindi :name / :module',
-    'log_login'               => ':email giriş yaptı. ip adresi :ip',
-    'log_forgot'              => 'IP adresi(:ip) olan birisi :email için şifre istedi',
-    'log_logout'              => ':email çıkış yaptı',
-
     'alert_delete_selected'         => 'Seçilen tüm verileri silmek istiyor musun ?',
     'alert_delete_selected_success' => 'Seçilenler silindi !',
     'alert_bulk_action_button'      => 'Emin misin',
@@ -230,23 +214,6 @@ return [
     'confirmation_title'            => 'Onaylama',
     'confirmation_text'             => 'Bu işlemi yapmak istediğinizden emin misiniz?',
     'confirmButtonText'             => 'Evet',
-    
-    // privilege
-    'privileges_name'               =>'Yetki ismi',
-    'set_as_superadmin'             =>'Süper Yönetici olarak ayarla',
-    'privileges_super_admin'        =>'Süper Yönetici',
-    'privileges_standart_user'      =>'Standart',
-    'privileges_ID'                 =>'NO',
-    'chose_theme_color_select'      =>'Tema rengini seçiniz',
-    'chose_theme_color'             =>'Tema ',
-    'privileges_configuration'      =>'Yetki ayarları',
-    'privileges_module_list_no'     =>'No.',
-    'privileges_module_list_mod_names'=>'Modül',
-    'privileges_module_list_view'   =>'Görüntüleme',
-    'privileges_module_list_create' =>'Ekleme',
-    'privileges_module_list_read'   =>'Okuma',
-    'privileges_module_list_update' =>'Güncelleme',
-    'privileges_module_list_delete' =>'Silme',
 
      //datamodal 
     'datamodal_select'              =>'Seç',

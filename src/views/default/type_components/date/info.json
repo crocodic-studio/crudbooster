@@ -1,12 +1,12 @@
 {
-  "title": "Date Input",
-  "type": "date",
+  'title': "Date Input",
+  'type': "date",
   "options": [
     {
-      "label": "Detail Date Format",
-      "name": "detail_format",
-      "type": "text",
-      "required": 1,
+      'label': "Detail Date Format",
+      'name': "detail_format",
+      'type': "text",
+      'required': 1,
       "help": "E.g : Y-m-d",
       "default": "Y-m-d"
     }
