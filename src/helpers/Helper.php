@@ -290,3 +290,11 @@ if (! function_exists('array_get_keys')) {
         return array_merge($_defaults, array_intersect_key($_array, $_defaults));
     }
 }
+
+if (! function_exists('cbGetSetting')) {
+    function cbGetSetting($name)
+    {
+        return \crocodicstudio\crudbooster\Modules\SettingModule\SettingRepo::getSetting($name);
+    }
+}
+

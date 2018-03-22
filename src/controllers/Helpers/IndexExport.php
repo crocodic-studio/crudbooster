@@ -31,7 +31,7 @@ class IndexExport
     public function xls($filename, $response, $orientation)
     {
         return Excel::create($filename, function ($excel) use ($response, $orientation) {
-            $excel->setTitle($filename)->setCreator("crudbooster.com")->setCompany(CRUDBooster::getSetting('appname'));
+            $excel->setTitle($filename)->setCreator("crudbooster.com")->setCompany(cbGetsetting('appname'));
             $excel->sheet($filename, function ($sheet) use ($response, $orientation) {
                 $sheet->setOrientation($orientation);
                 $sheet->loadview('crudbooster::export', $response);
@@ -47,7 +47,7 @@ class IndexExport
     public function csv($filename, $response, $orientation)
     {
         return Excel::create($filename, function ($excel) use ($response, $orientation) {
-            $excel->setTitle($filename)->setCreator("crudbooster.com")->setCompany(CRUDBooster::getSetting('appname'));
+            $excel->setTitle($filename)->setCreator("crudbooster.com")->setCompany(cbGetsetting('appname'));
             $excel->sheet($filename, function ($sheet) use ($response, $orientation) {
                 $sheet->setOrientation($orientation);
                 $sheet->loadview('crudbooster::export', $response);

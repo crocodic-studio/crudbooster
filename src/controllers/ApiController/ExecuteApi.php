@@ -154,7 +154,7 @@ class ExecuteApi
                 $result['api_status'] = 0;
                 $result['api_message'] = 'There is no data found !';
 
-                if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
+                if (cbGetsetting('api_debug_mode') == 'true') {
                     $result['api_authorization'] = $debug_mode_message;
                 }
 
@@ -209,7 +209,7 @@ class ExecuteApi
         $result['api_status'] = $this->ctrl->hook_api_status ?: $result['api_status'];
         $result['api_message'] = $this->ctrl->hook_api_message ?: $result['api_message'];
 
-        if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
+        if (cbGetsetting('api_debug_mode') == 'true') {
             $result['api_authorization'] = $debug_mode_message;
         }
 
@@ -259,7 +259,7 @@ class ExecuteApi
 
         $result['api_status'] = 0;
         $result['api_message'] = 'There is no data found !';
-        if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
+        if (cbGetsetting('api_debug_mode') == 'true') {
             $result['api_authorization'] = $debug_mode_message;
         }
         $result['data'] = [];
@@ -287,7 +287,7 @@ class ExecuteApi
 
         $result['api_status'] = ($delete) ? 1 : 0;
         $result['api_message'] = ($delete) ? "success" : "failed";
-        if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
+        if (cbGetsetting('api_debug_mode') == 'true') {
             $result['api_authorization'] = $debug_mode_message;
         }
 
@@ -403,7 +403,7 @@ class ExecuteApi
 
         $result['api_status'] = 1;
         $result['api_message'] = 'success';
-        if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
+        if (cbGetsetting('api_debug_mode') == 'true') {
             $result['api_authorization'] = $debug_mode_message;
         }
         $result['data'] = $rows;
@@ -438,7 +438,7 @@ class ExecuteApi
     {
         $result['api_status'] = 0;
         $result['api_message'] = 'Your password is wrong !';
-        if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
+        if (cbGetsetting('api_debug_mode') == 'true') {
             $result['api_authorization'] = $debug_mode_message;
         }
 
@@ -519,7 +519,7 @@ class ExecuteApi
     {
         $result['api_status'] = 1;
         $result['api_message'] = 'success';
-        if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
+        if (cbGetsetting('api_debug_mode') == 'true') {
             $result['api_authorization'] = $debug_mode_message;
         }
         $rows = (array) $rows;

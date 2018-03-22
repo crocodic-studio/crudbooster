@@ -84,7 +84,7 @@ class MenuRepo
         return $menu;
     }
 
-    private function table()
+    private static function table()
     {
         return DB::table('cms_menus');
     }
