@@ -56,7 +56,8 @@ if (! function_exists('is_checked')) {
 if (! function_exists('controllers_dir')) {
     function controllers_dir()
     {
-        return 'app/Http/Controllers/';
+        $_ = DIRECTORY_SEPARATOR;
+        return 'app'.$_.'Http'.$_.'Controllers'.$_;
     }
 }
 
@@ -70,7 +71,8 @@ if (! function_exists('parseScaffoldingToArray')) {
 if (! function_exists('controller_path')) {
     function controller_path($controller)
     {
-        return app_path('Http/Controllers/'.$controller.'.php');
+        $_ = DIRECTORY_SEPARATOR;
+        return app_path('Http'.$_.'Controllers'.$_.$controller.'.php');
     }
 }
 
