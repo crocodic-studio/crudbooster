@@ -42,7 +42,7 @@ class AuthController extends Controller
     {
         $users = $this->table('cms_users')->where('id', CRUDBooster::myId())->first();
 
-        if (\Hash::check(Request::input('password'), $users->password)) {
+        if (\Hash::check(request('password'), $users->password)) {
             Session::put('admin_lock', 0);
 
             return redirect()->route('AuthControllerGetIndex');
@@ -72,8 +72,8 @@ class AuthController extends Controller
             return CRUDBooster::backWithMsg(implode(', ', $message), 'danger');
         }
 
-        $email = Request::input("email");
-        $password = Request::input("password");
+        $email = request("email");
+        $password = request("password");
         $users = $this->table('cms_users')->where("email", $email)->first();
 
         if (! \Hash::check($password, $users->password)) {
@@ -85,16 +85,16 @@ class AuthController extends Controller
         $roles = $this->table('cms_privileges_roles')->where('id_cms_privileges', $users->id_cms_privileges)->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')->get();
 
         $photo = ($users->photo) ? asset($users->photo) : asset('vendor/crudbooster/avatar.jpg');
-        Session::put('admin_id', $users->id);
-        Session::put('admin_is_superadmin', $priv->is_superadmin);
-        Session::put('admin_name', $users->name);
-        Session::put('admin_photo', $photo);
-        Session::put('admin_privileges_roles', $roles);
-        Session::put('admin_privileges', $users->id_cms_privileges);
-        Session::put('admin_privileges_name', $priv->name);
-        Session::put('admin_lock', 0);
-        Session::put('theme_color', $priv->theme_color);
-        Session::put('appname', CRUDBooster::getSetting('appname'));
+        session()->put('admin_id', $users->id);
+        session()->put('admin_is_superadmin', $priv->is_superadmin);
+        session()->put('admin_name', $users->name);
+        session()->put('admin_photo', $photo);
+        session()->put('admin_privileges_roles', $roles);
+        session()->put('admin_privileges', $users->id_cms_privileges);
+        session()->put('admin_privileges_name', $priv->name);
+        session()->put('admin_lock', 0);
+        session()->put('theme_color', $priv->theme_color);
+        session()->put('appname', CRUDBooster::getSetting('appname'));
 
         CRUDBooster::insertLog(cbTrans('log_login', ['email' => $users->email, 'ip' => Request::server('REMOTE_ADDR')]));
 
@@ -123,7 +123,7 @@ class AuthController extends Controller
         }
 
         $randString = str_random(5);
-        $this->table('cms_users')->where('email', Request::input('email'))->update(['password' => \Hash::make($randString)]);
+        $this->table('cms_users')->where('email', request('email'))->update(['password' => \Hash::make($randString)]);
 
         //$appname = CRUDBooster::getSetting('appname');
         $user = CRUDBooster::first('cms_users', ['email' => request('email')]);
