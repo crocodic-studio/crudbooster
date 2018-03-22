@@ -16,14 +16,6 @@ use Validator;
 
 class CRUDBooster
 {
-    public static function insert($table, $data = [])
-    {
-        if (! $data['created_at'] && Schema::hasColumn($table, 'created_at')) {
-            $data['created_at'] = date('Y-m-d H:i:s');
-        }
-        return DB::table($table)->insertGetId($data);
-    }
-
     public static function get($table, $string_conditions = null, $orderby = null, $limit = null, $skip = null)
     {
         $table = self::parseSqlTable($table);
@@ -85,7 +77,7 @@ class CRUDBooster
             return;
         }
         foreach ($roles as $role) {
-            if ($role->path == CRUDBooster::getModulePath()) {
+            if ($role->path == self::getModulePath()) {
                 return $role;
             }
         }
