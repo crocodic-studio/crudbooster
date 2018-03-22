@@ -59,7 +59,7 @@ class AdminStatisticBuilderController extends CBController
         $this->cbLoader();
 
         $menus = DB::table('cms_menus')->where('is_dashboard', 1)->where('type', 'Statistic')->first();
-        $slug = str_replace(["statistic-builder/show/", "statistic_builder/show/"], "", $menus->path);
+        $slug = str_replace(['statistic-builder/show/', 'statistic_builder/show/'], "", $menus->path);
 
         $row = CRUDBooster::first($this->table, ['slug' => $slug]);
         $id_cms_statistics = $row->id;
@@ -126,7 +126,12 @@ class AdminStatisticBuilderController extends CBController
             'sorting' => request('sorting'),
             'name' => 'Untitled',
         ];
-        CRUDBooster::insert('cms_statistic_components', $data);
+
+        if (! $data['created_at'] && Schema::hasColumn('cms_statistic_components', 'created_at')) {
+            $data['created_at'] = date('Y-m-d H:i:s');
+        }
+
+        return DB::table('cms_statistic_components')->insertGetId($data);
 
         $layout = view('CbStatistics::components.'.$component_name, compact('command', 'componentID'))->render();
 
@@ -192,20 +197,20 @@ class AdminStatisticBuilderController extends CBController
         if (CRUDBooster::isSuperadmin()) {
             return;
         }
-        CRUDBooster::insertLog(trans("crudbooster.log_try_view", ['name' => $name, 'module' => 'Statistic']));
+        CRUDBooster::insertLog(cbTrans("log_try_view", ['name' => $name, 'module' => 'Statistic']));
         CRUDBooster::denyAccess();
     }
 
     private function makeColumns()
     {
         $this->col = [];
-        $this->col[] = ["label" => "Name", "name" => "name"];
+        $this->col[] = ['label' => 'Name', 'name' => 'name'];
     }
 
     private function setButtons()
     {
         $this->button_table_action = true;
-        $this->button_action_style = "button_icon_text";
+        $this->button_action_style = 'button_icon_text';
         $this->button_add = true;
         $this->button_delete = true;
         $this->button_edit = true;

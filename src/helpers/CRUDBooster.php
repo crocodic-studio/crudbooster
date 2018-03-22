@@ -47,7 +47,6 @@ class CRUDBooster
 
     public static function parseSqlTable($table)
     {
-
         $f = explode('.', $table);
 
         if (count($f) == 1) {
@@ -521,11 +520,10 @@ class CRUDBooster
     public static function isExistsController($table)
     {
         $ctrlName = ucwords(str_replace('_', ' ', $table));
-        $ctrlName = str_replace(' ', '', $ctrlName).'Controller';
+        $ctrlName = str_replace(' ', '', $ctrlName).'Controller.php';
         $path = base_path(controllers_dir());
         $path2 = base_path(controllers_dir()."ControllerMaster/");
 
-        $ctrlName = $ctrlName.'.php';
         if (file_exists($path.'Admin'.$ctrlName) || file_exists($path2.'Admin'.$ctrlName) || file_exists($path2.$ctrlName)) {
             return true;
         }
@@ -646,7 +644,8 @@ class CRUDBooster
 
     public static function PublishedComponentsPath($type = '')
     {
-        return resource_path('views/vendor/crudbooster/type_components/'.$type);
+        $Path = implode(DIRECTORY_SEPARATOR, ['views', 'vendor', 'crudbooster', 'type_components', $type]);
+        return resource_path($Path);
     }
 
     public static function extractBetween($raw, $mark)
