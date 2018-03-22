@@ -82,9 +82,9 @@ if (! function_exists('readCtrlContent')) {
 }
 
 if (! function_exists('putCtrlContent')) {
-    function putCtrlContent($ctrl)
+    function putCtrlContent($ctrl, $fileContent)
     {
-        return file_put_contents(controller_path($ctrl));
+        return file_put_contents(controller_path($ctrl), $fileContent);
     }
 }
 
