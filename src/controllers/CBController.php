@@ -651,7 +651,7 @@ class CBController extends Controller
 
     private function insertLog($msg, $name)
     {
-        CB::insertLog(cbTrans($msg, ['module' => CB::getCurrentModule()->name, 'name' => $name]));
+        CB::insertLog(trans('logging.'.$msg, ['module' => CB::getCurrentModule()->name, 'name' => $name]));
     }
 
     private function setTimeStamps($col)

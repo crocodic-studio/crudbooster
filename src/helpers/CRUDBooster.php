@@ -453,6 +453,11 @@ class CRUDBooster
         LogsRepository::insertLog($description, self::myId());
     }
 
+    public static function insertTryLog($action, $name = '')
+    {
+        self::insertLog(trans("logging.log_try_".$action, ['name' => $name, 'module' => self::getCurrentModule()]));
+    }
+
     public static function myId()
     {
         return session('admin_id');

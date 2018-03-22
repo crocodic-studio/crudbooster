@@ -60,8 +60,7 @@ class CBBackend
     private function guardView($request)
     {
         if ($request->is($this->url.'*') && ! CRUDBooster::canView()) {
-            $this->logIt('log_try_view');
-            CRUDBooster::denyAccess();
+            $this->stopIllegalAction('view');
         }
     }
 
@@ -71,8 +70,7 @@ class CBBackend
     private function guardCreate($request)
     {
         if ($request->is($this->url.'/add*') && ! CRUDBooster::canCreate()) {
-            $this->logIt('log_try_add');
-            CRUDBooster::denyAccess();
+            $this->stopIllegalAction('add');
         }
     }
 
@@ -82,8 +80,7 @@ class CBBackend
     private function guardUpdate($request)
     {
         if ($request->is($this->url.'/edit*') && ! CRUDBooster::canUpdate()) {
-            $this->logIt('log_try_edit');
-            CRUDBooster::denyAccess();
+            $this->stopIllegalAction('edit');
         }
     }
 
@@ -93,8 +90,7 @@ class CBBackend
     private function guardDelete($request)
     {
         if ($request->is($this->url.'/delete*') && ! CRUDBooster::canDelete()) {
-            $this->logIt('log_try_delete');
-            CRUDBooster::denyAccess();
+            $this->stopIllegalAction('delete');
         }
     }
 
@@ -104,16 +100,16 @@ class CBBackend
     private function guardRead($request)
     {
         if ($request->is($this->url.'/detail*') && ! CRUDBooster::canRead()) {
-            $this->logIt('log_try_view');
-            CRUDBooster::denyAccess();
+            $this->stopIllegalAction('view');
         }
     }
 
     /**
-     * @param $key
+     * @param $action
      */
-    private function logIt($key)
+    private function stopIllegalAction($action)
     {
-        CRUDBooster::insertLog(cbTrans($key, ['module' => $this->module->name]));
+        CRUDBooster::insertTryLog($action, '');
+        CRUDBooster::denyAccess();
     }
 }

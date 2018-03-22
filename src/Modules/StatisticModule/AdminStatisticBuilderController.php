@@ -197,7 +197,7 @@ class AdminStatisticBuilderController extends CBController
         if (CRUDBooster::isSuperadmin()) {
             return;
         }
-        CRUDBooster::insertLog(cbTrans("log_try_view", ['name' => $name, 'module' => 'Statistic']));
+        CRUDBooster::insertTryLog('view', $name);
         CRUDBooster::denyAccess();
     }
 

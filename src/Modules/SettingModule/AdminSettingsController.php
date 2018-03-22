@@ -116,7 +116,7 @@ class AdminSettingsController extends CBController
     private function allowOnlySuperAdmin()
     {
         if (! CRUDBooster::isSuperadmin()) {
-            CRUDBooster::insertLog(trans("crudbooster.log_try_view", ['name' => 'Setting', 'module' => 'Setting']));
+            CRUDBooster::insertTryLog('view', 'Setting');
             CRUDBooster::denyAccess();
         }
     }
