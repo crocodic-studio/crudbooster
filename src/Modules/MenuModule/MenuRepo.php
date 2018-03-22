@@ -39,9 +39,8 @@ class MenuRepo
                     $c->url = $url;
                     $c->url_path = trim(str_replace(url('/'), '', $url), "/");
                 }
-
-                $menu->children = $child;
             }
+            $menu->children = $child;
         }
 
         return $menuActive;
