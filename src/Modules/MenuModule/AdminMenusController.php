@@ -83,8 +83,8 @@ class AdminMenusController extends CBController
     public function postSaveMenu()
     {
         $this->cbInit();
-        $isActive = Request::input('isActive');
-        $post = json_decode(Request::input('menus'), true);
+        $isActive = request('isActive');
+        $post = json_decode(request('menus'), true);
 
         foreach ($post[0] as $i => $menu) {
             $pid = $menu['id'];

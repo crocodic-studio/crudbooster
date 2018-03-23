@@ -279,3 +279,10 @@ if (! function_exists('cbGetSetting')) {
     }
 }
 
+if (! function_exists('backWithMsg')) {
+    function backWithMsg($msg, $type = 'success')
+    {
+        return redirect()->back()->with(['message_type' => $type, 'message' => $msg]);
+    }
+}
+

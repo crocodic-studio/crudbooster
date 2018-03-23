@@ -80,7 +80,7 @@ class AdminSettingsController extends CBController
             Cache::forget('setting_'.$name);
         }
 
-        return CRUDBooster::backWithMsg(cbTrans('Update_Setting'));
+        return backWithMsg(cbTrans('Update_Setting'));
     }
 
     function hookBeforeAdd(&$arr)

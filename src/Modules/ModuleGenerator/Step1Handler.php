@@ -24,7 +24,7 @@ class Step1Handler
 
         if (! request('id')) {
             if (DB::table('cms_moduls')->where('path', $path)->where('deleted_at', null)->count()) {
-                return CRUDBooster::backWithMsg('Sorry the slug has already exists, please choose another !', 'warning');
+                return backWithMsg('Sorry the slug has already exists, please choose another !', 'warning');
             }
             $id = $this->registerNewModule($table_name, $path, $name, $icon);
             return redirect()->route("AdminModulesControllerGetStep2", ["id" => $id]);

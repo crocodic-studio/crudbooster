@@ -69,7 +69,7 @@ class AuthController extends Controller
         if ($validator->fails()) {
             $message = $validator->errors()->all();
 
-            return CRUDBooster::backWithMsg(implode(', ', $message), 'danger');
+            return backWithMsg(implode(', ', $message), 'danger');
         }
 
         $email = request("email");
@@ -119,7 +119,7 @@ class AuthController extends Controller
 
         if ($validator->fails()) {
             $message = $validator->errors()->all();
-            return CRUDBooster::backWithMsg(implode(', ', $message), 'danger');
+            return backWithMsg(implode(', ', $message), 'danger');
         }
 
         $randString = str_random(5);
