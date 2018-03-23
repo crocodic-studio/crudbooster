@@ -327,7 +327,7 @@ class CBController extends Controller
         $id = request('id');
         DB::table($table)->where(CB::pk($table), $id)->update([$column => $value]);
 
-        return CB::backWithMsg(cbTrans('alert_delete_data_success'));
+        return backWithMsg(cbTrans('alert_delete_data_success'));
     }
 
     public function postFindData()
@@ -553,7 +553,7 @@ class CBController extends Controller
 
         list($type, $message) = $this->_getMessageAndType($button_name, $selectedIds);
 
-        return CB::backWithMsg($message, $type);
+        return backWithMsg($message, $type);
     }
 
     /**
@@ -566,7 +566,7 @@ class CBController extends Controller
 
         $this->insertLog('log_delete', implode(',', $idsArray));
 
-        return CB::backWithMsg(cbTrans('alert_delete_selected_success'));
+        return backWithMsg(cbTrans('alert_delete_selected_success'));
     }
 
     /**

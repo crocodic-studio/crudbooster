@@ -34,7 +34,7 @@ class FileController extends Controller
         $file = Request::file('userfile');
         $validator = $import->validateForImport($file);
         if ($validator->fails()) {
-            return CB::backWithMsg(implode('<br/>', $validator->errors()->all()), 'warning');
+            return backWithMsg(implode('<br/>', $validator->errors()->all()), 'warning');
         }
         $url = $import->uploadImportData($file);
 
