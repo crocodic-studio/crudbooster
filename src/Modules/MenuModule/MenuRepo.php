@@ -87,4 +87,18 @@ class MenuRepo
     {
         return DB::table('cms_menus');
     }
+
+    public static function fetchMenuWithChilds($status = 1)
+    {
+        $menus = self::table()->where('parent_id', 0)->where('is_active', $status)->orderby('sorting', 'asc')->get();
+
+        foreach ($menus as $menu) {
+            $child = self::table()->where('parent_id', $menu->id)->where('is_active', $status)->orderby('sorting', 'asc')->get();
+            if (count($child)) {
+                $menu->children = $child;
+            }
+        }
+
+        return $menus;
+    }
 }
