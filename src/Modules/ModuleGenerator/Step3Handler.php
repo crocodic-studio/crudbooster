@@ -4,14 +4,13 @@ namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
 use crocodicstudio\crudbooster\helpers\Parsers\ScaffoldingParser;
 use CRUDBooster;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
 
 class Step3Handler
 {
     public function showForm($id)
     {
-        $row = DB::table('cms_moduls')->where('id', $id)->first();
+        $row = ModulesRepo::find($id);;
 
         $columns = CRUDBooster::getTableColumns($row->table_name);
 
@@ -28,7 +27,7 @@ class Step3Handler
     {
         $scripts = $this->setFormScript(Request::all());
 
-        $controller = DB::table('cms_moduls')->where('id', request('id'))->first()->controller;
+        $controller = ModulesRepo::getControllerName(request('id'));
         $phpCode = FileManipulator::readCtrlContent($controller);
         list($top, $currentScaffold, $bottom) = \CB::extractBetween($phpCode, "FORM");
 

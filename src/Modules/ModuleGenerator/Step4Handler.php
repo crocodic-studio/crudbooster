@@ -10,7 +10,7 @@ class Step4Handler
 {
     public function showForm($id)
     {
-        $controller = DB::table('cms_moduls')->where('id', $id)->first()->controller;
+        $controller = ModulesRepo::getControllerName($id);;
 
         $data = [];
         $data['id'] = $id;
@@ -25,7 +25,7 @@ class Step4Handler
     public function handleFormSubmit()
     {
         $id = Request::input('id');
-        $module = DB::table('cms_moduls')->where('id', $id)->first();
+        $module = ModulesRepo::find($id);
 
         $data = Request::all();
 

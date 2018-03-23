@@ -61,7 +61,7 @@ class AdminModulesController extends CBController
 
     function hookBeforeDelete($id)
     {
-        $controller = DB::table('cms_moduls')->where('id', $id)->first()->controller;
+        $controller = ModulesRepo::getControllerName($id);
         DB::table('cms_menus')->where('path', 'like', '%'.$controller.'%')->delete();
         @unlink(controller_path($controller));
     }

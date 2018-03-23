@@ -33,7 +33,7 @@ class Step1Handler
         $id = request('id');
         \DB::table('cms_moduls')->where('id', $id)->update(compact("name", "table_name", "icon", "path"));
 
-        $row = DB::table('cms_moduls')->where('id', $id)->first();
+        $row = ModulesRepo::find($id);
 
 
         if (file_exists(controller_path($row->controller))) {
