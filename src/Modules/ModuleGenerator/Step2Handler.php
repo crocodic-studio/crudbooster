@@ -4,8 +4,6 @@ namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
 use crocodicstudio\crudbooster\helpers\Parsers\ScaffoldingParser;
 use CRUDBooster;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Request;
 
 class Step2Handler
 {
@@ -36,7 +34,7 @@ class Step2Handler
 
     public function handleFormSubmit()
     {
-        $id = Request::input('id');
+        $id = request('id');
         $controller = ModulesRepo::getControllerName($id);
 
         $newCode = $this->makeColumnPhpCode();
