@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Request;
 
 class Step2Handler
 {
+    private $hooks = ['hookQueryIndex', 'hookRowIndex', 'hookBeforeAdd', 'hookAfterAdd',
+        'hookBeforeEdit', 'hookAfterEdit', 'hookBeforeDelete', 'hookAfterDelete',];
+
     public function showForm($id)
     {
         $module = DB::table('cms_moduls')->where('id', $id)->first();
@@ -24,9 +27,7 @@ class Step2Handler
         $data['cols'] = ScaffoldingParser::parse($controllerCode, 'col');
 
 
-        $hooks = ['hookQueryIndex', 'hookRowIndex', 'hookBeforeAdd', 'hookAfterAdd',
-            'hookBeforeEdit', 'hookAfterEdit', 'hookBeforeDelete', 'hookAfterDelete',];
-        foreach($hooks as $hook){
+        foreach($this->hooks as $hook){
             $data[$hook] = FileManipulator::readMethodContent($controllerCode, $hook);
         }
 
@@ -42,19 +43,9 @@ class Step2Handler
         $code = readCtrlContent($controller);
         $fileResult = \CB::replaceBetweenMark($code, 'COLUMNS', $newCode);
 
-        $hooks = ['hookQueryIndex', 'hookRowIndex', 'hookBeforeAdd', 'hookAfterAdd',
-            'hookBeforeEdit', 'hookAfterEdit', 'hookBeforeDelete', 'hookAfterDelete',];
-        foreach($hooks as $hook){
-
+        foreach($this->hooks as $hook){
+            $fileResult = FileManipulator::writeMethodContent($fileResult, $hook, request($hook));
         }
-        $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookQueryIndex', g('hookQueryIndex'));
-        $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookRowIndex', g('hookRowIndex'));
-        $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookBeforeAdd', g('hookBeforeAdd'));
-        $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookAfterAdd', g('hookAfterAdd'));
-        $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookBeforeEdit', g('hookBeforeEdit'));
-        $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookAfterEdit', g('hookAfterEdit'));
-        $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookBeforeDelete', g('hookBeforeDelete'));
-        $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookAfterDelete', g('hookAfterDelete'));
 
         putCtrlContent($controller, $fileResult);
 
