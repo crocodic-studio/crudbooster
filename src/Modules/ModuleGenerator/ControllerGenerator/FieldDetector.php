@@ -10,7 +10,7 @@ class FieldDetector
      */
     static function isPassword($fieldName)
     {
-        return in_array($fieldName, explode(',', cbConfig('PASSWORD_FIELDS_CANDIDATE')));
+        return self::isWithin($fieldName, 'PASSWORD_FIELDS_CANDIDATE');
     }
 
     /**
@@ -19,7 +19,7 @@ class FieldDetector
      */
     static function isEmail($fieldName)
     {
-        return in_array($fieldName, explode(',', cbConfig('EMAIL_FIELDS_CANDIDATE')));
+        return self::isWithin($fieldName, 'EMAIL_FIELDS_CANDIDATE');
     }
 
     /**
@@ -28,7 +28,7 @@ class FieldDetector
      */
     static function isPhone($fieldName)
     {
-        return in_array($fieldName, explode(',', cbConfig('PHONE_FIELDS_CANDIDATE')));
+        return self::isWithin($fieldName, 'PHONE_FIELDS_CANDIDATE');
     }
 
     /**
@@ -37,7 +37,7 @@ class FieldDetector
      */
     static function isImage($fieldName)
     {
-        return in_array($fieldName, explode(',', cbConfig('IMAGE_FIELDS_CANDIDATE')));
+        return self::isWithin($fieldName, 'IMAGE_FIELDS_CANDIDATE');
     }
 
     /**
@@ -73,7 +73,7 @@ class FieldDetector
      */
     static function isNameField($fieldName)
     {
-        return in_array($fieldName, explode(',', cbConfig('NAME_FIELDS_CANDIDATE')));
+        return self::isWithin($fieldName, 'NAME_FIELDS_CANDIDATE');
     }
 
     /**
@@ -82,11 +82,16 @@ class FieldDetector
      */
     static function isUrlField($fieldName)
     {
-        return in_array($fieldName, explode(',', cbConfig("URL_FIELDS_CANDIDATE")));
+        return self::isWithin($fieldName, 'URL_FIELDS_CANDIDATE');
     }
 
     static function isUploadField($fieldName)
     {
-        return in_array($fieldName, explode(',', cbConfig("UPLOAD_TYPES")));
+        return self::isWithin($fieldName, 'UPLOAD_TYPES');
+    }
+
+    static function isWithin($fieldName, $configKey)
+    {
+        return in_array($fieldName, explode(',', cbConfig($configKey)));
     }
 }
