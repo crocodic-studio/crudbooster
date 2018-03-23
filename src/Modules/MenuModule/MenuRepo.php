@@ -90,15 +90,19 @@ class MenuRepo
 
     public static function fetchMenuWithChilds($status = 1)
     {
-        $menus = self::table()->where('parent_id', 0)->where('is_active', $status)->orderby('sorting', 'asc')->get();
+        $menus = self::fetchMenu(0, $status);
 
         foreach ($menus as $menu) {
-            $child = self::table()->where('parent_id', $menu->id)->where('is_active', $status)->orderby('sorting', 'asc')->get();
+            $child = self::fetchMenu($menu->id, $status);
             if (count($child)) {
                 $menu->children = $child;
             }
         }
 
         return $menus;
+    }
+    public static function fetchMenu($parent, $status = 1)
+    {
+        return self::table()->where('parent_id', $parent)->where('is_active', $status)->orderby('sorting', 'asc')->get();
     }
 }
