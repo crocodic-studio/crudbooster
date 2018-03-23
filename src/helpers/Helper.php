@@ -61,13 +61,6 @@ if (! function_exists('controllers_dir')) {
     }
 }
 
-if (! function_exists('parseScaffoldingToArray')) {
-    function parseScaffoldingToArray($code, $type = 'form')
-    {
-        return \crocodicstudio\crudbooster\helpers\Parsers\ScaffoldingParser::parse($code, $type);
-    }
-}
-
 if (! function_exists('controller_path')) {
     function controller_path($controller)
     {

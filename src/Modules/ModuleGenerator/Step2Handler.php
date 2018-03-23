@@ -2,6 +2,7 @@
 
 namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
+use crocodicstudio\crudbooster\helpers\Parsers\ScaffoldingParser;
 use CRUDBooster;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
@@ -20,7 +21,7 @@ class Step2Handler
         $data['id'] = $id;
         $data['columns'] = $columns;
         //$data['table_list'] = \CB::listCbTables();
-        $data['cols'] = parseScaffoldingToArray($controllerCode, 'col');
+        $data['cols'] = ScaffoldingParser::parse($controllerCode, 'col');
 
 
         $hooks = ['hookQueryIndex', 'hookRowIndex', 'hookBeforeAdd', 'hookAfterAdd',
@@ -41,6 +42,11 @@ class Step2Handler
         $code = readCtrlContent($controller);
         $fileResult = \CB::replaceBetweenMark($code, 'COLUMNS', $newCode);
 
+        $hooks = ['hookQueryIndex', 'hookRowIndex', 'hookBeforeAdd', 'hookAfterAdd',
+            'hookBeforeEdit', 'hookAfterEdit', 'hookBeforeDelete', 'hookAfterDelete',];
+        foreach($hooks as $hook){
+
+        }
         $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookQueryIndex', g('hookQueryIndex'));
         $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookRowIndex', g('hookRowIndex'));
         $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookBeforeAdd', g('hookBeforeAdd'));

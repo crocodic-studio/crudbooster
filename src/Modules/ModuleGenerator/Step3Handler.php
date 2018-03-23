@@ -2,6 +2,7 @@
 
 namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
+use crocodicstudio\crudbooster\helpers\Parsers\ScaffoldingParser;
 use CRUDBooster;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
@@ -16,7 +17,7 @@ class Step3Handler
 
         $code = readCtrlContent($row->controller);
 
-        $forms = parseScaffoldingToArray($code, 'form');
+        $forms = ScaffoldingParser::parse($code, 'form');
 
         $types = $this->getComponentTypes();
 
