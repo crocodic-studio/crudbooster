@@ -7,6 +7,7 @@ class ScaffoldingParser
     static function parse($code, $type = 'form')
     {
         $colsItem = self::extractLines($code, $type);
+
         foreach ($colsItem as &$item) {
             $item = str_replace(' ','', $item);
             $item = str_replace('\',]',']', $item);
@@ -17,19 +18,20 @@ class ScaffoldingParser
             $item = trim(preg_replace("/[\n\r\t]/", "", $item));
             $strSplit = str_split($item);
             $innerCount = 0;
-            foreach ($strSplit as $e => $s) {
+            foreach ($strSplit as $index => $s) {
                 if ($s == '[') {
                     $innerCount++;
                 }
                 if ($s == ']') {
                     $innerCount--;
                 }
-                if ($innerCount == 0 && $s == ',' && $strSplit[$e + 1] == "'") {
-                    $strSplit[$e] = "|SPLIT|";
+                if ($innerCount == 0 && $s == ',' && $strSplit[$index + 1] == "'") {
+                    $strSplit[$index] = "|SPLIT|";
                 }
             }
             $item = implode("", $strSplit);
         }
+
         foreach ($colsItem as &$col) {
             $split = explode('|SPLIT|', $col);
 
