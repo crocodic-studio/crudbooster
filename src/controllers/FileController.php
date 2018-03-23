@@ -4,6 +4,7 @@ namespace crocodicstudio\crudbooster\controllers;
 
 use crocodicstudio\crudbooster\CBCoreModule\FileUploader;
 use crocodicstudio\crudbooster\controllers\Helpers\IndexImport;
+use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
 use Storage;
 use Response;
 use Image;
@@ -70,7 +71,7 @@ class FileController extends Controller
             return Response::make($imgRaw, 200, $headers);
         }
 
-        if (Request::get('download')) {
+        if (request('download')) {
             return Response::download($fullStoragePath, $filename, $headers);
         }
 
@@ -83,8 +84,8 @@ class FileController extends Controller
      */
     private function resizeImage($fullStoragePath)
     {
-        $w = Request::get('w', cbConfig('DEFAULT_THUMBNAIL_WIDTH', 300));
-        $h = Request::get('h', $w);
+        $w = request('w', cbConfig('DEFAULT_THUMBNAIL_WIDTH', 300));
+        $h = request('h', $w);
         $imgRaw = Image::cache(function ($image) use ($fullStoragePath, $w, $h) {
             $im = $image->make($fullStoragePath);
             if (! $w) {
@@ -109,11 +110,8 @@ class FileController extends Controller
     private function isImage($fullStoragePath)
     {
         $extension = strtolower(File::extension($fullStoragePath));
-        $images_ext = cbConfig('IMAGE_EXTENSIONS', 'jpg,png,gif,bmp');
-        $images_ext = explode(',', $images_ext);
-        $hasImageExtension = in_array($extension, $images_ext);
 
-        return $hasImageExtension;
+        return FieldDetector::isWithin($extension, 'IMAGE_EXTENSIONS');;
     }
 
     /**
