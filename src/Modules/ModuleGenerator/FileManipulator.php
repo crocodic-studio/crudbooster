@@ -187,4 +187,9 @@ class FileManipulator
         }
         return $codeArray;
     }
+
+    static function putCtrlContent($ctrl, $fileContent)
+    {
+        return file_put_contents(controller_path($ctrl), $fileContent);
+    }
 }

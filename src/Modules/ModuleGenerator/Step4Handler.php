@@ -91,6 +91,6 @@ class Step4Handler
     {
         $rawCode = readCtrlContent($controller);
         $fileController = \CB::replaceBetweenMark($rawCode, $mark, $newCode);
-        putCtrlContent($controller, $fileController);
+        FileManipulator::putCtrlContent($controller, $fileController);
     }
 }

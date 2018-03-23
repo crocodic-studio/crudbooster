@@ -76,13 +76,6 @@ if (! function_exists('readCtrlContent')) {
     }
 }
 
-if (! function_exists('putCtrlContent')) {
-    function putCtrlContent($ctrl, $fileContent)
-    {
-        return file_put_contents(controller_path($ctrl), $fileContent);
-    }
-}
-
 if (! function_exists('rrmdir')) {
     function rrmdir($dir)
     {

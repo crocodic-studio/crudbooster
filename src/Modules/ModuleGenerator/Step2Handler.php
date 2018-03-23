@@ -45,7 +45,7 @@ class Step2Handler
             $fileResult = FileManipulator::writeMethodContent($fileResult, $hook, request($hook));
         }
 
-        putCtrlContent($controller, $fileResult);
+        FileManipulator::putCtrlContent($controller, $fileResult);
 
         return redirect()->route("AdminModulesControllerGetStep3", ["id" => $id]);
     }

@@ -49,7 +49,7 @@ class Step3Handler
         $fileContent .= "            ".($bottom);
 
         //CREATE FILE CONTROLLER
-        putCtrlContent($controller, $fileContent);
+        FileManipulator::putCtrlContent($controller, $fileContent);
 
         return redirect()->route('AdminModulesControllerGetStep4', ['id' => request('id')]);
     }
