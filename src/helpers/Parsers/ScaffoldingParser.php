@@ -24,12 +24,8 @@ class ScaffoldingParser
                 if ($s == ']') {
                     $innerCount--;
                 }
-                if ($innerCount == 0) {
-                    if ($s == ',') {
-                        if ($strSplit[$e + 1] == "'") {
-                            $strSplit[$e] = "|SPLIT|";
-                        }
-                    }
+                if ($innerCount == 0 && $s == ',' && $strSplit[$e + 1] == "'") {
+                    $strSplit[$e] = "|SPLIT|";
                 }
             }
             $item = implode("", $strSplit);
