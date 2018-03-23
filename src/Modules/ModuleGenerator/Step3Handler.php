@@ -15,7 +15,7 @@ class Step3Handler
 
         $columns = CRUDBooster::getTableColumns($row->table_name);
 
-        $code = readCtrlContent($row->controller);
+        $code = FileManipulator::readCtrlContent($row->controller);
 
         $forms = ScaffoldingParser::parse($code, 'form');
 
@@ -29,7 +29,7 @@ class Step3Handler
         $scripts = $this->setFormScript(Request::all());
 
         $controller = DB::table('cms_moduls')->where('id', request('id'))->first()->controller;
-        $phpCode = readCtrlContent($controller);
+        $phpCode = FileManipulator::readCtrlContent($controller);
         list($top, $currentScaffold, $bottom) = \CB::extractBetween($phpCode, "FORM");
 
         //IF FOUND OLD, THEN CLEAR IT

@@ -15,7 +15,7 @@ class Step4Handler
         $data = [];
         $data['id'] = $id;
         if (file_exists(controller_path($controller))) {
-            $fileContent = (readCtrlContent($controller));
+            $fileContent = (FileManipulator::readCtrlContent($controller));
             $data['config'] = ControllerConfigParser::parse($fileContent);
         }
 
@@ -83,13 +83,13 @@ class Step4Handler
     }
 
     /**
-     * @param $module
+     * @param $controller
      * @param $mark
      * @param $newCode
      */
     private function replaceInFile($controller, $mark, $newCode)
     {
-        $rawCode = readCtrlContent($controller);
+        $rawCode = FileManipulator::readCtrlContent($controller);
         $fileController = \CB::replaceBetweenMark($rawCode, $mark, $newCode);
         FileManipulator::putCtrlContent($controller, $fileController);
     }

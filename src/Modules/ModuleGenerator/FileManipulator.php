@@ -192,4 +192,9 @@ class FileManipulator
     {
         return file_put_contents(controller_path($ctrl), $fileContent);
     }
+
+    static function readCtrlContent($ctrl)
+    {
+        return file_get_contents(controller_path($ctrl));
+    }
 }

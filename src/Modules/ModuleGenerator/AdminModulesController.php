@@ -219,7 +219,7 @@ class AdminModulesController extends CBController
 
     public function getTest()
     {
-        $code = (readCtrlContent('AdminCustomersController.php'));
+        $code = FileManipulator::readCtrlContent('AdminCustomersController.php');
 
         $forms = parseFormToArray($code);
         echo '<pre>';

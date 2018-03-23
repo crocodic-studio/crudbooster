@@ -16,7 +16,7 @@ class Step2Handler
 
         $columns = CRUDBooster::getTableColumns($module->table_name);
 
-        $controllerCode = (readCtrlContent($module->controller));
+        $controllerCode = (FileManipulator::readCtrlContent($module->controller));
 
         $data = [];
         $data['id'] = $id;
@@ -38,7 +38,7 @@ class Step2Handler
         $controller = ModulesRepo::getControllerName($id);
 
         $newCode = $this->makeColumnPhpCode();
-        $code = readCtrlContent($controller);
+        $code = FileManipulator::readCtrlContent($controller);
         $fileResult = \CB::replaceBetweenMark($code, 'COLUMNS', $newCode);
 
         foreach($this->hooks as $hook){
