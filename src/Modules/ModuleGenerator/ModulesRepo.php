@@ -8,6 +8,11 @@ class ModulesRepo
 {
     public static function getControllerName($moduleId)
     {
-        return DB::table('cms_moduls')->where('id', $moduleId)->first()->controller;
+        return self::find($moduleId)->controller;
+    }
+
+    public static function find($id)
+    {
+        return DB::table('cms_moduls')->where('id', $id)->first();
     }
 }

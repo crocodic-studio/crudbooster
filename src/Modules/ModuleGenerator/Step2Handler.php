@@ -14,7 +14,7 @@ class Step2Handler
 
     public function showForm($id)
     {
-        $module = DB::table('cms_moduls')->where('id', $id)->first();
+        $module = ModulesRepo::find($id);
 
         $columns = CRUDBooster::getTableColumns($module->table_name);
 
