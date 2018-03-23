@@ -25,7 +25,7 @@ class Step3Handler
 
     public function handleFormSubmit()
     {
-        $scripts = $this->setFormScript(Request::all());
+        $scripts = $this->setFormScript(request()->all());
 
         $controller = ModulesRepo::getControllerName(request('id'));
         $phpCode = FileManipulator::readCtrlContent($controller);

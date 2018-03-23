@@ -235,7 +235,7 @@ class AdminApiGeneratorController extends CBController
     function postSaveApiCustom()
     {
         $this->cbLoader();
-        $posts = Request::all();
+        $posts = request()->all();
 
         $_data = [];
 

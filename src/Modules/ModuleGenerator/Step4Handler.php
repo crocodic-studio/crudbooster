@@ -27,7 +27,7 @@ class Step4Handler
         $id = Request::input('id');
         $module = ModulesRepo::find($id);
 
-        $data = Request::all();
+        $data = request()->all();
 
         $data['table'] = $module->table_name;
 

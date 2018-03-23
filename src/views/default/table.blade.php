@@ -177,7 +177,7 @@
 
 </form><!--END FORM TABLE-->
 
-<p>{!! urldecode(str_replace("/?","?",$result->appends(Request::all())->render())) !!}</p>
+<p>{!! urldecode(str_replace("/?","?",$result->appends(request()->all())->render())) !!}</p>
 
 
 

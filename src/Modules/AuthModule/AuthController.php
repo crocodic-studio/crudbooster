@@ -61,7 +61,7 @@ class AuthController extends Controller
 
     public function postLogin()
     {
-        $validator = Validator::make(Request::all(), [
+        $validator = Validator::make(request()->all(), [
                 'email' => 'required|email|exists:cms_users',
                 'password' => 'required',
             ]);
@@ -115,7 +115,7 @@ class AuthController extends Controller
 
     public function postForgot()
     {
-        $validator = Validator::make(Request::all(), ['email' => 'required|email|exists:cms_users',]);
+        $validator = Validator::make(request()->all(), ['email' => 'required|email|exists:cms_users',]);
 
         if ($validator->fails()) {
             $message = $validator->errors()->all();

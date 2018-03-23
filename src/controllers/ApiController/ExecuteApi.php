@@ -21,7 +21,7 @@ class ExecuteApi
     public function execute()
     {
         $result = [];
-        $posts = Request::all();
+        $posts = request()->all();
         //$posts_keys = array_keys($posts);
         //$posts_values = array_values($posts);
 

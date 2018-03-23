@@ -332,7 +332,7 @@ class CRUDBooster
 
     public static function valid($arr = [], $type = 'json')
     {
-        $input_arr = Request::all();
+        $input_arr = request()->all();
 
         foreach ($arr as $a => $b) {
             if (is_int($a)) {
@@ -400,7 +400,7 @@ class CRUDBooster
 
     public static function urlFilterColumn($key, $type, $value = '', $singleSorting = true)
     {
-        $params = Request::all();
+        $params = request()->all();
         $mainpath = trim(self::mainpath(), '/');
 
         if ($params['filter_column'] && $singleSorting) {
