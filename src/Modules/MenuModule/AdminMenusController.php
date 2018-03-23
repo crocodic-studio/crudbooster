@@ -42,7 +42,7 @@ class AdminMenusController extends CBController
 
         $page_title = 'Menu Management';
 
-        return view('CbMenu::menus_management', compact('privileges', 'return_url', 'page_title'));
+        return view('CbMenu::menus_management', compact('return_url', 'page_title'));
     }
 
     public function hookBeforeAdd(&$postData)
