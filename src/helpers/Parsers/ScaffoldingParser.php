@@ -58,18 +58,7 @@ class ScaffoldingParser
 
         }
 
-
-        foreach ($colsItem as &$form) {
-            if ($type !== 'form') {
-                continue;
-            }
-            if ($form['options']) {
-                @eval("\$options = $form[options];");
-                @$form['options'] = $options;
-            } else {
-                $form['options'] = [];
-            }
-        }
+        self::formOptions($type, $colsItem);
 
         return $colsItem;
     }
@@ -96,5 +85,27 @@ class ScaffoldingParser
         $colsItem = array_filter($colsItem);
 
         return $colsItem;
+    }
+
+    /**
+     * @param $type
+     * @param $colsItem
+     * @param $form
+     * @param $options
+     * @return mixed
+     */
+    private static function formOptions($type, $colsItem)
+    {
+        foreach ($colsItem as &$form) {
+            if ($type !== 'form') {
+                continue;
+            }
+            if ($form['options']) {
+                @eval("\$options = $form[options];");
+                @$form['options'] = $options;
+            } else {
+                $form['options'] = [];
+            }
+        }
     }
 }
