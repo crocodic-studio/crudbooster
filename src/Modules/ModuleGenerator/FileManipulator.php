@@ -55,11 +55,7 @@ class FileManipulator
         $finalTagPenutup = self::finalTagPenutup($tagBuka, $tagPentutups, $methodIndex, $methodNextIndex);
 
         //Removing Content Of Method
-        foreach ($codeArray as $i => $c) {
-            if ($i > $tagBuka && $i < $finalTagPenutup) {
-                unset($codeArray[$i]);
-            }
-        }
+        $codeArray = self::removeMethodContent($codeArray, $tagBuka, $finalTagPenutup);
 
         //Insert Content To Method
         $stringToInsertArray = explode("\n", trim($stringToInsert));
@@ -174,5 +170,21 @@ class FileManipulator
         $methodNextIndex = ($totalMethodIndex == $keyTagBukaInMethodIndex) ? $keyTagBukaInMethodIndex : $keyTagBukaInMethodIndex + 1;
 
         return [$methodIndex, $methodNextIndex];
+    }
+
+    /**
+     * @param $codeArray array
+     * @param $tagBuka int
+     * @param $finalTagPenutup int
+     * @return array
+     */
+    private static function removeMethodContent($codeArray, $tagBuka, $finalTagPenutup)
+    {
+        foreach ($codeArray as $i => $c) {
+            if ($i > $tagBuka && $i < $finalTagPenutup) {
+                unset($codeArray[$i]);
+            }
+        }
+        return $codeArray;
     }
 }
