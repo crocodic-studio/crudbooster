@@ -14,7 +14,7 @@ class ScaffoldingParser
             $item = trim($item, '[');
             $item = trim($item, '];');
             $item = trim($item);
-            $item = trim(preg_replace("/[\n\r\t]/", " ", $item));
+            $item = trim(preg_replace("/[\n\r\t]/", "", $item));
             $strSplit = str_split($item);
             $innerCount = 0;
             foreach ($strSplit as $e => $s) {
