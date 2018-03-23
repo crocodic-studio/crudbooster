@@ -37,7 +37,7 @@ class Step2Handler
     public function handleFormSubmit()
     {
         $id = Request::input('id');
-        $controller = DB::table('cms_moduls')->where('id', $id)->first()->controller;
+        $controller = ModulesRepo::getControllerName($id);
 
         $newCode = $this->makeColumnPhpCode();
         $code = readCtrlContent($controller);
