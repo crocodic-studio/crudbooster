@@ -41,7 +41,7 @@ class AdminSettingsController extends CBController
         return view('CbSettings::setting', $data);
     }
 
-    function hookBeforeEdit(&$posdata, $id)
+    function hook_before_edit(&$posdata, $id)
     {
         $this->return_url = CRUDBooster::mainpath("show")."?group=".$posdata['group_setting'];
     }
@@ -83,13 +83,13 @@ class AdminSettingsController extends CBController
         return backWithMsg(cbTrans('Update_Setting'));
     }
 
-    function hookBeforeAdd(&$arr)
+    function hook_before_add(&$arr)
     {
         $arr['name'] = str_slug($arr['label'], '_');
         $this->return_url = CRUDBooster::mainpath("show")."?group=".$arr['group_setting'];
     }
 
-    function hookAfterEdit($id)
+    function hook_aftere_dit($id)
     {
         $row = $this->table()->where($this->primary_key, $id)->first();
 

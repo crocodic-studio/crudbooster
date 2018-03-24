@@ -644,9 +644,9 @@ class CBController extends Controller
      */
     private function performDeletion($idsArray)
     {
-        $this->hookBeforeDelete($idsArray);
+        $this->hook_before_delete($idsArray);
         $this->deleteIds($idsArray);
-        $this->hookAfterDelete($idsArray);
+        $this->hook_after_delete($idsArray);
     }
 
     private function insertLog($msg, $name)
