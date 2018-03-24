@@ -2,6 +2,8 @@
 
 namespace crocodicstudio\crudbooster\Modules\PrivilegeModule;
 
+use crocodicstudio\crudbooster\CBCoreModule\CbUsersRepo;
+
 class Seeder
 {
     public static function run()
@@ -18,7 +20,7 @@ class Seeder
         ]);
 
         $password = \Hash::make('123456');
-        $cms_users = DB::table('cms_users')->insert([
+        $cms_users = CbUsersRepo::table()->insert([
             'name' => 'Super Admin',
             'email' => 'admin@crudbooster.com',
             'password' => $password,
