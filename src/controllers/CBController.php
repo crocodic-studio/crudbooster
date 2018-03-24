@@ -208,17 +208,17 @@ class CBController extends Controller
 
     public function postExportData()
     {
-        $this->limit = Request::input('limit');
+        $this->limit = request('limit');
         $this->index_return = true;
-        $filename = Request::input('filename');
-        $papersize = Request::input('page_size');
-        $paperorientation = Request::input('page_orientation');
+        $filename = request('filename');
+        $papersize = request('page_size');
+        $paperorientation = request('page_orientation');
         $indexContent = $this->getIndex();
 
-        if (Request::input('default_paper_size')) {
+        if (request('default_paper_size')) {
             DB::table('cms_settings')->where('name', 'default_paper_size')->update(['content' => $papersize]);
         }
-        $format = Request::input('fileformat');
+        $format = request('fileformat');
         if(in_array($format, ['pdf', 'xls', 'csv']))
         {
             return app(IndexExport::class)->{$format}($filename, $indexContent, $paperorientation, $papersize);
