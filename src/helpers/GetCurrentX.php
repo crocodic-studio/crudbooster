@@ -62,4 +62,10 @@ class GetCurrentX
 
         return request('m');
     }
+
+    private static function getModulePath()
+    {
+        $adminPathSegments = count(explode('/',config('crudbooster.ADMIN_PATH')));
+        return Request::segment(1 + $adminPathSegments);
+    }
 }

@@ -17,7 +17,7 @@ class FormValidator
         $this->table = $table;
         $rules = $this->getRules($id, $form);
 
-        $validator = Validator::make(Request::all(), $rules);
+        $validator = Validator::make(request()->all(), $rules);
 
         if (! $validator->fails()) {
             return null;

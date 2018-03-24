@@ -10,12 +10,12 @@ class Step4Handler
 {
     public function showForm($id)
     {
-        $controller = DB::table('cms_moduls')->where('id', $id)->first()->controller;
+        $controller = ModulesRepo::getControllerName($id);;
 
         $data = [];
         $data['id'] = $id;
         if (file_exists(controller_path($controller))) {
-            $fileContent = (readCtrlContent($controller));
+            $fileContent = (FileManipulator::readCtrlContent($controller));
             $data['config'] = ControllerConfigParser::parse($fileContent);
         }
 
@@ -25,9 +25,9 @@ class Step4Handler
     public function handleFormSubmit()
     {
         $id = Request::input('id');
-        $module = DB::table('cms_moduls')->where('id', $id)->first();
+        $module = ModulesRepo::find($id);
 
-        $data = Request::all();
+        $data = request()->all();
 
         $data['table'] = $module->table_name;
 
@@ -83,14 +83,14 @@ class Step4Handler
     }
 
     /**
-     * @param $module
+     * @param $controller
      * @param $mark
      * @param $newCode
      */
     private function replaceInFile($controller, $mark, $newCode)
     {
-        $rawCode = readCtrlContent($controller);
+        $rawCode = FileManipulator::readCtrlContent($controller);
         $fileController = \CB::replaceBetweenMark($rawCode, $mark, $newCode);
-        putCtrlContent($controller, $fileController);
+        FileManipulator::putCtrlContent($controller, $fileController);
     }
 }

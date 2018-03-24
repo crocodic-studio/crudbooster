@@ -5,88 +5,93 @@ namespace crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator
 class FieldDetector
 {
     /**
-     * @param $field
+     * @param $fieldName string
      * @return bool
      */
-    static function isPassword($field)
+    static function isPassword($fieldName)
     {
-        return in_array($field, explode(',', cbConfig('PASSWORD_FIELDS_CANDIDATE')));
+        return self::isWithin($fieldName, 'PASSWORD_FIELDS_CANDIDATE');
     }
 
     /**
-     * @param $field
+     * @param $fieldName string
      * @return bool
      */
-    static function isEmail($field)
+    static function isEmail($fieldName)
     {
-        return in_array($field, explode(',', cbConfig('EMAIL_FIELDS_CANDIDATE')));
+        return self::isWithin($fieldName, 'EMAIL_FIELDS_CANDIDATE');
     }
 
     /**
-     * @param $field
+     * @param $fieldName string
      * @return bool
      */
-    static function isPhone($field)
+    static function isPhone($fieldName)
     {
-        return in_array($field, explode(',', cbConfig('PHONE_FIELDS_CANDIDATE')));
+        return self::isWithin($fieldName, 'PHONE_FIELDS_CANDIDATE');
     }
 
     /**
-     * @param $field
+     * @param $fieldName string
      * @return bool
      */
-    static function isImage($field)
+    static function isImage($fieldName)
     {
-        return in_array($field, explode(',', cbConfig('IMAGE_FIELDS_CANDIDATE')));
+        return self::isWithin($fieldName, 'IMAGE_FIELDS_CANDIDATE');
     }
 
     /**
-     * @param $field
+     * @param $fieldName string
      * @return bool
      */
-    static function isExceptional($field)
+    static function isExceptional($fieldName)
     {
-        return in_array($field, ['id', 'created_at', 'updated_at', 'deleted_at']);
+        return in_array($fieldName, ['id', 'created_at', 'updated_at', 'deleted_at']);
     }
 
     /**
-     * @param $field
+     * @param $fieldName string
      * @return bool
      */
-    static function isForeignKey($field)
+    static function isForeignKey($fieldName)
     {
-        return substr($field, 0, 3) == 'id_' || substr($field, -3) == '_id';
+        return substr($fieldName, 0, 3) == 'id_' || substr($fieldName, -3) == '_id';
     }
 
     /**
-     * @param $field
+     * @param $fieldName string
      * @return bool
      */
-    static function isGeographical($field)
+    static function isGeographical($fieldName)
     {
-        return in_array($field, ['latitude', 'longitude']);
+        return in_array($fieldName, ['latitude', 'longitude']);
     }
 
     /**
-     * @param $field
+     * @param $fieldName string
      * @return bool
      */
-    static function isNameField($field)
+    static function isNameField($fieldName)
     {
-        return in_array($field, explode(',', cbConfig('NAME_FIELDS_CANDIDATE')));
+        return self::isWithin($fieldName, 'NAME_FIELDS_CANDIDATE');
     }
 
     /**
-     * @param $field
+     * @param $fieldName string
      * @return bool
      */
-    static function isUrlField($field)
+    static function isUrlField($fieldName)
     {
-        return in_array($field, explode(',', cbConfig("URL_FIELDS_CANDIDATE")));
+        return self::isWithin($fieldName, 'URL_FIELDS_CANDIDATE');
     }
 
-    static function isUploadField($field)
+    static function isUploadField($fieldName)
     {
-        return in_array($field, explode(',', cbConfig("UPLOAD_TYPES")));
+        return self::isWithin($fieldName, 'UPLOAD_TYPES');
+    }
+
+    static function isWithin($fieldName, $configKey)
+    {
+        return in_array($fieldName, explode(',', cbConfig($configKey)));
     }
 }

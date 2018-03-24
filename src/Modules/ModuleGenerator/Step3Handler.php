@@ -2,21 +2,21 @@
 
 namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
+use crocodicstudio\crudbooster\helpers\Parsers\ScaffoldingParser;
 use CRUDBooster;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
 
 class Step3Handler
 {
     public function showForm($id)
     {
-        $row = DB::table('cms_moduls')->where('id', $id)->first();
+        $row = ModulesRepo::find($id);;
 
         $columns = CRUDBooster::getTableColumns($row->table_name);
 
-        $code = readCtrlContent($row->controller);
+        $code = FileManipulator::readCtrlContent($row->controller);
 
-        $forms = parseScaffoldingToArray($code, 'form');
+        $forms = ScaffoldingParser::parse($code, 'form');
 
         $types = $this->getComponentTypes();
 
@@ -25,10 +25,10 @@ class Step3Handler
 
     public function handleFormSubmit()
     {
-        $scripts = $this->setFormScript(Request::all());
+        $scripts = $this->setFormScript(request()->all());
 
-        $controller = DB::table('cms_moduls')->where('id', request('id'))->first()->controller;
-        $phpCode = readCtrlContent($controller);
+        $controller = ModulesRepo::getControllerName(request('id'));
+        $phpCode = FileManipulator::readCtrlContent($controller);
         list($top, $currentScaffold, $bottom) = \CB::extractBetween($phpCode, "FORM");
 
         //IF FOUND OLD, THEN CLEAR IT
@@ -48,7 +48,7 @@ class Step3Handler
         $fileContent .= "            ".($bottom);
 
         //CREATE FILE CONTROLLER
-        putCtrlContent($controller, $fileContent);
+        FileManipulator::putCtrlContent($controller, $fileContent);
 
         return redirect()->route('AdminModulesControllerGetStep4', ['id' => request('id')]);
     }

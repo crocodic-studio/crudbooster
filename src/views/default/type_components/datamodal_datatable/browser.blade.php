@@ -54,4 +54,4 @@
     @endforeach
     </tbody>
 </table>
-<div align="center">{!! str_replace("/?","?",$result->appends(Request::all())->render()) !!}</div>
+<div align="center">{!! str_replace("/?","?",$result->appends(request()->all())->render()) !!}</div>

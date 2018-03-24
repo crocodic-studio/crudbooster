@@ -2,12 +2,12 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>{{ ($page_title)?CRUDBooster::getSetting('appname').': '.strip_tags($page_title):"Admin Area" }}</title>
+    <title>{{ ($page_title)?cbGetsetting('appname').': '.strip_tags($page_title):"Admin Area" }}</title>
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
     <meta name='generator' content='CRUDBooster.com'/>
     <meta name='robots' content='noindex,nofollow'/>
     <link rel="shortcut icon"
-          href="{{ CRUDBooster::getSetting('favicon')?asset(CRUDBooster::getSetting('favicon')):cbAsset('logo_crudbooster.png') }}">
+          href="{{ cbGetsetting('favicon')?asset(cbGetsetting('favicon')):cbAsset('logo_crudbooster.png') }}">
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
 
     <!-- Bootstrap 3.3.2 -->
@@ -47,8 +47,8 @@
         <nav class="navbar navbar-static-top">
             <div class="container">
                 <div class="navbar-header">
-                    <a href="{{url(cbAdminPath())}}" title='{{CRUDBooster::getSetting('appname')}}'
-                       class="navbar-brand">{{CRUDBooster::getSetting('appname')}}</a>
+                    <a href="{{url(cbAdminPath())}}" title='{{cbGetsetting('appname')}}'
+                       class="navbar-brand">{{cbGetsetting('appname')}}</a>
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
                             data-target="#navbar-collapse">
                         <i class="fa fa-bars"></i>
@@ -162,7 +162,7 @@
     <footer class="main-footer">
         <!-- To the right -->
         <div class="pull-right hidden-xs">
-            Powered By {{CRUDBooster::getSetting('appname')}}
+            Powered By {{cbGetsetting('appname')}}
         </div>
         <!-- Default to the left -->
         <strong>Copyright &copy; {!! date('Y') !!}. All rights reserved.</strong>

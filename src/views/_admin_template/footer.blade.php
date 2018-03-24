@@ -2,7 +2,7 @@
     <!-- To the right -->
     <br>
     <div class="pull-{{ cbTrans('right') }} hidden-xs">
-        {{ cbTrans('powered_by') }} {{CRUDBooster::getSetting('appname')}}
+        {{ cbTrans('powered_by') }} {{cbGetsetting('appname')}}
     </div>
     <!-- Default to the left -->
     <strong>{{ cbTrans('copyright') }} &copy; {!! date('Y')  !!} {{ cbTrans('all_rights_reserved') }} .</strong>

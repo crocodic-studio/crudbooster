@@ -24,7 +24,7 @@ class Step1Handler
 
         if (! request('id')) {
             if (DB::table('cms_moduls')->where('path', $path)->where('deleted_at', null)->count()) {
-                return CRUDBooster::backWithMsg('Sorry the slug has already exists, please choose another !', 'warning');
+                return backWithMsg('Sorry the slug has already exists, please choose another !', 'warning');
             }
             $id = $this->registerNewModule($table_name, $path, $name, $icon);
             return redirect()->route("AdminModulesControllerGetStep2", ["id" => $id]);
@@ -33,11 +33,11 @@ class Step1Handler
         $id = request('id');
         \DB::table('cms_moduls')->where('id', $id)->update(compact("name", "table_name", "icon", "path"));
 
-        $row = DB::table('cms_moduls')->where('id', $id)->first();
+        $row = ModulesRepo::find($id);
 
 
         if (file_exists(controller_path($row->controller))) {
-            $response = (readCtrlContent(str_replace('.', '', $row->controller)));
+            $response = FileManipulator::readCtrlContent(str_replace('.', '', $row->controller));
         }else{
             $response = file_get_contents(__DIR__.'Step1Handler.php/'.str_replace('.', '', $row->controller).'.php');
         }

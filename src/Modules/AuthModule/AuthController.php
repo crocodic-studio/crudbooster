@@ -61,7 +61,7 @@ class AuthController extends Controller
 
     public function postLogin()
     {
-        $validator = Validator::make(Request::all(), [
+        $validator = Validator::make(request()->all(), [
                 'email' => 'required|email|exists:cms_users',
                 'password' => 'required',
             ]);
@@ -69,7 +69,7 @@ class AuthController extends Controller
         if ($validator->fails()) {
             $message = $validator->errors()->all();
 
-            return CRUDBooster::backWithMsg(implode(', ', $message), 'danger');
+            return backWithMsg(implode(', ', $message), 'danger');
         }
 
         $email = request("email");
@@ -94,7 +94,7 @@ class AuthController extends Controller
         session()->put('admin_privileges_name', $priv->name);
         session()->put('admin_lock', 0);
         session()->put('theme_color', $priv->theme_color);
-        session()->put('appname', CRUDBooster::getSetting('appname'));
+        session()->put('appname', cbGetsetting('appname'));
 
         CRUDBooster::insertLog(cbTrans('log_login', ['email' => $users->email, 'ip' => Request::server('REMOTE_ADDR')]));
 
@@ -115,17 +115,17 @@ class AuthController extends Controller
 
     public function postForgot()
     {
-        $validator = Validator::make(Request::all(), ['email' => 'required|email|exists:cms_users',]);
+        $validator = Validator::make(request()->all(), ['email' => 'required|email|exists:cms_users',]);
 
         if ($validator->fails()) {
             $message = $validator->errors()->all();
-            return CRUDBooster::backWithMsg(implode(', ', $message), 'danger');
+            return backWithMsg(implode(', ', $message), 'danger');
         }
 
         $randString = str_random(5);
         $this->table('cms_users')->where('email', request('email'))->update(['password' => \Hash::make($randString)]);
 
-        //$appname = CRUDBooster::getSetting('appname');
+        //$appname = cbGetsetting('appname');
         $user = CRUDBooster::first('cms_users', ['email' => request('email')]);
         $user->password = $randString;
         CRUDBooster::sendEmail(['to' => $user->email, 'data' => $user, 'template' => 'forgot_password_backend']);

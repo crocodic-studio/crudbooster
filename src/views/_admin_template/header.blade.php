@@ -3,8 +3,8 @@
 
     <!-- Logo -->
     <a href="{{url(cbAdminPath())}}"
-       title='{{CRUDBooster::getSetting('appname')}}'
-       class="logo">{{CRUDBooster::getSetting('appname')}}</a>
+       title='{{cbGetsetting('appname')}}'
+       class="logo">{{cbGetsetting('appname')}}</a>
 
     <!-- Header Navbar -->
     <nav class="navbar navbar-static-top" role="navigation">

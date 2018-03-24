@@ -56,35 +56,16 @@ if (! function_exists('is_checked')) {
 if (! function_exists('controllers_dir')) {
     function controllers_dir()
     {
-        return 'app/Http/Controllers/';
-    }
-}
-
-if (! function_exists('parseScaffoldingToArray')) {
-    function parseScaffoldingToArray($code, $type = 'form')
-    {
-        return \crocodicstudio\crudbooster\helpers\Parsers\ScaffoldingParser::parse($code, $type);
+        $_ = DIRECTORY_SEPARATOR;
+        return 'app'.$_.'Http'.$_.'Controllers'.$_;
     }
 }
 
 if (! function_exists('controller_path')) {
     function controller_path($controller)
     {
-        return app_path('Http/Controllers/'.$controller.'.php');
-    }
-}
-
-if (! function_exists('readCtrlContent')) {
-    function readCtrlContent($ctrl)
-    {
-        return file_get_contents(controller_path($ctrl));
-    }
-}
-
-if (! function_exists('putCtrlContent')) {
-    function putCtrlContent($ctrl)
-    {
-        return file_put_contents(controller_path($ctrl));
+        $_ = DIRECTORY_SEPARATOR;
+        return app_path('Http'.$_.'Controllers'.$_.$controller.'.php');
     }
 }
 
@@ -290,3 +271,18 @@ if (! function_exists('array_get_keys')) {
         return array_merge($_defaults, array_intersect_key($_array, $_defaults));
     }
 }
+
+if (! function_exists('cbGetSetting')) {
+    function cbGetSetting($name)
+    {
+        return \crocodicstudio\crudbooster\Modules\SettingModule\SettingRepo::getSetting($name);
+    }
+}
+
+if (! function_exists('backWithMsg')) {
+    function backWithMsg($msg, $type = 'success')
+    {
+        return redirect()->back()->with(['message_type' => $type, 'message' => $msg]);
+    }
+}
+

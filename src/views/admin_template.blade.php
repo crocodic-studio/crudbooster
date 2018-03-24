@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{{ ($page_title)?CRUDBooster::getSetting('appname').': '.strip_tags($page_title):"Admin Area" }}</title>
+    <title>{{ ($page_title)?cbGetsetting('appname').': '.strip_tags($page_title):"Admin Area" }}</title>
     @include('crudbooster::_admin_template.meta')
     @include('crudbooster::_admin_template.css')
 
@@ -32,7 +32,7 @@
 
                     @if(CRUDBooster::getCurrentMethod() == 'getIndex')
                         @if($button_show)
-                            <a href="{{ CRUDBooster::mainpath().'?'.http_build_query(Request::all()) }}"
+                            <a href="{{ CRUDBooster::mainpath().'?'.http_build_query(request()->all()) }}"
                                id='btn_show_data' class="btn btn-sm btn-primary"
                                title="{{cbTrans('action_show_data')}}">
 
@@ -63,7 +63,7 @@
                     <li class="active">{{$module->name}}</li>
                 </ol>
             @else
-                <h1>{{CRUDBooster::getSetting('appname')}}
+                <h1>{{cbGetsetting('appname')}}
                     <small>Information</small>
                 </h1>
             @endif

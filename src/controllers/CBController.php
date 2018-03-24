@@ -149,7 +149,7 @@ class CBController extends Controller
         $this->data['addaction'] = ($this->show_addaction) ? $this->addaction : null;
         $this->data['table'] = $this->table;
         $this->data['title_field'] = $this->title_field;
-        $this->data['appname'] = CB::getSetting('appname');
+        $this->data['appname'] = cbGetsetting('appname');
         $this->data['alerts'] = $this->alert;
         $this->data['index_button'] = $this->index_button;
         $this->data['show_numbering'] = $this->show_numbering;
@@ -182,7 +182,7 @@ class CBController extends Controller
         $this->data['parent_id'] = (request('parent_id')) ?: $this->parent_id;
 
         if (CB::getCurrentMethod() == 'getProfile') {
-            Session::put('current_row_id', CB::myId());
+            session()->put('current_row_id', CB::myId());
             $this->data['return_url'] = Request::fullUrl();
         }
 
@@ -208,17 +208,17 @@ class CBController extends Controller
 
     public function postExportData()
     {
-        $this->limit = Request::input('limit');
+        $this->limit = request('limit');
         $this->index_return = true;
-        $filename = Request::input('filename');
-        $papersize = Request::input('page_size');
-        $paperorientation = Request::input('page_orientation');
+        $filename = request('filename');
+        $papersize = request('page_size');
+        $paperorientation = request('page_orientation');
         $indexContent = $this->getIndex();
 
-        if (Request::input('default_paper_size')) {
+        if (request('default_paper_size')) {
             DB::table('cms_settings')->where('name', 'default_paper_size')->update(['content' => $papersize]);
         }
-        $format = Request::input('fileformat');
+        $format = request('fileformat');
         if(in_array($format, ['pdf', 'xls', 'csv']))
         {
             return app(IndexExport::class)->{$format}($filename, $indexContent, $paperorientation, $papersize);
@@ -327,7 +327,7 @@ class CBController extends Controller
         $id = request('id');
         DB::table($table)->where(CB::pk($table), $id)->update([$column => $value]);
 
-        return CB::backWithMsg(cbTrans('alert_delete_data_success'));
+        return backWithMsg(cbTrans('alert_delete_data_success'));
     }
 
     public function postFindData()
@@ -424,7 +424,7 @@ class CBController extends Controller
 
         $page_title = cbTrans("edit_data_page_title", ['module' => CB::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
         $command = 'edit';
-        Session::put('current_row_id', $id);
+        session()->put('current_row_id', $id);
 
         return view('crudbooster::default.form', compact('id', 'row', 'page_title', 'command'));
     }
@@ -481,7 +481,7 @@ class CBController extends Controller
         $page_title = cbTrans('detail_data_page_title', ['module' => CB::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
         $command = 'detail';
 
-        Session::put('current_row_id', $id);
+        session()->put('current_row_id', $id);
 
         return view('crudbooster::default.form', compact('row', 'page_title', 'command', 'id'));
     }
@@ -502,7 +502,7 @@ class CBController extends Controller
         $rows = Excel::load($file, function ($reader) {
         })->get();
 
-        Session::put('total_data_import', count($rows));
+        session()->put('total_data_import', count($rows));
 
         $data_import_column = [];
         foreach ($rows as $value) {
@@ -540,8 +540,8 @@ class CBController extends Controller
     public function postActionSelected()
     {
         $this->cbLoader();
-        $selectedIds = Request::input('checkbox');
-        $button_name = Request::input('button_name');
+        $selectedIds = request('checkbox');
+        $button_name = request('button_name');
 
         if (! $selectedIds) {
             CB::redirect($_SERVER['HTTP_REFERER'], 'Please select at least one data!', 'warning');
@@ -553,7 +553,7 @@ class CBController extends Controller
 
         list($type, $message) = $this->_getMessageAndType($button_name, $selectedIds);
 
-        return CB::backWithMsg($message, $type);
+        return backWithMsg($message, $type);
     }
 
     /**
@@ -566,7 +566,7 @@ class CBController extends Controller
 
         $this->insertLog('log_delete', implode(',', $idsArray));
 
-        return CB::backWithMsg(cbTrans('alert_delete_selected_success'));
+        return backWithMsg(cbTrans('alert_delete_selected_success'));
     }
 
     /**
@@ -644,14 +644,14 @@ class CBController extends Controller
      */
     private function performDeletion($idsArray)
     {
-        $this->hookBeforeDelete($idsArray);
+        $this->hook_before_delete($idsArray);
         $this->deleteIds($idsArray);
-        $this->hookAfterDelete($idsArray);
+        $this->hook_after_delete($idsArray);
     }
 
     private function insertLog($msg, $name)
     {
-        CB::insertLog(cbTrans($msg, ['module' => CB::getCurrentModule()->name, 'name' => $name]));
+        CB::insertLog(trans('logging.'.$msg, ['module' => CB::getCurrentModule()->name, 'name' => $name]));
     }
 
     private function setTimeStamps($col)

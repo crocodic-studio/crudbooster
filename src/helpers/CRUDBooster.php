@@ -16,14 +16,6 @@ use Validator;
 
 class CRUDBooster
 {
-    public static function insert($table, $data = [])
-    {
-        if (! $data['created_at'] && Schema::hasColumn($table, 'created_at')) {
-            $data['created_at'] = date('Y-m-d H:i:s');
-        }
-        return DB::table($table)->insertGetId($data);
-    }
-
     public static function get($table, $string_conditions = null, $orderby = null, $limit = null, $skip = null)
     {
         $table = self::parseSqlTable($table);
@@ -85,7 +77,7 @@ class CRUDBooster
             return;
         }
         foreach ($roles as $role) {
-            if ($role->path == CRUDBooster::getModulePath()) {
+            if ($role->path == self::getModulePath()) {
                 return $role;
             }
         }
@@ -340,7 +332,7 @@ class CRUDBooster
 
     public static function valid($arr = [], $type = 'json')
     {
-        $input_arr = Request::all();
+        $input_arr = request()->all();
 
         foreach ($arr as $a => $b) {
             if (is_int($a)) {
@@ -408,7 +400,7 @@ class CRUDBooster
 
     public static function urlFilterColumn($key, $type, $value = '', $singleSorting = true)
     {
-        $params = Request::all();
+        $params = request()->all();
         $mainpath = trim(self::mainpath(), '/');
 
         if ($params['filter_column'] && $singleSorting) {
@@ -451,6 +443,11 @@ class CRUDBooster
     public static function insertLog($description)
     {
         LogsRepository::insertLog($description, self::myId());
+    }
+
+    public static function insertTryLog($action, $name = '')
+    {
+        self::insertLog(trans("logging.log_try_".$action, ['name' => $name, 'module' => self::getCurrentModule()]));
     }
 
     public static function myId()

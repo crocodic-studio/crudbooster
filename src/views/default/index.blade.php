@@ -40,7 +40,7 @@
                     </a>
                 @endif
 
-            @include("crudbooster::default._index.search", ['parameters' => Request::all()])
+            @include("crudbooster::default._index.search", ['parameters' => request()->all()])
 
             @include("crudbooster::default._index.pagination_select", ['limit' => $limit ])
 

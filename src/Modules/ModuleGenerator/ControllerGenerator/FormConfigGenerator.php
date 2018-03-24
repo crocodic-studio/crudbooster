@@ -1,7 +1,7 @@
 <?php
 
 namespace crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator;
-
+use Illuminate\Support\Facades\Schema;
 use CB;
 
 class FormConfigGenerator

@@ -39,9 +39,8 @@ class MenuRepo
                     $c->url = $url;
                     $c->url_path = trim(str_replace(url('/'), '', $url), "/");
                 }
-
-                $menu->children = $child;
             }
+            $menu->children = $child;
         }
 
         return $menuActive;
@@ -84,8 +83,26 @@ class MenuRepo
         return $menu;
     }
 
-    private function table()
+    private static function table()
     {
         return DB::table('cms_menus');
+    }
+
+    public static function fetchMenuWithChilds($status = 1)
+    {
+        $menus = self::fetchMenu(0, $status);
+
+        foreach ($menus as $menu) {
+            $child = self::fetchMenu($menu->id, $status);
+            if (count($child)) {
+                $menu->children = $child;
+            }
+        }
+
+        return $menus;
+    }
+    public static function fetchMenu($parent, $status = 1)
+    {
+        return self::table()->where('parent_id', $parent)->where('is_active', $status)->orderby('sorting', 'asc')->get();
     }
 }

@@ -2,30 +2,30 @@
 
 namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
+use crocodicstudio\crudbooster\helpers\Parsers\ScaffoldingParser;
 use CRUDBooster;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Request;
 
 class Step2Handler
 {
+    private $hooks = ['hook_query_index', 'hook_row_index', 'hook_before_add', 'hook_after_add',
+        'hook_before_edit', 'hook_after_edit', 'hook_before_delete', 'hook_after_delete',];
+
     public function showForm($id)
     {
-        $module = DB::table('cms_moduls')->where('id', $id)->first();
+        $module = ModulesRepo::find($id);
 
         $columns = CRUDBooster::getTableColumns($module->table_name);
 
-        $controllerCode = (readCtrlContent($module->controller));
+        $controllerCode = (FileManipulator::readCtrlContent($module->controller));
 
         $data = [];
         $data['id'] = $id;
         $data['columns'] = $columns;
         //$data['table_list'] = \CB::listCbTables();
-        $data['cols'] = parseScaffoldingToArray($controllerCode, 'col');
+        $data['cols'] = ScaffoldingParser::parse($controllerCode, 'col');
 
 
-        $hooks = ['hookQueryIndex', 'hookRowIndex', 'hookBeforeAdd', 'hookAfterAdd',
-            'hookBeforeEdit', 'hookAfterEdit', 'hookBeforeDelete', 'hookAfterDelete',];
-        foreach($hooks as $hook){
+        foreach($this->hooks as $hook){
             $data[$hook] = FileManipulator::readMethodContent($controllerCode, $hook);
         }
 
@@ -34,23 +34,18 @@ class Step2Handler
 
     public function handleFormSubmit()
     {
-        $id = Request::input('id');
-        $controller = DB::table('cms_moduls')->where('id', $id)->first()->controller;
+        $id = request('id');
+        $controller = ModulesRepo::getControllerName($id);
 
         $newCode = $this->makeColumnPhpCode();
-        $code = readCtrlContent($controller);
+        $code = FileManipulator::readCtrlContent($controller);
         $fileResult = \CB::replaceBetweenMark($code, 'COLUMNS', $newCode);
 
-        $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookQueryIndex', g('hookQueryIndex'));
-        $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookRowIndex', g('hookRowIndex'));
-        $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookBeforeAdd', g('hookBeforeAdd'));
-        $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookAfterAdd', g('hookAfterAdd'));
-        $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookBeforeEdit', g('hookBeforeEdit'));
-        $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookAfterEdit', g('hookAfterEdit'));
-        $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookBeforeDelete', g('hookBeforeDelete'));
-        $fileResult = FileManipulator::writeMethodContent($fileResult, 'hookAfterDelete', g('hookAfterDelete'));
+        foreach($this->hooks as $hook){
+            $fileResult = FileManipulator::writeMethodContent($fileResult, $hook, request($hook));
+        }
 
-        putCtrlContent($controller, $fileResult);
+        FileManipulator::putCtrlContent($controller, $fileResult);
 
         return redirect()->route("AdminModulesControllerGetStep3", ["id" => $id]);
     }

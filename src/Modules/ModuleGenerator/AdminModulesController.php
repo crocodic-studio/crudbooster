@@ -59,9 +59,9 @@ class AdminModulesController extends CBController
     // 	$this->cbView('CbModulesGen::index',$data);
     // }	
 
-    function hookBeforeDelete($id)
+    function hook_before_delete($id)
     {
-        $controller = DB::table('cms_moduls')->where('id', $id)->first()->controller;
+        $controller = ModulesRepo::getControllerName($id);
         DB::table('cms_menus')->where('path', 'like', '%'.$controller.'%')->delete();
         @unlink(controller_path($controller));
     }
@@ -219,7 +219,7 @@ class AdminModulesController extends CBController
 
     public function getTest()
     {
-        $code = (readCtrlContent('AdminCustomersController.php'));
+        $code = FileManipulator::readCtrlContent('AdminCustomersController.php');
 
         $forms = parseFormToArray($code);
         echo '<pre>';
