@@ -12,7 +12,6 @@ class Seeder
         $data = [
             //LOGIN REGISTER STYLE
             [
-
                 'name' => 'login_background_color',
                 'label' => 'Login Background Color',
                 'content' => null,
@@ -22,7 +21,6 @@ class Seeder
                 'helper' => 'Input hexacode',
             ],
             [
-
                 'name' => 'login_font_color',
                 'label' => 'Login Font Color',
                 'content' => null,
@@ -32,7 +30,6 @@ class Seeder
                 'helper' => 'Input hexacode',
             ],
             [
-
                 'name' => 'login_background_image',
                 'label' => 'Login Background Image',
                 'content' => null,
@@ -44,7 +41,6 @@ class Seeder
 
             //EMAIL SETTING
             [
-
                 'name' => 'email_sender',
                 'label' => 'Email Sender',
                 'content' => 'support@crudbooster.com',
@@ -54,7 +50,6 @@ class Seeder
                 'helper' => null,
             ],
             [
-
                 'name' => 'smtp_driver',
                 'label' => 'Mail Driver',
                 'content' => 'mail',
@@ -64,7 +59,6 @@ class Seeder
                 'helper' => null,
             ],
             [
-
                 'name' => 'smtp_host',
                 'label' => 'SMTP Host',
                 'content' => '',
@@ -74,7 +68,6 @@ class Seeder
                 'helper' => null,
             ],
             [
-
                 'name' => 'smtp_port',
                 'label' => 'SMTP Port',
                 'content' => '25',
@@ -84,7 +77,6 @@ class Seeder
                 'helper' => 'default 25',
             ],
             [
-
                 'name' => 'smtp_username',
                 'label' => 'SMTP Username',
                 'content' => '',
@@ -94,7 +86,6 @@ class Seeder
                 'helper' => null,
             ],
             [
-
                 'name' => 'smtp_password',
                 'label' => 'SMTP Password',
                 'content' => '',
@@ -106,7 +97,6 @@ class Seeder
 
             //APPLICATION SETTING
             [
-
                 'name' => 'appname',
                 'label' => 'Application Name',
                 'group_setting' => cbTrans('application_setting'),
@@ -116,7 +106,6 @@ class Seeder
                 'helper' => null,
             ],
             [
-
                 'name' => 'default_paper_size',
                 'label' => 'Default Paper Print Size',
                 'group_setting' => cbTrans('application_setting'),
@@ -126,7 +115,6 @@ class Seeder
                 'helper' => 'Paper size, ex : A4, Legal, etc',
             ],
             [
-
                 'name' => 'logo',
                 'label' => 'Logo',
                 'content' => '',
@@ -136,7 +124,6 @@ class Seeder
                 'helper' => null,
             ],
             [
-
                 'name' => 'favicon',
                 'label' => 'Favicon',
                 'content' => '',
@@ -178,14 +165,14 @@ class Seeder
 
         foreach ($data as $row) {
             $count = DB::table('cms_settings')->where('name', $row['name'])->count();
-            if ($count) {
-                if ($count > 1) {
-                    $newsId = DB::table('cms_settings')->where('name', $row['name'])->orderby('id', 'asc')->take(1)->first();
-                    DB::table('cms_settings')->where('name', $row['name'])->where('id', '!=', $newsId->id)->delete();
-                }
+            if (! $count) {
+                DB::table('cms_settings')->insert($row);
                 continue;
             }
-            DB::table('cms_settings')->insert($row);
+            if ($count > 1) {
+                $newsId = DB::table('cms_settings')->where('name', $row['name'])->orderby('id', 'asc')->take(1)->first();
+                DB::table('cms_settings')->where('name', $row['name'])->where('id', '!=', $newsId->id)->delete();
+            }
         }
     }
 }
