@@ -1,0 +1,10 @@
+exclude_patterns:
+- "docs/"
+- "src/views/"
+- "src/assets/"
+- "src/configs/"
+- "src/database/"
+- "src/localization/"
+- "src/laravel-filemanager/"
+- "**/*.js"
+- "**/*.MD"
