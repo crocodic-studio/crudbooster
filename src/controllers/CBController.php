@@ -396,13 +396,15 @@ class CBController extends Controller
             if (Request::hasFile($name)) {
                 continue;
             }
+
+            if ($inputdata == '' && CB::isColumnNULL($this->table, $name)) {
+                continue;
+            }
+
+            $this->arr[$name] = '';
+
             if ($inputdata != '') {
                 $this->arr[$name] = $inputdata;
-            } else {
-                if (CB::isColumnNULL($this->table, $name)) {
-                    continue;
-                }
-                $this->arr[$name] = '';
             }
         }
     }
@@ -413,8 +415,8 @@ class CBController extends Controller
      */
     public function table($tableName = null)
     {
-        $tableName = $tableName ?: $this->table;
-        return \DB::table($tableName);
+        $table = $tableName ?: $this->table;
+        return \DB::table($table);
     }
 
     public function getEdit($id)
