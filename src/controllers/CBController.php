@@ -4,7 +4,7 @@ namespace crocodicstudio\crudbooster\controllers;
 
 error_reporting(E_ALL ^ E_NOTICE);
 
-use crocodicstudio\crudbooster\CBCoreModule\DataSaver;
+use crocodicstudio\crudbooster\CBCoreModule\RelationHandler;
 use crocodicstudio\crudbooster\CBCoreModule\Hooks;
 use crocodicstudio\crudbooster\CBCoreModule\Index;
 use crocodicstudio\crudbooster\CBCoreModule\Search;
@@ -279,7 +279,7 @@ class CBController extends Controller
         $this->hookBeforeAdd($this->arr);
 
         $this->arr[$this->primary_key] = $id = $this->table()->insertGetId($this->arr);
-        app(DataSaver::class)->save($this->table, $id, $this->data_inputan);
+        app(RelationHandler::class)->save($this->table, $id, $this->data_inputan);
 
         $this->hookAfterAdd($this->arr[$this->primary_key]);
 
@@ -370,7 +370,7 @@ class CBController extends Controller
 
         $this->hookBeforeEdit($this->arr, $id);
         $this->findRow($id)->update($this->arr);
-        app(DataSaver::class)->save($this->table, $id, $this->data_inputan);
+        app(RelationHandler::class)->save($this->table, $id, $this->data_inputan);
 
         $this->hookAfterEdit($id);
 
