@@ -37,7 +37,7 @@ class FilterIndexRows
                     case 'in':
                     case 'not in':
                         $value = explode(',', $value);
-                        if ($value) {
+                        if (!empty($value)) {
                             $query->whereIn($key, $value);
                         }
                         break;
