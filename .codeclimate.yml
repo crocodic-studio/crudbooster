@@ -2,6 +2,7 @@ exclude_patterns:
 - "docs/"
 - "**/views/"
 - "**/*.blade.php/"
+- "**/fontAwesome.php/"
 - "src/assets/"
 - "src/configs/"
 - "src/database/"
