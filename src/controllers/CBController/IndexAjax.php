@@ -2,6 +2,10 @@
 
 namespace crocodicstudio\crudbooster\controllers\CBController;
 
+use crocodicstudio\crudbooster\CBCoreModule\Search;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+
 trait IndexAjax
 {
     public function getDataTable()
