@@ -70,7 +70,7 @@ class AuthController extends Controller
         if ($validator->fails()) {
             $message = $validator->errors()->all();
 
-            return backWithMsg(implode(', ', $message), 'danger');
+            backWithMsg(implode(', ', $message), 'danger');
         }
 
         $password = request("password");
@@ -119,7 +119,7 @@ class AuthController extends Controller
 
         if ($validator->fails()) {
             $message = $validator->errors()->all();
-            return backWithMsg(implode(', ', $message), 'danger');
+            backWithMsg(implode(', ', $message), 'danger');
         }
 
         $randString = str_random(5);
