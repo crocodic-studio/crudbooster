@@ -139,7 +139,7 @@ class CBController extends Controller
         $this->cbInit();
 
         $this->checkHideForm();
-
+        $this->cbLayoutLoader();
         $this->primary_key = CB::pk($this->table);
         $this->columns_table = $this->col;
         $this->data_inputan = $this->form;
@@ -150,7 +150,6 @@ class CBController extends Controller
         $this->data['table'] = $this->table;
         $this->data['title_field'] = $this->title_field;
         $this->data['appname'] = cbGetsetting('appname');
-        $this->data['alerts'] = $this->alert;
         $this->data['index_button'] = $this->index_button;
         $this->data['button_detail'] = $this->button_detail;
         $this->data['button_edit'] = $this->button_edit;
@@ -162,10 +161,6 @@ class CBController extends Controller
         $this->data['button_save'] = $this->button_save;
         $this->data['button_action_width'] = $this->button_action_width;
         $this->data['button_selected'] = $this->button_selected;
-        $this->data['load_js'] = $this->load_js;
-        $this->data['load_css'] = $this->load_css;
-        $this->data['script_js'] = $this->script_js;
-        $this->data['style_css'] = $this->style_css;
         $this->data['sub_module'] = $this->sub_module;
         $this->data['parent_field'] = (request('parent_field')) ?: $this->parent_field;
         $this->data['parent_id'] = (request('parent_id')) ?: $this->parent_id;
@@ -176,6 +171,15 @@ class CBController extends Controller
         }
 
         view()->share($this->data);
+    }
+
+    private function cbLayoutLoader()
+    {
+        $this->data['alerts'] = $this->alert;
+        $this->data['style_css'] = $this->style_css;
+        $this->data['load_js'] = $this->load_js;
+        $this->data['script_js'] = $this->script_js;
+        $this->data['load_css'] = $this->load_css;
     }
 
     private function cbIndexLoader()
