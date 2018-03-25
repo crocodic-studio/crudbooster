@@ -8,10 +8,12 @@ use crocodicstudio\crudbooster\CBCoreModule\DataSaver;
 use crocodicstudio\crudbooster\CBCoreModule\Hooks;
 use crocodicstudio\crudbooster\CBCoreModule\Index;
 use crocodicstudio\crudbooster\CBCoreModule\Search;
+use crocodicstudio\crudbooster\controllers\CBController\CbFormLoader;
+use crocodicstudio\crudbooster\controllers\CBController\CbIndexLoader;
+use crocodicstudio\crudbooster\controllers\CBController\CbLayoutLoader;
+use crocodicstudio\crudbooster\controllers\CBController\Deleter;
 use crocodicstudio\crudbooster\controllers\Helpers\IndexExport;
 use crocodicstudio\crudbooster\controllers\Helpers\IndexImport;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +27,7 @@ use Schema;
 class CBController extends Controller
 {
     use Hooks;
+    use Deleter,CbFormLoader, CbIndexLoader, CbLayoutLoader;
 
     public $data_inputan;
 
@@ -242,7 +245,7 @@ class CBController extends Controller
         $id = request('id');
         DB::table($table)->where(CB::pk($table), $id)->update([$column => $value]);
 
-        return backWithMsg(cbTrans('alert_delete_data_success'));
+        backWithMsg(cbTrans('alert_update_data_success'));
     }
 
     public function postFindData()
@@ -376,20 +379,6 @@ class CBController extends Controller
         $this->sendResponseForSave('alert_update_data_success');
     }
 
-    public function getDelete($id)
-    {
-        $this->cbLoader();
-        $row = $this->findRow($id)->first();
-
-        $this->insertLog('log_delete', $row->{$this->title_field});
-
-        $this->performDeletion([$id]);
-
-        $url = request('return_url') ?: CB::referer();
-
-        CB::redirect($url, cbTrans('alert_delete_data_success'), 'success');
-    }
-
     public function getDetail($id)
     {
         $this->cbFormLoader();
@@ -456,77 +445,8 @@ class CBController extends Controller
         return response()->json(['status' => true]);
     }
 
-    public function postActionSelected()
-    {
-        $this->cbLoader();
-        $selectedIds = request('checkbox');
-        $button_name = request('button_name');
-
-        if (! $selectedIds) {
-            CB::redirect($_SERVER['HTTP_REFERER'], 'Please select at least one row!', 'warning');
-        }
-
-        if ($button_name == 'delete') {
-            return $this->deleteFromDB($selectedIds);
-        }
-
-        list($type, $message) = $this->_getMessageAndType($button_name, $selectedIds);
-
-        return backWithMsg($message, $type);
-    }
-
-    /**
-     * @param $idsArray
-     * @return mixed
-     */
-    private function deleteFromDB($idsArray)
-    {
-        $this->performDeletion($idsArray);
-
-        $this->insertLog('log_delete', implode(',', $idsArray));
-
-        return backWithMsg(cbTrans('alert_delete_selected_success'));
-    }
-
-    /**
-     * @param $button_name
-     * @param $id_selected
-     * @return array
-     */
-    private function _getMessageAndType($button_name, $id_selected)
-    {
-        $action = ucwords(str_replace(['-', '_'], ' ', $button_name));
-        $type = 'success';
-        $message = cbTrans('alert_action', ['action' => $action]);
-
-        if ($this->actionButtonSelected($id_selected, $button_name) === false) {
-            $message = ! empty($this->alert['message']) ? $this->alert['message'] : 'Error';
-            $type = ! empty($this->alert['type']) ? $this->alert['type'] : 'danger';
-        }
-
-        return [$type, $message];
-    }
-
     public function actionButtonSelected($id_selected, $button_name)
     {
-    }
-
-    public function getDeleteImage()
-    {
-        $this->cbLoader();
-        $id = request('id');
-        $column = request('column');
-
-        $row = $this->findRow($id)->first();
-        $file = $row->{$column};
-
-        Storage::delete($file);
-
-        $this->findRow($id)->update([$column => null]);
-
-        $this->insertLog('log_delete_image', $row->{$this->title_field});
-
-        CB::redirect(Request::server('HTTP_REFERER'), cbTrans('alert_delete_data_success'), 'success');
     }
 
     private function sendResponseForSave($msg)
@@ -542,29 +462,6 @@ class CBController extends Controller
             CB::redirect(CB::mainpath('add'), cbTrans($msg), 'success');
         }
         CB::redirect(CB::mainpath(), cbTrans($msg), 'success');
-    }
-
-    /**
-     * @param $idsArray
-     */
-    private function deleteIds($idsArray)
-    {
-        $query = $this->table()->whereIn($this->primary_key, $idsArray);
-        if (Schema::hasColumn($this->table, 'deleted_at')) {
-            $query->update(['deleted_at' => date('Y-m-d H:i:s')]);
-        } else {
-            $query->delete();
-        }
-    }
-
-    /**
-     * @param $idsArray
-     */
-    private function performDeletion($idsArray)
-    {
-        $this->hook_before_delete($idsArray);
-        $this->deleteIds($idsArray);
-        $this->hook_after_delete($idsArray);
     }
 
     private function insertLog($msg, $name)
