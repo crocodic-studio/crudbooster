@@ -4,6 +4,14 @@ namespace crocodicstudio\crudbooster\controllers\CBController;
 
 trait CbIndexLoader
 {
+    public $password_candidate = null;
+
+    public $date_candidate = null;
+
+    public $columns_table;
+
+    public $orderby = null;
+
     public $index_statistic = [];
 
     public $index_additional_view = [];

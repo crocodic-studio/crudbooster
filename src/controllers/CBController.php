@@ -32,8 +32,6 @@ class CBController extends Controller
 
     public $data_inputan;
 
-    public $columns_table;
-
     public $module_name;
 
     public $table;
@@ -52,13 +50,7 @@ class CBController extends Controller
 
     public $addaction = [];
 
-    public $orderby = null;
-
-    public $password_candidate = null;
-
-    public $date_candidate = null;
-
-    public $global_privilege = false;
+    //public $global_privilege = false;
 
     public $button_delete = true;
 
@@ -76,35 +68,20 @@ class CBController extends Controller
 
     public function cbView($template, $data)
     {
-        $this->cbLoader();
-        echo view($template, $data);
+        $this->cbLayoutLoader();
+        view()->share($this->data);
+        return view($template, $data);
     }
 
     public function cbLoader()
     {
         $this->cbInit();
 
-        $this->checkHideForm();
         $this->cbLayoutLoader();
-        $this->primary_key = CB::pk($this->table);
-        $this->columns_table = $this->col;
-        $this->data_inputan = $this->form;
-        $this->data['pk'] = $this->primary_key;
-        $this->data['forms'] = $this->data_inputan;
-        $this->data['hide_form'] = $this->hide_form;
-        $this->data['table'] = $this->table;
-        $this->data['title_field'] = $this->title_field;
-        $this->data['appname'] = cbGetsetting('appname');
-        $this->data['index_button'] = $this->index_button;
-        $this->data['button_delete'] = $this->button_delete;
-        $this->data['sub_module'] = $this->sub_module;
-        $this->data['parent_field'] = (request('parent_field')) ?: $this->parent_field;
-        $this->data['parent_id'] = (request('parent_id')) ?: $this->parent_id;
-
-        if (CB::getCurrentMethod() == 'getProfile') {
-            session()->put('current_row_id', CB::myId());
-            $this->data['return_url'] = Request::fullUrl();
-        }
+        $this->cbFormLoader();
+        $this->cbIndexLoader();
+        $this->checkHideForm();
+        $this->genericLoader();
 
         view()->share($this->data);
     }
@@ -152,7 +129,7 @@ class CBController extends Controller
         $this->cbLoader();
         $data = $index->index($this);
 
-        return view('crudbooster::default.index', $data);
+        return $this->cbView('crudbooster::default.index', $data);
     }
 
     public function getUpdateSingle()
@@ -166,23 +143,11 @@ class CBController extends Controller
         backWithMsg(cbTrans('alert_update_data_success'));
     }
 
-    public function postFindData()
-    {
-        $items = app(Search::class)->searchData(request('data'), request('q'), request('id'));
-
-        return response()->json(['items' => $items]);
-    }
-
     public function getAdd()
     {
-        $this->cbFormLoader();
-        $this->cbLoader();
-
         $page_title = cbTrans('add_data_page_title', ['module' => CB::getCurrentModule()->name]);
-
         $command = 'add';
-
-        return view('crudbooster::default.form', compact('page_title', 'command'));
+        return $this->cbForm(compact('page_title', 'command'));
     }
 
     public function postAddSave()
@@ -257,15 +222,13 @@ class CBController extends Controller
 
     public function getEdit($id)
     {
-        $this->cbFormLoader();
-        $this->cbLoader();
         $row = $this->findRow($id)->first();
 
         $page_title = cbTrans("edit_data_page_title", ['module' => CB::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
         $command = 'edit';
         session()->put('current_row_id', $id);
 
-        return view('crudbooster::default.form', compact('id', 'row', 'page_title', 'command'));
+        return $this->cbForm(compact('id', 'row', 'page_title', 'command'));
     }
 
     /**
@@ -299,8 +262,6 @@ class CBController extends Controller
 
     public function getDetail($id)
     {
-        $this->cbFormLoader();
-        $this->cbLoader();
         $row = $this->findRow($id)->first();
 
 
@@ -309,7 +270,7 @@ class CBController extends Controller
 
         session()->put('current_row_id', $id);
 
-        return view('crudbooster::default.form', compact('row', 'page_title', 'command', 'id'));
+        return $this->cbForm(compact('row', 'page_title', 'command', 'id'));
     }
 
     public function getImportData()
@@ -321,7 +282,7 @@ class CBController extends Controller
         $data['page_title'] = 'Import Data '.CB::getCurrentModule()->name;
 
         if (! request('file') || request('import')) {
-            return view('crudbooster::import', $data);
+            return $this->cbView('crudbooster::import', $data);
         }
 
         $file = 'storage'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.base64_decode(request('file'));
@@ -345,7 +306,7 @@ class CBController extends Controller
         $data['table_columns'] = DB::getSchemaBuilder()->getColumnListing($this->table);
         $data['data_import_column'] = $data_import_column;
 
-        return view('crudbooster::import', $data);
+        return $this->cbView('crudbooster::import', $data);
     }
 
     public function postDoImportChunk()
@@ -391,6 +352,40 @@ class CBController extends Controller
     {
         if (Schema::hasColumn($this->table, $col)) {
             $this->arr[$col] = date('Y-m-d H:i:s');
+        }
+    }
+
+    /**
+     * @param $data
+     * @return mixed
+     */
+    private function cbForm($data)
+    {
+        $this->genericLoader();
+        $this->cbFormLoader();
+        return $this->cbView('crudbooster::default.form', $data);
+    }
+
+    private function genericLoader()
+    {
+        $this->primary_key = CB::pk($this->table);
+        $this->columns_table = $this->col;
+        $this->data_inputan = $this->form;
+        $this->data['pk'] = $this->primary_key;
+        $this->data['forms'] = $this->data_inputan;
+        $this->data['hide_form'] = $this->hide_form;
+        $this->data['table'] = $this->table;
+        $this->data['title_field'] = $this->title_field;
+        $this->data['appname'] = cbGetsetting('appname');
+        $this->data['index_button'] = $this->index_button;
+        $this->data['button_delete'] = $this->button_delete;
+        $this->data['sub_module'] = $this->sub_module;
+        $this->data['parent_field'] = (request('parent_field')) ?: $this->parent_field;
+        $this->data['parent_id'] = (request('parent_id')) ?: $this->parent_id;
+
+        if (CB::getCurrentMethod() == 'getProfile') {
+            session()->put('current_row_id', CB::myId());
+            $this->data['return_url'] = Request::fullUrl();
         }
     }
 }
