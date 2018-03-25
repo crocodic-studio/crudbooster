@@ -15,10 +15,7 @@
         <!-- Navbar Right Menu -->
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
-
                 @include('crudbooster::_admin_template._header.notificationsMenu')
-
-                <!-- User Account Menu -->
                 @include('crudbooster::_admin_template._header.userAccountMenu')
             </ul>
         </div>
