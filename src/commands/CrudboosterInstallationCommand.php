@@ -112,54 +112,13 @@ class CrudboosterInstallationCommand extends Command
             $system_failed++;
         }
 
-        if (extension_loaded('mbstring')) {
-            $this->info('Mbstring extension: [Good]');
-        } else {
-            $this->info('Mbstring extension: [Bad]');
-            $system_failed++;
-        }
-
-        if (extension_loaded('openssl')) {
-            $this->info('OpenSSL extension: [Good]');
-        } else {
-            $this->info('OpenSSL extension: [Bad]');
-            $system_failed++;
-        }
-
-        if (extension_loaded('pdo')) {
-            $this->info('PDO extension: [Good]');
-        } else {
-            $this->info('PDO extension: [Bad]');
-            $system_failed++;
-        }
-
-        if (extension_loaded('tokenizer')) {
-            $this->info('Tokenizer extension: [Good]');
-        } else {
-            $this->info('Tokenizer extension: [Bad]');
-            $system_failed++;
-        }
-
-        if (extension_loaded('xml')) {
-            $this->info('XML extension: [Good]');
-        } else {
-            $this->info('XML extension: [Bad]');
-            $system_failed++;
-        }
-
-        if (extension_loaded('gd')) {
-            $this->info('GD extension: [Good]');
-        } else {
-            $this->info('GD extension: [Bad]');
-            $system_failed++;
-        }
-
-        if (extension_loaded('fileinfo')) {
-            $this->info('PHP Fileinfo extension: [Good]');
-        } else {
-            $this->info('PHP Fileinfo extension: [Bad]');
-            $system_failed++;
-        }
+        $system_failed = $this->chechExtension($system_failed, 'mbstring');
+        $system_failed = $this->chechExtension($system_failed, 'openssl');
+        $system_failed = $this->chechExtension($system_failed, 'pdo');
+        $system_failed = $this->chechExtension($system_failed, 'tokenizer');
+        $system_failed = $this->chechExtension($system_failed, 'xml');
+        $system_failed = $this->chechExtension($system_failed, 'gd');
+        $system_failed = $this->chechExtension($system_failed, 'fileinfo');
 
         if (is_writable(base_path('public'))) {
             $this->info('public dir is writable: [Good]');
@@ -274,5 +233,22 @@ class CrudboosterInstallationCommand extends Command
 
             exit;
         }
+    }
+
+    /**
+     * @param $system_failed
+     * @param $extension
+     * @return mixed
+     */
+    private function chechExtension($system_failed, $extension)
+    {
+        if (extension_loaded($extension)) {
+            $this->info($extension.' extension: [Good]');
+        } else {
+            $this->info($extension.' extension: [Bad]');
+            $system_failed++;
+        }
+
+        return $system_failed;
     }
 }
