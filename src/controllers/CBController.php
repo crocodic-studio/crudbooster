@@ -54,15 +54,9 @@ class CBController extends Controller
 
     public $date_candidate = null;
 
-    public $limit = 20;
-
     public $global_privilege = false;
 
-    public $show_numbering = false;
-
     public $alert = [];
-
-    public $index_button = [];
 
     public $button_filter = true;
 
@@ -73,10 +67,6 @@ class CBController extends Controller
     public $button_show = true;
 
     public $button_addmore = true;
-
-    public $button_table_action = true;
-
-    public $button_bulk_action = true;
 
     public $button_add = true;
 
@@ -92,16 +82,6 @@ class CBController extends Controller
 
     public $button_action_style = 'button_icon';
 
-    public $button_action_width = null;
-
-    public $index_statistic = [];
-
-    public $index_additional_view = [];
-
-    public $pre_index_html = null;
-
-    public $post_index_html = null;
-
     public $load_js = [];
 
     public $load_css = [];
@@ -113,8 +93,6 @@ class CBController extends Controller
     public $sub_module = [];
 
     public $show_addaction = true;
-
-    public $table_row_color = [];
 
     public $button_selected = [];
 
@@ -182,24 +160,6 @@ class CBController extends Controller
         $this->data['button_selected'] = $this->button_selected;
         $this->data['addaction'] = ($this->show_addaction) ? $this->addaction : null;
         $this->data['button_detail'] = $this->button_detail;
-    }
-
-    private function cbIndexLoader()
-    {
-        $this->data['button_export'] = $this->button_export;
-        $this->data['button_import'] = $this->button_import;
-        $this->data['button_filter'] = $this->button_filter;
-        $this->data['show_numbering'] = $this->show_numbering;
-        $this->data['pre_index_html'] = $this->pre_index_html;
-        $this->data['post_index_html'] = $this->post_index_html;
-        $this->data['index_statistic'] = $this->index_statistic;
-        $this->data['table_row_color'] = $this->table_row_color;
-        $this->data['button_bulk_action'] = $this->button_bulk_action;
-        $this->data['button_table_action'] = $this->button_table_action;
-        $this->data['index_additional_view'] = $this->index_additional_view;
-        $this->data['button_action_width'] = $this->button_action_width;
-        $this->data['limit'] = $this->limit;
-        $this->data['button_show'] = $this->button_show;
     }
 
     private function checkHideForm()
@@ -383,7 +343,6 @@ class CBController extends Controller
 
         $this->sendResponseForSave('alert_add_data_success');
     }
-
 
     public function inputAssignment($id = null)
     {
