@@ -1,0 +1,16 @@
+filter:
+    excluded_paths:
+		- "docs/"
+		- "*/views/*"
+		- "*/*.blade.php"
+		- "*/FontAwesome.php"
+		- "src/assets/"
+		- "src/configs/"
+		- "src/database/"
+		- "*/localization/*"
+		- "*/seeder.php"
+		- "*/*_routes.php"
+		- "*/*Form.php"
+		- "src/laravel-filemanager/"
+		- "*/*.js"
+		- "*/*.MD"
