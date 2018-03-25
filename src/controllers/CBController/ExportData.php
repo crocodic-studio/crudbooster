@@ -6,6 +6,8 @@ use crocodicstudio\crudbooster\controllers\Helpers\IndexExport;
 
 trait ExportData
 {
+    public $button_export = true;
+
     public function postExportData()
     {
         $this->limit = request('limit');
