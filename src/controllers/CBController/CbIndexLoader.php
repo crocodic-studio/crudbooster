@@ -34,10 +34,6 @@ trait CbIndexLoader
 
     public $button_filter = true;
 
-    public $button_export = true;
-
-    public $button_import = true;
-
     public $button_show = true;
 
     public $sub_module = [];

@@ -3,7 +3,6 @@
 namespace crocodicstudio\crudbooster\controllers\Helpers;
 
 use CRUDBooster;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;

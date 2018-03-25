@@ -7,20 +7,16 @@ error_reporting(E_ALL ^ E_NOTICE);
 use crocodicstudio\crudbooster\CBCoreModule\RelationHandler;
 use crocodicstudio\crudbooster\CBCoreModule\Hooks;
 use crocodicstudio\crudbooster\CBCoreModule\Index;
-use crocodicstudio\crudbooster\CBCoreModule\Search;
 use crocodicstudio\crudbooster\controllers\CBController\CbFormLoader;
 use crocodicstudio\crudbooster\controllers\CBController\CbIndexLoader;
 use crocodicstudio\crudbooster\controllers\CBController\CbLayoutLoader;
 use crocodicstudio\crudbooster\controllers\CBController\Deleter;
+use crocodicstudio\crudbooster\controllers\CBController\ExportData;
+use crocodicstudio\crudbooster\controllers\CBController\ImportData;
 use crocodicstudio\crudbooster\controllers\CBController\IndexAjax;
-use crocodicstudio\crudbooster\controllers\Helpers\IndexExport;
-use crocodicstudio\crudbooster\controllers\Helpers\IndexImport;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\PDF;
-use Maatwebsite\Excel\Facades\Excel;
 use CRUDBooster;
 use CB;
 use Schema;
@@ -28,7 +24,7 @@ use Schema;
 class CBController extends Controller
 {
     use Hooks;
-    use Deleter, CbFormLoader, CbIndexLoader, CbLayoutLoader, IndexAjax;
+    use Deleter, CbFormLoader, CbIndexLoader, CbLayoutLoader, IndexAjax, ImportData, ExportData;
 
     public $data_inputan;
 
@@ -98,35 +94,11 @@ class CBController extends Controller
         }
     }
 
-    public function getExportData()
-    {
-        return redirect(CB::mainpath());
-    }
-
-    public function postExportData()
-    {
-        $this->limit = request('limit');
-        $this->index_return = true;
-        $filename = request('filename');
-        $papersize = request('page_size');
-        $paperorientation = request('page_orientation');
-        $indexContent = $this->getIndex();
-
-        if (request('default_paper_size')) {
-            DB::table('cms_settings')->where('name', 'default_paper_size')->update(['content' => $papersize]);
-        }
-        $format = request('fileformat');
-        if(in_array($format, ['pdf', 'xls', 'csv']))
-        {
-            return app(IndexExport::class)->{$format}($filename, $indexContent, $paperorientation, $papersize);
-        }
-    }
-
     public function getIndex()
     {
         $index = app(Index::class);
         $this->cbIndexLoader();
-        $this->cbLoader();
+        $this->genericLoader();
         $data = $index->index($this);
 
         return $this->cbView('crudbooster::default.index', $data);
@@ -152,7 +124,7 @@ class CBController extends Controller
 
     public function postAddSave()
     {
-        $this->cbLoader();
+        $this->genericLoader();
 
         app(FormValidator::class)->validate(null, $this->form, $this->table);
         $this->inputAssignment();
@@ -242,7 +214,7 @@ class CBController extends Controller
 
     public function postEditSave($id)
     {
-        $this->cbLoader();
+        $this->genericLoader();
 
         app(FormValidator::class)->validate($id, $this->form, $this->table);
         $this->inputAssignment($id);
@@ -271,57 +243,6 @@ class CBController extends Controller
         session()->put('current_row_id', $id);
 
         return $this->cbForm(compact('row', 'page_title', 'command', 'id'));
-    }
-
-    public function getImportData()
-    {
-        $this->cbLoader();
-
-        $data = [];
-        $data['page_menu'] = Route::getCurrentRoute()->getActionName();
-        $data['page_title'] = 'Import Data '.CB::getCurrentModule()->name;
-
-        if (! request('file') || request('import')) {
-            return $this->cbView('crudbooster::import', $data);
-        }
-
-        $file = 'storage'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.base64_decode(request('file'));
-        $rows = Excel::load($file, function ($reader) {
-        })->get();
-
-        session()->put('total_data_import', count($rows));
-
-        $data_import_column = [];
-        foreach ($rows as $value) {
-            $a = [];
-            foreach ($value as $k => $v) {
-                $a[] = $k;
-            }
-            if (count($a)) {
-                $data_import_column = $a;
-            }
-            break;
-        }
-
-        $data['table_columns'] = DB::getSchemaBuilder()->getColumnListing($this->table);
-        $data['data_import_column'] = $data_import_column;
-
-        return $this->cbView('crudbooster::import', $data);
-    }
-
-    public function postDoImportChunk()
-    {
-        $import = app(IndexImport::class);
-        $this->cbLoader();
-        $fileMD5 = md5(request('file'));
-
-        if (request('file') && request('resume') == 1) {
-            return $import->handleImportProgress($fileMD5);
-        }
-
-        $import->InsertToDB($fileMD5, $this->table, $this->title_field);
-
-        return response()->json(['status' => true]);
     }
 
     public function actionButtonSelected($id_selected, $button_name)
