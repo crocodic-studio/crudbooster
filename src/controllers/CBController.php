@@ -56,8 +56,6 @@ class CBController extends Controller
 
     public $global_privilege = false;
 
-    public $alert = [];
-
     public $button_filter = true;
 
     public $button_export = true;
@@ -81,14 +79,6 @@ class CBController extends Controller
     public $button_detail = true;
 
     public $button_action_style = 'button_icon';
-
-    public $load_js = [];
-
-    public $load_css = [];
-
-    public $script_js = null;
-
-    public $style_css = null;
 
     public $sub_module = [];
 
@@ -139,15 +129,6 @@ class CBController extends Controller
         }
 
         view()->share($this->data);
-    }
-
-    private function cbLayoutLoader()
-    {
-        $this->data['alerts'] = $this->alert;
-        $this->data['style_css'] = $this->style_css;
-        $this->data['load_js'] = $this->load_js;
-        $this->data['script_js'] = $this->script_js;
-        $this->data['load_css'] = $this->load_css;
     }
 
     private function cbFormLoader()
