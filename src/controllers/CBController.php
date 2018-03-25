@@ -56,35 +56,9 @@ class CBController extends Controller
 
     public $global_privilege = false;
 
-    public $button_filter = true;
-
-    public $button_export = true;
-
-    public $button_import = true;
-
-    public $button_show = true;
-
-    public $button_addmore = true;
-
-    public $button_add = true;
-
     public $button_delete = true;
 
-    public $button_cancel = true;
-
-    public $button_save = true;
-
-    public $button_edit = true;
-
-    public $button_detail = true;
-
     public $button_action_style = 'button_icon';
-
-    public $sub_module = [];
-
-    public $show_addaction = true;
-
-    public $button_selected = [];
 
     public $return_url = null;
 
@@ -129,18 +103,6 @@ class CBController extends Controller
         }
 
         view()->share($this->data);
-    }
-
-    private function cbFormLoader()
-    {
-        $this->data['button_add'] = $this->button_add;
-        $this->data['button_addmore'] = $this->button_addmore;
-        $this->data['button_cancel'] = $this->button_cancel;
-        $this->data['button_edit'] = $this->button_edit;
-        $this->data['button_save'] = $this->button_save;
-        $this->data['button_selected'] = $this->button_selected;
-        $this->data['addaction'] = ($this->show_addaction) ? $this->addaction : null;
-        $this->data['button_detail'] = $this->button_detail;
     }
 
     private function checkHideForm()
@@ -241,11 +203,9 @@ class CBController extends Controller
 
     public function getDataModalDatatable()
     {
-        $data = request('data');
-        $data = base64_decode(json_decode($data, true));
+        $data = base64_decode(json_decode(request('data'), true));
 
-        $columns = $data['columns'];
-        $columns = explode(',', $columns);
+        $columns = explode(',', $data['columns']);
 
         $result = DB::table($data['table']);
         if (request('q')) {
@@ -503,7 +463,7 @@ class CBController extends Controller
         $button_name = request('button_name');
 
         if (! $selectedIds) {
-            CB::redirect($_SERVER['HTTP_REFERER'], 'Please select at least one data!', 'warning');
+            CB::redirect($_SERVER['HTTP_REFERER'], 'Please select at least one row!', 'warning');
         }
 
         if ($button_name == 'delete') {
@@ -535,8 +495,7 @@ class CBController extends Controller
      */
     private function _getMessageAndType($button_name, $id_selected)
     {
-        $action = str_replace(['-', '_'], ' ', $button_name);
-        $action = ucwords($action);
+        $action = ucwords(str_replace(['-', '_'], ' ', $button_name));
         $type = 'success';
         $message = cbTrans('alert_action', ['action' => $action]);
 
