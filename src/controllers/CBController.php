@@ -146,21 +146,11 @@ class CBController extends Controller
         $this->data['pk'] = $this->primary_key;
         $this->data['forms'] = $this->data_inputan;
         $this->data['hide_form'] = $this->hide_form;
-        $this->data['addaction'] = ($this->show_addaction) ? $this->addaction : null;
         $this->data['table'] = $this->table;
         $this->data['title_field'] = $this->title_field;
         $this->data['appname'] = cbGetsetting('appname');
         $this->data['index_button'] = $this->index_button;
-        $this->data['button_detail'] = $this->button_detail;
-        $this->data['button_edit'] = $this->button_edit;
-        $this->data['button_show'] = $this->button_show;
-        $this->data['button_add'] = $this->button_add;
         $this->data['button_delete'] = $this->button_delete;
-        $this->data['button_addmore'] = $this->button_addmore;
-        $this->data['button_cancel'] = $this->button_cancel;
-        $this->data['button_save'] = $this->button_save;
-        $this->data['button_action_width'] = $this->button_action_width;
-        $this->data['button_selected'] = $this->button_selected;
         $this->data['sub_module'] = $this->sub_module;
         $this->data['parent_field'] = (request('parent_field')) ?: $this->parent_field;
         $this->data['parent_id'] = (request('parent_id')) ?: $this->parent_id;
@@ -182,6 +172,18 @@ class CBController extends Controller
         $this->data['load_css'] = $this->load_css;
     }
 
+    private function cbFormLoader()
+    {
+        $this->data['button_add'] = $this->button_add;
+        $this->data['button_addmore'] = $this->button_addmore;
+        $this->data['button_cancel'] = $this->button_cancel;
+        $this->data['button_edit'] = $this->button_edit;
+        $this->data['button_save'] = $this->button_save;
+        $this->data['button_selected'] = $this->button_selected;
+        $this->data['addaction'] = ($this->show_addaction) ? $this->addaction : null;
+        $this->data['button_detail'] = $this->button_detail;
+    }
+
     private function cbIndexLoader()
     {
         $this->data['button_export'] = $this->button_export;
@@ -195,6 +197,9 @@ class CBController extends Controller
         $this->data['button_bulk_action'] = $this->button_bulk_action;
         $this->data['button_table_action'] = $this->button_table_action;
         $this->data['index_additional_view'] = $this->index_additional_view;
+        $this->data['button_action_width'] = $this->button_action_width;
+        $this->data['limit'] = $this->limit;
+        $this->data['button_show'] = $this->button_show;
     }
 
     private function checkHideForm()
@@ -348,6 +353,7 @@ class CBController extends Controller
 
     public function getAdd()
     {
+        $this->cbFormLoader();
         $this->cbLoader();
 
         $page_title = cbTrans('add_data_page_title', ['module' => CB::getCurrentModule()->name]);
@@ -430,6 +436,7 @@ class CBController extends Controller
 
     public function getEdit($id)
     {
+        $this->cbFormLoader();
         $this->cbLoader();
         $row = $this->findRow($id)->first();
 
@@ -485,6 +492,7 @@ class CBController extends Controller
 
     public function getDetail($id)
     {
+        $this->cbFormLoader();
         $this->cbLoader();
         $row = $this->findRow($id)->first();
 
