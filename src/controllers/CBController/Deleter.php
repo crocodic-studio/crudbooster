@@ -2,61 +2,19 @@
 
 namespace crocodicstudio\crudbooster\controllers\CBController;
 
+use crocodicstudio\crudbooster\CBCoreModule\DataRemover;
 use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\Schema;
-use CB;
 use Illuminate\Support\Facades\Storage;
+use CB;
 
 trait Deleter
 {
-    /**
-     * @param $idsArray
-     * @return mixed
-     */
-    private function deleteFromDB($idsArray)
-    {
-        $this->doDeleteWithHook($idsArray);
-
-        $this->insertLog('log_delete', implode(',', $idsArray));
-
-        backWithMsg(cbTrans('alert_delete_selected_success'));
-    }
-
-    /**
-     * @param $idsArray
-     */
-    private function deleteIds($idsArray)
-    {
-        $query = $this->table()->whereIn($this->primary_key, $idsArray);
-        if (Schema::hasColumn($this->table, 'deleted_at')) {
-            $query->update(['deleted_at' => date('Y-m-d H:i:s')]);
-        } else {
-            $query->delete();
-        }
-    }
-
-    /**
-     * @param $idsArray
-     */
-    private function doDeleteWithHook($idsArray)
-    {
-        $this->hook_before_delete($idsArray);
-        $this->deleteIds($idsArray);
-        $this->hook_after_delete($idsArray);
-    }
-
-
     public function getDelete($id)
     {
         $this->cbLoader();
-        $row = $this->findRow($id)->first();
-
-        $this->insertLog('log_delete', $row->{$this->title_field});
-
-        $this->doDeleteWithHook([$id]);
-
+        (new DataRemover($this))->doDeleteWithHook([$id]);
+        $this->insertLog('log_delete', $id);
         $url = request('return_url') ?: CB::referer();
-
         CB::redirect($url, cbTrans('alert_delete_data_success'), 'success');
     }
 
@@ -64,23 +22,23 @@ trait Deleter
     {
         $this->cbLoader();
         $selectedIds = request('checkbox');
-        $button_name = request('button_name');
-
+        $btnName = request('button_name');
         if (! $selectedIds) {
             CB::redirect($_SERVER['HTTP_REFERER'], 'Please select at least one row!', 'warning');
         }
-
-        if ($button_name == 'delete') {
-            return $this->deleteFromDB($selectedIds);
+        if ($btnName == 'delete') {
+            (new DataRemover($this))->doDeleteWithHook($selectedIds);
+            $this->insertLog('log_delete', implode(',', $selectedIds));
+            backWithMsg(cbTrans('alert_delete_selected_success'));
         }
 
-        return $this->_redirectBackWithMsg($button_name, $selectedIds);
+        return $this->_redirectBackWithMsg($btnName, $selectedIds);
     }
 
     /**
      * @param $button_name
      * @param $id_selected
-     * @return array
+     * @return null
      */
     private function _redirectBackWithMsg($button_name, $id_selected)
     {
