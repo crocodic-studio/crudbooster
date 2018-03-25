@@ -18,13 +18,23 @@ trait CbIndexLoader
 
     public $limit = 20;
 
-    public $button_action_width = null;
-
     public $table_row_color = [];
 
     public $button_table_action = true;
 
     public $button_bulk_action = true;
+
+    public $button_filter = true;
+
+    public $button_export = true;
+
+    public $button_import = true;
+
+    public $button_show = true;
+
+    public $sub_module = [];
+
+    public $button_action_width = null;
 
     protected function cbIndexLoader()
     {
@@ -39,8 +49,7 @@ trait CbIndexLoader
         $this->data['button_bulk_action'] = $this->button_bulk_action;
         $this->data['button_table_action'] = $this->button_table_action;
         $this->data['index_additional_view'] = $this->index_additional_view;
-        $this->data['button_action_width'] = $this->button_action_width;+
-
+        $this->data['button_action_width'] = $this->button_action_width;
         $this->data['button_show'] = $this->button_show;
     }
 
