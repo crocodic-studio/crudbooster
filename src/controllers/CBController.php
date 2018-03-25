@@ -152,27 +152,16 @@ class CBController extends Controller
         $this->data['appname'] = cbGetsetting('appname');
         $this->data['alerts'] = $this->alert;
         $this->data['index_button'] = $this->index_button;
-        $this->data['show_numbering'] = $this->show_numbering;
         $this->data['button_detail'] = $this->button_detail;
         $this->data['button_edit'] = $this->button_edit;
         $this->data['button_show'] = $this->button_show;
         $this->data['button_add'] = $this->button_add;
         $this->data['button_delete'] = $this->button_delete;
-        $this->data['button_filter'] = $this->button_filter;
-        $this->data['button_export'] = $this->button_export;
         $this->data['button_addmore'] = $this->button_addmore;
         $this->data['button_cancel'] = $this->button_cancel;
         $this->data['button_save'] = $this->button_save;
-        $this->data['button_table_action'] = $this->button_table_action;
-        $this->data['button_bulk_action'] = $this->button_bulk_action;
-        $this->data['button_import'] = $this->button_import;
         $this->data['button_action_width'] = $this->button_action_width;
         $this->data['button_selected'] = $this->button_selected;
-        $this->data['index_statistic'] = $this->index_statistic;
-        $this->data['index_additional_view'] = $this->index_additional_view;
-        $this->data['table_row_color'] = $this->table_row_color;
-        $this->data['pre_index_html'] = $this->pre_index_html;
-        $this->data['post_index_html'] = $this->post_index_html;
         $this->data['load_js'] = $this->load_js;
         $this->data['load_css'] = $this->load_css;
         $this->data['script_js'] = $this->script_js;
@@ -187,6 +176,21 @@ class CBController extends Controller
         }
 
         view()->share($this->data);
+    }
+
+    private function cbIndexLoader()
+    {
+        $this->data['button_export'] = $this->button_export;
+        $this->data['button_import'] = $this->button_import;
+        $this->data['button_filter'] = $this->button_filter;
+        $this->data['show_numbering'] = $this->show_numbering;
+        $this->data['pre_index_html'] = $this->pre_index_html;
+        $this->data['post_index_html'] = $this->post_index_html;
+        $this->data['index_statistic'] = $this->index_statistic;
+        $this->data['table_row_color'] = $this->table_row_color;
+        $this->data['button_bulk_action'] = $this->button_bulk_action;
+        $this->data['button_table_action'] = $this->button_table_action;
+        $this->data['index_additional_view'] = $this->index_additional_view;
     }
 
     private function checkHideForm()
@@ -228,6 +232,7 @@ class CBController extends Controller
     public function getIndex()
     {
         $index = app(Index::class);
+        $this->cbIndexLoader();
         $this->cbLoader();
         $data = $index->index($this);
 
