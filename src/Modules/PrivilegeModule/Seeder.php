@@ -2,26 +2,28 @@
 
 namespace crocodicstudio\crudbooster\Modules\PrivilegeModule;
 
+use crocodicstudio\crudbooster\CBCoreModule\CbUsersRepo;
+use Illuminate\Support\Facades\DB;
+
 class Seeder
 {
     public static function run()
     {
-        $count = DB::table('cms_privileges')->where('name', 'Super Administrator')->count();
-        if ($count != 0) {
+        $exists = DB::table('cms_privileges')->where('name', 'Super Administrator')->exists();
+        if ($exists) {
             return;
         }
-        unset($count);
+        unset($exists);
         $pid = DB::table('cms_privileges')->insertGetId([
             'name' => 'Super Administrator',
             'is_superadmin' => 1,
             'theme_color' => 'skin-red',
         ]);
 
-        $password = \Hash::make('123456');
-        $cms_users = DB::table('cms_users')->insert([
+        CbUsersRepo::table()->insert([
             'name' => 'Super Admin',
             'email' => 'admin@crudbooster.com',
-            'password' => $password,
+            'password' => \Hash::make('123456'),
             'id_cms_privileges' => $pid,
             'status' => 'Active',
         ]);

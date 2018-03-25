@@ -50,7 +50,7 @@
 
         </div>
         <div class="box-body table-responsive no-padding">
-            @include("crudbooster::default.table")
+            @include("crudbooster::default._index.table")
         </div>
     </div>
 

@@ -170,7 +170,7 @@ class AdminApiGeneratorController extends CBController
 
         DB::table('cms_apikey')->where('id', $id)->update(['status' => $status]);
 
-        return backWithMsg('You have been update api key status !');
+        backWithMsg('You have been update api key status !');
     }
 
     public function getDeleteApiKey()

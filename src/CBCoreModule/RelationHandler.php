@@ -8,7 +8,7 @@ use CRUDBooster;
 use CB;
 use Schema;
 
-class DataSaver
+class RelationHandler
 {
     private $Cb;
 

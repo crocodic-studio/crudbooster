@@ -39,7 +39,7 @@ class AdminFileManagerController extends CBController
         $name = str_slug($name, '_');
         Storage::makeDirectory($path.'/'.$name);
 
-        return backWithMsg('The directory has been created!');
+        backWithMsg('The directory has been created!');
     }
 
     public function postUpload()
@@ -55,12 +55,12 @@ class AdminFileManagerController extends CBController
         $isAllowed = in_array($file->getClientOriginalExtension(), $allowedExtension);
 
         if (! $isAllowed) {
-            return backWithMsg('The file '.$fileName.' type is not allowed!', 'warning');
+            backWithMsg('The file '.$fileName.' type is not allowed!', 'warning');
         }
 
         Storage::putFileAs($path, $file, $fileName);
 
-        return backWithMsg('The file '.$fileName.' has been uploaded!');
+        backWithMsg('The file '.$fileName.' has been uploaded!');
     }
 
     public function getDeleteDirectory($dir)
@@ -68,7 +68,7 @@ class AdminFileManagerController extends CBController
         $dir = base64_decode($dir);
         Storage::deleteDirectory($dir);
 
-        return backWithMsg('The directory has been deleted!');
+        backWithMsg('The directory has been deleted!');
     }
 
     public function getDeleteFile($file)
@@ -76,6 +76,6 @@ class AdminFileManagerController extends CBController
         $file = base64_decode($file);
         Storage::delete($file);
 
-        return backWithMsg('The file has been deleted!');
+        backWithMsg('The file has been deleted!');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace crocodicstudio\crudbooster\Modules\AuthModule;
 
+use crocodicstudio\crudbooster\CBCoreModule\CbUsersRepo;
 use crocodicstudio\crudbooster\controllers\Controller;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
@@ -40,9 +41,9 @@ class AuthController extends Controller
 
     public function postUnlockScreen()
     {
-        $users = $this->table('cms_users')->where('id', CRUDBooster::myId())->first();
+        $user = CbUsersRepo::find(CRUDBooster::myId());
 
-        if (\Hash::check(request('password'), $users->password)) {
+        if (\Hash::check(request('password'), $user->password)) {
             Session::put('admin_lock', 0);
 
             return redirect()->route('AuthControllerGetIndex');
@@ -69,12 +70,11 @@ class AuthController extends Controller
         if ($validator->fails()) {
             $message = $validator->errors()->all();
 
-            return backWithMsg(implode(', ', $message), 'danger');
+            backWithMsg(implode(', ', $message), 'danger');
         }
 
-        $email = request("email");
         $password = request("password");
-        $users = $this->table('cms_users')->where("email", $email)->first();
+        $users = CbUsersRepo::findByMail(request("email"));
 
         if (! \Hash::check($password, $users->password)) {
             return redirect()->route('getLogin')->with('message', cbTrans('alert_password_wrong'));
@@ -119,14 +119,14 @@ class AuthController extends Controller
 
         if ($validator->fails()) {
             $message = $validator->errors()->all();
-            return backWithMsg(implode(', ', $message), 'danger');
+            backWithMsg(implode(', ', $message), 'danger');
         }
 
         $randString = str_random(5);
-        $this->table('cms_users')->where('email', request('email'))->update(['password' => \Hash::make($randString)]);
+        CbUsersRepo::updateByMail(request('email'), ['password' => \Hash::make($randString)]);
 
         //$appname = cbGetsetting('appname');
-        $user = CRUDBooster::first('cms_users', ['email' => request('email')]);
+        $user = CbUsersRepo::findByMail(request('email'));
         $user->password = $randString;
         CRUDBooster::sendEmail(['to' => $user->email, 'data' => $user, 'template' => 'forgot_password_backend']);
 

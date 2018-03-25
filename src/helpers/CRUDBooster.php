@@ -2,6 +2,7 @@
 
 namespace crocodicstudio\crudbooster\helpers;
 
+use crocodicstudio\crudbooster\CBCoreModule\CbUsersRepo;
 use crocodicstudio\crudbooster\helpers\Cache as LaravelCache;
 use crocodicstudio\crudbooster\Modules\LogsModule\LogsRepository;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator;
@@ -57,7 +58,7 @@ class CRUDBooster
 
     public static function me()
     {
-        return DB::table(cbConfig('USER_TABLE'))->where('id', session('admin_id'))->first();
+        return CbUsersRepo::find(session('admin_id'));
     }
 
     public static function myName()
@@ -85,7 +86,7 @@ class CRUDBooster
 
     private static function getModulePath()
     {
-        $adminPathSegments = count(explode('/',config('crudbooster.ADMIN_PATH')));
+        $adminPathSegments = count(explode('/',cbConfig('ADMIN_PATH')));
         return Request::segment(1 + $adminPathSegments);
     }
 

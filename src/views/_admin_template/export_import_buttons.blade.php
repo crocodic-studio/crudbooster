@@ -1,4 +1,4 @@
-@if($exportBtn && CRUDBooster::getCurrentMethod() == 'getIndex')
+@if($exportBtn)
     <a href="javascript:void(0)" id='btn_export_data' data-url-parameter='{{$query}}'
        title='Export Data' class="btn btn-sm btn-primary btn-export-data">
 
@@ -7,7 +7,7 @@
     </a>
 @endif
 
-@if($importBtn && CRUDBooster::getCurrentMethod() == 'getIndex')
+@if($importBtn)
     <a href="{{ CRUDBooster::mainpath('import-data') }}" id='btn_import_data'
        data-url-parameter='{{$query}}' title='Import Data'
        class="btn btn-sm btn-primary btn-import-data">

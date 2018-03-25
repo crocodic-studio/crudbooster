@@ -31,12 +31,11 @@ class Index
         $data['table'] = $CbCtrl->table;
         $data['table_pk'] = CB::pk($CbCtrl->table);
         $data['page_title'] = CRUDBooster::getCurrentModule()->name;
-        $data['page_description'] = trans('crudbooster.default_module_description');
+        $data['page_description'] = cbTrans('default_module_description');
         $data['date_candidate'] = $CbCtrl->date_candidate;
         $data['limit'] = $limit = request('limit', $CbCtrl->limit);
 
         $tablePK = $data['table_pk'];
-        $table_columns = CB::getTableColumns($CbCtrl->table);
 
         $result = $CbCtrl->table()->select(DB::raw($CbCtrl->table.".".$CbCtrl->primary_key));
 
@@ -44,7 +43,9 @@ class Index
 
         $CbCtrl->hookQueryIndex($result);
 
-        $this->_filterOutSoftDeleted($table_columns, $result);
+        $tableCols = CB::getTableColumns($CbCtrl->table);
+        $this->_filterOutSoftDeleted($tableCols, $result);
+        unset($tableCols);
 
         $table = $CbCtrl->table;
         $columns_table = $CbCtrl->columns_table;

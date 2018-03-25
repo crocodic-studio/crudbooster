@@ -42,14 +42,12 @@
                         @endif
 
                         @include('crudbooster::_admin_template.addButton')
+                        @include('crudbooster::_admin_template.export_import_buttons', ['exportBtn' => $button_export, 'importBtn' => $button_import, 'query' => $build_query])
                     @endif
 
 
-                @include('crudbooster::_admin_template.export_import_buttons', ['exportBtn' => $button_export, 'importBtn' => $button_import, 'query' => $build_query])
+                    @include('crudbooster::_admin_template.action_buttons', ['index_button' => $index_button])
 
-                <!--ADD ACTIon-->
-                @include('crudbooster::_admin_template.action_buttons', ['index_button' => $index_button])
-                <!-- END BUTTON -->
                 </h1>
 
 

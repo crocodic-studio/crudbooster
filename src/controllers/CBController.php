@@ -4,14 +4,16 @@ namespace crocodicstudio\crudbooster\controllers;
 
 error_reporting(E_ALL ^ E_NOTICE);
 
-use crocodicstudio\crudbooster\CBCoreModule\DataSaver;
+use crocodicstudio\crudbooster\CBCoreModule\RelationHandler;
 use crocodicstudio\crudbooster\CBCoreModule\Hooks;
 use crocodicstudio\crudbooster\CBCoreModule\Index;
 use crocodicstudio\crudbooster\CBCoreModule\Search;
+use crocodicstudio\crudbooster\controllers\CBController\CbFormLoader;
+use crocodicstudio\crudbooster\controllers\CBController\CbIndexLoader;
+use crocodicstudio\crudbooster\controllers\CBController\CbLayoutLoader;
+use crocodicstudio\crudbooster\controllers\CBController\Deleter;
 use crocodicstudio\crudbooster\controllers\Helpers\IndexExport;
 use crocodicstudio\crudbooster\controllers\Helpers\IndexImport;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +27,7 @@ use Schema;
 class CBController extends Controller
 {
     use Hooks;
+    use Deleter,CbFormLoader, CbIndexLoader, CbLayoutLoader;
 
     public $data_inputan;
 
@@ -54,69 +57,11 @@ class CBController extends Controller
 
     public $date_candidate = null;
 
-    public $limit = 20;
-
     public $global_privilege = false;
-
-    public $show_numbering = false;
-
-    public $alert = [];
-
-    public $index_button = [];
-
-    public $button_filter = true;
-
-    public $button_export = true;
-
-    public $button_import = true;
-
-    public $button_show = true;
-
-    public $button_addmore = true;
-
-    public $button_table_action = true;
-
-    public $button_bulk_action = true;
-
-    public $button_add = true;
 
     public $button_delete = true;
 
-    public $button_cancel = true;
-
-    public $button_save = true;
-
-    public $button_edit = true;
-
-    public $button_detail = true;
-
     public $button_action_style = 'button_icon';
-
-    public $button_action_width = null;
-
-    public $index_statistic = [];
-
-    public $index_additional_view = [];
-
-    public $pre_index_html = null;
-
-    public $post_index_html = null;
-
-    public $load_js = [];
-
-    public $load_css = [];
-
-    public $script_js = null;
-
-    public $style_css = null;
-
-    public $sub_module = [];
-
-    public $show_addaction = true;
-
-    public $table_row_color = [];
-
-    public $button_selected = [];
 
     public $return_url = null;
 
@@ -139,44 +84,18 @@ class CBController extends Controller
         $this->cbInit();
 
         $this->checkHideForm();
-
+        $this->cbLayoutLoader();
         $this->primary_key = CB::pk($this->table);
         $this->columns_table = $this->col;
         $this->data_inputan = $this->form;
         $this->data['pk'] = $this->primary_key;
         $this->data['forms'] = $this->data_inputan;
         $this->data['hide_form'] = $this->hide_form;
-        $this->data['addaction'] = ($this->show_addaction) ? $this->addaction : null;
         $this->data['table'] = $this->table;
         $this->data['title_field'] = $this->title_field;
         $this->data['appname'] = cbGetsetting('appname');
-        $this->data['alerts'] = $this->alert;
         $this->data['index_button'] = $this->index_button;
-        $this->data['show_numbering'] = $this->show_numbering;
-        $this->data['button_detail'] = $this->button_detail;
-        $this->data['button_edit'] = $this->button_edit;
-        $this->data['button_show'] = $this->button_show;
-        $this->data['button_add'] = $this->button_add;
         $this->data['button_delete'] = $this->button_delete;
-        $this->data['button_filter'] = $this->button_filter;
-        $this->data['button_export'] = $this->button_export;
-        $this->data['button_addmore'] = $this->button_addmore;
-        $this->data['button_cancel'] = $this->button_cancel;
-        $this->data['button_save'] = $this->button_save;
-        $this->data['button_table_action'] = $this->button_table_action;
-        $this->data['button_bulk_action'] = $this->button_bulk_action;
-        $this->data['button_import'] = $this->button_import;
-        $this->data['button_action_width'] = $this->button_action_width;
-        $this->data['button_selected'] = $this->button_selected;
-        $this->data['index_statistic'] = $this->index_statistic;
-        $this->data['index_additional_view'] = $this->index_additional_view;
-        $this->data['table_row_color'] = $this->table_row_color;
-        $this->data['pre_index_html'] = $this->pre_index_html;
-        $this->data['post_index_html'] = $this->post_index_html;
-        $this->data['load_js'] = $this->load_js;
-        $this->data['load_css'] = $this->load_css;
-        $this->data['script_js'] = $this->script_js;
-        $this->data['style_css'] = $this->style_css;
         $this->data['sub_module'] = $this->sub_module;
         $this->data['parent_field'] = (request('parent_field')) ?: $this->parent_field;
         $this->data['parent_id'] = (request('parent_id')) ?: $this->parent_id;
@@ -228,6 +147,7 @@ class CBController extends Controller
     public function getIndex()
     {
         $index = app(Index::class);
+        $this->cbIndexLoader();
         $this->cbLoader();
         $data = $index->index($this);
 
@@ -286,11 +206,9 @@ class CBController extends Controller
 
     public function getDataModalDatatable()
     {
-        $data = request('data');
-        $data = base64_decode(json_decode($data, true));
+        $data = base64_decode(json_decode(request('data'), true));
 
-        $columns = $data['columns'];
-        $columns = explode(',', $columns);
+        $columns = explode(',', $data['columns']);
 
         $result = DB::table($data['table']);
         if (request('q')) {
@@ -327,7 +245,7 @@ class CBController extends Controller
         $id = request('id');
         DB::table($table)->where(CB::pk($table), $id)->update([$column => $value]);
 
-        return backWithMsg(cbTrans('alert_delete_data_success'));
+        backWithMsg(cbTrans('alert_update_data_success'));
     }
 
     public function postFindData()
@@ -339,6 +257,7 @@ class CBController extends Controller
 
     public function getAdd()
     {
+        $this->cbFormLoader();
         $this->cbLoader();
 
         $page_title = cbTrans('add_data_page_title', ['module' => CB::getCurrentModule()->name]);
@@ -360,7 +279,7 @@ class CBController extends Controller
         $this->hookBeforeAdd($this->arr);
 
         $this->arr[$this->primary_key] = $id = $this->table()->insertGetId($this->arr);
-        app(DataSaver::class)->save($this->table, $id, $this->data_inputan);
+        app(RelationHandler::class)->save($this->table, $id, $this->data_inputan);
 
         $this->hookAfterAdd($this->arr[$this->primary_key]);
 
@@ -368,7 +287,6 @@ class CBController extends Controller
 
         $this->sendResponseForSave('alert_add_data_success');
     }
-
 
     public function inputAssignment($id = null)
     {
@@ -396,13 +314,15 @@ class CBController extends Controller
             if (Request::hasFile($name)) {
                 continue;
             }
+
+            if ($inputdata == '' && CB::isColumnNULL($this->table, $name)) {
+                continue;
+            }
+
+            $this->arr[$name] = '';
+
             if ($inputdata != '') {
                 $this->arr[$name] = $inputdata;
-            } else {
-                if (CB::isColumnNULL($this->table, $name)) {
-                    continue;
-                }
-                $this->arr[$name] = '';
             }
         }
     }
@@ -413,12 +333,13 @@ class CBController extends Controller
      */
     public function table($tableName = null)
     {
-        $tableName = $tableName ?: $this->table;
-        return \DB::table($tableName);
+        $table = $tableName ?: $this->table;
+        return \DB::table($table);
     }
 
     public function getEdit($id)
     {
+        $this->cbFormLoader();
         $this->cbLoader();
         $row = $this->findRow($id)->first();
 
@@ -449,7 +370,7 @@ class CBController extends Controller
 
         $this->hookBeforeEdit($this->arr, $id);
         $this->findRow($id)->update($this->arr);
-        app(DataSaver::class)->save($this->table, $id, $this->data_inputan);
+        app(RelationHandler::class)->save($this->table, $id, $this->data_inputan);
 
         $this->hookAfterEdit($id);
 
@@ -458,22 +379,9 @@ class CBController extends Controller
         $this->sendResponseForSave('alert_update_data_success');
     }
 
-    public function getDelete($id)
-    {
-        $this->cbLoader();
-        $row = $this->findRow($id)->first();
-
-        $this->insertLog('log_delete', $row->{$this->title_field});
-
-        $this->performDeletion([$id]);
-
-        $url = request('return_url') ?: CB::referer();
-
-        CB::redirect($url, cbTrans('alert_delete_data_success'), 'success');
-    }
-
     public function getDetail($id)
     {
+        $this->cbFormLoader();
         $this->cbLoader();
         $row = $this->findRow($id)->first();
 
@@ -537,78 +445,8 @@ class CBController extends Controller
         return response()->json(['status' => true]);
     }
 
-    public function postActionSelected()
-    {
-        $this->cbLoader();
-        $selectedIds = request('checkbox');
-        $button_name = request('button_name');
-
-        if (! $selectedIds) {
-            CB::redirect($_SERVER['HTTP_REFERER'], 'Please select at least one data!', 'warning');
-        }
-
-        if ($button_name == 'delete') {
-            return $this->deleteFromDB($selectedIds);
-        }
-
-        list($type, $message) = $this->_getMessageAndType($button_name, $selectedIds);
-
-        return backWithMsg($message, $type);
-    }
-
-    /**
-     * @param $idsArray
-     * @return mixed
-     */
-    private function deleteFromDB($idsArray)
-    {
-        $this->performDeletion($idsArray);
-
-        $this->insertLog('log_delete', implode(',', $idsArray));
-
-        return backWithMsg(cbTrans('alert_delete_selected_success'));
-    }
-
-    /**
-     * @param $button_name
-     * @param $id_selected
-     * @return array
-     */
-    private function _getMessageAndType($button_name, $id_selected)
-    {
-        $action = str_replace(['-', '_'], ' ', $button_name);
-        $action = ucwords($action);
-        $type = 'success';
-        $message = cbTrans('alert_action', ['action' => $action]);
-
-        if ($this->actionButtonSelected($id_selected, $button_name) === false) {
-            $message = ! empty($this->alert['message']) ? $this->alert['message'] : 'Error';
-            $type = ! empty($this->alert['type']) ? $this->alert['type'] : 'danger';
-        }
-
-        return [$type, $message];
-    }
-
     public function actionButtonSelected($id_selected, $button_name)
     {
-    }
-
-    public function getDeleteImage()
-    {
-        $this->cbLoader();
-        $id = request('id');
-        $column = request('column');
-
-        $row = $this->findRow($id)->first();
-        $file = $row->{$column};
-
-        Storage::delete($file);
-
-        $this->findRow($id)->update([$column => null]);
-
-        $this->insertLog('log_delete_image', $row->{$this->title_field});
-
-        CB::redirect(Request::server('HTTP_REFERER'), cbTrans('alert_delete_data_success'), 'success');
     }
 
     private function sendResponseForSave($msg)
@@ -624,29 +462,6 @@ class CBController extends Controller
             CB::redirect(CB::mainpath('add'), cbTrans($msg), 'success');
         }
         CB::redirect(CB::mainpath(), cbTrans($msg), 'success');
-    }
-
-    /**
-     * @param $idsArray
-     */
-    private function deleteIds($idsArray)
-    {
-        $query = $this->table()->whereIn($this->primary_key, $idsArray);
-        if (Schema::hasColumn($this->table, 'deleted_at')) {
-            $query->update(['deleted_at' => date('Y-m-d H:i:s')]);
-        } else {
-            $query->delete();
-        }
-    }
-
-    /**
-     * @param $idsArray
-     */
-    private function performDeletion($idsArray)
-    {
-        $this->hook_before_delete($idsArray);
-        $this->deleteIds($idsArray);
-        $this->hook_after_delete($idsArray);
     }
 
     private function insertLog($msg, $name)
