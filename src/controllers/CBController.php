@@ -7,17 +7,15 @@ error_reporting(E_ALL ^ E_NOTICE);
 use crocodicstudio\crudbooster\CBCoreModule\RelationHandler;
 use crocodicstudio\crudbooster\CBCoreModule\Hooks;
 use crocodicstudio\crudbooster\CBCoreModule\Index;
-use crocodicstudio\crudbooster\CBCoreModule\Search;
 use crocodicstudio\crudbooster\controllers\CBController\CbFormLoader;
 use crocodicstudio\crudbooster\controllers\CBController\CbIndexLoader;
 use crocodicstudio\crudbooster\controllers\CBController\CbLayoutLoader;
 use crocodicstudio\crudbooster\controllers\CBController\Deleter;
+use crocodicstudio\crudbooster\controllers\CBController\ExportData;
 use crocodicstudio\crudbooster\controllers\CBController\ImportData;
 use crocodicstudio\crudbooster\controllers\CBController\IndexAjax;
-use crocodicstudio\crudbooster\controllers\Helpers\IndexExport;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\PDF;
 use CRUDBooster;
 use CB;
@@ -26,7 +24,7 @@ use Schema;
 class CBController extends Controller
 {
     use Hooks;
-    use Deleter, CbFormLoader, CbIndexLoader, CbLayoutLoader, IndexAjax, ImportData;
+    use Deleter, CbFormLoader, CbIndexLoader, CbLayoutLoader, IndexAjax, ImportData, ExportData;
 
     public $data_inputan;
 
@@ -96,35 +94,11 @@ class CBController extends Controller
         }
     }
 
-    public function getExportData()
-    {
-        return redirect(CB::mainpath());
-    }
-
-    public function postExportData()
-    {
-        $this->limit = request('limit');
-        $this->index_return = true;
-        $filename = request('filename');
-        $papersize = request('page_size');
-        $paperorientation = request('page_orientation');
-        $indexContent = $this->getIndex();
-
-        if (request('default_paper_size')) {
-            DB::table('cms_settings')->where('name', 'default_paper_size')->update(['content' => $papersize]);
-        }
-        $format = request('fileformat');
-        if(in_array($format, ['pdf', 'xls', 'csv']))
-        {
-            return app(IndexExport::class)->{$format}($filename, $indexContent, $paperorientation, $papersize);
-        }
-    }
-
     public function getIndex()
     {
         $index = app(Index::class);
         $this->cbIndexLoader();
-        $this->cbLoader();
+        $this->genericLoader();
         $data = $index->index($this);
 
         return $this->cbView('crudbooster::default.index', $data);
@@ -150,7 +124,7 @@ class CBController extends Controller
 
     public function postAddSave()
     {
-        $this->cbLoader();
+        $this->genericLoader();
 
         app(FormValidator::class)->validate(null, $this->form, $this->table);
         $this->inputAssignment();
@@ -240,7 +214,7 @@ class CBController extends Controller
 
     public function postEditSave($id)
     {
-        $this->cbLoader();
+        $this->genericLoader();
 
         app(FormValidator::class)->validate($id, $this->form, $this->table);
         $this->inputAssignment($id);
