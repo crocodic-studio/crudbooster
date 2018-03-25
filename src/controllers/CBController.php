@@ -12,6 +12,7 @@ use crocodicstudio\crudbooster\controllers\CBController\CbFormLoader;
 use crocodicstudio\crudbooster\controllers\CBController\CbIndexLoader;
 use crocodicstudio\crudbooster\controllers\CBController\CbLayoutLoader;
 use crocodicstudio\crudbooster\controllers\CBController\Deleter;
+use crocodicstudio\crudbooster\controllers\CBController\IndexAjax;
 use crocodicstudio\crudbooster\controllers\Helpers\IndexExport;
 use crocodicstudio\crudbooster\controllers\Helpers\IndexImport;
 use Illuminate\Support\Facades\Request;
@@ -27,11 +28,9 @@ use Schema;
 class CBController extends Controller
 {
     use Hooks;
-    use Deleter,CbFormLoader, CbIndexLoader, CbLayoutLoader;
+    use Deleter, CbFormLoader, CbIndexLoader, CbLayoutLoader, IndexAjax;
 
     public $data_inputan;
-
-    public $columns_table;
 
     public $module_name;
 
@@ -51,13 +50,7 @@ class CBController extends Controller
 
     public $addaction = [];
 
-    public $orderby = null;
-
-    public $password_candidate = null;
-
-    public $date_candidate = null;
-
-    public $global_privilege = false;
+    //public $global_privilege = false;
 
     public $button_delete = true;
 
@@ -75,35 +68,20 @@ class CBController extends Controller
 
     public function cbView($template, $data)
     {
-        $this->cbLoader();
-        echo view($template, $data);
+        $this->cbLayoutLoader();
+        view()->share($this->data);
+        return view($template, $data);
     }
 
     public function cbLoader()
     {
         $this->cbInit();
 
-        $this->checkHideForm();
         $this->cbLayoutLoader();
-        $this->primary_key = CB::pk($this->table);
-        $this->columns_table = $this->col;
-        $this->data_inputan = $this->form;
-        $this->data['pk'] = $this->primary_key;
-        $this->data['forms'] = $this->data_inputan;
-        $this->data['hide_form'] = $this->hide_form;
-        $this->data['table'] = $this->table;
-        $this->data['title_field'] = $this->title_field;
-        $this->data['appname'] = cbGetsetting('appname');
-        $this->data['index_button'] = $this->index_button;
-        $this->data['button_delete'] = $this->button_delete;
-        $this->data['sub_module'] = $this->sub_module;
-        $this->data['parent_field'] = (request('parent_field')) ?: $this->parent_field;
-        $this->data['parent_id'] = (request('parent_id')) ?: $this->parent_id;
-
-        if (CB::getCurrentMethod() == 'getProfile') {
-            session()->put('current_row_id', CB::myId());
-            $this->data['return_url'] = Request::fullUrl();
-        }
+        $this->cbFormLoader();
+        $this->cbIndexLoader();
+        $this->checkHideForm();
+        $this->genericLoader();
 
         view()->share($this->data);
     }
@@ -151,90 +129,7 @@ class CBController extends Controller
         $this->cbLoader();
         $data = $index->index($this);
 
-        return view('crudbooster::default.index', $data);
-    }
-
-    public function getDataQuery()
-    {
-        $key = request('query');
-        if (! Cache::has($key)) {
-            return response()->json(['items' => []]);
-        }
-        $query = Cache::get($key);
-
-        $fk_name = request('fk_name');
-        $fk_value = request('fk_value');
-
-        $condition = ' where ';
-        if (strpos(strtolower($query), 'where') !== false) {
-            $condition = ' and ';
-        }
-
-        if (strpos(strtolower($query), 'order by')) {
-            $query = str_replace('ORDER BY', 'order by', $query);
-            $qraw = explode('order by', $query);
-            $query = $qraw[0].$condition.$fk_name." = '$fk_value' $qraw[1]";
-        } else {
-            $query .= $condition.$fk_name." = '$fk_value'";
-        }
-
-        $query = DB::select(DB::raw($query));
-
-        return response()->json(['items' => $query]);
-    }
-
-    public function getDataTable()
-    {
-        $table = request('table');
-        $label = request('label');
-        $datatableWhere = urldecode(request('datatable_where'));
-        $foreign_key_name = request('fk_name');
-        $foreign_key_value = request('fk_value');
-        if (! $table || ! $label || ! $foreign_key_name || ! $foreign_key_value) {
-            return response()->json([]);
-        }
-        $query = DB::table($table);
-        if ($datatableWhere) {
-            $query->whereRaw($datatableWhere);
-        }
-        $query->select('id as select_value', $label.' as select_label');
-        $query->where($foreign_key_name, $foreign_key_value);
-        $query->orderby($label, 'asc');
-
-        return response()->json($query->get());
-    }
-
-    public function getDataModalDatatable()
-    {
-        $data = base64_decode(json_decode(request('data'), true));
-
-        $columns = explode(',', $data['columns']);
-
-        $result = DB::table($data['table']);
-        if (request('q')) {
-            $result->where(function ($where) use ($columns) {
-                foreach ($columns as $c => $col) {
-                    if ($c == 0) {
-                        $where->where($col, 'like', '%'.request('q').'%');
-                    } else {
-                        $where->orWhere($col, 'like', '%'.request('q').'%');
-                    }
-                }
-            });
-        }
-
-        if ($data['sql_where']) {
-            $result->whereraw($data['sql_where']);
-        }
-
-        if ($data['sql_orderby']) {
-            $result->orderByRaw($data['sql_orderby']);
-        } else {
-            $result->orderBy($data['column_value'], 'desc');
-        }
-        $limit = ($data['limit']) ?: 6;
-
-        return view('crudbooster::default.type_components.datamodal.browser', ['result' => $result->paginate($limit), 'data' => $data]);
+        return $this->cbView('crudbooster::default.index', $data);
     }
 
     public function getUpdateSingle()
@@ -248,23 +143,11 @@ class CBController extends Controller
         backWithMsg(cbTrans('alert_update_data_success'));
     }
 
-    public function postFindData()
-    {
-        $items = app(Search::class)->searchData(request('data'), request('q'), request('id'));
-
-        return response()->json(['items' => $items]);
-    }
-
     public function getAdd()
     {
-        $this->cbFormLoader();
-        $this->cbLoader();
-
         $page_title = cbTrans('add_data_page_title', ['module' => CB::getCurrentModule()->name]);
-
         $command = 'add';
-
-        return view('crudbooster::default.form', compact('page_title', 'command'));
+        return $this->cbForm(compact('page_title', 'command'));
     }
 
     public function postAddSave()
@@ -339,15 +222,13 @@ class CBController extends Controller
 
     public function getEdit($id)
     {
-        $this->cbFormLoader();
-        $this->cbLoader();
         $row = $this->findRow($id)->first();
 
         $page_title = cbTrans("edit_data_page_title", ['module' => CB::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
         $command = 'edit';
         session()->put('current_row_id', $id);
 
-        return view('crudbooster::default.form', compact('id', 'row', 'page_title', 'command'));
+        return $this->cbForm(compact('id', 'row', 'page_title', 'command'));
     }
 
     /**
@@ -381,8 +262,6 @@ class CBController extends Controller
 
     public function getDetail($id)
     {
-        $this->cbFormLoader();
-        $this->cbLoader();
         $row = $this->findRow($id)->first();
 
 
@@ -391,7 +270,7 @@ class CBController extends Controller
 
         session()->put('current_row_id', $id);
 
-        return view('crudbooster::default.form', compact('row', 'page_title', 'command', 'id'));
+        return $this->cbForm(compact('row', 'page_title', 'command', 'id'));
     }
 
     public function getImportData()
@@ -403,7 +282,7 @@ class CBController extends Controller
         $data['page_title'] = 'Import Data '.CB::getCurrentModule()->name;
 
         if (! request('file') || request('import')) {
-            return view('crudbooster::import', $data);
+            return $this->cbView('crudbooster::import', $data);
         }
 
         $file = 'storage'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.base64_decode(request('file'));
@@ -427,7 +306,7 @@ class CBController extends Controller
         $data['table_columns'] = DB::getSchemaBuilder()->getColumnListing($this->table);
         $data['data_import_column'] = $data_import_column;
 
-        return view('crudbooster::import', $data);
+        return $this->cbView('crudbooster::import', $data);
     }
 
     public function postDoImportChunk()
@@ -473,6 +352,40 @@ class CBController extends Controller
     {
         if (Schema::hasColumn($this->table, $col)) {
             $this->arr[$col] = date('Y-m-d H:i:s');
+        }
+    }
+
+    /**
+     * @param $data
+     * @return mixed
+     */
+    private function cbForm($data)
+    {
+        $this->genericLoader();
+        $this->cbFormLoader();
+        return $this->cbView('crudbooster::default.form', $data);
+    }
+
+    private function genericLoader()
+    {
+        $this->primary_key = CB::pk($this->table);
+        $this->columns_table = $this->col;
+        $this->data_inputan = $this->form;
+        $this->data['pk'] = $this->primary_key;
+        $this->data['forms'] = $this->data_inputan;
+        $this->data['hide_form'] = $this->hide_form;
+        $this->data['table'] = $this->table;
+        $this->data['title_field'] = $this->title_field;
+        $this->data['appname'] = cbGetsetting('appname');
+        $this->data['index_button'] = $this->index_button;
+        $this->data['button_delete'] = $this->button_delete;
+        $this->data['sub_module'] = $this->sub_module;
+        $this->data['parent_field'] = (request('parent_field')) ?: $this->parent_field;
+        $this->data['parent_id'] = (request('parent_id')) ?: $this->parent_id;
+
+        if (CB::getCurrentMethod() == 'getProfile') {
+            session()->put('current_row_id', CB::myId());
+            $this->data['return_url'] = Request::fullUrl();
         }
     }
 }
