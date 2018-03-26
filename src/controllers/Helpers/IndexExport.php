@@ -30,13 +30,7 @@ class IndexExport
      */
     public function xls($filename, $response, $orientation)
     {
-        return Excel::create($filename, function ($excel) use ($response, $orientation) {
-            $excel->setTitle($filename)->setCreator("crudbooster.com")->setCompany(cbGetsetting('appname'));
-            $excel->sheet($filename, function ($sheet) use ($response, $orientation) {
-                $sheet->setOrientation($orientation);
-                $sheet->loadview('crudbooster::export', $response);
-            });
-        })->export('xls');
+        return $this->exportExcelAs($filename, $response, $orientation, 'xls');
     }
 
     /**
@@ -46,12 +40,24 @@ class IndexExport
      */
     public function csv($filename, $response, $orientation)
     {
-        return Excel::create($filename, function ($excel) use ($response, $orientation) {
+        return $this->exportExcelAs($filename, $response, $orientation, 'csv');
+    }
+
+    /**
+     * @param $filename
+     * @param $response
+     * @param $orientation
+     * @param $fmt
+     * @return mixed
+     */
+    private function exportExcelAs($filename, $response, $orientation, $fmt)
+    {
+        return Excel::create($filename, function ($excel) use ($response, $orientation, $filename) {
             $excel->setTitle($filename)->setCreator("crudbooster.com")->setCompany(cbGetsetting('appname'));
             $excel->sheet($filename, function ($sheet) use ($response, $orientation) {
                 $sheet->setOrientation($orientation);
                 $sheet->loadview('crudbooster::export', $response);
             });
-        })->export('csv');
+        })->export($fmt);
     }
 }
