@@ -28,6 +28,9 @@
         "imanghafoori/laravel-responder":"0.1.*"
     },
     "autoload": {
+        "files": [
+            "src/helpers/cb_helpers.php"
+        ],
         "psr-4": {
           "crocodicstudio\\crudbooster\\": "src/"
         }
