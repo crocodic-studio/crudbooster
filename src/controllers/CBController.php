@@ -16,7 +16,6 @@ use crocodicstudio\crudbooster\controllers\CBController\ImportData;
 use crocodicstudio\crudbooster\controllers\CBController\IndexAjax;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\PDF;
 use CRUDBooster;
 use CB;
 use Schema;
@@ -136,7 +135,7 @@ class CBController extends Controller
         app(RelationHandler::class)->save($this->table, $id, $this->data_inputan);
         $this->hookAfterAdd($id);
 
-        $this->insertLog('log_add', $this->arr[$this->title_field]);
+        $this->insertLog('log_add', $id. ' on ' . $this->table);
 
         $this->sendResponseForSave('alert_add_data_success');
     }
@@ -220,7 +219,7 @@ class CBController extends Controller
         app(RelationHandler::class)->save($this->table, $id, $this->data_inputan);
         $this->hookAfterEdit($id);
 
-        $this->insertLog('log_update', $this->arr[$this->title_field]);
+        $this->insertLog('log_update', $id. ' on ' . $this->table);
 
         $this->sendResponseForSave('alert_update_data_success');
     }
