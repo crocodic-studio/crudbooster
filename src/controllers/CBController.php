@@ -128,8 +128,8 @@ class CBController extends Controller
      */
     public function table($tableName = null)
     {
-        $table = $tableName ?: $this->table;
-        return \DB::table($table);
+        $tableName = $tableName ?: $this->table;
+        return \DB::table($tableName);
     }
 
     public function getEdit($id)
