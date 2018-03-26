@@ -33,7 +33,7 @@ class FormValidator
      */
     private function getRules($id, $form)
     {
-        $cmpPath = implode(DIRECTORY_SEPARATOR, ["vendor", "crocodicstudio", "crudbooster", "src", "views", "default", "type_components", ""]);
+        $cmpPath = \CB::componentsPath();
         $rules = [];
         foreach ($form as $formInput) {
             $name = $formInput['name'];
@@ -46,7 +46,7 @@ class FormValidator
                 $ai[] = 'required';
             }
 
-            $hookValidationPath = base_path($cmpPath.$formInput['type'].DIRECTORY_SEPARATOR.'hookInputValidation.php');
+            $hookValidationPath = $cmpPath.$formInput['type'].DIRECTORY_SEPARATOR.'hookInputValidation.php';
             if (file_exists($hookValidationPath)) {
                 require_once($hookValidationPath);
             }
@@ -64,12 +64,12 @@ class FormValidator
 
     /**
      * @param $id
-     * @param $di
+     * @param $formInput
      * @return array
      */
-    private function parseValidationRules($id, $di)
+    private function parseValidationRules($id, $formInput)
     {
-        $exp = explode('|', $di['validation']);
+        $exp = explode('|', $formInput['validation']);
 
         if (! count($exp)) {
             return '';
@@ -82,7 +82,7 @@ class FormValidator
 
             $parseUnique = explode(',', str_replace('unique:', '', $validationItem));
             $uniqueTable = ($parseUnique[0]) ?: $this->table;
-            $uniqueColumn = ($parseUnique[1]) ?: $di['name'];
+            $uniqueColumn = ($parseUnique[1]) ?: $formInput['name'];
             $uniqueIgnoreId = ($parseUnique[2]) ?: (($id) ?: '');
 
             //Make sure table name
@@ -127,7 +127,6 @@ class FormValidator
             $resp = response()->json($msg);
             sendAndTerminate($resp);
         }
-        $resp = redirect()->back()->with("errors", $message)->with($msg)->withnput();
-        sendAndTerminate($resp);
+        sendAndTerminate(redirect()->back()->with("errors", $message)->with($msg)->withnput());
     }
 }
