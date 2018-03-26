@@ -145,7 +145,7 @@ class IndexImport
                 $relation_class = '\App\Http\Controllers\\'.$relation_moduls->controller;
             }
             $relation_class = new $relation_class;
-            $relation_class->cbLoader();
+            $relation_class->genericLoader();
 
             $title_field = $relation_class->title_field;
 
