@@ -438,7 +438,7 @@ class CRUDBooster
 
     public static function insertLog($description)
     {
-        LogsRepository::insertLog($description, self::myId());
+        LogsRepository::insertLog('crudbooster: '.$description, self::myId());
     }
 
     public static function insertTryLog($action, $name = '')
