@@ -34,8 +34,9 @@ class CrudboosterInstallationCommand extends Command
      */
     public function handle()
     {
+        $printer = new ConsolePrinter();
 
-        $this->printHeader();
+        $printer->printHeader();
 
         $passes = (new RequirementChecker())->check();
         if(!$passes) {
@@ -66,37 +67,9 @@ class CrudboosterInstallationCommand extends Command
 			$this->info('Please setting the database configuration for first !');
 		}
 
-		$this->printFooter();
+        $printer->printFooter();
         exit;
 	}
-
-	private function printHeader() {
-		$this->info("
-
-#     __________  __  ______  ____                   __           
-#    / ____/ __ \/ / / / __ \/ __ )____  ____  _____/ /____  _____
-#   / /   / /_/ / / / / / / / __  / __ \/ __ \/ ___/ __/ _ \/ ___/
-#  / /___/ _, _/ /_/ / /_/ / /_/ / /_/ / /_/ (__  ) /_/  __/ /    
-#  \____/_/ |_|\____/_____/_____/\____/\____/____/\__/\___/_/     
-#                                                                                                                       
-			");
-        $this->info('--------- :===: Thanks for choosing CRUDBooster :==: ---------------');
-        $this->info('====================================================================');
-    }
-
-    private function printFooter($success = true)
-    {
-        $this->info('--');
-        $this->info('Homepage : http://www.crudbooster.com');
-        $this->info('Github : https://github.com/crocodic-studio/crudbooster');
-        $this->info('Documentation : https://github.com/crocodic-studio/crudbooster/blob/master/docs/en/index.md');
-        $this->info('====================================================================');
-        if ($success == true) {
-            $this->info('------------------- :===: Completed !! :===: ------------------------');
-        } else {
-            $this->info('------------------- :===:  Failed !!  :===: ------------------------');
-        }
-    }
 
     /**
      * Get the composer command for the environment.
