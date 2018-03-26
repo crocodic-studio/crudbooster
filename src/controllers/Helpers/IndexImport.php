@@ -87,53 +87,7 @@ class IndexImport
 
         //$data_import_column = [];
         foreach ($rows as $value) {
-            $a = [];
-            foreach ($select_column as $sk => $s) {
-                $colname = $table_columns[$sk];
-
-                if (! CRUDBooster::isForeignKey($colname) || intval($value->$s)) {
-                    $a[$colname] = $value->$s;
-                    continue;
-                }
-
-                //Skip if value is empty
-                if ($value->$s == '') {
-                    continue;
-                }
-
-                $relation_table = CRUDBooster::getTableForeignKey($colname);
-                $relation_moduls = DB::table('cms_moduls')->where('table_name', $relation_table)->first();
-
-                $relation_class = __NAMESPACE__.'\\'.$relation_moduls->controller;
-                if (! class_exists($relation_class)) {
-                    $relation_class = '\App\Http\Controllers\\'.$relation_moduls->controller;
-                }
-                $relation_class = new $relation_class;
-                $relation_class->cbLoader();
-
-                $title_field = $relation_class->title_field;
-
-                $relation_insert_data = [];
-                $relation_insert_data[$title_field] = $value->$s;
-
-                if (CRUDBooster::isColumnExists($relation_table, 'created_at')) {
-                    $relation_insert_data['created_at'] = date('Y-m-d H:i:s');
-                }
-
-                try {
-                    $relation_exists = DB::table($relation_table)->where($title_field, $value->$s)->first();
-                    if ($relation_exists) {
-                        $relation_primary_key = $relation_class->primary_key;
-                        $relation_id = $relation_exists->$relation_primary_key;
-                    } else {
-                        $relation_id = DB::table($relation_table)->insertGetId($relation_insert_data);
-                    }
-
-                    $a[$colname] = $relation_id;
-                } catch (\Exception $e) {
-                    exit($e);
-                }
-            }
+            $a = $this->readAndInsert($select_column, $table_columns, $value);
 
             $has_title_field = true;
             foreach ($a as $k => $v) {
@@ -161,5 +115,62 @@ class IndexImport
         }
     }
 
+    /**
+     * @param $select_column
+     * @param $table_columns
+     * @param $value
+     * @return array
+     */
+    private function readAndInsert($select_column, $table_columns, $value)
+    {
+        $a = [];
+        foreach ($select_column as $sk => $s) {
+            $colname = $table_columns[$sk];
 
+            if (! CRUDBooster::isForeignKey($colname) || intval($value->$s)) {
+                $a[$colname] = $value->$s;
+                continue;
+            }
+
+            //Skip if value is empty
+            if ($value->$s == '') {
+                continue;
+            }
+
+            $relation_table = CRUDBooster::getTableForeignKey($colname);
+            $relation_moduls = DB::table('cms_moduls')->where('table_name', $relation_table)->first();
+
+            $relation_class = __NAMESPACE__.'\\'.$relation_moduls->controller;
+            if (! class_exists($relation_class)) {
+                $relation_class = '\App\Http\Controllers\\'.$relation_moduls->controller;
+            }
+            $relation_class = new $relation_class;
+            $relation_class->cbLoader();
+
+            $title_field = $relation_class->title_field;
+
+            $relation_insert_data = [];
+            $relation_insert_data[$title_field] = $value->$s;
+
+            if (CRUDBooster::isColumnExists($relation_table, 'created_at')) {
+                $relation_insert_data['created_at'] = date('Y-m-d H:i:s');
+            }
+
+            try {
+                $relation_exists = DB::table($relation_table)->where($title_field, $value->$s)->first();
+                if ($relation_exists) {
+                    $relation_primary_key = $relation_class->primary_key;
+                    $relation_id = $relation_exists->$relation_primary_key;
+                } else {
+                    $relation_id = DB::table($relation_table)->insertGetId($relation_insert_data);
+                }
+
+                $a[$colname] = $relation_id;
+            } catch (\Exception $e) {
+                exit($e);
+            }
+        }
+
+        return $a;
+    }
 }
