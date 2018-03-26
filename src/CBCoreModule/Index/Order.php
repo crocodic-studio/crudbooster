@@ -5,15 +5,25 @@ namespace crocodicstudio\crudbooster\CBCoreModule\Index;
 class Order
 {
     /**
+     * Order constructor.
+     *
+     * @param $ctrl
+     */
+    public function __construct($ctrl)
+    {
+        $this->ctrl = $ctrl;
+    }
+
+    /**
      * @param $result
      * @param $table
      * @param $index
      */
-    function handle($result, $table, $index)
+    function handle($result, $table)
     {
-        $orderby = $this->cb->orderby;
+        $orderby = $this->ctrl->orderby;
         if (! $orderby) {
-            $result->orderby($index->table.'.'.$index->cb->primary_key, 'desc');
+            $result->orderby($table.'.'.$this->ctrl->primary_key, 'desc');
             return;
         }
         if (is_string($orderby)) {

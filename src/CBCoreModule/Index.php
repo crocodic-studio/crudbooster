@@ -67,7 +67,7 @@ class Index
         }
 
         if ($filter_is_orderby === true) {
-            (new Order)->handle($result, $table, $this);
+            (new Order($this->cb))->handle($result, $table);
         }
         $data['result'] = $result->paginate($limit);
 
