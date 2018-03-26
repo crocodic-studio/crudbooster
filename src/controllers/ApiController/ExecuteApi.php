@@ -38,7 +38,7 @@ class ExecuteApi
         | ----------------------------------------------
         |
         */
-        $this->ctrl->hook_validate($posts);
+        $this->ctrl->hookValidate($posts);
         if ($this->ctrl->validate) { // hook have to return true
             $result['api_status'] = 0;
             $result['api_message'] = "Failed to execute API !";
@@ -119,7 +119,7 @@ class ExecuteApi
 
         $responses_fields = $this->prepareResponses($responses);
 
-        $this->ctrl->hook_before($posts);
+        $this->ctrl->hookBefore($posts);
 
         $limit = ($posts['limit']) ?: 20;
         $offset = ($posts['offset']) ?: 0;
@@ -146,7 +146,7 @@ class ExecuteApi
                 $data->whereraw($row_api->sql_where);
             }
 
-            $this->ctrl->hook_query($data);
+            $this->ctrl->hookQuery($data);
             if ($action_type == 'list') {
                 list($result, $row) = $this->handleListAction($table, $orderby, $data, $result, $debug_mode_message, $row, $responses_fields);
             }
@@ -213,7 +213,7 @@ class ExecuteApi
             $result['api_authorization'] = $debug_mode_message;
         }
 
-        $this->ctrl->hook_after($posts, $result);
+        $this->ctrl->hookAfter($posts, $result);
 
         return response()->json($result);
     }
