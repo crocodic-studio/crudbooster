@@ -132,11 +132,9 @@ class CBController extends Controller
         $this->setTimeStamps('created_at');
 
         $this->hookBeforeAdd($this->arr);
-
-        $this->arr[$this->primary_key] = $id = $this->table()->insertGetId($this->arr);
+        $id = $this->table()->insertGetId($this->arr);
         app(RelationHandler::class)->save($this->table, $id, $this->data_inputan);
-
-        $this->hookAfterAdd($this->arr[$this->primary_key]);
+        $this->hookAfterAdd($id);
 
         $this->insertLog('log_add', $this->arr[$this->title_field]);
 
@@ -147,16 +145,12 @@ class CBController extends Controller
     {
         $hide_form = (request('hide_form')) ? unserialize(request('hide_form')) : [];
 
-        foreach ($this->form as $ro) {
-            $name = $ro['name'];
-            $type = $ro['type'] ?: 'text';
+        foreach ($this->form as $form) {
+            $name = $form['name'];
+            $type = $form['type'] ?: 'text';
             $inputdata = request($name);
 
-            if (! $name || $ro['exception']) {
-                continue;
-            }
-
-            if (count($hide_form) && in_array($name, $hide_form)) {
+            if (!$name || in_array($name, $hide_form) || $form['exception']) {
                 continue;
             }
 
@@ -224,7 +218,6 @@ class CBController extends Controller
         $this->hookBeforeEdit($this->arr, $id);
         $this->findRow($id)->update($this->arr);
         app(RelationHandler::class)->save($this->table, $id, $this->data_inputan);
-
         $this->hookAfterEdit($id);
 
         $this->insertLog('log_update', $this->arr[$this->title_field]);
