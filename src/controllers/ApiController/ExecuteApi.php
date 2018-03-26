@@ -135,7 +135,7 @@ class ExecuteApi
 
             $this->params($parameters, $posts, $data, $table);
 
-            if (CRUDBooster::isColumnExists($table, 'deleted_at')) {
+            if (\Schema::hasColumn($table, 'deleted_at')) {
                 $data->where($table.'.deleted_at', null);
             }
 
@@ -279,7 +279,7 @@ class ExecuteApi
      */
     private function handleDeleteAction($table, $data, $result, $debug_mode_message)
     {
-        if (CRUDBooster::isColumnExists($table, 'deleted_at')) {
+        if (\Schema::hasColumn($table, 'deleted_at')) {
             $delete = $data->update(['deleted_at' => date('Y-m-d H:i:s')]);
         } else {
             $delete = $data->delete();
@@ -338,7 +338,7 @@ class ExecuteApi
      */
     private function applyWhere($w, $table, $name, $value)
     {
-        if (CRUDBooster::isColumnExists($table, $name)) {
+        if (\Schema::hasColumn($table, $name)) {
             $w->where($table.'.'.$name, $value);
         } else {
             $w->having($name, '=', $value);

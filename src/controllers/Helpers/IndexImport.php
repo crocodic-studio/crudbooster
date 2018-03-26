@@ -102,7 +102,7 @@ class IndexImport
             }
 
             try {
-                if (CRUDBooster::isColumnExists($table, 'created_at')) {
+                if (\Schema::hasColumn($table, 'created_at')) {
                     $a['created_at'] = date('Y-m-d H:i:s');
                 }
 
@@ -152,7 +152,7 @@ class IndexImport
             $relation_insert_data = [];
             $relation_insert_data[$title_field] = $value->$s;
 
-            if (CRUDBooster::isColumnExists($relation_table, 'created_at')) {
+            if (\Schema::hasColumn($relation_table, 'created_at')) {
                 $relation_insert_data['created_at'] = date('Y-m-d H:i:s');
             }
 

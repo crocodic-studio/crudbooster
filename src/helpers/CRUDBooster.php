@@ -376,15 +376,10 @@ class CRUDBooster
         $parent_table = CRUDBooster::parseSqlTable($parent_table)['table'];
         $child_table = CRUDBooster::parseSqlTable($child_table)['table'];
 
-        if (self::isColumnExists($child_table, 'id_'.$parent_table)) {
+        if (\Schema::hasColumn($child_table, 'id_'.$parent_table)) {
             return 'id_'.$parent_table;
         }
         return $parent_table.'_id';
-    }
-
-    public static function isColumnExists($table, $field)
-    {
-        return DbInspector::colExists($table, $field);
     }
 
     public static function getTableForeignKey($fieldName)
