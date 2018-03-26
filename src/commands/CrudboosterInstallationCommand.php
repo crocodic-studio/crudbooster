@@ -154,12 +154,9 @@ class CrudboosterInstallationCommand extends Command
     private function removeDefaultMigrations()
     {
         $this->info('I remove some default migration files from laravel...');
-        if (file_exists(base_path('database/migrations/2014_10_12_000000_create_users_table.php'))) {
-            @unlink(base_path('database/migrations/2014_10_12_000000_create_users_table.php'));
-        }
-        if (file_exists(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'))) {
-            @unlink(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'));
-        }
+        @unlink(base_path('database/migrations/2014_10_12_000000_create_users_table.php'));
+        @unlink(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'));
+
     }
 
     private function installCrudbooster()
