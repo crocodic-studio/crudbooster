@@ -132,18 +132,22 @@ class CrudboosterInstallationCommand extends Command
     private function symlinkForAsset()
     {
         $this->info('Checking public/vendor/crudbooster symlink...');
-        if (!file_exists(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'))) {
+
+
+        $vendorPath = public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster');
+
+        if (!file_exists($vendorPath)) {
             $this->info('Creating public/vendor/crudbooster symlink...');
             app('files')->link(__DIR__.'/../assets', public_path('vendor/crudbooster'));
             return ;
         }
-        $vendorpath = public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster');
 
-        $this->info('Vendor Path: '.$vendorpath);
-        if (realpath($vendorpath) == $vendorpath) {
+        $this->info('Vendor Path: '.$vendorPath);
+
+        if (realpath($vendorPath) == $vendorPath) {
             $this->info('Removing public/vendor/crudbooster dir, instead of creating a symlink...');
-            rrmdir(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'));
-            app('files')->link(__DIR__.'/../assets', public_path('vendor/crudbooster'));
+            rrmdir($vendorPath);
+            app('files')->link(__DIR__.'/../assets', $vendorPath);
         }
     }
 
