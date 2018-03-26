@@ -213,7 +213,7 @@ public function cbInit() {
     | @query = current sql query
     |
     */
-    public function hookqueryindex(&$query)
+    public function hookQueryindex(&$query)
     {
         //Your code here
     @foreach ($joinList as $join)
@@ -227,7 +227,7 @@ public function cbInit() {
     | ----------------------------------------------------------------------
     |
     */
-    public function hook_row_index($column_index,&$column_value)
+    public function hookRowIndex($column_index,&$column_value)
     {
         //Your code here
     }
@@ -239,7 +239,7 @@ public function cbInit() {
     | @arr
     |
     */
-    public function hook_before_add(&$postdata)
+    public function hookBeforeAdd(&$postdata)
     {
         //Your code here
     }
@@ -251,7 +251,7 @@ public function cbInit() {
     | @id = last insert id
     |
     */
-    public function hook_after_add($id)
+    public function hookAfterAdd($id)
     {
         //Your code here
     }
@@ -264,7 +264,7 @@ public function cbInit() {
     | @id       = current id
     |
     */
-    public function hook_before_edit(&$postdata,$id)
+    public function hookBeforeEdit(&$postdata,$id)
     {
         //Your code here
     }
@@ -276,7 +276,7 @@ public function cbInit() {
     | @id       = current id
     |
     */
-    public function hook_after_edit($id)
+    public function hookAfterEdit($id)
     {
         //Your code here
     }
@@ -288,7 +288,7 @@ public function cbInit() {
     | @id       = current id
     |
     */
-    public function hook_before_delete($id)
+    public function hookBeforeDelete($id)
     {
         //Your code here
     }
@@ -300,7 +300,7 @@ public function cbInit() {
     | @id       = current id
     |
     */
-    public function hook_after_delete($id)
+    public function hookAfterDelete($id)
     {
         //Your code here
     }

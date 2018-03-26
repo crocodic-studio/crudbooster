@@ -69,30 +69,6 @@ if (! function_exists('controller_path')) {
     }
 }
 
-if (! function_exists('rrmdir')) {
-    function rrmdir($dir)
-    {
-        if (! is_dir($dir)) {
-            return;
-        }
-        $objects = scandir($dir);
-        foreach ($objects as $object) {
-            if ($object == "." || $object == "..") {
-                continue;
-            }
-
-            $objPath = $dir."/".$object;
-
-            if (is_dir($objPath)) {
-                rrmdir($objPath);
-            } else {
-                unlink($objPath);
-            }
-        }
-        rmdir($dir);
-    }
-}
-
 if (! function_exists('extract_unit')) {
     /*
     Credits: Bit Repository
@@ -147,29 +123,6 @@ if (! function_exists('min_var_export')) {
         }
 
         return "[\n".implode(",\n", $buffer)."\n$indent]";
-    }
-}
-
-if (! function_exists('rrmdir')) {
-    /*
-    * http://stackoverflow.com/questions/3338123/how-do-i-recursively-delete-a-directory-and-its-entire-contents-files-sub-dir
-    */
-    function rrmdir($dir)
-    {
-        if (! is_dir($dir)) {
-            return;
-        }
-        foreach (scandir($dir) as $object) {
-            if (in_array($object, ['.', '..'])) {
-                continue;
-            }
-            if (is_dir($dir.'/'.$object)) {
-                rrmdir($dir.'/'.$object);
-            } else {
-                unlink($dir.'/'.$object);
-            }
-        }
-        rmdir($dir);
     }
 }
 

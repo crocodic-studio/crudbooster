@@ -110,43 +110,6 @@ class DbInspector
     /**
      * @param $table
      * @param $field
-     * @return bool
-     */
-    public static function colExists($table, $field)
-    {
-        if (! $table) {
-            throw new Exception("\$table is empty !", 1);
-        }
-        if (! $field) {
-            throw new Exception("\$field is empty !", 1);
-        }
-
-        $table = CRUDBooster::parseSqlTable($table);
-
-        if (CRUDBooster::getCache('table_'.$table, 'column_'.$field)) {
-            return CRUDBooster::getCache('table_'.$table, 'column_'.$field);
-        }
-
-        $result = DB::select('SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :database AND TABLE_NAME = :table AND COLUMN_NAME = :field', [
-            'database' => $table['database'],
-            'table' => $table['table'],
-            'field' => $field,
-        ]);
-
-        if (count($result) > 0) {
-            CRUDBooster::putCache('table_'.$table, 'column_'.$field, 1);
-
-            return true;
-        }
-
-        CRUDBooster::putCache('table_'.$table, 'column_'.$field, 0);
-
-        return false;
-    }
-
-    /**
-     * @param $table
-     * @param $field
      * @return mixed
      */
     public static function getFieldTypes($table, $field)

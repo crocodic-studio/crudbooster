@@ -34,8 +34,9 @@ class CrudboosterInstallationCommand extends Command
      */
     public function handle()
     {
+        $printer = new ConsolePrinter();
 
-        $this->printHeader();
+        $printer->printHeader();
 
         $passes = (new RequirementChecker())->check();
         if(!$passes) {
@@ -66,37 +67,9 @@ class CrudboosterInstallationCommand extends Command
 			$this->info('Please setting the database configuration for first !');
 		}
 
-		$this->printFooter();
+        $printer->printFooter();
         exit;
 	}
-
-	private function printHeader() {
-		$this->info("
-
-#     __________  __  ______  ____                   __           
-#    / ____/ __ \/ / / / __ \/ __ )____  ____  _____/ /____  _____
-#   / /   / /_/ / / / / / / / __  / __ \/ __ \/ ___/ __/ _ \/ ___/
-#  / /___/ _, _/ /_/ / /_/ / /_/ / /_/ / /_/ (__  ) /_/  __/ /    
-#  \____/_/ |_|\____/_____/_____/\____/\____/____/\__/\___/_/     
-#                                                                                                                       
-			");
-        $this->info('--------- :===: Thanks for choosing CRUDBooster :==: ---------------');
-        $this->info('====================================================================');
-    }
-
-    private function printFooter($success = true)
-    {
-        $this->info('--');
-        $this->info('Homepage : http://www.crudbooster.com');
-        $this->info('Github : https://github.com/crocodic-studio/crudbooster');
-        $this->info('Documentation : https://github.com/crocodic-studio/crudbooster/blob/master/docs/en/index.md');
-        $this->info('====================================================================');
-        if ($success == true) {
-            $this->info('------------------- :===: Completed !! :===: ------------------------');
-        } else {
-            $this->info('------------------- :===:  Failed !!  :===: ------------------------');
-        }
-    }
 
     /**
      * Get the composer command for the environment.
@@ -124,7 +97,7 @@ class CrudboosterInstallationCommand extends Command
         $this->info('Upload Path: '.$uploadPath);
         if (realpath($uploadPath) == $uploadPath) {
             $this->info('Remove the existing uploads dir, and create a symlink for it...');
-            rrmdir(public_path('uploads'));
+            $this->rrmdir(public_path('uploads'));
             app('files')->link(storage_path('app'), public_path('uploads'));
         }
     }
@@ -146,7 +119,7 @@ class CrudboosterInstallationCommand extends Command
 
         if (realpath($vendorPath) == $vendorPath) {
             $this->info('Removing public/vendor/crudbooster dir, instead of creating a symlink...');
-            rrmdir($vendorPath);
+            $this->rrmdir($vendorPath);
             app('files')->link(__DIR__.'/../assets', $vendorPath);
         }
     }
@@ -156,7 +129,6 @@ class CrudboosterInstallationCommand extends Command
         $this->info('I remove some default migration files from laravel...');
         @unlink(base_path('database/migrations/2014_10_12_000000_create_users_table.php'));
         @unlink(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'));
-
     }
 
     private function installCrudbooster()
@@ -197,5 +169,28 @@ class CrudboosterInstallationCommand extends Command
             $this->info('Please set public/vendor directory to writable 0777');
             exit;
         }
+    }
+    /*
+    * http://stackoverflow.com/questions/3338123/how-do-i-recursively-delete-a-directory-and-its-entire-contents-files-sub-dir
+    */
+    private function rrmdir($dir)
+    {
+        if (! is_dir($dir)) {
+            return;
+        }
+        foreach (scandir($dir) as $object) {
+            if (in_array($object, ['.', '..'])) {
+                continue;
+            }
+
+            $objPath = $dir."/".$object;
+
+            if (is_dir($objPath)) {
+                $this->rrmdir($objPath);
+            } else {
+                unlink($objPath);
+            }
+        }
+        rmdir($dir);
     }
 }

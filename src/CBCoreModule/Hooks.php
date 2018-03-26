@@ -4,35 +4,35 @@ namespace crocodicstudio\crudbooster\CBCoreModule;
 
 trait Hooks
 {
-    public function hook_before_delete($id)
+    public function hookBeforeDelete($id)
     {
     }
 
-    public function hook_after_Delete($id)
+    public function hookAfterDelete($id)
     {
     }
 
-    public function hook_before_edit(&$arr, $id)
+    public function hookBeforeEdit(&$arr, $id)
     {
     }
 
-    public function hook_after_edit($id)
+    public function hookAfterEdit($id)
     {
     }
 
-    public function hook_after_add($id)
+    public function hookAfterAdd($id)
     {
     }
 
-    public function hook_before_add(&$arr)
+    public function hookBeforeAdd(&$arr)
     {
     }
 
-    public function hook_query_index(&$query)
+    public function hookQueryIndex(&$query)
     {
     }
 
-    public function hook_row_index($index, &$value)
+    public function hookRowIndex($index, &$value)
     {
     }
 }

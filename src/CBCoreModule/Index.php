@@ -180,7 +180,7 @@ class Index
         $columns_table[$index]['field'] = $field;
         $columns_table[$index]['field_raw'] = $field;
 
-        if (CB::isColumnExists($table, $field)) {
+        if (\Schema::hasColumn($table, $field)) {
             $result->addselect($table.'.'.$field);
             $columns_table[$index]['type_data'] = CRUDBooster::getFieldType($table, $field);
             $columns_table[$index]['field_with'] = $table.'.'.$field;
