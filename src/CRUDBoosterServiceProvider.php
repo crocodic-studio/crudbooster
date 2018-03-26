@@ -14,7 +14,6 @@ use crocodicstudio\crudbooster\Modules\SettingModule\CbSettingsServiceProvider;
 use crocodicstudio\crudbooster\Modules\StatisticModule\CbStatisticsServiceProvider;
 use Illuminate\Support\ServiceProvider;
 use crocodicstudio\crudbooster\commands\CrudboosterInstallationCommand;
-use crocodicstudio\crudbooster\commands\CrudboosterUpdateCommand;
 use Illuminate\Foundation\AliasLoader;
 
 class CRUDBoosterServiceProvider extends ServiceProvider
@@ -122,9 +121,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
             return new CrudboosterInstallationCommand;
         });
 
-        $this->app->singleton('crudboosterupdate', function () {
-            return new CrudboosterUpdateCommand;
-        });
+        /*$this->app->singleton('crudboosterupdate', function () { return new CrudboosterUpdateCommand; });*/
     }
 
     private function defineValidationRules()
