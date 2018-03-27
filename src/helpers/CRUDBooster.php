@@ -247,43 +247,6 @@ class CRUDBooster
         return substr($string, $ini, $len);
     }
 
-    public static function timeAgo($datetime_to, $datetime_from = null, $full = false)
-    {
-        $datetime_from = ($datetime_from) ?: date('Y-m-d H:i:s');
-        $now = new \DateTime;
-        if ($datetime_from != '') {
-            $now = new \DateTime($datetime_from);
-        }
-        $ago = new \DateTime($datetime_to);
-        $diff = $now->diff($ago);
-
-        $diff->w = floor($diff->d / 7);
-        $diff->d -= $diff->w * 7;
-
-        $string = [
-            'y' => 'year',
-            'm' => 'month',
-            'w' => 'week',
-            'd' => 'day',
-            'h' => 'hour',
-            'i' => 'minute',
-            's' => 'second',
-        ];
-        foreach ($string as $k => &$v) {
-            if ($diff->$k) {
-                $v = $diff->$k.' '.$v.($diff->$k > 1 ? 's' : '');
-            } else {
-                unset($string[$k]);
-            }
-        }
-
-        if (! $full) {
-            $string = array_slice($string, 0, 1);
-        }
-
-        return $string ? implode(', ', $string).' ' : 'just now';
-    }
-
     public static function sendEmailQueue($queue)
     {
         return (new Mailer())->sendEmailQueue($queue);
