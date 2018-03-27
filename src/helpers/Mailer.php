@@ -8,8 +8,6 @@ class Mailer
 
     private $reciever;
 
-
-
     public function send($config)
     {
         $this->setConfigs();

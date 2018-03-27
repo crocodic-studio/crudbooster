@@ -247,16 +247,6 @@ class CRUDBooster
         return substr($string, $ini, $len);
     }
 
-    public static function sendEmailQueue($queue)
-    {
-        return (new Mailer())->sendEmailQueue($queue);
-    }
-
-    public static function sendEmail($config = [])
-    {
-        return (new Mailer())->send($config);
-    }
-
     public static function first($table, $id)
     {
         $table = self::parseSqlTable($table)['table'];
