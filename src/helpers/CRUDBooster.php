@@ -192,23 +192,14 @@ class CRUDBooster
         return DbInspector::findPK($table);
     }
 
-    public static function valid($arr = [], $type = 'json')
+    public static function valid($rules = [], $type = 'json')
     {
-        $input_arr = request()->all();
-
-        foreach ($arr as $a => $b) {
-            if (is_int($a)) {
-                $arr[$b] = 'required';
-            } else {
-                $arr[$a] = $b;
-            }
-        }
-
-        $validator = Validator::make($input_arr, $arr);
+        $validator = Validator::make(request()->all(), $rules);
 
         if (!$validator->fails()) {
             return true;
         }
+
         $message = $validator->errors()->all();
 
         if ($type == 'json') {

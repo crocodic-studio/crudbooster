@@ -163,7 +163,7 @@ class AdminApiGeneratorController extends CBController
 
     public function getStatusApikey()
     {
-        CRUDBooster::valid(['id', 'status'], 'view');
+        CRUDBooster::valid(['id' => 'required', 'status' => 'required'], 'view');
 
         $id = request('id');
         $status = (request('status') == 1) ? "active" : "non active";
