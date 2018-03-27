@@ -477,11 +477,6 @@ class CRUDBooster
         return false;
     }
 
-    public static function generateController($table, $name = null)
-    {
-        return ControllerGenerator::generateController($table, $name);
-    }
-
     public static function getTableColumns($table)
     {
         return DbInspector::getTableCols($table);
