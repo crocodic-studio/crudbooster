@@ -40,7 +40,7 @@
                     </a>
                 @endif
 
-            @include("crudbooster::default._index.search", ['parameters' => Request::all()])
+            @include("crudbooster::default._index.search", ['parameters' => request()->all()])
 
             @include("crudbooster::default._index.pagination_select", ['limit' => $limit ])
 
@@ -50,7 +50,7 @@
 
         </div>
         <div class="box-body table-responsive no-padding">
-            @include("crudbooster::default.table")
+            @include("crudbooster::default._index.table")
         </div>
     </div>
 

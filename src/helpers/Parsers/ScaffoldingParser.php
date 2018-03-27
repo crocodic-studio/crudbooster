@@ -7,6 +7,7 @@ class ScaffoldingParser
     static function parse($code, $type = 'form')
     {
         $colsItem = self::extractLines($code, $type);
+
         foreach ($colsItem as &$item) {
             $item = str_replace(' ','', $item);
             $item = str_replace('\',]',']', $item);
@@ -14,26 +15,23 @@ class ScaffoldingParser
             $item = trim($item, '[');
             $item = trim($item, '];');
             $item = trim($item);
-            $item = trim(preg_replace("/[\n\r\t]/", " ", $item));
+            $item = trim(preg_replace("/[\n\r\t]/", "", $item));
             $strSplit = str_split($item);
             $innerCount = 0;
-            foreach ($strSplit as $e => $s) {
+            foreach ($strSplit as $index => $s) {
                 if ($s == '[') {
                     $innerCount++;
                 }
                 if ($s == ']') {
                     $innerCount--;
                 }
-                if ($innerCount == 0) {
-                    if ($s == ',') {
-                        if ($strSplit[$e + 1] == "'") {
-                            $strSplit[$e] = "|SPLIT|";
-                        }
-                    }
+                if ($innerCount == 0 && $s == ',' && $strSplit[$index + 1] == "'") {
+                    $strSplit[$index] = "|SPLIT|";
                 }
             }
             $item = implode("", $strSplit);
         }
+
         foreach ($colsItem as &$col) {
             $split = explode('|SPLIT|', $col);
 
@@ -58,18 +56,7 @@ class ScaffoldingParser
 
         }
 
-
-        foreach ($colsItem as &$form) {
-            if ($type !== 'form') {
-                continue;
-            }
-            if ($form['options']) {
-                @eval("\$options = $form[options];");
-                @$form['options'] = $options;
-            } else {
-                $form['options'] = [];
-            }
-        }
+        self::formOptions($type, $colsItem);
 
         return $colsItem;
     }
@@ -96,5 +83,27 @@ class ScaffoldingParser
         $colsItem = array_filter($colsItem);
 
         return $colsItem;
+    }
+
+    /**
+     * @param $type
+     * @param $colsItem
+     * @param $form
+     * @param $options
+     * @return mixed
+     */
+    private static function formOptions($type, $colsItem)
+    {
+        foreach ($colsItem as &$form) {
+            if ($type !== 'form') {
+                continue;
+            }
+            if ($form['options']) {
+                @eval("\$options = $form[options];");
+                @$form['options'] = $options;
+            } else {
+                $form['options'] = [];
+            }
+        }
     }
 }

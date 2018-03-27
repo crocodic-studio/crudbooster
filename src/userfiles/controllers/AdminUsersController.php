@@ -12,7 +12,7 @@ class AdminUsersController extends CBController
     {
         # START CONFIGURATION DO NOT REMOVE THIS LINE
         $this->table = 'cms_users';
-        $this->title_field = "name";
+        $this->title_field = 'name';
         $this->button_action_style = 'button_icon';
         $this->button_import = false;
         $this->button_export = false;
@@ -21,38 +21,38 @@ class AdminUsersController extends CBController
 
         # START COLUMNS DO NOT REMOVE THIS LINE
         $this->col = [];
-        $this->col[] = ["label" => "Name", "name" => "name"];
-        $this->col[] = ["label" => "Email", "name" => "email"];
-        $this->col[] = ["label" => "Privilege", "name" => "cms_privileges_name"];
-        $this->col[] = ["label" => "Photo", "name" => "photo", "image" => 1];
+        $this->col[] = ['label' => 'name', 'name' => 'name'];
+        $this->col[] = ['label' => "Email", 'name' => "email"];
+        $this->col[] = ['label' => "Privilege", 'name' => "cms_privileges_name"];
+        $this->col[] = ['label' => "Photo", 'name' => "photo", "image" => 1];
         # END COLUMNS DO NOT REMOVE THIS LINE
 
         # START FORM DO NOT REMOVE THIS LINE
         $this->form = [];
-        $this->form[] = ["label" => "Name", "name" => "name", 'required' => true, 'validation' => 'required|alpha_spaces|min:3'];
+        $this->form[] = ['label' => 'name', 'name' => 'name', 'required' => true, 'validation' => 'required|alpha_spaces|min:3'];
         $this->form[] = [
-            "label" => "Email",
-            "name" => "email",
+            'label' => "Email",
+            'name' => "email",
             'required' => true,
             'type' => 'email',
             'validation' => 'required|email|unique:cms_users,email,'.CRUDBooster::getCurrentId(),
         ];
         $this->form[] = [
-            "label" => "Photo",
-            "name" => "photo",
-            "type" => "upload",
+            'label' => "Photo",
+            'name' => "photo",
+            'type' => "upload",
             "help" => "Recommended resolution is 200x200px",
             'required' => true,
             'validation' => 'required|image|max:1000',
         ];
         $this->form[] = [
-            "label" => "Privilege",
-            "name" => "id_cms_privileges",
-            "type" => "select_datatable",
-            "options" => ["table" => "cms_privileges", "field_value" => "id", "field_label" => "name"],
+            'label' => "Privilege",
+            'name' => "id_cms_privileges",
+            'type' => "select_datatable",
+            "options" => ["table" => "cms_privileges", "field_value" => "id", "field_label" => 'name'],
             'required' => true,
         ];
-        $this->form[] = ["label" => "Password", "name" => "password", "type" => "password", "help" => "Please leave empty if not change"];
+        $this->form[] = ['label' => "Password", 'name' => "password", 'type' => "password", "help" => "Please leave empty if not change"];
         # END FORM DO NOT REMOVE THIS LINE
 
     }

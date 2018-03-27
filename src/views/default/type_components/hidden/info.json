@@ -1,5 +1,5 @@
 {
-  "title": "Hidden Input",
-  "type": "hidden",
+  'title': "Hidden Input",
+  'type': "hidden",
   "options": []
 }

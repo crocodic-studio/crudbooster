@@ -12,14 +12,14 @@ class SettingsForm
         $form[] = ['label' => 'Label', 'name' => 'label'];
 
         $form[] = [
-            "label" => "Type",
-            "name" => "content_input_type",
-            "type" => "select_dataenum",
+            'label' => 'type',
+            'name' => "content_input_type",
+            'type' => "select_dataenum",
             'options' => ["enum" => ["text", "number", "email", "textarea", "wysiwyg", "upload_image", "upload_document", "datepicker", "radio", "select"]],
         ];
         $form[] = [
-            "label" => "Radio / Select Data",
-            "name" => "dataenum",
+            'label' => "Radio / Select Data",
+            'name' => 'dataenum',
             "placeholder" => "Example : abc,def,ghi",
             "jquery" => "
 			function show_radio_data() {
@@ -34,7 +34,7 @@ class SettingsForm
 			show_radio_data();
 			",
         ];
-        $form[] = ["label" => "Helper Text", "name" => "helper", "type" => "text"];
+        $form[] = ['label' => "Helper Text", 'name' => "helper", 'type' => "text"];
 
         return $form;
     }

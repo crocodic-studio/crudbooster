@@ -21,8 +21,8 @@ class FileUploader
 
         //Move file to storage
         $filename = md5(str_random(5)).'.'.$ext;
-        $file_path = 'uploads'.DIRECTORY_SEPARATOR.date('Y-m');
-        Storage::putFileAs($file_path, $file, $filename);
+        $filePath = 'uploads'.DIRECTORY_SEPARATOR.date('Y-m');
+        Storage::putFileAs($filePath, $file, $filename);
 
         return 'uploads/'.date('Y-m').'/'.$filename;
     }

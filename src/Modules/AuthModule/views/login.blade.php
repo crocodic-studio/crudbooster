@@ -10,8 +10,8 @@
 
     <div class="login-logo">
         <a href="{{url('/')}}">
-            <img title='{!!(CRUDBooster::getSetting('appname') == 'CRUDBooster')?"<b>CRUD</b>Booster":CRUDBooster::getSetting('appname')!!}'
-                 src='{{ CRUDBooster::getSetting("logo")?asset(CRUDBooster::getSetting('logo')):cbAsset('logo_crudbooster.png') }}'
+            <img title='{!!(cbGetsetting('appname') == 'CRUDBooster')?"<b>CRUD</b>Booster":cbGetsetting('appname')!!}'
+                 src='{{ cbGetsetting("logo")?asset(cbGetsetting('logo')):cbAsset('logo_crudbooster.png') }}'
                  style='max-width: 100%;max-height:170px'/>
         </a>
     </div>

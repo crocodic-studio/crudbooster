@@ -1,4 +1,4 @@
-<label>{{ cbTrans('set_as_superadmin')}}</label><br/>
+<label>{{ trans('privilege.set_as_superadmin')}}</label><br/>
 <div id='set_as_superadmin' class='radio-inline'>
 	<label class="radio-inline">
 		<input required {{ ($role->is_superadmin==1)?'checked':'' }} type='radio' name='is_superadmin' value='1'> {{cbTrans('confirmation_yes')}}

@@ -1,9 +1,8 @@
 <?php namespace crocodicstudio\crudbooster\commands;
 
+use crocodicstudio\crudbooster\helpers\Mailer;
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Inspiring;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
 use DB;
 use Cache;
 use Request;
@@ -32,8 +31,6 @@ class Mailqueues extends Command
      */
     public function handle()
     {
-
-
         $now = date('Y-m-d H:i:s');
 
         $this->comment('Mail Queues Started '.$now);
@@ -47,7 +44,7 @@ class Mailqueues extends Command
 
         foreach ($queues as $q) {
             if (filter_var($q->email_recipient, FILTER_VALIDATE_EMAIL) !== false) {
-                CRUDBooster::sendEmailQueue($queue);
+                (new Mailer())->sendEmailQueue($q);
                 $this->comment('Email send -> '.$q->subject);
             }
             DB::table('mailqueues')->where('id', $q->id)->delete();

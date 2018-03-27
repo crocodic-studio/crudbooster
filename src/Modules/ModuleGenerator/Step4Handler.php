@@ -2,6 +2,7 @@
 
 namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
+use crocodicstudio\crudbooster\helpers\Parsers\ControllerConfigParser;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
 
@@ -9,13 +10,13 @@ class Step4Handler
 {
     public function showForm($id)
     {
-        $controller = DB::table('cms_moduls')->where('id', $id)->first()->controller;
+        $controller = ModulesRepo::getControllerName($id);;
 
         $data = [];
         $data['id'] = $id;
         if (file_exists(controller_path($controller))) {
-            $response = file_get_contents(controller_path($controller));
-            $data['config'] = parseControllerConfigToArray($response);
+            $fileContent = (FileManipulator::readCtrlContent($controller));
+            $data['config'] = ControllerConfigParser::parse($fileContent);
         }
 
         return view('CbModulesGen::step4', $data);
@@ -24,46 +25,72 @@ class Step4Handler
     public function handleFormSubmit()
     {
         $id = Request::input('id');
-        $row = DB::table('cms_moduls')->where('id', $id)->first();
+        $module = ModulesRepo::find($id);
 
-        $post = Request::all();
+        $data = request()->all();
 
-        $post['table'] = $row->table_name;
+        $data['table'] = $module->table_name;
 
-        $script_config = [];
-        $exception = ['_token', 'id', 'submit'];
+        $newCode = $this->getScriptConfig($data);
+        $this->replaceInFile($module->controller, 'CONFIGURATION', $newCode);
+
+        return redirect()->route('AdminModulesControllerGetIndex')->with([
+            'message' => cbTrans('alert_update_data_success'),
+            'message_type' => 'success',
+        ]);
+    }
+
+    /**
+     * @param $data
+     * @return array
+     */
+    private function getScriptConfig($data)
+    {
+        $scriptConfig = [];
         $i = 0;
-        foreach ($post as $key => $val) {
-            if (in_array($key, $exception)) {
-                continue;
-            }
-
-            if ($val != 'true' && $val != 'false') {
-                $value = '"'.$val.'"';
-            } else {
+        $data = array_diff_key($data, array_flip(['_token', 'id', 'submit'])); // remove keys
+        foreach ($data as $key => $val) {
+            if ($val == 'true' || $val == 'false') {
                 $value = $val;
+            } else {
+                $value = "'$val'";
             }
 
-            $script_config[$i] = "            ".'$this->'.$key.' = '.$value.';';
+            $scriptConfig[$i] = '            $this->'.$key.' = '.$value.';';
             $i++;
         }
 
-        $scripts = implode("\n", $script_config);
-        $raw = file_get_contents(controller_path($row->controller));
-        $raw = explode("# START CONFIGURATION DO NOT REMOVE THIS LINE", $raw);
-        $rraw = explode("# END CONFIGURATION DO NOT REMOVE THIS LINE", $raw[1]);
+        return implode("\n", $scriptConfig);
+    }
 
-        $file_controller = trim($raw[0])."\n\n";
-        $file_controller .= "            # START CONFIGURATION DO NOT REMOVE THIS LINE\n";
-        $file_controller .= $scripts."\n";
-        $file_controller .= "            # END CONFIGURATION DO NOT REMOVE THIS LINE\n\n";
-        $file_controller .= "            ".trim($rraw[1]);
+    /**
+     * @param $phpCode
+     * @param $mark
+     * @param $newCode
+     * @return string
+     */
+    private function replaceConfigSection($phpCode, $mark, $newCode)
+    {
+        list($before, $_middle, $after) = FileManipulator::extractBetween($phpCode, $mark);
 
-        file_put_contents(controller_path($row->controller), $file_controller);
+        $_code = $before."\n\n";
+        $_code .= "            # START $mark DO NOT REMOVE THIS LINE\n";
+        $_code .= $newCode."\n";
+        $_code .= "            # END $mark DO NOT REMOVE THIS LINE\n\n";
+        $_code .= '            '.$after;
 
-        return redirect()->route('AdminModulesControllerGetIndex')->with([
-            'message' => trans('crudbooster.alert_update_data_success'),
-            'message_type' => 'success',
-        ]);
+        return $_code;
+    }
+
+    /**
+     * @param $controller
+     * @param $mark
+     * @param $newCode
+     */
+    private function replaceInFile($controller, $mark, $newCode)
+    {
+        $rawCode = FileManipulator::readCtrlContent($controller);
+        $fileController = FileManipulator::replaceBetweenMark($rawCode, $mark, $newCode);
+        FileManipulator::putCtrlContent($controller, $fileController);
     }
 }

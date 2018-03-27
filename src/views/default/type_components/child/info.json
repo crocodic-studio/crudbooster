@@ -1,9 +1,9 @@
 {
-  "title": "Child Table For Master -> Detail",
+  'title': "Child Table For Master -> Detail",
   "alert": "There is an attribute named 'columns' that you should set it manually",
-  "type": "child",
+  'type': "child",
   "attribute": {
-    "required": {
+    'required': {
       "table": "Relationship Table",
       "foreign_key": "foreign key"
     },

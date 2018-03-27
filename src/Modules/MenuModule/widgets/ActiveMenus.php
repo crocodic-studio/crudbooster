@@ -2,6 +2,8 @@
 
 namespace crocodicstudio\crudbooster\Modules\MenuModule\widgets;
 
+use crocodicstudio\crudbooster\Modules\MenuModule\MenuRepo;
+
 class ActiveMenus
 {
     public $template = 'CbMenu::_menus_management.active_menus';
@@ -12,15 +14,6 @@ class ActiveMenus
 
     public function data()
     {
-        $menu_active = app('db')->table('cms_menus')->where('parent_id', 0)->where('is_active', 1)->orderby('sorting', 'asc')->get();
-
-        foreach ($menu_active as $menu) {
-            $child = app('db')->table('cms_menus')->where('is_active', 1)->where('parent_id', $menu->id)->orderby('sorting', 'asc')->get();
-            if (count($child)) {
-                $menu->children = $child;
-            }
-        }
-
-        return $menu_active;
+        return MenuRepo::fetchMenuWithChilds(1);
     }
 }

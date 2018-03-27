@@ -11,6 +11,7 @@ trait Hooks
     public function hookAfterDelete($id)
     {
     }
+
     public function hookBeforeEdit(&$arr, $id)
     {
     }

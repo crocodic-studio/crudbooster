@@ -14,7 +14,6 @@ use crocodicstudio\crudbooster\Modules\SettingModule\CbSettingsServiceProvider;
 use crocodicstudio\crudbooster\Modules\StatisticModule\CbStatisticsServiceProvider;
 use Illuminate\Support\ServiceProvider;
 use crocodicstudio\crudbooster\commands\CrudboosterInstallationCommand;
-use crocodicstudio\crudbooster\commands\CrudboosterUpdateCommand;
 use Illuminate\Foundation\AliasLoader;
 
 class CRUDBoosterServiceProvider extends ServiceProvider
@@ -62,7 +61,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
             $this->publishes([__DIR__.'/userfiles/controllers/AdminUsersController.php' => app_path('Http/Controllers/AdminUsersController.php')], 'cb_user_controller');
         }
 
-        require __DIR__.'/validations/validation.php';
+        $this->defineValidationRules();
         $this->loadRoutesFrom( __DIR__.'/routes.php');
     }
 
@@ -73,8 +72,6 @@ class CRUDBoosterServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        require __DIR__.'/helpers/Helper.php';
-
         $this->mergeConfigFrom(__DIR__.'/configs/crudbooster.php', 'crudbooster');
 
         $this->app->singleton('crudbooster', function () {
@@ -88,13 +85,14 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->registerCrudboosterCommand();
 
         $this->commands('crudboosterinstall');
-        $this->commands('crudboosterupdate');
+        //$this->commands('crudboosterupdate');
 
         $this->app->register('Barryvdh\DomPDF\ServiceProvider');
         $this->app->register('Maatwebsite\Excel\ExcelServiceProvider');
         $this->app->register('Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider');
         $this->app->register('Intervention\Image\ImageServiceProvider');
         $this->app->register('Imanghafoori\Widgets\WidgetsServiceProvider');
+        $this->app->register('Imanghafoori\Responder\LaravelResponderServiceProvider');
 
         $loader = AliasLoader::getInstance();
         $loader->alias('PDF', 'Barryvdh\DomPDF\Facade');
@@ -121,8 +119,15 @@ class CRUDBoosterServiceProvider extends ServiceProvider
             return new CrudboosterInstallationCommand;
         });
 
-        $this->app->singleton('crudboosterupdate', function () {
-            return new CrudboosterUpdateCommand;
-        });
+        /*$this->app->singleton('crudboosterupdate', function () { return new CrudboosterUpdateCommand; });*/
+    }
+
+    private function defineValidationRules()
+    {
+        \Validator::extend('alpha_spaces', function ($attribute, $value) {
+            // This will only accept alpha and spaces.
+            // If you want to accept hyphens use: /^[\pL\s-]+$/u.
+            return preg_match('/^[\pL\s]+$/u', $value);
+        }, 'The :attribute should be letters only');
     }
 }

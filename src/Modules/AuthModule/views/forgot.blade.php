@@ -6,7 +6,7 @@
     <meta name='generator' content='CRUDBooster.com'/>
     <meta name='robots' content='noindex,nofollow'/>
     <link rel="shortcut icon"
-          href="{{ CRUDBooster::getSetting('favicon')?asset(CRUDBooster::getSetting('favicon')):cbAsset('logo_crudbooster.png') }}">
+          href="{{ cbGetsetting('favicon')?asset(cbGetsetting('favicon')):cbAsset('logo_crudbooster.png') }}">
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <!-- Bootstrap 3.3.2 -->
 {!! cbStyleSheet('adminlte/bootstrap/css/bootstrap.min.css') !!}
@@ -20,8 +20,8 @@
     {!! cbStyleSheet('css/main.css') !!}
     <style type="text/css">
         .login-page, .register-page {
-            background: {{ CRUDBooster::getSetting("login_background_color")?:'#dddddd'}} url('{{ CRUDBooster::getSetting("login_background_image")?asset(CRUDBooster::getSetting("login_background_image")):cbAsset('bg_blur3.jpg') }}');
-            color: {{ CRUDBooster::getSetting("login_font_color")?:'#ffffff' }}   !important;
+            background: {{ cbGetsetting("login_background_color")?:'#dddddd'}} url('{{ cbGetsetting("login_background_image")?asset(cbGetsetting("login_background_image")):cbAsset('bg_blur3.jpg') }}');
+            color: {{ cbGetsetting("login_font_color")?:'#ffffff' }}   !important;
             background-repeat: no-repeat;
             background-position: center;
             background-size: cover;
@@ -30,7 +30,7 @@
         .login-box-body {
             box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.8);
             background: rgba(255, 255, 255, 0.9);
-            color: {{ CRUDBooster::getSetting("login_font_color")?:'#666666' }}   !important;
+            color: {{ cbGetsetting("login_font_color")?:'#666666' }}   !important;
         }
     </style>
 </head>
@@ -39,7 +39,7 @@
     <div class="login-logo">
         <a href="{{url('/')}}">
             <img title='{!!($appname == 'CRUDBooster')?"<b>CRUD</b>Booster":$appname!!}'
-                 src='{{ CRUDBooster::getSetting("logo")?asset(CRUDBooster::getSetting('logo')):cbAsset('logo_crudbooster.png') }}'
+                 src='{{ cbGetsetting("logo")?asset(cbGetsetting('logo')):cbAsset('logo_crudbooster.png') }}'
                  style='max-width: 100%;max-height:170px'/>
         </a>
     </div><!-- /.login-logo -->

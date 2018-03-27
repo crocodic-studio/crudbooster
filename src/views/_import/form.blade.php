@@ -16,10 +16,12 @@
         <table class='table table-bordered' style="width:130%">
             <thead>
             <tr class='success'>
-                @foreach($table_columns as $k=>$column)
+                @foreach($table_columns as $k => $column)
+                    @if (\crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector::isExceptional($column))
+                        @continue
+                    @endif
                     <?php
                     $help = '';
-                    if ($column == 'id' || $column == 'created_at' || $column == 'updated_at' || $column == 'deleted_at') continue;
                     if (substr($column, 0, 3) == 'id_') {
                         $relational_table = substr($column, 3);
                         $help = "<a href='#' title='This is foreign key, so the System will be inserting new data to table `$relational_table` if doesn`t exists'><strong>(?)</strong></a>";
@@ -32,14 +34,16 @@
             <tbody>
 
             <tr>
-                @foreach($table_columns as $k=>$column)
-                    <?php if ($column == 'id' || $column == 'created_at' || $column == 'updated_at' || $column == 'deleted_at') continue;?>
+                @foreach($table_columns as $k => $column)
+                    @if (\crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector::isExceptional($column))
+                        @continue
+                    @endif
                     <td data-no-column='{{$k}}'>
                         <select style='width:120px' class='form-control select_column'
                                 name='select_column[{{$k}}]'>
                             <option value=''>** Set Column for {{$column}}</option>
-                            @foreach($data_import_column as $import_column)
-                                <option value='{{$import_column}}'>{{$import_column}}</option>
+                            @foreach($data_import_column as $importColumn)
+                                <option value='{{$importColumn}}'>{{$importColumn}}</option>
                             @endforeach
                         </select>
                     </td>
@@ -73,9 +77,9 @@
                 if (total_selected_column == 0) {
                     swal("Oops...", "Please at least 1 column that should adjusted...", "error");
                     return false;
-                } else {
-                    return true;
                 }
+                return true;
+                
             }
         </script>
     @endpush

@@ -39,22 +39,6 @@ return [
                 * Maybe the page that you are looking for has been deleted by Admin<br/>
                 * You can go back by click Back Button at browser<br/>',
 
-    'log_try_view'            => 'Try view the data :name at :module',
-    'log_try_edit'            => 'Try edit the data :name at :module',
-    'log_try_add'             => 'Try add data at :module',
-    'log_try_add_save'        => 'Try add the data :name data at :module',
-    'log_try_delete'          => 'Try delete the :name data at :module',
-    'log_try_delete_selected' => 'Try delete selected at :module',
-    'log_try_delete_image'    => 'Try delete the image of :name data at :module',
-    'log_try_update'          => 'Try update the :name data at :module',
-    'log_add'                 => 'Add New Data :name at :module',
-    'log_update'              => 'Update data :name at :module',
-    'log_delete'              => 'Delete data :name at :module',
-    'log_delete_image'        => 'Delete the image of :name at :module',
-    'log_login'               => ':email login with IP Address :ip',
-    'log_forgot'              => 'Someone with IP :ip request a password for :email',
-    'log_logout'              => ':email logout',
-
     'alert_delete_selected'         => 'Are you sure want to delete all selected data ?',
     'alert_delete_selected_success' => 'Delete selected success !',
     'alert_bulk_action_button'      => 'Are you sure want to',    
@@ -235,23 +219,7 @@ return [
     'confirmation_text'             => 'Are you sure want to do this action?',
     'confirmButtonText'             => 'Yes',
 
-    
-    // privilege
-    'privileges_name'               =>'Privilege Name',
-    'privileges_super_admin'        =>'Super Admin',
-    'privileges_standart_user'      =>'Standart user',
-    'privileges_ID'                 =>'ID',
-    'set_as_superadmin'             =>'Set as Superadmin',
-    'chose_theme_color_select'      =>'** Choose Backend Theme Color',
-    'chose_theme_color'             =>' Theme Color',
-    'privileges_configuration'      =>'Privileges Configuration',
-    'privileges_module_list_no'     =>'No.',
-    'privileges_module_list_mod_names'=>'Module\'s Name',
-    'privileges_module_list_view'   =>'View',
-    'privileges_module_list_create' =>'Create',
-    'privileges_module_list_read'   =>'Read',
-    'privileges_module_list_update' =>'Update',
-    'privileges_module_list_delete' =>'Delete',
+
 
     //datamodal 
     'datamodal_select'=>'Select',

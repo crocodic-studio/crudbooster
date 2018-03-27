@@ -2,6 +2,7 @@
 
 use crocodicstudio\crudbooster\middlewares\CBBackend;
 use crocodicstudio\crudbooster\middlewares\CBSuperadmin;
+use crocodicstudio\crudbooster\Modules\MenuModule\MenuTypes;
 
 Route::group([
     'middleware' => ['web', CBSuperadmin::class],
@@ -42,37 +43,37 @@ if (! Request::is(cbAdminPath())) {
     return;
 }
 
-$dashboard_menu = DB::table('cms_menus')->where('is_dashboard', 1)->first();
+$dashboardMenu = DB::table('cms_menus')->where('is_dashboard', 1)->first();
 // ROUTER FOR OWN CONTROLLER FROM CB
 Route::group(['middleware' => ['web', CBBackend::class], 'prefix' => cbAdminPath(), 'namespace' => ctrlNamespace(),
-], function () use ($dashboard_menu) {
+], function () use ($dashboardMenu) {
 
-    if (! $dashboard_menu) {
+    if (! $dashboardMenu) {
         return;
     }
-    $dashboard_type = $dashboard_menu->type;
-    $path = $dashboard_menu->path;
+    $dashboardType = $dashboardMenu->type;
+    $path = $dashboardMenu->path;
 
 
-    if ($dashboard_type == 'Statistic') {
-        Route::get('/', '\\crocodicstudio\\crudbooster\\Modules\\StatisticModule\\AdminStatisticBuilderController@getDashboard');
-    } elseif ($dashboard_type == 'Module') {
+    if ($dashboardType == MenuTypes::Statistic) {
+        Route::get('/', cbModulesNS('StatisticModule\\AdminStatisticBuilderController@getDashboard'));
+    } elseif ($dashboardType == MenuTypes::Module) {
         $module = CRUDBooster::first('cms_moduls', ['path' => $path]);
         Route::get('/', $module->controller.'@getIndex');
-    } elseif ($dashboard_type == 'Route') {
+    } elseif ($dashboardType == MenuTypes::route) {
         $action = str_replace("Controller", "Controller@", $path);
         $action = str_replace(['Get', 'Post'], ['get', 'post'], $action);
         Route::get('/', $action);
-    } elseif ($dashboard_type == 'Controller & Method') {
+    } elseif ($dashboardType == MenuTypes::ControllerMethod) {
         Route::get('/', $path);
-    } elseif ($dashboard_type == 'URL') {
+    } elseif ($dashboardType == MenuTypes::url) {
         redirect($path);
     }
 });
 
 Route::group(['middleware' => ['web', CBBackend::class], 'prefix' => cbAdminPath(), 'namespace' => '\crocodicstudio\crudbooster\controllers',
-], function () use ($dashboard_menu) {
-    if (! $dashboard_menu) {
+], function () use ($dashboardMenu) {
+    if (! $dashboardMenu) {
         CRUDBooster::routeController('/', cbModulesNS('AuthModule\AuthController'));
     }
 });

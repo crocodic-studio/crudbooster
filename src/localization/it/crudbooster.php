@@ -39,21 +39,6 @@ return [
                 * Forse la pagina che stai cercando è stata eliminata dall\'admin<br/>
                 * Puoi tornare indietro utilizzando il tasto back del browser<br/>',
 
-    'log_try_view'            => 'Try view the data :name at :module',
-    'log_try_edit'            => 'Try edit the data :name at :module',
-    'log_try_add'             => 'Try add data at :module',
-    'log_try_add_save'        => 'Try add the data :name data at :module',
-    'log_try_delete'          => 'Try delete the :name data at :module',
-    'log_try_delete_selected' => 'Try delete selected at :module',
-    'log_try_delete_image'    => 'Try delete the image of :name data at :module',
-    'log_try_update'          => 'Try update the :name data at :module',
-    'log_add'                 => 'Add New Data :name at :module',
-    'log_update'              => 'Update data :name at :module',
-    'log_delete'              => 'Delete data :name at :module',
-    'log_delete_image'        => 'Delete the image of :name at :module',
-    'log_login'               => ':email login with IP Address :ip',
-    'log_forgot'              => 'Someone with IP :ip request a password for :email',
-    'log_logout'              => ':email logout',
 
     'alert_delete_selected'         => 'Sicuro di voler eliminare i dati selezionati?',
     'alert_delete_selected_success' => 'Eliminazione effettuata con successo !',
@@ -234,23 +219,6 @@ return [
     'confirmation_text'             => 'Sicuro di voler eseguire questa azione?',
     'confirmButtonText'             => 'Si',
 
-    
-    // privilege
-    'privileges_name'               =>'Nome privilegio',
-    'privileges_super_admin'        =>'Super Admin',
-    'privileges_standart_user'      =>'Utente Standard',
-    'privileges_ID'                 =>'ID',
-    'set_as_superadmin'             =>'Imposta come Superadmin',
-    'chose_theme_color_select'      =>'** Scegli colore di sfondo del tema',
-    'chose_theme_color'             =>' Colore Tema',
-    'privileges_configuration'      =>'Configurazione privilegi',
-    'privileges_module_list_no'     =>'No.',
-    'privileges_module_list_mod_names'=>'Nome modulo',
-    'privileges_module_list_view'   =>'Vedi',
-    'privileges_module_list_create' =>'Crea',
-    'privileges_module_list_read'   =>'Leggi',
-    'privileges_module_list_update' =>'Aggiorna',
-    'privileges_module_list_delete' =>'Elimina',
 
     //datamodal 
     'datamodal_select'=>'Select',

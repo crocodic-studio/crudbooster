@@ -3,6 +3,7 @@
 namespace crocodicstudio\crudbooster\Modules\ApiGeneratorModule;
 
 use crocodicstudio\crudbooster\controllers\CBController;
+use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -30,7 +31,6 @@ class AdminApiGeneratorController extends CBController
         $data = [];
 
         $data['page_title'] = 'API Generator';
-        $data['page_menu'] = Route::getCurrentRoute()->getActionName();
         $data['apis'] = $this->table()->orderby('nama', 'asc')->get();
 
         return view('CbApiGen::api_documentation', $data);
@@ -52,7 +52,7 @@ class AdminApiGeneratorController extends CBController
         $data = [];
         $data['variables'] = [];
         $data['info'] = [
-            'name' => CRUDBooster::getSetting('appname').' - API',
+            'name' => cbGetsetting('appname').' - API',
             '_postman_id' => "1765dd11-73d1-2978-ae11-36921dc6263d",
             'description' => '',
             'schema' => 'https://schema.getpostman.com/json/collection/v2.0.0/collection.json',
@@ -99,7 +99,7 @@ class AdminApiGeneratorController extends CBController
 
         return \Response::make($json, 200, [
             'Content-Type' => 'application/json',
-            'Content-Disposition' => 'attachment; filename='.CRUDBooster::getSetting('appname').' - API For POSTMAN.json',
+            'Content-Disposition' => 'attachment; filename='.cbGetsetting('appname').' - API For POSTMAN.json',
         ]);
     }
 
@@ -107,7 +107,6 @@ class AdminApiGeneratorController extends CBController
     {
         $this->cbLoader();
         $data['page_title'] = 'API Generator';
-        $data['page_menu'] = Route::getCurrentRoute()->getActionName();
         $data['apikeys'] = DB::table('cms_apikey')->get();
 
         return view('CbApiGen::api_key', $data);
@@ -118,8 +117,7 @@ class AdminApiGeneratorController extends CBController
         $this->cbLoader();
 
         $data['page_title'] = 'API Generator';
-        $data['page_menu'] = Route::getCurrentRoute()->getActionName();
-        $data['tables'] = getTablesList();
+        $data['tables'] = \CB::listCbTables();
 
         return view('CbApiGen::api_generator', $data);
     }
@@ -134,9 +132,8 @@ class AdminApiGeneratorController extends CBController
         $data['parameters'] = json_encode(unserialize($row->parameters));
         $data['responses'] = json_encode(unserialize($row->responses));
         $data['page_title'] = 'API Generator';
-        $data['page_menu'] = Route::getCurrentRoute()->getActionName();
 
-        $data['tables'] = getTablesList();
+        $data['tables'] = \CB::listCbTables();
 
         return view('CbApiGen::api_generator', $data);
     }
@@ -173,7 +170,7 @@ class AdminApiGeneratorController extends CBController
 
         DB::table('cms_apikey')->where('id', $id)->update(['status' => $status]);
 
-        return CRUDBooster::backWithMsg('You have been update api key status !');
+        backWithMsg('You have been update api key status !');
     }
 
     public function getDeleteApiKey()
@@ -205,9 +202,9 @@ class AdminApiGeneratorController extends CBController
 
             $type_field = CRUDBooster::getFieldType($table, $ro);
 
-            $type_field = (array_search($ro, explode(',', cbConfig('EMAIL_FIELDS_CANDIDATE')))) ? "email" : $type_field;
-            $type_field = (array_search($ro, explode(',', cbConfig('IMAGE_FIELDS_CANDIDATE')))) ? "image" : $type_field;
-            $type_field = (array_search($ro, explode(',', cbConfig('PASSWORD_FIELDS_CANDIDATE')))) ? "password" : $type_field;
+            $type_field = FieldDetector::isEmail($ro) ? "email" : $type_field;
+            $type_field = FieldDetector::isImage($ro) ? "image" : $type_field;
+            $type_field = FieldDetector::isPassword($ro) ? "password" : $type_field;
 
             $type_field = (substr($ro, -3) == '_id') ? "integer" : $type_field;
             $type_field = (substr($ro, 0, 3) == 'id_') ? "integer" : $type_field;
@@ -219,7 +216,7 @@ class AdminApiGeneratorController extends CBController
             }
             $table2 = substr($ro, 3);
             foreach (DB::getSchemaBuilder()->getColumnListing($table2) as $col) {
-                if (in_array($col, ['id', 'created_at', 'updated_at', 'deleted_at'])) {
+                if (FieldDetector::isExceptional($col)) {
                     continue;
                 }
                 if (substr($col, 0, 3) == 'id_') {
@@ -238,7 +235,7 @@ class AdminApiGeneratorController extends CBController
     function postSaveApiCustom()
     {
         $this->cbLoader();
-        $posts = Request::all();
+        $posts = request()->all();
 
         $_data = [];
 

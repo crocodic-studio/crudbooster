@@ -26,12 +26,12 @@ class AdminMenusController extends CBController
         $row = CRUDBooster::first($this->table, $id);
         $row = (Request::segment(3) == 'edit') ? $row : null;
 
-        $this->script_js = MenuJavascript::setJs($id, $row->type);
+        $this->script_js = view('CbMenu::js', ['id' => $id, 'type' => $row->type])->render();
 
         $this->setCols();
 
-        list($statistic_id, $module_id) = $this->getMenuId($row);
-        $this->form = MenusForm::makeForm($statistic_id, $module_id, $row);
+        list($statisticId, $moduleId) = $this->getMenuId($row);
+        $this->form = MenusForm::makeForm($statisticId, $moduleId, $row);
     }
 
     public function getIndex()
@@ -42,49 +42,49 @@ class AdminMenusController extends CBController
 
         $page_title = 'Menu Management';
 
-        return view('CbMenu::menus_management', compact('privileges', 'return_url', 'page_title'));
+        return view('CbMenu::menus_management', compact('return_url', 'page_title'));
     }
 
-    public function hookBeforeAdd(&$postdata)
+    public function hook_before_add(&$postData)
     {
-        $postdata['parent_id'] = 0;
+        $postData['parent_id'] = 0;
 
-        $postdata['path'] = $this->getMenuPath($postdata);
+        $postData['path'] = $this->getMenuPath($postData);
 
-        unset($postdata['module_slug']);
-        unset($postdata['statistic_slug']);
+        unset($postData['module_slug']);
+        unset($postData['statistic_slug']);
 
-        if ($postdata['is_dashboard'] == 1) {
+        if ($postData['is_dashboard'] == 1) {
             //If set dashboard, so unset for first all dashboard
-            DB::table($this->table)->where('is_dashboard', 1)->update(['is_dashboard' => 0]);
+            $this->table()->where('is_dashboard', 1)->update(['is_dashboard' => 0]);
             Cache::forget('sidebarDashboard'.CRUDBooster::myPrivilegeId());
         }
     }
 
-    public function hookBeforeEdit(&$postdata, $id)
+    public function hook_before_edit(&$postData, $id)
     {
-        if ($postdata['is_dashboard'] == 1) {
+        if ($postData['is_dashboard'] == 1) {
             //If set dashboard, so unset for first all dashboard
-            DB::table($this->table)->where('is_dashboard', 1)->update(['is_dashboard' => 0]);
+            $this->table()->where('is_dashboard', 1)->update(['is_dashboard' => 0]);
             Cache::forget('sidebarDashboard'.CRUDBooster::myPrivilegeId());
         }
 
-        $postdata['path'] = $this->getMenuPath($postdata);
+        $postData['path'] = $this->getMenuPath($postData);
 
-        unset($postdata['module_slug']);
-        unset($postdata['statistic_slug']);
+        unset($postData['module_slug']);
+        unset($postData['statistic_slug']);
     }
 
-    public function hookAfterDelete($id)
+    public function hook_after_delete($id)
     {
-        DB::table($this->table)->where('parent_id', $id)->delete();
+        $this->table()->where('parent_id', $id)->delete();
     }
 
     public function postSaveMenu()
     {
         $this->cbInit();
-        $isActive = Request::input('isActive');
-        $post = json_decode(Request::input('menus'), true);
+        $isActive = request('isActive');
+        $post = json_decode(request('menus'), true);
 
         foreach ($post[0] as $i => $menu) {
             $pid = $menu['id'];

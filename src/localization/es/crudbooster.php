@@ -33,22 +33,7 @@ return [
                 * Recuerda que el sistema distingue entre mayúsculas y minúsculas<br/>
                 * Consulta con el administrador, puede que haya eliminado esta página<br/>
                 * Puedes regresar a la página anterior haciendo click en la flecha hacia atras del navegador<br/>',
-	
-	'log_try_view'            =>'Intentar ver :name en :module',
-	'log_try_edit'            =>'Intentar editar :name en :module',
-	'log_try_add'             =>'Intentar añadir datos al :module',
-	'log_try_add_save'        =>'Intentar añadir :name data en :module',
-	'log_try_delete'          =>'Intentar eliminar :name en :module',
-	'log_try_delete_selected' =>'Intentar eliminar el :module',
-	'log_try_delete_image'    =>'Intentar eliminar la imagen de :name en módulo :module',
-	'log_try_update'          =>'Intentar actualizar el :name en :module',
-	'log_add'                 =>'Añadir nueva información :name en :module',
-	'log_update'              =>'Actualizar información :name en :module',
-	'log_delete'              =>'Eliminar información :name en :module',
-	'log_delete_image'        =>'Eliminar la imagen de :name en :module',
-	'log_login'				  =>'Ingreso de :email desde la Dirección IP :ip',
-	'log_forgot'		      =>'Alguien con la dirección IP :ip solicitó su contraseña por email a :email',
-	'log_logout'		      =>':email se desconectó',
+
 	'alert_delete_selected'         =>'¿Seguro que quieres eliminar todos los elementos seleccionados?',
 	'alert_delete_selected_success' =>'¡El borrado de los elementos seleccionados se ha completado con éxito!',
 	'alert_action' 					=>'¡Has :action con éxito!',
@@ -88,8 +73,6 @@ return [
 	'action_detail_data' =>'Detalles',
 	'action_edit_data'   =>'Editar',
 	'action_delete_data' =>'Eliminar',
-
-	
 	
 	'button_cancel'          =>'Cancelar',
 	'button_add'			 =>'Añadir',
@@ -212,23 +195,6 @@ return [
     //filemanager
     'chose_an_image'               => 'Elige una imagen ',
     'chose_an_file'                => 'Elige un fichero ',
-
-	    // privilege
-    'privileges_name'               =>'Nombre del Privilegio',
-    'privileges_super_admin'        =>'Super Admin',
-    'privileges_standart_user'      =>'Usuario Estándar',
-    'privileges_ID'                 =>'ID',
-    'set_as_superadmin'             =>'Establecer como Superadmin',
-    'chose_theme_color_select'      =>'** Escoger color del tema',
-    'chose_theme_color'             =>' Color del Tema',
-    'privileges_configuration'      =>'Configuración de Privilegios',
-    'privileges_module_list_no'     =>'No.',
-    'privileges_module_list_mod_names'=>'Módulos',
-    'privileges_module_list_view'   =>'Ver',
-    'privileges_module_list_create' =>'Crear',
-    'privileges_module_list_read'   =>'Leer',
-    'privileges_module_list_update' =>'Actualizar',
-    'privileges_module_list_delete' =>'Eliminar',
 	
 	 //datamodal 
 

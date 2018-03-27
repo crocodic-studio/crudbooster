@@ -34,10 +34,17 @@ class CrudboosterInstallationCommand extends Command
      */
     public function handle()
     {
+        $printer = new ConsolePrinter($this);
 
-        $this->printHeader();
+        $printer->printHeader();
 
-        $this->checkRequirements();
+        $passes = (new RequirementChecker())->check();
+        if(!$passes) {
+            $this->info('Sorry unfortunately your system is not meet with our requirements !');
+            $this->printFooter(false);
+            $this->info('--');
+            exit;
+        }
 
         $this->info('Installing: ');
         /* Removing the default user and password reset, it makes you ambigous when using CRUDBooster */
@@ -60,120 +67,9 @@ class CrudboosterInstallationCommand extends Command
 			$this->info('Please setting the database configuration for first !');
 		}
 
-		$this->printFooter();
-	}
-
-	private function printHeader() {
-		$this->info("
-
-#     __________  __  ______  ____                   __           
-#    / ____/ __ \/ / / / __ \/ __ )____  ____  _____/ /____  _____
-#   / /   / /_/ / / / / / / / __  / __ \/ __ \/ ___/ __/ _ \/ ___/
-#  / /___/ _, _/ /_/ / /_/ / /_/ / /_/ / /_/ (__  ) /_/  __/ /    
-#  \____/_/ |_|\____/_____/_____/\____/\____/____/\__/\___/_/     
-#                                                                                                                       
-			");
-        $this->info('--------- :===: Thanks for choosing CRUDBooster :==: ---------------');
-        $this->info('====================================================================');
-    }
-
-    private function printFooter($success = true)
-    {
-        $this->info('--');
-        $this->info('Homepage : http://www.crudbooster.com');
-        $this->info('Github : https://github.com/crocodic-studio/crudbooster');
-        $this->info('Documentation : https://github.com/crocodic-studio/crudbooster/blob/master/docs/en/index.md');
-        $this->info('====================================================================');
-        if ($success == true) {
-            $this->info('------------------- :===: Completed !! :===: ------------------------');
-        } else {
-            $this->info('------------------- :===:  Failed !!  :===: ------------------------');
-        }
+        $printer->printFooter();
         exit;
-    }
-
-    private function checkRequirements()
-    {
-        $this->info('System Requirements Checking:');
-        $system_failed = 0;
-        $laravel = app();
-
-        if ($laravel::VERSION >= 5.3) {
-            $this->info('Laravel Version (>= 5.3.*): [Good]');
-        } else {
-            $this->info('Laravel Version (>= 5.3.*): [Bad]');
-            $system_failed++;
-        }
-
-        if (version_compare(phpversion(), '5.6.0', '>=')) {
-            $this->info('PHP Version (>= 5.6.*): [Good]');
-        } else {
-            $this->info('PHP Version (>= 5.6.*): [Bad] Yours: '.phpversion());
-            $system_failed++;
-        }
-
-        if (extension_loaded('mbstring')) {
-            $this->info('Mbstring extension: [Good]');
-        } else {
-            $this->info('Mbstring extension: [Bad]');
-            $system_failed++;
-        }
-
-        if (extension_loaded('openssl')) {
-            $this->info('OpenSSL extension: [Good]');
-        } else {
-            $this->info('OpenSSL extension: [Bad]');
-            $system_failed++;
-        }
-
-        if (extension_loaded('pdo')) {
-            $this->info('PDO extension: [Good]');
-        } else {
-            $this->info('PDO extension: [Bad]');
-            $system_failed++;
-        }
-
-        if (extension_loaded('tokenizer')) {
-            $this->info('Tokenizer extension: [Good]');
-        } else {
-            $this->info('Tokenizer extension: [Bad]');
-            $system_failed++;
-        }
-
-        if (extension_loaded('xml')) {
-            $this->info('XML extension: [Good]');
-        } else {
-            $this->info('XML extension: [Bad]');
-            $system_failed++;
-        }
-
-        if (extension_loaded('gd')) {
-            $this->info('GD extension: [Good]');
-        } else {
-            $this->info('GD extension: [Bad]');
-            $system_failed++;
-        }
-
-        if (extension_loaded('fileinfo')) {
-            $this->info('PHP Fileinfo extension: [Good]');
-        } else {
-            $this->info('PHP Fileinfo extension: [Bad]');
-            $system_failed++;
-        }
-
-        if (is_writable(base_path('public'))) {
-            $this->info('public dir is writable: [Good]');
-        } else {
-            $this->info('public dir is writable: [Bad]');
-            $system_failed++;
-        }
-
-        if ($system_failed != 0) {
-            $this->info('Sorry unfortunately your system is not meet with our requirements !');
-            $this->printFooter(false);
-        }
-        $this->info('--');
-    }
+	}
 
     /**
      * Get the composer command for the environment.
@@ -201,7 +97,7 @@ class CrudboosterInstallationCommand extends Command
         $this->info('Upload Path: '.$uploadPath);
         if (realpath($uploadPath) == $uploadPath) {
             $this->info('Remove the existing uploads dir, and create a symlink for it...');
-            rrmdir(public_path('uploads'));
+            $this->rrmdir(public_path('uploads'));
             app('files')->link(storage_path('app'), public_path('uploads'));
         }
     }
@@ -209,30 +105,30 @@ class CrudboosterInstallationCommand extends Command
     private function symlinkForAsset()
     {
         $this->info('Checking public/vendor/crudbooster symlink...');
-        if (!file_exists(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'))) {
+
+
+        $vendorPath = public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster');
+
+        if (!file_exists($vendorPath)) {
             $this->info('Creating public/vendor/crudbooster symlink...');
             app('files')->link(__DIR__.'/../assets', public_path('vendor/crudbooster'));
             return ;
         }
-        $vendorpath = public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster');
 
-        $this->info('Vendor Path: '.$vendorpath);
-        if (realpath($vendorpath) == $vendorpath) {
+        $this->info('Vendor Path: '.$vendorPath);
+
+        if (realpath($vendorPath) == $vendorPath) {
             $this->info('Removing public/vendor/crudbooster dir, instead of creating a symlink...');
-            rrmdir(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'));
-            app('files')->link(__DIR__.'/../assets', public_path('vendor/crudbooster'));
+            $this->rrmdir($vendorPath);
+            app('files')->link(__DIR__.'/../assets', $vendorPath);
         }
     }
 
     private function removeDefaultMigrations()
     {
         $this->info('I remove some default migration files from laravel...');
-        if (file_exists(base_path('database/migrations/2014_10_12_000000_create_users_table.php'))) {
-            @unlink(base_path('database/migrations/2014_10_12_000000_create_users_table.php'));
-        }
-        if (file_exists(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'))) {
-            @unlink(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'));
-        }
+        @unlink(base_path('database/migrations/2014_10_12_000000_create_users_table.php'));
+        @unlink(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'));
     }
 
     private function installCrudbooster()
@@ -271,8 +167,30 @@ class CrudboosterInstallationCommand extends Command
         if (! is_writable(public_path('vendor'))) {
             $this->info('Setup aborted !');
             $this->info('Please set public/vendor directory to writable 0777');
-
             exit;
         }
+    }
+    /*
+    * http://stackoverflow.com/questions/3338123/how-do-i-recursively-delete-a-directory-and-its-entire-contents-files-sub-dir
+    */
+    private function rrmdir($dir)
+    {
+        if (! is_dir($dir)) {
+            return;
+        }
+        foreach (scandir($dir) as $object) {
+            if (in_array($object, ['.', '..'])) {
+                continue;
+            }
+
+            $objPath = $dir."/".$object;
+
+            if (is_dir($objPath)) {
+                $this->rrmdir($objPath);
+            } else {
+                unlink($objPath);
+            }
+        }
+        rmdir($dir);
     }
 }

@@ -4,18 +4,12 @@
 <table border='1' width='100%' cellpadding='3' cellspacing="0" style='border-collapse: collapse;font-size:12px'>
     <thead>
     <tr>
-        <?php
-        foreach ($columns as $col) {
-
-            if (Request::get('columns')) {
-                if (! in_array($col['name'], Request::get('columns'))) {
-                    continue;
-                }
-            }
-            $colname = $col['label'];
-            echo "<th style='background:#eeeeee'>$colname</th>";
-        }
-        ?>
+        @foreach ($columns as $col)
+            @if (request('columns') && ! in_array($col['name'], request('columns')))
+                @continue
+            @endif
+            <th style='background:#eeeeee'>{!! $col['label'] !!}</th>
+        @endforeach
     </tr>
     </thead>
     <tbody>
@@ -26,42 +20,33 @@
     @else
         @foreach($result as $row)
             <tr>
-                <?php
-                foreach ($columns as $col) {
-
-                    if (Request::get('columns')) {
-                        if (! in_array($col['name'], Request::get('columns'))) {
-                            continue;
-                        }
-                    }
-
+                @foreach ($columns as $col)
+                    @if (request('columns') && ! in_array($col['name'], request('columns')))
+                        @continue
+                    @endif
+                    <?php
                     $value = @$row->{$col['field']};
                     $title = @$row->{$title_field};
-
-                    if (@$col['image']) {
+                    ?>
+                    @if (@$col['image'])
+                        <?php
                         if ($value == '') {
                             $value = "http://placehold.it/50x50&text=NO+IMAGE";
                         }
                         $pic = (strpos($value, 'http://') !== FALSE) ? $value : asset($value);
                         $pic_small = $pic;
-                        if (Request::input('fileformat') == 'pdf') {
-                            echo "
-                <td><a data-lightbox='roadtrip' rel='group_{{$table}}' title='$col[label]: $title' href='".$pic."'><img
-                                class='img-circle' width='40px' height='40px' src='".$pic_small."'/></a></td>
-                ";
-                        } else {
-                            echo "
-                <td>$pic</td>
-                ";
-                        }
-                    } elseif (@$col['download']) {
-                        $url = (strpos($value, 'http://') !== FALSE) ? $value : asset($value);
-                        echo "
-                <td><a class='btn btn-sm btn-primary' href='$url' target='_blank' title='Download File'>Download</a>
-                </td>
-                ";
-                    } else {
-
+                        ?>
+                        @if (request('fileformat') == 'pdf')
+                            <td><a data-lightbox='roadtrip' rel='group_{{$table}}' title='{!! $col['label'] !!}: {!! $title !!}' href='"{!! $pic !!}"'>
+                                    <img class='img-circle' width='40px' height='40px' src='"{!! $pic_small !!}"'/></a></td>
+                        @else
+                            <td>{!! $pic !!}</td>
+                        @endif
+                    @elseif (@$col['download'])
+                        <?php $url = (strpos($value, 'http://') !== FALSE) ? $value : asset($value); ?>
+                        <td><a class='btn btn-sm btn-primary' href='{!! $url !!}' target='_blank' title='Download File'>Download</a></td>
+                    @else
+                        <?php
                         //limit character
                         if ($col['str_limit']) {
                             $value = trim(strip_tags($value));
@@ -71,28 +56,23 @@
                         if ($col['nl2br']) {
                             $value = nl2br($value);
                         }
-
-                        if (Request::input('fileformat') == 'pdf') {
-                            if (! empty($col['callback_php'])) {
-
+                        ?>
+                        @if (Request::input('fileformat') == 'pdf')
+                            @if (! empty($col['callback_php']))
+                                <?php
                                 foreach ($row as $k => $v) {
                                     $col['callback_php'] = str_replace("[".$k."]", $v, $col['callback_php']);
                                 }
                                 @eval("\$value = ".$col['callback_php'].";");
-                            }
+                                ?>
+                            @endif
+                            {{--New method for callback--}}
+                            @if (isset($col['callback'])) <?php $value = call_user_func($col['callback'], $row); ?> @endif
+                        @endif
 
-                            //New method for callback
-                            if (isset($col['callback'])) {
-                                $value = call_user_func($col['callback'], $row);
-                            }
-                        }
-
-                        echo "
-                <td>".$value."</td>
-                ";
-                    }
-                }
-                ?>
+                        <td>{!! $value !!}</td>
+                    @endif
+                @endforeach
             </tr>
         @endforeach
     @endif

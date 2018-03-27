@@ -1,12 +1,12 @@
 {
-  "title": "Json Editor",
-  "type": "json",
+  'title': "Json Editor",
+  'type': "json",
   "options": [
     {
-      "label": "JSON Schema",
-      "name": "schema",
-      "required": 1,
-      "type": "textarea",
+      'label': "JSON Schema",
+      'name': "schema",
+      'required': 1,
+      'type': "textarea",
       "help": "Doc : http://jeremydorn.com/json-editor/"
     }
   ]

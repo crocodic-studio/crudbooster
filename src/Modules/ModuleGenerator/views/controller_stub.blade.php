@@ -59,7 +59,6 @@ public function cbInit() {
     */
     $this->sub_module = [];
 
-
     /*
     | ----------------------------------------------------------------------
     | Add More Action Button / Menu
@@ -73,7 +72,6 @@ public function cbInit() {
     */
     $this->addaction = [];
 
-
     /*
     | ----------------------------------------------------------------------
     | Add More Button Selected
@@ -86,7 +84,6 @@ public function cbInit() {
     */
     $this->button_selected = [];
 
-
     /*
     | ----------------------------------------------------------------------
     | Add alert message to this module at overheader
@@ -96,8 +93,6 @@ public function cbInit() {
     |
     */
     $this->alert = [];
-
-
 
     /*
     | ----------------------------------------------------------------------
@@ -110,8 +105,6 @@ public function cbInit() {
     */
     $this->index_button = [];
 
-
-
     /*
     | ----------------------------------------------------------------------
     | Customize Table Row Color
@@ -122,7 +115,6 @@ public function cbInit() {
     */
     $this->table_row_color = [];
 
-
     /*
     | ----------------------------------------------------------------------
     | You may use this bellow array to add statistic at dashboard
@@ -131,7 +123,6 @@ public function cbInit() {
     |
     */
     $this->index_statistic = [];
-
 
 
     /*
@@ -144,7 +135,6 @@ public function cbInit() {
     */
     $this->script_js = NULL;
 
-
     /*
     | ----------------------------------------------------------------------
     | Include HTML Code before index table
@@ -154,7 +144,6 @@ public function cbInit() {
     |
     */
     $this->pre_index_html = null;
-
 
 
     /*
@@ -168,7 +157,6 @@ public function cbInit() {
     $this->post_index_html = null;
 
 
-
     /*
     | ----------------------------------------------------------------------
     | Include Javascript File
@@ -178,7 +166,6 @@ public function cbInit() {
     |
     */
     $this->load_js = [];
-
 
 
     /*
@@ -214,9 +201,9 @@ public function cbInit() {
     | @button_name = the name of button
     |
     */
-    public function actionButtonSelected($id_selected,$button_name) {
-    //Your code here
-
+    public function actionButtonSelected($id_selected,$button_name)
+    {
+        //Your code here
     }
 
     /*
@@ -226,9 +213,9 @@ public function cbInit() {
     | @query = current sql query
     |
     */
-    public function hookQueryIndex(&$query) {
-    //Your code here
-
+    public function hookQueryindex(&$query)
+    {
+        //Your code here
     @foreach ($joinList as $join)
         $query->join("{!! $join['table'] !!}", "{!! $join['field1'] !!}", "=", "{!! $join['field2'] !!}");
     @endforeach
@@ -240,8 +227,9 @@ public function cbInit() {
     | ----------------------------------------------------------------------
     |
     */
-    public function hookRowIndex($column_index,&$column_value) {
-    //Your code here
+    public function hookRowIndex($column_index,&$column_value)
+    {
+        //Your code here
     }
 
     /*
@@ -251,9 +239,9 @@ public function cbInit() {
     | @arr
     |
     */
-    public function hookBeforeAdd(&$postdata) {
-    //Your code here
-
+    public function hookBeforeAdd(&$postdata)
+    {
+        //Your code here
     }
 
     /*
@@ -263,9 +251,9 @@ public function cbInit() {
     | @id = last insert id
     |
     */
-    public function hookAfterAdd($id) {
-    //Your code here
-
+    public function hookAfterAdd($id)
+    {
+        //Your code here
     }
 
     /*
@@ -276,9 +264,9 @@ public function cbInit() {
     | @id       = current id
     |
     */
-    public function hookBeforeEdit(&$postdata,$id) {
-    //Your code here
-
+    public function hookBeforeEdit(&$postdata,$id)
+    {
+        //Your code here
     }
 
     /*
@@ -288,9 +276,9 @@ public function cbInit() {
     | @id       = current id
     |
     */
-    public function hookAfterEdit($id) {
-    //Your code here
-
+    public function hookAfterEdit($id)
+    {
+        //Your code here
     }
 
     /*
@@ -300,9 +288,9 @@ public function cbInit() {
     | @id       = current id
     |
     */
-    public function hookBeforeDelete($id) {
-    //Your code here
-
+    public function hookBeforeDelete($id)
+    {
+        //Your code here
     }
 
     /*
@@ -312,9 +300,9 @@ public function cbInit() {
     | @id       = current id
     |
     */
-    public function hookAfterDelete($id) {
-    //Your code here
-
+    public function hookAfterDelete($id)
+    {
+        //Your code here
     }
 
     //By the way, you can still create your own method in here... :)

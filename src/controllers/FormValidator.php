@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Request;
 use CRUDBooster;
 
-
 class FormValidator
 {
     private $table;
@@ -16,33 +15,9 @@ class FormValidator
     public function validate($id = null, $form, $table)
     {
         $this->table = $table;
-        $request_all = Request::all();
-        $array_input = [];
-        $componentPath = implode(DIRECTORY_SEPARATOR, ["vendor", "crocodicstudio", "crudbooster", "src", "views", "default", "type_components", ""]);
+        $rules = $this->getRules($id, $form);
 
-        foreach ($form as $di) {
-            $ai = [];
-            $name = $di['name'];
-            $type = $di['type'];
-
-            if (! $name) {continue;}
-
-            if ($di['required'] && ! Request::hasFile($name)) {
-                $ai[] = 'required';
-            }
-
-            if (file_exists(base_path($componentPath.$type.DIRECTORY_SEPARATOR.'hookInputValidation.php'))) {
-                require_once(base_path($componentPath.$type.DIRECTORY_SEPARATOR.'hookInputValidation.php'));
-            }
-
-            if (@$di['validation']) {
-                $array_input[$name] = $this->prepareValidationRules($id, $di);
-            } else {
-                $array_input[$name] = implode('|', $ai);
-            }
-        }
-
-        $validator = Validator::make($request_all, $array_input);
+        $validator = Validator::make(request()->all(), $rules);
 
         if (! $validator->fails()) {
             return null;
@@ -50,14 +25,51 @@ class FormValidator
 
         $this->sendFailedValidationResponse($validator);
     }
+
     /**
      * @param $id
-     * @param $di
+     * @param $form
+     * @return mixed
+     */
+    private function getRules($id, $form)
+    {
+        $cmpPath = \CB::componentsPath();
+        $rules = [];
+        foreach ($form as $formInput) {
+            $name = $formInput['name'];
+            if (! $name) {
+                continue;
+            }
+
+            $ai = [];
+            if ($formInput['required'] && ! Request::hasFile($name)) {
+                $ai[] = 'required';
+            }
+
+            $hookValidationPath = $cmpPath.$formInput['type'].DIRECTORY_SEPARATOR.'hookInputValidation.php';
+            if (file_exists($hookValidationPath)) {
+                require_once($hookValidationPath);
+            }
+            unset($hookValidationPath);
+
+            if (@$formInput['validation']) {
+                $rules[$name] = $this->parseValidationRules($id, $formInput);
+            } else {
+                $rules[$name] = implode('|', $ai);
+            }
+        }
+
+        return $rules;
+    }
+
+    /**
+     * @param $id
+     * @param $formInput
      * @return array
      */
-    private function prepareValidationRules($id, $di)
+    private function parseValidationRules($id, $formInput)
     {
-        $exp = explode('|', $di['validation']);
+        $exp = explode('|', $formInput['validation']);
 
         if (! count($exp)) {
             return '';
@@ -70,7 +82,7 @@ class FormValidator
 
             $parseUnique = explode(',', str_replace('unique:', '', $validationItem));
             $uniqueTable = ($parseUnique[0]) ?: $this->table;
-            $uniqueColumn = ($parseUnique[1]) ?: $di['name'];
+            $uniqueColumn = ($parseUnique[1]) ?: $formInput['name'];
             $uniqueIgnoreId = ($parseUnique[2]) ?: (($id) ?: '');
 
             //Make sure table name
@@ -99,27 +111,22 @@ class FormValidator
 
         return implode('|', $exp);
     }
+
     /**
      * @param $validator
      */
     private function sendFailedValidationResponse($validator)
     {
         $message = $validator->messages();
-        $message_all = $message->all();
+        $msg = [
+            'message' => cbTrans('alert_validation_error', ['error' => implode(', ', $message->all())]),
+            'message_type' => 'warning',
+        ];
 
         if (Request::ajax()) {
-            response()->json([
-                'message' => trans('crudbooster.alert_validation_error', ['error' => implode(', ', $message_all)]),
-                'message_type' => 'warning',
-            ])->send();
-            exit;
+            $resp = response()->json($msg);
+            sendAndTerminate($resp);
         }
-
-        redirect()->back()->with("errors", $message)->with([
-            'message' => trans('crudbooster.alert_validation_error', ['error' => implode(', ', $message_all)]),
-            'message_type' => 'warning',
-        ])->withInput()->send();
-        \Session::driver()->save();
-        exit;
+        sendAndTerminate(redirect()->back()->with("errors", $message)->with($msg)->withnput());
     }
 }
