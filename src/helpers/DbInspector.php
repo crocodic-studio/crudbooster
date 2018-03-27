@@ -3,6 +3,7 @@
 namespace crocodicstudio\crudbooster\helpers;
 
 use Cache;
+use crocodicstudio\crudbooster\helpers\Cache as CbCache;
 use DB;
 use Schema;
 
@@ -19,8 +20,8 @@ class DbInspector
             return 'id';
         }
 
-        if (CRUDBooster::getCache('table_'.$table, 'primary_key')) {
-            return CRUDBooster::getCache('table_'.$table, 'primary_key');
+        if (CbCache::get('table_'.$table, 'primary_key')) {
+            return CbCache::get('table_'.$table, 'primary_key');
         }
         $table = CRUDBooster::parseSqlTable($table);
 
@@ -33,7 +34,7 @@ class DbInspector
         if (! $primary_key) {
             return 'id';
         }
-        CRUDBooster::putCache('table_'.$table, 'primary_key', $primary_key);
+        CbCache::put('table_'.$table, 'primary_key', $primary_key);
 
         return $primary_key;
     }

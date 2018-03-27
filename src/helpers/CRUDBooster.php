@@ -3,7 +3,6 @@
 namespace crocodicstudio\crudbooster\helpers;
 
 use crocodicstudio\crudbooster\CBCoreModule\CbUsersRepo;
-use crocodicstudio\crudbooster\helpers\Cache as LaravelCache;
 use crocodicstudio\crudbooster\Modules\LogsModule\LogsRepository;
 use crocodicstudio\crudbooster\Modules\PrivilegeModule\PrivilegeHelpers;
 use Session;
@@ -122,11 +121,6 @@ class CRUDBooster
         return GetCurrentX::getCurrentMethod();
     }
 
-    public static function clearCache($name)
-    {
-        return Cache::forget($name);
-    }
-
     public static function isColumnNULL($table, $field)
     {
         return DbInspector::isColNull($table, $field);
@@ -198,16 +192,6 @@ class CRUDBooster
         return DbInspector::findPK($table);
     }
 
-    public static function getCache($section, $cacheName)
-    {
-        return LaravelCache::get($section, $cacheName);
-    }
-
-    public static function putCache($section, $cacheName, $cacheValue)
-    {
-        return LaravelCache::put($section, $cacheName, $cacheValue);
-    }
-
     public static function valid($arr = [], $type = 'json')
     {
         $input_arr = request()->all();
@@ -236,16 +220,6 @@ class CRUDBooster
 
         $res = redirect()->back()->with(['message' => implode('<br/>', $message), 'message_type' => 'warning'])->withInput();
         sendAndTerminate($res);
-    }
-
-    public static function flushCache()
-    {
-        Cache::flush();
-    }
-
-    public static function forgetCache($section, $cacheName)
-    {
-        return LaravelCache::forgetCache($section, $cacheName);
     }
 
     public static function getForeignKey($parent_table, $child_table)
