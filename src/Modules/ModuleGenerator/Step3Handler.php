@@ -29,7 +29,7 @@ class Step3Handler
 
         $controller = ModulesRepo::getControllerName(request('id'));
         $phpCode = FileManipulator::readCtrlContent($controller);
-        list($top, $currentScaffold, $bottom) = \CB::extractBetween($phpCode, "FORM");
+        list($top, $currentScaffold, $bottom) = FileManipulator::extractBetween($phpCode, "FORM");
 
         //IF FOUND OLD, THEN CLEAR IT
         $bottom = $this->clearOldBackup($bottom);

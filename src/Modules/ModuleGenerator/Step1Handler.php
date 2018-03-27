@@ -60,7 +60,7 @@ class Step1Handler
     {
         $created_at = now();
 
-        $controller = CRUDBooster::generateController($table_name, $path);
+        $controller = ControllerGenerator::generateController($table_name, $path);
         $id = \DB::table('cms_moduls')->insertGetId(compact("controller", "name", "table_name", "icon", "path", "created_at"));
 
         //Insert Menu

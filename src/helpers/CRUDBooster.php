@@ -5,7 +5,7 @@ namespace crocodicstudio\crudbooster\helpers;
 use crocodicstudio\crudbooster\CBCoreModule\CbUsersRepo;
 use crocodicstudio\crudbooster\helpers\Cache as LaravelCache;
 use crocodicstudio\crudbooster\Modules\LogsModule\LogsRepository;
-use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator;
+use crocodicstudio\crudbooster\Modules\PrivilegeModule\PrivilegeHelpers;
 use Session;
 use Request;
 use Schema;
@@ -17,6 +17,8 @@ use Validator;
 
 class CRUDBooster
 {
+    use PrivilegeHelpers;
+
     public static function get($table, $string_conditions = null, $orderby = null, $limit = null, $skip = null)
     {
         $table = self::parseSqlTable($table);
@@ -71,77 +73,9 @@ class CRUDBooster
         return session('admin_photo');
     }
 
-    public static function myPrivilege()
-    {
-        $roles = session('admin_privileges_roles');
-        if (! $roles) {
-            return;
-        }
-        foreach ($roles as $role) {
-            if ($role->path == self::getModulePath()) {
-                return $role;
-            }
-        }
-    }
-
-    private static function getModulePath()
-    {
-        $adminPathSegments = count(explode('/',cbConfig('ADMIN_PATH')));
-        return Request::segment(1 + $adminPathSegments);
-    }
-
     public static function isLocked()
     {
         return session('admin_lock');
-    }
-
-    public static function isSuperadmin()
-    {
-        return session('admin_is_superadmin');
-    }
-
-    public static function canView()
-    {
-        return self::canDo('is_visible');
-    }
-
-    public static function canUpdate()
-    {
-        return self::canDo('is_edit');
-    }
-
-    public static function canCreate()
-    {
-        return self::canDo('is_create');
-    }
-
-    public static function canRead()
-    {
-        return self::canDo('is_read');
-    }
-
-    public static function canDelete()
-    {
-        return self::canDo('is_delete');
-    }
-
-    public static function canCRUD()
-    {
-        if (self::isSuperadmin()) {
-            return true;
-        }
-
-        $session = session('admin_privileges_roles');
-        foreach ($session as $v) {
-            if ($v->path !== self::getModulePath()) {
-                continue;
-            }
-            if ($v->is_visible && $v->is_create && $v->is_read && $v->is_edit && $v->is_delete) {
-                return true;
-            }
-
-            return false;
-        }
     }
 
     public static function getCurrentModule()
@@ -159,19 +93,9 @@ class CRUDBooster
         return GetCurrentX::getCurrentMenuId();
     }
 
-    public static function myPrivilegeId()
-    {
-        return session('admin_privileges');
-    }
-
     public static function adminPath($path = null)
     {
         return url(cbAdminPath().'/'.$path);
-    }
-
-    public static function myPrivilegeName()
-    {
-        return session('admin_privileges_name');
     }
 
     public static function deleteConfirm($redirectTo)
@@ -245,53 +169,6 @@ class CRUDBooster
         $len = strpos($string, $end, $ini) - $ini;
 
         return substr($string, $ini, $len);
-    }
-
-    public static function timeAgo($datetime_to, $datetime_from = null, $full = false)
-    {
-        $datetime_from = ($datetime_from) ?: date('Y-m-d H:i:s');
-        $now = new \DateTime;
-        if ($datetime_from != '') {
-            $now = new \DateTime($datetime_from);
-        }
-        $ago = new \DateTime($datetime_to);
-        $diff = $now->diff($ago);
-
-        $diff->w = floor($diff->d / 7);
-        $diff->d -= $diff->w * 7;
-
-        $string = [
-            'y' => 'year',
-            'm' => 'month',
-            'w' => 'week',
-            'd' => 'day',
-            'h' => 'hour',
-            'i' => 'minute',
-            's' => 'second',
-        ];
-        foreach ($string as $k => &$v) {
-            if ($diff->$k) {
-                $v = $diff->$k.' '.$v.($diff->$k > 1 ? 's' : '');
-            } else {
-                unset($string[$k]);
-            }
-        }
-
-        if (! $full) {
-            $string = array_slice($string, 0, 1);
-        }
-
-        return $string ? implode(', ', $string).' ' : 'just now';
-    }
-
-    public static function sendEmailQueue($queue)
-    {
-        return (new Mailer())->sendEmailQueue($queue);
-    }
-
-    public static function sendEmail($config = [])
-    {
-        return (new Mailer())->send($config);
     }
 
     public static function first($table, $id)
@@ -438,7 +315,7 @@ class CRUDBooster
 
     public static function insertLog($description)
     {
-        LogsRepository::insertLog($description, self::myId());
+        LogsRepository::insertLog('crudbooster: '.$description, self::myId());
     }
 
     public static function insertTryLog($action, $name = '')
@@ -524,11 +401,6 @@ class CRUDBooster
         return false;
     }
 
-    public static function generateController($table, $name = null)
-    {
-        return ControllerGenerator::generateController($table, $name);
-    }
-
     public static function getTableColumns($table)
     {
         return DbInspector::getTableCols($table);
@@ -542,11 +414,6 @@ class CRUDBooster
     public static function getFieldType($table, $field)
     {
         return DbInspector::getFieldTypes($table, $field);
-    }
-
-    public static function backWithMsg($msg, $type = 'success')
-    {
-        return redirect()->back()->with(['message_type' => $type, 'message' => $msg]);
     }
 
     public static function routeController($prefix, $controller, $namespace = null)
@@ -615,19 +482,6 @@ class CRUDBooster
         return '<i class=\'fa fa-'.$icon.'\'></i>';
     }
 
-    private static function canDo($verb)
-    {
-        if (self::isSuperadmin()) {
-            return true;
-        }
-
-        foreach (session('admin_privileges_roles') as $role) {
-            if ($role->path == self::getModulePath()) {
-                return (bool) $role->{$verb};
-            }
-        }
-    }
-
     public static function componentsPath($type = '')
     {
         $componentPath = implode(DIRECTORY_SEPARATOR, ['vendor', 'crocodicstudio', 'crudbooster', 'src', 'views', 'default', 'type_components', $type]);
@@ -639,32 +493,5 @@ class CRUDBooster
     {
         $Path = implode(DIRECTORY_SEPARATOR, ['views', 'vendor', 'crudbooster', 'type_components', $type]);
         return resource_path($Path);
-    }
-
-    public static function extractBetween($raw, $mark)
-    {
-        list($before, $_rest) = explode("# START $mark DO NOT REMOVE THIS LINE", $raw);
-        list($_middle, $after) = explode("# END $mark DO NOT REMOVE THIS LINE", $_rest);
-
-        return [trim($before), trim($_middle), trim($after)];
-    }
-
-    /**
-     * @param $phpCode
-     * @param $mark
-     * @param $newCode
-     * @return string
-     */
-    public static function replaceBetweenMark($phpCode, $mark, $newCode)
-    {
-        list($top, $_middle, $bottom) = self::extractBetween($phpCode, $mark);
-
-        $_code = $top."\n\n";
-        $_code .= "            # START $mark DO NOT REMOVE THIS LINE\n";
-        $_code .= $newCode."\n";
-        $_code .= "            # END $mark DO NOT REMOVE THIS LINE\n\n";
-        $_code .= '            '.$bottom;
-
-        return $_code;
     }
 }

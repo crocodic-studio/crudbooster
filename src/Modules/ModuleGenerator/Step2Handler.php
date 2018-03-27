@@ -39,7 +39,7 @@ class Step2Handler
 
         $newCode = $this->makeColumnPhpCode();
         $code = FileManipulator::readCtrlContent($controller);
-        $fileResult = \CB::replaceBetweenMark($code, 'COLUMNS', $newCode);
+        $fileResult = FileManipulator::replaceBetweenMark($code, 'COLUMNS', $newCode);
 
         foreach($this->hooks as $hook){
             $fileResult = FileManipulator::writeMethodContent($fileResult, $hook, request($hook));

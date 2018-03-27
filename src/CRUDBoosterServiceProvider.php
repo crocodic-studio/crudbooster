@@ -72,8 +72,6 @@ class CRUDBoosterServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        require __DIR__.'/helpers/Helper.php';
-
         $this->mergeConfigFrom(__DIR__.'/configs/crudbooster.php', 'crudbooster');
 
         $this->app->singleton('crudbooster', function () {
@@ -87,7 +85,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->registerCrudboosterCommand();
 
         $this->commands('crudboosterinstall');
-        $this->commands('crudboosterupdate');
+        //$this->commands('crudboosterupdate');
 
         $this->app->register('Barryvdh\DomPDF\ServiceProvider');
         $this->app->register('Maatwebsite\Excel\ExcelServiceProvider');

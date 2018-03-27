@@ -34,7 +34,7 @@ class CrudboosterInstallationCommand extends Command
      */
     public function handle()
     {
-        $printer = new ConsolePrinter();
+        $printer = new ConsolePrinter($this);
 
         $printer->printHeader();
 

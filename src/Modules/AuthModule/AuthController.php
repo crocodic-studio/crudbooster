@@ -4,6 +4,7 @@ namespace crocodicstudio\crudbooster\Modules\AuthModule;
 
 use crocodicstudio\crudbooster\CBCoreModule\CbUsersRepo;
 use crocodicstudio\crudbooster\controllers\Controller;
+use crocodicstudio\crudbooster\helpers\Mailer;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
@@ -128,7 +129,7 @@ class AuthController extends Controller
         //$appname = cbGetsetting('appname');
         $user = CbUsersRepo::findByMail(request('email'));
         $user->password = $randString;
-        CRUDBooster::sendEmail(['to' => $user->email, 'data' => $user, 'template' => 'forgot_password_backend']);
+        (new Mailer())->send(['to' => $user->email, 'data' => $user, 'template' => 'forgot_password_backend']);
 
         CRUDBooster::insertLog(cbTrans('log_forgot', ['email' => request('email'), 'ip' => Request::server('REMOTE_ADDR')]));
 

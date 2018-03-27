@@ -71,7 +71,7 @@ class Step4Handler
      */
     private function replaceConfigSection($phpCode, $mark, $newCode)
     {
-        list($before, $_middle, $after) = \CB::extractBetween($phpCode, $mark);
+        list($before, $_middle, $after) = FileManipulator::extractBetween($phpCode, $mark);
 
         $_code = $before."\n\n";
         $_code .= "            # START $mark DO NOT REMOVE THIS LINE\n";
@@ -90,7 +90,7 @@ class Step4Handler
     private function replaceInFile($controller, $mark, $newCode)
     {
         $rawCode = FileManipulator::readCtrlContent($controller);
-        $fileController = \CB::replaceBetweenMark($rawCode, $mark, $newCode);
+        $fileController = FileManipulator::replaceBetweenMark($rawCode, $mark, $newCode);
         FileManipulator::putCtrlContent($controller, $fileController);
     }
 }
