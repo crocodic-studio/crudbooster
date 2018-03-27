@@ -90,7 +90,6 @@ trait PrivilegeHelpers
         return Request::segment(1 + $adminPathSegments);
     }
 
-
     public static function myPrivilegeName()
     {
         return session('admin_privileges_name');
