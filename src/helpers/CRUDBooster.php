@@ -497,11 +497,6 @@ class CRUDBooster
         return DbInspector::getFieldTypes($table, $field);
     }
 
-    public static function backWithMsg($msg, $type = 'success')
-    {
-        return redirect()->back()->with(['message_type' => $type, 'message' => $msg]);
-    }
-
     public static function routeController($prefix, $controller, $namespace = null)
     {
         $prefix = trim($prefix, '/').'/';
