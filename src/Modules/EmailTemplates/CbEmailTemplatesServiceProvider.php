@@ -13,7 +13,7 @@ class CbEmailTemplatesServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //$this->app['view']->addNamespace('CbMenu', __DIR__.'/views');
+        $this->app['view']->addNamespace('CbEmailTpl', __DIR__.'/views');
         $this->loadRoutesFrom( __DIR__.'/email_templates_routes.php');
     }
 
