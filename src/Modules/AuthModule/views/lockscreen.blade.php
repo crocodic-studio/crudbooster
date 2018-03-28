@@ -43,13 +43,13 @@
         </a>
     </div>
     <!-- User name -->
-    <div class="lockscreen-name">{{Session::get('admin_name')}}</div>
+    <div class="lockscreen-name">{{session('admin_name')}}</div>
 
     <!-- START LOCK SCREEN ITEM -->
     <div class="lockscreen-item">
         <!-- lockscreen image -->
         <div class="lockscreen-image">
-            <img src="{{ (Session::get('admin_photo'))?:asset("assets/adminlte/dist/img/user2-160x160.jpg") }}"
+            <img src="{{ (session('admin_photo'))?:asset("assets/adminlte/dist/img/user2-160x160.jpg") }}"
                  alt="user image"/>
         </div>
         <!-- /.lockscreen-image -->
