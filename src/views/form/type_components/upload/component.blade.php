@@ -38,7 +38,7 @@
         @else
             <p class='text-muted'><em>{{cbTrans("notice_delete_file_upload")}}</em></p>
         @endif
-        @include('crudbooster::default._form_body.underField', ['help' => $formInput['help'], 'error' => $errors->first($name)])
+        @include('crudbooster::form._form_body.underField', ['help' => $formInput['help'], 'error' => $errors->first($name)])
 
     </div>
 

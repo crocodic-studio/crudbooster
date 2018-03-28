@@ -23,6 +23,6 @@ if(@$formInput['options']['query']){
                 </label> </div>
             @endforeach
         @endif
-       @include('crudbooster::default._form_body.underField', ['help' => $formInput['help'], 'error' => $errors->first($name)])
+       @include('crudbooster::form._form_body.underField', ['help' => $formInput['help'], 'error' => $errors->first($name)])
     </div>
 </div>

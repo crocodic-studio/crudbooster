@@ -14,7 +14,7 @@
 @endphp
 
 @if(file_exists(CB::componentsPath($type.'/component.blade.php')))
-    @include('crudbooster::default.type_components.'.$type.'.component')
+    @include('crudbooster::form.type_components.'.$type.'.component')
 @elseif(file_exists(CB::PublishedComponentsPath($type.'/component.blade.php')))
     @include('vendor.crudbooster.type_components.'.$type.'.component')
 @else

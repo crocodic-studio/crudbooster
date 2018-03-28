@@ -45,9 +45,9 @@ $name = str_slug($label, '');
                                                            {{($col['readonly']===true)?"readonly":""}}
                                                     />
                                                 @elseif($col['type']=='radio')
-                                                    @include('crudbooster::default.type_components.child.partials.dataenum', ['dataEnum' => $col['dataenum'] ?: ''])
+                                                    @include('crudbooster::form.type_components.child.partials.dataenum', ['dataEnum' => $col['dataenum'] ?: ''])
                                                 @elseif($col['type']=='datamodal')
-                                                    @include('crudbooster::default.type_components.child.partials.dataModal', ['name' => $name, 'col' => $col])
+                                                    @include('crudbooster::form.type_components.child.partials.dataModal', ['name' => $name, 'col' => $col])
                                                 @elseif($col['type']=='number')
                                                     <input id='{{$name_column}}' type='number'
                                                            {{ ($col['min'])?"min='$col[min]'":"" }} {{ ($col['max'])?"max='{$col['max']}'":"" }} name='child-{{$col["name"]}}'
@@ -58,9 +58,9 @@ $name = str_slug($label, '');
                                                     <textarea id='{{$name_column}}' name='child-{{$col["name"]}}'
                                                               class='form-control {{$col['required']?"required":""}}' {{($col['readonly']===true)?"readonly":""}} ></textarea>
                                                 @elseif($col['type']=='upload')
-                                                    @include('crudbooster::default.type_components.child.partials.upload', ['name' => $name, 'col' => $col])
+                                                    @include('crudbooster::form.type_components.child.partials.upload', ['name' => $name, 'col' => $col])
                                                 @elseif($col['type']=='select')
-                                                    @include('crudbooster::default.type_components.child.partials.select', ['name' => $name, 'col' => $col])
+                                                    @include('crudbooster::form.type_components.child.partials.select', ['name' => $name, 'col' => $col])
 
                                                 @elseif($col['type']=='hidden')
                                                     <input type="{{$col['type']}}" id="{{$name.$col["name"]}}"
@@ -76,11 +76,11 @@ $name = str_slug($label, '');
                                             </div>
                                         </div>
 
-                                     @include('crudbooster::default.type_components.child.partials.formula')
+                                     @include('crudbooster::form.type_components.child.partials.formula')
 
                                     @endforeach
 
-                                    @include('crudbooster::default.type_components.child.partials.script')
+                                    @include('crudbooster::form.type_components.child.partials.script')
 
                                 </div>
                                 <div class="panel-footer" align="right">
@@ -95,7 +95,7 @@ $name = str_slug($label, '');
 
 
 
-                    @include('crudbooster::default.type_components.child.partials.details_table')
+                    @include('crudbooster::form.type_components.child.partials.details_table')
 
 
 

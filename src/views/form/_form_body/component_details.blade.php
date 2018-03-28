@@ -6,11 +6,11 @@ $userLocation = CB::PublishedComponentsPath($type.'/component_detail.blade.php')
 @if(file_exists($fileLocation))
     <?php $containTR = (substr(trim(file_get_contents($fileLocation)), 0, 4) === '<tr>')?>
     @if($containTR)
-        @include('crudbooster::default.type_components.'.$type.'.component_detail')
+        @include('crudbooster::form.type_components.'.$type.'.component_detail')
     @else
         <tr>
             <td>{{$label}}</td>
-            <td>@include('crudbooster::default.type_components.'.$type.'.component_detail')</td>
+            <td>@include('crudbooster::form.type_components.'.$type.'.component_detail')</td>
         </tr>
     @endif
 @elseif(file_exists($userLocation))

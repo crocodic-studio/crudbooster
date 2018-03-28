@@ -5,6 +5,6 @@
     <div class="{{$col_width?:'col-sm-10'}}">
         {!! view($formInput['options']['view'])->render() !!}
 
-        @include('crudbooster::default._form_body.underField', ['help' => $formInput['help'], 'error' => $errors->first($name)])
+        @include('crudbooster::form._form_body.underField', ['help' => $formInput['help'], 'error' => $errors->first($name)])
     </div>
 </div>

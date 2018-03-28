@@ -10,7 +10,7 @@
   </span>
 </div><!-- /input-group -->
 
-@include('crudbooster::default.type_components.modal_dialog', ['name' => $name_column, 'label'=> $col['label'], 'size' => $col['datamodal_size']])
+@include('crudbooster::form.type_components.modal_dialog', ['name' => $name_column, 'label'=> $col['label'], 'size' => $col['datamodal_size']])
 
 @push('bottom')
     <script type="text/javascript">

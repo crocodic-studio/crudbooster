@@ -33,4 +33,4 @@
         })
     </script>
 @endif
-@include('crudbooster::default.type_components.select_datatable.partials.select_options')
+@include('crudbooster::form.type_components.select_datatable.partials.select_options')

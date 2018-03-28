@@ -56,12 +56,12 @@
             @endphp
 
             @if($formInput['options']['ajax_mode'] == false)
-                @include('crudbooster::default.type_components.select2_datatable.partials.severside_options')
+                @include('crudbooster::form.type_components.select2_datatable.partials.severside_options')
             @else
 
             @endif
         </select>
-        @include('crudbooster::default._form_body.underField', ['help' => $formInput['help'], 'error' => $errors->first($name)])
+        @include('crudbooster::form._form_body.underField', ['help' => $formInput['help'], 'error' => $errors->first($name)])
 
     </div>
 </div>

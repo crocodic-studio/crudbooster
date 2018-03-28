@@ -7,7 +7,7 @@
         <div id="{{$name}}"></div>
         <textarea name="{{$name}}" style="display:none"></textarea>
 
-        @include('crudbooster::default._form_body.underField', ['help' => $formInput['help'], 'error' => $errors->first($name)])
+        @include('crudbooster::form._form_body.underField', ['help' => $formInput['help'], 'error' => $errors->first($name)])
 
     </div>
 </div>

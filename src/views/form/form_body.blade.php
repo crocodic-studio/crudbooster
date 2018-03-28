@@ -1,7 +1,7 @@
 <?php
     $header_group_class = "header-group-0";
 ?>
-    @include('crudbooster::default._form_body.component_assets', ['forms' => $forms])
+    @include('crudbooster::form._form_body.component_assets', ['forms' => $forms])
     @foreach($forms as $index => $formInput)
         @php
             $label = $formInput['label'];
@@ -36,6 +36,6 @@
             }
 
         @endphp
-        @include('crudbooster::default._form_body.component', ['form' => $formInput])
+        @include('crudbooster::form._form_body.component', ['form' => $formInput])
 
     @endforeach

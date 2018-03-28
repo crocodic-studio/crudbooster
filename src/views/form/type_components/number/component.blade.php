@@ -6,6 +6,6 @@
         <input type='number' step="{{($formInput['options']['step'])?:'1'}}" title="{{$label}}"
                {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} {{$validation['min']?"min=$validation[min]":""}} {{$validation['max']?"max=$validation[max]":""}} class='form-control'
                name="{{$name}}" id="{{$name}}" value='{{$value}}'/>
-        @include('crudbooster::default._form_body.underField', ['help' => $formInput['help'], 'error' => $errors->first($name)])
+        @include('crudbooster::form._form_body.underField', ['help' => $formInput['help'], 'error' => $errors->first($name)])
     </div>
 </div>

@@ -45,4 +45,4 @@ $query = str_random(5);
     </script>
 @endif
 
-@include('crudbooster::default.type_components.select_dataquery.partials.select')
+@include('crudbooster::form.type_components.select_dataquery.partials.select')

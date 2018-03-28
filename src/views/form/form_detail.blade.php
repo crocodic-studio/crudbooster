@@ -6,7 +6,7 @@
         }
     </style>
 @endpush
-@include('crudbooster::default._form_body.component_assets', ['forms' => $forms])
+@include('crudbooster::form._form_body.component_assets', ['forms' => $forms])
 <div class='table-responsive'>
     <table id='table-detail' class='table table-striped'>
 
@@ -50,7 +50,7 @@
         $jquery = @$formInput['jquery'];
         $placeholder = "placeholder='{$formInput['placeholder']}'";
             ?>
-        @include('crudbooster::default._form_body.component_details')
+        @include('crudbooster::form._form_body.component_details')
 
         @endforeach
 
