@@ -230,5 +230,7 @@ return [
     "your_file_extension_is_not_allowed " => "izin verilmeyen dosya türü !",
 
     'toggle_navigation' => "Toggle navigation",
+    'information' => "Information",
+
 
 ];

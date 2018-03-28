@@ -233,4 +233,6 @@ return [
     "your_file_extension_is_not_allowed " => "Your file extension is not allowed !",
 
     'toggle_navigation' => "Toggle navigation",
+    'information' => "Information",
+
 ];

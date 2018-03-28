@@ -62,7 +62,7 @@
                 </ol>
             @else
                 <h1>{{cbGetsetting('appname')}}
-                    <small>Information</small>
+                    <small>{!! cbTrans('information') !!}</small>
                 </h1>
             @endif
         </section>

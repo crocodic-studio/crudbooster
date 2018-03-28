@@ -232,4 +232,6 @@ return [
     "your_file_extension_is_not_allowed " => "Estensione file non permessa!",
 
     'toggle_navigation' => "Toggle navigation",
+    'information' => "Information",
+
 ];

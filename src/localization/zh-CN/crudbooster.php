@@ -219,5 +219,6 @@ return [
     'datamodal_browse_data' => '浏览数据',
 
     'toggle_navigation' => "Toggle navigation",
+    'information' => "Information",
 
 ];
