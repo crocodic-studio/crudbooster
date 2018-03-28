@@ -221,4 +221,6 @@ return [
     'datamodal_enter_to_search'=>'进入查询',
     'datamodal_browse_data'=>'浏览数据' ,
     
+    'toggle_navigation' => "Toggle navigation",
+    
 ];

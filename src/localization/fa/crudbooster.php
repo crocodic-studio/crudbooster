@@ -231,4 +231,6 @@ return [
     'this_field_is_required' => 'تکمیل این فیلد اجباری است',
     'text_form' => 'فرم',
     "your_file_extension_is_not_allowed " => "نوع فایل شما مجاز نیست",
+
+    'toggle_navigation' => "Toggle navigation",
 ];

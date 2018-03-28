@@ -214,4 +214,6 @@ return [
     'this_field_is_required'   =>'This field is required',
     'text_form'                => 'Form',
      "your_file_extension_is_not_allowed "=>"Your file extension is not allowed !",
+
+    'toggle_navigation' => "Toggle navigation",
 ];

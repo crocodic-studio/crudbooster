@@ -236,4 +236,6 @@ return [
     'this_field_is_required'   =>'Questo campo è obbligatorio',
     'text_form'                => 'Form',
      "your_file_extension_is_not_allowed "=>"Estensione file non permessa!",
+
+    'toggle_navigation' => "Toggle navigation",
 ];
