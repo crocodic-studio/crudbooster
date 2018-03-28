@@ -371,11 +371,6 @@ class CRUDBooster
         return DbInspector::colName($columns);
     }
 
-    public static function getFieldType($table, $field)
-    {
-        return DbInspector::getFieldTypes($table, $field);
-    }
-
     public static function routeController($prefix, $controller, $namespace = null)
     {
         $prefix = trim($prefix, '/').'/';

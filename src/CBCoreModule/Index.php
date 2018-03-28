@@ -6,6 +6,7 @@ use crocodicstudio\crudbooster\CBCoreModule\Index\FilterIndexRows;
 use crocodicstudio\crudbooster\CBCoreModule\Index\Order;
 use crocodicstudio\crudbooster\CBCoreModule\Index\ValueCalculator;
 use crocodicstudio\crudbooster\controllers\CBController;
+use crocodicstudio\crudbooster\helpers\DbInspector;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
 use CRUDBooster;
@@ -157,7 +158,7 @@ class Index
         $result->addselect($field.' as '.str_slug($field, '_'));
         $tableField = substr($field, 0, strpos($field, '.'));
         $fieldOrign = substr($field, strpos($field, '.') + 1);
-        $columns_table[$index]['type_data'] = CRUDBooster::getFieldType($tableField, $fieldOrign);
+        $columns_table[$index]['type_data'] = DbInspector::getFieldTypes($tableField, $fieldOrign);
         $columns_table[$index]['field'] = str_slug($field, '_');
         $columns_table[$index]['field_raw'] = $field;
         $columns_table[$index]['field_with'] = $tableField.'.'.$fieldOrign;
@@ -182,7 +183,7 @@ class Index
 
         if (\Schema::hasColumn($table, $field)) {
             $result->addselect($table.'.'.$field);
-            $columns_table[$index]['type_data'] = CRUDBooster::getFieldType($table, $field);
+            $columns_table[$index]['type_data'] = DbInspector::getFieldTypes($table, $field);
             $columns_table[$index]['field_with'] = $table.'.'.$field;
         }
 
