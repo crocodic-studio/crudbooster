@@ -7,13 +7,13 @@
 @endif
 
 
-@if (Session::get('message'))
-    <div class='alert alert-{{ Session::get("message_type") }}'>
+@if (session('message'))
+    <div class='alert alert-{{ session("message_type") }}'>
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <h4>
             <i class="icon fa fa-info"></i>
-            {{ cbTrans("alert_".Session::get("message_type")) }}
+            {{ cbTrans("alert_".session("message_type")) }}
         </h4>
-        {!!Session::get('message')!!}
+        {!!session('message')!!}
     </div>
 @endif
