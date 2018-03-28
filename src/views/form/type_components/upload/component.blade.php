@@ -1,6 +1,6 @@
 <div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}'
      style="{{@$formInput['style']}}">
-    <label class='col-sm-2 control-label'>{{$label}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
+    <label class='col-sm-2 control-label'>{{$label}} {!!($required)?"<span class='text-danger' title='".cbTrans('this_field_is_required')."'>*</span>":"" !!}</label>
 
     <div class="{{$col_width?:'col-sm-10'}}">
         @if($value)
