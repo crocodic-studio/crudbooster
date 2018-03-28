@@ -239,3 +239,10 @@ if (! function_exists('backWithMsg')) {
     }
 }
 
+if (! function_exists('underField')) {
+    function underField($help, $error)
+    {
+        $error = $error ? "<i class='fa fa-info-circle'></i> $error":'' ;
+        return "<div class='text-danger'>$error</div><p class='help-block'>$help</p>";
+    }
+}

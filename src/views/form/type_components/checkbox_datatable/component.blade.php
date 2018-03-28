@@ -57,6 +57,6 @@ $field_value = $data[2];
                 </div>
             @endforeach
         @endif
-        @include('crudbooster::form._form_body.underField', ['help' => $formInput['help'], 'error' => $errors->first($name)])
+        {!! underField($formInput['help'], $errors->first($name)) !!}
     </div>
 </div>

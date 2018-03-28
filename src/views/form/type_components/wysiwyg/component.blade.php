@@ -40,6 +40,6 @@
         <textarea id='textarea_{{$name}}' id="{{$name}}"
                   {{$required}} {{$readonly}} {{$disabled}} name="{{$formInput['name']}}" class='form-control'
                   rows='5'>{{ $value }}</textarea>
-        @include('crudbooster::form._form_body.underField', ['help' => $formInput['help'], 'error' => $errors->first($name)])
+        {!! underField($formInput['help'], $errors->first($name)) !!}
     </div>
 </div>

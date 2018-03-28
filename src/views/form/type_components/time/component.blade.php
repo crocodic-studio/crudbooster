@@ -12,7 +12,7 @@
                        {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control notfocus timepicker'
                        name="{{$name}}" id="{{$name}}" readonly value='{{$value}}'/>
             </div>
-            @include('crudbooster::form._form_body.underField', ['help' => $formInput['help'], 'error' => $errors->first($name)])
+            {!! underField($formInput['help'], $errors->first($name)) !!}
         </div>
     </div>
 </div>

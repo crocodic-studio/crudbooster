@@ -22,7 +22,7 @@ $datamodal_value = DB::table($dm_table)->where($dm_value, $value)->first()->$dm_
       </span>
         </div><!-- /input-group -->
 
-        @include('crudbooster::form._form_body.underField', ['help' => $formInput['help'], 'error' => $errors->first($name)])
+        {!! underField($formInput['help'], $errors->first($name)) !!}
     </div>
 </div>
 

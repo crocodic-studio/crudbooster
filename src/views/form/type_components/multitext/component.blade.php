@@ -16,7 +16,7 @@
                             class='fa fa-plus'></i></button></span>
         </div>
 
-        @include('crudbooster::form._form_body.underField', ['help' => $formInput['help'], 'error' => $errors->first($name)])
+        {!! underField($formInput['help'], $errors->first($name)) !!}
 
     </div>
 

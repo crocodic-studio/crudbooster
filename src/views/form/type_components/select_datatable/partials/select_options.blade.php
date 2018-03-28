@@ -54,6 +54,6 @@ if (! $formInput['options']['parent_select']) {
             @endforeach
 
         </select>
-        @include('crudbooster::form._form_body.underField', ['help' => $formInput['help'], 'error' => $errors->first($name)])
+        {!! underField($formInput['help'], $errors->first($name)) !!}
     </div>
 </div>
