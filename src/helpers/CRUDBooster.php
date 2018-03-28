@@ -347,11 +347,6 @@ class CRUDBooster
         return $inputhtml;
     }
 
-    public static function sendFCM($regID = [], $data)
-    {
-        return (new GoogleFCM)->send($regID, $data);
-    }
-
     public static function isExistsController($table)
     {
         $ctrlName = ucwords(str_replace('_', ' ', $table));
