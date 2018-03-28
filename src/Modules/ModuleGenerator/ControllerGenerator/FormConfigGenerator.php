@@ -1,6 +1,8 @@
 <?php
 
 namespace crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator;
+
+use crocodicstudio\crudbooster\helpers\DbInspector;
 use Illuminate\Support\Facades\Schema;
 use CB;
 
@@ -14,32 +16,31 @@ class FormConfigGenerator
     static function generateFormConfig($table, $coloms)
     {
         $formArrayString = [];
-        foreach ($coloms as $i => $c) {
+        foreach ($coloms as $i => $colName) {
             //$attribute = [];
-            $validation = [];
-            $validation[] = 'required';
             $placeholder = '';
             $help = '';
 
-            $label = str_replace("id_", "", $c);
-            $label = ucwords(str_replace("_", " ", $label));
-            $field = $c;
+            $label = self::getLabel($colName);
 
-            if (FieldDetector::isExceptional($field)) {
+            if (FieldDetector::isExceptional($colName)) {
                 continue;
             }
 
-            $typedata = CB::getFieldType($table, $field);
+            $typeData = DbInspector::getFieldTypes($table, $colName);
 
-            list($type, $validation, $options) = self::parseFieldType($typedata, $validation);
+            $validation = [];
+            $validation[] = 'required';
+            list($type, $rule, $options) = self::parseFieldType($typeData);
+            $validation[] = $rule;
 
-            if (FieldDetector::isForeignKey($field)) {
-                list($type, $options) = self::handleForeignKey($field);
+            if (FieldDetector::isForeignKey($colName)) {
+                list($type, $options) = self::handleForeignKey($colName);
             }
 
-            if (substr($field, 0, 3) == 'is_') {
+            if (substr($colName, 0, 3) == 'is_') {
                 $type = 'radio_dataenum';
-                $label = ucwords(substr($field, 3));
+                $label = ucwords(substr($colName, 3));
                 $validation = ['required|integer'];
                 $options = [
                     'enum' => ['In '.$label, $label],
@@ -47,40 +48,40 @@ class FormConfigGenerator
                 ];
             }
 
-            if (FieldDetector::isPassword($field)) {
+            if (FieldDetector::isPassword($colName)) {
                 $type = 'password';
                 $validation = ['min:3', 'max:32'];
                 $help = cbTrans("text_default_help_password");
             }
 
-            if (FieldDetector::isImage($field)) {
+            if (FieldDetector::isImage($colName)) {
                 $type = 'upload';
                 $validation = ['required|image'];
                 $help = cbTrans('text_default_help_upload');
             }
 
-            if (FieldDetector::isGeographical($field)) {
+            if (FieldDetector::isGeographical($colName)) {
                 $type = 'hidden';
             }
 
-            if (FieldDetector::isPhone($field)) {
+            if (FieldDetector::isPhone($colName)) {
                 $type = 'number';
                 $validation = ['required', 'numeric'];
                 $placeholder = cbTrans('text_default_help_number');
             }
 
-            if (FieldDetector::isEmail($field)) {
+            if (FieldDetector::isEmail($colName)) {
                 $type = 'email';
                 $validation[] = 'email|unique:'.$table;
                 $placeholder = cbTrans('text_default_help_email');
             }
 
-            if ($type == 'text' && FieldDetector::isNameField($field)) {
-                $placeholder = cbTrans('text_default_help_text');
+            if ($type == 'text' && FieldDetector::isNameField($colName)) {
                 $validation = ['required', 'string', 'min:3', 'max:70'];
+                $placeholder = cbTrans('text_default_help_text');
             }
 
-            if ($type == 'text' && FieldDetector::isUrlField($field)) {
+            if ($type == 'text' && FieldDetector::isUrlField($colName)) {
                 $validation = ['required', 'url'];
                 $placeholder = cbTrans('text_default_help_url');
             }
@@ -89,7 +90,7 @@ class FormConfigGenerator
 
             $formArray = [];
             $formArray['label'] = $label;
-            $formArray['name'] = $field;
+            $formArray['name'] = $colName;
             $formArray['type'] = $type;
             $formArray['options'] = $options;
             $formArray['required'] = true;
@@ -100,6 +101,43 @@ class FormConfigGenerator
         }
 
         return $formArrayString;
+    }
+
+    /**
+     * @param $c
+     * @return mixed|string
+     */
+    private static function getLabel($c)
+    {
+        $label = str_replace("id_", "", $c);
+        $label = ucwords(str_replace("_", " ", $label));
+
+        return $label;
+    }
+
+    /**
+     * @param $typeData
+     * @param $validation
+     * @return array
+     */
+    private static function parseFieldType($typeData)
+    {
+        $typeData = array_get([
+            'longtext' => 'text',
+            'integer' => 'int',
+            'timestamp' => 'datetime',
+        ], $typeData, $typeData);
+
+
+        $default = ["text", "min:1|max:255", []];
+        return array_get([
+            'text' => ['textarea', "string|min:5", []],
+            'date' => ['date', "date", ['php_format' => 'M, d Y', 'datepicker_format' => 'M, dd YYYY',]],
+            'datetime' => ['datetime', "date_format:Y-m-d H:i:s", ['php_format' => 'M, d Y H:i',]],
+            'time' => ['time', 'date_format:H:i:s', []],
+            'double' => ['money', "integer|min:0", []],
+            'int' => ['number', 'integer|min:0', []],
+        ], $typeData, $default);
     }
 
     /**
@@ -122,41 +160,5 @@ class FormConfigGenerator
         }
 
         return [$type, $options];
-    }
-
-    /**
-     * @param $typeData
-     * @param $validation
-     * @return array
-     */
-    private static function parseFieldType($typeData, $validation)
-    {
-        $options = [];
-        if ($typeData == 'text' || $typeData == 'longtext') {
-            $type = 'textarea';
-            $validation[] = "string|min:5";
-        } elseif ($typeData == 'date') {
-            $type = 'date';
-            $validation[] = "date";
-            $options = ['php_format' => 'M, d Y', 'datepicker_format' => 'M, dd YYYY',];
-        } elseif ($typeData == 'datetime' || $typeData == 'timestamp') {
-            $type = 'datetime';
-            $validation[] = "date_format:Y-m-d H:i:s";
-            $options = ['php_format' => 'M, d Y H:i',];
-        } elseif ($typeData == 'time') {
-            $type = 'time';
-            $validation[] = 'date_format:H:i:s';
-        } elseif ($typeData == 'double') {
-            $type = 'money';
-            $validation[] = "integer|min:0";
-        } elseif ($typeData == 'int' || $typeData == 'integer') {
-            $type = 'number';
-            $validation[] = 'integer|min:0';
-        } else {
-            $type = "text";
-            $validation[] = "min:1|max:255";
-        }
-
-        return [$type, $validation, $options];
     }
 }
