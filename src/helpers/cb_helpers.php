@@ -108,24 +108,6 @@ if (! function_exists('g')) {
     }
 }
 
-if (! function_exists('min_var_export')) {
-    function min_var_export($input, $indent = "")
-    {
-        if (! is_array($input)) {
-            return var_export($input, true);
-        }
-        $buffer = [];
-        foreach ($input as $key => $value) {
-            $buffer[] = $indent.var_export($key, true)."=>".min_var_export($value, ($indent."\t"));
-        }
-        if (count($buffer) == 0) {
-            return "[]";
-        }
-
-        return "[\n".implode(",\n", $buffer)."\n$indent]";
-    }
-}
-
 if (! function_exists('cbTrans')) {
     /**
      * Translate the given message.
