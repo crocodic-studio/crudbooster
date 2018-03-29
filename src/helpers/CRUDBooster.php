@@ -137,7 +137,7 @@ class CRUDBooster
         return self::getFilter($field, 'type');
     }
 
-    public static function stringBetween($string, $start, $end)
+/*    public static function stringBetween($string, $start, $end)
     {
         $string = ' '.$string;
         $ini = strpos($string, $start);
@@ -148,7 +148,7 @@ class CRUDBooster
         $len = strpos($string, $end, $ini) - $ini;
 
         return substr($string, $ini, $len);
-    }
+    }*/
 
     public static function first($table, $id)
     {
