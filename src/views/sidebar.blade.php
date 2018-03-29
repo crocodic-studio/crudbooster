@@ -30,12 +30,12 @@
                 @endif
 
                 @foreach(CRUDBooster::sidebarMenu() as $menu)
-                    <li data-id='{{$menu->id}}' class='{{(count($menu->children))?"treeview":""}} {{ (Request::is($menu->url_path."*"))?"active":""}}'>
+                    <li data-id='{{$menu->id}}' class='{{(!empty($menu->children))?"treeview":""}} {{ (Request::is($menu->url_path."*"))?"active":""}}'>
                         <a href='{{ ($menu->is_broken)?"javascript:alert('".trans('crudbooster.controller_route_404')."')":$menu->url }}' class='{{($menu->color)?"text-".$menu->color:""}}'>
                             <i class='{{$menu->icon}} {{($menu->color)?"text-".$menu->color:""}}'></i> <span>{{$menu->name}}</span>
-                            @if(count($menu->children))<i class="fa fa-angle-{{ trans("crudbooster.right") }} pull-{{ trans("crudbooster.right") }}"></i>@endif
+                            @if(!empty($menu->children))<i class="fa fa-angle-{{ trans("crudbooster.right") }} pull-{{ trans("crudbooster.right") }}"></i>@endif
                         </a>
-                        @if(count($menu->children))
+                        @if(!empty($menu->children))
                             <ul class="treeview-menu">
                                 @foreach($menu->children as $child)
                                     <li data-id='{{$child->id}}' class='{{(Request::is($child->url_path."*"))?"active":""}}'>
