@@ -4,6 +4,7 @@ namespace crocodicstudio\crudbooster\helpers;
 
 use crocodicstudio\crudbooster\CBCoreModule\CbUsersRepo;
 use crocodicstudio\crudbooster\CBCoreModule\RouteController;
+use crocodicstudio\crudbooster\CBCoreModule\ViewHelpers;
 use crocodicstudio\crudbooster\Modules\LogsModule\LogsRepository;
 use crocodicstudio\crudbooster\Modules\PrivilegeModule\PrivilegeHelpers;
 use Session;
@@ -95,16 +96,7 @@ class CRUDBooster
 
     public static function deleteConfirm($redirectTo)
     {
-        echo 'swal({   
-				title: "'.cbTrans('delete_title_confirm').'",   
-				text: "'.cbTrans('delete_description_confirm').'",   
-				type: "warning",   
-				showCancelButton: true,   
-				confirmButtonColor: "#ff0000",   
-				confirmButtonText: "'.cbTrans('confirmation_yes').'",  
-				cancelButtonText: "'.cbTrans('confirmation_no').'",  
-				closeOnConfirm: false }, 
-				function(){  location.href="'.$redirectTo.'" });';
+        ViewHelpers::delConfirm($redirectTo);
     }
 
     public static function getCurrentId()
@@ -124,10 +116,7 @@ class CRUDBooster
 
     public static function getValueFilter($field)
     {
-        $filter = request('filter_column');
-        if ($filter[$field]) {
-            return $filter[$field]['value'];
-        }
+        self::getFilter($field, 'value');
     }
 
     private static function getFilter($field, $index)
@@ -315,30 +304,10 @@ class CRUDBooster
 
     public static function getUrlParameters($exception = null)
     {
-        @$get = $_GET;
-        $inputhtml = '';
-
-        if (! $get) {
-            return $inputhtml;
-        }
-        if (is_array($exception)) {
-            foreach ($exception as $e) {
-                unset($get[$e]);
-            }
-        }
-
-        $string_parameters = http_build_query($get);
-        foreach (explode('&', $string_parameters) as $s) {
-            $part = explode('=', $s);
-            $name = urldecode($part[0]);
-            $value = urldecode($part[1]);
-            $inputhtml .= "<input type='hidden' name='$name' value='$value'/>";
-        }
-
-        return $inputhtml;
+        return ViewHelpers::getUrlParameters($exception);
     }
 
-    public static function isExistsController($table)
+/*    public static function isExistsController($table)
     {
         $ctrlName = ucwords(str_replace('_', ' ', $table));
         $ctrlName = str_replace(' ', '', $ctrlName).'Controller.php';
@@ -350,7 +319,7 @@ class CRUDBooster
         }
 
         return false;
-    }
+    }*/
 
     public static function getTableColumns($table)
     {
