@@ -50,7 +50,7 @@
                 $selects_data->whereraw($formInput['datatable_where']);
             }
 
-            if (count($tables)) {
+            if (!empty($tables)) {
                 for ($i = 1; $i <= count($tables) - 1; $i++) {
                     $tab = $tables[$i];
                     $parent_table = $tables[$i - 1];

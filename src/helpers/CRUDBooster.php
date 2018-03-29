@@ -3,6 +3,8 @@
 namespace crocodicstudio\crudbooster\helpers;
 
 use crocodicstudio\crudbooster\CBCoreModule\CbUsersRepo;
+use crocodicstudio\crudbooster\CBCoreModule\RouteController;
+use crocodicstudio\crudbooster\CBCoreModule\ViewHelpers;
 use crocodicstudio\crudbooster\Modules\LogsModule\LogsRepository;
 use crocodicstudio\crudbooster\Modules\PrivilegeModule\PrivilegeHelpers;
 use Session;
@@ -82,11 +84,6 @@ class CRUDBooster
         return GetCurrentX::getCurrentModule();
     }
 
-    public static function getCurrentDashboardId()
-    {
-        return GetCurrentX::getCurrentDashboardId();
-    }
-
     public static function getCurrentMenuId()
     {
         return GetCurrentX::getCurrentMenuId();
@@ -99,16 +96,7 @@ class CRUDBooster
 
     public static function deleteConfirm($redirectTo)
     {
-        echo 'swal({   
-				title: "'.cbTrans('delete_title_confirm').'",   
-				text: "'.cbTrans('delete_description_confirm').'",   
-				type: "warning",   
-				showCancelButton: true,   
-				confirmButtonColor: "#ff0000",   
-				confirmButtonText: "'.cbTrans('confirmation_yes').'",  
-				cancelButtonText: "'.cbTrans('confirmation_no').'",  
-				closeOnConfirm: false }, 
-				function(){  location.href="'.$redirectTo.'" });';
+        ViewHelpers::delConfirm($redirectTo);
     }
 
     public static function getCurrentId()
@@ -128,10 +116,7 @@ class CRUDBooster
 
     public static function getValueFilter($field)
     {
-        $filter = request('filter_column');
-        if ($filter[$field]) {
-            return $filter[$field]['value'];
-        }
+        self::getFilter($field, 'value');
     }
 
     private static function getFilter($field, $index)
@@ -319,30 +304,10 @@ class CRUDBooster
 
     public static function getUrlParameters($exception = null)
     {
-        @$get = $_GET;
-        $inputhtml = '';
-
-        if (! $get) {
-            return $inputhtml;
-        }
-        if (is_array($exception)) {
-            foreach ($exception as $e) {
-                unset($get[$e]);
-            }
-        }
-
-        $string_parameters = http_build_query($get);
-        foreach (explode('&', $string_parameters) as $s) {
-            $part = explode('=', $s);
-            $name = urldecode($part[0]);
-            $value = urldecode($part[1]);
-            $inputhtml .= "<input type='hidden' name='$name' value='$value'/>";
-        }
-
-        return $inputhtml;
+        return ViewHelpers::getUrlParameters($exception);
     }
 
-    public static function isExistsController($table)
+/*    public static function isExistsController($table)
     {
         $ctrlName = ucwords(str_replace('_', ' ', $table));
         $ctrlName = str_replace(' ', '', $ctrlName).'Controller.php';
@@ -354,7 +319,7 @@ class CRUDBooster
         }
 
         return false;
-    }
+    }*/
 
     public static function getTableColumns($table)
     {
@@ -368,39 +333,7 @@ class CRUDBooster
 
     public static function routeController($prefix, $controller, $namespace = null)
     {
-        $prefix = trim($prefix, '/').'/';
-
-        $namespace = ($namespace) ?: ctrlNamespace();
-
-        try {
-            Route::get($prefix, ['uses' => $controller.'@getIndex', 'as' => $controller.'GetIndex']);
-
-            $controller_class = new \ReflectionClass($namespace.'\\'.$controller);
-            $controller_methods = $controller_class->getMethods(\ReflectionMethod::IS_PUBLIC);
-            $wildcards = '/{one?}/{two?}/{three?}/{four?}/{five?}';
-            foreach ($controller_methods as $method) {
-
-                if ($method->class == 'Illuminate\Routing\Controller' || $method->name == 'getIndex') {
-                    continue;
-                }
-                if (substr($method->name, 0, 3) == 'get') {
-                    $method_name = substr($method->name, 3);
-                    $slug = array_filter(preg_split('/(?=[A-Z])/', $method_name));
-                    $slug = strtolower(implode('-', $slug));
-                    $slug = ($slug == 'index') ? '' : $slug;
-                    Route::get($prefix.$slug.$wildcards, ['uses' => $controller.'@'.$method->name, 'as' => $controller.'Get'.$method_name]);
-                } elseif (substr($method->name, 0, 4) == 'post') {
-                    $method_name = substr($method->name, 4);
-                    $slug = array_filter(preg_split('/(?=[A-Z])/', $method_name));
-                    Route::post($prefix.strtolower(implode('-', $slug)).$wildcards, [
-                            'uses' => $controller.'@'.$method->name,
-                            'as' => $controller.'Post'.$method_name,
-                        ]);
-                }
-            }
-        } catch (\Exception $e) {
-
-        }
+        RouteController::routeController($prefix, $controller, $namespace);
     }
 
     /*

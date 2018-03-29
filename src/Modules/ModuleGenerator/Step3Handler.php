@@ -2,9 +2,7 @@
 
 namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
-use crocodicstudio\crudbooster\helpers\Parsers\ScaffoldingParser;
 use CRUDBooster;
-use Illuminate\Support\Facades\Request;
 
 class Step3Handler
 {
@@ -23,6 +21,18 @@ class Step3Handler
         return view('CbModulesGen::step3', compact('columns', 'forms', 'types', 'id'));
     }
 
+    /**
+     * @return array
+     */
+    private function getComponentTypes()
+    {
+        $types = [];
+        foreach (glob(CB::componentsPath().'*', GLOB_ONLYDIR) as $dir) {
+            array_push($types, basename($dir));
+        }
+        return $types;
+    }
+
     public function handleFormSubmit()
     {
         $scripts = $this->setFormScript(request()->all());
@@ -36,54 +46,66 @@ class Step3Handler
 
         //ARRANGE THE FULL SCRIPT
         $fileContent = $top."\n\n";
-        $fileContent .= "            # START FORM DO NOT REMOVE THIS LINE\n";
+        $fileContent .= str_repeat(' ', 12)."# START FORM DO NOT REMOVE THIS LINE\n";
         $fileContent .= $scripts;
-        $fileContent .= "\n            # END FORM DO NOT REMOVE THIS LINE\n\n";
+        $fileContent .= "\n".str_repeat(' ', 12)."# END FORM DO NOT REMOVE THIS LINE\n\n";
 
         //CREATE A BACKUP SCAFFOLDING TO OLD TAG
         if ($currentScaffold) {
             $fileContent = $this->backupOldTagScaffold($fileContent, $currentScaffold);
         }
 
-        $fileContent .= "            ".($bottom);
+        $fileContent .= str_repeat(' ', 12).($bottom);
 
         //CREATE FILE CONTROLLER
         FileManipulator::putCtrlContent($controller, $fileContent);
 
         return redirect()->route('AdminModulesControllerGetStep4', ['id' => request('id')]);
     }
-    /**
-     * @param $fileContent
-     * @param $middle
-     * @return string
-     */
-    private function backupOldTagScaffold($fileContent, $middle)
-    {
-        $middle = preg_split("/\\r\\n|\\r|\\n/", $middle);
-        foreach ($middle as &$c) {
-            $c = "            //".trim($c);
-        }
-        $middle = implode("\n", $middle);
-
-        $fileContent .= "            # OLD START FORM\n";
-        $fileContent .= $middle."\n";
-        $fileContent .= "            # OLD END FORM\n\n";
-
-        return $fileContent;
-    }
 
     /**
+     * @param $post
      * @return array
      */
-    private function getComponentTypes()
+    private function setFormScript($post)
     {
-        $types = [];
-        foreach (glob(CRUDBooster::componentsPath().'*', GLOB_ONLYDIR) as $dir) {
-            $types[] = basename($dir);
+        $name = $post['name'];
+        $width = $post['width'];
+        $type = $post['type'];
+        $help = $post['help'];
+        $placeholder = $post['placeholder'];
+        $style = $post['style'];
+        $validation = $post['validation'];
+
+        $scriptForm = [];
+        $scriptForm[] = str_repeat(' ', 12).'$this->form = [];';
+
+        foreach ($post['label'] as $i => $label) {
+            if ($label == '') {
+                continue;
+            }
+            $form = [
+                'label' => $label,
+                'name' => $name[$i],
+                'type' => $type[$i],
+                'validation' => $validation[$i],
+                'width' => $width[$i],
+                'placeholder' => $placeholder[$i],
+                'help' => $help[$i],
+                'style' => $style[$i],
+            ];
+
+            $info = json_decode(file_get_contents(CRUDBooster::componentsPath($type[$i]).'/info.json'), true);
+            if (!empty($info['options'])) {
+                $form = $this->parseComponentOptions($post, $info, $form);
+            }
+
+            $scriptForm[] = str_repeat(' ', 12).'$this->form[] = '.FileManipulator::stringify($form, str_repeat(' ', 12)).';';
         }
 
-        return $types;
+        return implode("\n", $scriptForm);
     }
+
     /**
      * @param $bottomScript
      * @return mixed
@@ -102,57 +124,44 @@ class Step3Handler
     }
 
     /**
+     * @param $fileContent
+     * @param $middle
+     * @return string
+     */
+    private function backupOldTagScaffold($fileContent, $middle)
+    {
+        $middle = preg_split("/\\r\\n|\\r|\\n/", $middle);
+        foreach ($middle as &$c) {
+            $c = str_repeat(' ', 12)."//".trim($c);
+        }
+        $middle = implode("\n", $middle);
+
+        $fileContent .= str_repeat(' ', 12)."# OLD START FORM\n";
+        $fileContent .= $middle."\n";
+        $fileContent .= str_repeat(' ', 12)."# OLD END FORM\n\n";
+
+        return $fileContent;
+    }
+
+    /**
      * @param $post
+     * @param $info
+     * @param $form
      * @return array
      */
-    private function setFormScript($post)
+    private function parseComponentOptions($post, $info, $form)
     {
-        $labels = $post['label'];
-        $name = $post['name'];
-        $width = $post['width'];
-        $type = $post['type'];
-        $help = $post['help'];
-        $placeholder = $post['placeholder'];
-        $style = $post['style'];
-        $validation = $post['validation'];
-
-        $scriptForm = [];
-        $scriptForm[] = "            ".'$this->form = [];';
-        foreach ($labels as $i => $label) {
-            if ($label == '') {
-                continue;
+        $options = [];
+        foreach ($info['options'] as $i => $opt) {
+            $optionValue = $post[$opt['name']][$form['name']];
+            if ($opt['type'] == 'array') {
+                $options[$opt['name']] = ($optionValue) ? explode(";", $optionValue) : [];
+            } elseif ($opt['type'] == 'boolean') {
+                $options[$opt['name']] = ($optionValue == 1) ? true : false;
             }
-            $currentName = $name[$i];
-            $form = [];
-            $form['label'] = $label;
-            $form['name'] = $name[$i];
-            $form['type'] = $type[$i];
-            $form['validation'] = $validation[$i];
-            $form['width'] = $width[$i];
-            $form['placeholder'] = $placeholder[$i];
-            $form['help'] = $help[$i];
-            $form['style'] = $style[$i];
-
-            $info = file_get_contents(CRUDBooster::componentsPath($type[$i]).'/info.json');
-            $info = json_decode($info, true);
-            if (count($info['options'])) {
-                $options = [];
-                foreach ($info['options'] as $i => $opt) {
-                    $optionName = $opt['name'];
-                    $optionValue = $post[$optionName][$currentName];
-                    if ($opt['type'] == 'array') {
-                        $optionValue = ($optionValue) ? explode(";", $optionValue) : [];
-                    } elseif ($opt['type'] == 'boolean') {
-                        $optionValue = ($optionValue == 1) ? true : false;
-                    }
-                    $options[$optionName] = $optionValue;
-                }
-                $form['options'] = $options;
-            }
-
-            $scriptForm[] = "            ".'$this->form[] = '.min_var_export($form, "            ").";";
         }
+        $form['options'] = $options;
 
-        return implode("\n", $scriptForm);
+        return $form;
     }
 }

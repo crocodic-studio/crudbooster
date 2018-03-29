@@ -44,45 +44,42 @@
                     <tr>
                         @foreach($formInput['columns'] as $col)
                             <td class="{{$col['name']}}">
-                                <?php
-                                if ($col['type'] == 'select') {
-                                    if ($col['datatable']) {
+                                @if ($col['type'] == 'select')
+                                    @if ($col['datatable'])
+                                        <?php
                                         $join_table = explode(',', $col['datatable'])[0];
                                         $join_field = explode(',', $col['datatable'])[1];
-                                        echo "<span class='td-label'>";
-                                        echo $d->{$join_table.'_'.$join_field};
-                                        echo "</span>";
-                                        echo "<input type='hidden' name='".$name."-".$col['name']."[]' value='".$d->{$col['name']}."'/>";
-                                    }
-                                    if ($col['dataenum']) {
-                                        echo "<span class='td-label'>";
-                                        echo $d->{$col['name']};
-                                        echo "</span>";
-                                        echo "<input type='hidden' name='".$name."-".$col['name']."[]' value='".$d->{$col['name']}."'/>";
-                                    }
-                                } elseif ($col['type'] == 'datamodal') {
-                                    $datamodal_title = explode(',', $col['datamodal_columns'])[0];
-                                    $datamodal_table = $col['datamodal_table'];
-                                    echo "<span class='td-label'>";
-                                    echo $d->{$datamodal_table.'_'.$datamodal_title};
-                                    echo "</span>";
-                                    echo "<input type='hidden' name='".$name."-".$col['name']."[]' value='".$d->{$col['name']}."'/>";
-                                } elseif ($col['type'] == 'upload') {
-                                    $filename = basename($d->{$col['name']});
-                                    if ($col['upload_type'] == 'image') {
-                                        echo "<a href='".asset($d->{$col['name']})."' class='fancybox'><img data-label='$filename' src='".asset($d->{$col['name']})."' width='50px' height='50px'/></a>";
-                                        echo "<input type='hidden' name='".$name."-".$col['name']."[]' value='".$d->{$col['name']}."'/>";
-                                    } else {
-                                        echo "<a data-label='$filename' href='".asset($d->{$col['name']})."'>$filename</a>";
-                                        echo "<input type='hidden' name='".$name."-".$col['name']."[]' value='".$d->{$col['name']}."'/>";
-                                    }
-                                } else {
-                                    echo "<span class='td-label'>";
-                                    echo $d->{$col['name']};
-                                    echo "</span>";
-                                    echo "<input type='hidden' name='".$name."-".$col['name']."[]' value='".$d->{$col['name']}."'/>";
-                                }
-                                ?>
+                                        ?>
+                                         <span class='td-label'>{!! $d->{$join_table.'_'.$join_field}  !!}</span>
+                                         <input type='hidden' name='{!! $name !!}-{!! $col['name'] !!}[]' value='{!! $d->{$col['name']} !!}'/>
+
+                                    @if ($col['dataenum'])
+                                        <span class='td-label'>{!! $d->{$col['name']} !!}</span>
+                                        <input type='hidden' name='{!! $name !!}-{!! $col['name'] !!}[]' value='{!! $d->{$col['name']} !!}'/>
+                                    @endif
+                                @elseif ($col['type'] == 'datamodal')
+                                    <span class='td-label'>
+                                    <?php
+                                        $datamodal_title = explode(',', $col['datamodal_columns'])[0];
+                                        $datamodal_table = $col['datamodal_table'];
+                                    ?>
+                                    {!! $d->{$datamodal_table.'_'.$datamodal_title} !!}
+                                    </span>
+                                    <input type='hidden' name='{!! $name !!}-{!! $col['name'] !!}[]' value='{!! $d->{$col['name']} !!}'/>
+                                @elseif ($col['type'] == 'upload')
+                                    <?php $filename = basename($d->{$col['name']}); ?>
+                                    @if ($col['upload_type'] == 'image')
+                                        <a href='{!! asset($d->{$col['name']}) !!}' class='fancybox'>
+                                        <img data-label='$filename' src='{!! asset($d->{$col['name']}) !!}' width='50px' height='50px'/></a>
+                                        <input type='hidden' name='{!! $name !!}-{!! $col['name'] !!}[]' value='{!! $d->{$col['name']} !!}'/>
+                                    @else
+                                        <a data-label='$filename' href='{!! asset($d->{$col['name']}) !!}'>{!! $filename !!}</a>
+                                        <input type='hidden' name='{!! $name !!}-{!! $col['name'] !!}[]' value='{!! $d->{$col['name']} !!}'/>
+                                    @endif
+                                @else
+                                    <span class='td-label'>{!! $d->{$col['name']} !!}</span>
+                                    <input type='hidden' name='{!! $name !!}-{!! $col['name'] !!}[]' value='{!! $d->{$col['name']} !!}'/>
+                                @endif
                             </td>
                         @endforeach
 
@@ -90,7 +87,7 @@
 
                     @endforeach
 
-                    @if(count($data_child)==0)
+                    @if(empty($data_child))
                         <tr class="trNull">
                             <td colspan="{{count($formInput['columns'])+1}}"
                                 align="center">{{cbTrans('table_data_not_found')}}</td>

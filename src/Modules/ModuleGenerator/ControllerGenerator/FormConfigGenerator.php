@@ -3,6 +3,7 @@
 namespace crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator;
 
 use crocodicstudio\crudbooster\helpers\DbInspector;
+use crocodicstudio\crudbooster\Modules\ModuleGenerator\FileManipulator;
 use Illuminate\Support\Facades\Schema;
 use CB;
 
@@ -18,10 +19,15 @@ class FormConfigGenerator
         $formArrayString = [];
         foreach ($coloms as $i => $colName) {
             //$attribute = [];
-            $placeholder = '';
-            $help = '';
-
-            $label = self::getLabel($colName);
+            $input = [];
+            $input['label'] = self::getLabel($colName);
+            $input['name'] = $colName;
+            $input['type'] = '';
+            $input['options'] = '';
+            $input['required'] = true;
+            $input['validation'] = '';
+            $input['help'] = '';
+            $input['placeholder'] = '';
 
             if (FieldDetector::isExceptional($colName)) {
                 continue;
@@ -29,75 +35,61 @@ class FormConfigGenerator
 
             $typeData = DbInspector::getFieldTypes($table, $colName);
 
-            $validation = [];
-            $validation[] = 'required';
-            list($type, $rule, $options) = self::parseFieldType($typeData);
-            $validation[] = $rule;
+            list($input['type'], $input['validation'], $input['options']) = self::parseFieldType($typeData);
 
             if (FieldDetector::isForeignKey($colName)) {
-                list($type, $options) = self::handleForeignKey($colName);
+                list($input['type'], $input['options']) = self::handleForeignKey($colName);
             }
 
             if (substr($colName, 0, 3) == 'is_') {
-                $type = 'radio_dataenum';
+                $input['type'] = 'radio_dataenum';
                 $label = ucwords(substr($colName, 3));
-                $validation = ['required|integer'];
-                $options = [
+                $input['options'] = [
                     'enum' => ['In '.$label, $label],
                     'value' => [0, 1],
                 ];
             }
 
             if (FieldDetector::isPassword($colName)) {
-                $type = 'password';
-                $validation = ['min:3', 'max:32'];
-                $help = cbTrans("text_default_help_password");
+                $input['type'] = 'password';
+                $input['validation'] = 'min:3|max:32|required';
+                $input['help'] = cbTrans("text_default_help_password");
             }
 
             if (FieldDetector::isImage($colName)) {
-                $type = 'upload';
-                $validation = ['required|image'];
-                $help = cbTrans('text_default_help_upload');
+                $input['type'] = 'upload';
+                $input['validation'] = 'required|image';
+                $input['help'] = cbTrans('text_default_help_upload');
             }
 
             if (FieldDetector::isGeographical($colName)) {
-                $type = 'hidden';
+                $input['type'] = 'hidden';
+                $input['validation'] = 'required|numeric';
             }
 
             if (FieldDetector::isPhone($colName)) {
-                $type = 'number';
-                $validation = ['required', 'numeric'];
-                $placeholder = cbTrans('text_default_help_number');
+                $input['type'] = 'number';
+                $input['validation'] = 'required|numeric';
+                $input['placeholder'] = cbTrans('text_default_help_number');
             }
 
             if (FieldDetector::isEmail($colName)) {
-                $type = 'email';
-                $validation[] = 'email|unique:'.$table;
-                $placeholder = cbTrans('text_default_help_email');
+                $input['type'] = 'email';
+                $input['validation'] = 'require|email|unique:'.$table;
+                $input['placeholder'] = cbTrans('text_default_help_email');
             }
 
-            if ($type == 'text' && FieldDetector::isNameField($colName)) {
-                $validation = ['required', 'string', 'min:3', 'max:70'];
-                $placeholder = cbTrans('text_default_help_text');
+            if ($input['type'] == 'text' && FieldDetector::isNameField($colName)) {
+                $input['validation'] = 'required|string|min:3|max:70';
+                $input['placeholder'] = cbTrans('text_default_help_text');
             }
 
-            if ($type == 'text' && FieldDetector::isUrlField($colName)) {
-                $validation = ['required', 'url'];
-                $placeholder = cbTrans('text_default_help_url');
+            if ($input['type'] == 'text' && FieldDetector::isUrlField($colName)) {
+                $input['validation'] = 'required|url';
+                $input['placeholder'] = cbTrans('text_default_help_url');
             }
 
-            $validation = implode('|', $validation);
-
-            $formArray = [];
-            $formArray['label'] = $label;
-            $formArray['name'] = $colName;
-            $formArray['type'] = $type;
-            $formArray['options'] = $options;
-            $formArray['required'] = true;
-            $formArray['validation'] = $validation;
-            $formArray['help'] = $help;
-            $formArray['placeholder'] = $placeholder;
-            $formArrayString[] = min_var_export($formArray, "            ");
+            $formArrayString[] = FileManipulator::stringify($input, "            ");
         }
 
         return $formArrayString;
@@ -117,7 +109,7 @@ class FormConfigGenerator
 
     /**
      * @param $typeData
-     * @param $validation
+     *
      * @return array
      */
     private static function parseFieldType($typeData)
@@ -147,18 +139,15 @@ class FormConfigGenerator
     private static function handleForeignKey($field)
     {
         $jointable = str_replace(['id_', '_id'], '', $field);
-        if (Schema::hasTable($jointable)) {
-            $joincols = CB::getTableColumns($jointable);
-            $joinname = CB::getNameTable($joincols);
-            $jointablePK = CB::pk($jointable);
-            $type = 'select2_datatable';
-            $options = [
-                'table' => $jointable,
-                'field_label' => $joinname,
-                'field_value' => $jointablePK,
-            ];
+        if (!Schema::hasTable($jointable)) {
+            return ['', ''];
         }
+        $options = [
+            'table' => $jointable,
+            'field_label' => CB::getNameTable(CB::getTableColumns($jointable)),
+            'field_value' => CB::pk($jointable),
+        ];
 
-        return [$type, $options];
+        return ['select2_datatable', $options];
     }
 }

@@ -13,7 +13,7 @@
     </tr>
     </thead>
     <tbody>
-    @if(count($result)==0)
+    @if(empty($result))
         <tr class='warning'>
             <td colspan='{{count($columns)+1}}' align="center">No Data Avaliable</td>
         </tr>

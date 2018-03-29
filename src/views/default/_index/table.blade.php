@@ -102,7 +102,7 @@
         </tr>
         </thead>
         <tbody>
-        @if(count($result)==0)
+        @if(empty($result))
             <tr class='warning'>
                 @if($button_bulk_action && $show_numbering)
                     <td colspan='{{count($columns)+3}}' align="center">
