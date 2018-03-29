@@ -137,7 +137,7 @@ class CRUDBooster
         return self::getFilter($field, 'type');
     }
 
-    public static function stringBetween($string, $start, $end)
+/*    public static function stringBetween($string, $start, $end)
     {
         $string = ' '.$string;
         $ini = strpos($string, $start);
@@ -148,7 +148,7 @@ class CRUDBooster
         $len = strpos($string, $end, $ini) - $ini;
 
         return substr($string, $ini, $len);
-    }
+    }*/
 
     public static function first($table, $id)
     {
@@ -195,13 +195,7 @@ class CRUDBooster
 
     public static function getForeignKey($parent_table, $child_table)
     {
-        $parent_table = CRUDBooster::parseSqlTable($parent_table)['table'];
-        $child_table = CRUDBooster::parseSqlTable($child_table)['table'];
-
-        if (\Schema::hasColumn($child_table, 'id_'.$parent_table)) {
-            return 'id_'.$parent_table;
-        }
-        return $parent_table.'_id';
+        return DbInspector::getForeignKey($parent_table, $child_table);
     }
 
     public static function getTableForeignKey($fieldName)
@@ -218,28 +212,8 @@ class CRUDBooster
 
     public static function urlFilterColumn($key, $type, $value = '', $singleSorting = true)
     {
-        $params = request()->all();
-        $mainpath = trim(self::mainpath(), '/');
-
-        if ($params['filter_column'] && $singleSorting) {
-            foreach ($params['filter_column'] as $k => $filter) {
-                foreach ($filter as $t => $val) {
-                    if ($t == 'sorting') {
-                        unset($params['filter_column'][$k]['sorting']);
-                    }
-                }
-            }
-        }
-
-        $params['filter_column'][$key][$type] = $value;
-
-        if (isset($params)) {
-            return $mainpath.'?'.http_build_query($params);
-        }
-        return $mainpath.'?filter_column['.$key.']['.$type.']='.$value;
-
+        return \crocodicstudio\crudbooster\CBCoreModule\Index\ViewHelpers::urlFilterColumn($key, $type, $value, $singleSorting);
     }
-
     public static function mainpath($path = null)
     {
         $controllerName = strtok(Route::currentRouteAction(), '@');
