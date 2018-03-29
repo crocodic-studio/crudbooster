@@ -110,20 +110,20 @@
                                     </select>
                                 </td>
                                 <td>
-                                    <a href="javascript:void(0)" class="btn btn-primary btn-callback"><i
-                                                class="fa fa-pencil"></i> Callback</a>
+                                    <a href="javascript:void(0)" class="btn btn-primary btn-callback">
+                                         <i class="fa fa-pencil"></i> Callback</a>
                                     <input type="hidden" class="input-callback" name="callback[]"
                                            value="{{$c['callback']}}">
                                 </td>
                                 <td>
-                                    <a href="javascript:void(0)" class="btn btn-info btn-plus"><i
-                                                class='fa fa-plus'></i></a>
-                                    <a href="javascript:void(0)" class="btn btn-danger btn-delete"><i
-                                                class='fa fa-trash'></i></a>
-                                    <a href="javascript:void(0)" class="btn btn-success btn-up"><i
-                                                class='fa fa-arrow-up'></i></a>
-                                    <a href="javascript:void(0)" class="btn btn-success btn-down"><i
-                                                class='fa fa-arrow-down'></i></a>
+                                    <a href="javascript:void(0)" class="btn btn-info btn-plus">
+                                         <i class='fa fa-plus'></i></a>
+                                    <a href="javascript:void(0)" class="btn btn-danger btn-delete">
+                                         <i class='fa fa-trash'></i></a>
+                                    <a href="javascript:void(0)" class="btn btn-success btn-up">
+                                         <i class='fa fa-arrow-up'></i></a>
+                                    <a href="javascript:void(0)" class="btn btn-success btn-down">
+                                         <i class='fa fa-arrow-down'></i></a>
                                 </td>
                             </tr>
                         @endforeach
@@ -150,18 +150,18 @@
                             </select>
                         </td>
                         <td>
-                            <a href="javascript:void(0)" class="btn btn-primary btn-callback"><i
-                                        class="fa fa-pencil"></i> Callback</a>
+                            <a href="javascript:void(0)" class="btn btn-primary btn-callback">
+                                 <i class="fa fa-pencil"></i> Callback</a>
                             <input type="hidden" class="input-callback" name="callback[]">
                         </td>
                         <td>
-                            <a href="javascript:void(0)" class="btn btn-info btn-plus"><i class='fa fa-plus'></i></a>
-                            <a href="javascript:void(0)" class="btn btn-danger btn-delete"><i
-                                        class='fa fa-trash'></i></a>
-                            <a href="javascript:void(0)" class="btn btn-success btn-up"><i
-                                        class='fa fa-arrow-up'></i></a>
-                            <a href="javascript:void(0)" class="btn btn-success btn-down"><i
-                                        class='fa fa-arrow-down'></i></a>
+                            <a href="javascript:void(0)" class="btn btn-info btn-plus">
+                                 <i class='fa fa-plus'></i></a><a href="javascript:void(0)" class="btn btn-danger btn-delete">
+                                 <i class='fa fa-trash'></i></a>
+                            <a href="javascript:void(0)" class="btn btn-success btn-up">
+                                 <i class='fa fa-arrow-up'></i></a>
+                            <a href="javascript:void(0)" class="btn btn-success btn-down">
+                                 <i class='fa fa-arrow-down'></i></a>
                         </td>
                     </tr>
 
