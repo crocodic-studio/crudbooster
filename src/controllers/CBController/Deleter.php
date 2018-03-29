@@ -28,7 +28,7 @@ trait Deleter
         }
         if ($btnName == 'delete') {
             (new DataRemover($this))->doDeleteWithHook($selectedIds);
-            $this->insertLog('log_delete', implode(',', $selectedIds));
+            $this->insertLog('log_delete', implode(',', $selectedIds) . ' - '. $this->table);
             backWithMsg(cbTrans('alert_delete_selected_success'));
         }
 
@@ -67,7 +67,7 @@ trait Deleter
 
         $this->findRow($id)->update([$column => null]);
 
-        $this->insertLog('log_delete_image', $row->{$this->title_field});
+        $this->insertLog('log_delete_image', $id . ' - '. $this->table);
 
         CB::redirect(Request::server('HTTP_REFERER'), cbTrans('alert_delete_data_success'), 'success');
     }

@@ -3,9 +3,9 @@
 namespace crocodicstudio\crudbooster\controllers\CBController;
 
 use CB;
+use crocodicstudio\crudbooster\CBCoreModule\RelationHandler;
 use crocodicstudio\crudbooster\controllers\FormValidator;
 use Illuminate\Support\Facades\Request;
-use crocodicstudio\crudbooster\CBCoreModule\RelationHandler;
 use Illuminate\Support\Facades\Schema;
 
 trait FormSubmitHandlers
@@ -44,7 +44,6 @@ trait FormSubmitHandlers
             }
         }
     }
-
 
     public function postAddSave()
     {

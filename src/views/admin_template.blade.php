@@ -7,7 +7,7 @@
 
     @stack('head')
 </head>
-<body class="{!! Session::get('theme_color','skin-blue') !!} {!! cbConfig('ADMIN_LAYOUT') !!}">
+<body class="{!! session('theme_color','skin-blue') !!} {!! cbConfig('ADMIN_LAYOUT') !!}">
 <div id='app' class="wrapper">
 
     <!-- Header -->
@@ -62,7 +62,7 @@
                 </ol>
             @else
                 <h1>{{cbGetsetting('appname')}}
-                    <small>Information</small>
+                    <small>{!! cbTrans('information') !!}</small>
                 </h1>
             @endif
         </section>

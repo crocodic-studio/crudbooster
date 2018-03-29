@@ -39,7 +39,6 @@ return [
                 * شاید صفحه ای که به دنبالش هستید توسط ادمین حذف شده است<br/>
                 * شما میتوانید با کلیک کردن بر روی دکمه بازگشت مرورگر به صفحه قبلی باز گردید<br/>',
 
-
     'alert_delete_selected' => 'آیا برای حذف داده های انتخاب شده مطمئن هستید؟',
     'alert_delete_selected_success' => 'حزف انتخاب شده ها با موفقیت انجام شد !',
     'alert_bulk_action_button' => 'آیا برای انجام این کار مطمئن هستید',
@@ -231,4 +230,8 @@ return [
     'this_field_is_required' => 'تکمیل این فیلد اجباری است',
     'text_form' => 'فرم',
     "your_file_extension_is_not_allowed " => "نوع فایل شما مجاز نیست",
+
+    'toggle_navigation' => "Toggle navigation",
+    'information' => "Information",
+
 ];

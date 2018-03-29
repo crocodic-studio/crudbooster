@@ -17,7 +17,7 @@
     @push('bottom')
         <script type="text/javascript">
             $(function () {
-                var total = {{ intval(Session::get('total_data_import')) }};
+                var total = {{ intval(session('total_data_import')) }};
 
                 var int_prog = setInterval(function () {
 

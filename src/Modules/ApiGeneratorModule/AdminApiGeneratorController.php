@@ -3,6 +3,7 @@
 namespace crocodicstudio\crudbooster\Modules\ApiGeneratorModule;
 
 use crocodicstudio\crudbooster\controllers\CBController;
+use crocodicstudio\crudbooster\helpers\DbInspector;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
@@ -163,7 +164,7 @@ class AdminApiGeneratorController extends CBController
 
     public function getStatusApikey()
     {
-        CRUDBooster::valid(['id', 'status'], 'view');
+        CRUDBooster::valid(['id' => 'required', 'status' => 'required'], 'view');
 
         $id = request('id');
         $status = (request('status') == 1) ? "active" : "non active";
@@ -200,7 +201,7 @@ class AdminApiGeneratorController extends CBController
                 continue;
             }
 
-            $type_field = CRUDBooster::getFieldType($table, $ro);
+            $type_field = DbInspector::getFieldTypes($table, $ro);
 
             $type_field = FieldDetector::isEmail($ro) ? "email" : $type_field;
             $type_field = FieldDetector::isImage($ro) ? "image" : $type_field;
@@ -223,7 +224,7 @@ class AdminApiGeneratorController extends CBController
                     continue;
                 }
 
-                $type_field = CRUDBooster::getFieldType($table2, $col);
+                $type_field = DbInspector::getFieldTypes($table2, $col);
                 $col = str_replace("_$table2", "", $col);
                 $new_result[] = ['name' => $table2.'_'.$col, 'type' => $type_field];
             }

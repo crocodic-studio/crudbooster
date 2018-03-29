@@ -18,9 +18,9 @@
 
     <div class="login-box-body">
 
-        @if ( Session::get('message') != '' )
+        @if ( session('message') != '' )
             <div class='alert alert-warning'>
-                {{ Session::get('message') }}
+                {{ session('message') }}
             </div>
         @endif
 

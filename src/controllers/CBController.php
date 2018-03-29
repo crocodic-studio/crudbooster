@@ -121,7 +121,6 @@ class CBController extends Controller
         return $this->cbForm(compact('page_title', 'command'));
     }
 
-
     /**
      * @param null $tableName
      * @return mixed
