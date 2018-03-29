@@ -195,13 +195,7 @@ class CRUDBooster
 
     public static function getForeignKey($parent_table, $child_table)
     {
-        $parent_table = CRUDBooster::parseSqlTable($parent_table)['table'];
-        $child_table = CRUDBooster::parseSqlTable($child_table)['table'];
-
-        if (\Schema::hasColumn($child_table, 'id_'.$parent_table)) {
-            return 'id_'.$parent_table;
-        }
-        return $parent_table.'_id';
+        return DbInspector::getForeignKey($parent_table, $child_table);
     }
 
     public static function getTableForeignKey($fieldName)
@@ -218,7 +212,7 @@ class CRUDBooster
 
     public static function urlFilterColumn($key, $type, $value = '', $singleSorting = true)
     {
-        \crocodicstudio\crudbooster\CBCoreModule\Index\ViewHelpers::urlFilterColumn($key, $type, $value, $singleSorting);
+        return \crocodicstudio\crudbooster\CBCoreModule\Index\ViewHelpers::urlFilterColumn($key, $type, $value, $singleSorting);
     }
     public static function mainpath($path = null)
     {
