@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\helpers\Parsers;
+namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
 class ScaffoldingParser
 {

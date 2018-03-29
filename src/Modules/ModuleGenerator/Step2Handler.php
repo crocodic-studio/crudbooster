@@ -2,7 +2,6 @@
 
 namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
-use crocodicstudio\crudbooster\helpers\Parsers\ScaffoldingParser;
 use CRUDBooster;
 
 class Step2Handler

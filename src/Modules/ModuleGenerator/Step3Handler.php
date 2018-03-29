@@ -2,9 +2,7 @@
 
 namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
-use crocodicstudio\crudbooster\helpers\Parsers\ScaffoldingParser;
 use CRUDBooster;
-use Illuminate\Support\Facades\Request;
 
 class Step3Handler
 {
@@ -134,7 +132,7 @@ class Step3Handler
     {
         $middle = preg_split("/\\r\\n|\\r|\\n/", $middle);
         foreach ($middle as &$c) {
-            $c = "            //".trim($c);
+            $c = str_repeat(' ', 12)."//".trim($c);
         }
         $middle = implode("\n", $middle);
 
