@@ -33,27 +33,8 @@ class ScaffoldingParser
         }
 
         foreach ($colsItem as &$col) {
-            $split = explode('|SPLIT|', $col);
-
-            $colInnerItem = [];
-            foreach ($split as $s) {
-                if (strpos($s, 'options') !== false) {
-                    $key = 'options';
-                    $val = trim(str_replace("'options'=>", "", $s));
-                } elseif (strpos($s, 'callback')) {
-                    $key = 'callback';
-                    $s = str_replace("return","return ",$s);
-                    $val = trim(str_replace(["'callback'=>function(\$row) {", "'callback'=>function(\$row){"], "", $s));
-                    $val = substr($val, 0, -1); //to remove last }
-                } else {
-                    $sSplit = explode('=>', $s);
-                    $key = trim($sSplit[0], "'");
-                    $val = trim($sSplit[1], "'");
-                }
-                $colInnerItem[$key] = $val;
-            }
+            $colInnerItem = self::prepareFields(explode('|SPLIT|', $col));
             $col = $colInnerItem;
-
         }
 
         self::formOptions($type, $colsItem);
@@ -88,8 +69,6 @@ class ScaffoldingParser
     /**
      * @param $type
      * @param $colsItem
-     * @param $form
-     * @param $options
      * @return mixed
      */
     private static function formOptions($type, $colsItem)
@@ -105,5 +84,40 @@ class ScaffoldingParser
                 $form['options'] = [];
             }
         }
+    }
+
+    /**
+     * @param $s
+     * @return array
+     */
+    private static function parseCallback($s)
+    {
+        $s = str_replace("return", "return ", $s);
+        $val = trim(str_replace(["'callback'=>function(\$row) {", "'callback'=>function(\$row){"], "", $s));
+        $val = substr($val, 0, -1);
+
+        return $val; //to remove last }
+    }
+
+    /**
+     * @param $split
+     * @return array
+     */
+    private static function prepareFields($split)
+    {
+        $colInnerItem = [];
+        foreach ($split as $s) {
+            if (strpos($s, 'options') !== false) {
+                $colInnerItem['options'] = trim(str_replace("'options'=>", "", $s));
+            } elseif (strpos($s, 'callback') !== false) {
+                $colInnerItem['callback'] = self::parseCallback($s);
+            } else {
+                $s = trim($s, "'");
+                $sSplit = explode('=>', $s);
+                $colInnerItem[$sSplit[0]] = $sSplit[1];
+            }
+        }
+
+        return $colInnerItem;
     }
 }
