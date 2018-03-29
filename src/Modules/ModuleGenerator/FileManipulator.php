@@ -4,7 +4,7 @@ namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
 class FileManipulator
 {
-    static function readMethodContent($code, $functionToFind)
+/*    static function readMethodContent($code, $functionToFind)
     {
         $codeArray = explode("\n", $code);
         $tagBuka = 0;
@@ -27,10 +27,9 @@ class FileManipulator
         $content = self::getContents($codeArray, $tagBuka, $finalTagPenutup);
 
         return implode("\n", $content);
-    }
+    }*/
 
-
-    static function writeMethodContent($code, $functionToFind, $stringToInsert)
+/*    static function writeMethodContent($code, $functionToFind, $stringToInsert)
     {
         $codeArray = explode("\n", $code);
         $tagBuka = 0;
@@ -71,7 +70,7 @@ class FileManipulator
         }
 
         return implode("\n", $codeArray);
-    }
+    }*/
 
     /**
      * @param $codeArray
@@ -79,7 +78,7 @@ class FileManipulator
      * @param $finalTagPenutup
      * @return array
      */
-    private static function getContents($codeArray, $tagBuka, $finalTagPenutup)
+  /*  private static function getContents($codeArray, $tagBuka, $finalTagPenutup)
     {
         $content = [];
         foreach ($codeArray as $i => $line) {
@@ -89,7 +88,7 @@ class FileManipulator
         }
 
         return $content;
-    }
+    }*/
 
     /**
      * @param $tagBuka
@@ -98,7 +97,7 @@ class FileManipulator
      * @param $methodNextIndex
      * @return mixed
      */
-    private static function finalTagPenutup($tagBuka, $tagPentutups, $methodIndex, $methodNextIndex)
+/*    private static function finalTagPenutup($tagBuka, $tagPentutups, $methodIndex, $methodNextIndex)
     {
         $finalTagPenutup = 0;
 
@@ -113,9 +112,8 @@ class FileManipulator
             }
         }
 
-
         return $finalTagPenutup;
-    }
+    }*/
 
     /**
      * @param $line
@@ -123,7 +121,7 @@ class FileManipulator
      * @param $tagPentutups
      * @return mixed
      */
-    private static function tagPentutups($line, $e, $tagPentutups)
+/*    private static function tagPentutups($line, $e, $tagPentutups)
     {
         if (stripos($line, '}') !== false) {
             $tagPentutups[$e] = $e;
@@ -134,7 +132,7 @@ class FileManipulator
         }
 
         return $tagPentutups;
-    }
+    }*/
 
     /**
      * @param $line
@@ -142,7 +140,7 @@ class FileManipulator
      * @param $methodIndex
      * @return array
      */
-    private static function methodIndex($line, $i, $methodIndex)
+/*    private static function methodIndex($line, $i, $methodIndex)
     {
         foreach (['public', 'private'] as $m) {
             if (strpos($line, $m) !== false) {
@@ -156,14 +154,14 @@ class FileManipulator
         }
 
         return $methodIndex;
-    }
+    }*/
 
     /**
      * @param $methodIndex
      * @param $tagBuka
      * @return array
      */
-    private static function tagBuka($methodIndex, $tagBuka)
+/*    private static function tagBuka($methodIndex, $tagBuka)
     {
         $methodIndex = array_values(array_unique($methodIndex));
 
@@ -172,23 +170,7 @@ class FileManipulator
         $methodNextIndex = ($totalMethodIndex == $keyTagBukaInMethodIndex) ? $keyTagBukaInMethodIndex : $keyTagBukaInMethodIndex + 1;
 
         return [$methodIndex, $methodNextIndex];
-    }
-
-    /**
-     * @param $codeArray array
-     * @param $tagBuka int
-     * @param $finalTagPenutup int
-     * @return array
-     */
-    private static function removeMethodContent($codeArray, $tagBuka, $finalTagPenutup)
-    {
-        foreach ($codeArray as $i => $c) {
-            if ($i > $tagBuka && $i < $finalTagPenutup) {
-                unset($codeArray[$i]);
-            }
-        }
-        return $codeArray;
-    }
+    }*/
 
     static function putCtrlContent($ctrl, $fileContent)
     {
@@ -219,10 +201,10 @@ class FileManipulator
         list($top, $_middle, $bottom) = self::extractBetween($phpCode, $mark);
 
         $_code = $top."\n\n";
-        $_code .= "            # START $mark DO NOT REMOVE THIS LINE\n";
+        $_code .= str_repeat(' ', 12)."# START $mark DO NOT REMOVE THIS LINE\n";
         $_code .= $newCode."\n";
-        $_code .= "            # END $mark DO NOT REMOVE THIS LINE\n\n";
-        $_code .= '            '.$bottom;
+        $_code .= str_repeat(' ', 12)."# END $mark DO NOT REMOVE THIS LINE\n\n";
+        $_code .= str_repeat(' ', 12).$bottom;
 
         return $_code;
     }

@@ -6,9 +6,6 @@ use CRUDBooster;
 
 class Step2Handler
 {
-    private $hooks = ['hook_query_index', 'hook_row_index', 'hook_before_add', 'hook_after_add',
-        'hook_before_edit', 'hook_after_edit', 'hook_before_delete', 'hook_after_delete',];
-
     public function showForm($id)
     {
         $module = ModulesRepo::find($id);
@@ -24,9 +21,9 @@ class Step2Handler
         $data['cols'] = ScaffoldingParser::parse($controllerCode, 'col');
 
 
-        foreach($this->hooks as $hook){
+        /*foreach($this->hooks as $hook){
             $data[$hook] = FileManipulator::readMethodContent($controllerCode, $hook);
-        }
+        }*/
 
         return view('CbModulesGen::step2', $data);
     }
@@ -40,9 +37,9 @@ class Step2Handler
         $code = FileManipulator::readCtrlContent($controller);
         $fileResult = FileManipulator::replaceBetweenMark($code, 'COLUMNS', $newCode);
 
-        foreach($this->hooks as $hook){
+        /* foreach($this->hooks as $hook){
             $fileResult = FileManipulator::writeMethodContent($fileResult, $hook, request($hook));
-        }
+        }*/
 
         FileManipulator::putCtrlContent($controller, $fileResult);
 
