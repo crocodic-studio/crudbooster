@@ -265,7 +265,7 @@ class Index
                 if ($col['visible'] === false) {
                     continue;
                 }
-                $htmlContent[] = app(ValueCalculator::class)->calculate($col, $row, $table);
+                $htmlContent[] = (new ValueCalculator)->calculate($col, $row, $table, @$row->{$this->cb->title_field});
             }
 
             if ($CbCtrl->button_table_action) {

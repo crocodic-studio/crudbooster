@@ -38,10 +38,10 @@ class CrudboosterInstallationCommand extends Command
 
         $printer->printHeader();
 
-        $passes = (new RequirementChecker())->check();
+        $passes = (new RequirementChecker($this))->check();
         if(!$passes) {
             $this->info('Sorry unfortunately your system is not meet with our requirements !');
-            $this->printFooter(false);
+            $printer->printFooter(false);
             $this->info('--');
             exit;
         }

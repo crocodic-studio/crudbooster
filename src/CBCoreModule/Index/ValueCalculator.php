@@ -8,12 +8,12 @@ class ValueCalculator
      * @param $col
      * @param $row
      * @param $table
+     * @param $title
      * @return string
      */
-    function calculate($col, $row, $table)
+    function calculate($col, $row, $table, $title)
     {
         $value = @$row->{$col['field']};
-        $title = @$row->{$this->cb->title_field};
         $label = $col['label'];
 
         if (isset($col['image'])) {

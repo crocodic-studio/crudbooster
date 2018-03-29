@@ -127,9 +127,16 @@ if (! function_exists('min_var_export')) {
 }
 
 if (! function_exists('cbTrans')) {
-    function cbTrans($key, $params = [])
+    /**
+     * Translate the given message.
+     *
+     * @param  string $key
+     * @param array $replace
+     * @return string
+     */
+    function cbTrans($key, $replace = [])
     {
-        return trans('crudbooster.'.$key, $params);
+        return trans('crudbooster.'.$key, $replace);
     }
 }
 
