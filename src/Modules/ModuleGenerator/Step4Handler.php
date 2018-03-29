@@ -2,10 +2,6 @@
 
 namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
-use crocodicstudio\crudbooster\helpers\Parsers\ControllerConfigParser;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Request;
-
 class Step4Handler
 {
     public function showForm($id)
@@ -24,7 +20,7 @@ class Step4Handler
 
     public function handleFormSubmit()
     {
-        $id = Request::input('id');
+        $id = request('id');
         $module = ModulesRepo::find($id);
 
         $data = request()->all();
