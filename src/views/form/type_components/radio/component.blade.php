@@ -54,8 +54,8 @@
                 for ($i = 1; $i <= count($tables) - 1; $i++) {
                     $tab = $tables[$i];
                     $parent_table = $tables[$i - 1];
-                    $fk_field = CRUDBooster::getForeignKey($parent_table, $tab);
-                    $pk = CRUDBooster::findPrimaryKey($tab) ?: 'id';
+                    $fk_field = CB::getForeignKey($parent_table, $tab);
+                    $pk = CB::pk($tab) ?: 'id';
                     $selects_data->leftjoin($tab, $tab.'.'.$pk, '=', $fk_field);
                 }
             }
