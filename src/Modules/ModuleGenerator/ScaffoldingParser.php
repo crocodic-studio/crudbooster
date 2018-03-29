@@ -50,20 +50,29 @@ class ScaffoldingParser
     private static function extractLines($code, $type)
     {
         if ($type == 'form') {
-            $cols = extract_unit($code, "# START FORM DO NOT REMOVE THIS LINE", "# END FORM DO NOT REMOVE THIS LINE");
-            $cols = str_replace('"', "'", $cols);
-            $cols = trim(str_replace('$this->form = [];', '', $cols));
-            $colsItem = explode('$this->form[] = ', $cols);
+            $d = 'FORM';
         } elseif ($type == 'col') {
-            $cols = extract_unit($code, "# START COLUMNS DO NOT REMOVE THIS LINE", "# END COLUMNS DO NOT REMOVE THIS LINE");
-            $cols = str_replace('"', "'", $cols);
-            $cols = trim(str_replace('$this->col = [];', '', $cols));
-            $colsItem = explode('$this->col[] = ', $cols);
+            $d = 'COLUMNS';
         }
 
-        $colsItem = array_filter($colsItem);
+        $cols = self::extract_unit($code, "# START $d DO NOT REMOVE THIS LINE", "# END $d DO NOT REMOVE THIS LINE");
+        $cols = str_replace('"', "'", $cols);
+        $cols = trim(str_replace('$this->'.$type.' = [];', '', $cols));
+        $colsItem = explode('$this->'.$type.'[] = ', $cols);
 
-        return $colsItem;
+        return array_filter($colsItem);
+    }
+
+    static function extract_unit($string, $start, $end)
+    {
+        $pos = stripos($string, $start);
+        $str = substr($string, $pos);
+        $str_two = substr($str, strlen($start));
+        $second_pos = stripos($str_two, $end);
+        $str_three = substr($str_two, 0, $second_pos);
+        $unit = trim($str_three); // remove whitespaces
+
+        return $unit;
     }
 
     /**
