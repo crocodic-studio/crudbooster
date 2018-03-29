@@ -12,6 +12,8 @@ class RelationHandler
 {
     private $Cb;
 
+    private $table;
+
     public function save($table, $id, $data)
     {
         $this->table = $table;
@@ -26,7 +28,7 @@ class RelationHandler
 
             //Insert Data Checkbox if Type Datatable
             if ($this->isRelationship($row)) {
-                $this->updateRelations($row, $id, $inputData);
+                $this->updateRelations($id, $row, $inputData);
             }
 
             if ($row['type'] == 'child') {
@@ -50,7 +52,7 @@ class RelationHandler
      * @param $inputData
      * @return array
      */
-    private function updateRelations($row, $id, $inputData)
+    private function updateRelations($id, $row, $inputData)
     {
         list($pivotTable, $foreignKey2, $foreignKey) = $this->deleteFromPivot($row, $id);
 

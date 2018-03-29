@@ -3,6 +3,7 @@
 namespace crocodicstudio\crudbooster\controllers;
 
 use CB;
+use crocodicstudio\crudbooster\helpers\DbInspector;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Request;
@@ -101,7 +102,7 @@ class FormValidator
 
             //Check whether deleted_at exists or not
             if (Schema::hasColumn($uniqueTable, 'deleted_at')) {
-                $uniqueRebuild[] = CB::findPrimaryKey($uniqueTable);
+                $uniqueRebuild[] = DbInspector::findPK($uniqueTable);
                 $uniqueRebuild[] = 'deleted_at';
                 $uniqueRebuild[] = 'NULL';
             }

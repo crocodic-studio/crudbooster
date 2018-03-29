@@ -41,7 +41,7 @@ class CrudboosterInstallationCommand extends Command
         $passes = (new RequirementChecker())->check();
         if(!$passes) {
             $this->info('Sorry unfortunately your system is not meet with our requirements !');
-            $this->printFooter(false);
+            $printer->printFooter(false);
             $this->info('--');
             exit;
         }

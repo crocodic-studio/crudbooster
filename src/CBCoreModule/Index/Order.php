@@ -4,6 +4,8 @@ namespace crocodicstudio\crudbooster\CBCoreModule\Index;
 
 class Order
 {
+    private $ctrl;
+
     /**
      * Order constructor.
      *
