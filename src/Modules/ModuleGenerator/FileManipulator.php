@@ -100,6 +100,8 @@ class FileManipulator
      */
     private static function finalTagPenutup($tagBuka, $tagPentutups, $methodIndex, $methodNextIndex)
     {
+        $finalTagPenutup = 0;
+
         if ($tagBuka == end($methodIndex)) {
             return $tagPentutups[count($tagPentutups) - 2];
         }
@@ -126,7 +128,7 @@ class FileManipulator
         if (stripos($line, '}') !== false) {
             $tagPentutups[$e] = $e;
         }
-
+        $tagPembukas = [];
         if (stripos($line, '{') !== false) {
             $tagPembukas[$e] = $e;
         }
