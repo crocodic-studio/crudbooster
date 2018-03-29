@@ -82,11 +82,6 @@ class CRUDBooster
         return GetCurrentX::getCurrentModule();
     }
 
-    public static function getCurrentDashboardId()
-    {
-        return GetCurrentX::getCurrentDashboardId();
-    }
-
     public static function getCurrentMenuId()
     {
         return GetCurrentX::getCurrentMenuId();
