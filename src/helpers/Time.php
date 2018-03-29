@@ -20,8 +20,7 @@ class Time
         $ago = new \DateTime($datetime_to);
         $diff = $now->diff($ago);
 
-        $diff->w = floor($diff->d / 7);
-        $diff->d -= $diff->w * 7;
+        $diff->d -= floor($diff->d / 7) * 7;
 
         foreach ($this->string as $k => &$v) {
             if ($diff->$k) {
