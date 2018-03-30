@@ -13,9 +13,9 @@ trait IndexAjax
         $table = request('table');
         $label = request('label');
         $datatableWhere = urldecode(request('datatable_where'));
-        $foreign_key_name = request('fk_name');
-        $foreign_key_value = request('fk_value');
-        if (! $table || ! $label || ! $foreign_key_name || ! $foreign_key_value) {
+        $foreignKeyName = request('fk_name');
+        $foreignKeyValue = request('fk_value');
+        if (! $table || ! $label || ! $foreignKeyName || ! $foreignKeyValue) {
             return response()->json([]);
         }
         $query = DB::table($table);
@@ -23,7 +23,7 @@ trait IndexAjax
             $query->whereRaw($datatableWhere);
         }
         $query->select('id as select_value', $label.' as select_label');
-        $query->where($foreign_key_name, $foreign_key_value);
+        $query->where($foreignKeyName, $foreignKeyValue);
         $query->orderby($label, 'asc');
 
         return response()->json($query->get());
