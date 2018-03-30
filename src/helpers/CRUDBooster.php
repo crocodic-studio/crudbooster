@@ -244,11 +244,6 @@ class CRUDBooster
     |
     */
 
-    public static function denyAccess()
-    {
-        static::redirect(static::adminPath(), cbTrans('denied_access'));
-    }
-
     public static function redirect($to, $message, $type = 'warning')
     {
         if (Request::ajax()) {
