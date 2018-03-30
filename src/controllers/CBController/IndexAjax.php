@@ -36,30 +36,16 @@ trait IndexAjax
         $columns = explode(',', $data['columns']);
 
         $result = DB::table($data['table']);
-        if (request('q')) {
-            $result->where(function ($where) use ($columns) {
-                foreach ($columns as $c => $col) {
-                    if ($c == 0) {
-                        $where->where($col, 'like', '%'.request('q').'%');
-                    } else {
-                        $where->orWhere($col, 'like', '%'.request('q').'%');
-                    }
-                }
-            });
-        }
+        $this->applyQ($result, $columns);
 
         if ($data['sql_where']) {
             $result->whereraw($data['sql_where']);
         }
 
-        if ($data['sql_orderby']) {
-            $result->orderByRaw($data['sql_orderby']);
-        } else {
-            $result->orderBy($data['column_value'], 'desc');
-        }
+        $this->applyOrderBy($data, $result);
         $limit = ($data['limit']) ?: 6;
 
-        return view('crudbooster::default.type_components.datamodal.browser', ['result' => $result->paginate($limit), 'data' => $data]);
+        return view('crudbooster::form.type_components.datamodal.browser', ['result' => $result->paginate($limit), 'data' => $data]);
     }
 
     public function getDataQuery()
@@ -98,5 +84,36 @@ trait IndexAjax
         return response()->json(['items' => $items]);
     }
 
+    /**
+     * @param $result
+     * @param $columns
+     */
+    private function applyQ($result, $columns)
+    {
+        if (request('q')) {
+            return;
+        }
+        $result->where(function ($where) use ($columns) {
+            foreach ($columns as $c => $col) {
+                if ($c == 0) {
+                    $where->where($col, 'like', '%'.request('q').'%');
+                } else {
+                    $where->orWhere($col, 'like', '%'.request('q').'%');
+                }
+            }
+        });
+    }
 
+    /**
+     * @param $data
+     * @param $result
+     */
+    private function applyOrderBy($data, $result)
+    {
+        if ($data['sql_orderby']) {
+            $result->orderByRaw($data['sql_orderby']);
+        } else {
+            $result->orderBy($data['column_value'], 'desc');
+        }
+    }
 }

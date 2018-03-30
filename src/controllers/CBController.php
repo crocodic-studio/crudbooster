@@ -14,6 +14,7 @@ use crocodicstudio\crudbooster\controllers\CBController\ExportData;
 use crocodicstudio\crudbooster\controllers\CBController\FormSubmitHandlers;
 use crocodicstudio\crudbooster\controllers\CBController\ImportData;
 use crocodicstudio\crudbooster\controllers\CBController\IndexAjax;
+use crocodicstudio\crudbooster\helpers\DbInspector;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
 use CRUDBooster;
@@ -95,10 +96,9 @@ class CBController extends Controller
 
     public function getIndex()
     {
-        $index = app(Index::class);
         $this->cbIndexLoader();
         $this->genericLoader();
-        $data = $index->index($this);
+        $data = app(Index::class)->index($this);
 
         return $this->cbView('crudbooster::index.index', $data);
     }
@@ -181,7 +181,7 @@ class CBController extends Controller
     {
         $this->genericLoader();
         $this->cbFormLoader();
-        return $this->cbView('crudbooster::default.form', $data);
+        return $this->cbView('crudbooster::form.form', $data);
     }
 
     private function genericLoader()
