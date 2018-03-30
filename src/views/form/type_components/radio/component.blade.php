@@ -55,7 +55,7 @@
                     $tab = $tables[$i];
                     $parent_table = $tables[$i - 1];
                     $fk_field = DbInspector::getForeignKey($parent_table, $tab);
-                    $pk = CB::pk($tab) ?: 'id';
+                    $pk = DbInspector::findPk($tab) ?: 'id';
                     $selects_data->leftjoin($tab, $tab.'.'.$pk, '=', $fk_field);
                 }
             }

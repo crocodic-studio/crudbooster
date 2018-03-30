@@ -30,7 +30,7 @@ class Index
         }
 
         $data['table'] = $CbCtrl->table;
-        $data['table_pk'] = CB::pk($CbCtrl->table);
+        $data['table_pk'] = DbInspector::findPk($CbCtrl->table);
         $data['page_title'] = CRUDBooster::getCurrentModule()->name;
         $data['page_description'] = cbTrans('default_module_description');
         $data['date_candidate'] = $CbCtrl->date_candidate;
@@ -101,7 +101,7 @@ class Index
     private function _handleParentTable()
     {
         $data = [];
-        $data['parent_table'] = DB::table(request('parent_table'))->where(CB::pk(request('parent_table')), request('parent_id'))->first();
+        $data['parent_table'] = DB::table(request('parent_table'))->where(DbInspector::findPk(request('parent_table')), request('parent_id'))->first();
         if (request('foreign_key')) {
             $data['parent_field'] = request('foreign_key');
         } else {
