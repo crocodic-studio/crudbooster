@@ -162,11 +162,6 @@ class CRUDBooster
         return $first->first();
     }
 
-    public static function pk($table)
-    {
-        return DbInspector::findPK($table);
-    }
-
     public static function valid($rules = [], $type = 'json')
     {
         $validator = Validator::make(request()->all(), $rules);
