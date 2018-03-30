@@ -79,16 +79,6 @@ class CRUDBooster
         return session('admin_lock');
     }
 
-    public static function getCurrentModule()
-    {
-        return GetCurrentX::getCurrentModule();
-    }
-
-    public static function getCurrentMenuId()
-    {
-        return GetCurrentX::getCurrentMenuId();
-    }
-
     public static function adminPath($path = null)
     {
         return url(cbAdminPath().'/'.$path);
@@ -97,16 +87,6 @@ class CRUDBooster
     public static function deleteConfirm($redirectTo)
     {
         ViewHelpers::delConfirm($redirectTo);
-    }
-
-    public static function getCurrentId()
-    {
-        return GetCurrentX::getCurrentId();
-    }
-
-    public static function getCurrentMethod()
-    {
-        return GetCurrentX::getCurrentMethod();
     }
 
     public static function getValueFilter($field)
@@ -198,7 +178,7 @@ class CRUDBooster
 
     public static function insertTryLog($action, $name = '')
     {
-        self::insertLog(trans("logging.log_try_".$action, ['name' => $name, 'module' => self::getCurrentModule()]));
+        self::insertLog(trans("logging.log_try_".$action, ['name' => $name, 'module' => GetCurrentX::getCurrentModule()]));
     }
 
     public static function myId()
