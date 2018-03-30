@@ -5,7 +5,9 @@ namespace crocodicstudio\crudbooster\helpers;
 use crocodicstudio\crudbooster\CBCoreModule\CbUsersRepo;
 use crocodicstudio\crudbooster\CBCoreModule\RouteController;
 use crocodicstudio\crudbooster\CBCoreModule\ViewHelpers;
+use crocodicstudio\crudbooster\Modules\AuthModule\Helpers;
 use crocodicstudio\crudbooster\Modules\LogsModule\LogsRepository;
+use crocodicstudio\crudbooster\Modules\PrivilegeModule\GetCurrentX;
 use crocodicstudio\crudbooster\Modules\PrivilegeModule\PrivilegeHelpers;
 use Session;
 use Request;
@@ -18,7 +20,7 @@ use Validator;
 
 class CRUDBooster
 {
-    use PrivilegeHelpers;
+    use PrivilegeHelpers, GetCurrentX, Helpers;
 
     public static function get($table, $string_conditions = null, $orderby = null, $limit = null, $skip = null)
     {
@@ -57,26 +59,6 @@ class CRUDBooster
         }
 
         return false;
-    }
-
-    public static function me()
-    {
-        return CbUsersRepo::find(session('admin_id'));
-    }
-
-    public static function myName()
-    {
-        return session('admin_name');
-    }
-
-    public static function myPhoto()
-    {
-        return session('admin_photo');
-    }
-
-    public static function isLocked()
-    {
-        return session('admin_lock');
     }
 
     public static function adminPath($path = null)
@@ -179,11 +161,6 @@ class CRUDBooster
     public static function insertTryLog($action, $name = '')
     {
         self::insertLog(trans("logging.log_try_".$action, ['name' => $name, 'module' => GetCurrentX::getCurrentModule()]));
-    }
-
-    public static function myId()
-    {
-        return session('admin_id');
     }
 
     public static function referer()
