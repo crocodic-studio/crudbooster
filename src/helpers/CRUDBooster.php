@@ -309,11 +309,6 @@ class CRUDBooster
         sendAndTerminate(redirect($to)->with(['message' => $message, 'message_type' => $type]));
     }
 
-    public static function icon($icon)
-    {
-        return '<i class=\'fa fa-'.$icon.'\'></i>';
-    }
-
     public static function componentsPath($type = '')
     {
         $componentPath = implode(DIRECTORY_SEPARATOR, ['vendor', 'crocodicstudio', 'crudbooster', 'src', 'views', 'default', 'type_components', $type]);

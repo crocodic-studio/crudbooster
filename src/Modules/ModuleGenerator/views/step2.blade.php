@@ -176,7 +176,7 @@
                     </button>
 
                     <button class="btn btn-success btn-sm" type="submit">
-                        {!! CB::icon('save') !!}Save Module
+                        {!! cbIcon('save') !!}Save Module
                     </button>
 
                 </div>

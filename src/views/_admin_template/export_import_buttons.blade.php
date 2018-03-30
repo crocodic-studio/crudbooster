@@ -2,7 +2,7 @@
     <a href="javascript:void(0)" id='btn_export_data' data-url-parameter='{{$query}}'
        title='Export Data' class="btn btn-sm btn-primary btn-export-data">
 
-        {!!  CB::icon('upload') !!}
+        {!!  cbIcon('upload') !!}
         {{cbTrans("button_export")}}
     </a>
 @endif
@@ -12,7 +12,7 @@
        data-url-parameter='{{$query}}' title='Import Data'
        class="btn btn-sm btn-primary btn-import-data">
 
-        {!!  CB::icon('download') !!}
+        {!!  cbIcon('download') !!}
         {{cbTrans("button_import")}}
     </a>
 @endif

@@ -1,7 +1,7 @@
 <div class="panel-heading">
     <strong>Menu Order (Active)</strong>
     <span id='menu-saved-info' style="display:none" class='pull-right text-success'>
-                        {!! CB::icon('check') !!} Menu Saved !</span>
+                        {!! cbIcon('check') !!} Menu Saved !</span>
 </div>
 <div class="panel-body clearfix">
     <ul class='draggable-menu draggable-menu-active'>

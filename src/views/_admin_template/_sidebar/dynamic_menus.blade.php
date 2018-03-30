@@ -5,7 +5,7 @@
            class='{{($menu->color)?"text-".$menu->color:""}}'>
             <i class='{{$menu->icon}} {{($menu->color)?"text-".$menu->color:""}}'></i>
             <span>{{$menu->name}}</span>
-            @if(!empty($menu->children)){!! CB::icon('angle-right pull-right') !!}@endif
+            @if(!empty($menu->children)){!! cbIcon('angle-right pull-right') !!}@endif
         </a>
         @if(!empty($menu->children))
             <ul class="treeview-menu">
