@@ -19,15 +19,16 @@ class FormConfigGenerator
         $formArrayString = [];
         foreach ($coloms as $i => $colName) {
             //$attribute = [];
-            $input = [];
-            $input['label'] = self::getLabel($colName);
-            $input['name'] = $colName;
-            $input['type'] = '';
-            $input['options'] = '';
-            $input['required'] = true;
-            $input['validation'] = '';
-            $input['help'] = '';
-            $input['placeholder'] = '';
+            $input = [
+                'label' => self::getLabel($colName),
+                'name' => $colName,
+                'type' => '',
+                'options' => '',
+                'required' => true,
+                'validation' => '',
+                'help' => '',
+                'placeholder' => '',
+            ];
 
             if (FieldDetector::isExceptional($colName)) {
                 continue;
@@ -39,9 +40,7 @@ class FormConfigGenerator
 
             if (FieldDetector::isForeignKey($colName)) {
                 list($input['type'], $input['options']) = self::handleForeignKey($colName);
-            }
-
-            if (substr($colName, 0, 3) == 'is_') {
+            }elseif (substr($colName, 0, 3) == 'is_') {
                 $input['type'] = 'radio_dataenum';
                 $label = ucwords(substr($colName, 3));
                 $input['options'] = [
@@ -52,44 +51,32 @@ class FormConfigGenerator
 
             if (FieldDetector::isPassword($colName)) {
                 $input['type'] = 'password';
-                $input['validation'] = 'min:3|max:32|required';
+                $input['validation'] = 'min:5|max:32|required';
                 $input['help'] = cbTrans("text_default_help_password");
-            }
-
-            if (FieldDetector::isImage($colName)) {
+            }elseif (FieldDetector::isImage($colName)) {
                 $input['type'] = 'upload';
                 $input['validation'] = 'required|image';
                 $input['help'] = cbTrans('text_default_help_upload');
-            }
-
-            if (FieldDetector::isGeographical($colName)) {
+            }elseif (FieldDetector::isGeographical($colName)) {
                 $input['type'] = 'hidden';
                 $input['validation'] = 'required|numeric';
-            }
-
-            if (FieldDetector::isPhone($colName)) {
+            }elseif (FieldDetector::isPhone($colName)) {
                 $input['type'] = 'number';
                 $input['validation'] = 'required|numeric';
                 $input['placeholder'] = cbTrans('text_default_help_number');
-            }
-
-            if (FieldDetector::isEmail($colName)) {
+            }elseif (FieldDetector::isEmail($colName)) {
                 $input['type'] = 'email';
                 $input['validation'] = 'require|email|unique:'.$table;
                 $input['placeholder'] = cbTrans('text_default_help_email');
-            }
-
-            if ($input['type'] == 'text' && FieldDetector::isNameField($colName)) {
+            }elseif ($input['type'] == 'text' && FieldDetector::isNameField($colName)) {
                 $input['validation'] = 'required|string|min:3|max:70';
                 $input['placeholder'] = cbTrans('text_default_help_text');
-            }
-
-            if ($input['type'] == 'text' && FieldDetector::isUrlField($colName)) {
+            }elseif ($input['type'] == 'text' && FieldDetector::isUrlField($colName)) {
                 $input['validation'] = 'required|url';
                 $input['placeholder'] = cbTrans('text_default_help_url');
             }
 
-            $formArrayString[] = FileManipulator::stringify($input, "            ");
+            $formArrayString[] = FileManipulator::stringify($input, str_repeat(" ", 12));
         }
 
         return $formArrayString;
@@ -114,6 +101,7 @@ class FormConfigGenerator
      */
     private static function parseFieldType($typeData)
     {
+        // if matched a key, overrides $typeData to corresponding values
         $typeData = array_get([
             'longtext' => 'text',
             'integer' => 'int',
