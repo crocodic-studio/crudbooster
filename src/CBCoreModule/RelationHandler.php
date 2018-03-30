@@ -73,8 +73,8 @@ class RelationHandler
         $pivotTable = $row['relationship_table'];
         $dataTable = explode(",", $row['datatable'])[0];
 
-        $foreignKey2 = CRUDBooster::getForeignKey($dataTable, $pivotTable);
-        $foreignKey = CRUDBooster::getForeignKey($this->Cb->table, $pivotTable);
+        $foreignKey2 = DbInspector::getForeignKey($dataTable, $pivotTable);
+        $foreignKey = DbInspector::getForeignKey($this->Cb->table, $pivotTable);
         DB::table($pivotTable)->where($foreignKey, $id)->delete();
 
         return [$pivotTable, $foreignKey2, $foreignKey];

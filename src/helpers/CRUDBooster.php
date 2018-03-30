@@ -188,11 +188,6 @@ class CRUDBooster
         sendAndTerminate($res);
     }
 
-    public static function getForeignKey($parent_table, $child_table)
-    {
-        return DbInspector::getForeignKey($parent_table, $child_table);
-    }
-
     public static function getTableForeignKey($fieldName)
     {
         if (substr($fieldName, 0, 3) == 'id_' || substr($fieldName, -3) == '_id') {

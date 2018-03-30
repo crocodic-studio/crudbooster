@@ -100,6 +100,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $loader->alias('Image', 'Intervention\Image\Facades\Image');
         $loader->alias('CRUDBooster', 'crocodicstudio\crudbooster\helpers\CRUDBooster');
         $loader->alias('CB', 'crocodicstudio\crudbooster\helpers\CB');
+        $loader->alias('DbInspector', 'crocodicstudio\crudbooster\helpers\DbInspector');
         $this->app->register(CbAuthServiceProvider::class);
         $this->app->register(CbApiGeneratorServiceProvider::class);
         $this->app->register(CbModulesGeneratorServiceProvider::class);

@@ -39,7 +39,7 @@
             $join_table = $join_arr[0];
             $join_title = $join_arr[1];
             $join_table_pk = CB::pk($join_table);
-            $join_fk = CB::getForeignKey($table, $join_table);
+            $join_fk = DbInspector::getForeignKey($table, $join_table);
             $join_query_{$join_table} = DB::table($join_table)->select($join_title)->where($join_table_pk, $row->{$join_fk})->first();
             $value = @$join_query_{$join_table}->{$join_title};
         }
