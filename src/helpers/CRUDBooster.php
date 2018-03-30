@@ -109,11 +109,6 @@ class CRUDBooster
         return GetCurrentX::getCurrentMethod();
     }
 
-    public static function isColumnNULL($table, $field)
-    {
-        return DbInspector::isColNull($table, $field);
-    }
-
     public static function getValueFilter($field)
     {
         self::getFilter($field, 'value');
