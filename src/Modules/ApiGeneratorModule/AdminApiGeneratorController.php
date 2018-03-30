@@ -3,6 +3,7 @@
 namespace crocodicstudio\crudbooster\Modules\ApiGeneratorModule;
 
 use crocodicstudio\crudbooster\controllers\CBController;
+use crocodicstudio\crudbooster\helpers\CbValidator;
 use crocodicstudio\crudbooster\helpers\DbInspector;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
 use Illuminate\Support\Facades\Request;
@@ -164,7 +165,7 @@ class AdminApiGeneratorController extends CBController
 
     public function getStatusApikey()
     {
-        CRUDBooster::valid(['id' => 'required', 'status' => 'required'], 'view');
+        CbValidator::valid(['id' => 'required', 'status' => 'required'], 'view');
 
         $id = request('id');
         $status = (request('status') == 1) ? "active" : "non active";
