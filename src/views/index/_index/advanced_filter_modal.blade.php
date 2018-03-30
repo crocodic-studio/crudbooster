@@ -20,7 +20,7 @@
                             </div>
 
                             <div class='col-sm-3'>
-                                @include('crudbooster::default._index.advanced_filter_modal.select', ['field_with' => $col['field_with'], 'type_data' => $col['type_data'] ])
+                                @include('crudbooster::index._index.advanced_filter_modal.select', ['field_with' => $col['field_with'], 'type_data' => $col['type_data'] ])
                             </div><!--END COL_SM_4-->
 
 
@@ -38,15 +38,15 @@
                                     $_arr = array_only($col, ['field_with', 'type_data', 'label'])
                                     ?>
 
-                                    @include('crudbooster::default._index.advanced_filter_modal.datePicker', ['dir' => 'from', 'value' => $value[0]] + $_arr)
+                                    @include('crudbooster::index._index.advanced_filter_modal.datePicker', ['dir' => 'from', 'value' => $value[0]] + $_arr)
 
-                                    @include('crudbooster::default._index.advanced_filter_modal.datePicker', ['dir' => 'to',   'value' => $value[1]] + $_arr)
+                                    @include('crudbooster::index._index.advanced_filter_modal.datePicker', ['dir' => 'to',   'value' => $value[1]] + $_arr)
 
                                 </div>
                             </div><!--END COL_SM_6-->
 
 
-                            @include('crudbooster::default._index.advanced_filter_modal.sort', ['field_with' => $col['field_with']])
+                            @include('crudbooster::index._index.advanced_filter_modal.sort', ['field_with' => $col['field_with']])
 
                         </div>
 
@@ -56,7 +56,7 @@
                 </div>
 
 
-                @include('crudbooster::default._index.advanced_filter_modal.footer')
+                @include('crudbooster::index._index.advanced_filter_modal.footer')
 
 
                 <input type="hidden" name="lasturl" value="{{Request::get('lasturl')?:Request::fullUrl()}}">

@@ -3,7 +3,7 @@
 @section('content')
 
 
-    @include("crudbooster::default._index.statistics" , ['index_statistic' => $index_statistic])
+    @include("crudbooster::index._index.statistics" , ['index_statistic' => $index_statistic])
 
 
     @if(!empty($pre_index_html))
@@ -21,13 +21,13 @@
     @endif
 
 
-    @include("crudbooster::default._index.parent_table", ['parent_table' => $parent_table])
+    @include("crudbooster::index._index.parent_table", ['parent_table' => $parent_table])
 
 
     <div class="box">
         <div class="box-header">
             @if($button_bulk_action && ( ($button_delete && CRUDBooster::canDelete()) || $button_selected) )
-                @include("crudbooster::default._index.header_btn")
+                @include("crudbooster::index._index.header_btn")
             @endif
             <div class="box-tools pull-{{ cbTrans('right') }}"
                  style="position: relative;margin-top: -5px;margin-right: -10px">
@@ -40,9 +40,9 @@
                     </a>
                 @endif
 
-            @include("crudbooster::default._index.search", ['parameters' => request()->all()])
+            @include("crudbooster::index._index.search", ['parameters' => request()->all()])
 
-            @include("crudbooster::default._index.pagination_select", ['limit' => $limit ])
+            @include("crudbooster::index._index.pagination_select", ['limit' => $limit ])
 
             </div>
 
@@ -50,7 +50,7 @@
 
         </div>
         <div class="box-body table-responsive no-padding">
-            @include("crudbooster::default._index.table")
+            @include("crudbooster::index._index.table")
         </div>
     </div>
 

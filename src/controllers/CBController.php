@@ -100,7 +100,7 @@ class CBController extends Controller
         $this->genericLoader();
         $data = $index->index($this);
 
-        return $this->cbView('crudbooster::default.index', $data);
+        return $this->cbView('crudbooster::index.index', $data);
     }
 
     public function getUpdateSingle()
