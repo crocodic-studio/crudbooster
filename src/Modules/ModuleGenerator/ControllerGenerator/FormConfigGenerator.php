@@ -144,8 +144,8 @@ class FormConfigGenerator
         }
         $options = [
             'table' => $jointable,
-            'field_label' => DbInspector::colName(CB::getTableColumns($jointable)),
-            'field_value' => CB::pk($jointable),
+            'field_label' => DbInspector::colName(DbInspector::getTableCols($jointable)),
+            'field_value' => DbInspector::findPk($jointable),
         ];
 
         return ['select2_datatable', $options];

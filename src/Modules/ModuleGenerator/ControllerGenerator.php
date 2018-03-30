@@ -14,8 +14,8 @@ class ControllerGenerator
 
         $controllerName = self::getControllerName($table, $name);
 
-        $coloms = CRUDBooster::getTableColumns($table);
-        $pk = CB::pk($table);
+        $coloms = DbInspector::getTableCols($table);
+        $pk = DbInspector::findPk($table);
         $formArrayString = FormConfigGenerator::generateFormConfig($table, $coloms);
         list($cols, $joinList) = self::addCol($table, $coloms, $pk);
         $php = '<?php '.view('CbModulesGen::controller_stub', compact('controllerName', 'table', 'pk', 'coloms', 'cols', 'formArrayString', 'joinList'))->render();

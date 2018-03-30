@@ -10,7 +10,7 @@ class Step3Handler
     {
         $row = ModulesRepo::find($id);;
 
-        $columns = CRUDBooster::getTableColumns($row->table_name);
+        $columns = DbInspector::getTableCols($row->table_name);
 
         $code = FileManipulator::readCtrlContent($row->controller);
 

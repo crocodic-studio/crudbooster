@@ -44,7 +44,7 @@ class Index
 
         $CbCtrl->hookQueryIndex($result);
 
-        $tableCols = CB::getTableColumns($CbCtrl->table);
+        $tableCols = DbInspector::getTableCols($CbCtrl->table);
         $this->_filterOutSoftDeleted($tableCols, $result);
         unset($tableCols);
 

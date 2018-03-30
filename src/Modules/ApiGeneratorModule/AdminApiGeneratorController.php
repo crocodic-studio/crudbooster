@@ -189,7 +189,7 @@ class AdminApiGeneratorController extends CBController
         $this->cbLoader();
         $result = [];
 
-        $cols = CRUDBooster::getTableColumns($table);
+        $cols = DbInspector::getTableCols($table);
 
         $except = ['created_at', 'deleted_at', 'updated_at'];
 
