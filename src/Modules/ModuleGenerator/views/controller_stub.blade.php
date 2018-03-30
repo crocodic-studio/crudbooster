@@ -12,7 +12,7 @@ class Admin{{$controllerName}} extends \crocodicstudio\crudbooster\controllers\C
 public function cbInit() {
     # START CONFIGURATION DO NOT REMOVE THIS LINE
     $this->table 			   = "{{$table}}";
-    $this->title_field         = "{{CRUDBooster::getNameTable($coloms)}}";
+    $this->title_field         = "{{DbInspector::colName($coloms)}}";
     $this->limit               = 20;
     $this->orderby             = "{{$pk}},desc";
     $this->show_numbering      = FALSE;

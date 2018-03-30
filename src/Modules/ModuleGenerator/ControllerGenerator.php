@@ -76,7 +76,7 @@ class ControllerGenerator
 
                 if (Schema::hasTable($jointable)) {
                     $joincols = CRUDBooster::getTableColumns($jointable);
-                    $joinname = CRUDBooster::getNameTable($joincols);
+                    $joinname = DbInspector::colName($joincols);
                     $cols[] = ['label' => $label, 'name' =>  $jointable.$joinname];
                     $jointablePK = CB::pk($jointable);
                     $joinList[] = [

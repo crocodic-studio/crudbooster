@@ -290,11 +290,6 @@ class CRUDBooster
         return DbInspector::getTableCols($table);
     }
 
-    public static function getNameTable($columns)
-    {
-        return DbInspector::colName($columns);
-    }
-
     public static function routeController($prefix, $controller, $namespace = null)
     {
         RouteController::routeController($prefix, $controller, $namespace);
