@@ -7,7 +7,7 @@
         <div class="box-header">
             <h1 class="box-title">Configuration</h1>
         </div>
-        <form method='post' action='{{Route('AdminModulesControllerPostStepFinish')}}'>
+        <form method='post' action='{{route('AdminModulesControllerPostStepFinish')}}'>
             {{csrf_field()}}
             <input type="hidden" name="id" value='{{$id}}'>
             <div class="box-body">

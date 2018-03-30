@@ -296,7 +296,7 @@
         </script>
 
         <!-- MODAL FOR SORTING DATA-->
-        @include('crudbooster::default._index.advanced_filter_modal', ['columns' => $columns])
+        @include('crudbooster::index._index.advanced_filter_modal', ['columns' => $columns])
 
 
         <script>
@@ -327,6 +327,6 @@
         </script>
 
         <!-- MODAL FOR EXPORT DATA-->
-        @include('crudbooster::default._index.export_data_modal')
+        @include('crudbooster::index._index.export_data_modal')
     @endpush
 @endif

@@ -55,7 +55,7 @@
                     <form class='form-horizontal' method='post' id="form" enctype="multipart/form-data" action='{{CRUDBooster::mainpath("add-save")}}'>
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <input type='hidden' name='return_url' value='{{Request::fullUrl()}}'/>
-                        @include("crudbooster::default.form_body")
+                        @include("crudbooster::form.form_body")
                         <p align="right"><input type='submit' class='btn btn-primary' value='Add Menu'/></p>
                     </form>
                 </div>

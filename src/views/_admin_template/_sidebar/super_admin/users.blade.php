@@ -4,12 +4,12 @@
     </a>
     <ul class='treeview-menu'>
         <li class="{{ (Request::is(cbAdminPath().'/users/add*')) ? 'active' : '' }}">
-            <a href='{{Route("AdminUsersControllerGetAdd")}}'>
+            <a href='{{route("AdminUsersControllerGetAdd")}}'>
                 {!! cbIcon('plus') !!} {{ cbTrans('add_user') }}
             </a>
         </li>
         <li class="{{ (Request::is(cbAdminPath().'/users')) ? 'active' : '' }}">
-            <a href='{{Route("AdminUsersControllerGetIndex")}}'>
+            <a href='{{route("AdminUsersControllerGetIndex")}}'>
                 {!! cbIcon('bars') !!} {{ cbTrans('List_users') }}
             </a>
         </li>

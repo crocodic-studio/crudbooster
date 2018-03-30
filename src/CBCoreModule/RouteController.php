@@ -12,14 +12,9 @@ class RouteController
 
         try {
             Route::get($prefix, ['uses' => $controller.'@getIndex', 'as' => $controller.'GetIndex']);
-
-            $wildcards = '/{one?}/{two?}/{three?}/{four?}/{five?}';
-            foreach (self::getControllerMethods($controller, $namespace) as $method) {
-                if (str_start($method, 'get')) {
-                    self::routeGet($prefix, $controller, $method, $wildcards);
-                } elseif (str_start($method, 'post')) {
-                    self::routePost($prefix, $controller, $method, $wildcards);
-                }
+            $ctrl = self::getControllerPath($controller, $namespace);
+            foreach (self::getControllerMethods($ctrl) as $method) {
+                self::setRoute($prefix, $controller, $method);
             }
         } catch (\Exception $e) {
 
@@ -31,7 +26,6 @@ class RouteController
      * @param $controller
      * @param $method
      * @param $wildcards
-     * @return array
      */
     private static function routePost($prefix, $controller, $method, $wildcards)
     {
@@ -62,14 +56,12 @@ class RouteController
     }
 
     /**
-     * @param $controller
-     * @param $namespace
+     * @param $ctrl
      * @return array|\ReflectionMethod[]
      * @throws \ReflectionException
      */
-    private static function getControllerMethods($controller, $namespace)
+    private static function getControllerMethods($ctrl)
     {
-        $ctrl = self::getControllerPath($controller, $namespace);
         $controller_methods = (new \ReflectionClass($ctrl))->getMethods(\ReflectionMethod::IS_PUBLIC);
         $controller_methods = array_filter($controller_methods, function ($method) {
             return ($method->class !== 'Illuminate\Routing\Controller' && $method->name !== 'getIndex');
@@ -89,5 +81,20 @@ class RouteController
         $ctrl = $ns.'\\'.$controller;
 
         return $ctrl;
+    }
+
+    /**
+     * @param $prefix
+     * @param $controller
+     * @param $method
+     */
+    private static function setRoute($prefix, $controller, $method)
+    {
+        $wildcards = '/{one?}/{two?}/{three?}/{four?}/{five?}';
+        if (str_start($method, 'get')) {
+            self::routeGet($prefix, $controller, $method, $wildcards);
+        } elseif (str_start($method, 'post')) {
+            self::routePost($prefix, $controller, $method, $wildcards);
+        }
     }
 }
