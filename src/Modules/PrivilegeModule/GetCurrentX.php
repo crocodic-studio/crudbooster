@@ -2,26 +2,28 @@
 
 namespace crocodicstudio\crudbooster\Modules\PrivilegeModule;
 
+use crocodicstudio\crudbooster\helpers\GetCurrentX as GetCurrentXClass;
+
 trait GetCurrentX
 {
     public static function getCurrentModule()
     {
-        return GetCurrentX::getCurrentModule();
+        return GetCurrentXClass::getCurrentModule();
     }
 
     public static function getCurrentMenuId()
     {
-        return GetCurrentX::getCurrentMenuId();
+        return GetCurrentXClass::getCurrentMenuId();
     }
 
     public static function getCurrentId()
     {
-        return GetCurrentX::getCurrentId();
+        return GetCurrentXClass::getCurrentId();
     }
 
     public static function getCurrentMethod()
     {
-        return GetCurrentX::getCurrentMethod();
+        return GetCurrentXClass::getCurrentMethod();
     }
 
 }

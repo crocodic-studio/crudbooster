@@ -2,6 +2,8 @@
 
 namespace crocodicstudio\crudbooster\Modules\AuthModule;
 
+use crocodicstudio\crudbooster\CBCoreModule\CbUsersRepo;
+
 trait Helpers
 {
     public static function me()
