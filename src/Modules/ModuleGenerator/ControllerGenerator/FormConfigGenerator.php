@@ -40,9 +40,7 @@ class FormConfigGenerator
 
             if (FieldDetector::isForeignKey($colName)) {
                 list($input['type'], $input['options']) = self::handleForeignKey($colName);
-            }
-
-            if (substr($colName, 0, 3) == 'is_') {
+            }elseif (substr($colName, 0, 3) == 'is_') {
                 $input['type'] = 'radio_dataenum';
                 $label = ucwords(substr($colName, 3));
                 $input['options'] = [
@@ -78,7 +76,7 @@ class FormConfigGenerator
                 $input['placeholder'] = cbTrans('text_default_help_url');
             }
 
-            $formArrayString[] = FileManipulator::stringify($input, "            ");
+            $formArrayString[] = FileManipulator::stringify($input, str_repeat(" ", 12));
         }
 
         return $formArrayString;
@@ -103,6 +101,7 @@ class FormConfigGenerator
      */
     private static function parseFieldType($typeData)
     {
+        // if matched a key, overrides $typeData to corresponding values
         $typeData = array_get([
             'longtext' => 'text',
             'integer' => 'int',
