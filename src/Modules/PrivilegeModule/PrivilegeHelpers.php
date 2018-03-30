@@ -94,4 +94,9 @@ trait PrivilegeHelpers
     {
         return session('admin_privileges_name');
     }
+
+    public static function denyAccess()
+    {
+        static::redirect(static::adminPath(), cbTrans('denied_access'));
+    }
 }
