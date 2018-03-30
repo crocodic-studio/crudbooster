@@ -133,7 +133,7 @@ class DbInspector
      * @param $fieldName
      * @return bool
      */
-    public static function isForeignKeey($fieldName)
+    public static function isForeignKey($fieldName)
     {
         $cacheKey = 'isForeignKey_'.$fieldName;
 

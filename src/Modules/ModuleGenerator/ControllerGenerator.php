@@ -2,6 +2,7 @@
 
 namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
+use crocodicstudio\crudbooster\helpers\DbInspector;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FormConfigGenerator;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
 use Schema;
@@ -14,8 +15,8 @@ class ControllerGenerator
 
         $controllerName = self::getControllerName($table, $name);
 
-        $coloms = CRUDBooster::getTableColumns($table);
-        $pk = CB::pk($table);
+        $coloms = DbInspector::getTableCols($table);
+        $pk = DbInspector::findPk($table);
         $formArrayString = FormConfigGenerator::generateFormConfig($table, $coloms);
         list($cols, $joinList) = self::addCol($table, $coloms, $pk);
         $php = '<?php '.view('CbModulesGen::controller_stub', compact('controllerName', 'table', 'pk', 'coloms', 'cols', 'formArrayString', 'joinList'))->render();
@@ -75,10 +76,10 @@ class ControllerGenerator
                 $jointable = str_replace(['id_', '_id'], '', $field);
 
                 if (Schema::hasTable($jointable)) {
-                    $joincols = CRUDBooster::getTableColumns($jointable);
-                    $joinname = CRUDBooster::getNameTable($joincols);
+                    $joincols = DbInspector::getTableCols($jointable);
+                    $joinname = DbInspector::colName($joincols);
                     $cols[] = ['label' => $label, 'name' =>  $jointable.$joinname];
-                    $jointablePK = CB::pk($jointable);
+                    $jointablePK = DbInspector::findPk($jointable);
                     $joinList[] = [
                         'table' => $jointable,
                         'field1' => $jointable.'.'.$jointablePK,

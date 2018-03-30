@@ -3,6 +3,7 @@
 namespace crocodicstudio\crudbooster\Modules\SettingModule;
 
 use crocodicstudio\crudbooster\controllers\CBController;
+use crocodicstudio\crudbooster\helpers\CbValidator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Cache;
@@ -110,7 +111,7 @@ class AdminSettingsController extends CBController
             $rules = [$name => 'mimes:doc,docx,xls,xlsx,ppt,pptx,pdf,zip,rar|max:20000'];
         }
 
-        CRUDBooster::valid($rules, 'view');
+        CbValidator::valid($rules, 'view');
     }
 
     private function allowOnlySuperAdmin()

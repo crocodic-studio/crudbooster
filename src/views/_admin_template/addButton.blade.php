@@ -3,7 +3,7 @@
        id='btn_add_new_data' class="btn btn-sm btn-success"
        title="{{cbTrans('action_add_data')}}">
 
-        {!!  CB::icon('plus-circle') !!}
+        {!!  cbIcon('plus-circle') !!}
         {{cbTrans('action_add_data')}}
     </a>
 @endif

@@ -5,6 +5,7 @@ namespace crocodicstudio\crudbooster\controllers\CBController;
 use CB;
 use crocodicstudio\crudbooster\CBCoreModule\RelationHandler;
 use crocodicstudio\crudbooster\controllers\FormValidator;
+use crocodicstudio\crudbooster\helpers\DbInspector;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Schema;
 
@@ -33,7 +34,7 @@ trait FormSubmitHandlers
                 continue;
             }
 
-            if ($inputdata == '' && CB::isColumnNULL($this->table, $name)) {
+            if ($inputdata == '' && DbInspector::isColNull($this->table, $name)) {
                 continue;
             }
 

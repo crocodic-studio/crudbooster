@@ -235,3 +235,9 @@ if (! function_exists('underField')) {
         return "<div class='text-danger'>$error</div><p class='help-block'>$help</p>";
     }
 }
+if (! function_exists('cbIcon')) {
+    function cbIcon($icon)
+    {
+        return '<i class=\'fa fa-'.$icon.'\'></i>';
+    }
+}

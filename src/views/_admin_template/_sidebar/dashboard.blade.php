@@ -2,7 +2,7 @@
     class="{{ (Request::is(cbAdminPath())) ? 'active' : '' }}">
     <a href='{!! $dashboard->url !!}'
        class='{{($dashboard->color)?"text-".$dashboard->color:""}}'>
-        {!! CB::icon('dashboard') !!}
+        {!! cbIcon('dashboard') !!}
         <span>{{cbTrans("text_dashboard")}}</span>
     </a>
 </li>

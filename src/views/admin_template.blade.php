@@ -36,7 +36,7 @@
                                id='btn_show_data' class="btn btn-sm btn-primary"
                                title="{{cbTrans('action_show_data')}}">
 
-                                {!!  CB::icon('table') !!}
+                                {!!  cbIcon('table') !!}
                                 {{cbTrans('action_show_data')}}
                             </a>
                         @endif
@@ -54,7 +54,7 @@
                 <ol class="breadcrumb">
                     <li>
                         <a href="{{CRUDBooster::adminPath()}}">
-                            {!!  CB::icon('dashboard') !!}
+                            {!!  cbIcon('dashboard') !!}
                             {{ cbTrans('home') }}
                         </a>
                     </li>

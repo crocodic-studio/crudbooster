@@ -12,7 +12,7 @@
             <p>
                 <a title='Generate API Key' class='btn btn-primary' href='javascript:void(0)'
                    onclick='generate_screet_key()'>
-                    {!! CB::icon('key') !!} Generate Secret Key
+                    {!! cbIcon('key') !!} Generate Secret Key
                 </a>
             </p>
 

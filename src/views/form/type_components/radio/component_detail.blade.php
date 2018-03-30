@@ -4,8 +4,8 @@ if ($formInput['datatable'] && $formInput['relationship_table']) {
     $datatable_array = explode(",", $formInput['datatable']);
     $datatable_tab = $datatable_array[0];
     $datatable_field = $datatable_array[1];
-    $foreignKey = CRUDBooster::getForeignKey($table, $formInput['relationship_table']);
-    $foreignKey2 = CRUDBooster::getForeignKey($datatable_tab, $formInput['relationship_table']);
+    $foreignKey = DbInspector::getForeignKey($table, $formInput['relationship_table']);
+    $foreignKey2 = DbInspector::getForeignKey($datatable_tab, $formInput['relationship_table']);
 
     $ids = DB::table($formInput['relationship_table'])->where($formInput['relationship_table'].'.'.$foreignKey, $id)->pluck($foreignKey2)->toArray();
     $value = DB::table($datatable_tab)->select($datatable_field)->whereIn('id', $ids)->pluck($datatable_field)->toArray();

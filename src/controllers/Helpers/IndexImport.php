@@ -2,6 +2,7 @@
 
 namespace crocodicstudio\crudbooster\controllers\Helpers;
 
+use crocodicstudio\crudbooster\helpers\DbInspector;
 use CRUDBooster;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -127,7 +128,7 @@ class IndexImport
         foreach ($select_column as $sk => $s) {
             $colname = $table_columns[$sk];
 
-            if (! CRUDBooster::isForeignKey($colname) || intval($value->$s)) {
+            if (! DbInspector::isForeignKey($colname) || intval($value->$s)) {
                 $a[$colname] = $value->$s;
                 continue;
             }

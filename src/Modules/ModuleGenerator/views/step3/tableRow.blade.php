@@ -1,15 +1,15 @@
 <td>
     <a href="javascript:void(0)" class="btn btn-info btn-plus">
-        {!! CB::icon('plus') !!}
+        {!! cbIcon('plus') !!}
     </a>
     <a href="javascript:void(0)" class="btn btn-danger btn-delete">
-        {!! CB::icon('trash') !!}
+        {!! cbIcon('trash') !!}
     </a>
     <a href="javascript:void(0)" class="btn btn-success btn-up">
-        {!! CB::icon('arrow-up') !!}
+        {!! cbIcon('arrow-up') !!}
     </a>
     <a href="javascript:void(0)" class="btn btn-success btn-down">
-        {!! CB::icon('arrow-down') !!}
+        {!! cbIcon('arrow-down') !!}
     </a>
 </td>
 <td><input type='text' value='{{$form["label"]}}' placeholder="Input field label"
@@ -30,7 +30,7 @@
 
         <span class="input-group-btn">
             <button class="btn btn-primary btn-options" title="Options" type="button">
-                {!! CB::icon('cog') !!}
+                {!! cbIcon('cog') !!}
             </button>
         </span>
 

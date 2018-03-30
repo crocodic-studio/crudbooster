@@ -12,7 +12,7 @@
     <div style="margin-bottom:10px" class='row'>
         <div class='col-xs-12'>
             <button type="submit" class="btn btn-primary btn-block btn-flat">
-                {!! CB::icon('lock') !!} {{cbTrans("button_sign_in")}}</button>
+                {!! cbIcon('lock') !!} {{cbTrans("button_sign_in")}}</button>
         </div>
     </div>
 

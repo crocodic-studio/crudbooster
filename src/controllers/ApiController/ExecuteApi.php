@@ -2,6 +2,7 @@
 
 namespace crocodicstudio\crudbooster\controllers\ApiController;
 
+use crocodicstudio\crudbooster\helpers\DbInspector;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
 
 class ExecuteApi
@@ -480,7 +481,7 @@ class ExecuteApi
             $subquery = $resp['subquery'];
             $used = intval($resp['used']);
 
-            if ($used == 0 && ! CRUDBooster::isForeignKey($name)) {
+            if ($used == 0 && ! DbInspector::isForeignKey($name)) {
                 continue;
             }
 
@@ -556,9 +557,9 @@ class ExecuteApi
      */
     private function joinRelatedTables($table, $responses_fields, $name, $data, $name_tmp)
     {
-        if (CRUDBooster::isForeignKey($name)) {
+        if (DbInspector::isForeignKey($name)) {
             $jointable = CRUDBooster::getTableForeignKey($name);
-            $jointable_field = CRUDBooster::getTableColumns($jointable);
+            $jointable_field = DbInspector::getTableCols($jointable);
 
             $data->leftjoin($jointable, $jointable.'.id', '=', $table.'.'.$name);
             foreach ($jointable_field as $jf) {

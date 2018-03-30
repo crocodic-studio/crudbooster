@@ -25,7 +25,7 @@
             </div>
             <div class="pull-{{ cbTrans('right') }}">
                 <a title='Lock Screen' href="{{ route('getLockScreen') }}"
-                   class='btn btn-default btn-flat'>{!! CB::icon('key') !!}</a>
+                   class='btn btn-default btn-flat'>{!! cbIcon('key') !!}</a>
                 <a href="javascript:void(0)" onclick="swal({
                         title: '{{cbTrans('alert_want_to_logout')}}',
                         type:'info',
@@ -39,7 +39,7 @@
                         location.href = '{{ route("getLogout") }}';
 
                         });" title="{{cbTrans('button_logout')}}" class="btn btn-danger btn-flat">
-                    {!! CB::icon('power-off') !!}
+                    {!! cbIcon('power-off') !!}
                 </a>
             </div>
         </li>

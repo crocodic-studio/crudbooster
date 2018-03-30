@@ -109,7 +109,7 @@ class CBController extends Controller
         $column = request('column');
         $value = request('value');
         $id = request('id');
-        DB::table($table)->where(CB::pk($table), $id)->update([$column => $value]);
+        DB::table($table)->where(DbInspector::findPk($table), $id)->update([$column => $value]);
 
         backWithMsg(cbTrans('alert_update_data_success'));
     }
@@ -186,7 +186,7 @@ class CBController extends Controller
 
     private function genericLoader()
     {
-        $this->primary_key = CB::pk($this->table);
+        $this->primary_key = DbInspector::findPk($this->table);
         $this->columns_table = $this->col;
         $this->data_inputan = $this->form;
         $this->data['pk'] = $this->primary_key;

@@ -68,7 +68,7 @@ class AdminModulesController extends CBController
 
     public function getTableColumns($table)
     {
-        $columns = CRUDBooster::getTableColumns($table);
+        $columns = DbInspector::getTableCols($table);
 
         return response()->json($columns);
     }

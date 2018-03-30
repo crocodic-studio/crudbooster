@@ -109,11 +109,6 @@ class CRUDBooster
         return GetCurrentX::getCurrentMethod();
     }
 
-    public static function isColumnNULL($table, $field)
-    {
-        return DbInspector::isColNull($table, $field);
-    }
-
     public static function getValueFilter($field)
     {
         self::getFilter($field, 'value');
@@ -167,47 +162,11 @@ class CRUDBooster
         return $first->first();
     }
 
-    public static function pk($table)
-    {
-        return DbInspector::findPK($table);
-    }
-
-    public static function valid($rules = [], $type = 'json')
-    {
-        $validator = Validator::make(request()->all(), $rules);
-
-        if (!$validator->fails()) {
-            return true;
-        }
-
-        $message = $validator->errors()->all();
-
-        if ($type == 'json') {
-            $result = [];
-            $result['api_status'] = 0;
-            $result['api_message'] = implode(', ', $message);
-            sendAndTerminate(response()->json($result, 200));
-        }
-
-        $res = redirect()->back()->with(['message' => implode('<br/>', $message), 'message_type' => 'warning'])->withInput();
-        sendAndTerminate($res);
-    }
-
-    public static function getForeignKey($parent_table, $child_table)
-    {
-        return DbInspector::getForeignKey($parent_table, $child_table);
-    }
-
     public static function getTableForeignKey($fieldName)
     {
         if (substr($fieldName, 0, 3) == 'id_' || substr($fieldName, -3) == '_id') {
             return str_replace(['_id', 'id_'], '', $fieldName);
         }
-    }
-
-    public static function isForeignKey($fieldName)
-    {
-        return DbInspector::isForeignKeey($fieldName);
     }
 
     public static function urlFilterColumn($key, $type, $value = '', $singleSorting = true)
@@ -252,15 +211,10 @@ class CRUDBooster
         return Request::server('HTTP_REFERER');
     }
 
-    public static function listTables()
-    {
-        return DbInspector::listTables();
-    }
-
     public static function listCbTables()
     {
         $tablesList = [];
-        foreach (self::listTables() as $tableObj) {
+        foreach (DbInspector::listTables() as $tableObj) {
 
             $tableName = $tableObj->TABLE_NAME;
             if ($tableName == config('database.migrations')) {
@@ -295,16 +249,6 @@ class CRUDBooster
         return false;
     }*/
 
-    public static function getTableColumns($table)
-    {
-        return DbInspector::getTableCols($table);
-    }
-
-    public static function getNameTable($columns)
-    {
-        return DbInspector::colName($columns);
-    }
-
     public static function routeController($prefix, $controller, $namespace = null)
     {
         RouteController::routeController($prefix, $controller, $namespace);
@@ -332,11 +276,6 @@ class CRUDBooster
         }
 
         sendAndTerminate(redirect($to)->with(['message' => $message, 'message_type' => $type]));
-    }
-
-    public static function icon($icon)
-    {
-        return '<i class=\'fa fa-'.$icon.'\'></i>';
     }
 
     public static function componentsPath($type = '')

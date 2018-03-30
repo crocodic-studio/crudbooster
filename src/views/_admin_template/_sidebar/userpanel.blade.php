@@ -5,6 +5,6 @@
     <div class="pull-{{ cbTrans('left') }} info">
         <p>{{ CRUDBooster::myName() }}</p>
         <!-- Status -->
-        <a href="#">{!! CB::icon('circle text-success') !!} {{ cbTrans('online') }}</a>
+        <a href="#">{!! cbIcon('circle text-success') !!} {{ cbTrans('online') }}</a>
     </div>
 </div>

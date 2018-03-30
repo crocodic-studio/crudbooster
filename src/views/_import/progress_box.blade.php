@@ -56,7 +56,7 @@
 <div class="box-footer" id='upload-footer' style="display:none">
     <div class='pull-right'>
         <a href='{{ CRUDBooster::mainpath("import-data") }}' class='btn btn-default'>
-            {!! CB::icon('upload') !!} Upload Other File</a>
+            {!! cbIcon('upload') !!} Upload Other File</a>
         <a href='{{CRUDBooster::mainpath()}}' class='btn btn-success'>Finish</a>
     </div>
 </div>
