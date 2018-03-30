@@ -1,4 +1,4 @@
-<form method="post" action="{{Route('AdminModulesControllerPostStep2')}}">
+<form method="post" action="{{route('AdminModulesControllerPostStep2')}}">
 
     <div class="box-body">
 
@@ -59,7 +59,7 @@
         <a href='#' title='If you check this, we will create the menu for this module'>(?)</a>
 
         <div class='pull-right'>
-            <a class='btn btn-default' href='{{Route("AdminModulesControllerGetIndex")}}'>
+            <a class='btn btn-default' href='{{route("AdminModulesControllerGetIndex")}}'>
                 {{cbTrans('button_back')}}
             </a>
             <input type="submit" class="btn btn-primary" value="Step 2 &raquo;">

@@ -36,7 +36,7 @@
 
             <?php
             if ($data_sub_module) {
-                $action_path = Route($data_sub_module->controller."GetIndex");
+                $action_path = route($data_sub_module->controller."GetIndex");
             } else {
                 $action_path = CRUDBooster::mainpath();
             }
@@ -75,7 +75,7 @@
 
             <?php
             if ($data_sub_module) {
-                $action_path = Route($data_sub_module->controller."GetIndex");
+                $action_path = route($data_sub_module->controller."GetIndex");
             } else {
                 $action_path = CRUDBooster::mainpath();
             }
