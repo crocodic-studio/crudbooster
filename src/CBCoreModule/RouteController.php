@@ -10,21 +10,14 @@ class RouteController
     {
         $prefix = trim($prefix, '/').'/';
 
-        $namespace = ($namespace) ?: ctrlNamespace();
-
         try {
             Route::get($prefix, ['uses' => $controller.'@getIndex', 'as' => $controller.'GetIndex']);
 
-            $controller_methods = (new \ReflectionClass($namespace.'\\'.$controller))->getMethods(\ReflectionMethod::IS_PUBLIC);
             $wildcards = '/{one?}/{two?}/{three?}/{four?}/{five?}';
-            foreach ($controller_methods as $method) {
-
-                if ($method->class == 'Illuminate\Routing\Controller' || $method->name == 'getIndex') {
-                    continue;
-                }
-                if (substr($method->name, 0, 3) == 'get') {
+            foreach (self::getControllerMethods($controller, $namespace) as $method) {
+                if (str_start($method, 'get')) {
                     self::routeGet($prefix, $controller, $method, $wildcards);
-                } elseif (substr($method->name, 0, 4) == 'post') {
+                } elseif (str_start($method, 'post')) {
                     self::routePost($prefix, $controller, $method, $wildcards);
                 }
             }
@@ -66,5 +59,35 @@ class RouteController
         Route::get($prefix.$slug.$wildcards,
             ['uses' => $controller.'@'.$method->name,
             'as' => $controller.'Get'.$methodName]);
+    }
+
+    /**
+     * @param $controller
+     * @param $namespace
+     * @return array|\ReflectionMethod[]
+     * @throws \ReflectionException
+     */
+    private static function getControllerMethods($controller, $namespace)
+    {
+        $ctrl = self::getControllerPath($controller, $namespace);
+        $controller_methods = (new \ReflectionClass($ctrl))->getMethods(\ReflectionMethod::IS_PUBLIC);
+        $controller_methods = array_filter($controller_methods, function ($method) {
+            return ($method->class !== 'Illuminate\Routing\Controller' && $method->name !== 'getIndex');
+        });
+
+        return $controller_methods;
+    }
+
+    /**
+     * @param $controller
+     * @param $namespace
+     * @return string
+     */
+    private static function getControllerPath($controller, $namespace)
+    {
+        $ns = $namespace ?: ctrlNamespace();
+        $ctrl = $ns.'\\'.$controller;
+
+        return $ctrl;
     }
 }
