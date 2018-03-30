@@ -13,13 +13,8 @@ class RouteController
         try {
             Route::get($prefix, ['uses' => $controller.'@getIndex', 'as' => $controller.'GetIndex']);
 
-            $wildcards = '/{one?}/{two?}/{three?}/{four?}/{five?}';
             foreach (self::getControllerMethods($controller, $namespace) as $method) {
-                if (str_start($method, 'get')) {
-                    self::routeGet($prefix, $controller, $method, $wildcards);
-                } elseif (str_start($method, 'post')) {
-                    self::routePost($prefix, $controller, $method, $wildcards);
-                }
+                self::setRoute($prefix, $controller, $method);
             }
         } catch (\Exception $e) {
 
@@ -31,7 +26,6 @@ class RouteController
      * @param $controller
      * @param $method
      * @param $wildcards
-     * @return array
      */
     private static function routePost($prefix, $controller, $method, $wildcards)
     {
@@ -89,5 +83,20 @@ class RouteController
         $ctrl = $ns.'\\'.$controller;
 
         return $ctrl;
+    }
+
+    /**
+     * @param $prefix
+     * @param $controller
+     * @param $method
+     */
+    private static function setRoute($prefix, $controller, $method)
+    {
+        $wildcards = '/{one?}/{two?}/{three?}/{four?}/{five?}';
+        if (str_start($method, 'get')) {
+            self::routeGet($prefix, $controller, $method, $wildcards);
+        } elseif (str_start($method, 'post')) {
+            self::routePost($prefix, $controller, $method, $wildcards);
+        }
     }
 }
