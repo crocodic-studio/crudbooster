@@ -40,7 +40,7 @@ class FormConfigGenerator
 
             if (FieldDetector::isForeignKey($colName)) {
                 list($input['type'], $input['options']) = self::handleForeignKey($colName);
-            }elseif (substr($colName, 0, 3) == 'is_') {
+            } elseif (substr($colName, 0, 3) == 'is_') {
                 $input['type'] = 'radio_dataenum';
                 $label = ucwords(substr($colName, 3));
                 $input['options'] = [
@@ -49,32 +49,46 @@ class FormConfigGenerator
                 ];
             }
 
-            if (FieldDetector::isPassword($colName)) {
-                $input['type'] = 'password';
-                $input['validation'] = 'min:5|max:32|required';
-                $input['help'] = cbTrans("text_default_help_password");
-            }elseif (FieldDetector::isImage($colName)) {
-                $input['type'] = 'upload';
-                $input['validation'] = 'required|image';
-                $input['help'] = cbTrans('text_default_help_upload');
-            }elseif (FieldDetector::isGeographical($colName)) {
-                $input['type'] = 'hidden';
-                $input['validation'] = 'required|numeric';
-            }elseif (FieldDetector::isPhone($colName)) {
-                $input['type'] = 'number';
-                $input['validation'] = 'required|numeric';
-                $input['placeholder'] = cbTrans('text_default_help_number');
-            }elseif (FieldDetector::isEmail($colName)) {
-                $input['type'] = 'email';
-                $input['validation'] = 'require|email|unique:'.$table;
-                $input['placeholder'] = cbTrans('text_default_help_email');
-            }elseif ($input['type'] == 'text' && FieldDetector::isNameField($colName)) {
-                $input['validation'] = 'required|string|min:3|max:70';
-                $input['placeholder'] = cbTrans('text_default_help_text');
-            }elseif ($input['type'] == 'text' && FieldDetector::isUrlField($colName)) {
-                $input['validation'] = 'required|url';
-                $input['placeholder'] = cbTrans('text_default_help_url');
-            }
+            $map = [
+                'password' => [
+                    'type' => 'password',
+                    'validation' => 'min:5|max:32|required',
+                    'help' => cbTrans("text_default_help_password"),
+                ],
+                'image' => [
+                    'type' => 'upload',
+                    'validation' => 'required|image',
+                    'help' => cbTrans('text_default_help_upload'),
+                ],
+                'geo' => [
+                    'type' => 'hidden',
+                    'validation' => 'required|numeric',
+                ],
+                'phone' => [
+                    'type' => 'number',
+                    'validation' => 'required|numeric',
+                    'placeholder' => cbTrans('text_default_help_number'),
+                ],
+                'email' => [
+                    'type' => 'email',
+                    'validation' => 'require|email|unique:'.$table,
+                    'placeholder' => cbTrans('text_default_help_email'),
+                ],
+                'name' => [
+                    'type' => 'text',
+                    'validation' => 'required|string|min:3|max:70',
+                    'placeholder' => cbTrans('text_default_help_text'),
+                ],
+                'url' => [
+                    'type' => 'text',
+                    'validation' => 'required|url',
+                    'placeholder' => cbTrans('text_default_help_url'),
+                ],
+            ];
+            
+            $props = array_get($map, FieldDetector::detect($colName));
+            unset($map);
+            $input = array_merge($input, $props);
 
             $formArrayString[] = FileManipulator::stringify($input, str_repeat(" ", 12));
         }
@@ -108,8 +122,8 @@ class FormConfigGenerator
             'timestamp' => 'datetime',
         ], $typeData, $typeData);
 
-
         $default = ["text", "min:1|max:255", []];
+
         return array_get([
             'text' => ['textarea', "string|min:5", []],
             'date' => ['date', "date", ['php_format' => 'M, d Y', 'datepicker_format' => 'M, dd YYYY',]],
@@ -127,7 +141,7 @@ class FormConfigGenerator
     private static function handleForeignKey($field)
     {
         $jointable = str_replace(['id_', '_id'], '', $field);
-        if (!Schema::hasTable($jointable)) {
+        if (! Schema::hasTable($jointable)) {
             return ['', ''];
         }
         $options = [
