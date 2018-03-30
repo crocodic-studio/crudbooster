@@ -252,33 +252,13 @@ class Index
         foreach ($data['result'] as $row) {
             $htmlContent = [];
 
-            if ($CbCtrl->button_bulk_action) {
-                $htmlContent[] = "<input type='checkbox' class='checkbox' name='checkbox[]' value='".$row->{$tablePK}."'/>";
-            }
-
-            if ($CbCtrl->show_numbering) {
-                $htmlContent[] = $number.'. ';
-                $number++;
-            }
-
-            foreach ($columnsTable as $col) {
-                if ($col['visible'] === false) {
-                    continue;
-                }
-                $htmlContent[] = (new ValueCalculator)->calculate($col, $row, $table, @$row->{$this->cb->title_field});
-            }
-
-            if ($CbCtrl->button_table_action) {
-                $button_action_style = $CbCtrl->button_action_style;
-                $htmlContent[] = "<div class='button_action' style='text-align:right'>".view('crudbooster::components.action', compact('addaction', 'row', 'button_action_style', 'parent_field'))->render()."</div>";
-            }
-
-            foreach ($htmlContent as $i => $v) {
-                $CbCtrl->hookRowIndex($i, $v);
-                $htmlContent[$i] = $v;
-            }
-
+            $htmlContent = $this->addCheckBox($CbCtrl, $tablePK, $row, $htmlContent);
+            $htmlContent = $this->addRowNumber($CbCtrl, $number, $htmlContent);
+            $htmlContent = $this->addOtherColumns($columnsTable, $table, $row, $htmlContent);
+            $htmlContent = $this->addActionButtons($CbCtrl, $addaction, $row, $htmlContent);
+            $htmlContent = $this->performHookOnRow($CbCtrl, $htmlContent);
             $htmlContents[] = $htmlContent;
+            $number++;
         }
 
         return $htmlContents;
@@ -297,5 +277,89 @@ class Index
             .(! isset($module['custom_parent_id']) ? "id" : $module['custom_parent_id'])
             .']&return_url='.urlencode(Request::fullUrl()).'&foreign_key='
             .$module['foreign_key'].'&label='.urlencode($module['label']);
+    }
+
+    /**
+     * @param \crocodicstudio\crudbooster\controllers\CBController $CbCtrl
+     * @param $tablePK
+     * @param $row
+     * @param $htmlContent
+     * @return array
+     */
+    private function addCheckBox(CBController $CbCtrl, $tablePK, $row, $htmlContent)
+    {
+        if ($CbCtrl->button_bulk_action) {
+            $htmlContent[] = "<input type='checkbox' class='checkbox' name='checkbox[]' value='".$row->{$tablePK}."'/>";
+        }
+
+        return $htmlContent;
+    }
+
+    /**
+     * @param \crocodicstudio\crudbooster\controllers\CBController $CbCtrl
+     * @param $number
+     * @param $htmlContent
+     * @return array
+     */
+    private function addRowNumber(CBController $CbCtrl, $number, $htmlContent)
+    {
+        if ($CbCtrl->show_numbering) {
+            $htmlContent[] = $number.'. ';
+        }
+
+        return $htmlContent;
+    }
+
+    /**
+     * @param $columnsTable
+     * @param $table
+     * @param $row
+     * @param $htmlContent
+     * @return array
+     */
+    private function addOtherColumns($columnsTable, $table, $row, $htmlContent)
+    {
+        foreach ($columnsTable as $col) {
+            if ($col['visible'] === false) {
+                continue;
+            }
+            $htmlContent[] = (new ValueCalculator)->calculate($col, $row, $table, @$row->{$this->cb->title_field});
+        }
+
+        return $htmlContent;
+    }
+
+    /**
+     * @param \crocodicstudio\crudbooster\controllers\CBController $CbCtrl
+     * @param $htmlContent
+     * @return mixed
+     */
+    private function performHookOnRow(CBController $CbCtrl, $htmlContent)
+    {
+        foreach ($htmlContent as $i => $v) {
+            $CbCtrl->hookRowIndex($i, $v);
+            $htmlContent[$i] = $v;
+        }
+
+        return $htmlContent;
+    }
+
+    /**
+     * @param \crocodicstudio\crudbooster\controllers\CBController $CbCtrl
+     * @param $addaction
+     * @param $row
+     * @param $parent_field
+     * @param $htmlContent
+     * @return array
+     * @throws \Throwable
+     */
+    private function addActionButtons(CBController $CbCtrl, $addaction, $row, $htmlContent)
+    {
+        if ($CbCtrl->button_table_action) {
+            $button_action_style = $CbCtrl->button_action_style;
+            $htmlContent[] = "<div class='button_action' style='text-align:right'>".view('crudbooster::components.action', compact('addaction', 'row', 'button_action_style', 'parent_field'))->render()."</div>";
+        }
+
+        return $htmlContent;
     }
 }

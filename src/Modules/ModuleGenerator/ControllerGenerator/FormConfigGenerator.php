@@ -36,7 +36,7 @@ class FormConfigGenerator
 
             $typeData = DbInspector::getFieldTypes($table, $colName);
 
-            list($input['type'], $input['validation'], $input['options']) = self::parseFieldType($typeData);
+            $input = array_merge($input, self::parseFieldType($typeData));
 
             if (FieldDetector::isForeignKey($colName)) {
                 list($input['type'], $input['options']) = self::handleForeignKey($colName);
@@ -85,7 +85,7 @@ class FormConfigGenerator
                     'placeholder' => cbTrans('text_default_help_url'),
                 ],
             ];
-            
+
             $props = array_get($map, FieldDetector::detect($colName));
             unset($map);
             $input = array_merge($input, $props);
@@ -124,7 +124,7 @@ class FormConfigGenerator
 
         $default = ["text", "min:1|max:255", []];
 
-        return array_get([
+        $arr = array_get([
             'text' => ['textarea', "string|min:5", []],
             'date' => ['date', "date", ['php_format' => 'M, d Y', 'datepicker_format' => 'M, dd YYYY',]],
             'datetime' => ['datetime', "date_format:Y-m-d H:i:s", ['php_format' => 'M, d Y H:i',]],
@@ -132,6 +132,12 @@ class FormConfigGenerator
             'double' => ['money', "integer|min:0", []],
             'int' => ['number', 'integer|min:0', []],
         ], $typeData, $default);
+
+        return [
+            'type' => $arr[0],
+            'validation' => $arr[1],
+            'options' => $arr[2],
+        ];
     }
 
     /**
