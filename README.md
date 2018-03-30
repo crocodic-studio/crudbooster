@@ -1,3 +1,6 @@
+# Next Major release of CRudBooster is about to come soon !!!
+
+
 # CRUDBOOSTER - Laravel CRUD Generator
 [![Code Climate](https://codeclimate.com/github/crocodic-studio/crudbooster/badges/gpa.svg)](https://codeclimate.com/github/crocodic-studio/crudbooster)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/crocodic-studio/crudbooster/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/crocodic-studio/crudbooster/?branch=master)
