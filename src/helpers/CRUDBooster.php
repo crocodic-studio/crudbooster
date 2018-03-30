@@ -195,11 +195,6 @@ class CRUDBooster
         }
     }
 
-    public static function isForeignKey($fieldName)
-    {
-        return DbInspector::isForeignKeey($fieldName);
-    }
-
     public static function urlFilterColumn($key, $type, $value = '', $singleSorting = true)
     {
         return \crocodicstudio\crudbooster\CBCoreModule\Index\ViewHelpers::urlFilterColumn($key, $type, $value, $singleSorting);
@@ -242,15 +237,10 @@ class CRUDBooster
         return Request::server('HTTP_REFERER');
     }
 
-    public static function listTables()
-    {
-        return DbInspector::listTables();
-    }
-
     public static function listCbTables()
     {
         $tablesList = [];
-        foreach (self::listTables() as $tableObj) {
+        foreach (DbInspector::listTables() as $tableObj) {
 
             $tableName = $tableObj->TABLE_NAME;
             if ($tableName == config('database.migrations')) {
