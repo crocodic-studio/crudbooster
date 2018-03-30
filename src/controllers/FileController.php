@@ -53,6 +53,7 @@ class FileController extends Controller {
 	    		$w = Request::get('w');
 	    		$h = Request::get('h')?:$w;
 	    	}		    
+
 	    	$imgRaw = Image::cache(function($image) use ($fullStoragePath,$w,$h) {
 	    		$im = $image->make($fullStoragePath);
 		    	if($w) {

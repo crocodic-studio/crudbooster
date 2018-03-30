@@ -9,6 +9,28 @@
 |
 */
 
+if(!function_exists('assetThumbnail')) {
+	function assetThumbnail($path) {
+		$path = str_replace('uploads/','uploads_thumbnail/',$path);
+		return asset($path);
+	}
+}
+
+if(!function_exists('assetResize')) {
+	function assetResize($path,$width,$height=null,$quality=70) {
+		$basename = basename($path);
+	    $pathWithoutName = str_replace($basename, '', $path);
+	    $newLocation = $pathWithoutName.'/w_'.$width.'_h_'.$height.'_'.$basename;
+	    if(Storage::exists($newLocation)) {
+	        return asset($newLocation);
+	    }else{
+	        $img = Image::make(storage_path($path))->fit($width,$height);
+	        $img->save(storage_path($newLocation),$quality);
+	        return asset($newLocation);
+	    }
+	}
+}
+
 if(!function_exists('extract_unit')) {	
 	/*
 	Credits: Bit Repository

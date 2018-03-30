@@ -37,7 +37,9 @@ class PrivilegesController extends CBController {
 		$this->form   = array();
 		$this->form[] = array("label"=>"Name","name"=>"name",'required'=>true);
 		$this->form[] = array("label"=>"Is Superadmin","name"=>"is_superadmin",'required'=>true);				
-		$this->form[] = array("label"=>"Theme Color","name"=>"theme_color",'required'=>true);		
+		$this->form[] = array("label"=>"Theme Color","name"=>"theme_color",'required'=>true);	
+
+		$this->alert[] = ['message'=>"You can use the helper <code>CRUDBooster::getMyPrivilegeId()</code> to get current user login privilege id, or <code>CRUDBooster::getMyPrivilegeName()</code> to get current user login privilege name",'type'=>'info'];	
 	}
 
 

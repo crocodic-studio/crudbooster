@@ -544,39 +544,12 @@ class ApiController extends Controller {
 					continue;
 				}
 
-				if ( $type == 'file' || $type == 'image' ) {
-					if ( Request::hasFile( $name ) ) {
-						$file = Request::file( $name );
-						$ext  = $file->getClientOriginalExtension();
-						$filePath = 'uploads/'.date('Y-m');
+				if ( $type == 'file' || $type == 'image' ) {					
+					$row_assign[$name] = CRUDBooster::uploadFile($name,true);
 
-						//Create Directory Monthly 
-						Storage::makeDirectory($filePath);						
-
-						//Move file to storage
-						$filename = md5(str_random(5)).'.'.$ext;
-						if(Storage::putFileAs($filePath,$file,$filename)) {						
-							$v = $filePath.'/'.$filename;
-							$row_assign[$name] = $v;
-						}					  
-					}	
 		    	}elseif ($type == 'base64_file') {
-		    		$filedata = base64_decode($value);
-					$f = finfo_open();
-					$mime_type = finfo_buffer($f, $filedata, FILEINFO_MIME_TYPE);
-					@$mime_type = explode('/',$mime_type);
-					@$mime_type = $mime_type[1];
-					if($mime_type) {
-						if(in_array($mime_type, $uploads_format_candidate)) {
-							$filePath = 'uploads/'.date('Y-m');
-							Storage::makeDirectory($filePath);
-							$filename = md5(str_random(5)).'.'.$mime_type;
-							if(Storage::put($filePath.'/'.$filename,$filedata)) {								
-								$v = $filePath.'/'.$filename;
-								$row_assign[$name] = $v;
-							}
-						}
-					}
+		    		$row_assign[$name] = CRUDBooster::uploadBase64($value);
+
 		    	}elseif ($type == 'password') {
 		    		$row_assign[$name] = Hash::make(g($name));		    		
 		    	}
