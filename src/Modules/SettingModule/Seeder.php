@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 
 class Seeder
 {
-    public static function seed()
+    public static function run()
     {
 
         $data = [
