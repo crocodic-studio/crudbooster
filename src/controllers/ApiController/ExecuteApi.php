@@ -31,7 +31,7 @@ class ExecuteApi
         $action_type = $row_api->aksi;
         $table = $row_api->tabel;
 
-        $debug_mode_message = 'You are in debug mode !';
+        $debugModeMessage = 'You are in debug mode !';
 
         /* 
         | ----------------------------------------------
@@ -44,7 +44,7 @@ class ExecuteApi
             $result['api_status'] = 0;
             $result['api_message'] = "Failed to execute API !";
 
-            return $this->show($result, $debug_mode_message, $posts);
+            return $this->show($result, $debugModeMessage, $posts);
         }
 
         /* 
@@ -61,7 +61,7 @@ class ExecuteApi
             $result['api_status'] = 0;
             $result['api_message'] = "The request method is not allowed !";
 
-            return $this->show($result, $debug_mode_message, $posts);
+            return $this->show($result, $debugModeMessage, $posts);
         }
 
         /*
@@ -74,7 +74,7 @@ class ExecuteApi
             $result['api_status'] = 0;
             $result['api_message'] = 'Sorry this API is no longer available, maybe has changed by admin, or please make sure api url is correct.';
 
-            return $this->show($result, $debug_mode_message, $posts);
+            return $this->show($result, $debugModeMessage, $posts);
         }
 
         @$parameters = unserialize($row_api->parameters);
@@ -114,7 +114,7 @@ class ExecuteApi
                 $result['api_status'] = 0;
                 $result['api_message'] = $message;
 
-                return $this->show($result, $debug_mode_message, $posts);
+                return $this->show($result, $debugModeMessage, $posts);
             }
         }
 
@@ -149,14 +149,14 @@ class ExecuteApi
 
             $this->ctrl->hookQuery($data);
             if ($action_type == 'list') {
-                list($result, $row) = $this->handleListAction($table, $orderby, $data, $result, $debug_mode_message, $row, $responses_fields);
+                list($result, $row) = $this->handleListAction($table, $orderby, $data, $result, $debugModeMessage, $row, $responses_fields);
             }
             if ($action_type == 'detail') {
                 $result['api_status'] = 0;
                 $result['api_message'] = 'There is no data found !';
 
                 if (cbGetsetting('api_debug_mode') == 'true') {
-                    $result['api_authorization'] = $debug_mode_message;
+                    $result['api_authorization'] = $debugModeMessage;
                 }
 
                 $rows = $data->first();
@@ -174,21 +174,21 @@ class ExecuteApi
                         }
 
                         if ($required && $type == 'password' && ! Hash::check($value, $rows->{$name})) {
-                            return $this->passwordError($result, $debug_mode_message, $posts);
+                            return $this->passwordError($result, $debugModeMessage, $posts);
                         }
 
                         if (! $required && $used && $value && ! Hash::check($value, $row->{$name})) {
-                            return $this->passwordError($result, $debug_mode_message, $posts);
+                            return $this->passwordError($result, $debugModeMessage, $posts);
                         }
                     }
 
                     $this->handleFile($rows, $responses_fields, $row);
 
-                    $result = $this->success($result, $debug_mode_message, $rows);
+                    $result = $this->success($result, $debugModeMessage, $rows);
                 }
             }
             if ($action_type == 'delete') {
-                $result = $this->handleDeleteAction($action_type, $table, $data, $result, $debug_mode_message);
+                $result = $this->handleDeleteAction($action_type, $table, $data, $result, $debugModeMessage);
             }
         }
 
@@ -196,22 +196,22 @@ class ExecuteApi
             $this->handleAddEdit($parameters, $posts, $row_assign);
         }
 
-        return $this->show($result, $debug_mode_message, $posts);
+        return $this->show($result, $debugModeMessage, $posts);
     }
 
     /**
      * @param $result
-     * @param $debug_mode_message
+     * @param $debugModeMessage
      * @param $posts
      * @return mixed
      */
-    private function show($result, $debug_mode_message, $posts)
+    private function show($result, $debugModeMessage, $posts)
     {
         $result['api_status'] = $this->ctrl->hook_api_status ?: $result['api_status'];
         $result['api_message'] = $this->ctrl->hook_api_message ?: $result['api_message'];
 
         if (cbGetsetting('api_debug_mode') == 'true') {
-            $result['api_authorization'] = $debug_mode_message;
+            $result['api_authorization'] = $debugModeMessage;
         }
 
         $this->ctrl->hookAfter($posts, $result);
@@ -240,12 +240,12 @@ class ExecuteApi
      * @param $orderby
      * @param $data
      * @param $result
-     * @param $debug_mode_message
+     * @param $debugModeMessage
      * @param $row
      * @param $responses_fields
      * @return array
      */
-    private function handleListAction($table, $orderby, $data, $result, $debug_mode_message, $row, $responses_fields)
+    private function handleListAction($table, $orderby, $data, $result, $debugModeMessage, $row, $responses_fields)
     {
         $orderby_col = $table.'.id';
         $orderby_val = 'desc';
@@ -261,11 +261,11 @@ class ExecuteApi
         $result['api_status'] = 0;
         $result['api_message'] = 'There is no data found !';
         if (cbGetsetting('api_debug_mode') == 'true') {
-            $result['api_authorization'] = $debug_mode_message;
+            $result['api_authorization'] = $debugModeMessage;
         }
         $result['data'] = [];
         if ($rows) {
-            list($row, $result) = $this->handleRows($result, $debug_mode_message, $row, $responses_fields, $rows);
+            list($row, $result) = $this->handleRows($result, $debugModeMessage, $row, $responses_fields, $rows);
         }
 
         return [$result, $row];
@@ -275,10 +275,10 @@ class ExecuteApi
      * @param $table
      * @param $data
      * @param $result
-     * @param $debug_mode_message
+     * @param $debugModeMessage
      * @return mixed
      */
-    private function handleDeleteAction($table, $data, $result, $debug_mode_message)
+    private function handleDeleteAction($table, $data, $result, $debugModeMessage)
     {
         if (\Schema::hasColumn($table, 'deleted_at')) {
             $delete = $data->update(['deleted_at' => date('Y-m-d H:i:s')]);
@@ -289,7 +289,7 @@ class ExecuteApi
         $result['api_status'] = ($delete) ? 1 : 0;
         $result['api_message'] = ($delete) ? "success" : "failed";
         if (cbGetsetting('api_debug_mode') == 'true') {
-            $result['api_authorization'] = $debug_mode_message;
+            $result['api_authorization'] = $debugModeMessage;
         }
 
         return $result;
