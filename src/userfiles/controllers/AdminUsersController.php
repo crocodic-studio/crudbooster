@@ -73,7 +73,7 @@ class AdminUsersController extends CBController
         $this->deleteBtn = false;
         $this->hide_form = ['id_cms_privileges'];
 
-        $data['page_title'] = trans("crudbooster.label_button_profile");
+        $data['page_title'] = cbTrans("label_button_profile");
         $data['row'] = CRUDBooster::first('cms_users', CRUDBooster::myId());
         $this->cbView('crudbooster::form.form', $data);
     }

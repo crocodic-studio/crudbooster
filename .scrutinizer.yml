@@ -8,7 +8,7 @@ filter:
         - "src/configs/"
         - "src/database/"
         - "*/localization/*"
-        - "*/seeder.php"
+        - "*/Seeder.php"
         - "*/*_routes.php"
         - "*/*Form.php"
         - "src/laravel-filemanager/"
