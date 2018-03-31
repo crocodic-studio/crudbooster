@@ -69,8 +69,6 @@ class CBController extends Controller
 
     public function cbLoader()
     {
-        $this->cbInit();
-
         $this->cbLayoutLoader();
         $this->cbFormLoader();
         $this->cbIndexLoader();
@@ -184,6 +182,7 @@ class CBController extends Controller
 
     private function genericLoader()
     {
+        $this->cbInit();
         $this->primary_key = DbInspector::findPk($this->table);
         $this->columns_table = $this->col;
         $this->data_inputan = $this->form;
