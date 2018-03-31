@@ -40,6 +40,8 @@ trait CbIndexLoader
 
     public $button_action_width = null;
 
+    public $addaction = [];
+
     protected function cbIndexLoader()
     {
         $this->data['button_export'] = $this->button_export;
@@ -55,6 +57,7 @@ trait CbIndexLoader
         $this->data['index_additional_view'] = $this->index_additional_view;
         $this->data['button_action_width'] = $this->button_action_width;
         $this->data['button_show'] = $this->button_show;
+        $this->data['addaction'] = ($this->show_addaction) ? $this->addaction : null;
     }
 
 }

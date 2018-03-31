@@ -135,6 +135,7 @@ class CRUDBooster
     {
         return \crocodicstudio\crudbooster\CBCoreModule\Index\ViewHelpers::urlFilterColumn($key, $type, $value, $singleSorting);
     }
+
     public static function mainpath($path = null)
     {
         $controllerName = strtok(Route::currentRouteAction(), '@');

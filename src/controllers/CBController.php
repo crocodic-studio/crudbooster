@@ -44,8 +44,6 @@ class CBController extends Controller
 
     public $data = [];
 
-    public $addaction = [];
-
     //public $global_privilege = false;
 
     public $deleteBtn = true;
