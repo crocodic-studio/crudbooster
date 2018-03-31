@@ -12,7 +12,7 @@ class RequirementChecker
      *
      * @param $console
      */
-    public function __construct(Command $console)
+    public function __construct($console)
     {
         $this->console = $console;
     }
