@@ -33,6 +33,6 @@ class AdminLogsController extends CBController
         $this->button_import = false;
         $this->button_add = false;
         $this->button_edit = false;
-        $this->button_delete = true;
+        $this->deleteBtn = true;
     }
 }

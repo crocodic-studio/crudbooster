@@ -149,7 +149,7 @@ class AdminSettingsController extends CBController
 
     private function setButtons()
     {
-        $this->button_delete = true;
+        $this->deleteBtn = true;
         $this->button_show = false;
         $this->button_cancel = false;
         $this->button_import = false;

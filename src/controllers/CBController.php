@@ -48,7 +48,7 @@ class CBController extends Controller
 
     //public $global_privilege = false;
 
-    public $button_delete = true;
+    public $deleteBtn = true;
 
     public $button_action_style = 'button_icon';
 
@@ -196,7 +196,7 @@ class CBController extends Controller
         $this->data['title_field'] = $this->title_field;
         $this->data['appname'] = cbGetsetting('appname');
         $this->data['index_button'] = $this->index_button;
-        $this->data['button_delete'] = $this->button_delete;
+        $this->data['deleteBtn'] = $this->deleteBtn;
         $this->data['sub_module'] = $this->sub_module;
         $this->data['parent_field'] = (request('parent_field')) ?: $this->parent_field;
         $this->data['parent_id'] = (request('parent_id')) ?: $this->parent_id;

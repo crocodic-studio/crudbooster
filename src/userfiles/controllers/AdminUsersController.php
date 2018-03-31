@@ -70,7 +70,7 @@ class AdminUsersController extends CBController
         $this->button_cancel = false;
         $this->button_show = false;
         $this->button_add = false;
-        $this->button_delete = false;
+        $this->deleteBtn = false;
         $this->hide_form = ['id_cms_privileges'];
 
         $data['page_title'] = trans("crudbooster.label_button_profile");
