@@ -89,9 +89,9 @@ class Index
         //$orig_mainpath = $CbCtrl->data['mainpath'];
         //$title_field = $CbCtrl->title_field;
         $number = (request('page', 1) - 1) * $limit + 1;
-        $html_contents = $this->htmlContents($CbCtrl, $data, $tablePK, $number, $columns_table, $table, $addAction); //end foreach data[result]
+        $htmlContents = $this->htmlContents($CbCtrl, $data, $tablePK, $number, $columns_table, $table, $addAction); //end foreach data[result]
 
-        $data['html_contents'] = ['html' => $html_contents, 'data' => $data['result']];
+        $data['html_contents'] = ['html' => $htmlContents, 'data' => $data['result']];
 
         return $data;
     }
@@ -192,15 +192,15 @@ class Index
 
     /**
      * @param $result
-     * @param $columns_table
+     * @param $columnsTable
      * @param $table
      * @return mixed
      */
-    private function _applyWhereAndQfilters($result, $columns_table, $table)
+    private function _applyWhereAndQfilters($result, $columnsTable, $table)
     {
         if (request('q')) {
-            $result->where(function ($query) use ($columns_table) {
-                foreach ($columns_table as $col) {
+            $result->where(function ($query) use ($columnsTable) {
+                foreach ($columnsTable as $col) {
                     if (! $col['field_with']) {
                         continue;
                     }
@@ -223,11 +223,10 @@ class Index
     private function _handleSubModules($addAction)
     {
         foreach ($this->cb->sub_module as $module) {
-            $table_parent = CRUDBooster::parseSqlTable($this->table)['table'];
             $addAction[] = [
                 'label' => $module['label'],
                 'icon' => $module['button_icon'],
-                'url' => $this->subModuleUrl($module, $table_parent),
+                'url' => $this->subModuleUrl($module, CRUDBooster::parseSqlTable($this->table)['table']),
                 'color' => $module['button_color'],
                 'showIf' => $module['showIf'],
             ];
