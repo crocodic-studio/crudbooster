@@ -1,6 +1,6 @@
 <li class='treeview'>
     <a href='#'>{!! cbIcon('key') !!}
-        <span>{{ trans('privilege.privileges_Roles') }}</span> {!! cbIcon('angle-right pull-right') !!}
+        <span>{{ cbTrans('privileges_Roles') }}</span> {!! cbIcon('angle-right pull-right') !!}
     </a>
     <ul class='treeview-menu'>
         <li class="{{ (Request::is(cbAdminPath().'/privileges/add*')) ? 'active' : '' }}">

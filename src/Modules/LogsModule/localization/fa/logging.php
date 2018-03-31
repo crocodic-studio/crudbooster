@@ -6,7 +6,7 @@ return [
     'log_try_add_save' => 'داده :name در :module افزود',
     'log_try_delete' => 'داده :name در :module را حذف کرد',
     'log_try_delete_selected' => 'داده های انتخاب شده را در :module حذف کرد',
-    'log_try_delete_image' => 'تصویر داده :name در :module را حزف کرد',
+    'log_try_delete_image' => 'تصویر داده :name در :module را حذف کرد',
     'log_try_update' => 'داده :name در :module را بروزرسانی کرد',
     'log_add' => 'داده جدید :name در :module افزود',
     'log_update' => 'داده :name در :module بروزرسانی کرد',

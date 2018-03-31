@@ -44,11 +44,9 @@ class CBController extends Controller
 
     public $data = [];
 
-    public $addaction = [];
-
     //public $global_privilege = false;
 
-    public $button_delete = true;
+    public $deleteBtn = true;
 
     public $button_action_style = 'button_icon';
 
@@ -133,7 +131,7 @@ class CBController extends Controller
 
     public function getEdit($id)
     {
-        $row = $this->findRow($id)->first();
+        $row = $this->findFirst($id);
 
         $page_title = cbTrans("edit_data_page_title", ['module' => CB::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
         $command = 'edit';
@@ -153,7 +151,7 @@ class CBController extends Controller
 
     public function getDetail($id)
     {
-        $row = $this->findRow($id)->first();
+        $row = $this->findFirst($id);
 
 
         $page_title = cbTrans('detail_data_page_title', ['module' => CB::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
@@ -196,7 +194,7 @@ class CBController extends Controller
         $this->data['title_field'] = $this->title_field;
         $this->data['appname'] = cbGetsetting('appname');
         $this->data['index_button'] = $this->index_button;
-        $this->data['button_delete'] = $this->button_delete;
+        $this->data['deleteBtn'] = $this->deleteBtn;
         $this->data['sub_module'] = $this->sub_module;
         $this->data['parent_field'] = (request('parent_field')) ?: $this->parent_field;
         $this->data['parent_id'] = (request('parent_id')) ?: $this->parent_id;
@@ -205,5 +203,14 @@ class CBController extends Controller
             session()->put('current_row_id', CB::myId());
             $this->data['return_url'] = Request::fullUrl();
         }
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    private function findFirst($id)
+    {
+        return $this->findRow($id)->first();
     }
 }

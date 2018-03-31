@@ -20,7 +20,7 @@ class AdminApiGeneratorController extends CBController
         $this->title_field = "nama";
         $this->button_show = false;
         $this->button_new = false;
-        $this->button_delete = false;
+        $this->deleteBtn = false;
         $this->button_add = false;
         $this->button_import = false;
         $this->button_export = false;

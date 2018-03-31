@@ -111,7 +111,7 @@ class CRUDBooster
     {
         $table = self::parseSqlTable($table)['table'];
         if (! is_array($id)) {
-            $pk = self::pk($table);
+            $pk = DbInspector::findPK($table);
 
             return DB::table($table)->where($pk, $id)->first();
         }
@@ -135,6 +135,7 @@ class CRUDBooster
     {
         return \crocodicstudio\crudbooster\CBCoreModule\Index\ViewHelpers::urlFilterColumn($key, $type, $value, $singleSorting);
     }
+
     public static function mainpath($path = null)
     {
         $controllerName = strtok(Route::currentRouteAction(), '@');

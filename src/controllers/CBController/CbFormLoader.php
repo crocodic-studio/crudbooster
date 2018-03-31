@@ -29,7 +29,6 @@ trait CbFormLoader
         $this->data['button_edit'] = $this->button_edit;
         $this->data['button_save'] = $this->button_save;
         $this->data['button_selected'] = $this->button_selected;
-        $this->data['addaction'] = ($this->show_addaction) ? $this->addaction : null;
         $this->data['button_detail'] = $this->button_detail;
     }
 }

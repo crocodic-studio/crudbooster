@@ -27,7 +27,7 @@ class AdminEmailTemplatesController extends CBController
         $this->button_table_action = true;
         $this->button_action_style = 'button_icon';
         $this->button_add = true;
-        $this->button_delete = true;
+        $this->deleteBtn = true;
         $this->button_edit = true;
         $this->button_detail = true;
         $this->button_show = true;

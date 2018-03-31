@@ -9,7 +9,7 @@
 
 
         <ul class="dropdown-menu">
-            @if($button_delete && CRUDBooster::canDelete())
+            @if($deleteBtn && CRUDBooster::canDelete())
                 <li>
                     <a href="javascript:void(0)" data-name='delete' title='{{cbTrans('action_delete_selected')}}'>
                         <i class="fa fa-trash"></i> {{cbTrans('action_delete_selected')}}

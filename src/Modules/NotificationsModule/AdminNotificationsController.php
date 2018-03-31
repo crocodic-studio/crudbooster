@@ -72,7 +72,7 @@ class AdminNotificationsController extends CBController
     {
         $this->button_show = true;
         $this->button_add = false;
-        $this->button_delete = true;
+        $this->deleteBtn = true;
         $this->button_export = false;
         $this->button_import = false;
     }
