@@ -13,9 +13,9 @@
     $type = array_merge($defaults, $formInput)['type'];
 @endphp
 
-@if(file_exists(CB::componentsPath($type.'/component.blade.php')))
+@if(file_exists(CB::componentsPath($type.DIRECTORY_SEPARATOR.'component.blade.php')))
     @include('crudbooster::form.type_components.'.$type.'.component')
-@elseif(file_exists(CB::PublishedComponentsPath($type.'/component.blade.php')))
+@elseif(file_exists(CB::PublishedComponentsPath($type.DIRECTORY_SEPARATOR.'component.blade.php')))
     @include('vendor.crudbooster.type_components.'.$type.'.component')
 @else
     <p class='text-danger'>{{$type}} is not found in type component system</p><br/>
