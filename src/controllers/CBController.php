@@ -133,7 +133,7 @@ class CBController extends Controller
 
     public function getEdit($id)
     {
-        $row = $this->findRow($id)->first();
+        $row = $this->findFirst($id);
 
         $page_title = cbTrans("edit_data_page_title", ['module' => CB::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
         $command = 'edit';
@@ -153,7 +153,7 @@ class CBController extends Controller
 
     public function getDetail($id)
     {
-        $row = $this->findRow($id)->first();
+        $row = $this->findFirst($id);
 
 
         $page_title = cbTrans('detail_data_page_title', ['module' => CB::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
@@ -205,5 +205,14 @@ class CBController extends Controller
             session()->put('current_row_id', CB::myId());
             $this->data['return_url'] = Request::fullUrl();
         }
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    private function findFirst($id)
+    {
+        return $this->findRow($id)->first();
     }
 }
