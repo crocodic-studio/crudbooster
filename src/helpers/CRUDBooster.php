@@ -111,7 +111,7 @@ class CRUDBooster
     {
         $table = self::parseSqlTable($table)['table'];
         if (! is_array($id)) {
-            $pk = self::pk($table);
+            $pk = DbInspector::findPK($table);
 
             return DB::table($table)->where($pk, $id)->first();
         }
