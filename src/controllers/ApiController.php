@@ -46,7 +46,7 @@ class ApiController extends Controller
      * @param $row_assign
      * @return array
      */
-    private function handleFile($name, $row_assign)
+    /*private function handleFile($name, $row_assign)
     {
         if (! Request::hasFile($name)) {
             return;
@@ -65,7 +65,7 @@ class ApiController extends Controller
         }
 
         return $row_assign;
-    }
+    }*/
 
     /**
      * @param $value
@@ -74,7 +74,7 @@ class ApiController extends Controller
      * @param $name
      * @return mixed
      */
-    private function handleBase64($value, $uploads_format_candidate, $row_assign, $name)
+   /* private function handleBase64($value, $uploads_format_candidate, $row_assign, $name)
     {
         $filedata = base64_decode($value);
         $f = finfo_open();
@@ -92,7 +92,7 @@ class ApiController extends Controller
         }
 
         return $row_assign;
-    }
+    }*/
 }
 
 
