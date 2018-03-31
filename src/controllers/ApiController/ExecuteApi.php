@@ -39,13 +39,7 @@ class ExecuteApi
         | ----------------------------------------------
         |
         */
-        $this->ctrl->hookValidate($posts);
-        if ($this->ctrl->validate) { // hook have to return true
-            $result['api_status'] = 0;
-            $result['api_message'] = "Failed to execute API !";
-
-            return $this->show($result, $debugModeMessage, $posts);
-        }
+        $this->doCustomePrecheck($posts, $result, $debugModeMessage);
 
         /* 
         | ----------------------------------------------
@@ -53,16 +47,7 @@ class ExecuteApi
         | ----------------------------------------------
         |
         */
-        if (! $row_api->method_type) {
-            return;
-        }
-        $method_type = $row_api->method_type;
-        if ($method_type && ! Request::isMethod($method_type)) {
-            $result['api_status'] = 0;
-            $result['api_message'] = "The request method is not allowed !";
-
-            return $this->show($result, $debugModeMessage, $posts);
-        }
+        $this->validateMethodType($row_api, $result, $debugModeMessage, $posts);
 
         /*
         | ----------------------------------------------
@@ -70,12 +55,7 @@ class ExecuteApi
         | ----------------------------------------------
         |
         */
-        if (! $row_api) {
-            $result['api_status'] = 0;
-            $result['api_message'] = 'Sorry this API is no longer available, maybe has changed by admin, or please make sure api url is correct.';
-
-            return $this->show($result, $debugModeMessage, $posts);
-        }
+        $this->checkApiDefined($row_api, $result, $debugModeMessage, $posts);
 
         @$parameters = unserialize($row_api->parameters);
         @$responses = unserialize($row_api->responses);
@@ -107,15 +87,7 @@ class ExecuteApi
                 $data_validation[$name] = app(ValidationRules::class)->make($param, $type_except, $table);
             }
 
-            $validator = Validator::make($input_validator, $data_validation);
-            if ($validator->fails()) {
-                $message = $validator->errors()->all();
-                $message = implode(', ', $message);
-                $result['api_status'] = 0;
-                $result['api_message'] = $message;
-
-                return $this->show($result, $debugModeMessage, $posts);
-            }
+            $result = $this->doValidation($input_validator, $data_validation, $result, $debugModeMessage, $posts);
         }
 
         $responses_fields = $this->prepareResponses($responses);
@@ -216,7 +188,7 @@ class ExecuteApi
 
         $this->ctrl->hookAfter($posts, $result);
 
-        return response()->json($result);
+        sendAndTerminate(response()->json($result));
     }
 
     /**
@@ -572,5 +544,86 @@ class ExecuteApi
         }
 
         return $name_tmp;
+    }
+
+    /**
+     * @param $row_api
+     * @param $result
+     * @param $debugModeMessage
+     * @param $posts
+     * @return mixed
+     */
+    private function validateMethodType($row_api, $result, $debugModeMessage, $posts)
+    {
+        $method_type = $row_api->method_type;
+        if (! $method_type || ! Request::isMethod($method_type)) {
+            $result['api_status'] = 0;
+            $result['api_message'] = "The request method is not allowed !";
+
+            $this->show($result, $debugModeMessage, $posts);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param $posts
+     * @param $result
+     * @param $debugModeMessage
+     * @return mixed
+     */
+    private function doCustomePrecheck($posts, $result, $debugModeMessage)
+    {
+        $this->ctrl->hookValidate($posts);
+        if ($this->ctrl->validate) { // hook have to return true
+            $result['api_status'] = 0;
+            $result['api_message'] = "Failed to execute API !";
+
+            $this->show($result, $debugModeMessage, $posts);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param $row_api
+     * @param $result
+     * @param $debugModeMessage
+     * @param $posts
+     * @return mixed
+     */
+    private function checkApiDefined($row_api, $result, $debugModeMessage, $posts)
+    {
+        if (! $row_api) {
+            $result['api_status'] = 0;
+            $result['api_message'] = 'Sorry this API is no longer available, maybe has changed by admin, or please make sure api url is correct.';
+
+            $this->show($result, $debugModeMessage, $posts);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param $input_validator
+     * @param $data_validation
+     * @param $result
+     * @param $debugModeMessage
+     * @param $posts
+     * @return mixed
+     */
+    private function doValidation($input_validator, $data_validation, $result, $debugModeMessage, $posts)
+    {
+        $validator = Validator::make($input_validator, $data_validation);
+        if ($validator->fails()) {
+            $message = $validator->errors()->all();
+            $message = implode(', ', $message);
+            $result['api_status'] = 0;
+            $result['api_message'] = $message;
+
+            $this->show($result, $debugModeMessage, $posts);
+        }
+
+        return $result;
     }
 }
