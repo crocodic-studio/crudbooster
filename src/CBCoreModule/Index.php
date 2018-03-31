@@ -130,17 +130,17 @@ class Index
             return null;
         }
 
-        $table_parent = CRUDBooster::parseSqlTable($this->table)['table'];
-        $result->where($table_parent.'.'.request('foreign_key'), request('parent_id'));
+        $tableParent = CRUDBooster::parseSqlTable($this->table)['table'];
+        $result->where($tableParent.'.'.request('foreign_key'), request('parent_id'));
     }
 
     /**
-     * @param $table_columns
+     * @param $tableColumns
      * @param $result
      */
-    private function _filterOutSoftDeleted($table_columns, $result)
+    private function _filterOutSoftDeleted($tableColumns, $result)
     {
-        if (! in_array('deleted_at', $table_columns)) {
+        if (! in_array('deleted_at', $tableColumns)) {
             return;
         }
         $result->where($this->table.'.deleted_at', '=', null);
@@ -149,45 +149,45 @@ class Index
     /**
      * @param $result
      * @param $field
-     * @param $columns_table
+     * @param $columnsTable
      * @param $index
      * @return mixed
      */
-    private function addDotField($columns_table, $index, $field, $result)
+    private function addDotField($columnsTable, $index, $field, $result)
     {
         $result->addselect($field.' as '.str_slug($field, '_'));
         $tableField = substr($field, 0, strpos($field, '.'));
         $fieldOrign = substr($field, strpos($field, '.') + 1);
-        $columns_table[$index]['type_data'] = DbInspector::getFieldTypes($tableField, $fieldOrign);
-        $columns_table[$index]['field'] = str_slug($field, '_');
-        $columns_table[$index]['field_raw'] = $field;
-        $columns_table[$index]['field_with'] = $tableField.'.'.$fieldOrign;
+        $columnsTable[$index]['type_data'] = DbInspector::getFieldTypes($tableField, $fieldOrign);
+        $columnsTable[$index]['field'] = str_slug($field, '_');
+        $columnsTable[$index]['field_raw'] = $field;
+        $columnsTable[$index]['field_with'] = $tableField.'.'.$fieldOrign;
 
-        return $columns_table;
+        return $columnsTable;
     }
 
     /**
-     * @param $columns_table
+     * @param $columnsTable
      * @param $index
      * @param $field
      * @param $table
      * @param $result
      * @return mixed
      */
-    private function _addField($columns_table, $index, $field, $result, $table)
+    private function _addField($columnsTable, $index, $field, $result, $table)
     {
-        $columns_table[$index]['type_data'] = 'varchar';
-        $columns_table[$index]['field_with'] = null;
-        $columns_table[$index]['field'] = $field;
-        $columns_table[$index]['field_raw'] = $field;
+        $columnsTable[$index]['type_data'] = 'varchar';
+        $columnsTable[$index]['field_with'] = null;
+        $columnsTable[$index]['field'] = $field;
+        $columnsTable[$index]['field_raw'] = $field;
 
         if (\Schema::hasColumn($table, $field)) {
             $result->addselect($table.'.'.$field);
-            $columns_table[$index]['type_data'] = DbInspector::getFieldTypes($table, $field);
-            $columns_table[$index]['field_with'] = $table.'.'.$field;
+            $columnsTable[$index]['type_data'] = DbInspector::getFieldTypes($table, $field);
+            $columnsTable[$index]['field_with'] = $table.'.'.$field;
         }
 
-        return $columns_table;
+        return $columnsTable;
     }
 
     /**
