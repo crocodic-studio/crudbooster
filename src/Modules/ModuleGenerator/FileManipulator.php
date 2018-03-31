@@ -48,7 +48,7 @@ class FileManipulator
         }
         $buffer = [];
         foreach ($input as $key => $value) {
-            $buffer[] = $indent.var_export($key, true)."=>".min_var_export($value, ($indent."    "));
+            $buffer[] = $indent.var_export($key, true)."=>".self::stringify($value, ($indent."    "));
         }
         if (empty($buffer)) {
             return "[]";
