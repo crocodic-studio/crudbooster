@@ -7,7 +7,7 @@ class ViewHelpers
     public static function urlFilterColumn($key, $type, $value = '', $singleSorting = true)
     {
         $params = request()->all();
-        $mainpath = trim(self::mainpath(), '/');
+        $mainpath = trim(\CB::mainpath(), '/');
 
         if ($params['filter_column'] && $singleSorting) {
             foreach ($params['filter_column'] as $k => $filter) {
