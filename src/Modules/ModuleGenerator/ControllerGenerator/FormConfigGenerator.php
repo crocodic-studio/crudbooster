@@ -50,47 +50,49 @@ class FormConfigGenerator
             }
 
             $map = [
-                'password' => [
+                'isPassword' => [
                     'type' => 'password',
                     'validation' => 'min:5|max:32|required',
                     'help' => cbTrans("text_default_help_password"),
                 ],
-                'image' => [
+                'isImage' => [
                     'type' => 'upload',
                     'validation' => 'required|image',
                     'help' => cbTrans('text_default_help_upload'),
                 ],
-                'geo' => [
+                'isGeographical' => [
                     'type' => 'hidden',
                     'validation' => 'required|numeric',
                 ],
-                'phone' => [
+                'isPhone' => [
                     'type' => 'number',
                     'validation' => 'required|numeric',
                     'placeholder' => cbTrans('text_default_help_number'),
                 ],
-                'email' => [
+                'isEmail' => [
                     'type' => 'email',
                     'validation' => 'require|email|unique:'.$table,
                     'placeholder' => cbTrans('text_default_help_email'),
                 ],
-                'name' => [
+                'isNameField' => [
                     'type' => 'text',
                     'validation' => 'required|string|min:3|max:70',
                     'placeholder' => cbTrans('text_default_help_text'),
                 ],
-                'url' => [
+                'isUrlField' => [
                     'type' => 'text',
                     'validation' => 'required|url',
                     'placeholder' => cbTrans('text_default_help_url'),
                 ],
             ];
 
-            $props = array_get($map, FieldDetector::detect($colName));
+            $props = array_get($map, FieldDetector::detect($colName), null);
             unset($map);
-            $input = array_merge($input, $props);
+            if($props !== null){
+                $input = array_merge($input, $props);
+            }
 
-            $formArrayString[] = FileManipulator::stringify($input, str_repeat(" ", 12));
+            $formArrayString[] = FileManipulator::stringify($input, str_repeat(' ', 12));
         }
 
         return $formArrayString;
