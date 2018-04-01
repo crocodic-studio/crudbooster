@@ -69,11 +69,11 @@ class CBController extends Controller
 
     public function cbLoader()
     {
+        $this->genericLoader();
         $this->cbLayoutLoader();
         $this->cbFormLoader();
         $this->cbIndexLoader();
         $this->checkHideForm();
-        $this->genericLoader();
 
         view()->share($this->data);
     }
@@ -92,8 +92,8 @@ class CBController extends Controller
 
     public function getIndex()
     {
-        $this->cbIndexLoader();
         $this->genericLoader();
+        $this->cbIndexLoader();
         $data = app(Index::class)->index($this);
 
         return $this->cbView('crudbooster::index.index', $data);
@@ -151,13 +151,12 @@ class CBController extends Controller
     {
         $row = $this->findFirst($id);
 
-
         $page_title = cbTrans('detail_data_page_title', ['module' => CB::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
-        $command = 'detail';
 
         session()->put('current_row_id', $id);
-
-        return $this->cbForm(compact('row', 'page_title', 'command', 'id'));
+        $this->genericLoader();
+        $this->cbFormLoader();
+        return $this->cbView('crudbooster::form.details', compact('row', 'page_title', 'id'));
     }
 
     public function actionButtonSelected($id_selected, $button_name)
