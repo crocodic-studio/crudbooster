@@ -2,7 +2,8 @@
 
 namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
-use CRUDBooster;
+use crocodicstudio\crudbooster\helpers\DbInspector;
+use CRUDBooster, CB;
 
 class Step3Handler
 {
