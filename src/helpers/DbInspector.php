@@ -180,7 +180,7 @@ class DbInspector
 
     /**
      * @param $table
-     * @return null
+     * @return array
      */
     private static function findPKname($table)
     {

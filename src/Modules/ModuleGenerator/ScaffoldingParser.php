@@ -10,10 +10,20 @@ class ScaffoldingParser
 
         foreach ($colsItem as &$item) {
             $item = str_replace(' ','', $item);
-            $item = str_replace('\',]',']', $item);
+            // "['label'=>'KanapeType','name'=>'kanape_type',];\r\n"
+
+            $item = str_replace('\',]',']', $item); // replaces:  ',]  with   ]
+            // "['label'=>'KanapeType','name'=>'kanape_type];\r\n"
+
             $item = trim($item);
+            // "['label'=>'KanapeType','name'=>'kanape_type];"
+
             $item = trim($item, '[');
+            // "'label'=>'KanapeType','name'=>'kanape_type];"
+
             $item = trim($item, '];');
+            // "'label'=>'KanapeType','name'=>'kanape_type"
+
             $item = trim($item);
             $item = trim(preg_replace("/[\n\r\t]/", "", $item));
             $strSplit = str_split($item);
@@ -33,8 +43,7 @@ class ScaffoldingParser
         }
 
         foreach ($colsItem as &$col) {
-            $colInnerItem = self::prepareFields(explode('|SPLIT|', $col));
-            $col = $colInnerItem;
+            $col = self::prepareFields(explode('|SPLIT|', $col));
         }
 
         self::formOptions($type, $colsItem);
@@ -86,6 +95,7 @@ class ScaffoldingParser
             if ($type !== 'form') {
                 continue;
             }
+
             if ($form['options']) {
                 @eval("\$options = $form[options];");
                 @$form['options'] = $options;
@@ -117,11 +127,11 @@ class ScaffoldingParser
         $colInnerItem = [];
         foreach ($split as $s) {
             if (strpos($s, 'options') !== false) {
-                $colInnerItem['options'] = trim(str_replace("'options'=>", "", $s));
+                $colInnerItem['options'] = trim(str_replace("'options'=>", "", $s), '\'\"\]\[');
             } elseif (strpos($s, 'callback') !== false) {
                 $colInnerItem['callback'] = self::parseCallback($s);
             } else {
-                $s = trim($s, "'");
+                $s = str_replace("'", '',$s);
                 $sSplit = explode('=>', $s);
                 $colInnerItem[$sSplit[0]] = $sSplit[1];
             }

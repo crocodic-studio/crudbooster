@@ -15,13 +15,9 @@ class ControllerGenerator
 
         $controllerName = self::getControllerName($table, $name);
 
-        $coloms = DbInspector::getTableCols($table);
-        $pk = DbInspector::findPk($table);
-        $formArrayString = FormConfigGenerator::generateFormConfig($table, $coloms);
-        list($cols, $joinList) = self::addCol($table, $coloms, $pk);
-        $php = '<?php '.view('CbModulesGen::controller_stub', compact('controllerName', 'table', 'pk', 'coloms', 'cols', 'formArrayString', 'joinList'))->render();
+        $php = self::generateControllerCode($table, $controllerName);
         //create file controller
-        FileManipulator::putCtrlContent('Admin'.$controllerName.'.php', $php);
+        FileManipulator::putCtrlContent('Admin'.$controllerName, $php);
 
         return 'Admin'.$controllerName;
     }
@@ -96,5 +92,23 @@ class ControllerGenerator
         }
 
         return [$cols, $joinList];
+    }
+
+    /**
+     * @param $table
+     * @param $controllerName
+     * @return string
+     * @throws \Exception
+     * @throws \Throwable
+     */
+    private static function generateControllerCode($table, $controllerName)
+    {
+        $coloms = DbInspector::getTableCols($table);
+        $pk = DbInspector::findPk($table);
+        $formArrayString = FormConfigGenerator::generateFormConfig($table, $coloms);
+        list($cols, $joinList) = self::addCol($table, $coloms, $pk);
+
+        $data = compact('controllerName', 'table', 'pk', 'coloms', 'cols', 'formArrayString', 'joinList');
+        return '<?php '.view('CbModulesGen::controller_stub', $data)->render();
     }
 }

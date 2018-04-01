@@ -116,7 +116,7 @@
             </tr>
         @endif
 
-        @foreach($html_contents['html'] as $i=>$hc)
+        @foreach($html_contents['html'] as $i => $hc)
 
             @if($table_row_color)
                 <?php $tr_color = NULL;?>

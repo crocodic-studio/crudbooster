@@ -35,19 +35,20 @@ class FieldDetector
     static function detect($colName)
     {
         $map = [
-            'isPassword' => 'password',
-            'isImage' => 'image',
-            'isGeographical' => 'geo',
-            'isPhone' => 'phone',
-            'isEmail' => 'email',
-            'isNameField' => 'name',
-            'isUrlField' => 'url',
+            'isPassword',
+            'isImage',
+            'isGeographical',
+            'isPhone',
+            'isEmail',
+            'isNameField',
+            'isUrlField',
         ];
-        foreach ($map as $methodName => $fieldType){
+        foreach ($map as $methodName){
             if (self::$methodName($colName)) {
-                return $fieldType;
+                return $methodName;
             }
         }
+        return 'not found';
     }
 
     /**
