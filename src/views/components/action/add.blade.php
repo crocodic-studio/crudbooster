@@ -1,7 +1,7 @@
 @foreach($addaction as $a)
     <?php
     foreach ($row as $key => $val) {
-        $a['url'] = str_replace("[".$key."]", $val, $a['url']);
+        $a['url'] = str_replace("[$key]", $val, $a['url']);
     }
 
     $confirm_box = '';
