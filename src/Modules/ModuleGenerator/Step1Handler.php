@@ -3,6 +3,7 @@
 namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
 use CB;
+use CRUDBooster;
 use Illuminate\Support\Facades\DB;
 
 class Step1Handler
