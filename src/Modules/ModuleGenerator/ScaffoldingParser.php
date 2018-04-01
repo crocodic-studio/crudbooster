@@ -127,7 +127,7 @@ class ScaffoldingParser
         $colInnerItem = [];
         foreach ($split as $s) {
             if (strpos($s, 'options') !== false) {
-                $colInnerItem['options'] = trim(str_replace("'options'=>", "", $s));
+                $colInnerItem['options'] = trim(str_replace("'options'=>", "", $s), '\'\"\]\[');
             } elseif (strpos($s, 'callback') !== false) {
                 $colInnerItem['callback'] = self::parseCallback($s);
             } else {
