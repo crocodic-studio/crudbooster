@@ -71,12 +71,7 @@ class AuthController extends Controller
 
     public function postForgot()
     {
-        $validator = Validator::make(request()->all(), ['email' => 'required|email|exists:cms_users',]);
-
-        if ($validator->fails()) {
-            $message = $validator->errors()->all();
-            backWithMsg(implode(', ', $message), 'danger');
-        }
+        $this->validateForgotPass();
 
         $randString = str_random(5);
         CbUsersRepo::updateByMail(request('email'), ['password' => \Hash::make($randString)]);
@@ -97,5 +92,15 @@ class AuthController extends Controller
         Session::flush();
 
         return redirect()->route('getLogin')->with('message', cbTrans('message_after_logout'));
+    }
+
+    private function validateForgotPass()
+    {
+        $validator = Validator::make(request()->all(), ['email' => 'required|email|exists:cms_users',]);
+
+        if ($validator->fails()) {
+            $message = $validator->errors()->all();
+            backWithMsg(implode(', ', $message), 'danger');
+        }
     }
 }
