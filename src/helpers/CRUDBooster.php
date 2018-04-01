@@ -94,18 +94,18 @@ class CRUDBooster
         return self::getFilter($field, 'type');
     }
 
-/*    public static function stringBetween($string, $start, $end)
-    {
-        $string = ' '.$string;
-        $ini = strpos($string, $start);
-        if ($ini == 0) {
-            return '';
-        }
-        $ini += strlen($start);
-        $len = strpos($string, $end, $ini) - $ini;
+    /*    public static function stringBetween($string, $start, $end)
+        {
+            $string = ' '.$string;
+            $ini = strpos($string, $start);
+            if ($ini == 0) {
+                return '';
+            }
+            $ini += strlen($start);
+            $len = strpos($string, $end, $ini) - $ini;
 
-        return substr($string, $ini, $len);
-    }*/
+            return substr($string, $ini, $len);
+        }*/
 
     public static function first($table, $id)
     {
@@ -171,21 +171,28 @@ class CRUDBooster
 
     public static function listCbTables()
     {
-        $tablesList = [];
-        foreach (DbInspector::listTables() as $tableObj) {
+        $tables = array_map(function ($table) {
+            return $table->TABLE_NAME;
+        }, DbInspector::listTables());
 
-            $tableName = $tableObj->TABLE_NAME;
+        $filter = function ($tableName) {
+
             if ($tableName == config('database.migrations')) {
-                continue;
-            }
-            if (substr($tableName, 0, 4) == 'cms_' && $tableName != 'cms_users') {
-                continue;
+                return false;
             }
 
-            $tablesList[] = $tableName;
-        }
+            if ($tableName == 'cms_users') {
+                return true;
+            }
 
-        return $tablesList;
+            if (starts_with($tableName, 'cms_')) {
+                return false;
+            }
+
+            return true;
+        };
+
+        return array_filter($tables, $filter);
     }
 
     public static function getUrlParameters($exception = null)
@@ -193,19 +200,19 @@ class CRUDBooster
         return ViewHelpers::getUrlParameters($exception);
     }
 
-/*    public static function isExistsController($table)
-    {
-        $ctrlName = ucwords(str_replace('_', ' ', $table));
-        $ctrlName = str_replace(' ', '', $ctrlName).'Controller.php';
-        $path = base_path(controllers_dir());
-        $path2 = base_path(controllers_dir()."ControllerMaster/");
+    /*    public static function isExistsController($table)
+        {
+            $ctrlName = ucwords(str_replace('_', ' ', $table));
+            $ctrlName = str_replace(' ', '', $ctrlName).'Controller.php';
+            $path = base_path(controllers_dir());
+            $path2 = base_path(controllers_dir()."ControllerMaster/");
 
-        if (file_exists($path.'Admin'.$ctrlName) || file_exists($path2.'Admin'.$ctrlName) || file_exists($path2.$ctrlName)) {
-            return true;
-        }
+            if (file_exists($path.'Admin'.$ctrlName) || file_exists($path2.'Admin'.$ctrlName) || file_exists($path2.$ctrlName)) {
+                return true;
+            }
 
-        return false;
-    }*/
+            return false;
+        }*/
 
     public static function routeController($prefix, $controller, $namespace = null)
     {
@@ -234,13 +241,14 @@ class CRUDBooster
     public static function componentsPath($type = '')
     {
         $componentPath = implode(DIRECTORY_SEPARATOR, ['vendor', 'crocodicstudio', 'crudbooster', 'src', 'views', 'form', 'type_components', $type]);
-        return base_path($componentPath);
 
+        return base_path($componentPath);
     }
 
     public static function PublishedComponentsPath($type = '')
     {
         $Path = implode(DIRECTORY_SEPARATOR, ['views', 'vendor', 'crudbooster', 'type_components', $type]);
+
         return resource_path($Path);
     }
 }
