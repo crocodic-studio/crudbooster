@@ -96,7 +96,7 @@ class AuthController extends Controller
         session()->put('theme_color', $priv->theme_color);
         session()->put('appname', cbGetsetting('appname'));
 
-        CRUDBooster::insertLog(cbTrans('log_login', ['email' => $users->email, 'ip' => Request::server('REMOTE_ADDR')]));
+        CRUDBooster::insertLog(trans('logging.log_login', ['email' => $users->email, 'ip' => Request::server('REMOTE_ADDR')]));
 
         $cbHookSession = new \App\Http\Controllers\CBHook;
         $cbHookSession->afterLogin();
