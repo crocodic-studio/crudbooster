@@ -26,11 +26,6 @@ Route::group([
 
 /* ROUTER FOR BACKEND CRUDBOOSTER */
 Route::group([
-    'middleware' => ['web', CBBackend::class], 'prefix' => cbAdminPath(), 'namespace' => $namespace,], function () use ($namespace){
-    CRUDBooster::routeController('notifications', 'AdminNotificationsController', $namespace);
-});
-
-Route::group([
     'middleware' => ['web', \crocodicstudio\crudbooster\middlewares\CBSuperadmin::class],
     'prefix' => cbAdminPath(),
     'namespace' => $namespace,
