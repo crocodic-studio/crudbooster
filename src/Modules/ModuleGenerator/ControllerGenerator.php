@@ -21,7 +21,7 @@ class ControllerGenerator
         list($cols, $joinList) = self::addCol($table, $coloms, $pk);
         $php = '<?php '.view('CbModulesGen::controller_stub', compact('controllerName', 'table', 'pk', 'coloms', 'cols', 'formArrayString', 'joinList'))->render();
         //create file controller
-        FileManipulator::putCtrlContent('Admin'.$controllerName.'.php', $php);
+        FileManipulator::putCtrlContent('Admin'.$controllerName, $php);
 
         return 'Admin'.$controllerName;
     }
