@@ -347,17 +347,23 @@ class Index
      * @param \crocodicstudio\crudbooster\controllers\CBController $CbCtrl
      * @param $addaction
      * @param $row
-     * @param $parent_field
      * @param $htmlContent
      * @return array
      * @throws \Throwable
      */
     private function addActionButtons(CBController $CbCtrl, $addaction, $row, $htmlContent)
     {
-        if ($CbCtrl->button_table_action) {
-            $button_action_style = $CbCtrl->button_action_style;
-            $htmlContent[] = "<div class='button_action' style='text-align:right'>".view('crudbooster::components.action', compact('addaction', 'row', 'button_action_style', 'parent_field'))->render()."</div>";
+        if (!$CbCtrl->button_table_action) {
+            return $htmlContent;
         }
+        $button_action_style = $CbCtrl->button_action_style;
+        $button_edit = $CbCtrl->button_edit;
+        $button_detail = $CbCtrl->button_detail;
+        $deleteBtn = $CbCtrl->deleteBtn;
+        $id = ($row->{$CbCtrl->primary_key});
+
+        $data = compact('addaction', 'row', 'id', 'button_action_style', 'parent_field', 'button_edit', 'deleteBtn', 'button_detail');
+        $htmlContent[] = "<div class='button_action' style='text-align:right'>".view('crudbooster::index.action', $data)->render()."</div>";
 
         return $htmlContent;
     }
