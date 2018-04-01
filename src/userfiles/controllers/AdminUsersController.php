@@ -65,7 +65,8 @@ class AdminUsersController extends CBController
 
     public function getProfile()
     {
-
+        $this->genericLoader();
+        $this->cbFormLoader();
         $this->button_addmore = false;
         $this->button_cancel = false;
         $this->button_show = false;
@@ -75,6 +76,6 @@ class AdminUsersController extends CBController
 
         $data['page_title'] = cbTrans("label_button_profile");
         $data['row'] = CRUDBooster::first('cms_users', CRUDBooster::myId());
-        $this->cbView('crudbooster::form.form', $data);
+        return $this->cbView('crudbooster::form.form', $data);
     }
 }

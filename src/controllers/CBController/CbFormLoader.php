@@ -19,8 +19,6 @@ trait CbFormLoader
 
     public $show_addaction = true;
 
-    public $button_detail = true;
-
     protected function cbFormLoader()
     {
         $this->data['button_add'] = $this->button_add;
@@ -29,6 +27,5 @@ trait CbFormLoader
         $this->data['button_edit'] = $this->button_edit;
         $this->data['button_save'] = $this->button_save;
         $this->data['button_selected'] = $this->button_selected;
-        $this->data['button_detail'] = $this->button_detail;
     }
 }

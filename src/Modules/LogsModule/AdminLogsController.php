@@ -2,10 +2,12 @@
 
 namespace crocodicstudio\crudbooster\Modules\LogsModule;
 
+use crocodicstudio\crudbooster\CBCoreModule\Hooks;
 use crocodicstudio\crudbooster\controllers\CBController;
 
 class AdminLogsController extends CBController
 {
+    use Hooks;
     public function cbInit()
     {
         $this->table = 'cms_logs';
