@@ -60,50 +60,6 @@ class AuthController extends Controller
         return view('CbAuth::login');
     }
 
-    public function postLogin()
-    {
-        $validator = Validator::make(request()->all(), [
-                'email' => 'required|email|exists:cms_users',
-                'password' => 'required',
-            ]);
-
-        if ($validator->fails()) {
-            $message = $validator->errors()->all();
-
-            backWithMsg(implode(', ', $message), 'danger');
-        }
-
-        $password = request("password");
-        $users = CbUsersRepo::findByMail(request("email"));
-
-        if (! \Hash::check($password, $users->password)) {
-            return redirect()->route('getLogin')->with('message', cbTrans('alert_password_wrong'));
-        }
-
-        $priv = $this->table('cms_privileges')->where('id', $users->id_cms_privileges)->first();
-
-        $roles = $this->table('cms_privileges_roles')->where('id_cms_privileges', $users->id_cms_privileges)->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')->get();
-
-        $photo = ($users->photo) ? asset($users->photo) : asset('vendor/crudbooster/avatar.jpg');
-        session()->put('admin_id', $users->id);
-        session()->put('admin_is_superadmin', $priv->is_superadmin);
-        session()->put('admin_name', $users->name);
-        session()->put('admin_photo', $photo);
-        session()->put('admin_privileges_roles', $roles);
-        session()->put('admin_privileges', $users->id_cms_privileges);
-        session()->put('admin_privileges_name', $priv->name);
-        session()->put('admin_lock', 0);
-        session()->put('theme_color', $priv->theme_color);
-        session()->put('appname', cbGetsetting('appname'));
-
-        CRUDBooster::insertLog(trans('logging.log_login', ['email' => $users->email, 'ip' => Request::server('REMOTE_ADDR')]));
-
-        $cbHookSession = new \App\Http\Controllers\CBHook;
-        $cbHookSession->afterLogin();
-
-        return redirect(CRUDBooster::adminPath());
-    }
-
     public function getForgot()
     {
         if (CRUDBooster::myId()) {

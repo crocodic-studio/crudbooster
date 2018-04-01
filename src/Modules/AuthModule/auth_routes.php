@@ -11,6 +11,6 @@ Route::group(['middleware' => ['web'], 'prefix' => $prefix, 'namespace' => $name
     Route::post('register', ['uses' => 'AuthController@postRegister', 'as' => 'postRegister']);
     Route::get('register', ['uses' => 'AuthController@getRegister', 'as' => 'getRegister']);
     Route::get('logout', ['uses' => 'AuthController@getLogout', 'as' => 'getLogout']);
-    Route::post('login', ['uses' => 'AuthController@postLogin', 'as' => 'postLogin']);
+    Route::post('login', ['uses' => 'LoginController@postLogin', 'as' => 'postLogin']);
     Route::get('login', ['uses' => 'AuthController@getLogin', 'as' => 'getLogin']);
 });
