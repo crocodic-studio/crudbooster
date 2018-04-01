@@ -112,6 +112,7 @@ class CBController extends Controller
 
     public function getAdd()
     {
+        $this->genericLoader();
         $page_title = cbTrans('add_data_page_title', ['module' => CB::getCurrentModule()->name]);
         $command = 'add';
         return $this->cbForm(compact('page_title', 'command'));
@@ -129,6 +130,7 @@ class CBController extends Controller
 
     public function getEdit($id)
     {
+        $this->genericLoader();
         $row = $this->findFirst($id);
 
         $page_title = cbTrans("edit_data_page_title", ['module' => CB::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
@@ -174,12 +176,11 @@ class CBController extends Controller
      */
     private function cbForm($data)
     {
-        $this->genericLoader();
         $this->cbFormLoader();
         return $this->cbView('crudbooster::form.form', $data);
     }
 
-    private function genericLoader()
+    protected function genericLoader()
     {
         $this->cbInit();
         $this->primary_key = DbInspector::findPk($this->table);
