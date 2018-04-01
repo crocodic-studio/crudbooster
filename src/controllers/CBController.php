@@ -149,13 +149,13 @@ class CBController extends Controller
 
     public function getDetail($id)
     {
+        $this->genericLoader();
+        $this->cbFormLoader();
         $row = $this->findFirst($id);
 
         $page_title = cbTrans('detail_data_page_title', ['module' => CB::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
 
         session()->put('current_row_id', $id);
-        $this->genericLoader();
-        $this->cbFormLoader();
         return $this->cbView('crudbooster::form.details', compact('row', 'page_title', 'id'));
     }
 
