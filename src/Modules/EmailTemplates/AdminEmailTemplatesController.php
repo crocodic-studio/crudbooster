@@ -29,7 +29,7 @@ class AdminEmailTemplatesController extends CBController
         $this->button_add = true;
         $this->deleteBtn = true;
         $this->button_edit = true;
-        $this->button_detail = true;
+        $this->buttonDetail = true;
         $this->button_show = true;
         $this->button_filter = true;
         $this->button_export = false;

@@ -21,7 +21,7 @@ public function cbInit() {
     $this->button_add          = TRUE;
     $this->deleteBtn       = TRUE;
     $this->button_edit         = TRUE;
-    $this->button_detail       = TRUE;
+    $this->buttonDetail       = TRUE;
     $this->button_show         = TRUE;
     $this->button_filter       = TRUE;
     $this->button_export       = FALSE;

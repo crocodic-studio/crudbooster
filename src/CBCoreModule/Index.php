@@ -358,11 +358,11 @@ class Index
         }
         $button_action_style = $CbCtrl->button_action_style;
         $button_edit = $CbCtrl->button_edit;
-        $button_detail = $CbCtrl->button_detail;
+        $buttonDetail = $CbCtrl->buttonDetail;
         $deleteBtn = $CbCtrl->deleteBtn;
         $id = ($row->{$CbCtrl->primaryKey});
 
-        $data = compact('addaction', 'row', 'id', 'button_action_style', 'parent_field', 'button_edit', 'deleteBtn', 'button_detail');
+        $data = compact('addaction', 'row', 'id', 'button_action_style', 'parent_field', 'button_edit', 'deleteBtn', 'buttonDetail');
         $htmlContent[] = "<div class='button_action' style='text-align:right'>".view('crudbooster::index.action', $data)->render()."</div>";
 
         return $htmlContent;
