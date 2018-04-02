@@ -78,18 +78,6 @@ class CBController extends Controller
         view()->share($this->data);
     }
 
-    private function checkHideForm()
-    {
-        if (! count($this->hide_form)) {
-            return null;
-        }
-        foreach ($this->form as $i => $f) {
-            if (in_array($f['name'], $this->hide_form)) {
-                unset($this->form[$i]);
-            }
-        }
-    }
-
     public function getIndex()
     {
         $this->genericLoader();

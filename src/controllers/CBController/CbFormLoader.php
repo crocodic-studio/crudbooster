@@ -26,6 +26,17 @@ trait CbFormLoader
         $this->data['button_cancel'] = $this->button_cancel;
         $this->data['button_edit'] = $this->button_edit;
         $this->data['button_save'] = $this->button_save;
-        $this->data['button_selected'] = $this->button_selected;
+    }
+
+    private function checkHideForm()
+    {
+        if (! count($this->hide_form)) {
+            return null;
+        }
+        foreach ($this->form as $i => $f) {
+            if (in_array($f['name'], $this->hide_form)) {
+                unset($this->form[$i]);
+            }
+        }
     }
 }
