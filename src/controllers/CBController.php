@@ -38,15 +38,11 @@ class CBController extends Controller
 
     public $arr = [];
 
-    public $col = [];
-
     public $form = [];
 
     public $data = [];
 
     //public $global_privilege = false;
-
-    public $deleteBtn = true;
 
     public $button_action_style = 'button_icon';
 
@@ -55,8 +51,6 @@ class CBController extends Controller
     public $parent_field = null;
 
     public $parent_id = null;
-
-    public $hide_form = [];
 
     public $index_return = false; //for export
 
@@ -172,7 +166,6 @@ class CBController extends Controller
     {
         $this->cbInit();
         $this->primary_key = DbInspector::findPk($this->table);
-        $this->columns_table = $this->col;
         $this->data_inputan = $this->form;
         $this->data['pk'] = $this->primary_key;
         $this->data['forms'] = $this->data_inputan;
@@ -181,15 +174,11 @@ class CBController extends Controller
         $this->data['title_field'] = $this->title_field;
         $this->data['appname'] = cbGetsetting('appname');
         $this->data['index_button'] = $this->index_button;
-        $this->data['deleteBtn'] = $this->deleteBtn;
+
         $this->data['sub_module'] = $this->sub_module;
         $this->data['parent_field'] = (request('parent_field')) ?: $this->parent_field;
         $this->data['parent_id'] = (request('parent_id')) ?: $this->parent_id;
 
-        if (CB::getCurrentMethod() == 'getProfile') {
-            session()->put('current_row_id', CB::myId());
-            $this->data['return_url'] = Request::fullUrl();
-        }
     }
 
     /**

@@ -5,13 +5,13 @@ namespace crocodicstudio\crudbooster\controllers\CBController;
 trait CbFormLoader
 {
 
+    public $hide_form = [];
+
     public $button_cancel = true;
 
     public $button_edit = true;
 
     public $button_save = true;
-
-    public $button_selected = [];
 
     public $button_add = true;
 

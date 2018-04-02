@@ -44,8 +44,17 @@ trait CbIndexLoader
 
     public $button_detail = true;
 
+    public $deleteBtn = true;
+
+    public $col = [];
+
+    public $button_selected = [];
+
     protected function cbIndexLoader()
     {
+        $this->columns_table = $this->col;
+        $this->data['deleteBtn'] = $this->deleteBtn;
+        $this->data['button_selected'] = $this->button_selected;
         $this->data['button_export'] = $this->buttonExport;
         $this->data['button_import'] = $this->buttonImport;
         $this->data['button_filter'] = $this->buttonFilter;
