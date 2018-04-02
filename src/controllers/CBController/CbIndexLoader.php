@@ -50,8 +50,11 @@ trait CbIndexLoader
 
     public $button_selected = [];
 
+    public $button_edit = true;
+
     protected function cbIndexLoader()
     {
+        $this->data['button_edit'] = $this->button_edit;
         $this->columns_table = $this->col;
         $this->data['deleteBtn'] = $this->deleteBtn;
         $this->data['button_selected'] = $this->button_selected;
