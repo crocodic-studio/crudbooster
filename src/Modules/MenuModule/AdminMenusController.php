@@ -118,7 +118,7 @@ class AdminMenusController extends CBController
 
     private function setButtons()
     {
-        $this->button_table_action = true;
+        $this->buttonTableAction = true;
         $this->button_action_style = "FALSE";
         $this->button_add = false;
         $this->deleteBtn = true;

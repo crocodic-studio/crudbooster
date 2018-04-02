@@ -16,7 +16,7 @@ public function cbInit() {
     $this->limit               = 20;
     $this->orderby             = "{{$pk}},desc";
     $this->show_numbering      = FALSE;
-    $this->button_table_action = TRUE;
+    $this->buttonTableAction = TRUE;
     $this->button_action_style = "button_icon";
     $this->button_add          = TRUE;
     $this->deleteBtn       = TRUE;

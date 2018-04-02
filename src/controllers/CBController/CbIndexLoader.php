@@ -44,8 +44,20 @@ trait CbIndexLoader
 
     public $button_detail = true;
 
+    public $deleteBtn = true;
+
+    public $col = [];
+
+    public $button_selected = [];
+
+    public $button_edit = true;
+
     protected function cbIndexLoader()
     {
+        $this->data['button_edit'] = $this->button_edit;
+        $this->columns_table = $this->col;
+        $this->data['deleteBtn'] = $this->deleteBtn;
+        $this->data['button_selected'] = $this->button_selected;
         $this->data['button_export'] = $this->buttonExport;
         $this->data['button_import'] = $this->buttonImport;
         $this->data['button_filter'] = $this->buttonFilter;
@@ -55,12 +67,13 @@ trait CbIndexLoader
         $this->data['index_statistic'] = $this->indexStatistic;
         $this->data['table_row_color'] = $this->tableRowColor;
         $this->data['button_bulk_action'] = $this->buttonBulkAction;
-        $this->data['button_table_action'] = $this->buttonTableAction;
+        $this->data['buttonTableAction'] = $this->buttonTableAction;
         $this->data['index_additional_view'] = $this->indexAdditionalView;
         $this->data['button_action_width'] = $this->buttonActionWidth;
         $this->data['button_show'] = $this->buttonShow;
         $this->data['addaction'] = ($this->show_addaction) ? $this->addaction : null;
         $this->data['button_detail'] = $this->button_detail;
+
     }
 
 }

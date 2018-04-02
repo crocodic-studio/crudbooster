@@ -93,7 +93,7 @@
             }
             ?>
 
-            @if($button_table_action)
+            @if($buttonTableAction)
                 @if(CRUDBooster::canUpdate() || CRUDBooster::canDelete() || CRUDBooster::canRead())
                     <th width='{{$button_action_width?:"auto"}}'
                         style="text-align:right">{{cbTrans("action_label")}}</th>
@@ -166,7 +166,7 @@
             }
             ?>
 
-            @if($button_table_action)
+            @if($buttonTableAction)
                 @if(CRUDBooster::canUpdate() || CRUDBooster::canDelete() || CRUDBooster::canRead())
                     <th> -</th>
                 @endif

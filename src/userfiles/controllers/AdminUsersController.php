@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use crocodicstudio\crudbooster\controllers\CBController;
-use CRUDBooster;
-use CB;
+use CRUDBooster, CB;
+use Illuminate\Support\Facades\Request;
 
 class AdminUsersController extends CBController
 {
@@ -73,6 +73,9 @@ class AdminUsersController extends CBController
         $this->button_add = false;
         $this->deleteBtn = false;
         $this->hide_form = ['id_cms_privileges'];
+
+        session()->put('current_row_id', CB::myId());
+        $this->data['return_url'] = Request::fullUrl();
 
         $data['page_title'] = cbTrans("label_button_profile");
         $data['row'] = CRUDBooster::first('cms_users', CRUDBooster::myId());
