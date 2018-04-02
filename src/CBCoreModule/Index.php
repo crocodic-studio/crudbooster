@@ -353,7 +353,7 @@ class Index
      */
     private function addActionButtons(CBController $CbCtrl, $addaction, $row, $htmlContent)
     {
-        if (!$CbCtrl->button_table_action) {
+        if (!$CbCtrl->buttonTableAction) {
             return $htmlContent;
         }
         $button_action_style = $CbCtrl->button_action_style;
