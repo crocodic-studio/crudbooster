@@ -15,7 +15,7 @@ class AdminModulesController extends CBController
     public function cbInit()
     {
         $this->table = 'cms_moduls';
-        $this->primary_key = 'id';
+        $this->primaryKey = 'id';
         $this->title_field = 'name' ;
         $this->limit = 100;
         $this->button_add = false;
@@ -195,7 +195,7 @@ class AdminModulesController extends CBController
     {
         $this->cbLoader();
 
-        $row = $this->table()->where($this->primary_key, $id)->first();
+        $row = $this->table()->where($this->primaryKey, $id)->first();
 
 
         app(FormValidator::class)->validate($id, $this->form, $this->table);

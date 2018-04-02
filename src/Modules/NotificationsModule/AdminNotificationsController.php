@@ -13,7 +13,7 @@ class AdminNotificationsController extends CBController
     public function __construct()
     {
         $this->table = "cms_notifications";
-        $this->primary_key = "id";
+        $this->primaryKey = "id";
         $this->title_field = "content";
         $this->limit = 20;
         $this->index_orderby = ["id" => "desc"];

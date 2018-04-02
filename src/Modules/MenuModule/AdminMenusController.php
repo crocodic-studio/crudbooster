@@ -15,7 +15,7 @@ class AdminMenusController extends CBController
     public function cbInit()
     {
         $this->table = "cms_menus";
-        $this->primary_key = "id";
+        $this->primaryKey = "id";
         $this->title_field = "name";
         $this->limit = 20;
         $this->orderby = ["id" => "desc"];
@@ -136,18 +136,18 @@ class AdminMenusController extends CBController
      */
     private function getMenuId($row)
     {
-        $id_module = $id_statistic = 0;
+        $idModule = $idStatistic = 0;
 
         if ($row->type == 'Module') {
-            $id_module = DB::table('cms_moduls')->where('path', $row->path)->first()->id;
+            $idModule = DB::table('cms_moduls')->where('path', $row->path)->first()->id;
         }
 
         if ($row->type == 'Statistic') {
             $row->path = str_replace('statistic-builder/show/', '', $row->path);
-            $id_statistic = DB::table('cms_statistics')->where('slug', $row->path)->first()->id;
+            $idStatistic = DB::table('cms_statistics')->where('slug', $row->path)->first()->id;
         }
 
-        return [$id_statistic, $id_module];
+        return [$idStatistic, $idModule];
     }
 
     private function setCols()

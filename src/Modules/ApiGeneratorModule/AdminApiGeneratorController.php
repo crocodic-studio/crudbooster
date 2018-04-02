@@ -16,7 +16,7 @@ class AdminApiGeneratorController extends CBController
     public function cbInit()
     {
         $this->table = 'cms_apicustom';
-        $this->primary_key = "id";
+        $this->primaryKey = "id";
         $this->title_field = "nama";
         $this->button_show = false;
         $this->button_new = false;

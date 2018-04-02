@@ -34,7 +34,7 @@ class CBController extends Controller
 
     public $title_field;
 
-    public $primary_key = 'id';
+    public $primaryKey = 'id';
 
     public $arr = [];
 
@@ -128,7 +128,7 @@ class CBController extends Controller
      */
     public function findRow($id)
     {
-        return $this->table()->where($this->primary_key, $id);
+        return $this->table()->where($this->primaryKey, $id);
     }
 
     public function getDetail($id)
@@ -165,9 +165,9 @@ class CBController extends Controller
     protected function genericLoader()
     {
         $this->cbInit();
-        $this->primary_key = DbInspector::findPk($this->table);
+        $this->primaryKey = DbInspector::findPk($this->table);
         $this->data_inputan = $this->form;
-        $this->data['pk'] = $this->primary_key;
+        $this->data['pk'] = $this->primaryKey;
         $this->data['forms'] = $this->data_inputan;
         $this->data['hide_form'] = $this->hide_form;
         $this->data['table'] = $this->table;

@@ -12,7 +12,7 @@ class AdminStatisticBuilderController extends CBController
     public function cbInit()
     {
         $this->table = "cms_statistics";
-        $this->primary_key = "id";
+        $this->primaryKey = "id";
         $this->title_field = "name";
         $this->limit = 20;
         $this->orderby = "id,desc";

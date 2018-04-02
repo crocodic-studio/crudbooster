@@ -38,7 +38,7 @@ class Index
 
         $tablePK = $data['table_pk'];
 
-        $result = $CbCtrl->table()->select(DB::raw($CbCtrl->table.".".$CbCtrl->primary_key));
+        $result = $CbCtrl->table()->select(DB::raw($CbCtrl->table.".".$CbCtrl->primaryKey));
 
         $this->_filterForParent($result);
 
@@ -360,7 +360,7 @@ class Index
         $button_edit = $CbCtrl->button_edit;
         $button_detail = $CbCtrl->button_detail;
         $deleteBtn = $CbCtrl->deleteBtn;
-        $id = ($row->{$CbCtrl->primary_key});
+        $id = ($row->{$CbCtrl->primaryKey});
 
         $data = compact('addaction', 'row', 'id', 'button_action_style', 'parent_field', 'button_edit', 'deleteBtn', 'button_detail');
         $htmlContent[] = "<div class='button_action' style='text-align:right'>".view('crudbooster::index.action', $data)->render()."</div>";
