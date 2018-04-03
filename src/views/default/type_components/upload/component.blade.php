@@ -4,7 +4,7 @@
 			<div class="{{$col_width?:'col-sm-10'}}">
 			@if($value)
 				<?php 					
-					if(Storage::exists($value)):								
+					if(Storage::exists($value) || file_exists($value)):								
 						$url         = asset($value);						
 						$ext 		= pathinfo($url, PATHINFO_EXTENSION);
 						$images_type = array('jpg','png','gif','jpeg','bmp','tiff');																																				
