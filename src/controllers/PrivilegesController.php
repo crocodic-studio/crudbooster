@@ -158,6 +158,10 @@ class PrivilegesController extends CBController {
 		DB::table($this->table)->where($this->primary_key,$id)->update($this->arr);
 										
 		$priv = Request::input("privileges");
+		
+		// This solves issue #1074
+    		DB::table("cms_privileges_roles")->where("id_cms_privileges",$id)->delete();
+		
 		if($priv) {
 						
 			foreach($priv as $id_modul => $data) {
