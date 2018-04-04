@@ -302,7 +302,7 @@ class Index
      */
     private function addRowNumber(CBController $CbCtrl, $number, $htmlContent)
     {
-        if ($CbCtrl->show_numbering) {
+        if ($CbCtrl->showNumbering) {
             $htmlContent[] = $number.'. ';
         }
 

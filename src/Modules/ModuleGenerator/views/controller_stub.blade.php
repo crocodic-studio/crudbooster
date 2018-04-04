@@ -15,7 +15,7 @@ public function cbInit() {
     $this->title_field         = "{{DbInspector::colName($coloms)}}";
     $this->limit               = 20;
     $this->orderby             = "{{$pk}},desc";
-    $this->show_numbering      = FALSE;
+    $this->showNumbering      = FALSE;
     $this->buttonTableAction = TRUE;
     $this->button_action_style = "button_icon";
     $this->button_add          = TRUE;
