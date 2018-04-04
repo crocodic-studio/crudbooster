@@ -59,7 +59,7 @@ class AdminModulesController extends CBController
     // 	$this->cbView('CbModulesGen::index',$data);
     // }	
 
-    function hook_before_delete($id)
+    function hookBeforeDelete($id)
     {
         $controller = ModulesRepo::getControllerName($id);
         DB::table('cms_menus')->where('path', 'like', '%'.$controller.'%')->delete();

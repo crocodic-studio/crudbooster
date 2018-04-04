@@ -45,7 +45,7 @@ class AdminMenusController extends CBController
         return view('CbMenu::menus_management', compact('return_url', 'page_title'));
     }
 
-    public function hook_before_add(&$postData)
+    public function hookBeforeAdd(&$postData)
     {
         $postData['parent_id'] = 0;
 
@@ -61,7 +61,7 @@ class AdminMenusController extends CBController
         }
     }
 
-    public function hook_before_edit(&$postData, $id)
+    public function hookBeforeEdit(&$postData, $id)
     {
         if ($postData['is_dashboard'] == 1) {
             //If set dashboard, so unset for first all dashboard
@@ -75,7 +75,7 @@ class AdminMenusController extends CBController
         unset($postData['statistic_slug']);
     }
 
-    public function hook_after_delete($id)
+    public function hookAfterDelete($id)
     {
         $this->table()->where('parent_id', $id)->delete();
     }
