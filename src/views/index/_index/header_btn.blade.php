@@ -3,7 +3,7 @@
 
 
         <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-            <i class='fa fa-check-square-o'></i> {{cbTrans("button_selected_action")}}
+            <i class='fa fa-check-square-o'></i> {{ cbTrans("button_selected_action")}}
             <span class="fa fa-caret-down"></span>
         </button>
 

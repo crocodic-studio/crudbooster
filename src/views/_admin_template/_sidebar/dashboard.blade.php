@@ -3,6 +3,6 @@
     <a href='{!! $dashboard->url !!}'
        class='{{($dashboard->color)?"text-".$dashboard->color:""}}'>
         {!! cbIcon('dashboard') !!}
-        <span>{{cbTrans("text_dashboard")}}</span>
+        <span>{{ cbTrans("text_dashboard")}}</span>
     </a>
 </li>

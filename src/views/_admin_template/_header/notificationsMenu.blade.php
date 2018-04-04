@@ -5,7 +5,7 @@
         <span id='notification_count' class="label label-danger" style="display:none">0</span>
     </a>
     <ul id='list_notifications' class="dropdown-menu">
-        <li class="header">{{cbTrans("text_no_notification")}}</li>
+        <li class="header">{{ cbTrans("text_no_notification")}}</li>
         <li>
             <!-- inner menu: contains the actual data -->
             <div class="slimScrollDiv"
@@ -13,7 +13,7 @@
                 <ul class="menu" style="overflow: hidden; width: 100%; height: 200px;">
                     <li>
                         <a href="#">
-                            <em>{{cbTrans("text_no_notification")}}</em>
+                            <em>{{ cbTrans("text_no_notification")}}</em>
                         </a>
                     </li>
 
@@ -25,7 +25,7 @@
             </div>
         </li>
         <li class="footer">
-            <a href="{{route('AdminNotificationsControllerGetIndex')}}">{{cbTrans("text_view_all_notification")}}</a>
+            <a href="{{route('AdminNotificationsControllerGetIndex')}}">{{ cbTrans("text_view_all_notification")}}</a>
         </li>
     </ul>
 </li>

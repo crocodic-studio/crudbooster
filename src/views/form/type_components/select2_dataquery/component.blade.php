@@ -56,7 +56,7 @@
 
             @if($formInput['options']['ajax_mode'] == false)
                 @if($formInput['options']['multiple']==false)
-                    <option value=''>{{cbTrans('text_prefix_option')}} {{$label}}</option>
+                    <option value=''>{{ cbTrans('text_prefix_option')}} {{$label}}</option>
                 @endif
 
                 @foreach (DB::select(DB::raw($query)) as $row)

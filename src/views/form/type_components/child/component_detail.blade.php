@@ -90,7 +90,7 @@
                     @if(empty($data_child))
                         <tr class="trNull">
                             <td colspan="{{count($formInput['columns'])+1}}"
-                                align="center">{{cbTrans('table_data_not_found')}}</td>
+                                align="center">{{ cbTrans('table_data_not_found')}}</td>
                         </tr>
                     @endif
                     </tbody>

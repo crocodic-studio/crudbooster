@@ -6,7 +6,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <h4 class="modal-title">
-                    <i class='fa fa-search'></i> {{cbTrans('datamodal_browse_data')}} {{$label}}
+                    <i class='fa fa-search'></i> {{ cbTrans('datamodal_browse_data')}} {{$label}}
                 </h4>
             </div>
             <div class="modal-body">

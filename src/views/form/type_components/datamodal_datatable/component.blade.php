@@ -18,7 +18,7 @@ $datamodal_value = DB::table($dm_table)->where($dm_value, $value)->first()->$dm_
                    {{$required?"required":""}} value="{{$datamodal_value}}" readonly>
             <span class="input-group-btn">
         <button class="btn btn-primary" onclick="showModal{{$name}}()" type="button"><i
-                    class='fa fa-search'></i> {{cbTrans('datamodal_browse_data')}}</button>
+                    class='fa fa-search'></i> {{ cbTrans('datamodal_browse_data')}}</button>
       </span>
         </div><!-- /input-group -->
 

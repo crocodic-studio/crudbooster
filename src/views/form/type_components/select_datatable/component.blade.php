@@ -12,7 +12,7 @@
                 var value = "{{$value}}";
 
                 if (fk_value != '') {
-                    $current.html("<option value=''>{{cbTrans('text_loading')}} {{$label}}");
+                    $current.html("<option value=''>{{ cbTrans('text_loading')}} {{$label}}");
                     $.get("{{CRUDBooster::mainpath('data-table')}}?table=" + table + "&label=" + label + "&fk_name=" + fk_name + "&fk_value=" + fk_value, function (response) {
                         if (response) {
                             $current.html("<option value=''>{{$default}}");

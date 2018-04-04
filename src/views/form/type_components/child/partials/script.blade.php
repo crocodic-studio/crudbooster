@@ -9,11 +9,11 @@
 
         function deleteRow {{$name}}(t) {
 
-            if (confirm("{{cbTrans('delete_title_confirm')}}")) {
+            if (confirm("{{ cbTrans('delete_title_confirm')}}")) {
                 $(t).parent().parent().remove();
                 if ($('#table-{{$name}} tbody tr').length == 0) {
                     var colspan = $('#table-{{$name}} thead tr th').length;
-                    $('#table-{{$name}} tbody').html("<tr class='trNull'><td colspan='" + colspan + "' align='center'>{{cbTrans('table_data_not_found')}}</td></tr>");
+                    $('#table-{{$name}} tbody').html("<tr class='trNull'><td colspan='" + colspan + "' align='center'>{{ cbTrans('table_data_not_found')}}</td></tr>");
                 }
             }
         }
@@ -22,7 +22,7 @@
             var p = $(t).parent().parent(); //parentTR
             currentRow = p;
             p.addClass('warning');
-            $('#btn-add-table-{{$name}}').val('{{cbTrans("save_changes")}}');
+            $('#btn-add-table-{{$name}}').val('{{ cbTrans("save_changes")}}');
             @foreach($formInput['columns'] as $c)
             @if($c['type']=='select')
             $('#{{$name.$c["name"]}}').val(p.find(".{{$c['name']}} input").val()).trigger("change");
@@ -50,7 +50,7 @@
             $('#panel-form-{{$name}} .required').each(function () {
                 var v = $(this).val();
                 if (v == '') {
-                    sweetAlert("{{cbTrans('alert_warning')}}", "{{cbTrans('please_complete_the_form')}}", "warning");
+                    sweetAlert("{{ cbTrans('alert_warning')}}", "{{ cbTrans('please_complete_the_form')}}", "warning");
                     is_false += 1;
                 }
             })
@@ -111,7 +111,7 @@
                 currentRow.replaceWith(trRow);
                 currentRow = null;
             }
-            $('#btn-add-table-{{$name}}').val('{{cbTrans("button_add_to_table")}}');
+            $('#btn-add-table-{{$name}}').val('{{ cbTrans("button_add_to_table")}}');
             $('#btn-reset-form-{{$name}}').click();
         }
     </script>

@@ -15,7 +15,7 @@ $query = str_random(5);
                 var value = "{{$value}}";
 
                 if (fk_value != '') {
-                    $current.html("<option value=''>{{cbTrans('text_loading')}} {{$label}}</option>");
+                    $current.html("<option value=''>{{ cbTrans('text_loading')}} {{$label}}</option>");
                     $.get("{{CRUDBooster::mainpath('data-query')}}?query=" + query + "&fk_name=" + fk_name + "&fk_value=" + fk_value, function (response) {
                         if (response.items.length > 0) {
                             $current.html("<option value=''>{{$default}}</option>");

@@ -4,7 +4,7 @@
     <div class="{{$col_width?:'col-sm-10'}}">
 
         @if(!$formInput['dataenum'] && !$formInput['datatable'] && !$formInput['dataquery'])
-            <em>{{cbTrans('there_is_no_option')}}</em>
+            <em>{{ cbTrans('there_is_no_option')}}</em>
         @endif
 
         @if($formInput['dataenum']!='')

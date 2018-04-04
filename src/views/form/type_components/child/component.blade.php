@@ -23,7 +23,7 @@ $name = str_slug($label, '');
                         <div class='col-sm-10'>
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <i class="fa fa-pencil-square-o"></i> {{cbTrans("text_form")}}</div>
+                                    <i class="fa fa-pencil-square-o"></i> {{ cbTrans("text_form")}}</div>
                                 <div class="panel-body child-form-area">
                                     @foreach($formInput['columns'] as $col)
                                         <?php $name_column = $name.$col['name'];?>
@@ -31,7 +31,7 @@ $name = str_slug($label, '');
                                             @if($col['type']!='hidden')
                                                 <label class="control-label col-sm-2">{{$col['label']}}
                                                     @if(!empty($col['required']))
-                                                        <span class="text-danger" title="{{cbTrans('this_field_is_required')}}">*</span>
+                                                        <span class="text-danger" title="{{ cbTrans('this_field_is_required')}}">*</span>
                                                     @endif
                                                 </label>
                                             @endif
@@ -85,9 +85,9 @@ $name = str_slug($label, '');
                                 </div>
                                 <div class="panel-footer" align="right">
                                     <input type='button' class='btn btn-default' id="btn-reset-form-{{$name}}"
-                                           onclick="resetForm{{$name}}()" value='{{cbTrans("button_reset")}}'/>
+                                           onclick="resetForm{{$name}}()" value='{{ cbTrans("button_reset")}}'/>
                                     <input type='button' id='btn-add-table-{{$name}}' class='btn btn-primary'
-                                           onclick="addToTable{{$name}}()" value='{{cbTrans("button_add_to_table")}}'/>
+                                           onclick="addToTable{{$name}}()" value='{{ cbTrans("button_add_to_table")}}'/>
                                 </div>
                             </div>
                         </div>
