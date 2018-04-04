@@ -7,7 +7,7 @@
 
         <div class='main-menu'>
             <ul class="sidebar-menu">
-                <li class="header">{{cbTrans("menu_navigation")}}</li>
+                <li class="header">{{ cbTrans("menu_navigation")}}</li>
                 <!-- Optionally, you can add icons to the links -->
                 <?php $hasDashboard = \crocodicstudio\crudbooster\Modules\MenuModule\MenuRepo::sidebarDashboard(); ?>
                 @includeWhen($hasDashboard, 'crudbooster::_admin_template._sidebar.dashboard')

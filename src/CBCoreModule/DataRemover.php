@@ -23,7 +23,7 @@ class DataRemover
      */
     function deleteIds($idsArray)
     {
-        $query = $this->ctrl->table()->whereIn($this->ctrl->primary_key, $idsArray);
+        $query = $this->ctrl->table()->whereIn($this->ctrl->primaryKey, $idsArray);
         if (Schema::hasColumn($this->ctrl->table, 'deleted_at')) {
             $query->update(['deleted_at' => date('Y-m-d H:i:s')]);
         } else {

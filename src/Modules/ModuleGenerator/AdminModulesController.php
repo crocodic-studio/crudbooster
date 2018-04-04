@@ -15,14 +15,14 @@ class AdminModulesController extends CBController
     public function cbInit()
     {
         $this->table = 'cms_moduls';
-        $this->primary_key = 'id';
+        $this->primaryKey = 'id';
         $this->title_field = 'name' ;
         $this->limit = 100;
         $this->button_add = false;
-        $this->button_export = false;
+        $this->buttonExport = false;
         $this->button_import = false;
         $this->button_filter = false;
-        $this->button_detail = false;
+        $this->buttonDetail = false;
         $this->button_bulk_action = false;
         $this->button_action_style = 'button_icon';
         $this->orderby = ['is_protected' => 'asc', 'name' => 'asc'];
@@ -59,7 +59,7 @@ class AdminModulesController extends CBController
     // 	$this->cbView('CbModulesGen::index',$data);
     // }	
 
-    function hook_before_delete($id)
+    function hookBeforeDelete($id)
     {
         $controller = ModulesRepo::getControllerName($id);
         DB::table('cms_menus')->where('path', 'like', '%'.$controller.'%')->delete();
@@ -195,7 +195,7 @@ class AdminModulesController extends CBController
     {
         $this->cbLoader();
 
-        $row = $this->table()->where($this->primary_key, $id)->first();
+        $row = $this->table()->where($this->primaryKey, $id)->first();
 
 
         app(FormValidator::class)->validate($id, $this->form, $this->table);

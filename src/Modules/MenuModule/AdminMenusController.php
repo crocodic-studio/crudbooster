@@ -15,7 +15,7 @@ class AdminMenusController extends CBController
     public function cbInit()
     {
         $this->table = "cms_menus";
-        $this->primary_key = "id";
+        $this->primaryKey = "id";
         $this->title_field = "name";
         $this->limit = 20;
         $this->orderby = ["id" => "desc"];
@@ -45,7 +45,7 @@ class AdminMenusController extends CBController
         return view('CbMenu::menus_management', compact('return_url', 'page_title'));
     }
 
-    public function hook_before_add(&$postData)
+    public function hookBeforeAdd(&$postData)
     {
         $postData['parent_id'] = 0;
 
@@ -61,7 +61,7 @@ class AdminMenusController extends CBController
         }
     }
 
-    public function hook_before_edit(&$postData, $id)
+    public function hookBeforeEdit(&$postData, $id)
     {
         if ($postData['is_dashboard'] == 1) {
             //If set dashboard, so unset for first all dashboard
@@ -75,7 +75,7 @@ class AdminMenusController extends CBController
         unset($postData['statistic_slug']);
     }
 
-    public function hook_after_delete($id)
+    public function hookAfterDelete($id)
     {
         $this->table()->where('parent_id', $id)->delete();
     }
@@ -123,10 +123,10 @@ class AdminMenusController extends CBController
         $this->button_add = false;
         $this->deleteBtn = true;
         $this->button_edit = true;
-        $this->button_detail = true;
+        $this->buttonDetail = true;
         $this->button_show = false;
         $this->button_filter = true;
-        $this->button_export = false;
+        $this->buttonExport = false;
         $this->button_import = false;
     }
 
@@ -136,18 +136,18 @@ class AdminMenusController extends CBController
      */
     private function getMenuId($row)
     {
-        $id_module = $id_statistic = 0;
+        $idModule = $idStatistic = 0;
 
         if ($row->type == 'Module') {
-            $id_module = DB::table('cms_moduls')->where('path', $row->path)->first()->id;
+            $idModule = DB::table('cms_moduls')->where('path', $row->path)->first()->id;
         }
 
         if ($row->type == 'Statistic') {
             $row->path = str_replace('statistic-builder/show/', '', $row->path);
-            $id_statistic = DB::table('cms_statistics')->where('slug', $row->path)->first()->id;
+            $idStatistic = DB::table('cms_statistics')->where('slug', $row->path)->first()->id;
         }
 
-        return [$id_statistic, $id_module];
+        return [$idStatistic, $idModule];
     }
 
     private function setCols()

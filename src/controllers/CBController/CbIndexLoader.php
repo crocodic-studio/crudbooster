@@ -42,7 +42,7 @@ trait CbIndexLoader
 
     public $addaction = [];
 
-    public $button_detail = true;
+    public $buttonDetail = true;
 
     public $deleteBtn = true;
 
@@ -52,18 +52,20 @@ trait CbIndexLoader
 
     public $button_edit = true;
 
+    public $buttonAdd = true;
+
     protected function cbIndexLoader()
     {
         $this->data['button_edit'] = $this->button_edit;
         $this->columns_table = $this->col;
         $this->data['deleteBtn'] = $this->deleteBtn;
         $this->data['button_selected'] = $this->button_selected;
-        $this->data['button_export'] = $this->buttonExport;
+        $this->data['buttonExport'] = $this->buttonExport;
         $this->data['button_import'] = $this->buttonImport;
         $this->data['button_filter'] = $this->buttonFilter;
-        $this->data['show_numbering'] = $this->showNumbering;
-        $this->data['pre_index_html'] = $this->preIndexHtml;
-        $this->data['post_index_html'] = $this->postIndexHtml;
+        $this->data['showNumbering'] = $this->showNumbering;
+        $this->data['preIndexHtml'] = $this->preIndexHtml;
+        $this->data['postIndexHtml'] = $this->postIndexHtml;
         $this->data['index_statistic'] = $this->indexStatistic;
         $this->data['table_row_color'] = $this->tableRowColor;
         $this->data['button_bulk_action'] = $this->buttonBulkAction;
@@ -72,7 +74,8 @@ trait CbIndexLoader
         $this->data['button_action_width'] = $this->buttonActionWidth;
         $this->data['button_show'] = $this->buttonShow;
         $this->data['addaction'] = ($this->show_addaction) ? $this->addaction : null;
-        $this->data['button_detail'] = $this->button_detail;
+        $this->data['buttonDetail'] = $this->buttonDetail;
+        $this->data['button_add'] = $this->buttonAdd;
 
     }
 

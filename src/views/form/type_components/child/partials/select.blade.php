@@ -30,7 +30,7 @@ if ($col['datatable']) {
         class='form-control select2 {{$col['required']?'required':''}}'
         {{ ($col['readonly']===true)?"readonly":"" }}
 >
-    <option value=''>{{cbTrans('text_prefix_option')}} {{$col['label']}}</option>
+    <option value=''>{{ cbTrans('text_prefix_option')}} {{$col['label']}}</option>
     @foreach ($options as $i => $option)
         <option value='{!! $option['value'] !!}'>{!! $option['label'] !!}</option>
     @endforeach

@@ -6,11 +6,11 @@
         @if(CRUDBooster::getCurrentMethod() != 'getProfile' && $button_cancel)
             @if(request('return_url'))
                 <p><a title='Return' href='{{request("return_url")}}'><i class='fa fa-chevron-circle-left '></i>
-                        &nbsp; {{cbTrans("form_back_to_list",['module'=>CRUDBooster::getCurrentModule()->name])}}</a>
+                        &nbsp; {{ cbTrans("form_back_to_list",['module'=>CRUDBooster::getCurrentModule()->name])}}</a>
                 </p>
             @else
                 <p><a title='Main Module' href='{{CRUDBooster::mainpath()}}'><i class='fa fa-chevron-circle-left '></i>
-                        &nbsp; {{cbTrans("form_back_to_list",['module'=>CRUDBooster::getCurrentModule()->name])}}</a>
+                        &nbsp; {{ cbTrans("form_back_to_list",['module'=>CRUDBooster::getCurrentModule()->name])}}</a>
                 </p>
             @endif
         @endif
@@ -60,7 +60,7 @@
                                            {{CRUDBooster::mainpath("?".http_build_query(@$_GET)) }}
                                     @endif
                                             ' class='btn btn-default'>
-                                            <i class='fa fa-chevron-circle-left'></i> {{cbTrans("button_back")}}
+                                            <i class='fa fa-chevron-circle-left'></i> {{ cbTrans("button_back")}}
                                         </a>
                                 @endif
 
@@ -68,11 +68,11 @@
                                 @if(CRUDBooster::canCreate() || CRUDBooster::canUpdate())
                                     <input type="submit" name="submit" value='
                                     @if(CRUDBooster::canCreate() && $button_addmore==TRUE && $command == 'add')
-                                        {{cbTrans("button_save_more")}}
+                                        {{ cbTrans("button_save_more")}}
                                     @endif
 
                                     @if(($button_save && $command != 'detail') || CB::getCurrentMethod() == 'getProfile')
-                                      {{cbTrans("button_save")}}
+                                      {{ cbTrans("button_save")}}
                                     @endif
                                     ' class='btn btn-success'>
 

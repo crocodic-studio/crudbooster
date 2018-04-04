@@ -22,7 +22,7 @@
                 {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} name="{{$name}}{{($formInput['options']['multiple']==true)?'[]':''}}" {{ ($formInput['options']['multiple'])?'multiple="multiple"':'' }} >
 
             @if($formInput['options']['multiple']==false)
-                <option value=''>{{cbTrans('text_prefix_option')}} {{$label}}</option>
+                <option value=''>{{ cbTrans('text_prefix_option')}} {{$label}}</option>
             @endif
 
             @php

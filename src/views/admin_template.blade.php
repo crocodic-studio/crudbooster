@@ -34,15 +34,15 @@
                         @if($button_show)
                             <a href="{{ CRUDBooster::mainpath().'?'.http_build_query(request()->all()) }}"
                                id='btn_show_data' class="btn btn-sm btn-primary"
-                               title="{{cbTrans('action_show_data')}}">
+                               title="{{ cbTrans('action_show_data')}}">
 
                                 {!!  cbIcon('table') !!}
-                                {{cbTrans('action_show_data')}}
+                                {{ cbTrans('action_show_data')}}
                             </a>
                         @endif
 
                         @include('crudbooster::_admin_template.addButton')
-                        @include('crudbooster::_admin_template.export_import_buttons', ['exportBtn' => $button_export, 'importBtn' => $button_import, 'query' => $build_query])
+                        @include('crudbooster::_admin_template.export_import_buttons', ['exportBtn' => $buttonExport, 'importBtn' => $button_import, 'query' => $build_query])
                     @endif
 
 

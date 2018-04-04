@@ -20,8 +20,8 @@ class DbInspector
             return 'id';
         }
 
-        if (CbCache::get('table_'.$table, 'primary_key')) {
-            return CbCache::get('table_'.$table, 'primary_key');
+        if (CbCache::get('table_'.$table, 'primaryKey')) {
+            return CbCache::get('table_'.$table, 'primaryKey');
         }
         $table = CRUDBooster::parseSqlTable($table);
 
@@ -29,14 +29,14 @@ class DbInspector
             throw new \Exception("parseSqlTable can't determine the table");
         }
 
-        $primary_key = self::findPKname($table);
+        $primaryKey = self::findPKname($table);
 
-        if (! $primary_key) {
+        if (! $primaryKey) {
             return 'id';
         }
-        CbCache::put('table_'.$table, 'primary_key', $primary_key);
+        CbCache::put('table_'.$table, 'primaryKey', $primaryKey);
 
-        return $primary_key;
+        return $primaryKey;
     }
 
     /**
@@ -170,12 +170,12 @@ class DbInspector
 							AND Col.Table_Name = '$table[table]' 
 					";
             $keys = DB::select($query);
-            $primary_key = $keys[0]->Column_Name;
+            $primaryKey = $keys[0]->Column_Name;
         } catch (\Exception $e) {
-            $primary_key = null;
+            $primaryKey = null;
         }
 
-        return $primary_key;
+        return $primaryKey;
     }
 
     /**
@@ -190,12 +190,12 @@ class DbInspector
         try {
             $query = "select * from information_schema.COLUMNS where TABLE_SCHEMA = '$table[database]' and TABLE_NAME = '$table[table]' and COLUMN_KEY = 'PRI'";
             $keys = DB::select($query);
-            $primary_key = $keys[0]->COLUMN_NAME;
+            $primaryKey = $keys[0]->COLUMN_NAME;
         } catch (\Exception $e) {
-            $primary_key = null;
+            $primaryKey = null;
         }
 
-        return $primary_key;
+        return $primaryKey;
     }
 
     public static function listTables()

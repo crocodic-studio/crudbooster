@@ -6,7 +6,7 @@
     <span class="input-group-btn">
         <button class="btn btn-primary" id="btn-upload-{{$name_column}}"
                 onclick="showFakeUpload{{$name_column}}()" type="button">
-            <i class='fa fa-search'></i> {{cbTrans('datamodal_browse_file')}}
+            <i class='fa fa-search'></i> {{ cbTrans('datamodal_browse_file')}}
         </button>
     </span>
 </div><!-- /input-group -->

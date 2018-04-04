@@ -54,7 +54,7 @@
             @if($button_bulk_action)
                 <th width='3%'><input type='checkbox' id='checkall'/></th>
             @endif
-            @if($show_numbering)
+            @if($showNumbering)
                 <th width="1%">{{ cbTrans('no') }}</th>
             @endif
 
@@ -104,9 +104,9 @@
         <tbody>
         @if(empty($result))
             <tr class='warning'>
-                @if($button_bulk_action && $show_numbering)
+                @if($button_bulk_action && $showNumbering)
                     <td colspan='{{count($columns)+3}}' align="center">
-                @elseif( ($button_bulk_action && ! $show_numbering) || (! $button_bulk_action && $show_numbering) )
+                @elseif( ($button_bulk_action && ! $showNumbering) || (! $button_bulk_action && $showNumbering) )
                     <td colspan='{{count($columns)+2}}' align="center">
                 @else
                     <td colspan='{{count($columns)+1}}' align="center">
@@ -153,7 +153,7 @@
                 <th>&nbsp;</th>
             @endif
 
-            @if($show_numbering)
+            @if($showNumbering)
                 <th>&nbsp;</th>
             @endif
 

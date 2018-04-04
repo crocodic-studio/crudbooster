@@ -23,7 +23,7 @@ $data_child = $data_child->orderby($formInput['table'].'.id', 'desc')->get();
 ?>
 <div class="panel panel-default">
     <div class="panel-heading">
-        <i class='fa fa-table'></i> {{cbTrans('table_detail')}}
+        <i class='fa fa-table'></i> {{ cbTrans('table_detail')}}
     </div>
     <div class="panel-body no-padding table-responsive" style="max-height: 400px;overflow: auto;">
         <table id='table-{{$name}}' class='table table-striped table-bordered'>
@@ -32,7 +32,7 @@ $data_child = $data_child->orderby($formInput['table'].'.id', 'desc')->get();
                     @foreach($formInput['columns'] as $col)
                         <th>{{$col['label']}}</th>
                     @endforeach
-                    <th width="90px">{{cbTrans('action_label')}}</th>
+                    <th width="90px">{{ cbTrans('action_label')}}</th>
                 </tr>
             </thead>
             <tbody>
@@ -96,7 +96,7 @@ $data_child = $data_child->orderby($formInput['table'].'.id', 'desc')->get();
             @if(count($data_child)==0)
                 <tr class="trNull">
                     <td colspan="{{count($formInput['columns'])+1}}"
-                        align="center">{{cbTrans('table_data_not_found')}}</td>
+                        align="center">{{ cbTrans('table_data_not_found')}}</td>
                 </tr>
             @endif
             </tbody>

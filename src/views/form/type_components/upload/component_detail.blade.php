@@ -10,7 +10,7 @@ $ext = pathinfo($value, PATHINFO_EXTENSION);
     @else
         <a href='{{asset($value)}}?download=1'
            title="File For {{$label}}"
-           target="_blank">{{cbTrans("button_download_file")}}
+           target="_blank">{{ cbTrans("button_download_file")}}
         </a>
     @endif
 @endif

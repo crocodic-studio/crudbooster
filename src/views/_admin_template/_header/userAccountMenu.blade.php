@@ -21,24 +21,24 @@
         <li class="user-footer">
             <div class="pull-{{ cbTrans('left') }}">
                 <a href="{{ CB::adminPath('users/profile') }}" class="btn btn-default btn-flat">
-                    <i class='fa fa-user'></i> {{cbTrans("label_button_profile")}}</a>
+                    <i class='fa fa-user'></i> {{ cbTrans("label_button_profile")}}</a>
             </div>
             <div class="pull-{{ cbTrans('right') }}">
                 <a title='Lock Screen' href="{{ route('getLockScreen') }}"
                    class='btn btn-default btn-flat'>{!! cbIcon('key') !!}</a>
                 <a href="javascript:void(0)" onclick="swal({
-                        title: '{{cbTrans('alert_want_to_logout')}}',
+                        title: '{{ cbTrans('alert_want_to_logout')}}',
                         type:'info',
                         showCancelButton:true,
                         allowOutsideClick:true,
                         confirmButtonColor: '#DD6B55',
-                        confirmButtonText: '{{cbTrans('button_logout')}}',
-                        cancelButtonText: '{{cbTrans('button_cancel')}}',
+                        confirmButtonText: '{{ cbTrans('button_logout')}}',
+                        cancelButtonText: '{{ cbTrans('button_cancel')}}',
                         closeOnConfirm: false
                         }, function(){
                         location.href = '{{ route("getLogout") }}';
 
-                        });" title="{{cbTrans('button_logout')}}" class="btn btn-danger btn-flat">
+                        });" title="{{ cbTrans('button_logout')}}" class="btn btn-danger btn-flat">
                     {!! cbIcon('power-off') !!}
                 </a>
             </div>

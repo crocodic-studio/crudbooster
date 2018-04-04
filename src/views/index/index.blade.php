@@ -6,8 +6,8 @@
     @include("crudbooster::index._index.statistics" , ['index_statistic' => $index_statistic])
 
 
-    @if(!empty($pre_index_html))
-        {!! $pre_index_html !!}
+    @if(!empty($preIndexHtml))
+        {!! $preIndexHtml !!}
     @endif
 
 
@@ -15,7 +15,7 @@
         <p>
             <a href='{{g("return_url")}}'>
                 <i class='fa fa-chevron-circle-{{ cbTrans('left') }}'></i>
-                &nbsp; {{cbTrans('form_back_to_list',['module'=>urldecode(g('label'))])}}
+                &nbsp; {{ cbTrans('form_back_to_list',['module'=>urldecode(g('label'))])}}
             </a>
         </p>
     @endif
@@ -34,9 +34,9 @@
 
                 @if($button_filter)
                     <a style="margin-top:-23px" href="javascript:void(0)" id='btn_advanced_filter'
-                       data-url-parameter='{{$build_query}}' title='{{cbTrans('filter_dialog_title')}}'
+                       data-url-parameter='{{$build_query}}' title='{{ cbTrans('filter_dialog_title')}}'
                        class="btn btn-sm btn-default {{(Request::get('filter_column'))?'active':''}}">
-                        <i class="fa fa-filter"></i> {{cbTrans("button_filter")}}
+                        <i class="fa fa-filter"></i> {{ cbTrans("button_filter")}}
                     </a>
                 @endif
 
@@ -54,8 +54,8 @@
         </div>
     </div>
 
-    @if(!empty($post_index_html))
-        {!! $post_index_html !!}
+    @if(!empty($postIndexHtml))
+        {!! $postIndexHtml !!}
     @endif
 
 @endsection

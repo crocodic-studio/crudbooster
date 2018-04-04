@@ -25,7 +25,7 @@ class Order
     {
         $orderby = $this->ctrl->orderby;
         if (! $orderby) {
-            $result->orderby($table.'.'.$this->ctrl->primary_key, 'desc');
+            $result->orderby($table.'.'.$this->ctrl->primaryKey, 'desc');
             return;
         }
         if (is_string($orderby)) {

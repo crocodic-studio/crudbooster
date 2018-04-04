@@ -38,7 +38,7 @@ class Index
 
         $tablePK = $data['table_pk'];
 
-        $result = $CbCtrl->table()->select(DB::raw($CbCtrl->table.".".$CbCtrl->primary_key));
+        $result = $CbCtrl->table()->select(DB::raw($CbCtrl->table.".".$CbCtrl->primaryKey));
 
         $this->_filterForParent($result);
 
@@ -302,7 +302,7 @@ class Index
      */
     private function addRowNumber(CBController $CbCtrl, $number, $htmlContent)
     {
-        if ($CbCtrl->show_numbering) {
+        if ($CbCtrl->showNumbering) {
             $htmlContent[] = $number.'. ';
         }
 
@@ -358,11 +358,11 @@ class Index
         }
         $button_action_style = $CbCtrl->button_action_style;
         $button_edit = $CbCtrl->button_edit;
-        $button_detail = $CbCtrl->button_detail;
+        $buttonDetail = $CbCtrl->buttonDetail;
         $deleteBtn = $CbCtrl->deleteBtn;
-        $id = ($row->{$CbCtrl->primary_key});
+        $id = ($row->{$CbCtrl->primaryKey});
 
-        $data = compact('addaction', 'row', 'id', 'button_action_style', 'parent_field', 'button_edit', 'deleteBtn', 'button_detail');
+        $data = compact('addaction', 'row', 'id', 'button_action_style', 'parent_field', 'button_edit', 'deleteBtn', 'buttonDetail');
         $htmlContent[] = "<div class='button_action' style='text-align:right'>".view('crudbooster::index.action', $data)->render()."</div>";
 
         return $htmlContent;

@@ -17,7 +17,7 @@
                         <img style='max-width:160px' title="Image For {{$label}}" src='{{$url}}'/></a>
                 </p>
                 @else
-                    <p><a href='{{$url}}'>{{cbTrans("button_download_file")}}</a></p>
+                    <p><a href='{{$url}}'>{{ cbTrans("button_download_file")}}</a></p>
                 @endif
 
                 <input type='hidden' name='_$name' value='{!! $value !!}'/>
@@ -27,16 +27,16 @@
 
             @if(!$readonly || !$disabled)
                 <p><a class='btn btn-danger btn-delete btn-sm'
-                      onclick="if(!confirm('{{cbTrans("delete_title_confirm")}}')) return false"
+                      onclick="if(!confirm('{{ cbTrans("delete_title_confirm")}}')) return false"
                       href='{{url(CRUDBooster::mainpath("delete-image?image=".$value."&id=".$row->id."&column=".$name))}}'><i
-                                class='fa fa-ban'></i> {{cbTrans('text_delete')}} </a></p>
+                                class='fa fa-ban'></i> {{ cbTrans('text_delete')}} </a></p>
             @endif
         @endif
         @if(!$value)
             <input type='file' id="{{$name}}" title="{{$label}}"
                    {{$required}} {{$readonly}} {{$disabled}} class='form-control' name="{{$name}}"/>
         @else
-            <p class='text-muted'><em>{{cbTrans("notice_delete_file_upload")}}</em></p>
+            <p class='text-muted'><em>{{ cbTrans("notice_delete_file_upload")}}</em></p>
         @endif
         {!! underField($formInput['help'], $errors->first($name)) !!}
 

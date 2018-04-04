@@ -5,7 +5,7 @@
     <input type="text" class="form-control input-label {{$col['required']?"required":""}}" readonly>
     <span class="input-group-btn">
         <button class="btn btn-primary" onclick="showModal{{$name_column}}()" type="button">
-            <i class='fa fa-search'></i> {{cbTrans('datamodal_browse_data')}}
+            <i class='fa fa-search'></i> {{ cbTrans('datamodal_browse_data')}}
         </button>
   </span>
 </div><!-- /input-group -->

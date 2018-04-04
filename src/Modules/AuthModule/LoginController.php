@@ -9,36 +9,17 @@ use Illuminate\Support\Facades\Validator;
 
 class LoginController
 {
-    public function table($tableName = null)
-    {
-        $tableName = $tableName ?: $this->table;
-        return \DB::table($tableName);
-    }
-
     public function postLogin()
     {
         $this->validateLogin();
 
         $password = request("password");
+
         $user = CbUsersRepo::findByMail(request("email"));
 
         $this->validatePassword($password, $user);
 
-        $priv = $this->table('cms_privileges')->where('id', $user->id_cms_privileges)->first();
-
-        $roles = $this->fetchRoles($user);
-
-        $photo = ($user->photo) ? asset($user->photo) : asset('vendor/crudbooster/avatar.jpg');
-        session()->put('admin_id', $user->id);
-        session()->put('admin_is_superadmin', $priv->is_superadmin);
-        session()->put('admin_name', $user->name);
-        session()->put('admin_photo', $photo);
-        session()->put('admin_privileges_roles', $roles);
-        session()->put('admin_privileges', $user->id_cms_privileges);
-        session()->put('admin_privileges_name', $priv->name);
-        session()->put('admin_lock', 0);
-        session()->put('theme_color', $priv->theme_color);
-        session()->put('appname', cbGetsetting('appname'));
+        $this->setSession($user);
 
         $this->LogIt($user);
 
@@ -47,7 +28,6 @@ class LoginController
 
         return redirect(CB::adminPath());
     }
-
 
     private function validateLogin()
     {
@@ -75,12 +55,11 @@ class LoginController
         }
     }
 
-    /**
-     * @param $users
-     */
-    private function LogIt($users)
+    public function table($tableName = null)
     {
-        CB::insertLog(trans('logging.log_login', ['email' => $users->email, 'ip' => Request::server('REMOTE_ADDR')]));
+        $tableName = $tableName ?: $this->table;
+
+        return \DB::table($tableName);
     }
 
     /**
@@ -92,5 +71,36 @@ class LoginController
         $roles = $this->table('cms_privileges_roles')->where('id_cms_privileges', $user->id_cms_privileges)->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')->get();
 
         return $roles;
+    }
+
+    /**
+     * @param $users
+     */
+    private function LogIt($users)
+    {
+        CB::insertLog(trans('logging.log_login', ['email' => $users->email, 'ip' => Request::server('REMOTE_ADDR')]));
+    }
+
+    /**
+     * @param $user
+     * @param $priv
+     * @param $photo
+     * @param $roles
+     */
+    private function setSession($user)
+    {
+        $session = [
+            'admin_id' => $user->id,
+            'admin_is_superadmin' => $this->table('cms_privileges')->where('id', $user->id_cms_privileges)->first()->is_superadmin,
+            'admin_name' => $user->name,
+            'admin_photo' => ($user->photo) ? asset($user->photo) : asset('vendor/crudbooster/avatar.jpg'),
+            'admin_privileges_roles' => $this->fetchRoles($user),
+            'admin_privileges' => $user->id_cms_privileges,
+            'admin_privileges_name' => $this->table('cms_privileges')->where('id', $user->id_cms_privileges)->first()->name,
+            'admin_lock' => 0,
+            'theme_color' => $this->table('cms_privileges')->where('id', $user->id_cms_privileges)->first()->theme_color,
+            'appname' => cbGetsetting('appname'),
+        ];
+        session($session);
     }
 }

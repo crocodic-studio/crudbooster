@@ -3,7 +3,7 @@
        title='Export Data' class="btn btn-sm btn-primary btn-export-data">
 
         {!!  cbIcon('upload') !!}
-        {{cbTrans("button_export")}}
+        {{ cbTrans("button_export")}}
     </a>
 @endif
 
@@ -13,6 +13,6 @@
        class="btn btn-sm btn-primary btn-import-data">
 
         {!!  cbIcon('download') !!}
-        {{cbTrans("button_import")}}
+        {{ cbTrans("button_import")}}
     </a>
 @endif

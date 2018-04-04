@@ -38,7 +38,7 @@
             ?>
         @endforeach
 
-        @if(CRUDBooster::canRead() && $button_detail)
+        @if(CRUDBooster::canRead() && $buttonDetail)
             <li><a class='btn-detail' title='{{cbTrans("action_detail_data")}}'
                    href='{{CRUDBooster::mainpath("detail/".$row->$pk)."?return_url=".urlencode(Request::fullUrl())}}'>
                     {!! cbIcon('eye') !!}

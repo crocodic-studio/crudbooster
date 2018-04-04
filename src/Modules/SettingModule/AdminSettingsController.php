@@ -92,7 +92,7 @@ class AdminSettingsController extends CBController
 
     function hookAfterEdit($id)
     {
-        $row = $this->table()->where($this->primary_key, $id)->first();
+        $row = $this->table()->where($this->primaryKey, $id)->first();
 
         /* REMOVE CACHE */
         Cache::forget('setting_'.$row->name);
@@ -153,6 +153,6 @@ class AdminSettingsController extends CBController
         $this->button_show = false;
         $this->button_cancel = false;
         $this->button_import = false;
-        $this->button_export = false;
+        $this->buttonExport = false;
     }
 }

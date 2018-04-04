@@ -17,7 +17,7 @@ class AdminPrivilegesController extends CBController
     public function __construct()
     {
         $this->table = 'cms_privileges';
-        $this->primary_key = 'id';
+        $this->primaryKey = 'id';
         $this->title_field = "name";
     }
 
@@ -71,7 +71,7 @@ class AdminPrivilegesController extends CBController
         $this->inputAssignment();
 
         $this->table()->insert($this->arr);
-        $id = $this->arr[$this->primary_key];
+        $id = $this->arr[$this->primaryKey];
 
         $this->setTheme();
 
@@ -175,9 +175,9 @@ class AdminPrivilegesController extends CBController
     private function setButtons()
     {
         $this->button_import = false;
-        $this->button_export = false;
+        $this->buttonExport = false;
         $this->button_action_style = 'button_icon';
-        $this->button_detail = false;
+        $this->buttonDetail = false;
         $this->button_bulk_action = false;
     }
 }
