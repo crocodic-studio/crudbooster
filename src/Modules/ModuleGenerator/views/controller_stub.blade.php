@@ -140,10 +140,10 @@ public function cbInit() {
     | Include HTML Code before index table
     | ----------------------------------------------------------------------
     | html code to display it before index table
-    | $this->pre_index_html = "<p>test</p>";
+    | $this->preIndexHtml = "<p>test</p>";
     |
     */
-    $this->pre_index_html = null;
+    $this->preIndexHtml = null;
 
 
     /*
@@ -151,10 +151,10 @@ public function cbInit() {
     | Include HTML Code after index table
     | ----------------------------------------------------------------------
     | html code to display it after index table
-    | $this->post_index_html = "<p>test</p>";
+    | $this->postIndexHtml = "<p>test</p>";
     |
     */
-    $this->post_index_html = null;
+    $this->postIndexHtml = null;
 
 
     /*

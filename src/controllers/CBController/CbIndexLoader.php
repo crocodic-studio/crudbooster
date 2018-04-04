@@ -64,8 +64,8 @@ trait CbIndexLoader
         $this->data['button_import'] = $this->buttonImport;
         $this->data['button_filter'] = $this->buttonFilter;
         $this->data['show_numbering'] = $this->showNumbering;
-        $this->data['pre_index_html'] = $this->preIndexHtml;
-        $this->data['post_index_html'] = $this->postIndexHtml;
+        $this->data['preIndexHtml'] = $this->preIndexHtml;
+        $this->data['postIndexHtml'] = $this->postIndexHtml;
         $this->data['index_statistic'] = $this->indexStatistic;
         $this->data['table_row_color'] = $this->tableRowColor;
         $this->data['button_bulk_action'] = $this->buttonBulkAction;
