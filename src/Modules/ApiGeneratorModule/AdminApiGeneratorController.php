@@ -23,7 +23,7 @@ class AdminApiGeneratorController extends CBController
         $this->deleteBtn = false;
         $this->button_add = false;
         $this->button_import = false;
-        $this->button_export = false;
+        $this->buttonExport = false;
     }
 
     function getIndex()

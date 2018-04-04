@@ -32,7 +32,7 @@ class AdminEmailTemplatesController extends CBController
         $this->buttonDetail = true;
         $this->button_show = true;
         $this->button_filter = true;
-        $this->button_export = false;
+        $this->buttonExport = false;
         $this->button_import = false;
     }
 

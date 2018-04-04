@@ -217,7 +217,7 @@ class AdminStatisticBuilderController extends CBController
         $this->buttonDetail = false;
         $this->button_show = true;
         $this->button_filter = false;
-        $this->button_export = false;
+        $this->buttonExport = false;
         $this->button_import = false;
     }
 }
