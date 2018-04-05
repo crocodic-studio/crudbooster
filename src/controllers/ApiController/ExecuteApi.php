@@ -302,13 +302,13 @@ class ExecuteApi
 
     /**
      * @param $result
-     * @param $debug_mode_message
+     * @param $debugModeMessage
      * @param $row
      * @param $responses_fields
      * @param $rows
      * @return array
      */
-    private function handleRows($result, $debug_mode_message, $row, $responses_fields, $rows)
+    private function handleRows($result, $debugModeMessage,$row, $responses_fields, $rows)
     {
         $uploadsFormatCandidate = explode(',', cbConfig("UPLOAD_TYPES"));
         foreach ($rows as &$row) {
@@ -327,7 +327,7 @@ class ExecuteApi
         $result['api_status'] = 1;
         $result['api_message'] = 'success';
         if (cbGetsetting('api_debug_mode') == 'true') {
-            $result['api_authorization'] = $debug_mode_message;
+            $result['api_authorization'] = $debugModeMessage;
         }
         $result['data'] = $rows;
 
@@ -337,35 +337,35 @@ class ExecuteApi
     /**
      * @param $parameters
      * @param $posts
-     * @param $row_assign
+     * @param $rowAssign
      */
-    private function handleAddEdit($parameters, $posts, $row_assign)
+    private function handleAddEdit($parameters, $posts, $rowAssign)
     {
         foreach ($parameters as $param) {
             $name = $param['name'];
             $used = $param['used'];
             $value = $posts[$name];
             if ($used == '1' && $value == '') {
-                unset($row_assign[$name]);
+                unset($rowAssign[$name]);
             }
         }
     }
 
     /**
      * @param $result
-     * @param $debug_mode_message
+     * @param$Debug_mode_message
      * @param $posts
      * @return mixed
      */
-    private function passwordError($result, $debug_mode_message, $posts)
+    private function passwordError($result, $debugModeMessage, $posts)
     {
         $result['api_status'] = 0;
         $result['api_message'] = 'Your password is wrong !';
         if (cbGetsetting('api_debug_mode') == 'true') {
-            $result['api_authorization'] = $debug_mode_message;
+            $result['api_authorization'] = $debugModeMessage;
         }
 
-        $this->show($result, $debug_mode_message, $posts);
+        $this->show($result, $debugModeMessage, $posts);
     }
 
     /**
@@ -434,16 +434,16 @@ class ExecuteApi
 
     /**
      * @param $result
-     * @param $debug_mode_message
+     * @param $debugmode_message
      * @param $rows
      * @return array
      */
-    private function success($result, $debug_mode_message, $rows)
+    private function success($result, $debugmode_message, $rows)
     {
         $result['api_status'] = 1;
         $result['api_message'] = 'success';
         if (cbGetsetting('api_debug_mode') == 'true') {
-            $result['api_authorization'] = $debug_mode_message;
+            $result['api_authorization']=$Debug_mode_message;
         }
         $rows = (array) $rows;
         $result = array_merge($result, $rows);
