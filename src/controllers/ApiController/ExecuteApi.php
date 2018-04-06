@@ -4,6 +4,7 @@ namespace crocodicstudio\crudbooster\controllers\ApiController;
 
 use crocodicstudio\crudbooster\helpers\DbInspector;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
+use CRUDBooster, CB;
 
 class ExecuteApi
 {
@@ -434,7 +435,7 @@ class ExecuteApi
 
     /**
      * @param $result
-     * @param $debugmode_message
+     * @param $debugModeMessage
      * @param $rows
      * @return array
      */
@@ -443,7 +444,7 @@ class ExecuteApi
         $result['api_status'] = 1;
         $result['api_message'] = 'success';
         if (cbGetsetting('api_debug_mode') == 'true') {
-            $result['api_authorization']=$debugModeMessage;
+            $result['api_authorization'] = $debugModeMessage;
         }
         $rows = (array) $rows;
         $result = array_merge($result, $rows);
