@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Session;
 use Request;
 use DB;
-use CRUDBooster, CB;
+use crocodicstudio\crudbooster\helpers\CRUDBooster, CB;
 use \crocodicstudio\crudbooster\controllers\CBController;
 
 class Admin{{$controllerName}} extends CBController {

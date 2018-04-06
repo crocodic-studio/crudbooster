@@ -3,7 +3,7 @@
 namespace crocodicstudio\crudbooster\controllers\Helpers;
 
 use crocodicstudio\crudbooster\helpers\DbInspector;
-use CRUDBooster;
+use crocodicstudio\crudbooster\helpers\CRUDBooster;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;

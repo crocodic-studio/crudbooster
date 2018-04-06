@@ -8,7 +8,7 @@ use crocodicstudio\crudbooster\controllers\Helpers\FontAwesome;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
-use CRUDBooster;
+use crocodicstudio\crudbooster\helpers\CRUDBooster;
 
 class AdminModulesController extends CBController
 {
@@ -217,21 +217,12 @@ class AdminModulesController extends CBController
         CRUDBooster::redirect(Request::server('HTTP_REFERER'), cbTrans('alert_update_data_success'), 'success');
     }
 
-    public function getTest()
-    {
-        $code = FileManipulator::readCtrlContent('AdminCustomersController.php');
-
-        $forms = parseFormToArray($code);
-        echo '<pre>';
-        print_r($forms);
-    }
-
     private function makeForm()
     {
         $this->form = [];
         $this->form[] = ['label' => 'Name', 'name' => 'name', 'placeholder' => 'Module name here', 'required' => true];
 
-        $tables_list = \CB::listCbTables();
+        $tables_list = CRUDBooster::listCbTables();
 
         $this->form[] = [
             'label' => "Table Name",

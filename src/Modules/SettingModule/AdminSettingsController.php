@@ -7,7 +7,7 @@ use crocodicstudio\crudbooster\helpers\CbValidator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Cache;
-use CRUDBooster;
+use crocodicstudio\crudbooster\helpers\CRUDBooster;
 
 class AdminSettingsController extends CBController
 {

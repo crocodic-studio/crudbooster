@@ -8,7 +8,7 @@ use crocodicstudio\crudbooster\helpers\Mailer;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
-use CRUDBooster, CB;
+use crocodicstudio\crudbooster\helpers\CRUDBooster, CB;
 
 class AuthController extends Controller
 {

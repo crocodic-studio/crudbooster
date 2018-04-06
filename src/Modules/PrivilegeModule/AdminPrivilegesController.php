@@ -7,7 +7,7 @@ use crocodicstudio\crudbooster\controllers\FormValidator;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
-use CRUDBooster;
+use crocodicstudio\crudbooster\helpers\CRUDBooster;
 
 class AdminPrivilegesController extends CBController
 {

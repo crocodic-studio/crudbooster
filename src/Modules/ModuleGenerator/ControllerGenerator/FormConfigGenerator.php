@@ -5,7 +5,7 @@ namespace crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator
 use crocodicstudio\crudbooster\helpers\DbInspector;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\FileManipulator;
 use Illuminate\Support\Facades\Schema;
-use CB;
+use crocodicstudio\crudbooster\helpers\CRUDBooster;
 
 class FormConfigGenerator
 {

@@ -3,7 +3,6 @@
 namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
 use crocodicstudio\crudbooster\helpers\DbInspector;
-use CRUDBooster;
 
 class Step2Handler
 {
@@ -18,7 +17,7 @@ class Step2Handler
         $data = [];
         $data['id'] = $id;
         $data['columns'] = $columns;
-        //$data['table_list'] = \CB::listCbTables();
+        //$data['table_list'] = \crocodicstudio\crudbooster\helpers\CRUDBooster::listCbTables();
         $data['cols'] = ScaffoldingParser::parse($controllerCode, 'col');
 
 

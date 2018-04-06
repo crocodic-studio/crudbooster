@@ -5,7 +5,7 @@ namespace crocodicstudio\crudbooster\controllers\CBController;
 use crocodicstudio\crudbooster\CBCoreModule\DataRemover;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Storage;
-use CB;
+use crocodicstudio\crudbooster\helpers\CRUDBooster;
 
 trait Deleter
 {
@@ -14,8 +14,8 @@ trait Deleter
         $this->cbLoader();
         (new DataRemover($this))->doDeleteWithHook([$id]);
         $this->insertLog('log_delete', $id);
-        $url = request('return_url') ?: CB::referer();
-        CB::redirect($url, cbTrans('alert_delete_data_success'), 'success');
+        $url = request('return_url') ?: CRUDBooster::referer();
+        CRUDBooster::redirect($url, cbTrans('alert_delete_data_success'), 'success');
     }
 
     public function postActionSelected()
@@ -24,7 +24,7 @@ trait Deleter
         $selectedIds = request('checkbox');
         $btnName = request('button_name');
         if (! $selectedIds) {
-            CB::redirect($_SERVER['HTTP_REFERER'], 'Please select at least one row!', 'warning');
+            CRUDBooster::redirect($_SERVER['HTTP_REFERER'], 'Please select at least one row!', 'warning');
         }
         if ($btnName == 'delete') {
             (new DataRemover($this))->doDeleteWithHook($selectedIds);
@@ -69,6 +69,6 @@ trait Deleter
 
         $this->insertLog('log_delete_image', $id . ' - '. $this->table);
 
-        CB::redirect(Request::server('HTTP_REFERER'), cbTrans('alert_delete_data_success'), 'success');
+        CRUDBooster::redirect(Request::server('HTTP_REFERER'), cbTrans('alert_delete_data_success'), 'success');
     }
 }
