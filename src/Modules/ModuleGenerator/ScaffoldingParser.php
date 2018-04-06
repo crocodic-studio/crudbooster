@@ -9,23 +9,7 @@ class ScaffoldingParser
         $colsItem = self::extractLines($code, $type);
 
         foreach ($colsItem as &$item) {
-            $item = str_replace(' ','', $item);
-            // "['label'=>'KanapeType','name'=>'kanape_type',];\r\n"
-
-            $item = str_replace('\',]',']', $item); // replaces:  ',]  with   ]
-            // "['label'=>'KanapeType','name'=>'kanape_type];\r\n"
-
-            $item = trim($item);
-            // "['label'=>'KanapeType','name'=>'kanape_type];"
-
-            $item = trim($item, '[');
-            // "'label'=>'KanapeType','name'=>'kanape_type];"
-
-            $item = trim($item, '];');
-            // "'label'=>'KanapeType','name'=>'kanape_type"
-
-            $item = trim($item);
-            $item = trim(preg_replace("/[\n\r\t]/", "", $item));
+            $item = self::removeExtraCharacters($item);
             $strSplit = str_split($item);
             $innerCount = 0;
             foreach ($strSplit as $index => $s) {
@@ -138,5 +122,32 @@ class ScaffoldingParser
         }
 
         return $colInnerItem;
+    }
+
+    /**
+     * @param $item
+     * @return mixed|string
+     */
+    private static function removeExtraCharacters($item)
+    {
+        $item = str_replace(' ', '', $item);
+        // "['label'=>'KanapeType','name'=>'kanape_type',];\r\n"
+
+        $item = str_replace('\',]', ']', $item); // replaces:  ',]  with   ]
+        // "['label'=>'KanapeType','name'=>'kanape_type];\r\n"
+
+        $item = trim($item);
+        // "['label'=>'KanapeType','name'=>'kanape_type];"
+
+        $item = trim($item, '[');
+        // "'label'=>'KanapeType','name'=>'kanape_type];"
+
+        $item = trim($item, '];');
+        // "'label'=>'KanapeType','name'=>'kanape_type"
+
+        $item = trim($item);
+        $item = trim(preg_replace("/[\n\r\t]/", "", $item));
+
+        return $item;
     }
 }
