@@ -472,29 +472,29 @@ class ExecuteApi
 
     /**
      * @param $table
-     * @param $responses_fields
+     * @param $responsesFields
      * @param $name
      * @param $data
-     * @param $name_tmp
+     * @param $nameTmp
      * @return array
      */
-    private function joinRelatedTables($table, $responses_fields, $name, $data, $name_tmp)
+    private function joinRelatedTables($table, $responsesFields, $name, $data, $nameTmp)
     {
-        if (DbInspector::isForeignKey($name)) {
-            $jointable = CRUDBooster::getTableForeignKey($name);
-            $jointable_field = DbInspector::getTableCols($jointable);
+        if (! DbInspector::isForeignKey($name)) {
+            return $nameTmp;
+        }
+        $jointable = CRUDBooster::getTableForeignKey($name);
+        $jointable_field = DbInspector::getTableCols($jointable);
 
-            $data->leftjoin($jointable, $jointable.'.id', '=', $table.'.'.$name);
-            foreach ($jointable_field as $jf) {
-                $jf_alias = $jointable.'_'.$jf;
-                if (in_array($jf_alias, $responses_fields)) {
-                    $data->addselect($jointable.'.'.$jf.' as '.$jf_alias);
-                    $name_tmp[] = $jf_alias;
-                }
+        $data->leftjoin($jointable, $jointable.'.id', '=', $table.'.'.$name);
+        foreach ($jointable_field as $jf) {
+            $jfAlias = $jointable.'_'.$jf;
+            if (in_array($jfAlias, $responsesFields)) {
+                $data->addselect($jointable.'.'.$jf.' as '.$jfAlias);
+                $nameTmp[] = $jfAlias;
             }
         }
-
-        return $name_tmp;
+        return $nameTmp;
     }
 
     /**
@@ -506,8 +506,8 @@ class ExecuteApi
      */
     private function validateMethodType($row_api, $result, $debugModeMessage, $posts)
     {
-        $method_type = $row_api->method_type;
-        if (! $method_type || ! Request::isMethod($method_type)) {
+        $methodType = $row_api->method_type;
+        if (! $methodType || ! Request::isMethod($methodType)) {
             $result['api_status'] = 0;
             $result['api_message'] = "The request method is not allowed !";
 
