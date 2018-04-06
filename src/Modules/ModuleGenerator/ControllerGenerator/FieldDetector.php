@@ -19,7 +19,7 @@ class FieldDetector
      */
     static function isForeignKey($fieldName)
     {
-        return substr($fieldName, 0, 3) == 'id_' || substr($fieldName, -3) == '_id';
+        return starts_with($fieldName, 'id_') || ends_with($fieldName, '_id');
     }
 
     static function isUploadField($fieldName)

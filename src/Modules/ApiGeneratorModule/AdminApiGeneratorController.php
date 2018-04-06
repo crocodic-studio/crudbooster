@@ -188,46 +188,28 @@ class AdminApiGeneratorController extends CBController
     function getColumnTable($table, $type = 'list')
     {
         $this->cbLoader();
-        $result = [];
-
-        $cols = DbInspector::getTableCols($table);
-
         $except = ['created_at', 'deleted_at', 'updated_at'];
 
-        $result = $cols;
+        $result = DbInspector::getTableCols($table);
         $new_result = [];
         foreach ($result as $ro) {
 
             if (in_array($ro, $except)) {
                 continue;
             }
-
             $type_field = DbInspector::getFieldTypes($table, $ro);
+            $new_result[] = ['name' => $ro, 'type' => $this->getFieldType($ro, $type_field)];
 
-            $type_field = FieldDetector::isEmail($ro) ? "email" : $type_field;
-            $type_field = FieldDetector::isImage($ro) ? "image" : $type_field;
-            $type_field = FieldDetector::isPassword($ro) ? "password" : $type_field;
-
-            $type_field = (substr($ro, -3) == '_id') ? "integer" : $type_field;
-            $type_field = (substr($ro, 0, 3) == 'id_') ? "integer" : $type_field;
-
-            $new_result[] = ['name' => $ro, 'type' => $type_field];
-
-            if (!in_array($type, ['list', 'detail']) || substr($ro, 0, 3) !== 'id_') {
+            if (!in_array($type, ['list', 'detail']) || !starts_with($ro, 'id_') ) {
                 continue;
             }
             $table2 = substr($ro, 3);
             foreach (DB::getSchemaBuilder()->getColumnListing($table2) as $col) {
-                if (FieldDetector::isExceptional($col)) {
+                if (FieldDetector::isExceptional($col) || starts_with($ro, 'id_')) {
                     continue;
                 }
-                if (substr($col, 0, 3) == 'id_') {
-                    continue;
-                }
-
-                $type_field = DbInspector::getFieldTypes($table2, $col);
                 $col = str_replace("_$table2", "", $col);
-                $new_result[] = ['name' => $table2.'_'.$col, 'type' => $type_field];
+                $new_result[] = ['name' => $table2.'_'.$col, 'type' => DbInspector::getFieldTypes($table2, $col)];
             }
         }
 
@@ -350,5 +332,28 @@ class AdminApiGeneratorController extends CBController
         $php = '<?php '.view('CbApiGen::api_stub', compact('controller_name', 'table_name', 'permalink', 'method_type'))->render();
         $path = base_path(controllers_dir());
         file_put_contents($path.'Api'.$controller_name.'Controller.php', $php);
+    }
+
+    /**
+     * @param $ro string
+     * @param $default string
+     * @return string
+     */
+    private function getFieldType($ro, $default)
+    {
+        $MAP = [
+            'isEmail' => "email",
+            'isImage' => "image",
+            'isPassword' => "password",
+            'isForeignKey' => "integer",
+        ];
+
+        foreach ($MAP as $methodName => $type) {
+            if (FieldDetector::$methodName($ro)) {
+                return $type;
+            }
+        }
+
+        return $default;
     }
 }

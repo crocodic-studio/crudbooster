@@ -9,23 +9,7 @@ class ScaffoldingParser
         $colsItem = self::extractLines($code, $type);
 
         foreach ($colsItem as &$item) {
-            $item = str_replace(' ','', $item);
-            // "['label'=>'KanapeType','name'=>'kanape_type',];\r\n"
-
-            $item = str_replace('\',]',']', $item); // replaces:  ',]  with   ]
-            // "['label'=>'KanapeType','name'=>'kanape_type];\r\n"
-
-            $item = trim($item);
-            // "['label'=>'KanapeType','name'=>'kanape_type];"
-
-            $item = trim($item, '[');
-            // "'label'=>'KanapeType','name'=>'kanape_type];"
-
-            $item = trim($item, '];');
-            // "'label'=>'KanapeType','name'=>'kanape_type"
-
-            $item = trim($item);
-            $item = trim(preg_replace("/[\n\r\t]/", "", $item));
+            $item = self::removeExtraCharacters($item);
             $strSplit = str_split($item);
             $innerCount = 0;
             foreach ($strSplit as $index => $s) {
@@ -128,15 +112,46 @@ class ScaffoldingParser
         foreach ($split as $s) {
             if (strpos($s, 'options') !== false) {
                 $colInnerItem['options'] = trim(str_replace("'options'=>", "", $s), '\'\"\]\[');
-            } elseif (strpos($s, 'callback') !== false) {
-                $colInnerItem['callback'] = self::parseCallback($s);
-            } else {
-                $s = str_replace("'", '',$s);
-                $sSplit = explode('=>', $s);
-                $colInnerItem[$sSplit[0]] = $sSplit[1];
+                continue;
             }
+            if (strpos($s, 'callback') !== false) {
+                $colInnerItem['callback'] = self::parseCallback($s);
+                continue;
+            }
+
+            $s = str_replace("'", '',$s);
+            list($key, $val) = explode('=>', $s);
+            $colInnerItem[$key] = $val;
+
         }
 
         return $colInnerItem;
+    }
+
+    /**
+     * @param $item
+     * @return mixed|string
+     */
+    private static function removeExtraCharacters($item)
+    {
+        $item = str_replace(' ', '', $item);
+        // "['label'=>'KanapeType','name'=>'kanape_type',];\r\n"
+
+        $item = str_replace('\',]', ']', $item); // replaces:  ',]  with   ]
+        // "['label'=>'KanapeType','name'=>'kanape_type];\r\n"
+
+        $item = trim($item);
+        // "['label'=>'KanapeType','name'=>'kanape_type];"
+
+        $item = trim($item, '[');
+        // "'label'=>'KanapeType','name'=>'kanape_type];"
+
+        $item = trim($item, '];');
+        // "'label'=>'KanapeType','name'=>'kanape_type"
+
+        $item = trim($item);
+        $item = trim(preg_replace("/[\n\r\t]/", "", $item));
+
+        return $item;
     }
 }
