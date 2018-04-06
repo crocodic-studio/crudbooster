@@ -351,7 +351,7 @@ class AdminApiGeneratorController extends CBController
             return "password";
         }
 
-        if (ends_with('_id') || starts_with($ro, 'id_')) {
+        if (FieldDetector::isForeignKey($ro)) {
             return "integer";
         }
 
