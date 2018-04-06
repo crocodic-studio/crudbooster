@@ -589,43 +589,44 @@ class ExecuteApi
      */
     private function handleDetailsAction($action_type, $result, $debugModeMessage, $data, $parameters, $posts, $responses_fields)
     {
-        if ($action_type == 'detail') {
-            $result['api_status'] = 0;
-            $result['api_message'] = 'There is no data found !';
-
-            if (cbGetsetting('api_debug_mode') == 'true') {
-                $result['api_authorization'] = $debugModeMessage;
-            }
-
-            $row = $data->first();
-
-            if ($row) {
-                foreach ($parameters as $param) {
-                    $name = $param['name'];
-                    $type = $param['type'];
-                    $value = $posts[$name];
-                    $used = $param['used'];
-                    $required = $param['required'];
-
-                    if ($param['config'] != '' && substr($param['config'], 0, 1) != '*') {
-                        $value = $param['config'];
-                    }
-
-                    if ($required && $type == 'password' && ! Hash::check($value, $row->{$name})) {
-                        $this->passwordError($result, $debugModeMessage, $posts);
-                    }
-
-                    if (! $required && $used && $value && ! Hash::check($value, $row->{$name})) {
-                        $this->passwordError($result, $debugModeMessage, $posts);
-                    }
-                }
-
-                $this->handleFile($row, $responses_fields, $row);
-
-                $result = $this->success($result, $debugModeMessage, $row);
-            }
+        if ($action_type != 'detail') {
+            return $result;
         }
 
+        $result['api_status'] = 0;
+        $result['api_message'] = 'There is no data found !';
+
+        if (cbGetsetting('api_debug_mode') == 'true') {
+            $result['api_authorization'] = $debugModeMessage;
+        }
+
+        $row = $data->first();
+
+        if ($row) {
+            foreach ($parameters as $param) {
+                $name = $param['name'];
+                $type = $param['type'];
+                $value = $posts[$name];
+                $used = $param['used'];
+                $required = $param['required'];
+
+                if ($param['config'] != '' && substr($param['config'], 0, 1) != '*') {
+                    $value = $param['config'];
+                }
+
+                if ($required && $type == 'password' && ! Hash::check($value, $row->{$name})) {
+                    $this->passwordError($result, $debugModeMessage, $posts);
+                }
+
+                if (! $required && $used && $value && ! Hash::check($value, $row->{$name})) {
+                    $this->passwordError($result, $debugModeMessage, $posts);
+                }
+            }
+
+            $this->handleFile($row, $responses_fields, $row);
+
+            $result = $this->success($result, $debugModeMessage, $row);
+        }
         return $result;
     }
 }
