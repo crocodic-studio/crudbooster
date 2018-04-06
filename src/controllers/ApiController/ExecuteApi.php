@@ -116,7 +116,11 @@ class ExecuteApi
         }
 
         if (in_array($actionType, ['save_add', 'save_edit'])) {
-            $this->handleAddEdit($parameters, $posts, $row_assign);
+            $rowAssign = array_filter($input_validator, function ($column) use ($table) {
+                return \Schema::hasColumn($table, $column);
+            }, ARRAY_FILTER_USE_KEY);
+
+            $this->handleAddEdit($parameters, $posts, $rowAssign);
         }
 
         $this->show($result, $debugModeMessage, $posts);
