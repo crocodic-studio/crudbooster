@@ -111,7 +111,7 @@ class DbInspector
     /**
      * @param $table
      * @param $field
-     * @return mixed
+     * @return string
      */
     public static function getFieldTypes($table, $field)
     {
