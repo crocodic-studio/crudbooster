@@ -173,9 +173,7 @@ class ExecuteApi
         $orderbyVal = 'desc';
 
         if ($orderby) {
-            $orderby_raw = explode(',', $orderby);
-            $orderbyCol = $orderby_raw[0];
-            $orderbyVal = $orderby_raw[1];
+            list($orderbyCol, $orderbyVal) = explode(',', $orderby);
         }
 
         $rows = $data->orderby($orderbyCol, $orderbyVal)->get();
