@@ -4,6 +4,7 @@ namespace crocodicstudio\crudbooster\controllers\ApiController;
 
 use crocodicstudio\crudbooster\helpers\DbInspector;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
+use CRUDBooster, CB;
 
 class ExecuteApi
 {
@@ -28,7 +29,7 @@ class ExecuteApi
 
         $row_api = DB::table('cms_apicustom')->where('permalink', $this->ctrl->permalink)->first();
 
-        $action_type = $row_api->aksi;
+        $actionType = $row_api->aksi;
         $table = $row_api->tabel;
 
         $debugModeMessage = 'You are in debug mode !';
@@ -85,7 +86,7 @@ class ExecuteApi
 
         unset($posts['limit'], $posts['offset'], $posts['orderby']);
 
-        if (in_array($action_type, ['list', 'detail', 'delete'])) {
+        if (in_array($actionType, ['list', 'detail', 'delete'])) {
             $data = DB::table($table);
             $data->skip($offset);
             $data->take($limit);
@@ -105,16 +106,16 @@ class ExecuteApi
             }
 
             $this->ctrl->hookQuery($data);
-            if ($action_type == 'list') {
-                list($result, $row) = $this->handleListAction($table, $orderby, $data, $result, $debugModeMessage, $row, $responses_fields);
+            if ($actionType == 'list') {
+                $result = $this->handleListAction($table, $orderby, $data, $result, $debugModeMessage, $responses_fields);
             }
-            $result = $this->handleDetailsAction($action_type, $result, $debugModeMessage, $data, $parameters, $posts, $responses_fields);
-            if ($action_type == 'delete') {
-                $result = $this->handleDeleteAction($action_type, $table, $data, $result, $debugModeMessage);
+            $result = $this->handleDetailsAction($actionType, $result, $debugModeMessage, $data, $parameters, $posts, $responses_fields);
+            if ($actionType == 'delete') {
+                $result = $this->handleDeleteAction($actionType, $table, $data, $result, $debugModeMessage);
             }
         }
 
-        if (in_array($action_type, ['save_add', 'save_edit'])) {
+        if (in_array($actionType, ['save_add', 'save_edit'])) {
             $this->handleAddEdit($parameters, $posts, $row_assign);
         }
 
@@ -163,22 +164,19 @@ class ExecuteApi
      * @param $data
      * @param $result
      * @param $debugModeMessage
-     * @param $row
-     * @param $responses_fields
+     * @param $responsesFields
      * @return array
      */
-    private function handleListAction($table, $orderby, $data, $result, $debugModeMessage, $row, $responses_fields)
+    private function handleListAction($table, $orderby, $data, $result, $debugModeMessage, $responsesFields)
     {
-        $orderby_col = $table.'.id';
-        $orderby_val = 'desc';
+        $orderbyCol = $table.'.id';
+        $orderbyVal = 'desc';
 
         if ($orderby) {
-            $orderby_raw = explode(',', $orderby);
-            $orderby_col = $orderby_raw[0];
-            $orderby_val = $orderby_raw[1];
+            list($orderbyCol, $orderbyVal) = explode(',', $orderby);
         }
 
-        $rows = $data->orderby($orderby_col, $orderby_val)->get();
+        $rows = $data->orderby($orderbyCol, $orderbyVal)->get();
 
         $result['api_status'] = 0;
         $result['api_message'] = 'There is no data found !';
@@ -187,10 +185,10 @@ class ExecuteApi
         }
         $result['data'] = [];
         if ($rows) {
-            list($row, $result) = $this->handleRows($result, $debugModeMessage, $row, $responses_fields, $rows);
+            $result = $this->handleRows($result, $debugModeMessage, $responsesFields, $rows);
         }
 
-        return [$result, $row];
+        return $result;
     }
 
     /**
@@ -222,11 +220,11 @@ class ExecuteApi
      * @param $parameters
      * @param $posts
      * @param $table
-     * @param $type_except
+     * @param $typeExcept
      */
-    private function filterRows($data, $parameters, $posts, $table, $type_except)
+    private function filterRows($data, $parameters, $posts, $table, $typeExcept)
     {
-        $data->where(function ($w) use ($parameters, $posts, $table, $type_except) {
+        $data->where(function ($w) use ($parameters, $posts, $table, $typeExcept) {
             foreach ($parameters as $param) {
                 $name = $param['name'];
                 $type = $param['type'];
@@ -234,7 +232,7 @@ class ExecuteApi
                 $used = $param['used'];
                 $required = $param['required'];
 
-                if (in_array($type, $type_except)) {
+                if (in_array($type, $typeExcept)) {
                     continue;
                 }
 
@@ -302,13 +300,13 @@ class ExecuteApi
 
     /**
      * @param $result
-     * @param $debug_mode_message
+     * @param $debugModeMessage
      * @param $row
-     * @param $responses_fields
+     * @param $responsesFields
      * @param $rows
      * @return array
      */
-    private function handleRows($result, $debug_mode_message, $row, $responses_fields, $rows)
+    private function handleRows($result, $debugModeMessage, $responsesFields, $rows)
     {
         $uploadsFormatCandidate = explode(',', cbConfig("UPLOAD_TYPES"));
         foreach ($rows as &$row) {
@@ -318,7 +316,7 @@ class ExecuteApi
                     $row->$k = asset($v);
                 }
 
-                if (! in_array($k, $responses_fields)) {
+                if (! in_array($k, $responsesFields)) {
                     unset($row[$k]);
                 }
             }
@@ -327,53 +325,53 @@ class ExecuteApi
         $result['api_status'] = 1;
         $result['api_message'] = 'success';
         if (cbGetsetting('api_debug_mode') == 'true') {
-            $result['api_authorization'] = $debug_mode_message;
+            $result['api_authorization'] = $debugModeMessage;
         }
         $result['data'] = $rows;
 
-        return [$row, $result];
+        return $result;
     }
 
     /**
      * @param $parameters
      * @param $posts
-     * @param $row_assign
+     * @param $rowAssign
      */
-    private function handleAddEdit($parameters, $posts, $row_assign)
+    private function handleAddEdit($parameters, $posts, $rowAssign)
     {
         foreach ($parameters as $param) {
             $name = $param['name'];
             $used = $param['used'];
             $value = $posts[$name];
             if ($used == '1' && $value == '') {
-                unset($row_assign[$name]);
+                unset($rowAssign[$name]);
             }
         }
     }
 
     /**
      * @param $result
-     * @param $debug_mode_message
+     * @param $debugModeMessage
      * @param $posts
      * @return mixed
      */
-    private function passwordError($result, $debug_mode_message, $posts)
+    private function passwordError($result, $debugModeMessage, $posts)
     {
         $result['api_status'] = 0;
-        $result['api_message'] = 'Your password is wrong !';
+        $result['api_message'] = cbTrans('alert_password_wrong');
         if (cbGetsetting('api_debug_mode') == 'true') {
-            $result['api_authorization'] = $debug_mode_message;
+            $result['api_authorization'] = $debugModeMessage;
         }
 
-        $this->show($result, $debug_mode_message, $posts);
+        $this->show($result, $debugModeMessage, $posts);
     }
 
     /**
      * @param $rows
-     * @param $responses_fields
+     * @param $responsesFields
      * @param $row
      */
-    private function handleFile($rows, $responses_fields, $row)
+    private function handleFile($rows, $responsesFields, $row)
     {
         foreach ($rows as $k => $v) {
             $ext = \File::extension($v);
@@ -381,7 +379,7 @@ class ExecuteApi
                 $rows->$k = asset($v);
             }
 
-            if (! in_array($k, $responses_fields)) {
+            if (! in_array($k, $responsesFields)) {
                 unset($row[$k]);
             }
         }
@@ -391,10 +389,11 @@ class ExecuteApi
      * @param $table
      * @param $data
      * @param $responses
-     * @param $responses_fields
+     *
+     * @param $responsesFields
      * @return array
      */
-    private function responses($table, $data, $responses, $responses_fields)
+    private function responses($table, $data, $responses, $responsesFields)
     {
         $name_tmp = [];
         foreach ($responses as $resp) {
@@ -426,7 +425,7 @@ class ExecuteApi
             }
 
             $name_tmp[] = $name;
-            $name_tmp = $this->joinRelatedTables($table, $responses_fields, $name, $data, $name_tmp);
+            $name_tmp = $this->joinRelatedTables($table, $responsesFields, $name, $data, $name_tmp);
         }
 
         return $data;
@@ -434,16 +433,16 @@ class ExecuteApi
 
     /**
      * @param $result
-     * @param $debug_mode_message
+     * @param $debugModeMessage
      * @param $rows
      * @return array
      */
-    private function success($result, $debug_mode_message, $rows)
+    private function success($result, $debugModeMessage, $rows)
     {
         $result['api_status'] = 1;
         $result['api_message'] = 'success';
         if (cbGetsetting('api_debug_mode') == 'true') {
-            $result['api_authorization'] = $debug_mode_message;
+            $result['api_authorization'] = $debugModeMessage;
         }
         $rows = (array) $rows;
         $result = array_merge($result, $rows);
@@ -471,29 +470,29 @@ class ExecuteApi
 
     /**
      * @param $table
-     * @param $responses_fields
+     * @param $responsesFields
      * @param $name
      * @param $data
-     * @param $name_tmp
+     * @param $nameTmp
      * @return array
      */
-    private function joinRelatedTables($table, $responses_fields, $name, $data, $name_tmp)
+    private function joinRelatedTables($table, $responsesFields, $name, $data, $nameTmp)
     {
-        if (DbInspector::isForeignKey($name)) {
-            $jointable = CRUDBooster::getTableForeignKey($name);
-            $jointable_field = DbInspector::getTableCols($jointable);
+        if (! DbInspector::isForeignKey($name)) {
+            return $nameTmp;
+        }
+        $jointable = CRUDBooster::getTableForeignKey($name);
+        $jointable_field = DbInspector::getTableCols($jointable);
 
-            $data->leftjoin($jointable, $jointable.'.id', '=', $table.'.'.$name);
-            foreach ($jointable_field as $jf) {
-                $jf_alias = $jointable.'_'.$jf;
-                if (in_array($jf_alias, $responses_fields)) {
-                    $data->addselect($jointable.'.'.$jf.' as '.$jf_alias);
-                    $name_tmp[] = $jf_alias;
-                }
+        $data->leftjoin($jointable, $jointable.'.id', '=', $table.'.'.$name);
+        foreach ($jointable_field as $jf) {
+            $jfAlias = $jointable.'_'.$jf;
+            if (in_array($jfAlias, $responsesFields)) {
+                $data->addselect($jointable.'.'.$jf.' as '.$jfAlias);
+                $nameTmp[] = $jfAlias;
             }
         }
-
-        return $name_tmp;
+        return $nameTmp;
     }
 
     /**
@@ -505,8 +504,8 @@ class ExecuteApi
      */
     private function validateMethodType($row_api, $result, $debugModeMessage, $posts)
     {
-        $method_type = $row_api->method_type;
-        if (! $method_type || ! Request::isMethod($method_type)) {
+        $methodType = $row_api->method_type;
+        if (! $methodType || ! Request::isMethod($methodType)) {
             $result['api_status'] = 0;
             $result['api_message'] = "The request method is not allowed !";
 
@@ -589,43 +588,44 @@ class ExecuteApi
      */
     private function handleDetailsAction($action_type, $result, $debugModeMessage, $data, $parameters, $posts, $responses_fields)
     {
-        if ($action_type == 'detail') {
-            $result['api_status'] = 0;
-            $result['api_message'] = 'There is no data found !';
-
-            if (cbGetsetting('api_debug_mode') == 'true') {
-                $result['api_authorization'] = $debugModeMessage;
-            }
-
-            $row = $data->first();
-
-            if ($row) {
-                foreach ($parameters as $param) {
-                    $name = $param['name'];
-                    $type = $param['type'];
-                    $value = $posts[$name];
-                    $used = $param['used'];
-                    $required = $param['required'];
-
-                    if ($param['config'] != '' && substr($param['config'], 0, 1) != '*') {
-                        $value = $param['config'];
-                    }
-
-                    if ($required && $type == 'password' && ! Hash::check($value, $row->{$name})) {
-                        $this->passwordError($result, $debugModeMessage, $posts);
-                    }
-
-                    if (! $required && $used && $value && ! Hash::check($value, $row->{$name})) {
-                        $this->passwordError($result, $debugModeMessage, $posts);
-                    }
-                }
-
-                $this->handleFile($row, $responses_fields, $row);
-
-                $result = $this->success($result, $debugModeMessage, $row);
-            }
+        if ($action_type != 'detail') {
+            return $result;
         }
 
+        $result['api_status'] = 0;
+        $result['api_message'] = 'There is no data found !';
+
+        if (cbGetsetting('api_debug_mode') == 'true') {
+            $result['api_authorization'] = $debugModeMessage;
+        }
+
+        $row = $data->first();
+
+        if ($row) {
+            foreach ($parameters as $param) {
+                $name = $param['name'];
+                $type = $param['type'];
+                $value = $posts[$name];
+                $used = $param['used'];
+                $required = $param['required'];
+
+                if ($param['config'] != '' && substr($param['config'], 0, 1) != '*') {
+                    $value = $param['config'];
+                }
+
+                if ($required && $type == 'password' && ! Hash::check($value, $row->{$name})) {
+                    $this->passwordError($result, $debugModeMessage, $posts);
+                }
+
+                if (! $required && $used && $value && ! Hash::check($value, $row->{$name})) {
+                    $this->passwordError($result, $debugModeMessage, $posts);
+                }
+            }
+
+            $this->handleFile($row, $responses_fields, $row);
+
+            $result = $this->success($result, $debugModeMessage, $row);
+        }
         return $result;
     }
 }

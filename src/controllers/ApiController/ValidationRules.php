@@ -2,6 +2,8 @@
 
 namespace crocodicstudio\crudbooster\controllers\ApiController;
 
+use CRUDBooster;
+
 class ValidationRules
 {
     /**

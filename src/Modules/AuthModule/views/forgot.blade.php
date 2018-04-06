@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>{{cbTrans("page_title_forgot")}} : {{$appname}}</title>
+    <title>{{ cbTrans("page_title_forgot")}} : {{$appname}}</title>
     <meta name='generator' content='CRUDBooster.com'/>
     <meta name='robots' content='noindex,nofollow'/>
     <link rel="shortcut icon"
@@ -51,7 +51,7 @@
             </div>
         @endif
 
-        <p class="login-box-msg">{{cbTrans("forgot_message")}}</p>
+        <p class="login-box-msg">{{ cbTrans("forgot_message")}}</p>
         <form action="{{ route('postForgot') }}" method="post">
             <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
             <div class="form-group has-feedback">
@@ -60,10 +60,10 @@
             </div>
             <div class="row">
                 <div class="col-xs-8">
-                    {{cbTrans("forgot_text_try_again")}} <a href='{{route("getLogin")}}'>{{cbTrans("click_here")}}</a>
+                    {{ cbTrans("forgot_text_try_again")}} <a href='{{route("getLogin")}}'>{{ cbTrans("click_here")}}</a>
                 </div>
                 <div class="col-xs-4">
-                    <button type="submit" class="btn btn-primary btn-block btn-flat">{{cbTrans("button_submit")}}</button>
+                    <button type="submit" class="btn btn-primary btn-block btn-flat">{{ cbTrans("button_submit")}}</button>
                 </div>
             </div>
         </form>

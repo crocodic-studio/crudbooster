@@ -2,6 +2,7 @@
 
 namespace crocodicstudio\crudbooster\Modules\AuthModule;
 
+use App\Http\Controllers\CBHook;
 use crocodicstudio\crudbooster\CBCoreModule\CbUsersRepo;
 use CB;
 use Illuminate\Support\Facades\Request;
@@ -23,8 +24,7 @@ class LoginController
 
         $this->LogIt($user);
 
-        $cbHookSession = new \App\Http\Controllers\CBHook;
-        $cbHookSession->afterLogin();
+        (new CBHook)->afterLogin();
 
         return redirect(CB::adminPath());
     }
