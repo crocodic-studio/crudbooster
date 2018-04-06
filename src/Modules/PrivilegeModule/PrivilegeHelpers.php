@@ -64,6 +64,7 @@ trait PrivilegeHelpers
                 return (bool) $role->{$verb};
             }
         }
+        return false;
     }
 
     public static function myPrivilegeId()
