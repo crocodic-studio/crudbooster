@@ -10,7 +10,7 @@ use Response;
 use Image;
 use File;
 use Illuminate\Support\Facades\Request;
-use CB;
+use crocodicstudio\crudbooster\helpers\CRUDBooster;
 
 class FileController extends Controller
 {

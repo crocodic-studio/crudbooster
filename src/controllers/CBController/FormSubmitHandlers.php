@@ -2,9 +2,9 @@
 
 namespace crocodicstudio\crudbooster\controllers\CBController;
 
-use CB;
 use crocodicstudio\crudbooster\CBCoreModule\RelationHandler;
 use crocodicstudio\crudbooster\controllers\FormValidator;
+use crocodicstudio\crudbooster\helpers\CRUDBooster;
 use crocodicstudio\crudbooster\helpers\DbInspector;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Schema;
@@ -24,7 +24,7 @@ trait FormSubmitHandlers
                 continue;
             }
 
-            $hookPath = \CB::componentsPath($type).DIRECTORY_SEPARATOR.'hookInputAssignment.php';
+            $hookPath = CRUDBooster::componentsPath($type).DIRECTORY_SEPARATOR.'hookInputAssignment.php';
             if (file_exists($hookPath)) {
                 require_once($hookPath);
             }
@@ -89,14 +89,14 @@ trait FormSubmitHandlers
         $this->return_url = $this->return_url ?: request('return_url');
         if ($this->return_url) {
             if (request('submit') == cbTrans('button_save_more')) {
-                CB::redirect(Request::server('HTTP_REFERER'), cbTrans($msg), 'success');
+                CRUDBooster::redirect(Request::server('HTTP_REFERER'), cbTrans($msg), 'success');
             }
-            CB::redirect($this->return_url, cbTrans($msg), 'success');
+            CRUDBooster::redirect($this->return_url, cbTrans($msg), 'success');
         }
         if (request('submit') == cbTrans('button_save_more')) {
-            CB::redirect(CB::mainpath('add'), cbTrans($msg), 'success');
+            CRUDBooster::redirect(CRUDBooster::mainpath('add'), cbTrans($msg), 'success');
         }
-        CB::redirect(CB::mainpath(), cbTrans($msg), 'success');
+        CRUDBooster::redirect(CRUDBooster::mainpath(), cbTrans($msg), 'success');
     }
 
     private function setTimeStamps($col)

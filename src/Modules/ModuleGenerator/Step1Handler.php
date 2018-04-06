@@ -2,16 +2,15 @@
 
 namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
-use CB;
-use CRUDBooster;
+use crocodicstudio\crudbooster\helpers\CRUDBooster;
 use Illuminate\Support\Facades\DB;
 
 class Step1Handler
 {
     public function showForm($id)
     {
-        $tables_list = CB::listCbTables();
-        $row = CB::first('cms_moduls', ['id' => $id]);
+        $tables_list = CRUDBooster::listCbTables();
+        $row = CRUDBooster::first('cms_moduls', ['id' => $id]);
 
         return view("CbModulesGen::step1", compact("tables_list", "row", "id"));
     }

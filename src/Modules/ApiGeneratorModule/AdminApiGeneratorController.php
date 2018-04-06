@@ -9,7 +9,7 @@ use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\Field
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
-use CRUDbooster;
+use crocodicstudio\crudbooster\helpers\CRUDBooster;
 
 class AdminApiGeneratorController extends CBController
 {
@@ -119,7 +119,7 @@ class AdminApiGeneratorController extends CBController
         $this->cbLoader();
 
         $data['page_title'] = 'API Generator';
-        $data['tables'] = \CB::listCbTables();
+        $data['tables'] = CRUDBooster::listCbTables();
 
         return view('CbApiGen::api_generator', $data);
     }
@@ -135,7 +135,7 @@ class AdminApiGeneratorController extends CBController
         $data['responses'] = json_encode(unserialize($row->responses));
         $data['page_title'] = 'API Generator';
 
-        $data['tables'] = \CB::listCbTables();
+        $data['tables'] = CRUDBooster::listCbTables();
 
         return view('CbApiGen::api_generator', $data);
     }

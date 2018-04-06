@@ -5,8 +5,7 @@ namespace App\Http\Controllers;
 use DB;
 use Session;
 use Request;
-use CRUDBooster;
-use CB;
+use crocodicstudio\crudbooster\helpers\CRUDBooster;
 
 class CBHook extends Controller
 {

@@ -3,7 +3,7 @@
 namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
 use crocodicstudio\crudbooster\helpers\DbInspector;
-use CRUDBooster, CB;
+use crocodicstudio\crudbooster\helpers\CRUDBooster, CB;
 
 class Step3Handler
 {
@@ -28,7 +28,7 @@ class Step3Handler
     private function getComponentTypes()
     {
         $types = [];
-        foreach (glob(CB::componentsPath().'*', GLOB_ONLYDIR) as $dir) {
+        foreach (glob(CRUDBooster::componentsPath().'*', GLOB_ONLYDIR) as $dir) {
             array_push($types, basename($dir));
         }
         return $types;

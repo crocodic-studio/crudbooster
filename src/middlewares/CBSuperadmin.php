@@ -3,8 +3,7 @@
 namespace crocodicstudio\crudbooster\middlewares;
 
 use Closure;
-use CRUDBooster;
-use CB;
+use crocodicstudio\crudbooster\helpers\CRUDBooster;
 
 class CBSuperadmin
 {

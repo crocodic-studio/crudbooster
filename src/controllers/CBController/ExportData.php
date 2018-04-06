@@ -29,7 +29,7 @@ trait ExportData
 
     public function getExportData()
     {
-        return redirect(CB::mainpath());
+        return redirect(CRUDBooster::mainpath());
     }
 
 }

@@ -3,7 +3,7 @@
 namespace crocodicstudio\crudbooster\Modules\FileManagerModule;
 
 use crocodicstudio\crudbooster\controllers\CBController;
-use CRUDBooster;
+use crocodicstudio\crudbooster\helpers\CRUDBooster;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;
 

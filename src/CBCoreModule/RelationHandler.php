@@ -5,8 +5,7 @@ namespace crocodicstudio\crudbooster\CBCoreModule;
 use crocodicstudio\crudbooster\helpers\DbInspector;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\PDF;
-use CRUDBooster;
-use CB;
+use crocodicstudio\crudbooster\helpers\CRUDBooster;
 use Schema;
 
 class RelationHandler

@@ -2,7 +2,7 @@
 
 namespace crocodicstudio\crudbooster\Modules\MenuModule;
 
-use CRUDBooster;
+use crocodicstudio\crudbooster\helpers\CRUDBooster;
 use Illuminate\Support\Facades\DB;
 
 class MenuRepo

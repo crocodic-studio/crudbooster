@@ -3,7 +3,7 @@
 namespace crocodicstudio\crudbooster\Modules\EmailTemplates;
 
 use crocodicstudio\crudbooster\controllers\CBController;
-use CRUDBooster;
+use crocodicstudio\crudbooster\helpers\CRUDBooster;
 
 class AdminEmailTemplatesController extends CBController
 {

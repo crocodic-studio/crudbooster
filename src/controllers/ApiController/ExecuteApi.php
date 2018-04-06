@@ -4,7 +4,7 @@ namespace crocodicstudio\crudbooster\controllers\ApiController;
 
 use crocodicstudio\crudbooster\helpers\DbInspector;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
-use CRUDBooster, CB;
+use crocodicstudio\crudbooster\helpers\CRUDBooster, CB;
 
 class ExecuteApi
 {

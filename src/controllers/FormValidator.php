@@ -2,12 +2,11 @@
 
 namespace crocodicstudio\crudbooster\controllers;
 
-use CB;
 use crocodicstudio\crudbooster\helpers\DbInspector;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Request;
-use CRUDBooster;
+use crocodicstudio\crudbooster\helpers\CRUDBooster;
 
 class FormValidator
 {
@@ -34,7 +33,7 @@ class FormValidator
      */
     private function getRules($id, $form)
     {
-        $cmpPath = \CB::componentsPath();
+        $cmpPath = CRUDBooster::componentsPath();
         $rules = [];
         foreach ($form as $formInput) {
             $name = $formInput['name'];
@@ -87,7 +86,7 @@ class FormValidator
             $uniqueIgnoreId = ($parseUnique[2]) ?: (($id) ?: '');
 
             //Make sure table name
-            $uniqueTable = CB::parseSqlTable($uniqueTable)['table'];
+            $uniqueTable = CRUDBooster::parseSqlTable($uniqueTable)['table'];
 
             //Rebuild unique rule
             $uniqueRebuild = [];

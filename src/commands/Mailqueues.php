@@ -6,7 +6,7 @@ use Illuminate\Foundation\Inspiring;
 use DB;
 use Cache;
 use Request;
-use CRUDBooster;
+use crocodicstudio\crudbooster\helpers\CRUDBooster;
 
 class Mailqueues extends Command
 {

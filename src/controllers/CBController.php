@@ -15,10 +15,8 @@ use crocodicstudio\crudbooster\controllers\CBController\FormSubmitHandlers;
 use crocodicstudio\crudbooster\controllers\CBController\ImportData;
 use crocodicstudio\crudbooster\controllers\CBController\IndexAjax;
 use crocodicstudio\crudbooster\helpers\DbInspector;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
-use CRUDBooster;
-use CB;
+use crocodicstudio\crudbooster\helpers\CRUDBooster;
 use Schema;
 
 class CBController extends Controller
@@ -95,7 +93,7 @@ class CBController extends Controller
     public function getAdd()
     {
         $this->genericLoader();
-        $page_title = cbTrans('add_data_page_title', ['module' => CB::getCurrentModule()->name]);
+        $page_title = cbTrans('add_data_page_title', ['module' => CRUDBooster::getCurrentModule()->name]);
         $command = 'add';
         return $this->cbForm(compact('page_title', 'command'));
     }
@@ -115,7 +113,7 @@ class CBController extends Controller
         $this->genericLoader();
         $row = $this->findFirst($id);
 
-        $page_title = cbTrans("edit_data_page_title", ['module' => CB::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
+        $page_title = cbTrans("edit_data_page_title", ['module' => CRUDBooster::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
         $command = 'edit';
         session()->put('current_row_id', $id);
 
@@ -137,7 +135,7 @@ class CBController extends Controller
         $this->cbFormLoader();
         $row = $this->findFirst($id);
 
-        $page_title = cbTrans('detail_data_page_title', ['module' => CB::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
+        $page_title = cbTrans('detail_data_page_title', ['module' => CRUDBooster::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
 
         session()->put('current_row_id', $id);
         return $this->cbView('crudbooster::form.details', compact('row', 'page_title', 'id'));
@@ -149,7 +147,7 @@ class CBController extends Controller
 
     private function insertLog($msg, $name)
     {
-        CB::insertLog(trans('logging.'.$msg, ['module' => CB::getCurrentModule()->name, 'name' => $name]));
+        CRUDBooster::insertLog(trans('logging.'.$msg, ['module' => CRUDBooster::getCurrentModule()->name, 'name' => $name]));
     }
 
     /**

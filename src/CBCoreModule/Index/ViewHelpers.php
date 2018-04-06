@@ -2,12 +2,14 @@
 
 namespace crocodicstudio\crudbooster\CBCoreModule\Index;
 
+use crocodicstudio\crudbooster\helpers\CRUDBooster;
+
 class ViewHelpers
 {
     public static function urlFilterColumn($key, $type, $value = '', $singleSorting = true)
     {
         $params = request()->all();
-        $mainpath = trim(\CB::mainpath(), '/');
+        $mainpath = trim(CRUDBooster::mainpath(), '/');
 
         if ($params['filter_column'] && $singleSorting) {
             foreach ($params['filter_column'] as $k => $filter) {

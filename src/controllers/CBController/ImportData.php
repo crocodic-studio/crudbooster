@@ -17,7 +17,7 @@ trait ImportData
 
         $data = [];
         $data['page_menu'] = Route::getCurrentRoute()->getActionName();
-        $data['page_title'] = 'Import Data '.CB::getCurrentModule()->name;
+        $data['page_title'] = 'Import Data '.CRUDBooster::getCurrentModule()->name;
 
         if (! request('file') || request('import')) {
             return $this->cbView('crudbooster::import', $data);

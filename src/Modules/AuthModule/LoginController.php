@@ -4,7 +4,7 @@ namespace crocodicstudio\crudbooster\Modules\AuthModule;
 
 use App\Http\Controllers\CBHook;
 use crocodicstudio\crudbooster\CBCoreModule\CbUsersRepo;
-use CB;
+use crocodicstudio\crudbooster\helpers\CRUDBooster;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -26,7 +26,7 @@ class LoginController
 
         (new CBHook)->afterLogin();
 
-        return redirect(CB::adminPath());
+        return redirect(CRUDBooster::adminPath());
     }
 
     private function validateLogin()
@@ -78,7 +78,7 @@ class LoginController
      */
     private function LogIt($users)
     {
-        CB::insertLog(trans('logging.log_login', ['email' => $users->email, 'ip' => Request::server('REMOTE_ADDR')]));
+        CRUDBooster::insertLog(trans('logging.log_login', ['email' => $users->email, 'ip' => Request::server('REMOTE_ADDR')]));
     }
 
     /**
