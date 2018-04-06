@@ -7,6 +7,7 @@ use crocodicstudio\crudbooster\CBCoreModule\Index\Order;
 use crocodicstudio\crudbooster\CBCoreModule\Index\ValueCalculator;
 use crocodicstudio\crudbooster\controllers\CBController;
 use crocodicstudio\crudbooster\helpers\DbInspector;
+use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
 use crocodicstudio\crudbooster\helpers\CRUDBooster;
@@ -104,7 +105,7 @@ class Index
         if (request('foreign_key')) {
             $data['parent_field'] = request('foreign_key');
         } else {
-            $data['parent_field'] = CRUDBooster::getTableForeignKey(request('parent_table'), $this->table);
+            $data['parent_field'] = DbInspector::getTableForeignKey(request('parent_table'), $this->table);
         }
 
         if (! $data['parent_field']) {

@@ -485,7 +485,7 @@ class ExecuteApi
         if (! DbInspector::isForeignKey($name)) {
             return $nameTmp;
         }
-        $jointable = CRUDBooster::getTableForeignKey($name);
+        $jointable = DbInspector::getTableForeignKey($name);
         $jointable_field = DbInspector::getTableCols($jointable);
 
         $data->leftjoin($jointable, $jointable.'.id', '=', $table.'.'.$name);
