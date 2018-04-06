@@ -341,18 +341,17 @@ class AdminApiGeneratorController extends CBController
      */
     private function getFieldType($ro, $default)
     {
-        if (FieldDetector::isEmail($ro)) {
-            return "email";
-        }
-        if (FieldDetector::isImage($ro)) {
-            return "image";
-        }
-        if (FieldDetector::isPassword($ro)) {
-            return "password";
-        }
+        $MAP = [
+            'isEmail' => "email",
+            'isImage' => "image",
+            'isPassword' => "password",
+            'isForeignKey' => "integer",
+        ];
 
-        if (FieldDetector::isForeignKey($ro)) {
-            return "integer";
+        foreach ($MAP as $methodName => $type) {
+            if (FieldDetector::$methodName($ro)) {
+                return $type;
+            }
         }
 
         return $default;
