@@ -106,7 +106,7 @@ class ExecuteApi
 
             $this->ctrl->hookQuery($data);
             if ($actionType == 'list') {
-                list($result, $row) = $this->handleListAction($table, $orderby, $data, $result, $debugModeMessage, $row, $responses_fields);
+                $result = $this->handleListAction($table, $orderby, $data, $result, $debugModeMessage, $responses_fields);
             }
             $result = $this->handleDetailsAction($actionType, $result, $debugModeMessage, $data, $parameters, $posts, $responses_fields);
             if ($actionType == 'delete') {
@@ -163,11 +163,10 @@ class ExecuteApi
      * @param $data
      * @param $result
      * @param $debugModeMessage
-     * @param $row
      * @param $responsesFields
      * @return array
      */
-    private function handleListAction($table, $orderby, $data, $result, $debugModeMessage, $row, $responsesFields)
+    private function handleListAction($table, $orderby, $data, $result, $debugModeMessage, $responsesFields)
     {
         $orderbyCol = $table.'.id';
         $orderbyVal = 'desc';
@@ -187,10 +186,10 @@ class ExecuteApi
         }
         $result['data'] = [];
         if ($rows) {
-            list($row, $result) = $this->handleRows($result, $debugModeMessage, $row, $responsesFields, $rows);
+            $result = $this->handleRows($result, $debugModeMessage, $responsesFields, $rows);
         }
 
-        return [$result, $row];
+        return $result;
     }
 
     /**
@@ -308,7 +307,7 @@ class ExecuteApi
      * @param $rows
      * @return array
      */
-    private function handleRows($result, $debugModeMessage,$row, $responsesFields, $rows)
+    private function handleRows($result, $debugModeMessage, $responsesFields, $rows)
     {
         $uploadsFormatCandidate = explode(',', cbConfig("UPLOAD_TYPES"));
         foreach ($rows as &$row) {
@@ -331,7 +330,7 @@ class ExecuteApi
         }
         $result['data'] = $rows;
 
-        return [$row, $result];
+        return $result;
     }
 
     /**
@@ -391,6 +390,7 @@ class ExecuteApi
      * @param $table
      * @param $data
      * @param $responses
+     *
      * @param $responsesFields
      * @return array
      */
