@@ -112,13 +112,17 @@ class ScaffoldingParser
         foreach ($split as $s) {
             if (strpos($s, 'options') !== false) {
                 $colInnerItem['options'] = trim(str_replace("'options'=>", "", $s), '\'\"\]\[');
-            } elseif (strpos($s, 'callback') !== false) {
-                $colInnerItem['callback'] = self::parseCallback($s);
-            } else {
-                $s = str_replace("'", '',$s);
-                $sSplit = explode('=>', $s);
-                $colInnerItem[$sSplit[0]] = $sSplit[1];
+                continue;
             }
+            if (strpos($s, 'callback') !== false) {
+                $colInnerItem['callback'] = self::parseCallback($s);
+                continue;
+            }
+
+            $s = str_replace("'", '',$s);
+            list($key, $val) = explode('=>', $s);
+            $colInnerItem[$key] = $val;
+
         }
 
         return $colInnerItem;
