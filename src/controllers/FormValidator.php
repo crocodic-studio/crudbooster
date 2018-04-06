@@ -71,15 +71,11 @@ class FormValidator
     {
         $exp = explode('|', $formInput['validation']);
 
-        if (! count($exp)) {
-            return '';
-        }
+        $uniqueRules = array_filter($exp, function($item){
+            return starts_with($item, 'unique');
+        });
 
-        foreach ($exp as &$validationItem) {
-            if (substr($validationItem, 0, 6) !== 'unique') {
-                continue;
-            }
-
+        foreach ($uniqueRules as &$validationItem) {
             $parseUnique = explode(',', str_replace('unique:', '', $validationItem));
             $uniqueTable = ($parseUnique[0]) ?: $this->table;
             $uniqueColumn = ($parseUnique[1]) ?: $formInput['name'];
