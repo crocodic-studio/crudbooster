@@ -28,7 +28,7 @@ class ExecuteApi
 
         $row_api = DB::table('cms_apicustom')->where('permalink', $this->ctrl->permalink)->first();
 
-        $action_type = $row_api->aksi;
+        $actionType = $row_api->aksi;
         $table = $row_api->tabel;
 
         $debugModeMessage = 'You are in debug mode !';
@@ -85,7 +85,7 @@ class ExecuteApi
 
         unset($posts['limit'], $posts['offset'], $posts['orderby']);
 
-        if (in_array($action_type, ['list', 'detail', 'delete'])) {
+        if (in_array($actionType, ['list', 'detail', 'delete'])) {
             $data = DB::table($table);
             $data->skip($offset);
             $data->take($limit);
@@ -105,16 +105,16 @@ class ExecuteApi
             }
 
             $this->ctrl->hookQuery($data);
-            if ($action_type == 'list') {
+            if ($actionType == 'list') {
                 list($result, $row) = $this->handleListAction($table, $orderby, $data, $result, $debugModeMessage, $row, $responses_fields);
             }
-            $result = $this->handleDetailsAction($action_type, $result, $debugModeMessage, $data, $parameters, $posts, $responses_fields);
-            if ($action_type == 'delete') {
-                $result = $this->handleDeleteAction($action_type, $table, $data, $result, $debugModeMessage);
+            $result = $this->handleDetailsAction($actionType, $result, $debugModeMessage, $data, $parameters, $posts, $responses_fields);
+            if ($actionType == 'delete') {
+                $result = $this->handleDeleteAction($actionType, $table, $data, $result, $debugModeMessage);
             }
         }
 
-        if (in_array($action_type, ['save_add', 'save_edit'])) {
+        if (in_array($actionType, ['save_add', 'save_edit'])) {
             $this->handleAddEdit($parameters, $posts, $row_assign);
         }
 
@@ -164,21 +164,21 @@ class ExecuteApi
      * @param $result
      * @param $debugModeMessage
      * @param $row
-     * @param $responses_fields
+     * @param $responsesFields
      * @return array
      */
-    private function handleListAction($table, $orderby, $data, $result, $debugModeMessage, $row, $responses_fields)
+    private function handleListAction($table, $orderby, $data, $result, $debugModeMessage, $row, $responsesFields)
     {
-        $orderby_col = $table.'.id';
-        $orderby_val = 'desc';
+        $orderbyCol = $table.'.id';
+        $orderbyVal = 'desc';
 
         if ($orderby) {
             $orderby_raw = explode(',', $orderby);
-            $orderby_col = $orderby_raw[0];
-            $orderby_val = $orderby_raw[1];
+            $orderbyCol = $orderby_raw[0];
+            $orderbyVal = $orderby_raw[1];
         }
 
-        $rows = $data->orderby($orderby_col, $orderby_val)->get();
+        $rows = $data->orderby($orderbyCol, $orderbyVal)->get();
 
         $result['api_status'] = 0;
         $result['api_message'] = 'There is no data found !';
@@ -187,7 +187,7 @@ class ExecuteApi
         }
         $result['data'] = [];
         if ($rows) {
-            list($row, $result) = $this->handleRows($result, $debugModeMessage, $row, $responses_fields, $rows);
+            list($row, $result) = $this->handleRows($result, $debugModeMessage, $row, $responsesFields, $rows);
         }
 
         return [$result, $row];
@@ -222,11 +222,11 @@ class ExecuteApi
      * @param $parameters
      * @param $posts
      * @param $table
-     * @param $type_except
+     * @param $typeExcept
      */
-    private function filterRows($data, $parameters, $posts, $table, $type_except)
+    private function filterRows($data, $parameters, $posts, $table, $typeExcept)
     {
-        $data->where(function ($w) use ($parameters, $posts, $table, $type_except) {
+        $data->where(function ($w) use ($parameters, $posts, $table, $typeExcept) {
             foreach ($parameters as $param) {
                 $name = $param['name'];
                 $type = $param['type'];
@@ -234,7 +234,7 @@ class ExecuteApi
                 $used = $param['used'];
                 $required = $param['required'];
 
-                if (in_array($type, $type_except)) {
+                if (in_array($type, $typeExcept)) {
                     continue;
                 }
 
@@ -304,11 +304,11 @@ class ExecuteApi
      * @param $result
      * @param $debugModeMessage
      * @param $row
-     * @param $responses_fields
+     * @param $responsesFields
      * @param $rows
      * @return array
      */
-    private function handleRows($result, $debugModeMessage,$row, $responses_fields, $rows)
+    private function handleRows($result, $debugModeMessage,$row, $responsesFields, $rows)
     {
         $uploadsFormatCandidate = explode(',', cbConfig("UPLOAD_TYPES"));
         foreach ($rows as &$row) {
@@ -318,7 +318,7 @@ class ExecuteApi
                     $row->$k = asset($v);
                 }
 
-                if (! in_array($k, $responses_fields)) {
+                if (! in_array($k, $responsesFields)) {
                     unset($row[$k]);
                 }
             }
@@ -353,7 +353,7 @@ class ExecuteApi
 
     /**
      * @param $result
-     * @param$Debug_mode_message
+     * @param $debugModeMessage
      * @param $posts
      * @return mixed
      */
@@ -370,10 +370,10 @@ class ExecuteApi
 
     /**
      * @param $rows
-     * @param $responses_fields
+     * @param $responsesFields
      * @param $row
      */
-    private function handleFile($rows, $responses_fields, $row)
+    private function handleFile($rows, $responsesFields, $row)
     {
         foreach ($rows as $k => $v) {
             $ext = \File::extension($v);
@@ -381,7 +381,7 @@ class ExecuteApi
                 $rows->$k = asset($v);
             }
 
-            if (! in_array($k, $responses_fields)) {
+            if (! in_array($k, $responsesFields)) {
                 unset($row[$k]);
             }
         }
@@ -391,10 +391,10 @@ class ExecuteApi
      * @param $table
      * @param $data
      * @param $responses
-     * @param $responses_fields
+     * @param $responsesFields
      * @return array
      */
-    private function responses($table, $data, $responses, $responses_fields)
+    private function responses($table, $data, $responses, $responsesFields)
     {
         $name_tmp = [];
         foreach ($responses as $resp) {
@@ -426,7 +426,7 @@ class ExecuteApi
             }
 
             $name_tmp[] = $name;
-            $name_tmp = $this->joinRelatedTables($table, $responses_fields, $name, $data, $name_tmp);
+            $name_tmp = $this->joinRelatedTables($table, $responsesFields, $name, $data, $name_tmp);
         }
 
         return $data;
@@ -438,12 +438,12 @@ class ExecuteApi
      * @param $rows
      * @return array
      */
-    private function success($result, $debugmode_message, $rows)
+    private function success($result, $debugModeMessage, $rows)
     {
         $result['api_status'] = 1;
         $result['api_message'] = 'success';
         if (cbGetsetting('api_debug_mode') == 'true') {
-            $result['api_authorization']=$Debug_mode_message;
+            $result['api_authorization']=$debugModeMessage;
         }
         $rows = (array) $rows;
         $result = array_merge($result, $rows);
