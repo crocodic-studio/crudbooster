@@ -141,7 +141,7 @@ class DbInspector
             return Cache::get($cacheKey);
         }
 
-        $table = CRUDBooster::getTableForeignKey($fieldName);
+        $table = self::getTableForeignKey($fieldName);
         if (! $table) {
             return false;
         }
@@ -233,5 +233,12 @@ class DbInspector
             return 'id_'.$parent_table;
         }
         return $parent_table.'_id';
+    }
+
+    public static function getTableForeignKey($fieldName)
+    {
+        if (self::isForeignKey($fieldName)) {
+            return str_replace(['_id', 'id_'], '', $fieldName);
+        }
     }
 }

@@ -8,7 +8,7 @@ class FieldDetector
      * @param $fieldName string
      * @return bool
      */
-    static function isExceptional($fieldName)
+    public static function isExceptional($fieldName)
     {
         return in_array($fieldName, ['id', 'created_at', 'updated_at', 'deleted_at']);
     }
@@ -17,22 +17,22 @@ class FieldDetector
      * @param $fieldName string
      * @return bool
      */
-    static function isForeignKey($fieldName)
+    public static function isForeignKey($fieldName)
     {
         return starts_with($fieldName, 'id_') || ends_with($fieldName, '_id');
     }
 
-    static function isUploadField($fieldName)
+    public static function isUploadField($fieldName)
     {
         return self::isWithin($fieldName, 'UPLOAD_TYPES');
     }
 
-    static function isWithin($fieldName, $configKey)
+    public static function isWithin($fieldName, $configKey)
     {
         return in_array($fieldName, explode(',', cbConfig($configKey)));
     }
 
-    static function detect($colName)
+    public static function detect($colName)
     {
         $map = [
             'isPassword',
@@ -55,7 +55,7 @@ class FieldDetector
      * @param $fieldName string
      * @return bool
      */
-    static function isPassword($fieldName)
+    public static function isPassword($fieldName)
     {
         return self::isWithin($fieldName, 'PASSWORD_FIELDS_CANDIDATE');
     }
@@ -64,7 +64,7 @@ class FieldDetector
      * @param $fieldName string
      * @return bool
      */
-    static function isImage($fieldName)
+    public static function isImage($fieldName)
     {
         return self::isWithin($fieldName, 'IMAGE_FIELDS_CANDIDATE');
     }
@@ -73,7 +73,7 @@ class FieldDetector
      * @param $fieldName string
      * @return bool
      */
-    static function isGeographical($fieldName)
+    public static function isGeographical($fieldName)
     {
         return in_array($fieldName, ['latitude', 'longitude']);
     }
@@ -82,7 +82,7 @@ class FieldDetector
      * @param $fieldName string
      * @return bool
      */
-    static function isPhone($fieldName)
+    public static function isPhone($fieldName)
     {
         return self::isWithin($fieldName, 'PHONE_FIELDS_CANDIDATE');
     }
@@ -91,7 +91,7 @@ class FieldDetector
      * @param $fieldName string
      * @return bool
      */
-    static function isEmail($fieldName)
+    public static function isEmail($fieldName)
     {
         return self::isWithin($fieldName, 'EMAIL_FIELDS_CANDIDATE');
     }
@@ -100,7 +100,7 @@ class FieldDetector
      * @param $fieldName string
      * @return bool
      */
-    static function isNameField($fieldName)
+    public static function isNameField($fieldName)
     {
         return self::isWithin($fieldName, 'NAME_FIELDS_CANDIDATE');
     }
@@ -109,7 +109,7 @@ class FieldDetector
      * @param $fieldName string
      * @return bool
      */
-    static function isUrlField($fieldName)
+    public static function isUrlField($fieldName)
     {
         return self::isWithin($fieldName, 'URL_FIELDS_CANDIDATE');
     }

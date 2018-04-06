@@ -138,7 +138,7 @@ class IndexImport
                 continue;
             }
 
-            $relation_table = CRUDBooster::getTableForeignKey($colname);
+            $relation_table = DbInspector::getTableForeignKey($colname);
             $relation_moduls = DB::table('cms_moduls')->where('table_name', $relation_table)->first();
 
             $relation_class = __NAMESPACE__.'\\'.$relation_moduls->controller;

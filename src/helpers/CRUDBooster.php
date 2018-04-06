@@ -2,7 +2,6 @@
 
 namespace crocodicstudio\crudbooster\helpers;
 
-use crocodicstudio\crudbooster\CBCoreModule\CbUsersRepo;
 use crocodicstudio\crudbooster\CBCoreModule\RouteController;
 use crocodicstudio\crudbooster\CBCoreModule\ViewHelpers;
 use crocodicstudio\crudbooster\Modules\AuthModule\Helpers;
@@ -122,13 +121,6 @@ class CRUDBooster
         }
 
         return $first->first();
-    }
-
-    public static function getTableForeignKey($fieldName)
-    {
-        if (substr($fieldName, 0, 3) == 'id_' || substr($fieldName, -3) == '_id') {
-            return str_replace(['_id', 'id_'], '', $fieldName);
-        }
     }
 
     public static function urlFilterColumn($key, $type, $value = '', $singleSorting = true)
