@@ -359,7 +359,7 @@ class ExecuteApi
     private function passwordError($result, $debugModeMessage, $posts)
     {
         $result['api_status'] = 0;
-        $result['api_message'] = 'Your password is wrong !';
+        $result['api_message'] = cbTrans('alert_password_wrong');
         if (cbGetsetting('api_debug_mode') == 'true') {
             $result['api_authorization'] = $debugModeMessage;
         }
