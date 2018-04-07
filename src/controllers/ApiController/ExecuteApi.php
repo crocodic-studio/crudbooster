@@ -4,7 +4,7 @@ namespace crocodicstudio\crudbooster\controllers\ApiController;
 
 use crocodicstudio\crudbooster\helpers\DbInspector;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
-use crocodicstudio\crudbooster\helpers\CRUDBooster, CB;
+use CB;
 use Illuminate\Support\Facades\Schema;
 
 class ExecuteApi
@@ -402,7 +402,7 @@ class ExecuteApi
         $name_tmp = [];
 
         $responses = $this->filterRedundantResp($responses);
-        
+
         foreach ($responses as $resp) {
             $name = $resp['name'];
             $subquery = $resp['subquery'];

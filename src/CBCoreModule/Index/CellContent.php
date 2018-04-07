@@ -28,7 +28,7 @@ class CellContent
      *
      * @return array
      */
-    function calculate($data, $tablePK, $number, $columnsTable, $table, $addaction)
+    public function calculate($data, $tablePK, $number, $columnsTable, $table, $addaction)
     {
         $htmlContents = [];
         foreach ($data['result'] as $row) {
@@ -128,7 +128,7 @@ class CellContent
         $id = ($row->{$this->cb->primaryKey});
 
         $data = compact('addaction', 'row', 'id', 'button_action_style', 'parent_field', 'button_edit', 'deleteBtn', 'buttonDetail');
-        $htmlContent[] = "<div class='button_action' style='text-align:right'>".view('crudbooster::index.action', $data)->render()."</div>";
+        $htmlContent[] = "<div class='button_action' style='text-align:right'>".view('crudbooster::index.action', $data)->render().'</div>';
 
         return $htmlContent;
     }
