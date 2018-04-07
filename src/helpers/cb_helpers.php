@@ -11,7 +11,7 @@
 if (! function_exists('cbModulesNS')) {
     function cbModulesNS($path = '')
     {
-        return '\crocodicstudio\crudbooster\Modules\\'.$path;
+        return \crocodicstudio\crudbooster\helpers\CbStructure::cbModulesNS($path);
     }
 }
 
@@ -25,7 +25,7 @@ if (! function_exists('cbAdminPath')) {
 if (! function_exists('ctrlNamespace')) {
     function ctrlNamespace()
     {
-        return 'App\Http\Controllers';
+        return \crocodicstudio\crudbooster\helpers\CbStructure::ctrlNamespace();
     }
 }
 

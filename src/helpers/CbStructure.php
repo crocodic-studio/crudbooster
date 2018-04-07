@@ -28,4 +28,14 @@ class CbStructure
     {
         return self::controllersDir().$controller.'.php';
     }
+
+    public static function cbModulesNS($path = '')
+    {
+        return '\crocodicstudio\crudbooster\Modules\\'.$path;
+    }
+
+    public static function ctrlNamespace()
+    {
+        return 'App\Http\Controllers';
+    }
 }
