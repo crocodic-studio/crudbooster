@@ -3,11 +3,10 @@
 namespace crocodicstudio\crudbooster\CBCoreModule;
 
 use crocodicstudio\crudbooster\CBCoreModule\Index\FilterIndexRows;
+use crocodicstudio\crudbooster\CBCoreModule\Index\CellContent;
 use crocodicstudio\crudbooster\CBCoreModule\Index\Order;
-use crocodicstudio\crudbooster\CBCoreModule\Index\ValueCalculator;
 use crocodicstudio\crudbooster\controllers\CBController;
 use crocodicstudio\crudbooster\helpers\DbInspector;
-use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
 use crocodicstudio\crudbooster\helpers\CRUDBooster;
@@ -30,13 +29,12 @@ class Index
         }
 
         $data['table'] = $CbCtrl->table;
-        $data['table_pk'] = DbInspector::findPk($CbCtrl->table);
+        $tablePK = $data['table_pk'] = DbInspector::findPk($CbCtrl->table);
         $data['page_title'] = CRUDBooster::getCurrentModule()->name;
         $data['page_description'] = cbTrans('default_module_description');
         $data['date_candidate'] = $CbCtrl->date_candidate;
         $data['limit'] = $limit = request('limit', $CbCtrl->limit);
 
-        $tablePK = $data['table_pk'];
 
         $result = $CbCtrl->table()->select(DB::raw($CbCtrl->table.".".$CbCtrl->primaryKey));
 
@@ -89,7 +87,7 @@ class Index
         //$orig_mainpath = $CbCtrl->data['mainpath'];
         //$title_field = $CbCtrl->title_field;
         $number = (request('page', 1) - 1) * $limit + 1;
-        $htmlContents = $this->htmlContents($CbCtrl, $data, $tablePK, $number, $columns_table, $table, $addAction); //end foreach data[result]
+        $htmlContents = (new CellContent($CbCtrl))->calculate($data, $tablePK, $number, $columns_table, $table, $addAction); //end foreach data[result]
 
         $data['html_contents'] = ['html' => $htmlContents, 'data' => $data['result']];
 
@@ -236,34 +234,6 @@ class Index
     }
 
     /**
-     * @param \crocodicstudio\crudbooster\controllers\CBController $CbCtrl
-     * @param $data
-     * @param $tablePK
-     * @param $number
-     * @param $columnsTable
-     * @param $table
-     * @param $addaction
-     * @return array
-     */
-    private function htmlContents(CBController $CbCtrl, $data, $tablePK, $number, $columnsTable, $table, $addaction)
-    {
-        $htmlContents = [];
-        foreach ($data['result'] as $row) {
-            $htmlContent = [];
-
-            $htmlContent = $this->addCheckBox($CbCtrl, $tablePK, $row, $htmlContent);
-            $htmlContent = $this->addRowNumber($CbCtrl, $number, $htmlContent);
-            $htmlContent = $this->addOtherColumns($columnsTable, $table, $row, $htmlContent);
-            $htmlContent = $this->addActionButtons($CbCtrl, $addaction, $row, $htmlContent);
-            $htmlContent = $this->performHookOnRow($CbCtrl, $htmlContent);
-            $htmlContents[] = $htmlContent;
-            $number++;
-        }
-
-        return $htmlContents;
-    }
-
-    /**
      * @param $module
      * @param $table_parent
      * @return string
@@ -278,93 +248,4 @@ class Index
             .$module['foreign_key'].'&label='.urlencode($module['label']);
     }
 
-    /**
-     * @param \crocodicstudio\crudbooster\controllers\CBController $CbCtrl
-     * @param $tablePK
-     * @param $row
-     * @param $htmlContent
-     * @return array
-     */
-    private function addCheckBox(CBController $CbCtrl, $tablePK, $row, $htmlContent)
-    {
-        if ($CbCtrl->button_bulk_action) {
-            $htmlContent[] = "<input type='checkbox' class='checkbox' name='checkbox[]' value='".$row->{$tablePK}."'/>";
-        }
-
-        return $htmlContent;
-    }
-
-    /**
-     * @param \crocodicstudio\crudbooster\controllers\CBController $CbCtrl
-     * @param $number
-     * @param $htmlContent
-     * @return array
-     */
-    private function addRowNumber(CBController $CbCtrl, $number, $htmlContent)
-    {
-        if ($CbCtrl->showNumbering) {
-            $htmlContent[] = $number.'. ';
-        }
-
-        return $htmlContent;
-    }
-
-    /**
-     * @param $columnsTable
-     * @param $table
-     * @param $row
-     * @param $htmlContent
-     * @return array
-     */
-    private function addOtherColumns($columnsTable, $table, $row, $htmlContent)
-    {
-        foreach ($columnsTable as $col) {
-            if ($col['visible'] === false) {
-                continue;
-            }
-            $htmlContent[] = (new ValueCalculator)->calculate($col, $row, $table, @$row->{$this->cb->title_field});
-        }
-
-        return $htmlContent;
-    }
-
-    /**
-     * @param \crocodicstudio\crudbooster\controllers\CBController $CbCtrl
-     * @param $htmlContent
-     * @return mixed
-     */
-    private function performHookOnRow(CBController $CbCtrl, $htmlContent)
-    {
-        foreach ($htmlContent as $i => $v) {
-            $CbCtrl->hookRowIndex($i, $v);
-            $htmlContent[$i] = $v;
-        }
-
-        return $htmlContent;
-    }
-
-    /**
-     * @param \crocodicstudio\crudbooster\controllers\CBController $CbCtrl
-     * @param $addaction
-     * @param $row
-     * @param $htmlContent
-     * @return array
-     * @throws \Throwable
-     */
-    private function addActionButtons(CBController $CbCtrl, $addaction, $row, $htmlContent)
-    {
-        if (!$CbCtrl->buttonTableAction) {
-            return $htmlContent;
-        }
-        $button_action_style = $CbCtrl->button_action_style;
-        $button_edit = $CbCtrl->button_edit;
-        $buttonDetail = $CbCtrl->buttonDetail;
-        $deleteBtn = $CbCtrl->deleteBtn;
-        $id = ($row->{$CbCtrl->primaryKey});
-
-        $data = compact('addaction', 'row', 'id', 'button_action_style', 'parent_field', 'button_edit', 'deleteBtn', 'buttonDetail');
-        $htmlContent[] = "<div class='button_action' style='text-align:right'>".view('crudbooster::index.action', $data)->render()."</div>";
-
-        return $htmlContent;
-    }
 }

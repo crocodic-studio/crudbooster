@@ -5,6 +5,7 @@ namespace crocodicstudio\crudbooster\controllers\ApiController;
 use crocodicstudio\crudbooster\helpers\DbInspector;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
 use crocodicstudio\crudbooster\helpers\CRUDBooster, CB;
+use Illuminate\Support\Facades\Schema;
 
 class ExecuteApi
 {
@@ -117,7 +118,7 @@ class ExecuteApi
 
         if (in_array($actionType, ['save_add', 'save_edit'])) {
             $rowAssign = array_filter($input_validator, function ($column) use ($table) {
-                return \Schema::hasColumn($table, $column);
+                return Schema::hasColumn($table, $column);
             }, ARRAY_FILTER_USE_KEY);
 
             $this->handleAddEdit($parameters, $posts, $rowAssign);
@@ -305,7 +306,6 @@ class ExecuteApi
     /**
      * @param $result
      * @param $debugModeMessage
-     * @param $row
      * @param $responsesFields
      * @param $rows
      * @return array
@@ -400,21 +400,15 @@ class ExecuteApi
     private function responses($table, $data, $responses, $responsesFields)
     {
         $name_tmp = [];
+
+        $responses = $this->filterRedundantResp($responses);
+        
         foreach ($responses as $resp) {
             $name = $resp['name'];
-            $type = $resp['type'];
             $subquery = $resp['subquery'];
             $used = intval($resp['used']);
 
-            if ($used == 0 && ! DbInspector::isForeignKey($name)) {
-                continue;
-            }
-
             if (in_array($name, $name_tmp)) {
-                continue;
-            }
-
-            if ($name == 'ref_id' || $type == 'custom') {
                 continue;
             }
 
@@ -631,5 +625,22 @@ class ExecuteApi
             $result = $this->success($result, $debugModeMessage, $row);
         }
         return $result;
+    }
+
+    /**
+     * @param $responses
+     * @return array
+     */
+    private function filterRedundantResp($responses)
+    {
+        $responses = array_filter($responses, function ($resp) {
+            return ! ($resp['name'] == 'ref_id' || $resp['type'] == 'custom');
+        });
+
+        $responses = array_filter($responses, function ($resp) {
+            return (intval($resp['used']) != 0 || DbInspector::isForeignKey($resp['name']));
+        });
+
+        return $responses;
     }
 }
