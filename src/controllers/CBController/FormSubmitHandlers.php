@@ -24,7 +24,7 @@ trait FormSubmitHandlers
                 continue;
             }
 
-            $hookPath = CRUDBooster::componentsPath($type).DIRECTORY_SEPARATOR.'hookInputAssignment.php';
+            $hookPath = CbComponentsPath($type).DIRECTORY_SEPARATOR.'hookInputAssignment.php';
             if (file_exists($hookPath)) {
                 require_once($hookPath);
             }

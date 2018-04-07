@@ -53,19 +53,31 @@ if (! function_exists('is_checked')) {
     }
 }
 
+if (! function_exists('CbComponentsPath')) {
+    function CbComponentsPath($type = '')
+    {
+        return \crocodicstudio\crudbooster\helpers\CbStructure::componentsPath($type);
+    }
+}
+
+if (! function_exists('CbPublishedComponentsPath')) {
+    function CbPublishedComponentsPath($type = '')
+    {
+        return \crocodicstudio\crudbooster\helpers\CbStructure::publishedComponentsPath($type);
+    }
+}
+
 if (! function_exists('controllers_dir')) {
     function controllers_dir()
     {
-        $_ = DIRECTORY_SEPARATOR;
-        return 'app'.$_.'Http'.$_.'Controllers'.$_;
+        return \crocodicstudio\crudbooster\helpers\CbStructure::controllersDir();
     }
 }
 
 if (! function_exists('controller_path')) {
     function controller_path($controller)
     {
-        $_ = DIRECTORY_SEPARATOR;
-        return app_path('Http'.$_.'Controllers'.$_.$controller.'.php');
+        return \crocodicstudio\crudbooster\helpers\CbStructure::controllerPath($controller);
     }
 }
 

@@ -19,9 +19,9 @@
 @endphp
 
 @foreach($types as $type)
-    @if(file_exists(CB::componentsPath($type.'/asset.blade.php')))
+    @if(file_exists(CbComponentsPath($type.'/asset.blade.php')))
         @include('crudbooster::form.type_components.'.$type.'.asset')
-    @elseif(file_exists(CB::PublishedComponentsPath($type.'/asset.blade.php')))
+    @elseif(file_exists(CbPublishedComponentsPath($type.'/asset.blade.php')))
         @include('vendor.crudbooster.type_components.'.$type.'.asset')
     @endif
 @endforeach

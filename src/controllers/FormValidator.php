@@ -33,7 +33,7 @@ class FormValidator
      */
     private function getRules($id, $form)
     {
-        $cmpPath = CRUDBooster::componentsPath();
+        $cmpPath = CbComponentsPath();
         $rules = [];
         foreach ($form as $formInput) {
             $name = $formInput['name'];
