@@ -122,7 +122,7 @@ class AdminModulesController extends CBController
     public function getTypeInfo($type = 'text')
     {
         header("Content-Type: application/json");
-        echo file_get_contents(CRUDBooster::componentsPath($type).'/info.json');
+        echo file_get_contents(CbComponentsPath($type).'/info.json');
     }
 
     public function postStep4(Step3Handler $handler)

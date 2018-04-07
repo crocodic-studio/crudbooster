@@ -1,6 +1,6 @@
 <?php
-$fileLocation = CB::componentsPath($type.'/component_detail.blade.php');
-$userLocation = CB::PublishedComponentsPath($type.'/component_detail.blade.php');
+$fileLocation = CbComponentsPath($type.'/component_detail.blade.php');
+$userLocation = CbPublishedComponentsPath($type.'/component_detail.blade.php');
 ?>
 
 @if(file_exists($fileLocation))

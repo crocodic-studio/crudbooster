@@ -70,25 +70,17 @@ class DbInspector
      */
     public static function colName($columns)
     {
-        $name_col_candidate = cbConfig('NAME_FIELDS_CANDIDATE');
-        $name_col_candidate = explode(',', $name_col_candidate);
-        $name_col = '';
+        $nameColCandidate = explode(',', cbConfig('NAME_FIELDS_CANDIDATE'));
+
         foreach ($columns as $c) {
-            foreach ($name_col_candidate as $cc) {
+            foreach ($nameColCandidate as $cc) {
                 if (strpos($c, $cc) !== false) {
-                    $name_col = $c;
-                    break;
+                    return $c;
                 }
             }
-            if ($name_col) {
-                break;
-            }
-        }
-        if ($name_col == '') {
-            $name_col = 'id';
         }
 
-        return $name_col;
+        return 'id';
     }
 
     /**
@@ -120,12 +112,10 @@ class DbInspector
         return Cache::rememberForever($field, function () use ($table, $field) {
             try {
                 //MySQL & SQL Server
-                $typedata = DB::select(DB::raw("select DATA_TYPE from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='$table' and COLUMN_NAME = '$field'"))[0]->DATA_TYPE;
+                return DB::select(DB::raw("select DATA_TYPE from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='$table' and COLUMN_NAME = '$field'"))[0]->DATA_TYPE;
             } catch (\Exception $e) {
-                $typedata = null;
+                return 'varchar';
             }
-
-            return $typedata ?: 'varchar';
         });
     }
 

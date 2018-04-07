@@ -229,18 +229,4 @@ class CRUDBooster
 
         sendAndTerminate(redirect($to)->with(['message' => $message, 'message_type' => $type]));
     }
-
-    public static function componentsPath($type = '')
-    {
-        $componentPath = implode(DIRECTORY_SEPARATOR, ['vendor', 'crocodicstudio', 'crudbooster', 'src', 'views', 'form', 'type_components', $type]);
-
-        return base_path($componentPath);
-    }
-
-    public static function PublishedComponentsPath($type = '')
-    {
-        $Path = implode(DIRECTORY_SEPARATOR, ['views', 'vendor', 'crudbooster', 'type_components', $type]);
-
-        return resource_path($Path);
-    }
 }
