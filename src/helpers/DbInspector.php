@@ -5,7 +5,7 @@ namespace crocodicstudio\crudbooster\helpers;
 use Cache;
 use crocodicstudio\crudbooster\helpers\Cache as CbCache;
 use DB;
-use Schema;
+use Illuminate\Support\Facades\Schema;
 
 class DbInspector
 {
@@ -81,25 +81,6 @@ class DbInspector
         }
 
         return 'id';
-    }
-
-    /**
-     * @param $table
-     * @param $field
-     * @return string
-     */
-    public static function getFieldTypes($table, $field)
-    {
-        $field = 'field_type_'.$table.'_'.$field;
-
-        return Cache::rememberForever($field, function () use ($table, $field) {
-            try {
-                //MySQL & SQL Server
-                return DB::select(DB::raw("select DATA_TYPE from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='$table' and COLUMN_NAME = '$field'"))[0]->DATA_TYPE;
-            } catch (\Exception $e) {
-                return 'varchar';
-            }
-        });
     }
 
     /**
