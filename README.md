@@ -3,7 +3,7 @@
 
 # CRUDBOOSTER - Laravel CRUD Generator
 [![Code Climate](https://codeclimate.com/github/crocodic-studio/crudbooster/badges/gpa.svg)](https://codeclimate.com/github/crocodic-studio/crudbooster)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/crocodic-studio/crudbooster/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/crocodic-studio/crudbooster/?branch=master)
+<a href="https://scrutinizer-ci.com/g/crocodic-studio/crudbooster"><img src="https://img.shields.io/scrutinizer/g/crocodic-studio/crudbooster.svg?style=flat-square" alt="Quality Score"></img></a>
 [![Latest Stable Version](https://poser.pugx.org/crocodicstudio/crudbooster/v/stable)](https://packagist.org/packages/crocodicstudio/crudbooster)
 [![Total Downloads](https://poser.pugx.org/crocodicstudio/crudbooster/downloads)](https://packagist.org/packages/crocodicstudio/crudbooster)
 [![Latest Unstable Version](https://poser.pugx.org/crocodicstudio/crudbooster/v/unstable)](https://packagist.org/packages/crocodicstudio/crudbooster)
