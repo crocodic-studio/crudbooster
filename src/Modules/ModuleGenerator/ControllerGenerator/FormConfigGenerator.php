@@ -154,7 +154,7 @@ class FormConfigGenerator
         }
         $options = [
             'table' => $jointable,
-            'field_label' => DbInspector::colName(DbInspector::getTableCols($jointable)),
+            'field_label' => DbInspector::colName(\Schema::getColumnListing($jointable)),
             'field_value' => DbInspector::findPk($jointable),
         ];
 

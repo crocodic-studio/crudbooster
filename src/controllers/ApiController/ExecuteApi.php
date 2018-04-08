@@ -480,7 +480,7 @@ class ExecuteApi
             return $nameTmp;
         }
         $jointable = DbInspector::getTableForeignKey($name);
-        $jointable_field = DbInspector::getTableCols($jointable);
+        $jointable_field = \Schema::getColumnListing($jointable);
 
         $data->leftjoin($jointable, $jointable.'.id', '=', $table.'.'.$name);
         foreach ($jointable_field as $jf) {

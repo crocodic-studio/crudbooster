@@ -70,7 +70,7 @@ class ControllerGenerator
                 $jointable = str_replace(['id_', '_id'], '', $field);
 
                 if (Schema::hasTable($jointable)) {
-                    $joincols = DbInspector::getTableCols($jointable);
+                    $joincols = \Schema::getColumnListing($jointable);
                     $joinname = DbInspector::colName($joincols);
                     $cols[] = ['label' => $label, 'name' =>  $jointable.$joinname];
                     $jointablePK = DbInspector::findPk($jointable);
@@ -101,7 +101,7 @@ class ControllerGenerator
      */
     private static function generateControllerCode($table, $controllerName)
     {
-        $coloms = DbInspector::getTableCols($table);
+        $coloms = \Schema::getColumnListing($table);
         $pk = DbInspector::findPk($table);
         $formArrayString = FormConfigGenerator::generateFormConfig($table, $coloms);
         list($cols, $joinList) = self::addCol($table, $coloms, $pk);

@@ -85,23 +85,6 @@ class DbInspector
 
     /**
      * @param $table
-     * @return array
-     */
-    public static function getTableCols($table)
-    {
-        $table = CRUDBooster::parseSqlTable($table);
-        $cols = collect(DB::select('SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :database AND TABLE_NAME = :table', [
-            'database' => $table['database'],
-            'table' => $table['table'],
-        ]))->map(function ($x) {
-            return (array) $x;
-        })->toArray();
-
-        return array_column($cols, 'COLUMN_NAME');
-    }
-
-    /**
-     * @param $table
      * @param $field
      * @return string
      */

@@ -190,7 +190,7 @@ class AdminApiGeneratorController extends CBController
         $this->cbLoader();
         $except = ['created_at', 'deleted_at', 'updated_at'];
 
-        $result = DbInspector::getTableCols($table);
+        $result = \Schema::getColumnListing($table);
         $new_result = [];
         foreach ($result as $ro) {
 

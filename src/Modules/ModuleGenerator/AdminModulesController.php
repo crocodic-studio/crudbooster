@@ -68,7 +68,7 @@ class AdminModulesController extends CBController
 
     public function getTableColumns($table)
     {
-        $columns = DbInspector::getTableCols($table);
+        $columns = \Schema::getColumnListing($table);
 
         return response()->json($columns);
     }
