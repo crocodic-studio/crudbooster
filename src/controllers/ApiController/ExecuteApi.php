@@ -4,7 +4,7 @@ namespace crocodicstudio\crudbooster\controllers\ApiController;
 
 use crocodicstudio\crudbooster\helpers\DbInspector;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
-use crocodicstudio\crudbooster\helpers\CRUDBooster, CB;
+use CB;
 use Illuminate\Support\Facades\Schema;
 
 class ExecuteApi
@@ -402,7 +402,7 @@ class ExecuteApi
         $name_tmp = [];
 
         $responses = $this->filterRedundantResp($responses);
-        
+
         foreach ($responses as $resp) {
             $name = $resp['name'];
             $subquery = $resp['subquery'];
@@ -480,7 +480,7 @@ class ExecuteApi
             return $nameTmp;
         }
         $jointable = DbInspector::getTableForeignKey($name);
-        $jointable_field = DbInspector::getTableCols($jointable);
+        $jointable_field = \Schema::getColumnListing($jointable);
 
         $data->leftjoin($jointable, $jointable.'.id', '=', $table.'.'.$name);
         foreach ($jointable_field as $jf) {

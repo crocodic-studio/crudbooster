@@ -5,19 +5,18 @@ namespace crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator
 use crocodicstudio\crudbooster\helpers\DbInspector;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\FileManipulator;
 use Illuminate\Support\Facades\Schema;
-use crocodicstudio\crudbooster\helpers\CRUDBooster;
 
 class FormConfigGenerator
 {
     /**
      * @param $table
-     * @param $coloms
+     * @param $columns
      * @return array
      */
-    static function generateFormConfig($table, $coloms)
+    static function generateFormConfig($table, $columns)
     {
         $formArrayString = [];
-        foreach ($coloms as $i => $colName) {
+        foreach ($columns as $i => $colName) {
             //$attribute = [];
             $input = [
                 'label' => self::getLabel($colName),
@@ -34,7 +33,7 @@ class FormConfigGenerator
                 continue;
             }
 
-            $typeData = DbInspector::getFieldTypes($table, $colName);
+            $typeData = \Schema::getColumnType($table, $colName);
 
             $input = array_merge($input, self::parseFieldType($typeData));
 
@@ -127,6 +126,7 @@ class FormConfigGenerator
         $default = ["text", "min:1|max:255", []];
 
         $arr = array_get([
+            'string' => $default,
             'text' => ['textarea', "string|min:5", []],
             'date' => ['date', "date", ['php_format' => 'M, d Y', 'datepicker_format' => 'M, dd YYYY',]],
             'datetime' => ['datetime', "date_format:Y-m-d H:i:s", ['php_format' => 'M, d Y H:i',]],
@@ -154,7 +154,7 @@ class FormConfigGenerator
         }
         $options = [
             'table' => $jointable,
-            'field_label' => DbInspector::colName(DbInspector::getTableCols($jointable)),
+            'field_label' => DbInspector::colName(\Schema::getColumnListing($jointable)),
             'field_value' => DbInspector::findPk($jointable),
         ];
 

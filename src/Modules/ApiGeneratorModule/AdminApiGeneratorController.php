@@ -190,14 +190,14 @@ class AdminApiGeneratorController extends CBController
         $this->cbLoader();
         $except = ['created_at', 'deleted_at', 'updated_at'];
 
-        $result = DbInspector::getTableCols($table);
+        $result = \Schema::getColumnListing($table);
         $new_result = [];
         foreach ($result as $ro) {
 
             if (in_array($ro, $except)) {
                 continue;
             }
-            $type_field = DbInspector::getFieldTypes($table, $ro);
+            $type_field = \Schema::getColumnType($table, $ro);
             $new_result[] = ['name' => $ro, 'type' => $this->getFieldType($ro, $type_field)];
 
             if (!in_array($type, ['list', 'detail']) || !starts_with($ro, 'id_') ) {
@@ -209,7 +209,7 @@ class AdminApiGeneratorController extends CBController
                     continue;
                 }
                 $col = str_replace("_$table2", "", $col);
-                $new_result[] = ['name' => $table2.'_'.$col, 'type' => DbInspector::getFieldTypes($table2, $col)];
+                $new_result[] = ['name' => $table2.'_'.$col, 'type' => \Schema::getColumnType($table2, $col)];
             }
         }
 

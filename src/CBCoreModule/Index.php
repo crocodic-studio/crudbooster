@@ -42,7 +42,7 @@ class Index
 
         $CbCtrl->hookQueryIndex($result);
 
-        $tableCols = DbInspector::getTableCols($CbCtrl->table);
+        $tableCols = \Schema::getColumnListing($CbCtrl->table);
         $this->_filterOutSoftDeleted($tableCols, $result);
         unset($tableCols);
 
@@ -156,7 +156,7 @@ class Index
         $result->addselect($field.' as '.str_slug($field, '_'));
         $tableField = substr($field, 0, strpos($field, '.'));
         $fieldOrign = substr($field, strpos($field, '.') + 1);
-        $columnsTable[$index]['type_data'] = DbInspector::getFieldTypes($tableField, $fieldOrign);
+        $columnsTable[$index]['type_data'] = \Schema::getColumnType($tableField, $fieldOrign);
         $columnsTable[$index]['field'] = str_slug($field, '_');
         $columnsTable[$index]['field_raw'] = $field;
         $columnsTable[$index]['field_with'] = $tableField.'.'.$fieldOrign;
@@ -181,7 +181,7 @@ class Index
 
         if (\Schema::hasColumn($table, $field)) {
             $result->addselect($table.'.'.$field);
-            $columnsTable[$index]['type_data'] = DbInspector::getFieldTypes($table, $field);
+            $columnsTable[$index]['type_data'] = \Schema::getColumnType($table, $field);
             $columnsTable[$index]['field_with'] = $table.'.'.$field;
         }
 
