@@ -4,7 +4,6 @@ namespace crocodicstudio\crudbooster\controllers;
 
 use crocodicstudio\crudbooster\controllers\ApiController\ApiHooks;
 use crocodicstudio\crudbooster\controllers\ApiController\ExecuteApi;
-use CRUDBooster;
 
 class ApiController extends Controller
 {
