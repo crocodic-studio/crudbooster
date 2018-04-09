@@ -4,7 +4,6 @@ namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
 use crocodicstudio\crudbooster\controllers\CBController;
 use crocodicstudio\crudbooster\controllers\FormValidator;
-use crocodicstudio\crudbooster\controllers\Helpers\FontAwesome;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
@@ -34,7 +33,7 @@ class AdminModulesController extends CBController
         $this->col[] = ['label' => "Controller", 'name' => "controller"];
         $this->col[] = ['label' => "Protected", 'name' => "is_protected", "visible" => false];
 
-        $this->makeForm();
+        $this->form = Form::makeForm($this->table);
 
         $this->script_js = "
  			$(function() {
@@ -215,126 +214,6 @@ class AdminModulesController extends CBController
         Session::put('admin_privileges_roles', $roles);
 
         CRUDBooster::redirect(Request::server('HTTP_REFERER'), cbTrans('alert_update_data_success'), 'success');
-    }
-
-    private function makeForm()
-    {
-        $this->form = [];
-        $this->form[] = ['label' => 'Name', 'name' => 'name', 'placeholder' => 'Module name here', 'required' => true];
-
-        $tables_list = CRUDBooster::listCbTables();
-
-        $this->form[] = [
-            'label' => "Table Name",
-            'name' => "table_name",
-            'type' => "select2_dataenum",
-            "options" => ['enum' => $tables_list],
-            'required' => true,
-        ];
-
-        $fontawesome = FontAwesome::cssClass();
-        $row = CRUDBooster::first($this->table, CRUDBooster::getCurrentId());
-        $custom = view('crudbooster::components.list_icon', compact('fontawesome', 'row'))->render();
-        $this->form[] = ['label' => 'Icon', 'name' => 'icon', 'type' => 'custom_html', 'options' => ['html' => $custom], 'required' => true];
-
-        $this->form[] = ['label' => 'Path', 'name' => 'path', 'required' => true, 'placeholder' => 'Optional'];
-        $this->form[] = ['label' => 'Controller', 'name' => 'controller', 'type' => 'text', 'placeholder' => '(Optional) Auto Generated'];
-
-        if (in_array(CRUDBooster::getCurrentMethod(), ['getAdd', 'postAddSave'])) {
-            return ;
-        }
-
-        $this->form[] = [
-            'label' => "Global Privilege",
-            'name' => "global_privilege",
-            'type' => "radio",
-            'dataenum' => ['0|No', '1|Yes'],
-            'value' => 0,
-            'help' => 'Global Privilege allows you to make the module to be accessible by all privileges',
-            'exception' => true,
-        ];
-
-        $this->form[] = [
-            'label' => 'Button Action Style',
-            'name' => 'button_action_style',
-            'type' => 'radio',
-            'dataenum' => ['button_icon', 'button_icon_text', 'button_text', 'dropdown'],
-            'value' => 'button_icon',
-            'exception' => true,
-        ];
-        $this->form[] = [
-            'label' => "Button Table Action",
-            'name' => "button_table_action",
-            'type' => "radio",
-            'dataenum' => ['Yes', 'No'],
-            'value' => 'Yes',
-            'exception' => true,
-        ];
-        $this->form[] = [
-            'label' => "Button Add",
-            'name' => "button_add",
-            'type' => "radio",
-            'dataenum' => ['Yes', 'No'],
-            'value' => 'Yes',
-            'exception' => true,
-        ];
-        $this->form[] = [
-            'label' => "Button Delete",
-            'name' => "button_delete",
-            'type' => "radio",
-            'dataenum' => ['Yes', 'No'],
-            'value' => 'Yes',
-            'exception' => true,
-        ];
-        $this->form[] = [
-            'label' => "Button Edit",
-            'name' => "button_edit",
-            'type' => "radio",
-            'dataenum' => ['Yes', 'No'],
-            'value' => 'Yes',
-            'exception' => true,
-        ];
-        $this->form[] = [
-            'label' => "Button Detail",
-            'name' => "button_detail",
-            'type' => "radio",
-            'dataenum' => ['Yes', 'No'],
-            'value' => 'Yes',
-            'exception' => true,
-        ];
-        $this->form[] = [
-            'label' => "Button Show",
-            'name' => "button_show",
-            'type' => "radio",
-            'dataenum' => ['Yes', 'No'],
-            'value' => 'Yes',
-            'exception' => true,
-        ];
-        $this->form[] = [
-            'label' => "Button Filter",
-            'name' => "button_filter",
-            'type' => "radio",
-            'dataenum' => ['Yes', 'No'],
-            'value' => 'Yes',
-            'exception' => true,
-        ];
-        $this->form[] = [
-            'label' => 'Button Export',
-            'name' => 'button_export',
-            'type' => 'radio',
-            'dataenum' => ['Yes', 'No'],
-            'value' => 'No',
-            'exception' => true,
-        ];
-        $this->form[] = [
-            'label' => 'Button Import',
-            'name' => 'button_import',
-            'type' => 'radio',
-            'dataenum' => ['Yes', 'No'],
-            'value' => 'No',
-            'exception' => true,
-        ];
-
     }
 
     private function createMenuForModule()
