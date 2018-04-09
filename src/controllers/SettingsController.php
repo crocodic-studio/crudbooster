@@ -71,9 +71,10 @@ class SettingsController extends CBController {
 			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
 		}
 
-		$data['page_title'] = urldecode(Request::get('group'));		
+		$data['page_title'] = urldecode(Request::get('group'));	
+		echo Request::get('group')."<br>";	
 		echo "page title".$data['page_title'];
-		return view('crudbooster::setting',$data);
+		//return view('crudbooster::setting',$data);
 	} 
 	
 	function hook_before_edit(&$posdata,$id) {
