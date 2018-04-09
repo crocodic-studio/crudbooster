@@ -32,7 +32,7 @@ class Index
         $tablePK = $data['table_pk'] = DbInspector::findPk($CbCtrl->table);
         $data['page_title'] = CRUDBooster::getCurrentModule()->name;
         $data['page_description'] = cbTrans('default_module_description');
-        $data['date_candidate'] = $CbCtrl->date_candidate;
+        //$data['date_candidate'] = $CbCtrl->date_candidate;
         $data['limit'] = $limit = request('limit', $CbCtrl->limit);
 
 
@@ -79,7 +79,7 @@ class Index
         //LISTING INDEX HTML
         $addAction = $CbCtrl->data['addaction'];
 
-        if ($CbCtrl->sub_module) {
+        if (!empty($CbCtrl->sub_module)) {
             $addAction = $this->_handleSubModules($addAction);
         }
 
