@@ -63,7 +63,7 @@ class SettingsController extends CBController {
 		
 	}
 
-	function getShow() {
+	function getShow(Request $request) {
 		$this->cbLoader();
 
 		if(!CRUDBooster::isSuperadmin()) {
@@ -72,7 +72,7 @@ class SettingsController extends CBController {
 		}
 
 		$data['page_title'] = urldecode(Request::get('group'));	
-		echo Request::get('group')."<br>";	
+		echo $request->input('group')."<br>";	
 		echo "page title".$data['page_title'];
 		//return view('crudbooster::setting',$data);
 	} 
