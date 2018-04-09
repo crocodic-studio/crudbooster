@@ -26,12 +26,7 @@ class AdminModulesController extends CBController
         $this->button_action_style = 'button_icon';
         $this->orderby = ['is_protected' => 'asc', 'name' => 'asc'];
 
-        $this->col = [];
-        $this->col[] = ['label' => 'name', 'name' => 'name' ];
-        $this->col[] = ['label' => "Table", 'name' => "table_name"];
-        $this->col[] = ['label' => "Path", 'name' => "path"];
-        $this->col[] = ['label' => "Controller", 'name' => "controller"];
-        $this->col[] = ['label' => "Protected", 'name' => "is_protected", "visible" => false];
+        $this->makeColumns();
 
         $this->form = Form::makeForm($this->table);
 
@@ -254,5 +249,15 @@ class AdminModulesController extends CBController
             'sorting' => 2,
         ] + $arr);
 
+    }
+
+    private function makeColumns()
+    {
+        $this->col = [];
+        $this->col[] = ['label' => 'name', 'name' => 'name'];
+        $this->col[] = ['label' => "Table", 'name' => "table_name"];
+        $this->col[] = ['label' => "Path", 'name' => "path"];
+        $this->col[] = ['label' => "Controller", 'name' => "controller"];
+        $this->col[] = ['label' => "Protected", 'name' => "is_protected", "visible" => false];
     }
 }
