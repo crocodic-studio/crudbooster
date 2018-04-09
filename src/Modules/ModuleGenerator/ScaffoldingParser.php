@@ -56,7 +56,7 @@ class ScaffoldingParser
         return array_filter($colsItem);
     }
 
-    static function extract_unit($string, $start, $end)
+    public static function extract_unit($string, $start, $end)
     {
         $pos = stripos($string, $start);
         $str = substr($string, $pos);
