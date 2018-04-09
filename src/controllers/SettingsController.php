@@ -3,7 +3,7 @@
 use crocodicstudio\crudbooster\controllers\Controller;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-//use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Mail;
@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\PDF;
 use Illuminate\Support\Facades\Excel;
-use Illuminate\Http\Request;
 use CRUDBooster;
 
 class SettingsController extends CBController {
@@ -64,7 +63,7 @@ class SettingsController extends CBController {
 		
 	}
 
-	function getShow(Request $request) {
+	function getShow() {
 		$this->cbLoader();
 
 		if(!CRUDBooster::isSuperadmin()) {
@@ -72,10 +71,8 @@ class SettingsController extends CBController {
 			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
 		}
 
-		$data['page_title'] = urldecode(Request::get('group'));	
-		echo $request->input('group')."<br>";	
-		echo "page title".$data['page_title'];
-		//return view('crudbooster::setting',$data);
+		$data['page_title'] = urldecode(Request::get('group'));		
+		return view('crudbooster::setting',$data);
 	} 
 	
 	function hook_before_edit(&$posdata,$id) {
