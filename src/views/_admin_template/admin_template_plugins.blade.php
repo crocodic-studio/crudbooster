@@ -21,7 +21,7 @@
 {!! cbStyleSheet('adminlte/plugins/timepicker/bootstrap-timepicker.min.css') !!}
 {!! cbScript('adminlte/plugins/timepicker/bootstrap-timepicker.min.js') !!}
 
-{!! cbStyleSheet('lightbox/dist/css/lightbox.css') !!}
+{!! cbStyleSheet('lightbox/dist/css/lightbox.min.css') !!}
 {!! cbScript('lightbox/dist/js/lightbox.min.js') !!}
 
 <!--SWEET ALERT-->
