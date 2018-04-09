@@ -33,6 +33,8 @@ class FilterIndexRows
      */
     private function applyWhere($result, $filterColumn)
     {
+        $filterColumn = $this->filterFalsyValues($filterColumn);
+
         $result->where(function ($query) use ($filterColumn) {
             foreach ($filterColumn as $key => $fc) {
 
@@ -44,9 +46,7 @@ class FilterIndexRows
                     continue;
                 }
 
-                if (($type == 'between') || ! $value || ! $key || ! $type) {
-                    continue;
-                }
+
                 switch ($type) {
                     default:
                         $query->where($key, $type, $value);
@@ -94,5 +94,23 @@ class FilterIndexRows
         if ($type == 'between' && $key && $value) {
             $result->whereBetween($key, $value);
         }
+    }
+
+    /**
+     * @param $filterColumn
+     * @return array
+     */
+    private function filterFalsyValues($filterColumn)
+    {
+        return array_filter($filterColumn, function ($fc) {
+            $value = @$fc['value'];
+            $type = @$fc['type'];
+
+            if (($type == 'between') || ! $value || ! $type) {
+                return false;
+            }
+
+            return true;
+        });
     }
 }
