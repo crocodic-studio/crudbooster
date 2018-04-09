@@ -163,9 +163,7 @@ class CRUDBooster
 
     public static function listCbTables()
     {
-        $tables = array_map(function ($table) {
-            return $table->TABLE_NAME;
-        }, DbInspector::listTables());
+        $tables = DbInspector::listTables();
 
         $filter = function ($tableName) {
 

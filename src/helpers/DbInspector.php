@@ -175,6 +175,11 @@ class DbInspector
             $tables = [];
         }
 
+
+        $tables = array_map(function ($table) {
+            return $table->TABLE_NAME;
+        }, $tables);
+
         return $tables;
     }
 
