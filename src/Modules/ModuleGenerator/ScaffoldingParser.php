@@ -4,7 +4,7 @@ namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
 class ScaffoldingParser
 {
-    static function parse($code, $type = 'form')
+    public static function parse($code, $type = 'form')
     {
         $colsItem = self::extractLines($code, $type);
 
@@ -30,7 +30,7 @@ class ScaffoldingParser
             $col = self::prepareFields(explode('|SPLIT|', $col));
         }
 
-        self::formOptions($type, $colsItem);
+        $colsItem = self::formOptions($type, $colsItem);
 
         return $colsItem;
     }
@@ -75,18 +75,21 @@ class ScaffoldingParser
      */
     private static function formOptions($type, $colsItem)
     {
-        foreach ($colsItem as &$form) {
+        foreach ($colsItem as $i => $form) {
             if ($type !== 'form') {
                 continue;
             }
 
             if ($form['options']) {
                 @eval("\$options = $form[options];");
-                @$form['options'] = $options;
+                @$colsItem[$i]['options'] = $options;
             } else {
-                $form['options'] = [];
+                $colsItem[$i]['options'] = [];
             }
         }
+
+        return $colsItem;
+
     }
 
     /**
