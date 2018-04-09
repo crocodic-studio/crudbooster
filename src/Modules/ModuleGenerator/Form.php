@@ -26,9 +26,18 @@ class Form
         $form[] = ['label' => 'Controller', 'name' => 'controller', 'type' => 'text', 'placeholder' => '(Optional) Auto Generated'];
 
         if (in_array(CRUDBooster::getCurrentMethod(), ['getAdd', 'postAddSave'])) {
-            return ;
+            return $form;
         }
 
+        return self::addStep4fields($form);
+    }
+
+    /**
+     * @param $form
+     * @return array
+     */
+    private static function addStep4fields($form)
+    {
         $form[] = [
             'label' => "Global Privilege",
             'name' => "global_privilege",
