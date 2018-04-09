@@ -9,9 +9,30 @@ class FilterIndexRows
      * @param $filterColumn
      * @return bool
      */
-    function filterIndexRows($result, $filterColumn)
+    public function filterIndexRows($result, $filterColumn)
     {
-        $filter_is_orderby = false;
+        $filterIsOrderby = false;
+        $this->applyWhere($result, $filterColumn);
+
+        foreach ($filterColumn as $key => $fc) {
+            $value = @$fc['value'];
+            $type = @$fc['type'];
+            $sorting = @$fc['sorting'];
+
+            $filterIsOrderby = $this->applySorting($result, $sorting, $key);
+
+            $this->applyBetween($result, $type, $key, $value);
+        }
+
+        return $filterIsOrderby;
+    }
+
+    /**
+     * @param $result
+     * @param $filterColumn
+     */
+    private function applyWhere($result, $filterColumn)
+    {
         $result->where(function ($query) use ($filterColumn) {
             foreach ($filterColumn as $key => $fc) {
 
@@ -23,7 +44,7 @@ class FilterIndexRows
                     continue;
                 }
 
-                if (($type == 'between') || !$value || !$key || !$type) {
+                if (($type == 'between') || ! $value || ! $key || ! $type) {
                     continue;
                 }
                 switch ($type) {
@@ -37,29 +58,41 @@ class FilterIndexRows
                     case 'in':
                     case 'not in':
                         $value = explode(',', $value);
-                        if (!empty($value)) {
+                        if (! empty($value)) {
                             $query->whereIn($key, $value);
                         }
                         break;
                 }
             }
         });
+    }
 
-        foreach ($filterColumn as $key => $fc) {
-            $value = @$fc['value'];
-            $type = @$fc['type'];
-            $sorting = @$fc['sorting'];
-
-            if ($sorting != '' && $key) {
-                $result->orderby($key, $sorting);
-                $filter_is_orderby = true;
-            }
-
-            if ($type == 'between' && $key && $value) {
-                $result->whereBetween($key, $value);
-            }
+    /**
+     * @param $result
+     * @param $sorting
+     * @param $key
+     * @return bool
+     */
+    private function applySorting($result, $sorting, $key)
+    {
+        if ($sorting != '' && $key) {
+            $result->orderby($key, $sorting);
+            $filter_is_orderby = true;
         }
 
         return $filter_is_orderby;
+    }
+
+    /**
+     * @param $result
+     * @param $type
+     * @param $key
+     * @param $value
+     */
+    private function applyBetween($result, $type, $key, $value)
+    {
+        if ($type == 'between' && $key && $value) {
+            $result->whereBetween($key, $value);
+        }
     }
 }
