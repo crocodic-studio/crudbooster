@@ -72,6 +72,7 @@ class SettingsController extends CBController {
 		}
 
 		$data['page_title'] = urldecode(Request::get('group'));		
+		echo "page title".$data['page_title'];
 		return view('crudbooster::setting',$data);
 	} 
 	
