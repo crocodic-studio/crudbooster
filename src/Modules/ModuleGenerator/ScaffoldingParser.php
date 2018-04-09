@@ -11,18 +11,7 @@ class ScaffoldingParser
         foreach ($colsItem as &$item) {
             $item = self::removeExtraCharacters($item);
             $strSplit = str_split($item);
-            $innerCount = 0;
-            foreach ($strSplit as $index => $s) {
-                if ($s == '[') {
-                    $innerCount++;
-                }
-                if ($s == ']') {
-                    $innerCount--;
-                }
-                if ($innerCount == 0 && $s == ',' && $strSplit[$index + 1] == "'") {
-                    $strSplit[$index] = "|SPLIT|";
-                }
-            }
+            $strSplit = self::putDelimiter($strSplit);
             $item = implode("", $strSplit);
         }
 
@@ -156,5 +145,27 @@ class ScaffoldingParser
         $item = trim(preg_replace("/[\n\r\t]/", "", $item));
 
         return $item;
+    }
+
+    /**
+     * @param $strSplit
+     * @return mixed
+     */
+    private static function putDelimiter($strSplit)
+    {
+        $innerCount = 0;
+        foreach ($strSplit as $index => $s) {
+            if ($s == '[') {
+                $innerCount++;
+            }
+            if ($s == ']') {
+                $innerCount--;
+            }
+            if ($innerCount == 0 && $s == ',' && $strSplit[$index + 1] == "'") {
+                $strSplit[$index] = "|SPLIT|";
+            }
+        }
+
+        return $strSplit;
     }
 }
