@@ -9,7 +9,7 @@
     $(function() {
         $('.input_date').datepicker({
             format: 'yyyy-mm-dd',
-            @if (App::getLocale() == 'ar')
+            @if (in_array(App::getLocale(), ['ar', 'fa']))
             rtl: true,
             @endif
             language: lang

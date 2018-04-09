@@ -16,7 +16,7 @@
     <link href="{{asset('vendor/crudbooster/assets/adminlte/dist/css/AdminLTE.min.css')}}" rel="stylesheet" type="text/css" />
 
     <!-- support rtl-->
-    @if (App::getLocale() == 'ar')
+    @if (in_array(App::getLocale(), ['ar', 'fa']))
       <link rel="stylesheet" href="//cdn.rawgit.com/morteza/bootstrap-rtl/v3.3.4/dist/css/bootstrap-rtl.min.css">
       <link href="{{ asset("vendor/crudbooster/assets/rtl.css")}}" rel="stylesheet" type="text/css" />
     @endif
