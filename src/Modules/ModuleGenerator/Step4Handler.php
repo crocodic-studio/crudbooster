@@ -11,7 +11,7 @@ class Step4Handler
         $data = [];
         $data['id'] = $id;
         if (file_exists(controller_path($controller))) {
-            $fileContent = (FileManipulator::readCtrlContent($controller));
+            $fileContent = FileManipulator::readCtrlContent($controller);
             $data['config'] = ControllerConfigParser::parse($fileContent);
         }
 
@@ -52,7 +52,7 @@ class Step4Handler
                 $value = "'$val'";
             }
 
-            $scriptConfig[$i] = '            $this->'.$key.' = '.$value.';';
+            $scriptConfig[$i] = str_repeat(' ', 12).'$this->'.$key.' = '.$value.';';
             $i++;
         }
 
@@ -65,7 +65,7 @@ class Step4Handler
      * @param $newCode
      * @return string
      */
-    private function replaceConfigSection($phpCode, $mark, $newCode)
+/*    private function replaceConfigSection($phpCode, $mark, $newCode)
     {
         list($before, $_middle, $after) = FileManipulator::extractBetween($phpCode, $mark);
 
@@ -76,7 +76,7 @@ class Step4Handler
         $_code .= '            '.$after;
 
         return $_code;
-    }
+    }*/
 
     /**
      * @param $controller
