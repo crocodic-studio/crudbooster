@@ -205,7 +205,7 @@ class AdminModulesController extends CBController
         //Generate Controller 
         $route_basename = basename(request('path'));
         if ($this->arr['controller'] == '') {
-            $this->arr['controller'] = CRUDBooster::generateController(request('table_name'), $route_basename);
+            $this->arr['controller'] = ControllerGenerator::generateController(request('table_name'), $route_basename);
         }
 
         $this->findRow($id)->update($this->arr);
