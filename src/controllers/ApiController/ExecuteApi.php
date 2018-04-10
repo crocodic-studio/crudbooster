@@ -53,7 +53,7 @@ class ExecuteApi
         |
         */
         list($type_except, $input_validator) = $this->validateParams($parameters, $posts, $table, $debugModeMessage);
-        $result = [];
+
 
         $responses_fields = $this->prepareResponses($responses);
 
@@ -76,16 +76,16 @@ class ExecuteApi
             }
 
             $this->ctrl->hookQuery($data);
-            if ($actionType == 'list') {
-                $result = $this->handleListAction($table, $orderby, $data, $result, $debugModeMessage, $responses_fields);
-            }
-            $result = $this->handleDetailsAction($actionType, $result, $debugModeMessage, $data, $parameters, $posts, $responses_fields);
-            if ($actionType == 'delete') {
-                $result = $this->handleDeleteAction($actionType, $table, $data, $result, $debugModeMessage);
-            }
-        }
 
-        if (in_array($actionType, ['save_add', 'save_edit'])) {
+            $result = [];
+            if ($actionType == 'list') {
+                $result = $this->handleListAction($table, $orderby, $data, $debugModeMessage, $responses_fields);
+            }else if ($actionType == 'detail') {
+                $result = $this->handleDetailsAction($debugModeMessage, $data, $parameters, $posts, $responses_fields);
+            }else if ($actionType == 'delete') {
+                $result = $this->handleDeleteAction($table, $data, $debugModeMessage);
+            }
+        }else if (in_array($actionType, ['save_add', 'save_edit'])) {
             $rowAssign = array_filter($input_validator, function ($column) use ($table) {
                 return Schema::hasColumn($table, $column);
             }, ARRAY_FILTER_USE_KEY);
@@ -136,12 +136,11 @@ class ExecuteApi
      * @param $table
      * @param $orderby
      * @param $data
-     * @param $result
      * @param $debugModeMessage
      * @param $responsesFields
      * @return array
      */
-    private function handleListAction($table, $orderby, $data, $result, $debugModeMessage, $responsesFields)
+    private function handleListAction($table, $orderby, $data, $debugModeMessage, $responsesFields)
     {
         $orderbyCol = $table.'.id';
         $orderbyVal = 'desc';
@@ -152,6 +151,7 @@ class ExecuteApi
 
         $rows = $data->orderby($orderbyCol, $orderbyVal)->get();
 
+        $result = [];
         $result['api_status'] = 0;
         $result['api_message'] = 'There is no data found !';
         if (cbGetsetting('api_debug_mode') == 'true') {
@@ -172,7 +172,7 @@ class ExecuteApi
      * @param $debugModeMessage
      * @return mixed
      */
-    private function handleDeleteAction($table, $data, $result, $debugModeMessage)
+    private function handleDeleteAction($table, $data, $debugModeMessage)
     {
         if (\Schema::hasColumn($table, 'deleted_at')) {
             $delete = $data->update(['deleted_at' => date('Y-m-d H:i:s')]);
@@ -540,8 +540,6 @@ class ExecuteApi
     }
 
     /**
-     * @param $action_type
-     * @param $result
      * @param $debugModeMessage
      * @param $data
      * @param $parameters
@@ -549,12 +547,9 @@ class ExecuteApi
      * @param $responses_fields
      * @return array
      */
-    private function handleDetailsAction($action_type, $result, $debugModeMessage, $data, $parameters, $posts, $responses_fields)
+    private function handleDetailsAction($debugModeMessage, $data, $parameters, $posts, $responses_fields)
     {
-        if ($action_type != 'detail') {
-            return $result;
-        }
-
+        $result = [];
         $result['api_status'] = 0;
         $result['api_message'] = 'There is no data found !';
 
@@ -564,32 +559,33 @@ class ExecuteApi
 
         $row = $data->first();
 
-        if ($row) {
-            foreach ($parameters as $param) {
-                $name = $param['name'];
-                $type = $param['type'];
-                $value = $posts[$name];
-                $used = $param['used'];
-                $required = $param['required'];
+        if (!$row) {
+            return $result;
+        }
 
-                if ($param['config'] != '' && substr($param['config'], 0, 1) != '*') {
-                    $value = $param['config'];
-                }
+        foreach ($parameters as $param) {
+            $name = $param['name'];
+            $type = $param['type'];
+            $value = $posts[$name];
+            $used = $param['used'];
+            $required = $param['required'];
 
-                if ($required && $type == 'password' && ! Hash::check($value, $row->{$name})) {
-                    $this->passwordError($result, $debugModeMessage, $posts);
-                }
-
-                if (! $required && $used && $value && ! Hash::check($value, $row->{$name})) {
-                    $this->passwordError($result, $debugModeMessage, $posts);
-                }
+            if ($param['config'] != '' && substr($param['config'], 0, 1) != '*') {
+                $value = $param['config'];
             }
 
-            $this->handleFile($row, $responses_fields, $row);
+            if ($required && $type == 'password' && ! Hash::check($value, $row->{$name})) {
+                $this->passwordError($result, $debugModeMessage, $posts);
+            }
 
-            $result = $this->success($result, $debugModeMessage, $row);
+            if (! $required && $used && $value && ! Hash::check($value, $row->{$name})) {
+                $this->passwordError($result, $debugModeMessage, $posts);
+            }
         }
-        return $result;
+
+        $this->handleFile($row, $responses_fields, $row);
+
+        return $this->success($result, $debugModeMessage, $row);
     }
 
     /**
