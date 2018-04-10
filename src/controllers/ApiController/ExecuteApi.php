@@ -23,7 +23,7 @@ class ExecuteApi
 
     public function execute()
     {
-        $result = [];
+
         $posts = request()->all();
         //$posts_keys = array_keys($posts);
         //$posts_values = array_values($posts);
@@ -42,8 +42,8 @@ class ExecuteApi
         $this->validateMethodType($row_api, $debugModeMessage, $posts);
 
         /* Check the row is exists or not */
-        $this->checkApiDefined($row_api, $result, $debugModeMessage, $posts);
-
+        $this->checkApiDefined($row_api, $debugModeMessage, $posts);
+        $result = [];
         @$parameters = unserialize($row_api->parameters);
         @$responses = unserialize($row_api->responses);
 
@@ -508,11 +508,12 @@ class ExecuteApi
      * @param $posts
      * @return mixed
      */
-    private function checkApiDefined($rowApi, $result, $debugModeMessage, $posts)
+    private function checkApiDefined($rowApi, $debugModeMessage, $posts)
     {
         if ($rowApi) {
             return true;
         }
+        $result = [];
         $result['api_status'] = 0;
         $result['api_message'] = 'Sorry this API is no longer available, maybe has changed by admin, or please make sure api url is correct.';
 
