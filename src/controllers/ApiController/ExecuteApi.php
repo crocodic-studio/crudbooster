@@ -32,8 +32,6 @@ class ExecuteApi
         $actionType = $row_api->aksi;
         $table = $row_api->tabel;
 
-        $debugModeMessage = 'You are in debug mode !';
-
         /* Do some custome pre-checking for posted data, if failed discard API execution */
         $this->doCustomePrecheck();
 
@@ -52,12 +50,12 @@ class ExecuteApi
         | ----------------------------------------------
         |
         */
-        $posts = request()->all();
-        list($type_except, $input_validator) = $this->validateParams($parameters, $posts, $table);
+        list($type_except, $input_validator) = $this->validateParams($parameters, $table);
 
 
         $responses_fields = $this->prepareResponses($responses);
 
+        $posts = request()->all();
         $this->ctrl->hookBefore($posts);
 
         $limit = ($posts['limit']) ?: 20;
@@ -569,8 +567,9 @@ class ExecuteApi
      * @param $table
      * @return array
      */
-    private function validateParams($parameters, $posts, $table)
+    private function validateParams($parameters, $table)
     {
+        $posts = request()->all();
         if (!$parameters) {
             return ['', ''];
         }
