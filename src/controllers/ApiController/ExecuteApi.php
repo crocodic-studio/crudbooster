@@ -53,7 +53,7 @@ class ExecuteApi
         |
         */
         $posts = request()->all();
-        list($type_except, $input_validator) = $this->validateParams($parameters, $posts, $table, $debugModeMessage);
+        list($type_except, $input_validator) = $this->validateParams($parameters, $posts, $table);
 
 
         $responses_fields = $this->prepareResponses($responses);
@@ -80,7 +80,7 @@ class ExecuteApi
 
             $result = [];
             if ($actionType == 'list') {
-                $result = $this->handleListAction($table, $orderby, $data, $debugModeMessage, $responses_fields);
+                $result = $this->handleListAction($table, $orderby, $data, $responses_fields);
             }elseif ($actionType == 'detail') {
                 $result = $this->handleDetailsAction($data, $parameters, $posts, $responses_fields);
             }elseif ($actionType == 'delete') {
@@ -136,11 +136,10 @@ class ExecuteApi
      * @param $table
      * @param $orderby
      * @param $data
-     * @param $debugModeMessage
      * @param $responsesFields
      * @return array
      */
-    private function handleListAction($table, $orderby, $data, $debugModeMessage, $responsesFields)
+    private function handleListAction($table, $orderby, $data, $responsesFields)
     {
         $orderbyCol = $table.'.id';
         $orderbyVal = 'desc';
@@ -151,16 +150,11 @@ class ExecuteApi
 
         $rows = $data->orderby($orderbyCol, $orderbyVal)->get();
 
-        $result = [
-            'api_status' => 0,
-            'api_message' => 'There is no data found !',
-         ];
-        if (cbGetsetting('api_debug_mode') == 'true') {
-            $result['api_authorization'] = $debugModeMessage;
-        }
+        $result = $this->makeResult(0, 'There is no data found !');
+
         $result['data'] = [];
         if ($rows) {
-            $result = $this->handleRows($result, $debugModeMessage, $responsesFields, $rows);
+            $result = $this->handleRows($responsesFields, $rows);
         }
 
         return $result;
@@ -270,13 +264,11 @@ class ExecuteApi
     }
 
     /**
-     * @param $result
-     * @param $debugModeMessage
      * @param $responsesFields
      * @param $rows
      * @return array
      */
-    private function handleRows($result, $debugModeMessage, $responsesFields, $rows)
+    private function handleRows($responsesFields, $rows)
     {
         $uploadsFormatCandidate = explode(',', cbConfig("UPLOAD_TYPES"));
         foreach ($rows as &$row) {
@@ -292,11 +284,7 @@ class ExecuteApi
             }
         }
 
-        $result['api_status'] = 1;
-        $result['api_message'] = 'success';
-        if (cbGetsetting('api_debug_mode') == 'true') {
-            $result['api_authorization'] = $debugModeMessage;
-        }
+        $result = $this->makeResult(1, 'success');
         $result['data'] = $rows;
 
         return $result;
