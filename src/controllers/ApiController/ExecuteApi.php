@@ -170,7 +170,6 @@ class ExecuteApi
     /**
      * @param $table
      * @param $data
-     * @param $result
      * @param $debugModeMessage
      * @return mixed
      */
@@ -331,12 +330,7 @@ class ExecuteApi
      */
     private function passwordError($debugModeMessage, $posts)
     {
-        $result = [];
-        $result['api_status'] = 0;
-        $result['api_message'] = cbTrans('alert_password_wrong');
-        if (cbGetsetting('api_debug_mode') == 'true') {
-            $result['api_authorization'] = $debugModeMessage;
-        }
+        $result = $this->makeResult(0, cbTrans('alert_password_wrong'), $debugModeMessage);
 
         $this->show($result, $debugModeMessage, $posts);
     }
@@ -494,10 +488,9 @@ class ExecuteApi
         }  // hook have to return true
 
         $result = [
-
-        'api_status'] => 0,
+            'api_status' => 0,
+            'api_message' => "Failed to execute API !",
         ];
-        'api_message'] => "Failed to execute API !",
 
         $this->show($result, $debugModeMessage, $posts);
     }
@@ -612,7 +605,6 @@ class ExecuteApi
      * @param $parameters
      * @param $posts
      * @param $table
-     * @param $result
      * @param $debugModeMessage
      * @return array
      */
@@ -670,5 +662,23 @@ class ExecuteApi
         }
 
         return $data;
+    }
+
+    /**
+     * @param $status
+     * @param $msg
+     * @param $debugModeMessage
+     * @return array
+     */
+    private function makeResult($status, $msg, $debugModeMessage)
+    {
+        $result = [];
+        $result['api_status'] = $status;
+        $result['api_message'] = $msg;
+        if (cbGetsetting('api_debug_mode') == 'true') {
+            $result['api_authorization'] = $debugModeMessage;
+        }
+
+        return $result;
     }
 }
