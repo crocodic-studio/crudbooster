@@ -39,7 +39,7 @@ class ExecuteApi
         $this->doCustomePrecheck($posts, $debugModeMessage);
 
         /* Method Type validation */
-        $this->validateMethodType($row_api, $result, $debugModeMessage, $posts);
+        $this->validateMethodType($row_api, $debugModeMessage, $posts);
 
         /* Check the row is exists or not */
         $this->checkApiDefined($row_api, $result, $debugModeMessage, $posts);
@@ -467,12 +467,13 @@ class ExecuteApi
      * @param $posts
      * @return mixed
      */
-    private function validateMethodType($rowApi, $result, $debugModeMessage, $posts)
+    private function validateMethodType($rowApi, $debugModeMessage, $posts)
     {
         $methodType = $rowApi->method_type;
         if ($methodType && Request::isMethod($methodType)) {
             return true;
         }
+        $result = [];
         $result['api_status'] = 0;
         $result['api_message'] = "The request method is not allowed !";
 
@@ -501,22 +502,21 @@ class ExecuteApi
     }
 
     /**
-     * @param $row_api
+     * @param $rowApi
      * @param $result
      * @param $debugModeMessage
      * @param $posts
      * @return mixed
      */
-    private function checkApiDefined($row_api, $result, $debugModeMessage, $posts)
+    private function checkApiDefined($rowApi, $result, $debugModeMessage, $posts)
     {
-        if (! $row_api) {
-            $result['api_status'] = 0;
-            $result['api_message'] = 'Sorry this API is no longer available, maybe has changed by admin, or please make sure api url is correct.';
-
-            $this->show($result, $debugModeMessage, $posts);
+        if ($rowApi) {
+            return true;
         }
+        $result['api_status'] = 0;
+        $result['api_message'] = 'Sorry this API is no longer available, maybe has changed by admin, or please make sure api url is correct.';
 
-        return $result;
+        $this->show($result, $debugModeMessage, $posts);
     }
 
     /**
