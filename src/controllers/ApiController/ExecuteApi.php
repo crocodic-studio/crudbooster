@@ -458,10 +458,8 @@ class ExecuteApi
             return $nameTmp;
         }
         $jointable = DbInspector::getTableForeignKey($name);
-        $jointable_field = \Schema::getColumnListing($jointable);
-
         $data->leftjoin($jointable, $jointable.'.id', '=', $table.'.'.$name);
-        foreach ($jointable_field as $jf) {
+        foreach (\Schema::getColumnListing($jointable) as $jf) {
             $jfAlias = $jointable.'_'.$jf;
             if (in_array($jfAlias, $responsesFields)) {
                 $data->addselect($jointable.'.'.$jf.' as '.$jfAlias);
