@@ -472,23 +472,22 @@ class ExecuteApi
     }
 
     /**
-     * @param $row_api
+     * @param $rowApi
      * @param $result
      * @param $debugModeMessage
      * @param $posts
      * @return mixed
      */
-    private function validateMethodType($row_api, $result, $debugModeMessage, $posts)
+    private function validateMethodType($rowApi, $result, $debugModeMessage, $posts)
     {
-        $methodType = $row_api->method_type;
-        if (! $methodType || ! Request::isMethod($methodType)) {
-            $result['api_status'] = 0;
-            $result['api_message'] = "The request method is not allowed !";
-
-            $this->show($result, $debugModeMessage, $posts);
+        $methodType = $rowApi->method_type;
+        if ($methodType && Request::isMethod($methodType)) {
+            return true;
         }
+        $result['api_status'] = 0;
+        $result['api_message'] = "The request method is not allowed !";
 
-        return $result;
+        $this->show($result, $debugModeMessage, $posts);
     }
 
     /**
