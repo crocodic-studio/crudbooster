@@ -23,7 +23,6 @@ class ExecuteApi
 
     public function execute()
     {
-
         $posts = request()->all();
         //$posts_keys = array_keys($posts);
         //$posts_values = array_values($posts);
@@ -462,10 +461,8 @@ class ExecuteApi
         if ($methodType && Request::isMethod($methodType)) {
             return true;
         }
-        $result = [];
-        $result['api_status'] = 0;
-        $result['api_message'] = "The request method is not allowed !";
 
+        $result = $this->makeResult(0, "The request method is not allowed !", $debugModeMessage);
         $this->show($result, $debugModeMessage, $posts);
     }
 
@@ -482,10 +479,7 @@ class ExecuteApi
             return true;
         }  // hook have to return true
 
-        $result = [
-            'api_status' => 0,
-            'api_message' => "Failed to execute API !",
-        ];
+        $result = $this->makeResult(0, 'Failed to execute API !', $debugModeMessage);
 
         $this->show($result, $debugModeMessage, $posts);
     }
@@ -501,10 +495,9 @@ class ExecuteApi
         if ($rowApi) {
             return true;
         }
-        $result = [];
-        $result['api_status'] = 0;
-        $result['api_message'] = 'Sorry this API is no longer available, maybe has changed by admin, or please make sure api url is correct.';
 
+        $msg = 'Sorry this API is no longer available, maybe has changed by admin, or please make sure api url is correct.';
+        $result = $this->makeResult(0, $msg, $debugModeMessage);
         $this->show($result, $debugModeMessage, $posts);
     }
 
