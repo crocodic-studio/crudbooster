@@ -23,7 +23,7 @@ class ExecuteApi
 
     public function execute()
     {
-        $posts = request()->all();
+
         //$posts_keys = array_keys($posts);
         //$posts_values = array_values($posts);
 
@@ -35,14 +35,14 @@ class ExecuteApi
         $debugModeMessage = 'You are in debug mode !';
 
         /* Do some custome pre-checking for posted data, if failed discard API execution */
-        $this->doCustomePrecheck($posts, $debugModeMessage);
+        $this->doCustomePrecheck($debugModeMessage);
 
         /* Method Type validation */
         $methodType = $row_api->method_type;
-        $this->validateMethodType($methodType, $debugModeMessage, $posts);
+        $this->validateMethodType($methodType, $debugModeMessage);
 
         /* Check the row is exists or not */
-        $this->checkApiDefined($row_api, $debugModeMessage, $posts);
+        $this->checkApiDefined($row_api, $debugModeMessage);
         @$parameters = unserialize($row_api->parameters);
         @$responses = unserialize($row_api->responses);
 
@@ -52,6 +52,7 @@ class ExecuteApi
         | ----------------------------------------------
         |
         */
+        $posts = request()->all();
         list($type_except, $input_validator) = $this->validateParams($parameters, $posts, $table, $debugModeMessage);
 
 
@@ -453,11 +454,12 @@ class ExecuteApi
     /**
      * @param $methodType
      * @param $debugModeMessage
-     * @param $posts
      * @return mixed
      */
-    private function validateMethodType($methodType, $debugModeMessage, $posts)
+    private function validateMethodType($methodType, $debugModeMessage)
     {
+        $posts = request()->all();
+
         if ($methodType && Request::isMethod($methodType)) {
             return true;
         }
@@ -467,12 +469,12 @@ class ExecuteApi
     }
 
     /**
-     * @param $posts
      * @param $debugModeMessage
      * @return mixed
      */
-    private function doCustomePrecheck($posts, $debugModeMessage)
+    private function doCustomePrecheck($debugModeMessage)
     {
+        $posts = request()->all();
         $this->ctrl->hookValidate($posts);
 
         if (! $this->ctrl->validate) {
@@ -487,11 +489,12 @@ class ExecuteApi
     /**
      * @param $rowApi
      * @param $debugModeMessage
-     * @param $posts
      * @return mixed
      */
-    private function checkApiDefined($rowApi, $debugModeMessage, $posts)
+    private function checkApiDefined($rowApi, $debugModeMessage)
     {
+        $posts = request()->all();
+
         if ($rowApi) {
             return true;
         }
