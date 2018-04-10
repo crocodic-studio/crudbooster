@@ -16,10 +16,10 @@ class AdminApiGeneratorController extends CBController
         $this->table = 'cms_apicustom';
         $this->primaryKey = "id";
         $this->title_field = "nama";
-        $this->button_show = false;
+        $this->buttonShow = false;
         $this->button_new = false;
         $this->deleteBtn = false;
-        $this->button_add = false;
+        $this->buttonAdd = false;
         $this->button_import = false;
         $this->buttonExport = false;
     }
