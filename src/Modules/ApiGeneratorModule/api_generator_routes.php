@@ -17,12 +17,12 @@ Route::group([
     Route::get('api-generator/', ['uses' => 'AdminApiGeneratorController@getIndex', 'as' => 'AdminApiGeneratorControllerGetIndex']);
 
     Route::get('api-generator/download-postman', ['uses' => 'AdminApiGeneratorController@getDownloadPostman', 'as' => 'AdminApiGeneratorControllerGetDownloadPostman']);
-    Route::get('api-generator/screet-key', ['uses' => 'AdminApiGeneratorController@getScreetKey', 'as' => 'AdminApiGeneratorControllerGetScreetKey']);
+    Route::get('api-generator/screet-key', ['uses' => 'AdminApiKeyController@getSecretKey', 'as' => 'AdminApiGeneratorControllerGetScreetKey']);
     Route::get('api-generator/generator', ['uses' => 'AdminApiGeneratorController@getGenerator', 'as' => 'AdminApiGeneratorControllerGetGenerator']);
     Route::get('api-generator/edit-api/{id?}', ['uses' => 'AdminApiGeneratorController@getEditApi', 'as' => 'AdminApiGeneratorControllerGetEditApi']);
-    Route::get('api-generator/generate-screet-key', ['uses' => 'AdminApiGeneratorController@getGenerateScreetKey', 'as' => 'AdminApiGeneratorControllerGetGenerateScreetKey']);
-    Route::get('api-generator/status-apikey', ['uses' => 'AdminApiGeneratorController@getStatusApikey', 'as' => 'AdminApiGeneratorControllerGetStatusApikey']);
-    Route::get('api-generator/delete-api-key', ['uses' => 'AdminApiGeneratorController@getDeleteApiKey', 'as' => 'AdminApiGeneratorControllerGetDeleteApiKey']);
+    Route::get('api-generator/generate-screet-key', ['uses' => 'AdminApiKeyController@getGenerateScreetKey', 'as' => 'AdminApiGeneratorControllerGetGenerateScreetKey']);
+    Route::get('api-generator/status-apikey', ['uses' => 'AdminApiKeyController@getStatusApikey', 'as' => 'AdminApiGeneratorControllerGetStatusApikey']);
+    Route::get('api-generator/delete-api-key', ['uses' => 'AdminApiKeyController@getDeleteApiKey', 'as' => 'AdminApiGeneratorControllerGetDeleteApiKey']);
     Route::get('api-generator/column-table/{one?}/{type?}', ['uses' => 'AdminApiGeneratorController@getColumnTable', 'as' => 'AdminApiGeneratorControllerGetColumnTable']);
     Route::get('api-generator/delete-api/{id?}', ['uses' => 'AdminApiGeneratorController@getDeleteApi', 'as' => 'AdminApiGeneratorControllerGetDeleteApi']);
     Route::get('api-generator/export-data', ['uses' => 'AdminApiGeneratorController@getExportData', 'as' => 'AdminApiGeneratorControllerGetExportData']);

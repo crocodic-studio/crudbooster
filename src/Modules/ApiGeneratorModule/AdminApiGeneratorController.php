@@ -3,8 +3,6 @@
 namespace crocodicstudio\crudbooster\Modules\ApiGeneratorModule;
 
 use crocodicstudio\crudbooster\controllers\CBController;
-use crocodicstudio\crudbooster\helpers\CbValidator;
-use crocodicstudio\crudbooster\helpers\DbInspector;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
@@ -26,7 +24,7 @@ class AdminApiGeneratorController extends CBController
         $this->buttonExport = false;
     }
 
-    function getIndex()
+    public function getIndex()
     {
         $this->cbLoader();
 
@@ -38,7 +36,7 @@ class AdminApiGeneratorController extends CBController
         return view('CbApiGen::api_documentation', $data);
     }
 
-    function apiDocumentation()
+    public function apiDocumentation()
     {
         $this->cbLoader();
         $data = [];
@@ -48,7 +46,7 @@ class AdminApiGeneratorController extends CBController
         return view('CbApiGen::api_documentation_public', $data);
     }
 
-    function getDownloadPostman()
+    public function getDownloadPostman()
     {
         $this->cbLoader();
         $data = [];
@@ -105,15 +103,6 @@ class AdminApiGeneratorController extends CBController
         ]);
     }
 
-    public function getScreetKey()
-    {
-        $this->cbLoader();
-        $data['page_title'] = 'API Generator';
-        $data['apikeys'] = DB::table('cms_apikey')->get();
-
-        return view('CbApiGen::api_key', $data);
-    }
-
     public function getGenerator()
     {
         $this->cbLoader();
@@ -140,52 +129,7 @@ class AdminApiGeneratorController extends CBController
         return view('CbApiGen::api_generator', $data);
     }
 
-    function getGenerateScreetKey()
-    {
-        $this->cbLoader();
-        //Generate a random string.
-        $token = openssl_random_pseudo_bytes(16);
-
-        //Convert the binary data into hexadecimal representation.
-        $token = bin2hex($token);
-
-        $id = DB::table('cms_apikey')->insertGetId([
-                'screetkey' => $token,
-                'created_at' => date('Y-m-d H:i:s'),
-                'status' => 'active',
-                'hit' => 0,
-            ]);
-
-        $response = [];
-        $response['key'] = $token;
-        $response['id'] = $id;
-
-        return response()->json($response);
-    }
-
-    public function getStatusApikey()
-    {
-        CbValidator::valid(['id' => 'required', 'status' => 'required'], 'view');
-
-        $id = request('id');
-        $status = (request('status') == 1) ? "active" : "non active";
-
-        DB::table('cms_apikey')->where('id', $id)->update(['status' => $status]);
-
-        backWithMsg('You have been update api key status !');
-    }
-
-    public function getDeleteApiKey()
-    {
-        $id = request('id');
-        if (DB::table('cms_apikey')->where('id', $id)->delete()) {
-            return response()->json(['status' => 1]);
-        }
-
-        return response()->json(['status' => 0]);
-    }
-
-    function getColumnTable($table, $type = 'list')
+    public function getColumnTable($table, $type = 'list')
     {
         $this->cbLoader();
         $except = ['created_at', 'deleted_at', 'updated_at'];
@@ -216,7 +160,7 @@ class AdminApiGeneratorController extends CBController
         return response()->json($new_result);
     }
 
-    function postSaveApiCustom()
+    public function postSaveApiCustom()
     {
         $this->cbLoader();
         $posts = request()->all();
@@ -245,7 +189,7 @@ class AdminApiGeneratorController extends CBController
         return redirect(CRUDBooster::mainpath())->with(['message' => 'Yeay, your api has been saved successfully !', 'message_type' => 'success']);
     }
 
-    function getDeleteApi($id)
+    public function getDeleteApi($id)
     {
         $this->cbLoader();
         $row = $this->findRow($id)->first();
