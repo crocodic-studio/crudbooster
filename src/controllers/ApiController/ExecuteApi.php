@@ -35,14 +35,14 @@ class ExecuteApi
         $debugModeMessage = 'You are in debug mode !';
 
         /* Do some custome pre-checking for posted data, if failed discard API execution */
-        $this->doCustomePrecheck($debugModeMessage);
+        $this->doCustomePrecheck();
 
         /* Method Type validation */
         $methodType = $row_api->method_type;
-        $this->validateMethodType($methodType, $debugModeMessage);
+        $this->validateMethodType($methodType);
 
         /* Check the row is exists or not */
-        $this->checkApiDefined($row_api, $debugModeMessage);
+        $this->checkApiDefined($row_api);
         @$parameters = unserialize($row_api->parameters);
         @$responses = unserialize($row_api->responses);
 
@@ -82,7 +82,7 @@ class ExecuteApi
             if ($actionType == 'list') {
                 $result = $this->handleListAction($table, $orderby, $data, $debugModeMessage, $responses_fields);
             }elseif ($actionType == 'detail') {
-                $result = $this->handleDetailsAction($debugModeMessage, $data, $parameters, $posts, $responses_fields);
+                $result = $this->handleDetailsAction($data, $parameters, $posts, $responses_fields);
             }elseif ($actionType == 'delete') {
                 $result = $this->handleDeleteAction($table, $data, $debugModeMessage);
             }
@@ -94,22 +94,21 @@ class ExecuteApi
             $this->handleAddEdit($parameters, $posts, $rowAssign);
         }
 
-        $this->show($result, $debugModeMessage, $posts);
+        $this->show($result, $posts);
     }
 
     /**
      * @param $result
-     * @param $debugModeMessage
      * @param $posts
      * @return mixed
      */
-    private function show($result, $debugModeMessage, $posts)
+    private function show($result, $posts)
     {
         $result['api_status'] = $this->ctrl->hook_api_status ?: $result['api_status'];
         $result['api_message'] = $this->ctrl->hook_api_message ?: $result['api_message'];
 
         if (cbGetsetting('api_debug_mode') == 'true') {
-            $result['api_authorization'] = $debugModeMessage;
+            $result['api_authorization'] = 'You are in debug mode !';
         }
 
         $this->ctrl->hookAfter($posts, $result);
@@ -328,11 +327,11 @@ class ExecuteApi
      * @param $posts
      * @return mixed
      */
-    private function passwordError($debugModeMessage, $posts)
+    private function passwordError($posts)
     {
-        $result = $this->makeResult(0, cbTrans('alert_password_wrong'), $debugModeMessage);
+        $result = $this->makeResult(0, cbTrans('alert_password_wrong'));
 
-        $this->show($result, $debugModeMessage, $posts);
+        $this->show($result, $posts);
     }
 
     /**
@@ -395,13 +394,12 @@ class ExecuteApi
     }
 
     /**
-     * @param $debugModeMessage
      * @param $rows
      * @return array
      */
-    private function success($debugModeMessage, $rows)
+    private function success($rows)
     {
-        $result = $this->makeResult(1, 'success', $debugModeMessage);
+        $result = $this->makeResult(1, 'success');
         $rows = (array) $rows;
         $result = array_merge($result, $rows);
 
@@ -456,7 +454,7 @@ class ExecuteApi
      * @param $debugModeMessage
      * @return mixed
      */
-    private function validateMethodType($methodType, $debugModeMessage)
+    private function validateMethodType($methodType)
     {
         $posts = request()->all();
 
@@ -464,15 +462,14 @@ class ExecuteApi
             return true;
         }
 
-        $result = $this->makeResult(0, "The request method is not allowed !", $debugModeMessage);
-        $this->show($result, $debugModeMessage, $posts);
+        $result = $this->makeResult(0, "The request method is not allowed !");
+        $this->show($result, $posts);
     }
 
     /**
-     * @param $debugModeMessage
      * @return mixed
      */
-    private function doCustomePrecheck($debugModeMessage)
+    private function doCustomePrecheck()
     {
         $posts = request()->all();
         $this->ctrl->hookValidate($posts);
@@ -481,9 +478,9 @@ class ExecuteApi
             return true;
         }  // hook have to return true
 
-        $result = $this->makeResult(0, 'Failed to execute API !', $debugModeMessage);
+        $result = $this->makeResult(0, 'Failed to execute API !');
 
-        $this->show($result, $debugModeMessage, $posts);
+        $this->show($result, $posts);
     }
 
     /**
@@ -491,7 +488,7 @@ class ExecuteApi
      * @param $debugModeMessage
      * @return mixed
      */
-    private function checkApiDefined($rowApi, $debugModeMessage)
+    private function checkApiDefined($rowApi)
     {
         $posts = request()->all();
 
@@ -500,18 +497,17 @@ class ExecuteApi
         }
 
         $msg = 'Sorry this API is no longer available, maybe has changed by admin, or please make sure api url is correct.';
-        $result = $this->makeResult(0, $msg, $debugModeMessage);
-        $this->show($result, $debugModeMessage, $posts);
+        $result = $this->makeResult(0, $msg);
+        $this->show($result, $posts);
     }
 
     /**
      * @param $input_validator
      * @param $data_validation
-     * @param $debugModeMessage
      * @param $posts
      * @return mixed
      */
-    private function doValidation($input_validator, $data_validation, $debugModeMessage, $posts)
+    private function doValidation($input_validator, $data_validation, $posts)
     {
         $validator = Validator::make($input_validator, $data_validation);
         if (! $validator->fails()) {
@@ -523,7 +519,7 @@ class ExecuteApi
         $result['api_status'] = 0;
         $result['api_message'] = $message;
 
-        $this->show($result, $debugModeMessage, $posts);
+        $this->show($result, $posts);
     }
 
     /**
@@ -534,15 +530,9 @@ class ExecuteApi
      * @param $responses_fields
      * @return array
      */
-    private function handleDetailsAction($debugModeMessage, $data, $parameters, $posts, $responses_fields)
+    private function handleDetailsAction($data, $parameters, $posts, $responses_fields)
     {
-        $result = [];
-        $result['api_status'] = 0;
-        $result['api_message'] = 'There is no data found !';
-
-        if (cbGetsetting('api_debug_mode') == 'true') {
-            $result['api_authorization'] = $debugModeMessage;
-        }
+        $result = $this->makeResult(0, 'There is no data found !');
 
         $row = $data->first();
 
@@ -562,17 +552,17 @@ class ExecuteApi
             }
 
             if ($required && $type == 'password' && ! Hash::check($value, $row->{$name})) {
-                $this->passwordError($debugModeMessage, $posts);
+                $this->passwordError($posts);
             }
 
             if (! $required && $used && $value && ! Hash::check($value, $row->{$name})) {
-                $this->passwordError($debugModeMessage, $posts);
+                $this->passwordError($posts);
             }
         }
 
         $this->handleFile($row, $responses_fields, $row);
 
-        return $this->success($debugModeMessage, $row);
+        return $this->success($row);
     }
 
     /**
@@ -596,10 +586,9 @@ class ExecuteApi
      * @param $parameters
      * @param $posts
      * @param $table
-     * @param $debugModeMessage
      * @return array
      */
-    private function validateParams($parameters, $posts, $table, $debugModeMessage)
+    private function validateParams($parameters, $posts, $table)
     {
         if (!$parameters) {
             return ['', ''];
@@ -624,7 +613,7 @@ class ExecuteApi
             $dataValidation[$name] = app(ValidationRules::class)->make($param, $type_except, $table);
         }
 
-        $this->doValidation($inputValidator, $dataValidation, $debugModeMessage, $posts);
+        $this->doValidation($inputValidator, $dataValidation, $posts);
 
         return [$type_except, $inputValidator];
     }
@@ -658,16 +647,15 @@ class ExecuteApi
     /**
      * @param $status
      * @param $msg
-     * @param $debugModeMessage
      * @return array
      */
-    private function makeResult($status, $msg, $debugModeMessage)
+    private function makeResult($status, $msg)
     {
         $result = [];
         $result['api_status'] = $status;
         $result['api_message'] = $msg;
         if (cbGetsetting('api_debug_mode') == 'true') {
-            $result['api_authorization'] = $debugModeMessage;
+            $result['api_authorization'] = 'You are in debug mode !';
         }
 
         return $result;
