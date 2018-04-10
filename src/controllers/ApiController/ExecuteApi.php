@@ -53,29 +53,7 @@ class ExecuteApi
         | ----------------------------------------------
         |
         */
-        if ($parameters) {
-            $type_except = ['password', 'ref', 'base64_file', 'custom', 'search'];
-            $input_validator = [];
-            $data_validation = [];
-
-            foreach ($parameters as $param) {
-                $name = $param['name'];
-                $value = $posts[$name];
-                $used = $param['used'];
-
-                if ($used == 0) {
-                    continue;
-                }
-                if ($param['config'] && substr($param['config'], 0, 1) != '*') {
-                    continue;
-                }
-
-                $input_validator[$name] = $value;
-                $data_validation[$name] = app(ValidationRules::class)->make($param, $type_except, $table);
-            }
-
-            $result = $this->doValidation($input_validator, $data_validation, $result, $debugModeMessage, $posts);
-        }
+        list($type_except, $input_validator, $result) = $this->validateParams($parameters, $posts, $table, $result, $debugModeMessage);
 
         $responses_fields = $this->prepareResponses($responses);
 
@@ -641,5 +619,43 @@ class ExecuteApi
         });
 
         return $responses;
+    }
+
+    /**
+     * @param $parameters
+     * @param $posts
+     * @param $table
+     * @param $result
+     * @param $debugModeMessage
+     * @return array
+     */
+    private function validateParams($parameters, $posts, $table, $result, $debugModeMessage)
+    {
+        if (!$parameters) {
+            return ['', '', $result];
+        }
+        $type_except = ['password', 'ref', 'base64_file', 'custom', 'search'];
+        $inputValidator = [];
+        $dataValidation = [];
+
+        foreach ($parameters as $param) {
+            $name = $param['name'];
+            $value = $posts[$name];
+            $used = $param['used'];
+
+            if ($used == 0) {
+                continue;
+            }
+            if ($param['config'] && substr($param['config'], 0, 1) != '*') {
+                continue;
+            }
+
+            $inputValidator[$name] = $value;
+            $dataValidation[$name] = app(ValidationRules::class)->make($param, $type_except, $table);
+        }
+
+        $result = $this->doValidation($inputValidator, $dataValidation, $result, $debugModeMessage, $posts);
+
+        return [$type_except, $inputValidator, $result];
     }
 }
