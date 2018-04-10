@@ -395,18 +395,13 @@ class ExecuteApi
     }
 
     /**
-     * @param $result
      * @param $debugModeMessage
      * @param $rows
      * @return array
      */
-    private function success($result, $debugModeMessage, $rows)
+    private function success($debugModeMessage, $rows)
     {
-        $result['api_status'] = 1;
-        $result['api_message'] = 'success';
-        if (cbGetsetting('api_debug_mode') == 'true') {
-            $result['api_authorization'] = $debugModeMessage;
-        }
+        $result = $this->makeResult(1, 'success', $debugModeMessage);
         $rows = (array) $rows;
         $result = array_merge($result, $rows);
 
@@ -581,7 +576,7 @@ class ExecuteApi
 
         $this->handleFile($row, $responses_fields, $row);
 
-        return $this->success($result, $debugModeMessage, $row);
+        return $this->success($debugModeMessage, $row);
     }
 
     /**
