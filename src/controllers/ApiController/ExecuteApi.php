@@ -84,7 +84,7 @@ class ExecuteApi
             }elseif ($actionType == 'detail') {
                 $result = $this->handleDetailsAction($data, $parameters, $posts, $responses_fields);
             }elseif ($actionType == 'delete') {
-                $result = $this->handleDeleteAction($table, $data, $debugModeMessage);
+                $result = $this->handleDeleteAction($table, $data);
             }
         }elseif (in_array($actionType, ['save_add', 'save_edit'])) {
             $rowAssign = array_filter($input_validator, function ($column) use ($table) {
@@ -169,10 +169,9 @@ class ExecuteApi
     /**
      * @param $table
      * @param $data
-     * @param $debugModeMessage
      * @return mixed
      */
-    private function handleDeleteAction($table, $data, $debugModeMessage)
+    private function handleDeleteAction($table, $data)
     {
         if (\Schema::hasColumn($table, 'deleted_at')) {
             $delete = $data->update(['deleted_at' => date('Y-m-d H:i:s')]);
@@ -180,13 +179,11 @@ class ExecuteApi
             $delete = $data->delete();
         }
 
-        $result['api_status'] = ($delete) ? 1 : 0;
-        $result['api_message'] = ($delete) ? "success" : "failed";
-        if (cbGetsetting('api_debug_mode') == 'true') {
-            $result['api_authorization'] = $debugModeMessage;
-        }
+        $status = ($delete) ? 1 : 0;
+        $msg = ($delete) ? "success" : "failed";
+        $this->makeResult($status, $msg);
 
-        return $result;
+        return $this->makeResult($status, $msg);
     }
 
     /**
@@ -323,7 +320,6 @@ class ExecuteApi
     }
 
     /**
-     * @param $debugModeMessage
      * @param $posts
      * @return mixed
      */
@@ -451,7 +447,6 @@ class ExecuteApi
 
     /**
      * @param $methodType
-     * @param $debugModeMessage
      * @return mixed
      */
     private function validateMethodType($methodType)
@@ -485,7 +480,6 @@ class ExecuteApi
 
     /**
      * @param $rowApi
-     * @param $debugModeMessage
      * @return mixed
      */
     private function checkApiDefined($rowApi)
@@ -523,7 +517,6 @@ class ExecuteApi
     }
 
     /**
-     * @param $debugModeMessage
      * @param $data
      * @param $parameters
      * @param $posts
