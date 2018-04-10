@@ -16,7 +16,7 @@
 {!! cbStyleSheet('adminlte/dist/css/AdminLTE.min.css') !!}
 
 <!-- support rtl-->
-@if (App::getLocale() == 'ar')
+@if(in_array(App::getLocale(), ['ar', 'fa']))
     <link rel="stylesheet" href="//cdn.rawgit.com/morteza/bootstrap-rtl/v3.3.4/dist/css/bootstrap-rtl.min.css">
     {!! cbStyleSheet('rtl.css') !!}
 @endif
