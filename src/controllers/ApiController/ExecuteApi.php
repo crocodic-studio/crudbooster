@@ -39,7 +39,8 @@ class ExecuteApi
         $this->doCustomePrecheck($posts, $debugModeMessage);
 
         /* Method Type validation */
-        $this->validateMethodType($row_api, $debugModeMessage, $posts);
+        $methodType = $row_api->method_type;
+        $this->validateMethodType($methodType, $debugModeMessage, $posts);
 
         /* Check the row is exists or not */
         $this->checkApiDefined($row_api, $debugModeMessage, $posts);
@@ -80,12 +81,12 @@ class ExecuteApi
             $result = [];
             if ($actionType == 'list') {
                 $result = $this->handleListAction($table, $orderby, $data, $debugModeMessage, $responses_fields);
-            }else if ($actionType == 'detail') {
+            }elseif ($actionType == 'detail') {
                 $result = $this->handleDetailsAction($debugModeMessage, $data, $parameters, $posts, $responses_fields);
-            }else if ($actionType == 'delete') {
+            }elseif ($actionType == 'delete') {
                 $result = $this->handleDeleteAction($table, $data, $debugModeMessage);
             }
-        }else if (in_array($actionType, ['save_add', 'save_edit'])) {
+        }elseif (in_array($actionType, ['save_add', 'save_edit'])) {
             $rowAssign = array_filter($input_validator, function ($column) use ($table) {
                 return Schema::hasColumn($table, $column);
             }, ARRAY_FILTER_USE_KEY);
@@ -151,9 +152,10 @@ class ExecuteApi
 
         $rows = $data->orderby($orderbyCol, $orderbyVal)->get();
 
-        $result = [];
-        $result['api_status'] = 0;
-        $result['api_message'] = 'There is no data found !';
+        $result = [
+            'api_status' => 0,
+            'api_message' => 'There is no data found !',
+         ];
         if (cbGetsetting('api_debug_mode') == 'true') {
             $result['api_authorization'] = $debugModeMessage;
         }
@@ -323,13 +325,13 @@ class ExecuteApi
     }
 
     /**
-     * @param $result
      * @param $debugModeMessage
      * @param $posts
      * @return mixed
      */
-    private function passwordError($result, $debugModeMessage, $posts)
+    private function passwordError($debugModeMessage, $posts)
     {
+        $result = [];
         $result['api_status'] = 0;
         $result['api_message'] = cbTrans('alert_password_wrong');
         if (cbGetsetting('api_debug_mode') == 'true') {
@@ -461,14 +463,13 @@ class ExecuteApi
     }
 
     /**
-     * @param $rowApi
+     * @param $methodType
      * @param $debugModeMessage
      * @param $posts
      * @return mixed
      */
-    private function validateMethodType($rowApi, $debugModeMessage, $posts)
+    private function validateMethodType($methodType, $debugModeMessage, $posts)
     {
-        $methodType = $rowApi->method_type;
         if ($methodType && Request::isMethod($methodType)) {
             return true;
         }
@@ -492,9 +493,11 @@ class ExecuteApi
             return true;
         }  // hook have to return true
 
-        $result = [];
-        $result['api_status'] = 0;
-        $result['api_message'] = "Failed to execute API !";
+        $result = [
+
+        'api_status'] => 0,
+        ];
+        'api_message'] => "Failed to execute API !",
 
         $this->show($result, $debugModeMessage, $posts);
     }
@@ -575,11 +578,11 @@ class ExecuteApi
             }
 
             if ($required && $type == 'password' && ! Hash::check($value, $row->{$name})) {
-                $this->passwordError($result, $debugModeMessage, $posts);
+                $this->passwordError($debugModeMessage, $posts);
             }
 
             if (! $required && $used && $value && ! Hash::check($value, $row->{$name})) {
-                $this->passwordError($result, $debugModeMessage, $posts);
+                $this->passwordError($debugModeMessage, $posts);
             }
         }
 
