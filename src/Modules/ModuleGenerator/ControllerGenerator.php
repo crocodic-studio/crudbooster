@@ -35,7 +35,7 @@ class ControllerGenerator
             $controllername = str_replace(' ', '', $controllername).'Controller';
         }
 
-        $countSameFile = count(glob(base_path(controllers_dir()).'Admin'.$controllername.'.php'));
+        $countSameFile = count(glob(controllers_dir().'Admin'.$controllername.'.php'));
 
         if ($countSameFile != 0) {
             $suffix = $countSameFile;
