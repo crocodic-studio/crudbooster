@@ -36,7 +36,7 @@ class ExecuteApi
         $debugModeMessage = 'You are in debug mode !';
 
         /* Do some custome pre-checking for posted data, if failed discard API execution */
-        $this->doCustomePrecheck($posts, $result, $debugModeMessage);
+        $this->doCustomePrecheck($posts, $debugModeMessage);
 
         /* Method Type validation */
         $this->validateMethodType($row_api, $result, $debugModeMessage, $posts);
@@ -485,17 +485,19 @@ class ExecuteApi
      * @param $debugModeMessage
      * @return mixed
      */
-    private function doCustomePrecheck($posts, $result, $debugModeMessage)
+    private function doCustomePrecheck($posts, $debugModeMessage)
     {
         $this->ctrl->hookValidate($posts);
-        if ($this->ctrl->validate) { // hook have to return true
-            $result['api_status'] = 0;
-            $result['api_message'] = "Failed to execute API !";
 
-            $this->show($result, $debugModeMessage, $posts);
-        }
+        if (! $this->ctrl->validate) {
+            return true;
+        }  // hook have to return true
 
-        return $result;
+        $result = [];
+        $result['api_status'] = 0;
+        $result['api_message'] = "Failed to execute API !";
+
+        $this->show($result, $debugModeMessage, $posts);
     }
 
     /**
