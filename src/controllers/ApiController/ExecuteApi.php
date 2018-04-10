@@ -66,16 +66,7 @@ class ExecuteApi
         unset($posts['limit'], $posts['offset'], $posts['orderby']);
 
         if (in_array($actionType, ['list', 'detail', 'delete'])) {
-            $data = DB::table($table);
-            $data->skip($offset);
-            $data->take($limit);
-            $data = $this->responses($table, $data, $responses, $responses_fields); //End Responses
-
-            $this->params($parameters, $posts, $data, $table);
-
-            if (\Schema::hasColumn($table, 'deleted_at')) {
-                $data->where($table.'.deleted_at', null);
-            }
+            $data = $this->fetchDataFromDB($table, $offset, $limit, $responses, $responses_fields, $parameters, $posts);
 
             $this->filterRows($data, $parameters, $posts, $table, $type_except);
 
@@ -654,5 +645,31 @@ class ExecuteApi
         $result = $this->doValidation($inputValidator, $dataValidation, $result, $debugModeMessage, $posts);
 
         return [$type_except, $inputValidator, $result];
+    }
+
+    /**
+     * @param $table
+     * @param $offset
+     * @param $limit
+     * @param $responses
+     * @param $responses_fields
+     * @param $parameters
+     * @param $posts
+     * @return array
+     */
+    private function fetchDataFromDB($table, $offset, $limit, $responses, $responses_fields, $parameters, $posts)
+    {
+        $data = DB::table($table);
+        $data->skip($offset);
+        $data->take($limit);
+        $data = $this->responses($table, $data, $responses, $responses_fields); //End Responses
+
+        $this->params($parameters, $posts, $data, $table);
+
+        if (\Schema::hasColumn($table, 'deleted_at')) {
+            $data->where($table.'.deleted_at', null);
+        }
+
+        return $data;
     }
 }
