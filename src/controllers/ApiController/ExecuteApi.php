@@ -43,7 +43,6 @@ class ExecuteApi
 
         /* Check the row is exists or not */
         $this->checkApiDefined($row_api, $debugModeMessage, $posts);
-        $result = [];
         @$parameters = unserialize($row_api->parameters);
         @$responses = unserialize($row_api->responses);
 
@@ -53,7 +52,8 @@ class ExecuteApi
         | ----------------------------------------------
         |
         */
-        list($type_except, $input_validator, $result) = $this->validateParams($parameters, $posts, $table, $result, $debugModeMessage);
+        list($type_except, $input_validator) = $this->validateParams($parameters, $posts, $table, $debugModeMessage);
+        $result = [];
 
         $responses_fields = $this->prepareResponses($responses);
 
@@ -462,7 +462,6 @@ class ExecuteApi
 
     /**
      * @param $rowApi
-     * @param $result
      * @param $debugModeMessage
      * @param $posts
      * @return mixed
@@ -482,7 +481,6 @@ class ExecuteApi
 
     /**
      * @param $posts
-     * @param $result
      * @param $debugModeMessage
      * @return mixed
      */
@@ -503,7 +501,6 @@ class ExecuteApi
 
     /**
      * @param $rowApi
-     * @param $result
      * @param $debugModeMessage
      * @param $posts
      * @return mixed
@@ -523,19 +520,19 @@ class ExecuteApi
     /**
      * @param $input_validator
      * @param $data_validation
-     * @param $result
      * @param $debugModeMessage
      * @param $posts
      * @return mixed
      */
-    private function doValidation($input_validator, $data_validation, $result, $debugModeMessage, $posts)
+    private function doValidation($input_validator, $data_validation, $debugModeMessage, $posts)
     {
         $validator = Validator::make($input_validator, $data_validation);
         if (! $validator->fails()) {
-            return $result;
+            return true;
         }
         $message = $validator->errors()->all();
         $message = implode(', ', $message);
+        $result = [];
         $result['api_status'] = 0;
         $result['api_message'] = $message;
 
@@ -620,10 +617,10 @@ class ExecuteApi
      * @param $debugModeMessage
      * @return array
      */
-    private function validateParams($parameters, $posts, $table, $result, $debugModeMessage)
+    private function validateParams($parameters, $posts, $table, $debugModeMessage)
     {
         if (!$parameters) {
-            return ['', '', $result];
+            return ['', ''];
         }
         $type_except = ['password', 'ref', 'base64_file', 'custom', 'search'];
         $inputValidator = [];
@@ -645,9 +642,9 @@ class ExecuteApi
             $dataValidation[$name] = app(ValidationRules::class)->make($param, $type_except, $table);
         }
 
-        $result = $this->doValidation($inputValidator, $dataValidation, $result, $debugModeMessage, $posts);
+        $this->doValidation($inputValidator, $dataValidation, $debugModeMessage, $posts);
 
-        return [$type_except, $inputValidator, $result];
+        return [$type_except, $inputValidator];
     }
 
     /**
