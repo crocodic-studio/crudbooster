@@ -25,10 +25,6 @@ class ExecuteApi
 
     public function execute()
     {
-
-        //$posts_keys = array_keys($posts);
-        //$posts_values = array_values($posts);
-
         $row_api = DB::table('cms_apicustom')->where('permalink', $this->ctrl->permalink)->first();
 
         $actionType = $row_api->aksi;
@@ -43,18 +39,11 @@ class ExecuteApi
 
         /* Check the row is exists or not */
         $this->checkApiDefined($row_api);
-        @$parameters = unserialize($row_api->parameters);
-        @$responses = unserialize($row_api->responses);
 
-        /*
-        | ----------------------------------------------
-        | User Data Validation
-        | ----------------------------------------------
-        |
-        */
+        @$parameters = unserialize($row_api->parameters);
         list($type_except, $input_validator) = $this->validateParams($parameters, $table);
 
-
+        @$responses = unserialize($row_api->responses);
         $responses_fields = $this->prepareResponses($responses);
 
         $posts = request()->all();
