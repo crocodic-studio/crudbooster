@@ -5,7 +5,9 @@ namespace crocodicstudio\crudbooster\controllers\ApiController;
 use crocodicstudio\crudbooster\helpers\DbInspector;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Validator;
 
 class ExecuteApi
 {
@@ -439,7 +441,7 @@ class ExecuteApi
     {
         $posts = request()->all();
 
-        if ($methodType && Request::isMethod($methodType)) {
+        if ($methodType && request()->isMethod($methodType)) {
             return true;
         }
 
