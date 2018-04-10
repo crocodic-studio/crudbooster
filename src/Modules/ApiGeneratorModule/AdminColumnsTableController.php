@@ -26,15 +26,15 @@ class AdminColumnsTableController extends CBController
     public function getColumnTable($table, $type = 'list')
     {
         $this->cbLoader();
-        $except = ['created_at', 'deleted_at', 'updated_at'];
 
         $result = \Schema::getColumnListing($table);
+
+        $result = array_filter($result, function ($row) {
+            return ! (in_array($row, ['created_at', 'deleted_at', 'updated_at']));
+        });
+
         $newResult = [];
         foreach ($result as $row) {
-
-            if (in_array($row, $except)) {
-                continue;
-            }
             $type_field = \Schema::getColumnType($table, $row);
             $newResult[] = ['name' => $row, 'type' => $this->getFieldType($row, $type_field)];
 
