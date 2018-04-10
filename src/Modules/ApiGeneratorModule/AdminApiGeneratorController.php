@@ -75,7 +75,7 @@ class AdminApiGeneratorController extends CBController
 
             if (strtolower($api->method_type) == 'get' && $httpbuilder) {
                 $httpbuilder = "?".http_build_query($httpbuilder);
-            }else{
+            } else {
                 $httpbuilder = '';
             }
 
@@ -135,29 +135,23 @@ class AdminApiGeneratorController extends CBController
         $except = ['created_at', 'deleted_at', 'updated_at'];
 
         $result = \Schema::getColumnListing($table);
-        $new_result = [];
-        foreach ($result as $ro) {
+        $newResult = [];
+        foreach ($result as $row) {
 
-            if (in_array($ro, $except)) {
+            if (in_array($row, $except)) {
                 continue;
             }
-            $type_field = \Schema::getColumnType($table, $ro);
-            $new_result[] = ['name' => $ro, 'type' => $this->getFieldType($ro, $type_field)];
+            $type_field = \Schema::getColumnType($table, $row);
+            $newResult[] = ['name' => $row, 'type' => $this->getFieldType($row, $type_field)];
 
-            if (!in_array($type, ['list', 'detail']) || !starts_with($ro, 'id_') ) {
+            if (! in_array($type, ['list', 'detail']) || ! starts_with($row, 'id_')) {
                 continue;
             }
-            $table2 = substr($ro, 3);
-            foreach (DB::getSchemaBuilder()->getColumnListing($table2) as $col) {
-                if (FieldDetector::isExceptional($col) || starts_with($ro, 'id_')) {
-                    continue;
-                }
-                $col = str_replace("_$table2", "", $col);
-                $new_result[] = ['name' => $table2.'_'.$col, 'type' => \Schema::getColumnType($table2, $col)];
-            }
+
+            $newResult = $this->prepareResults($row, $newResult);
         }
 
-        return response()->json($new_result);
+        return response()->json($newResult);
     }
 
     public function postSaveApiCustom()
@@ -197,7 +191,7 @@ class AdminApiGeneratorController extends CBController
 
         $controllername = ucwords(str_replace('_', ' ', $row->permalink));
         $controllername = str_replace(' ', '', $controllername);
-        @unlink(base_path(controllers_dir()."Api".$controllername."Controller.php"));
+        @unlink((controllers_dir()."Api".$controllername."Controller.php"));
 
         return response()->json(['status' => 1]);
     }
@@ -299,5 +293,30 @@ class AdminApiGeneratorController extends CBController
         }
 
         return $default;
+    }
+
+    /**
+     * @param $table2
+     * @param $ro
+     * @param $new_result
+     * @return array
+     */
+    private function prepareResults($ro, $new_result)
+    {
+        if (starts_with($ro, 'id_')) {
+            return $new_result;
+        }
+        $table2 = substr($ro, 3);
+        $columns = DB::getSchemaBuilder()->getColumnListing($table2);
+        $columns = array_filter($columns, function ($col) {
+            return ! FieldDetector::isExceptional($col);
+        });
+
+        foreach ($columns as $col) {
+            $col = str_replace("_$table2", "", $col);
+            $new_result[] = ['name' => $table2.'_'.$col, 'type' => \Schema::getColumnType($table2, $col)];
+        }
+
+        return $new_result;
     }
 }
