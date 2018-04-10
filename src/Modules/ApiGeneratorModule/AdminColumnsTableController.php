@@ -72,15 +72,14 @@ class AdminColumnsTableController extends CBController
     }
 
     /**
-     * @param $table2
      * @param $ro
-     * @param $new_result
+     * @param $newResult
      * @return array
      */
-    private function prepareResults($ro, $new_result)
+    private function prepareResults($ro, $newResult)
     {
         if (starts_with($ro, 'id_')) {
-            return $new_result;
+            return $newResult;
         }
         $table2 = substr($ro, 3);
         $columns = DB::getSchemaBuilder()->getColumnListing($table2);
@@ -90,9 +89,9 @@ class AdminColumnsTableController extends CBController
 
         foreach ($columns as $col) {
             $col = str_replace("_$table2", "", $col);
-            $new_result[] = ['name' => $table2.'_'.$col, 'type' => \Schema::getColumnType($table2, $col)];
+            $newResult[] = ['name' => $table2.'_'.$col, 'type' => \Schema::getColumnType($table2, $col)];
         }
 
-        return $new_result;
+        return $newResult;
     }
 }
