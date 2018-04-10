@@ -562,16 +562,15 @@ class ExecuteApi
     private function doValidation($input_validator, $data_validation, $result, $debugModeMessage, $posts)
     {
         $validator = Validator::make($input_validator, $data_validation);
-        if ($validator->fails()) {
-            $message = $validator->errors()->all();
-            $message = implode(', ', $message);
-            $result['api_status'] = 0;
-            $result['api_message'] = $message;
-
-            $this->show($result, $debugModeMessage, $posts);
+        if (! $validator->fails()) {
+            return $result;
         }
+        $message = $validator->errors()->all();
+        $message = implode(', ', $message);
+        $result['api_status'] = 0;
+        $result['api_message'] = $message;
 
-        return $result;
+        $this->show($result, $debugModeMessage, $posts);
     }
 
     /**
