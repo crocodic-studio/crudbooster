@@ -403,12 +403,12 @@ class ExecuteApi
         if (! DbInspector::isForeignKey($name)) {
             return $nameTmp;
         }
-        $jointable = DbInspector::getTableForeignKey($name);
-        $data->leftjoin($jointable, $jointable.'.id', '=', $table.'.'.$name);
-        foreach (\Schema::getColumnListing($jointable) as $jf) {
-            $jfAlias = $jointable.'_'.$jf;
+        $joinTable = DbInspector::getTableForeignKey($name);
+        $data->leftjoin($joinTable, $joinTable.'.id', '=', $table.'.'.$name);
+        foreach (\Schema::getColumnListing($joinTable) as $jf) {
+            $jfAlias = $joinTable.'_'.$jf;
             if (in_array($jfAlias, $responsesFields)) {
-                $data->addselect($jointable.'.'.$jf.' as '.$jfAlias);
+                $data->addselect($joinTable.'.'.$jf.' as '.$jfAlias);
                 $nameTmp[] = $jfAlias;
             }
         }
