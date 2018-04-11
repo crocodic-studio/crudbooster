@@ -50,8 +50,6 @@ class ExecuteApi
         $this->ctrl->hookBefore($posts);
 
 
-        $orderby = ($posts['orderby']) ?: $table.'.id,desc';
-
         unset($posts['limit'], $posts['offset'], $posts['orderby']);
 
         if (in_array($actionType, ['list', 'detail', 'delete'])) {
@@ -68,7 +66,7 @@ class ExecuteApi
 
             $result = [];
             if ($actionType == 'list') {
-                $result = $this->handleListAction($table, $orderby, $data, $responses_fields);
+                $result = $this->handleListAction($table, $data, $responses_fields);
             } elseif ($actionType == 'detail') {
                 $result = $this->handleDetailsAction($data, $parameters, $posts, $responses_fields);
             } elseif ($actionType == 'delete') {
@@ -122,14 +120,13 @@ class ExecuteApi
 
     /**
      * @param $table
-     * @param $orderBy
      * @param $data
      * @param $responsesFields
      * @return array
      */
-    private function handleListAction($table, $orderBy, $data, $responsesFields)
+    private function handleListAction($table, $data, $responsesFields)
     {
-        $orderBy = $orderBy ?: "$table.id,desc";
+        $orderBy = request('orderby', $table.'.id,desc');
 
         list($orderByCol, $orderByVal) = explode(',', $orderBy);
 
