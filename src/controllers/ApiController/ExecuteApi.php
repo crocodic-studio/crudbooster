@@ -606,9 +606,11 @@ class ExecuteApi
      */
     private function makeResult($status, $msg)
     {
-        $result = [];
-        $result['api_status'] = $status;
-        $result['api_message'] = $msg;
+        $result = [
+            'api_status'=> $status,
+            'api_message'=> $msg,
+        ];
+
         if (cbGetsetting('api_debug_mode') == 'true') {
             $result['api_authorization'] = 'You are in debug mode !';
         }
