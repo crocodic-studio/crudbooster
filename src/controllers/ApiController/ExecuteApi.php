@@ -63,7 +63,6 @@ class ExecuteApi
             }
 
             $this->ctrl->hookQuery($data);
-
             $result = [];
             if ($actionType == 'list') {
                 $result = $this->handleListAction($table, $data, $responses_fields);
@@ -72,6 +71,7 @@ class ExecuteApi
             } elseif ($actionType == 'delete') {
                 $result = $this->handleDeleteAction($table, $data);
             }
+            $this->show($result, $posts);
         } elseif (in_array($actionType, ['save_add', 'save_edit'])) {
             $rowAssign = array_filter($input_validator, function ($column) use ($table) {
                 return Schema::hasColumn($table, $column);
@@ -80,7 +80,6 @@ class ExecuteApi
             $this->handleAddEdit($parameters, $posts, $rowAssign);
         }
 
-        $this->show($result, $posts);
     }
 
     /**
@@ -90,15 +89,13 @@ class ExecuteApi
      */
     private function show($result, $posts)
     {
+        $this->ctrl->hookAfter($posts, $result);
         $result['api_status'] = $this->ctrl->hook_api_status ?: $result['api_status'];
         $result['api_message'] = $this->ctrl->hook_api_message ?: $result['api_message'];
 
         if (cbGetsetting('api_debug_mode') == 'true') {
             $result['api_authorization'] = 'You are in debug mode !';
         }
-
-        $this->ctrl->hookAfter($posts, $result);
-
         sendAndTerminate(response()->json($result));
     }
 
@@ -156,7 +153,6 @@ class ExecuteApi
 
         $status = ($delete) ? 1 : 0;
         $msg = ($delete) ? "success" : "failed";
-        $this->makeResult($status, $msg);
 
         return $this->makeResult($status, $msg);
     }
