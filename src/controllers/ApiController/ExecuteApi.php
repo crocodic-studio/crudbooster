@@ -374,11 +374,11 @@ class ExecuteApi
     {
         $data->where(function ($w) use ($search_in, $value) {
             foreach ($search_in as $k => $field) {
+                $method = 'orWhere';
                 if ($k == 0) {
-                    $w->where($field, "like", "%$value%");
-                } else {
-                    $w->orWhere($field, "like", "%$value%");
+                    $method = 'where';
                 }
+                $w->$method($field, "like", "%$value%");
             }
         });
     }
@@ -460,22 +460,20 @@ class ExecuteApi
     }
 
     /**
-     * @param $input_validator
-     * @param $data_validation
+     * @param $inputValidator
+     * @param $dataValidation
      * @param $posts
      * @return mixed
      */
-    private function doValidation($input_validator, $data_validation, $posts)
+    private function doValidation($inputValidator, $dataValidation, $posts)
     {
-        $validator = Validator::make($input_validator, $data_validation);
+        $validator = Validator::make($inputValidator, $dataValidation);
         if (! $validator->fails()) {
             return true;
         }
         $message = $validator->errors()->all();
         $message = implode(', ', $message);
-        $result = [];
-        $result['api_status'] = 0;
-        $result['api_message'] = $message;
+        $result = $this->makeResult(0, $message);
 
         $this->show($result, $posts);
     }
@@ -484,10 +482,10 @@ class ExecuteApi
      * @param $data
      * @param $parameters
      * @param $posts
-     * @param $responses_fields
+     * @param $responsesFields
      * @return array
      */
-    private function handleDetailsAction($data, $parameters, $posts, $responses_fields)
+    private function handleDetailsAction($data, $parameters, $posts, $responsesFields)
     {
         $row = $data->first();
 
@@ -518,7 +516,7 @@ class ExecuteApi
             }
         }
 
-        $this->handleFile($row, $responses_fields, $row);
+        $this->handleFile($row, $responsesFields, $row);
 
         return $this->success($row);
     }
@@ -580,17 +578,17 @@ class ExecuteApi
     /**
      * @param $table
      * @param $responses
-     * @param $responses_fields
+     * @param $responsesFields
      * @param $parameters
      * @param $posts
      * @return array
      */
-    private function fetchDataFromDB($table, $responses, $responses_fields, $parameters, $posts)
+    private function fetchDataFromDB($table, $responses, $responsesFields, $parameters, $posts)
     {
         $data = DB::table($table);
         $data->skip(request('offset', 0));
         $data->take(request('limit', 20));
-        $data = $this->responses($table, $data, $responses, $responses_fields); //End Responses
+        $data = $this->responses($table, $data, $responses, $responsesFields); //End Responses
 
         $this->params($parameters, $posts, $data, $table);
 
