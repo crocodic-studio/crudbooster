@@ -49,14 +49,13 @@ class ExecuteApi
         $posts = request()->all();
         $this->ctrl->hookBefore($posts);
 
-        $limit = ($posts['limit']) ?: 20;
-        $offset = ($posts['offset']) ?: 0;
+
         $orderby = ($posts['orderby']) ?: $table.'.id,desc';
 
         unset($posts['limit'], $posts['offset'], $posts['orderby']);
 
         if (in_array($actionType, ['list', 'detail', 'delete'])) {
-            $data = $this->fetchDataFromDB($table, $offset, $limit, $responses, $responses_fields, $parameters, $posts);
+            $data = $this->fetchDataFromDB($table, $responses, $responses_fields, $parameters, $posts);
 
             $this->filterRows($data, $parameters, $posts, $table, $type_except);
 
@@ -123,30 +122,26 @@ class ExecuteApi
 
     /**
      * @param $table
-     * @param $orderby
+     * @param $orderBy
      * @param $data
      * @param $responsesFields
      * @return array
      */
-    private function handleListAction($table, $orderby, $data, $responsesFields)
+    private function handleListAction($table, $orderBy, $data, $responsesFields)
     {
-        $orderByCol = $table.'.id';
-        $orderByVal = 'desc';
+        $orderBy = $orderBy ?: "$table.id,desc";
 
-        if ($orderby) {
-            list($orderByCol, $orderByVal) = explode(',', $orderby);
-        }
-
-        $result = $this->makeResult(0, 'There is no data found !');
-
-        $result['data'] = [];
+        list($orderByCol, $orderByVal) = explode(',', $orderBy);
 
         $rows = $data->orderby($orderByCol, $orderByVal)->get();
-        if ($rows) {
-            $result = $this->handleRows($responsesFields, $rows);
+        if (! $rows) {
+            $result = $this->makeResult(0, 'There is no data found !');
+            $result['data'] = [];
+
+            return $result;
         }
 
-        return $result;
+        return $this->handleRows($responsesFields, $rows);
     }
 
     /**
@@ -373,10 +368,8 @@ class ExecuteApi
     private function success($rows)
     {
         $result = $this->makeResult(1, 'success');
-        $rows = (array)$rows;
-        $result = array_merge($result, $rows);
 
-        return $result;
+        return array_merge($result, (array)$rows);
     }
 
     /**
@@ -593,19 +586,17 @@ class ExecuteApi
 
     /**
      * @param $table
-     * @param $offset
-     * @param $limit
      * @param $responses
      * @param $responses_fields
      * @param $parameters
      * @param $posts
      * @return array
      */
-    private function fetchDataFromDB($table, $offset, $limit, $responses, $responses_fields, $parameters, $posts)
+    private function fetchDataFromDB($table, $responses, $responses_fields, $parameters, $posts)
     {
         $data = DB::table($table);
-        $data->skip($offset);
-        $data->take($limit);
+        $data->skip(request('offset', 0));
+        $data->take(request('limit', 20));
         $data = $this->responses($table, $data, $responses, $responses_fields); //End Responses
 
         $this->params($parameters, $posts, $data, $table);
