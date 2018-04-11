@@ -70,12 +70,12 @@ class ExecuteApi
             $result = [];
             if ($actionType == 'list') {
                 $result = $this->handleListAction($table, $orderby, $data, $responses_fields);
-            }elseif ($actionType == 'detail') {
+            } elseif ($actionType == 'detail') {
                 $result = $this->handleDetailsAction($data, $parameters, $posts, $responses_fields);
-            }elseif ($actionType == 'delete') {
+            } elseif ($actionType == 'delete') {
                 $result = $this->handleDeleteAction($table, $data);
             }
-        }elseif (in_array($actionType, ['save_add', 'save_edit'])) {
+        } elseif (in_array($actionType, ['save_add', 'save_edit'])) {
             $rowAssign = array_filter($input_validator, function ($column) use ($table) {
                 return Schema::hasColumn($table, $column);
             }, ARRAY_FILTER_USE_KEY);
@@ -130,18 +130,18 @@ class ExecuteApi
      */
     private function handleListAction($table, $orderby, $data, $responsesFields)
     {
-        $orderbyCol = $table.'.id';
-        $orderbyVal = 'desc';
+        $orderByCol = $table.'.id';
+        $orderByVal = 'desc';
 
         if ($orderby) {
-            list($orderbyCol, $orderbyVal) = explode(',', $orderby);
+            list($orderByCol, $orderByVal) = explode(',', $orderby);
         }
-
-        $rows = $data->orderby($orderbyCol, $orderbyVal)->get();
 
         $result = $this->makeResult(0, 'There is no data found !');
 
         $result['data'] = [];
+
+        $rows = $data->orderby($orderByCol, $orderByVal)->get();
         if ($rows) {
             $result = $this->handleRows($responsesFields, $rows);
         }
@@ -373,7 +373,7 @@ class ExecuteApi
     private function success($rows)
     {
         $result = $this->makeResult(1, 'success');
-        $rows = (array) $rows;
+        $rows = (array)$rows;
         $result = array_merge($result, $rows);
 
         return $result;
@@ -419,6 +419,7 @@ class ExecuteApi
                 $nameTmp[] = $jfAlias;
             }
         }
+
         return $nameTmp;
     }
 
@@ -502,12 +503,10 @@ class ExecuteApi
      */
     private function handleDetailsAction($data, $parameters, $posts, $responses_fields)
     {
-        $result = $this->makeResult(0, 'There is no data found !');
-
         $row = $data->first();
 
-        if (!$row) {
-            return $result;
+        if (! $row) {
+            return $this->makeResult(0, 'There is no data found !');
         }
 
         foreach ($parameters as $param) {
@@ -520,12 +519,15 @@ class ExecuteApi
             if ($param['config'] != '' && substr($param['config'], 0, 1) != '*') {
                 $value = $param['config'];
             }
+            if (Hash::check($value, $row->{$name})) {
+                continue;
+            }
 
-            if ($required && $type == 'password' && ! Hash::check($value, $row->{$name})) {
+            if ($required && $type == 'password') {
                 $this->passwordError($posts);
             }
 
-            if (! $required && $used && $value && ! Hash::check($value, $row->{$name})) {
+            if (! $required && $used && $value) {
                 $this->passwordError($posts);
             }
         }
@@ -561,10 +563,10 @@ class ExecuteApi
     private function validateParams($parameters, $table)
     {
         $posts = request()->all();
-        if (!$parameters) {
+        if (! $parameters) {
             return ['', ''];
         }
-        $type_except = ['password', 'ref', 'base64_file', 'custom', 'search'];
+        $typeExcept = ['password', 'ref', 'base64_file', 'custom', 'search'];
         $inputValidator = [];
         $dataValidation = [];
 
@@ -581,12 +583,12 @@ class ExecuteApi
             }
 
             $inputValidator[$name] = $value;
-            $dataValidation[$name] = app(ValidationRules::class)->make($param, $type_except, $table);
+            $dataValidation[$name] = app(ValidationRules::class)->make($param, $typeExcept, $table);
         }
 
         $this->doValidation($inputValidator, $dataValidation, $posts);
 
-        return [$type_except, $inputValidator];
+        return [$typeExcept, $inputValidator];
     }
 
     /**
