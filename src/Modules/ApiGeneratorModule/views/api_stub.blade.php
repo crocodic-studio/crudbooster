@@ -1,30 +1,32 @@
+{!! '<?php ' !!}
 
-namespace App\Http\Controllers;
+namespace {!! ctrlNamespace() !!};
 
 use Session;
 use Request;
 use DB;
-use crocodicstudio\crudbooster\helpers\CRUDBooster;
+use \crocodicstudio\crudbooster\controllers\ApiController;
 
-class Api{{$controller_name}}Controller extends \crocodicstudio\crudbooster\controllers\ApiController {
+class Api{{$controller_name}}Controller extends ApiController {
 
-    function __construct() {
+    public function __construct()
+    {
         $this->table = "{{$table_name}}";
         $this->permalink = "{{$permalink}}";
         $this->method_type = "{{$method_type}}";
     }
 
-    public function hook_before(&$postdata) {
+    public function hook_before(&$postdata)
+    {
         //This method will be execute before run the main process
-
     }
 
-    public function hook_query(&$query) {
+    public function hook_query(&$query)
+    {
         //This method is to customize the sql query
-
     }
 
-    public function hook_after($postdata,&$result) {
+    public function hook_after($postdata,&$result)
+    {
         //This method will be execute after run the main process
-
     }
