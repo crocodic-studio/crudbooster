@@ -351,7 +351,7 @@
                                   <input 
                                   {{ (CRUDBooster::getTypeFilter($col["field_with"]) != 'between')?"disabled":"" }}
                                   type='text' 
-                                  class='filter-value-between form-control {{ (in_array($col["type_data"],["date","time","datetime","timestamp"]))?"datepicker":"" }}' readonly placeholder='{{$col["label"]}} {{trans("crudbooster.filter_from")}}' name='filter_column[{{$col["field_with"]}}][value][]' value='<?php
+                                  class='filter-value-between form-control {{ (in_array($col["type_data"],["date","time","datetime","timestamp"])||(strpos(strtolower($col['label']),"date")!==false))?"datepicker":"" }}' readonly placeholder='{{$col["label"]}} {{trans("crudbooster.filter_from")}}' name='filter_column[{{$col["field_with"]}}][value][]' value='<?php
                                   $value = CRUDBooster::getValueFilter($col["field_with"]); 
                                   echo (CRUDBooster::getTypeFilter($col["field_with"])=='between')?$value[0]:"";
                                   ?>'>
@@ -363,7 +363,7 @@
                                   <input 
                                   {{ (CRUDBooster::getTypeFilter($col["field_with"]) != 'between')?"disabled":"" }}
                                   type='text' 
-                                  class='filter-value-between form-control {{ (in_array($col["type_data"],["date","time","datetime","timestamp"]))?"datepicker":"" }}' readonly placeholder='{{$col["label"]}} {{trans("crudbooster.filter_to")}}' name='filter_column[{{$col["field_with"]}}][value][]' value='<?php
+                                  class='filter-value-between form-control {{ (in_array($col["type_data"],["date","time","datetime","timestamp"])||(strpos(strtolower($col['label']),"date")!==false))?"datepicker":"" }}' readonly placeholder='{{$col["label"]}} {{trans("crudbooster.filter_to")}}' name='filter_column[{{$col["field_with"]}}][value][]' value='<?php
                                   $value = CRUDBooster::getValueFilter($col["field_with"]); 
                                   echo (CRUDBooster::getTypeFilter($col["field_with"])=='between')?$value[1]:"";
                                   ?>'>
