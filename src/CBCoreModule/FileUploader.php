@@ -2,6 +2,7 @@
 
 namespace crocodicstudio\crudbooster\CBCoreModule;
 
+use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;
 
@@ -32,7 +33,7 @@ class FileUploader
      */
     private function validateExtension($ext)
     {
-        if (! in_array($ext, explode(',', cbConfig('UPLOAD_TYPES')))) {
+        if (! FieldDetector::isUploadField($ext)) {
             echo "The filetype is not allowed!";
             exit;
         }
