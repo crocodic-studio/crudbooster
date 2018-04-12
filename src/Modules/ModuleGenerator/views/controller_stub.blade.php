@@ -1,10 +1,11 @@
+{!! '<?php ' !!}
 
-namespace App\Http\Controllers;
+namespace {!! ctrlNamespace() !!};
 
 use Session;
 use Request;
 use DB;
-use crocodicstudio\crudbooster\helpers\CRUDBooster, CB;
+use \crocodicstudio\crudbooster\helpers\CRUDBooster, CB;
 use \crocodicstudio\crudbooster\controllers\CBController;
 
 class Admin{{$controllerName}} extends CBController {
