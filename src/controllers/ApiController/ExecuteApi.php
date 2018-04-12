@@ -26,6 +26,11 @@ class ExecuteApi
     public function execute()
     {
         $rowApi = DB::table('cms_apicustom')->where('permalink', $this->ctrl->permalink)->first();
+        /* Check the row is exists or not */
+        $this->checkApiDefined($rowApi);
+
+        /* Method Type validation */
+        $this->validateMethodType($rowApi->method_type);
 
         $actionType = $rowApi->aksi;
         $table = $rowApi->tabel;
@@ -33,11 +38,6 @@ class ExecuteApi
         /* Do some custome pre-checking for posted data, if failed discard API execution */
         $this->doCustomePrecheck();
 
-        /* Method Type validation */
-        $this->validateMethodType($rowApi->method_type);
-
-        /* Check the row is exists or not */
-        $this->checkApiDefined($rowApi);
 
         @$parameters = unserialize($rowApi->parameters);
         list($type_except, $input_validator) = $this->validateParams($parameters, $table);
@@ -414,12 +414,11 @@ class ExecuteApi
      */
     private function validateMethodType($methodType)
     {
-        $posts = request()->all();
-
         if ($methodType && request()->isMethod($methodType)) {
             return true;
         }
 
+        $posts = request()->all();
         $result = $this->makeResult(0, "The request method is not allowed !");
         $this->show($result, $posts);
     }
