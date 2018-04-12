@@ -423,16 +423,14 @@ class ExecuteApi
      */
     private function doCustomePrecheck()
     {
-        $posts = request()->all();
-        $this->ctrl->hookValidate($posts);
+        $this->ctrl->hookValidate();
 
         if (! $this->ctrl->validate) {
             return true;
         }  // hook have to return true
 
         $result = $this->makeResult(0, 'Failed to execute API !');
-
-        $this->show($result, $posts);
+        $this->show($result, request()->all());
     }
 
     /**
@@ -531,7 +529,6 @@ class ExecuteApi
 
     /**
      * @param $parameters
-     * @param $posts
      * @param $table
      * @return array
      */
