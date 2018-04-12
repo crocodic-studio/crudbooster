@@ -118,19 +118,13 @@ class ExecuteApi
      */
     private function handleListAction($table, $data, $responsesFields)
     {
-        $orderBy = request('orderby', $table.'.id,desc');
-
-        list($orderByCol, $orderByVal) = explode(',', $orderBy);
-
-        $rows = $data->orderby($orderByCol, $orderByVal)->get();
-        if (! $rows) {
-            $result = $this->makeResult(0, 'There is no data found !');
-            $result['data'] = [];
-
-            return $result;
+        $rows = $this->sortRows($table, $data);
+        if ($rows) {
+            return $this->handleRows($responsesFields, $rows);
         }
-
-        return $this->handleRows($responsesFields, $rows);
+        $result = $this->makeResult(0, 'No data found !');
+        $result['data'] = [];
+        $this->show($result, request()->all());
     }
 
     /**
@@ -283,9 +277,8 @@ class ExecuteApi
     /**
      * @param $rows
      * @param $responsesFields
-     * @param $row
      */
-    private function handleFile($rows, $responsesFields, $row)
+    private function handleFile($rows, $responsesFields)
     {
         foreach ($rows as $k => $v) {
             if (FieldDetector::isUploadField(\File::extension($v))) {
@@ -293,7 +286,7 @@ class ExecuteApi
             }
 
             if (! in_array($k, $responsesFields)) {
-                unset($row->$k);
+                unset($rows->$k);
             }
         }
     }
@@ -494,7 +487,7 @@ class ExecuteApi
             }
         }
 
-        $this->handleFile($row, $responsesFields, $row);
+        $this->handleFile($row, $responsesFields);
 
         return $this->success($row);
     }
@@ -594,5 +587,21 @@ class ExecuteApi
         }
 
         return $result;
+    }
+
+    /**
+     * @param $table
+     * @param $data
+     * @return mixed
+     */
+    private function sortRows($table, $data)
+    {
+        $orderBy = request('orderby', $table.'.id,desc');
+
+        list($orderByCol, $orderByVal) = explode(',', $orderBy);
+
+        $rows = $data->orderby($orderByCol, $orderByVal)->get();
+
+        return $rows;
     }
 }
