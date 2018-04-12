@@ -242,18 +242,8 @@ class ExecuteApi
      */
     private function handleRows($responsesFields, $rows)
     {
-        $uploadsFormatCandidate = explode(',', cbConfig("UPLOAD_TYPES"));
         foreach ($rows as &$row) {
-            foreach ($row as $k => $v) {
-                $ext = \File::extension($v);
-                if (in_array($ext, $uploadsFormatCandidate)) {
-                    $row->$k = asset($v);
-                }
-
-                if (! in_array($k, $responsesFields)) {
-                    unset($row[$k]);
-                }
-            }
+            $this->handleFile($row, $responsesFields);
         }
 
         $result = $this->makeResult(1, 'success');
