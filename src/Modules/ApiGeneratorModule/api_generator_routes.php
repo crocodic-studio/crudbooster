@@ -16,7 +16,7 @@ Route::group([
 ], function () {
     Route::get('api-generator/', ['uses' => 'AdminApiGeneratorController@getIndex', 'as' => 'AdminApiGeneratorControllerGetIndex']);
 
-    Route::get('api-generator/download-postman', ['uses' => 'AdminApiGeneratorController@getDownloadPostman', 'as' => 'AdminApiGeneratorControllerGetDownloadPostman']);
+    Route::get('api-generator/download-postman', ['uses' => 'DownloadPostman@getDownloadPostman', 'as' => 'AdminApiGeneratorControllerGetDownloadPostman']);
     Route::get('api-generator/screet-key', ['uses' => 'AdminApiKeyController@getSecretKey', 'as' => 'AdminApiGeneratorControllerGetScreetKey']);
     Route::get('api-generator/generator', ['uses' => 'AdminApiGeneratorController@getGenerator', 'as' => 'AdminApiGeneratorControllerGetGenerator']);
     Route::get('api-generator/edit-api/{id?}', ['uses' => 'AdminApiGeneratorController@getEditApi', 'as' => 'AdminApiGeneratorControllerGetEditApi']);
