@@ -141,13 +141,13 @@ class AdminApiGeneratorController extends CBController
         $_data['permalink'] = g('permalink');
         $_data['method_type'] = g('method_type');
 
-        $json = $this->json(g('params_name'), g('params_type'), g('params_config'), g('params_required'), g('params_used'));
+        $json = $this->json();
 
         $_data['parameters'] = serialize(array_filter($json));
 
         $_data['sql_where'] = g('sql_where');
 
-        $json = $this->json2(g('responses_name'), g('responses_type'), g('responses_subquery'), g('responses_used'));
+        $json = $this->json2();
         $json = array_filter($json);
         $_data['responses'] = serialize($json);
         $_data['keterangan'] = g('keterangan');
@@ -171,16 +171,16 @@ class AdminApiGeneratorController extends CBController
     }
 
     /**
-     * @param $params_name
-     * @param $params_type
-     * @param $params_config
-     * @param $params_required
-     * @param $params_used
-     * @param $json
      * @return array
      */
-    private function json($params_name, $params_type, $params_config, $params_required, $params_used, $json)
+    private function json()
     {
+        $params_name = g('params_name');
+        $params_type = g('params_type');
+        $params_config = g('params_config');
+        $params_required = g('params_required');
+        $params_used = g('params_used');
+
         $json = [];
         for ($i = 0, $_count = count($params_name); $i <= $_count; $i++) {
             if (! $params_name[$i]) {
@@ -199,14 +199,15 @@ class AdminApiGeneratorController extends CBController
     }
 
     /**
-     * @param $responses_name
-     * @param $responses_type
-     * @param $responses_subquery
-     * @param $responses_used
      * @return array
      */
-    private function json2($responses_name, $responses_type, $responses_subquery, $responses_used)
+    private function json2()
     {
+        $responses_name = g('responses_name');
+        $responses_type = g('responses_type');
+        $responses_subquery = g('responses_subquery');
+        $responses_used = g('responses_used');
+
         $json = [];
         for ($i = 0, $_count = count($responses_name); $i <= $_count; $i++) {
             if (! $responses_name[$i]) {
@@ -242,7 +243,6 @@ class AdminApiGeneratorController extends CBController
     private function generateAPI($controller_name, $table_name, $permalink, $method_type = 'post')
     {
         $php = view('CbApiGen::api_stub', compact('controller_name', 'table_name', 'permalink', 'method_type'))->render();
-        $path = controllers_dir();
-        file_put_contents($path.'Api'.$controller_name.'Controller.php', $php);
+        file_put_contents(controllers_dir().'Api'.$controller_name.'Controller.php', $php);
     }
 }
