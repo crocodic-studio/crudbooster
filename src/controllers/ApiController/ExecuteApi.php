@@ -25,25 +25,24 @@ class ExecuteApi
 
     public function execute()
     {
-        $row_api = DB::table('cms_apicustom')->where('permalink', $this->ctrl->permalink)->first();
+        $rowApi = DB::table('cms_apicustom')->where('permalink', $this->ctrl->permalink)->first();
 
-        $actionType = $row_api->aksi;
-        $table = $row_api->tabel;
+        $actionType = $rowApi->aksi;
+        $table = $rowApi->tabel;
 
         /* Do some custome pre-checking for posted data, if failed discard API execution */
         $this->doCustomePrecheck();
 
         /* Method Type validation */
-        $methodType = $row_api->method_type;
-        $this->validateMethodType($methodType);
+        $this->validateMethodType($rowApi->method_type);
 
         /* Check the row is exists or not */
-        $this->checkApiDefined($row_api);
+        $this->checkApiDefined($rowApi);
 
-        @$parameters = unserialize($row_api->parameters);
+        @$parameters = unserialize($rowApi->parameters);
         list($type_except, $input_validator) = $this->validateParams($parameters, $table);
 
-        @$responses = unserialize($row_api->responses);
+        @$responses = unserialize($rowApi->responses);
         $responses_fields = $this->prepareResponses($responses);
 
         $posts = request()->all();
@@ -58,8 +57,8 @@ class ExecuteApi
             $this->filterRows($data, $parameters, $posts, $table, $type_except);
 
             //IF SQL WHERE IS NOT NULL
-            if ($row_api->sql_where) {
-                $data->whereraw($row_api->sql_where);
+            if ($rowApi->sql_where) {
+                $data->whereraw($rowApi->sql_where);
             }
 
             $this->ctrl->hookQuery($data);
