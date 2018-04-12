@@ -8,7 +8,7 @@ use DB;
 use \crocodicstudio\crudbooster\helpers\CRUDBooster, CB;
 use \crocodicstudio\crudbooster\controllers\CBController;
 
-class Admin{{$controllerName}} extends CBController {
+class {{$controllerName}} extends CBController {
 
     public function cbInit() {
         # START CONFIGURATION DO NOT REMOVE THIS LINE

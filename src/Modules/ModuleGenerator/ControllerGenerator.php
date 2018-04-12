@@ -16,9 +16,9 @@ class ControllerGenerator
 
         $php = self::generateControllerCode($table, $controllerName);
         //create file controller
-        FileManipulator::putCtrlContent('Admin'.$controllerName, $php);
+        FileManipulator::putCtrlContent($controllerName, $php);
 
-        return 'Admin'.$controllerName;
+        return $controllerName;
     }
 
     /**
@@ -43,7 +43,7 @@ class ControllerGenerator
             $controllerName = str_replace(' ', '', $controllerName).'Controller';
         }
 
-        return $controllerName;
+        return 'Admin'.$controllerName;
     }
 
     /**
