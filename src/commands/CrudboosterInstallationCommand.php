@@ -43,7 +43,7 @@ class CrudboosterInstallationCommand extends Command
             $this->info('Sorry unfortunately your system is not meet with our requirements !');
             $printer->printFooter(false);
             $this->info('--');
-            exit;
+            return;
         }
 
         $this->info('Installing: ');

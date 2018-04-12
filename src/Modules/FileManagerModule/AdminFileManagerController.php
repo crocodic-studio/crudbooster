@@ -16,7 +16,6 @@ class AdminFileManagerController extends CBController
 
     public function getIndex()
     {
-
         $path = request('path') ? base64_decode(request('path')) : '';
 
         if (strpos($path, '..') || $path == '.' || strpos($path, '/.')) {
