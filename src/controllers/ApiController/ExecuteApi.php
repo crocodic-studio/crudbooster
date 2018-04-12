@@ -542,15 +542,16 @@ class ExecuteApi
         $inputValidator = [];
         $dataValidation = [];
 
+        $parameters = array_filter($parameters, function ($param){
+            return !(is_string($param['config'])&& !starts_with($param['config'], '*'));
+        });
+
         foreach ($parameters as $param) {
             $name = $param['name'];
             $value = $posts[$name];
             $used = $param['used'];
 
             if ($used == 0) {
-                continue;
-            }
-            if ($param['config'] && substr($param['config'], 0, 1) != '*') {
                 continue;
             }
 
