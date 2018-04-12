@@ -24,13 +24,12 @@ class RequirementChecker
         $this->console->info('System Requirements Checking:');
         $this->checkLaravelVersion();
         $this->checkPHPversion();
-        $this->chechExtension('mbstring');
-        $this->chechExtension('openssl');
-        $this->chechExtension('pdo');
-        $this->chechExtension('tokenizer');
-        $this->chechExtension('xml');
-        $this->chechExtension('gd');
-        $this->chechExtension('fileinfo');
+
+        $extensions = ['mbstring', 'openssl', 'pdo', 'tokenizer', 'xml', 'gd', 'fileinfo',];
+        array_walk($extensions, function ($ext){
+            $this->chechExtension($ext);
+        });
+
         $this->checkWritableFolders();
 
         return $this->requirements;
@@ -67,7 +66,6 @@ class RequirementChecker
         }
         $this->console->info('public dir is writable: [Bad]');
         return $this->requirements = false;
-
     }
 
     /**
