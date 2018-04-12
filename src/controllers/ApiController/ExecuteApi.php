@@ -32,32 +32,28 @@ class ExecuteApi
         /* Method Type validation */
         $this->validateMethodType($rowApi->method_type);
 
-        $actionType = $rowApi->aksi;
-        $table = $rowApi->tabel;
-
         /* Do some custome pre-checking for posted data, if failed discard API execution */
         $this->doCustomePrecheck();
 
+        $table = $rowApi->tabel;
 
         @$parameters = unserialize($rowApi->parameters);
         list($type_except, $input_validator) = $this->validateParams($parameters, $table);
-
-        @$responses = unserialize($rowApi->responses);
-        $responses_fields = $this->prepareResponses($responses);
 
         $posts = request()->all();
         $this->ctrl->hookBefore($posts);
 
 
         unset($posts['limit'], $posts['offset'], $posts['orderby']);
-
+        $actionType = $rowApi->aksi;
         if (in_array($actionType, ['list', 'detail', 'delete'])) {
+            @$responses = unserialize($rowApi->responses);
+            $responses_fields = $this->prepareResponses($responses);
             $data = $this->fetchDataFromDB($table, $responses, $responses_fields, $parameters, $posts);
 
             $this->filterRows($data, $parameters, $posts, $table, $type_except);
 
-            //IF SQL WHERE IS NOT NULL
-            if ($rowApi->sql_where) {
+            if (!is_null($rowApi->sql_where)) {
                 $data->whereraw($rowApi->sql_where);
             }
 
