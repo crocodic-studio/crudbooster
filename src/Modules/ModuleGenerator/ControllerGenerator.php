@@ -28,22 +28,22 @@ class ControllerGenerator
      */
     private static function getControllerName($table, $name)
     {
-        $controllername = ucwords(str_replace('_', ' ', $table));
-        $controllername = str_replace(' ', '', $controllername).'Controller';
+        $controllerName = ucwords(str_replace('_', ' ', $table));
+        $controllerName = str_replace(' ', '', $controllerName).'Controller';
         if ($name) {
-            $controllername = ucwords(str_replace(['_', '-'], ' ', $name));
-            $controllername = str_replace(' ', '', $controllername).'Controller';
+            $controllerName = ucwords(str_replace(['_', '-'], ' ', $name));
+            $controllerName = str_replace(' ', '', $controllerName).'Controller';
         }
 
-        $countSameFile = count(glob(controllers_dir().'Admin'.$controllername.'.php'));
+        $countSameFile = count(glob(controllers_dir().'Admin'.$controllerName.'.php'));
 
         if ($countSameFile != 0) {
             $suffix = $countSameFile;
-            $controllername = ucwords(str_replace(['_', '-'], ' ', $name)).$suffix;
-            $controllername = str_replace(' ', '', $controllername).'Controller';
+            $controllerName = ucwords(str_replace(['_', '-'], ' ', $name)).$suffix;
+            $controllerName = str_replace(' ', '', $controllerName).'Controller';
         }
 
-        return $controllername;
+        return $controllerName;
     }
 
     /**
@@ -62,7 +62,7 @@ class ControllerGenerator
 
         $data = compact('controllerName', 'table', 'pk', 'coloms', 'cols', 'formArrayString', 'joinList');
 
-        return '<?php '.view('CbModulesGen::controller_stub', $data)->render();
+        return view('CbModulesGen::controller_stub', $data)->render();
     }
 
     /**
