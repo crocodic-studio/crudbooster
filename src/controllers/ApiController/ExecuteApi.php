@@ -414,13 +414,12 @@ class ExecuteApi
      */
     private function validateMethodType($methodType)
     {
-        if ($methodType && request()->isMethod($methodType)) {
+        if (!is_null($methodType) && request()->isMethod($methodType)) {
             return true;
         }
 
-        $posts = request()->all();
         $result = $this->makeResult(0, "The request method is not allowed !");
-        $this->show($result, $posts);
+        $this->show($result, request()->all());
     }
 
     /**
@@ -446,15 +445,13 @@ class ExecuteApi
      */
     private function checkApiDefined($rowApi)
     {
-        $posts = request()->all();
-
-        if ($rowApi) {
+        if (!is_null($rowApi)) {
             return true;
         }
 
         $msg = 'Sorry this API is no longer available, maybe has changed by admin, or please make sure api url is correct.';
         $result = $this->makeResult(0, $msg);
-        $this->show($result, $posts);
+        $this->show($result, request()->all());
     }
 
     /**
