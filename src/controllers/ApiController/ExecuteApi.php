@@ -298,13 +298,12 @@ class ExecuteApi
     private function handleFile($rows, $responsesFields, $row)
     {
         foreach ($rows as $k => $v) {
-            $ext = \File::extension($v);
-            if (FieldDetector::isUploadField($ext)) {
+            if (FieldDetector::isUploadField(\File::extension($v))) {
                 $rows->$k = asset($v);
             }
 
             if (! in_array($k, $responsesFields)) {
-                unset($row[$k]);
+                unset($row->$k);
             }
         }
     }
