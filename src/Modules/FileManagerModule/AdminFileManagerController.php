@@ -4,6 +4,7 @@ namespace crocodicstudio\crudbooster\Modules\FileManagerModule;
 
 use crocodicstudio\crudbooster\controllers\CBController;
 use crocodicstudio\crudbooster\helpers\CRUDBooster;
+use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;
 
@@ -33,10 +34,8 @@ class AdminFileManagerController extends CBController
 
     public function postCreateDirectory()
     {
-        $path = base64_decode(request('path'));
-        $path = ($path) ?: 'uploads';
-        $name = request('name');
-        $name = str_slug($name, '_');
+        $path = (base64_decode(request('path'))) ?: 'uploads';
+        $name = str_slug(request('name'), '_');
         Storage::makeDirectory($path.'/'.$name);
 
         backWithMsg('The directory has been created!');
@@ -44,7 +43,6 @@ class AdminFileManagerController extends CBController
 
     public function postUpload()
     {
-        $allowedExtension = explode(',', strtolower(cbConfig('UPLOAD_TYPES')));
         $path = request('path') ? base64_decode(request('path')) : 'uploads';
         $file = Request::file('userfile');
         if (! $file) {
@@ -52,9 +50,8 @@ class AdminFileManagerController extends CBController
         }
 
         $fileName = $file->getClientOriginalName();
-        $isAllowed = in_array($file->getClientOriginalExtension(), $allowedExtension);
 
-        if (! $isAllowed) {
+        if (! FieldDetector::isUploadField($file->getClientOriginalExtension())) {
             backWithMsg('The file '.$fileName.' type is not allowed!', 'warning');
         }
 
