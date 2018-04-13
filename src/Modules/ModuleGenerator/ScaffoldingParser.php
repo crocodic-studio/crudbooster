@@ -64,12 +64,11 @@ class ScaffoldingParser
      */
     private static function formOptions($type, $colsItem)
     {
+        if ($type !== 'form') {
+            return $colsItem;
+        }
         foreach ($colsItem as $i => $form) {
-            if ($type !== 'form') {
-                continue;
-            }
-
-            if ($form['options']) {
+            if ($form['options'] !== '[]') {
                 @eval("\$options = $form[options];");
                 @$colsItem[$i]['options'] = $options;
             } else {
@@ -103,7 +102,7 @@ class ScaffoldingParser
         $colInnerItem = [];
         foreach ($split as $s) {
             if (strpos($s, 'options') !== false) {
-                $colInnerItem['options'] = trim(str_replace("'options'=>", "", $s), '\'\"\]\[');
+                $colInnerItem['options'] = trim(str_replace("'options'=>", "", $s));
                 continue;
             }
             if (strpos($s, 'callback') !== false) {
