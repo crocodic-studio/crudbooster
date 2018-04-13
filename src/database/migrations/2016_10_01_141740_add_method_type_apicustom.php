@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class AddMethodTypeApicustom extends Migration
 {
@@ -14,7 +14,7 @@ class AddMethodTypeApicustom extends Migration
     {
         Schema::table('cms_apicustom', function (Blueprint $table) {
             //
-            $table->string('method_type',25)->nullable();
+            $table->string('method_type', 25)->nullable();
         });
     }
 

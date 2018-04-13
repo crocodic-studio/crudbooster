@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class AddTableCmsNotifications extends Migration
 {
@@ -20,7 +20,7 @@ class AddTableCmsNotifications extends Migration
             $table->string('url')->nullable();
             $table->boolean('is_read')->nullable();
 
-			$table->timestamps();
+            $table->timestamps();
         });
     }
 

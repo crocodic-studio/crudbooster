@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class AddStatusCmsUsers extends Migration
 {
@@ -14,7 +14,7 @@ class AddStatusCmsUsers extends Migration
     {
         Schema::table('cms_users', function (Blueprint $table) {
             //
-            $table->string('status',50)->nullable();
+            $table->string('status', 50)->nullable();
         });
     }
 

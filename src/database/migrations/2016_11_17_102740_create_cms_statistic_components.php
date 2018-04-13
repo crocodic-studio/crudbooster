@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateCmsStatisticComponents extends Migration
 {
@@ -17,7 +17,7 @@ class CreateCmsStatisticComponents extends Migration
             $table->integer('id_cms_statistics')->nullable();
             $table->string('componentID')->nullable();
             $table->string('component_name')->nullable();
-            $table->string('area_name',55)->nullable();
+            $table->string('area_name', 55)->nullable();
             $table->integer('sorting')->nullable();
             $table->string('name')->nullable();
             $table->longtext('config')->nullable();

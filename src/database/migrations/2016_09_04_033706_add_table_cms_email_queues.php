@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class AddTableCmsEmailQueues extends Migration
 {
@@ -19,13 +19,13 @@ class AddTableCmsEmailQueues extends Migration
             $table->string('email_recipient')->nullable();
             $table->string('email_from_email')->nullable();
             $table->string('email_from_name')->nullable();
-            $table->string('email_cc_email')->nullable();            
+            $table->string('email_cc_email')->nullable();
             $table->string('email_subject')->nullable();
             $table->text('email_content')->nullable();
             $table->text('email_attachments')->nullable();
             $table->boolean('is_sent')->nullable();
-			
-			$table->timestamps();
+
+            $table->timestamps();
         });
     }
 
