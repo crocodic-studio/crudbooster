@@ -114,7 +114,7 @@ class ControllerGenerator
         }
         $joincols = \Schema::getColumnListing($jointable);
         $joinname = DbInspector::colName($joincols);
-        $cols[] = ['label' => $label, 'name' => $jointable.$joinname];
+        $cols[] = ['label' => $label, 'name' => "'".$jointable.$joinname."'"];
         $jointablePK = DbInspector::findPk($jointable);
         $joinList[] = [
             'table' => $jointable,
