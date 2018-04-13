@@ -47,16 +47,17 @@ class Step3Handler
 
         //ARRANGE THE FULL SCRIPT
         $fileContent = $top."\n\n";
-        $fileContent .= str_repeat(' ', 12)."# START FORM DO NOT REMOVE THIS LINE\n";
+        $indent = str_repeat(' ', 8);
+        $fileContent .= $indent."# START FORM DO NOT REMOVE THIS LINE\n";
         $fileContent .= $scripts;
-        $fileContent .= "\n".str_repeat(' ', 12)."# END FORM DO NOT REMOVE THIS LINE\n\n";
+        $fileContent .= "\n".$indent."# END FORM DO NOT REMOVE THIS LINE\n\n";
 
         //CREATE A BACKUP SCAFFOLDING TO OLD TAG
         if ($currentScaffold) {
             $fileContent = $this->backupOldTagScaffold($fileContent, $currentScaffold);
         }
 
-        $fileContent .= str_repeat(' ', 12).($bottom);
+        $fileContent .= $indent.($bottom);
 
         //CREATE FILE CONTROLLER
         FileManipulator::putCtrlContent($controller, $fileContent);
@@ -79,7 +80,8 @@ class Step3Handler
         $validation = $post['validation'];
 
         $scriptForm = [];
-        $scriptForm[] = str_repeat(' ', 12).'$this->form = [];';
+        $indent = str_repeat(' ', 12);
+        $scriptForm[] = $indent.'$this->form = [];';
 
         foreach ($post['label'] as $i => $label) {
             if ($label == '') {
@@ -101,7 +103,7 @@ class Step3Handler
                 $form = $this->parseComponentOptions($post, $info, $form);
             }
 
-            $scriptForm[] = str_repeat(' ', 12).'$this->form[] = '.FileManipulator::stringify($form, str_repeat(' ', 12)).';';
+            $scriptForm[] = $indent.'$this->form[] = '.FileManipulator::stringify($form, $indent).';';
         }
 
         return implode("\n", $scriptForm);
