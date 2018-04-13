@@ -4,12 +4,12 @@ namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
 class FileManipulator
 {
-    static function putCtrlContent($ctrl, $fileContent)
+    public static function putCtrlContent($ctrl, $fileContent)
     {
         return file_put_contents(controller_path($ctrl), $fileContent);
     }
 
-    static function readCtrlContent($ctrl)
+    public static function readCtrlContent($ctrl)
     {
         return file_get_contents(controller_path($ctrl));
     }
