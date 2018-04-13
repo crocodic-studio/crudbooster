@@ -34,7 +34,7 @@
 								@endif
 								<div class="col-sm-10">
 									@if($col['type']=='text')
-									<input id='{{$name_column}}' type='text' {{ ($col['max'])?"maxlength='$col[max]'":"" }} name='child-{{$col["name"]}}' class='form-control {{$col['required']?"required":""}}' 										
+									<input id='{{$name_column}}' type='text' {{ ($col['max'])?"maxlength='".$col['max']."'":"" }} name='child-{{$col["name"]}}' class='form-control {{$col['required']?"required":""}}'
 										{{($col['readonly']===true)?"readonly":""}} 
 										/>
 									@elseif($col['type']=='radio')
@@ -118,7 +118,7 @@
 									</div><!-- /.modal -->
 
 									@elseif($col['type']=='number')
-									<input id='{{$name_column}}' type='number' {{ ($col['min'])?"min='$col[min]'":"" }} {{ ($col['max'])?"max='$col[max]'":"" }} name='child-{{$col["name"]}}' class='form-control {{$col['required']?"required":""}}' 										
+									<input id='{{$name_column}}' type='number' {{ ($col['min'])?"min='".$col['min']."'":"" }} {{ ($col['max'])?"max='$col[max]'":"" }} name='child-{{$col["name"]}}' class='form-control {{$col['required']?"required":""}}'
 										{{($col['readonly']===true)?"readonly":""}} 
 										/>
 									@elseif($col['type']=='textarea')		
