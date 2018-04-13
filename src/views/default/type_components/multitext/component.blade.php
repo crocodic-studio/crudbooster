@@ -1,10 +1,10 @@
 <div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
-	<label class='control-label col-sm-2'>{{$form['label']}} {!!($required)?"<span class='text-danger' title='This field is required'>*</span>":"" !!}</label>
+	<label class='control-label col-sm-2'>{{$form['label']}} {!!($required)?"<span class='text-danger' title='{!! trans('crudbooster.this_field_is_required') !!}'>*</span>":"" !!}</label>
 
 	<div class="{{$col_width?:'col-sm-10'}} input_fields_wrap {{$name}}">
 
 	 <div class="input-group" > 
-     	<input type='text' title="{{$form['label']}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} {{$validation['max']?"maxlength=$validation[max]":""}} class='form-control {{$name}} first_value' name="{{$name}}[]" id="{{$name}}" value='{{$value}}'/> <span class="input-group-addon" style="padding: 1px;"><button class="add_field_button {{$name}}  btn btn-danger  btn-xs" ><i class='fa fa-plus'></i></button></span>
+     	<input type='text' title="{{$form['label']}}" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} {{$validation['max']?"maxlength=".$validation['max']:""}} class='form-control {{$name}} first_value' name="{{$name}}[]" id="{{$name}}" value='{{$value}}'/> <span class="input-group-addon" style="padding: 1px;"><button class="add_field_button {{$name}}  btn btn-danger  btn-xs" ><i class='fa fa-plus'></i></button></span>
       </div>
 				
 	<div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
@@ -26,7 +26,7 @@
         e.preventDefault();
         if(count_{{$name}} < max_fields_{{$name}} ){ //max input box allowed
             count_{{$name}}++; //text box increment
-            $(wrapper_{{$name}}).append('<div><input class="form-control" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} {{$validation['max']?"maxlength=$validation[max]":""}} type="text" name="{{$name}}[]"/><a href="#" class="remove_field {{$name}}"><i class="fa fa-minus"></a></div>'); //add input box
+            $(wrapper_{{$name}}).append('<div><input class="form-control" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} {{$validation['max']?"maxlength=".$validation['max']:""}} type="text" name="{{$name}}[]"/><a href="#" class="remove_field {{$name}}"><i class="fa fa-minus"></a></div>'); //add input box
         }
     });
     
@@ -39,7 +39,7 @@
 		val=val.split("|");
 		$(".first_value").filter(".{{$name}}").val(val[0]);
 		for(i=1;i<val.length;i++){
-			 $(wrapper_{{$name}}).append(' <div > <input class="form-control" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} {{$validation['max']?"maxlength=$validation[max]":""}}  type="text" name="{{$name}}[]" value="'+ val[i] +'"/><a href="#" class="remove_field {{$name}}"><i class="fa fa-minus"></a></div>'); //add input box
+			 $(wrapper_{{$name}}).append(' <div > <input class="form-control" {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} {{$validation['max']?"maxlength=".$validation['max']:""}}  type="text" name="{{$name}}[]" value="'+ val[i] +'"/><a href="#" class="remove_field {{$name}}"><i class="fa fa-minus"></a></div>'); //add input box
 		}
 	}
 	 Load();
