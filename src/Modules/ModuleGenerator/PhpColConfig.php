@@ -27,22 +27,36 @@ class PhpColConfig
             }
 
             $colProperties = ["'label' => '$label'", "'name' => '{$name[$i]}'"];
-            if ($isImage[$i]) {
-                $colProperties[] = '"image" => true ';
-            }
-            if ($isDownload[$i]) {
-                $colProperties[] = '"download" => true';
-            }
-            if ($callback[$i]) {
-                $colProperties[] = '"callback" => function($row) {'.$callback[$i].'}';
-            }
-            if ($width[$i]) {
-                $colProperties[] = "'width' => '$width[$i]'";
-            }
+            $colProperties = self::addProperties($colProperties, $isImage[$i], $isDownload[$i], $callback[$i], $width[$i]);
 
             $columnScript[] = $indent.'$this->col[] = ['.implode(", ", $colProperties).'];';
         }
         return implode("\n", $columnScript);
     }
 
+    /**
+     * @param $colProperties
+     * @param $isImage
+     * @param $isDownload
+     * @param $callback
+     * @param $width
+     * @return array
+     */
+    private static function addProperties($colProperties, $isImage, $isDownload, $callback, $width)
+    {
+        if ($isImage) {
+            $colProperties[] = '"image" => true ';
+        }
+        if ($isDownload) {
+            $colProperties[] = '"download" => true';
+        }
+        if ($callback) {
+            $colProperties[] = '"callback" => function($row) {'.$callback.'}';
+        }
+        if ($width) {
+            $colProperties[] = "'width' => '$width'";
+        }
+
+        return $colProperties;
+    }
 }
