@@ -42,30 +42,12 @@ class DownloadPostman extends CBController
     {
         $items = [];
         foreach ($this->table()->orderby('nama', 'asc')->get() as $api) {
-            $parameters = unserialize($api->parameters);
-            $formdata = [];
-            $httpbuilder = [];
-            if ($parameters) {
-                foreach ($parameters as $p) {
-                    $enabled = ($p['used'] == 0) ? false : true;
-                    $name = $p['name'];
-                    $httpbuilder[$name] = '';
-                    if ($enabled) {
-                        $formdata[] = ['key' => $name, 'value' => '', 'type' => 'text', 'enabled' => $enabled];
-                    }
-                }
-            }
-
-            if (strtolower($api->method_type) == 'get' && $httpbuilder) {
-                $httpbuilder = "?".http_build_query($httpbuilder);
-            } else {
-                $httpbuilder = '';
-            }
+            list($httpbuilder, $formdata) = $this->processParams($api->parameters);
 
             $items[] = [
                 'name' => $api->nama,
                 'request' => [
-                    'url' => url('api/'.$api->permalink).$httpbuilder,
+                    'url' => url('api/'.$api->permalink).$this->httpBuilder($api, $httpbuilder),
                     'method' => $api->method_type ?: 'GET',
                     'header' => [],
                     'body' => [
@@ -78,5 +60,42 @@ class DownloadPostman extends CBController
         }
 
         return $items;
+    }
+
+    /**
+     * @param $api
+     * @param $httpbuilder
+     * @return string
+     */
+    private function httpBuilder($api, $httpbuilder)
+    {
+        if (strtolower($api->method_type) == 'get' && $httpbuilder) {
+            return "?".http_build_query($httpbuilder);
+        }
+        return '';
+    }
+
+    /**
+     * @param $parameters
+     * @return array
+     */
+    private function processParams($parameters)
+    {
+        $parameters = unserialize($parameters);
+        $formdata = [];
+        $httpbuilder = [];
+        if (! $parameters) {
+            return [$httpbuilder, $formdata];
+        }
+        foreach ($parameters as $p) {
+            $enabled = ($p['used'] == 0) ? false : true;
+            $name = $p['name'];
+            $httpbuilder[$name] = '';
+            if ($enabled) {
+                $formdata[] = ['key' => $name, 'value' => '', 'type' => 'text', 'enabled' => $enabled];
+            }
+        }
+
+        return [$httpbuilder, $formdata];
     }
 }
