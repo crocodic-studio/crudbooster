@@ -1,12 +1,10 @@
 <?php namespace crocodicstudio\crudbooster\controllers;
 
-use crocodicstudio\crudbooster\controllers\Controller;
-
-use Storage;
-use Response;
-use Image;
 use File;
+use Image;
 use Request;
+use Response;
+use Storage;
 
 class FileController extends Controller
 {

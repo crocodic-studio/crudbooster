@@ -1,13 +1,10 @@
 <?php namespace crocodicstudio\crudbooster\controllers;
 
-use crocodicstudio\crudbooster\controllers\Controller;
+use CRUDBooster;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use CRUDBooster;
 
 class AdminController extends CBController
 {
@@ -62,9 +59,9 @@ class AdminController extends CBController
     {
 
         $validator = Validator::make(Request::all(), [
-                'email' => 'required|email|exists:'.config('crudbooster.USER_TABLE'),
-                'password' => 'required',
-            ]);
+            'email' => 'required|email|exists:'.config('crudbooster.USER_TABLE'),
+            'password' => 'required',
+        ]);
 
         if ($validator->fails()) {
             $message = $validator->errors()->all();
@@ -116,8 +113,8 @@ class AdminController extends CBController
     public function postForgot()
     {
         $validator = Validator::make(Request::all(), [
-                'email' => 'required|email|exists:'.config('crudbooster.USER_TABLE'),
-            ]);
+            'email' => 'required|email|exists:'.config('crudbooster.USER_TABLE'),
+        ]);
 
         if ($validator->fails()) {
             $message = $validator->errors()->all();

@@ -1,19 +1,10 @@
 <?php namespace crocodicstudio\crudbooster\controllers;
 
-use crocodicstudio\crudbooster\controllers\Controller;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\PDF;
-use Illuminate\Support\Facades\Excel;
 use CRUDBooster;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Excel;
+use Illuminate\Support\Facades\PDF;
+use Illuminate\Support\Facades\Request;
 
 class StatisticBuilderController extends CBController
 {
@@ -168,9 +159,9 @@ class StatisticBuilderController extends CBController
     public function postUpdateAreaComponent()
     {
         DB::table('cms_statistic_components')->where('componentID', Request::get('componentid'))->update([
-                'sorting' => Request::get('sorting'),
-                'area_name' => Request::get('areaname'),
-            ]);
+            'sorting' => Request::get('sorting'),
+            'area_name' => Request::get('areaname'),
+        ]);
 
         return response()->json(['status' => true]);
     }
@@ -196,9 +187,9 @@ class StatisticBuilderController extends CBController
     public function postSaveComponent()
     {
         DB::table('cms_statistic_components')->where('componentID', Request::get('componentid'))->update([
-                'name' => Request::get('name'),
-                'config' => json_encode(Request::get('config')),
-            ]);
+            'name' => Request::get('name'),
+            'config' => json_encode(Request::get('config')),
+        ]);
 
         return response()->json(['status' => true]);
     }

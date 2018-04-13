@@ -1,19 +1,11 @@
 <?php namespace crocodicstudio\crudbooster\controllers;
 
-use crocodicstudio\crudbooster\controllers\Controller;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\PDF;
-use Illuminate\Support\Facades\Excel;
 use CRUDbooster;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Excel;
+use Illuminate\Support\Facades\PDF;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Route;
 
 class ApiCustomController extends CBController
 {
@@ -196,11 +188,11 @@ class ApiCustomController extends CBController
         $token = bin2hex($token);
 
         $id = DB::table('cms_apikey')->insertGetId([
-                'screetkey' => $token,
-                'created_at' => date('Y-m-d H:i:s'),
-                'status' => 'active',
-                'hit' => 0,
-            ]);
+            'screetkey' => $token,
+            'created_at' => date('Y-m-d H:i:s'),
+            'status' => 'active',
+            'hit' => 0,
+        ]);
 
         $response = [];
         $response['key'] = $token;
