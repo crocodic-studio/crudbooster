@@ -2,8 +2,6 @@
 
 namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
-use crocodicstudio\crudbooster\helpers\DbInspector;
-
 class Step2Handler
 {
     public function showForm($id)
@@ -20,11 +18,6 @@ class Step2Handler
         //$data['table_list'] = \crocodicstudio\crudbooster\helpers\CRUDBooster::listCbTables();
         $data['cols'] = ScaffoldingParser::parse($controllerCode, 'col');
 
-
-        /*foreach($this->hooks as $hook){
-            $data[$hook] = FileManipulator::readMethodContent($controllerCode, $hook);
-        }*/
-
         return view('CbModulesGen::step2', $data);
     }
 
@@ -35,10 +28,6 @@ class Step2Handler
         $newCode = PhpColConfig::makeColumnPhpCode();
         $code = FileManipulator::readCtrlContent($controller);
         $fileResult = FileManipulator::replaceBetweenMark($code, 'COLUMNS', $newCode);
-
-        /* foreach($this->hooks as $hook){
-            $fileResult = FileManipulator::writeMethodContent($fileResult, $hook, request($hook));
-        }*/
 
         FileManipulator::putCtrlContent($controller, $fileResult);
 
