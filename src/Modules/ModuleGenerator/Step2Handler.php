@@ -58,7 +58,7 @@ class Step2Handler
         $width = request('width');
 
         $columnScript = [];
-        $columnScript[] = str_repeat(' ', 12).'$this->col[] = [];';
+        $columnScript[] = str_repeat(' ', 8).'$this->col[] = [];';
         foreach ($labels as $i => $label) {
 
             if (! $name[$i]) {
@@ -79,7 +79,7 @@ class Step2Handler
                 $colProperties[] = "'width' => '$width[$i]'";
             }
 
-            $columnScript[] = str_repeat(' ', 12).'$this->col[] = ['.implode(", ", $colProperties).'];';
+            $columnScript[] = str_repeat(' ', 8).'$this->col[] = ['.implode(", ", $colProperties).'];';
         }
         return implode("\n", $columnScript);
     }
