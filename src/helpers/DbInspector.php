@@ -93,48 +93,11 @@ class DbInspector
 
     /**
      * @param $table
-     * @return null
-     */
-    private static function getPKforSqlServer($table)
-    {
-        try {
-            $query = "
-						SELECT Col.Column_Name,Col.Table_Name from 
-						    INFORMATION_SCHEMA.TABLE_CONSTRAINTS Tab, 
-						    INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE Col 
-						WHERE 
-						    Col.Constraint_Name = Tab.Constraint_Name
-						    AND Col.Table_Name = Tab.Table_Name
-						    AND Constraint_Type = 'PRIMARY KEY'
-							AND Col.Table_Name = '$table[table]' 
-					";
-            $keys = DB::select($query);
-            $primaryKey = $keys[0]->Column_Name;
-        } catch (\Exception $e) {
-            $primaryKey = null;
-        }
-
-        return $primaryKey;
-    }
-
-    /**
-     * @param $table
      * @return array
      */
     private static function findPKname($table)
     {
-        if (env('DB_CONNECTION') == 'sqlsrv') {
-            return self::getPKforSqlServer($table);
-        }
-        try {
-            $query = "select * from information_schema.COLUMNS where TABLE_SCHEMA = '$table[database]' and TABLE_NAME = '$table[table]' and COLUMN_KEY = 'PRI'";
-            $keys = DB::select($query);
-            $primaryKey = $keys[0]->COLUMN_NAME;
-        } catch (\Exception $e) {
-            $primaryKey = null;
-        }
-
-        return $primaryKey;
+        return \DB::getDoctrineSchemaManager()->listTableDetails($table)->getPrimaryKey()->getColumns()[0];
     }
 
     public static function listTables()
