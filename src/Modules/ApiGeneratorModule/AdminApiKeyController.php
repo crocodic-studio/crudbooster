@@ -4,9 +4,7 @@ namespace crocodicstudio\crudbooster\Modules\ApiGeneratorModule;
 
 use crocodicstudio\crudbooster\controllers\CBController;
 use crocodicstudio\crudbooster\helpers\CbValidator;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Route;
 
 class AdminApiKeyController extends CBController
 {

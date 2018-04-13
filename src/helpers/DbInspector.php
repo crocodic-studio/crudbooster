@@ -23,11 +23,7 @@ class DbInspector
         if (CbCache::get('table_'.$table, 'primaryKey')) {
             return CbCache::get('table_'.$table, 'primaryKey');
         }
-        $table = CRUDBooster::parseSqlTable($table);
-
-        if (! $table['table']) {
-            throw new \Exception("parseSqlTable can't determine the table");
-        }
+        //$table = CRUDBooster::parseSqlTable($table);
 
         $primaryKey = self::findPKname($table);
 
