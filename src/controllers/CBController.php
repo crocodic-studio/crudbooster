@@ -2,21 +2,19 @@
 
 error_reporting(E_ALL ^ E_NOTICE);
 
-use crocodicstudio\crudbooster\controllers\Controller;
+use CB;
+use CRUDBooster;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\PDF;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\PDF;
 use Maatwebsite\Excel\Facades\Excel;
-use CRUDBooster;
-use CB;
 use Schema;
 
 class CBController extends Controller
