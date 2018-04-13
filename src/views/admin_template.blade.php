@@ -138,7 +138,7 @@
 
         	@if(@$alerts)
         		@foreach(@$alerts as $alert)
-        			<div class='callout callout-{{$alert[type]}}'>        				
+        			<div class='callout callout-{{$alert["type"]}}'>
         					{!! $alert['message'] !!}
         			</div>
         		@endforeach
