@@ -44,24 +44,9 @@ class DbInspector
      * @param $field
      * @return bool
      */
-    public static function isColNull($table, $field)
+    public static function isNullableColumn($table, $field)
     {
-        $cacheKey = 'field_isNull_'.$table.'_'.$field;
-
-        if (Cache::has($cacheKey)) {
-            return Cache::get($cacheKey);
-        }
-
-        try {
-            //MySQL & SQL Server
-            $isNULL = DB::select(DB::raw("select IS_NULLABLE from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='$table' and COLUMN_NAME = '$field'"))[0]->IS_NULLABLE;
-            $isNULL = ($isNULL == 'YES') ? true : false;
-        } catch (\Exception $e) {
-            $isNULL = false;
-        }
-        Cache::forever($cacheKey, $isNULL);
-
-        return $isNULL;
+        return !\DB::getDoctrineSchemaManager()->listTableColumns($table)[$field]->getNotnull();
     }
 
     /**

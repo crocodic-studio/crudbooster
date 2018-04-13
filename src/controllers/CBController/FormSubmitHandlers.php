@@ -34,7 +34,7 @@ trait FormSubmitHandlers
                 continue;
             }
 
-            if ($inputdata == '' && DbInspector::isColNull($this->table, $name)) {
+            if ($inputdata == '' && DbInspector::isNullableColumn($this->table, $name)) {
                 continue;
             }
 
