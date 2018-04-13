@@ -62,7 +62,7 @@ class ControllerGenerator
 
         $data = compact('controllerName', 'table', 'pk', 'coloms', 'cols', 'formArrayString', 'joinList');
 
-        return view('CbModulesGen::controller_stub', $data)->render();
+        return '<?php ' . view('CbModulesGen::controller_stub', $data)->render();
     }
 
     /**

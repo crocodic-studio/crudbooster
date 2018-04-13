@@ -185,7 +185,7 @@ class AdminApiGeneratorController extends CBController
 
     private function generateAPI($controller_name, $table_name, $permalink, $method_type = 'post')
     {
-        $php = view('CbApiGen::api_stub', compact('controller_name', 'table_name', 'permalink', 'method_type'))->render();
+        $php = '<?php '.view('CbApiGen::api_stub', compact('controller_name', 'table_name', 'permalink', 'method_type'))->render();
         file_put_contents(controllers_dir().'Api'.$controller_name.'Controller.php', $php);
     }
 }
