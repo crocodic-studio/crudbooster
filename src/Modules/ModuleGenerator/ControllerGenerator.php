@@ -73,13 +73,13 @@ class ControllerGenerator
      */
     private static function addCol($table, $coloms, $pk)
     {
-        $coloms_col = array_slice($coloms, 0, 8);
-        $joinList = [];
-        $cols = [];
-        array_filter($coloms_col, function ($field) {
+        $coloms_col = array_filter($coloms, function ($field) {
             return (! FieldDetector::isExceptional($field) && ! FieldDetector::isPassword($field));
         });
+        $coloms_col = array_slice($coloms_col, 0, 10);
 
+        $joinList = [];
+        $cols = [];
         foreach ($coloms_col as $field) {
             $label = str_replace("id_", "", $field);
             $label = ucwords(str_replace("_", " ", $label));
