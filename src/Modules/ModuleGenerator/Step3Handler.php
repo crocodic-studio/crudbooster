@@ -80,7 +80,9 @@ class Step3Handler
         $validation = $post['validation'];
 
         $scriptForm = [];
-        $indent = str_repeat(' ', 12);
+
+        $indent = str_repeat(' ', 8);
+
         $scriptForm[] = $indent.'$this->form = [];';
 
         foreach ($post['label'] as $i => $label) {
