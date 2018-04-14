@@ -67,7 +67,7 @@ class ScaffoldingParser
             return $colsItem;
         }
         foreach ($colsItem as $i => $form) {
-            if ($form['options'] !== '[]') {
+            if ( empty($form['options']) == false && $form['options'] !== '[]') {
                 @eval("\$options = $form[options];");
                 @$colsItem[$i]['options'] = $options;
             } else {
