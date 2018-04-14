@@ -10,7 +10,7 @@ class AdminEmailTemplatesController extends CBController
     public function cbInit()
     {
         $this->table = 'cms_email_templates';
-        $this->title_field = 'name';
+        $this->titleField = 'name';
         $this->limit = 20;
         $this->orderby = ['id' => 'desc'];
         $this->global_privilege = false;

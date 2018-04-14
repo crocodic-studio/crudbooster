@@ -16,7 +16,7 @@ class AdminMenusController extends CBController
     {
         $this->table = "cms_menus";
         $this->primaryKey = "id";
-        $this->title_field = "name";
+        $this->titleField = "name";
         $this->limit = 20;
         $this->orderby = ["id" => "desc"];
 

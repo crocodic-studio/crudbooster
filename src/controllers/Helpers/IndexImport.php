@@ -142,17 +142,17 @@ class IndexImport
             $relation_class = $this->resolveController($relation_table);
             $relation_class->genericLoader();
 
-            $title_field = $relation_class->title_field;
+            $titleField = $relation_class->titleField;
 
             $relation_insert_data = [];
-            $relation_insert_data[$title_field] = $value->$s;
+            $relation_insert_data[$titleField] = $value->$s;
 
             if (\Schema::hasColumn($relation_table, 'created_at')) {
                 $relation_insert_data['created_at'] = date('Y-m-d H:i:s');
             }
 
             try {
-                $relation_exists = DB::table($relation_table)->where($title_field, $value->$s)->first();
+                $relation_exists = DB::table($relation_table)->where($titleField, $value->$s)->first();
                 if ($relation_exists) {
                     $relation_primary_key = $relation_class->primaryKey;
                     $relation_id = $relation_exists->$relation_primary_key;

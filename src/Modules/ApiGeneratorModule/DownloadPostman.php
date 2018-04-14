@@ -10,7 +10,7 @@ class DownloadPostman extends CBController
     {
         $this->table = 'cms_apicustom';
         $this->primaryKey = "id";
-        $this->title_field = "nama";
+        $this->titleField = "nama";
     }
 
     public function getDownloadPostman()

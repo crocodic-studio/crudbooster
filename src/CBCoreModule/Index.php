@@ -85,7 +85,7 @@ class Index
 
         //$mainpath = CRUDBooster::mainpath();
         //$orig_mainpath = $CbCtrl->data['mainpath'];
-        //$title_field = $CbCtrl->title_field;
+        //$titleField = $CbCtrl->titleField;
         $number = (request('page', 1) - 1) * $limit + 1;
         $htmlContents = (new CellContent($CbCtrl))->calculate($data, $tablePK, $number, $columns_table, $table, $addAction); //end foreach data[result]
 

@@ -11,7 +11,7 @@ class AdminLogsController extends CBController
     public function cbInit()
     {
         $this->table = 'cms_logs';
-        $this->title_field = 'ipaddress';
+        $this->titleField = 'ipaddress';
 
         $this->setButtons();
         $this->makeColumns();

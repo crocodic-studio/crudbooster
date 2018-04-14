@@ -15,7 +15,7 @@ class AdminModulesController extends CBController
     {
         $this->table = 'cms_moduls';
         $this->primaryKey = 'id';
-        $this->title_field = 'name' ;
+        $this->titleField = 'name' ;
         $this->limit = 100;
         $this->buttonAdd = false;
         $this->buttonExport = false;

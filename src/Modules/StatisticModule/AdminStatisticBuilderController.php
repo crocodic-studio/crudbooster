@@ -13,7 +13,7 @@ class AdminStatisticBuilderController extends CBController
     {
         $this->table = "cms_statistics";
         $this->primaryKey = "id";
-        $this->title_field = "name";
+        $this->titleField = "name";
         $this->limit = 20;
         $this->orderby = "id,desc";
         $this->global_privilege = false;

@@ -17,7 +17,7 @@ class AdminSettingsController extends CBController
     public function __construct()
     {
         $this->table = 'cms_settings';
-        $this->title_field = "name";
+        $this->titleField = "name";
     }
 
     public function cbInit()

@@ -26,7 +26,7 @@
                     @endif
                     <?php
                     $value = @$row->{$col['field']};
-                    $title = @$row->{$title_field};
+                    $title = @$row->{$titleField};
                     ?>
                     @if (@$col['image'])
                         <?php

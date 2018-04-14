@@ -17,6 +17,8 @@ trait CbFormLoader
 
     protected function cbFormLoader()
     {
+        $this->data_inputan = $this->form;
+        $this->data['forms'] = $this->data_inputan;
         $this->data['button_addmore'] = $this->button_addmore;
         $this->data['button_cancel'] = $this->button_cancel;
         $this->data['button_save'] = $this->button_save;

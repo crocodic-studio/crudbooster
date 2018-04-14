@@ -14,7 +14,7 @@ class AdminNotificationsController extends CBController
     {
         $this->table = "cms_notifications";
         $this->primaryKey = "id";
-        $this->title_field = "content";
+        $this->titleField = "content";
         $this->limit = 20;
         $this->index_orderby = ["id" => "desc"];
         $this->global_privilege = true;

@@ -87,7 +87,7 @@ class CellContent
             if ($col['visible'] === false) {
                 continue;
             }
-            $htmlContent[] = (new ValueCalculator)->calculate($col, $row, $table, @$row->{$this->cb->title_field});
+            $htmlContent[] = (new ValueCalculator)->calculate($col, $row, $table, @$row->{$this->cb->titleField});
         }
 
         return $htmlContent;

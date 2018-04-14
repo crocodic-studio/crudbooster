@@ -14,7 +14,7 @@ class AdminColumnsTableController extends CBController
     {
         $this->table = 'cms_apicustom';
         $this->primaryKey = "id";
-        $this->title_field = "nama";
+        $this->titleField = "nama";
         $this->buttonShow = false;
         $this->button_new = false;
         $this->deleteBtn = false;

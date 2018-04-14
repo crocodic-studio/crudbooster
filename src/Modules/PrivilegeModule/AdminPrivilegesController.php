@@ -18,7 +18,7 @@ class AdminPrivilegesController extends CBController
     {
         $this->table = 'cms_privileges';
         $this->primaryKey = 'id';
-        $this->title_field = "name";
+        $this->titleField = "name";
     }
 
     public function cbInit()

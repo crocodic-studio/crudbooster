@@ -8,7 +8,7 @@ class {{$controllerName}} extends CBController {
     public function cbInit() {
         {!! cbStartMarker('CONFIGURATION') !!}
         $this->table = "{{$table}}";
-        $this->title_field = "{{DbInspector::colName($coloms)}}";
+        $this->titleField = "{{DbInspector::colName($coloms)}}";
         $this->limit = 20;
         $this->showNumbering = false;
         $this->buttonTableAction = true;

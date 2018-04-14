@@ -30,7 +30,7 @@ class CBController extends Controller
 
     public $table;
 
-    public $title_field;
+    public $titleField;
 
     public $primaryKey = 'id';
 
@@ -113,7 +113,7 @@ class CBController extends Controller
         $this->genericLoader();
         $row = $this->findFirst($id);
 
-        $page_title = cbTrans("edit_data_page_title", ['module' => CRUDBooster::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
+        $page_title = cbTrans("edit_data_page_title", ['module' => CRUDBooster::getCurrentModule()->name, 'name' => $row->{$this->titleField}]);
         $command = 'edit';
         session()->put('current_row_id', $id);
 
@@ -135,7 +135,7 @@ class CBController extends Controller
         $this->cbFormLoader();
         $row = $this->findFirst($id);
 
-        $page_title = cbTrans('detail_data_page_title', ['module' => CRUDBooster::getCurrentModule()->name, 'name' => $row->{$this->title_field}]);
+        $page_title = cbTrans('detail_data_page_title', ['module' => CRUDBooster::getCurrentModule()->name, 'name' => $row->{$this->titleField}]);
 
         session()->put('current_row_id', $id);
         return $this->cbView('crudbooster::form.details', compact('row', 'page_title', 'id'));
@@ -169,7 +169,7 @@ class CBController extends Controller
         $this->data['forms'] = $this->data_inputan;
         $this->data['hide_form'] = $this->hide_form;
         $this->data['table'] = $this->table;
-        $this->data['title_field'] = $this->title_field;
+        $this->data['titleField'] = $this->titleField;
         $this->data['appname'] = cbGetsetting('appname');
         $this->data['index_button'] = $this->index_button;
 

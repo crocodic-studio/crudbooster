@@ -57,7 +57,7 @@ trait ImportData
             return $import->handleImportProgress($fileMD5);
         }
 
-        $import->InsertToDB($fileMD5, $this->table, $this->title_field);
+        $import->InsertToDB($fileMD5, $this->table, $this->titleField);
 
         return response()->json(['status' => true]);
     }
