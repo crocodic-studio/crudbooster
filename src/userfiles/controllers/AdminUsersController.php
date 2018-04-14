@@ -10,14 +10,7 @@ class AdminUsersController extends CBController
 {
     public function cbInit()
     {
-        # START CONFIGURATION DO NOT REMOVE THIS LINE
-        $this->table = 'cms_users';
-        $this->titleField = 'name';
-        $this->button_action_style = 'button_icon';
-        $this->button_import = false;
-        $this->buttonExport = false;
-        $this->button_save = true;
-        # END CONFIGURATION DO NOT REMOVE THIS LINE
+        $this->makeConfigs();
         $this->makeCols();
         $this->makeForm();
     }
@@ -49,7 +42,7 @@ class AdminUsersController extends CBController
 
     private function makeForm()
     {
-# START FORM DO NOT REMOVE THIS LINE
+        # START FORM DO NOT REMOVE THIS LINE
         $this->form = [];
         $this->form[] = ['label' => 'name', 'name' => 'name', 'required' => true, 'validation' => 'required|alpha_spaces|min:3'];
         $this->form[] = [
@@ -80,12 +73,24 @@ class AdminUsersController extends CBController
 
     private function makeCols()
     {
-# START COLUMNS DO NOT REMOVE THIS LINE
+        # START COLUMNS DO NOT REMOVE THIS LINE
         $this->col = [];
         $this->col[] = ['label' => 'name', 'name' => 'name'];
         $this->col[] = ['label' => "Email", 'name' => "email"];
         $this->col[] = ['label' => "Privilege", 'name' => "cms_privileges_name"];
         $this->col[] = ['label' => "Photo", 'name' => "photo", "image" => 1];
         # END COLUMNS DO NOT REMOVE THIS LINE
+    }
+
+    private function makeConfigs()
+    {
+        # START CONFIGURATION DO NOT REMOVE THIS LINE
+        $this->table = 'cms_users';
+        $this->titleField = 'name';
+        $this->button_action_style = 'button_icon';
+        $this->button_import = false;
+        $this->buttonExport = false;
+        $this->button_save = true;
+        # END CONFIGURATION DO NOT REMOVE THIS LINE
     }
 }
