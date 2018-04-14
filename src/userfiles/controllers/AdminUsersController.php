@@ -18,16 +18,38 @@ class AdminUsersController extends CBController
         $this->buttonExport = false;
         $this->button_save = true;
         # END CONFIGURATION DO NOT REMOVE THIS LINE
+        $this->makeCols();
+        $this->makeForm();
+    }
 
-        # START COLUMNS DO NOT REMOVE THIS LINE
-        $this->col = [];
-        $this->col[] = ['label' => 'name', 'name' => 'name'];
-        $this->col[] = ['label' => "Email", 'name' => "email"];
-        $this->col[] = ['label' => "Privilege", 'name' => "cms_privileges_name"];
-        $this->col[] = ['label' => "Photo", 'name' => "photo", "image" => 1];
-        # END COLUMNS DO NOT REMOVE THIS LINE
+    public function hookQueryIndex(&$query)
+    {
+        $query->join('cms_privileges', 'cms_privileges.id', '=', 'id_cms_privileges');
+        $query->addSelect('cms_privileges.name as cms_privileges_name');
+    }
 
-        # START FORM DO NOT REMOVE THIS LINE
+    public function getProfile()
+    {
+        $this->genericLoader();
+        $this->cbFormLoader();
+        $this->button_addmore = false;
+        $this->button_cancel = false;
+        $this->button_show = false;
+        $this->buttonAdd = false;
+        $this->deleteBtn = false;
+        $this->hide_form = ['id_cms_privileges'];
+
+        session()->put('current_row_id', CRUDBooster::myId());
+        $this->data['return_url'] = Request::fullUrl();
+
+        $data['page_title'] = cbTrans("label_button_profile");
+        $data['row'] = CRUDBooster::first('cms_users', CRUDBooster::myId());
+        return $this->cbView('crudbooster::form.form', $data);
+    }
+
+    private function makeForm()
+    {
+# START FORM DO NOT REMOVE THIS LINE
         $this->form = [];
         $this->form[] = ['label' => 'name', 'name' => 'name', 'required' => true, 'validation' => 'required|alpha_spaces|min:3'];
         $this->form[] = [
@@ -54,31 +76,16 @@ class AdminUsersController extends CBController
         ];
         $this->form[] = ['label' => "Password", 'name' => "password", 'type' => "password", "help" => "Please leave empty if not change"];
         # END FORM DO NOT REMOVE THIS LINE
-
     }
 
-    public function hookQueryIndex(&$query)
+    private function makeCols()
     {
-        $query->join('cms_privileges', 'cms_privileges.id', '=', 'id_cms_privileges');
-        $query->addSelect('cms_privileges.name as cms_privileges_name');
-    }
-
-    public function getProfile()
-    {
-        $this->genericLoader();
-        $this->cbFormLoader();
-        $this->button_addmore = false;
-        $this->button_cancel = false;
-        $this->button_show = false;
-        $this->buttonAdd = false;
-        $this->deleteBtn = false;
-        $this->hide_form = ['id_cms_privileges'];
-
-        session()->put('current_row_id', CRUDBooster::myId());
-        $this->data['return_url'] = Request::fullUrl();
-
-        $data['page_title'] = cbTrans("label_button_profile");
-        $data['row'] = CRUDBooster::first('cms_users', CRUDBooster::myId());
-        return $this->cbView('crudbooster::form.form', $data);
+# START COLUMNS DO NOT REMOVE THIS LINE
+        $this->col = [];
+        $this->col[] = ['label' => 'name', 'name' => 'name'];
+        $this->col[] = ['label' => "Email", 'name' => "email"];
+        $this->col[] = ['label' => "Privilege", 'name' => "cms_privileges_name"];
+        $this->col[] = ['label' => "Photo", 'name' => "photo", "image" => 1];
+        # END COLUMNS DO NOT REMOVE THIS LINE
     }
 }
