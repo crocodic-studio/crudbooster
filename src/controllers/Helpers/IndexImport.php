@@ -160,7 +160,7 @@ class IndexImport
             try {
                 $relation_exists = DB::table($relation_table)->where($title_field, $value->$s)->first();
                 if ($relation_exists) {
-                    $relation_primary_key = $relation_class->primary_key;
+                    $relation_primary_key = $relation_class->primaryKey;
                     $relation_id = $relation_exists->$relation_primary_key;
                 } else {
                     $relation_id = DB::table($relation_table)->insertGetId($relation_insert_data);
