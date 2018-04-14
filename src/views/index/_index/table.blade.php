@@ -51,7 +51,7 @@
     <table id='table_dashboard' class="table table-hover table-striped table-bordered">
         <thead>
         <tr class="active">
-            @if($button_bulk_action)
+            @if($buttonBulkAction)
                 <th width='3%'><input type='checkbox' id='checkall'/></th>
             @endif
             @if($showNumbering)
@@ -104,9 +104,9 @@
         <tbody>
         @if(empty($result))
             <tr class='warning'>
-                @if($button_bulk_action && $showNumbering)
+                @if($buttonBulkAction && $showNumbering)
                     <td colspan='{{count($columns)+3}}' align="center">
-                @elseif( ($button_bulk_action && ! $showNumbering) || (! $button_bulk_action && $showNumbering) )
+                @elseif( ($buttonBulkAction && ! $showNumbering) || (! $buttonBulkAction && $showNumbering) )
                     <td colspan='{{count($columns)+2}}' align="center">
                 @else
                     <td colspan='{{count($columns)+1}}' align="center">
@@ -149,7 +149,7 @@
 
         <tfoot>
         <tr>
-            @if($button_bulk_action)
+            @if($buttonBulkAction)
                 <th>&nbsp;</th>
             @endif
 

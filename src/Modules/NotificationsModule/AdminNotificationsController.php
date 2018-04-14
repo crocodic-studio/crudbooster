@@ -71,7 +71,7 @@ class AdminNotificationsController extends CBController
     private function setButtons()
     {
         $this->button_show = true;
-        $this->button_add = false;
+        $this->buttonAdd = false;
         $this->deleteBtn = true;
         $this->buttonExport = false;
         $this->button_import = false;

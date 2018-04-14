@@ -120,7 +120,7 @@ class AdminMenusController extends CBController
     {
         $this->buttonTableAction = true;
         $this->button_action_style = "FALSE";
-        $this->button_add = false;
+        $this->buttonAdd = false;
         $this->deleteBtn = true;
         $this->button_edit = true;
         $this->buttonDetail = true;

@@ -1,10 +1,6 @@
 
 namespace {!! ctrlNamespace() !!};
 
-use Session;
-use Request;
-use DB;
-use \crocodicstudio\crudbooster\helpers\CRUDBooster, CB;
 use \crocodicstudio\crudbooster\controllers\CBController;
 
 class {{$controllerName}} extends CBController {
@@ -18,7 +14,7 @@ class {{$controllerName}} extends CBController {
         $this->buttonTableAction = true;
         $this->orderby = "{{$pk}},desc";
         $this->button_action_style = "button_icon";
-        $this->button_add          = true;
+        $this->buttonAdd = true;
         $this->deleteBtn = true;
         $this->button_edit = true;
         $this->buttonDetail = true;
@@ -26,7 +22,7 @@ class {{$controllerName}} extends CBController {
         $this->button_filter = true;
         $this->buttonExport = false;
         $this->button_import = false;
-        $this->buttonBulkAction  = true;
+        $this->buttonBulkAction = true;
         {!! cbEndMarker('CONFIGURATION') !!}
 
         {!! cbStartMarker('COLUMNS') !!}

@@ -68,14 +68,14 @@ trait CbIndexLoader
         $this->data['postIndexHtml'] = $this->postIndexHtml;
         $this->data['index_statistic'] = $this->indexStatistic;
         $this->data['table_row_color'] = $this->tableRowColor;
-        $this->data['button_bulk_action'] = $this->buttonBulkAction;
+        $this->data['buttonBulkAction'] = $this->buttonBulkAction;
         $this->data['buttonTableAction'] = $this->buttonTableAction;
         $this->data['index_additional_view'] = $this->indexAdditionalView;
         $this->data['button_action_width'] = $this->buttonActionWidth;
         $this->data['button_show'] = $this->buttonShow;
         $this->data['addaction'] = ($this->show_addaction) ? $this->addaction : null;
         $this->data['buttonDetail'] = $this->buttonDetail;
-        $this->data['button_add'] = $this->buttonAdd;
+        $this->data['buttonAdd'] = $this->buttonAdd;
 
     }
 

@@ -16,7 +16,7 @@ class AdminApiKeyController extends CBController
         $this->button_show = false;
         $this->button_new = false;
         $this->deleteBtn = false;
-        $this->button_add = false;
+        $this->buttonAdd = false;
         $this->button_import = false;
         $this->buttonExport = false;
     }

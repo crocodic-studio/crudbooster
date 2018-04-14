@@ -26,7 +26,7 @@
 
     <div class="box">
         <div class="box-header">
-            @if($button_bulk_action && ( ($deleteBtn && CRUDBooster::canDelete()) || $button_selected) )
+            @if($buttonBulkAction && ( ($deleteBtn && CRUDBooster::canDelete()) || $button_selected) )
                 @include("crudbooster::index._index.header_btn")
             @endif
             <div class="box-tools pull-{{ cbTrans('right') }}"
