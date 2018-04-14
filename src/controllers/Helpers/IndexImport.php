@@ -30,7 +30,7 @@ class IndexImport
      * @param $file_md5
      * @return mixed
      */
-    function handleImportProgress($file_md5)
+    public function handleImportProgress($file_md5)
     {
         $total = session('total_data_import') * 100;
         $prog = intval(cache('success_'.$file_md5)) / $total;
@@ -47,7 +47,7 @@ class IndexImport
      * @param $file
      * @return string
      */
-    function uploadImportData($file)
+    public function uploadImportData($file)
     {
         $dir = 'uploads/'.date('Y-m');
         $filename = md5(str_random(5)).'.'. $file->getClientOriginalExtension();
@@ -65,7 +65,7 @@ class IndexImport
      * @param $file
      * @return array
      */
-    function validateForImport($file)
+    public function validateForImport($file)
     {
         return Validator::make(['extension' => $file->getClientOriginalExtension(),], ['extension' => 'in:xls,xlsx,csv']);
     }
@@ -76,7 +76,7 @@ class IndexImport
      * @param $table
      * @param $titleField
      */
-    function InsertToDB($file_md5, $table, $titleField)
+    public function InsertToDB($file_md5, $table, $titleField)
     {
         $select_column = array_filter(session('select_column'));
         $table_columns = DB::getSchemaBuilder()->getColumnListing($table);
@@ -139,13 +139,7 @@ class IndexImport
             }
 
             $relation_table = DbInspector::getTableForeignKey($colname);
-            $relation_moduls = DB::table('cms_moduls')->where('table_name', $relation_table)->first();
-
-            $relation_class = __NAMESPACE__.'\\'.$relation_moduls->controller;
-            if (! class_exists($relation_class)) {
-                $relation_class =  ctrlNamespace().'\\'.$relation_moduls->controller;
-            }
-            $relation_class = new $relation_class;
+            $relation_class = $this->resolveController($relation_table);
             $relation_class->genericLoader();
 
             $title_field = $relation_class->title_field;
@@ -173,5 +167,21 @@ class IndexImport
         }
 
         return $a;
+    }
+
+    /**
+     * @param $relation_table
+     * @return string
+     */
+    private function resolveController($relation_table)
+    {
+        $relation_moduls = DB::table('cms_moduls')->where('table_name', $relation_table)->first();
+
+        $relation_class = __NAMESPACE__.'\\'.$relation_moduls->controller;
+        if (! class_exists($relation_class)) {
+            $relation_class = ctrlNamespace().'\\'.$relation_moduls->controller;
+        }
+
+        return new $relation_class;
     }
 }
