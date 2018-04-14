@@ -88,7 +88,7 @@
                         ?>
                     @else
                         @php $url = CRUDBooster::urlFilterColumn($field, 'sorting', 'asc'); @endphp
-                        <a href='$url' title='{!! cbtrans('click_to_sort_ascending') !!}'>$colname &nbsp; <i class='fa fa-sort'></i></a>
+                        <a href='$url' title='{!! cbtrans('click_to_sort_ascending') !!}'>{!! $colname !!}&nbsp; <i class='fa fa-sort'></i></a>
                     @endif
 
                 </th>
