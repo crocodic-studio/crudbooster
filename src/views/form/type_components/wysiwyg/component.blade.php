@@ -10,7 +10,7 @@
                 }
             });
 
-            function uploadImage {{$name}}(image) {
+            function uploadImage{{$name}}(image) {
                 var data = new FormData();
                 data.append("userfile", image);
                 $.ajax({
