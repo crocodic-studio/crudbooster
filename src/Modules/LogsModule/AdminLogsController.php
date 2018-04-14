@@ -30,7 +30,7 @@ class AdminLogsController extends CBController
 
     private function setButtons()
     {
-        $this->button_bulk_action = true;
+        $this->buttonBulkAction = true;
         $this->buttonExport = false;
         $this->button_import = false;
         $this->button_add = false;

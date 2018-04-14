@@ -178,6 +178,6 @@ class AdminPrivilegesController extends CBController
         $this->buttonExport = false;
         $this->button_action_style = 'button_icon';
         $this->buttonDetail = false;
-        $this->button_bulk_action = false;
+        $this->buttonBulkAction = false;
     }
 }

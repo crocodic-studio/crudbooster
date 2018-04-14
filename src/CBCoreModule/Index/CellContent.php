@@ -54,7 +54,7 @@ class CellContent
      */
     private function addCheckBox($tablePK, $row, $htmlContent)
     {
-        if ($this->cb->button_bulk_action) {
+        if ($this->cb->buttonBulkAction) {
             $htmlContent[] = "<input type='checkbox' class='checkbox' name='checkbox[]' value='".$row->{$tablePK}."'/>";
         }
 
