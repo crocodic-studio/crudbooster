@@ -6,7 +6,7 @@ class ControllerConfigParser
 {
     static function parse($code)
     {
-        $configCode = extract_unit($code, cbStartMarker('CONFIGURATION'), cbEndMarker('CONFIGURATION'));
+        $configCode = ScaffoldingParser::extract_unit($code, cbStartMarker('CONFIGURATION'), cbEndMarker('CONFIGURATION'));
         $configCode = preg_replace('/[\t\n\r\0\x0B]/', '', $configCode);
         $configCode = preg_replace('/([\s])\1+/', ' ', $configCode);
         $configCode = explode(";", $configCode);
