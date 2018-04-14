@@ -13,7 +13,7 @@ class FormConfigGenerator
      * @param $columns
      * @return array
      */
-    static function generateFormConfig($table, $columns)
+    public static function generateFormConfig($table, $columns)
     {
         $formArrayString = [];
         foreach ($columns as $i => $colName) {
@@ -48,50 +48,14 @@ class FormConfigGenerator
                 ];
             }
 
-            $map = [
-                'isPassword' => [
-                    'type' => 'password',
-                    'validation' => 'min:5|max:32|required',
-                    'help' => cbTrans("text_default_help_password"),
-                ],
-                'isImage' => [
-                    'type' => 'upload',
-                    'validation' => 'required|image',
-                    'help' => cbTrans('text_default_help_upload'),
-                ],
-                'isGeographical' => [
-                    'type' => 'hidden',
-                    'validation' => 'required|numeric',
-                ],
-                'isPhone' => [
-                    'type' => 'number',
-                    'validation' => 'required|numeric',
-                    'placeholder' => cbTrans('text_default_help_number'),
-                ],
-                'isEmail' => [
-                    'type' => 'email',
-                    'validation' => 'require|email|unique:'.$table,
-                    'placeholder' => cbTrans('text_default_help_email'),
-                ],
-                'isNameField' => [
-                    'type' => 'text',
-                    'validation' => 'required|string|min:3|max:70',
-                    'placeholder' => cbTrans('text_default_help_text'),
-                ],
-                'isUrlField' => [
-                    'type' => 'text',
-                    'validation' => 'required|url',
-                    'placeholder' => cbTrans('text_default_help_url'),
-                ],
-            ];
+            $props = array_get(DefaultFormConfigs::defaultConfigForFields($table), FieldDetector::detect($colName), null);
 
-            $props = array_get($map, FieldDetector::detect($colName), null);
-            unset($map);
             if($props !== null){
                 $input = array_merge($input, $props);
             }
 
-            $formArrayString[] = FileManipulator::stringify($input, str_repeat(' ', 12));
+            $indent = str_repeat(' ', 8);
+            $formArrayString[] = FileManipulator::stringify($input, $indent);
         }
 
         return $formArrayString;
