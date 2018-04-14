@@ -4,7 +4,7 @@ namespace crocodicstudio\crudbooster\CBCoreModule;
 
 use Route;
 
-class RouteController
+class CbRouter
 {
     public static function routeController($prefix, $controller, $namespace = null)
     {
@@ -14,7 +14,7 @@ class RouteController
             Route::get($prefix, ['uses' => $controller.'@getIndex', 'as' => $controller.'GetIndex']);
             $ctrl = self::getControllerPath($controller, $namespace);
             foreach (self::getControllerMethods($ctrl) as $method) {
-                self::setRoute($prefix, $controller, $method);
+                self::setRoute($prefix, $controller, $method->name);
             }
         } catch (\Exception $e) {
 
@@ -29,11 +29,11 @@ class RouteController
      */
     private static function routePost($prefix, $controller, $method, $wildcards)
     {
-        $methodName = substr($method->name, 4);
+        $methodName = substr($method, 4);
         $slug = array_filter(preg_split('/(?=[A-Z])/', $methodName));
         $slug = strtolower(implode('-', $slug));
         Route::post($prefix.$slug.$wildcards, [
-            'uses' => $controller.'@'.$method->name,
+            'uses' => $controller.'@'.$method,
             'as' => $controller.'Post'.$methodName,
         ]);
     }
@@ -46,12 +46,12 @@ class RouteController
      */
     private static function routeGet($prefix, $controller, $method, $wildcards)
     {
-        $methodName = substr($method->name, 3);
+        $methodName = substr($method, 3);
         $slug = array_filter(preg_split('/(?=[A-Z])/', $methodName));
         $slug = strtolower(implode('-', $slug));
         $slug = ($slug == 'index') ? '' : $slug;
         Route::get($prefix.$slug.$wildcards,
-            ['uses' => $controller.'@'.$method->name,
+            ['uses' => $controller.'@'.$method,
             'as' => $controller.'Get'.$methodName]);
     }
 
@@ -91,9 +91,9 @@ class RouteController
     private static function setRoute($prefix, $controller, $method)
     {
         $wildcards = '/{one?}/{two?}/{three?}/{four?}/{five?}';
-        if (str_start($method, 'get')) {
+        if (starts_with($method, 'get')) {
             self::routeGet($prefix, $controller, $method, $wildcards);
-        } elseif (str_start($method, 'post')) {
+        } elseif (starts_with($method, 'post')) {
             self::routePost($prefix, $controller, $method, $wildcards);
         }
     }

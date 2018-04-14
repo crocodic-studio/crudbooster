@@ -2,7 +2,7 @@
 
 namespace crocodicstudio\crudbooster\helpers;
 
-use crocodicstudio\crudbooster\CBCoreModule\RouteController;
+use crocodicstudio\crudbooster\CBCoreModule\CbRouter;
 use crocodicstudio\crudbooster\CBCoreModule\ViewHelpers;
 use crocodicstudio\crudbooster\Modules\AuthModule\Helpers;
 use crocodicstudio\crudbooster\Modules\LogsModule\LogsRepository;
@@ -193,7 +193,7 @@ class CRUDBooster
 
     public static function routeController($prefix, $controller, $namespace = null)
     {
-        RouteController::routeController($prefix, $controller, $namespace);
+        CbRouter::routeController($prefix, $controller, $namespace);
     }
 
     /*

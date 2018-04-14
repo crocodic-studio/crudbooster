@@ -1,5 +1,6 @@
 <?php
 
+use crocodicstudio\crudbooster\CBCoreModule\CbRouter;
 use crocodicstudio\crudbooster\middlewares\CBBackend;
 
 $namespace = '\crocodicstudio\crudbooster\controllers';
@@ -14,11 +15,11 @@ Route::group([
     'prefix' => cbAdminPath(),
     'namespace' => ctrlNamespace(),
 ], function () {
-    CRUDBooster::routeController('users', 'AdminUsersController');
+    CbRouter::routeController('users', 'AdminUsersController');
     try {
         $modules = DB::table('cms_moduls')->where('path', '!=', '')->where('controller', '!=', '')->where('is_protected', 0)->get();
         foreach ($modules as $module) {
-            CRUDBooster::routeController($module->path, $module->controller);
+            CbRouter::routeController($module->path, $module->controller);
         }
     } catch (Exception $e) {
     }
