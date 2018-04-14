@@ -1,9 +1,9 @@
 <?php
 /**
- * @param $form
+ * @param $formInput
  * @return array
  */
-$queryData = function ($form)
+$queryData = function ($formInput)
 {
     if (! $formInput['options']['table']) return;
     $field_label = $formInput['options']['field_label'];
