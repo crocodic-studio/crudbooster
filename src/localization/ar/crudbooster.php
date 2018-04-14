@@ -223,4 +223,6 @@ return [
     'toggle_navigation' => "Toggle navigation",
     'information' => "Information",
     'at_least_one_row' => 'Please select at least one row!',
+    'click_to_sort_ascending' => 'Click to sort ascending',
+    'click_to_sort_descending' => 'Click to sort descending',
 ];

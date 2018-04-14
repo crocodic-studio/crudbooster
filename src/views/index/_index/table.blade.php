@@ -58,47 +58,48 @@
                 <th width="1%">{{ cbTrans('no') }}</th>
             @endif
 
-            <?php
-            foreach ($columns as $col) {
-                if ($col['visible'] === FALSE) continue;
-
+            @foreach ($columns as $col)
+                @if ($col['visible'] === false) @continue
+                <?php
                 $sort_column = Request::get('filter_column');
                 $colname = $col['label'];
                 $name = $col['name'];
                 $field = $col['field_with'];
                 $width = ($col['width']) ?: "auto";
                 $mainpath = trim(CRUDBooster::mainpath(), '/').$build_query;
-                echo "<th width='$width'>";
-                if (isset($sort_column[$field])) {
-                    switch ($sort_column[$field]['sorting']) {
-                        case 'asc':
-                            $url = CRUDBooster::urlFilterColumn($field, 'sorting', 'desc');
-                            echo "<a href='$url' title='Click to sort descending'>$colname &nbsp; <i class='fa fa-sort-desc'></i></a>";
-                            break;
-                        case 'desc':
-                            $url = CRUDBooster::urlFilterColumn($field, 'sorting', 'asc');
-                            echo "<a href='$url' title='Click to sort ascending'>$colname &nbsp; <i class='fa fa-sort-asc'></i></a>";
-                            break;
-                        default:
-                            $url = CRUDBooster::urlFilterColumn($field, 'sorting', 'asc');
-                            echo "<a href='$url' title='Click to sort ascending'>$colname &nbsp; <i class='fa fa-sort'></i></a>";
-                            break;
-                    }
-                } else {
-                    $url = CRUDBooster::urlFilterColumn($field, 'sorting', 'asc');
-                    echo "<a href='$url' title='Click to sort ascending'>$colname &nbsp; <i class='fa fa-sort'></i></a>";
-                }
+                ?>
+                <th width='$width'>
+                    @if (isset($sort_column[$field]))
+                        <?php
+                        switch ($sort_column[$field]['sorting']) {
+                            case 'asc':
+                                $url = CRUDBooster::urlFilterColumn($field, 'sorting', 'desc');
+                                echo "<a href='$url' title='".cbtrans('click_to_sort_descending')."'>$colname &nbsp; <i class='fa fa-sort-desc'></i></a>";
+                                break;
+                            case 'desc':
+                                $url = CRUDBooster::urlFilterColumn($field, 'sorting', 'asc');
+                                echo "<a href='$url' title='".cbtrans('click_to_sort_ascending')."'>$colname &nbsp; <i class='fa fa-sort-asc'></i></a>";
+                                break;
+                            default:
+                                $url = CRUDBooster::urlFilterColumn($field, 'sorting', 'asc');
+                                echo "<a href='$url' title='".cbtrans('click_to_sort_ascending')."'>$colname &nbsp; <i class='fa fa-sort'></i></a>";
+                                break;
+                        }
+                        ?>
+                    @else
+                        @php $url = CRUDBooster::urlFilterColumn($field, 'sorting', 'asc'); @endphp
+                        <a href='$url' title='{!! cbtrans('click_to_sort_ascending') !!}'>$colname &nbsp; <i class='fa fa-sort'></i></a>
+                    @endif
 
-                echo "</th>";
-            }
-            ?>
+                    @endforeach
+                </th>
 
-            @if($buttonTableAction)
-                @if(CRUDBooster::canUpdate() || CRUDBooster::canDelete() || CRUDBooster::canRead())
-                    <th width='{{$button_action_width?:"auto"}}'
-                        style="text-align:right">{{cbTrans("action_label")}}</th>
+                @if($buttonTableAction)
+                    @if(CRUDBooster::canUpdate() || CRUDBooster::canDelete() || CRUDBooster::canRead())
+                        <th width='{{$button_action_width?:"auto"}}'
+                            style="text-align:right">{{cbTrans("action_label")}}</th>
+                    @endif
                 @endif
-            @endif
         </tr>
         </thead>
         <tbody>
@@ -110,9 +111,9 @@
                     <td colspan='{{count($columns)+2}}' align="center">
                 @else
                     <td colspan='{{count($columns)+1}}' align="center">
-                @endif
-                    <i class='fa fa-search'></i> {{cbTrans("table_data_not_found")}}
-                </td>
+                        @endif
+                        <i class='fa fa-search'></i> {{cbTrans("table_data_not_found")}}
+                    </td>
             </tr>
         @endif
 
@@ -134,7 +135,7 @@
                     }");
                     ?>
                 @endforeach
-               <tr class='{!! $tr_color !!}'>
+                <tr class='{!! $tr_color !!}'>
             @else
                 <tr>
                     @endif
