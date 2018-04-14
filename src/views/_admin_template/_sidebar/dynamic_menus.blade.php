@@ -5,9 +5,10 @@
            class='{{($menu->color)?"text-".$menu->color:""}}'>
             <i class='{{$menu->icon}} {{($menu->color)?"text-".$menu->color:""}}'></i>
             <span>{{$menu->name}}</span>
-            @if(!empty($menu->children)){!! cbIcon('angle-right pull-right') !!}@endif
+            @if($menu->children->count() !== 0){!! cbIcon('angle-right pull-right') !!}@endif
         </a>
-        @if(!empty($menu->children))
+
+        @if($menu->children->count() !== 0)
             <ul class="treeview-menu">
                 @foreach($menu->children as $child)
                     <li data-id='{{$child->id}}'
