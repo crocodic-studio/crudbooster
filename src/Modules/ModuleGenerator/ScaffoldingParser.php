@@ -31,13 +31,12 @@ class ScaffoldingParser
      */
     private static function extractLines($code, $type)
     {
+        $mark = 'COLUMNS';
         if ($type == 'form') {
-            $d = 'FORM';
-        } elseif ($type == 'col') {
-            $d = 'COLUMNS';
+            $mark = 'FORM';
         }
 
-        $cols = self::extract_unit($code, "# START $d DO NOT REMOVE THIS LINE", "# END $d DO NOT REMOVE THIS LINE");
+        $cols = self::extract_unit($code, cbStartMarker($mark), cbEndMarker($mark));
         $cols = str_replace('"', "'", $cols);
         $cols = trim(str_replace('$this->'.$type.' = [];', '', $cols));
         $colsItem = explode('$this->'.$type.'[] = ', $cols);

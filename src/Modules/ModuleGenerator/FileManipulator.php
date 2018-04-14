@@ -16,8 +16,8 @@ class FileManipulator
 
     public static function extractBetween($raw, $mark)
     {
-        list($before, $_rest) = explode("# START $mark DO NOT REMOVE THIS LINE", $raw);
-        list($_middle, $after) = explode("# END $mark DO NOT REMOVE THIS LINE", $_rest);
+        list($before, $_rest) = explode(cbStartMarker($mark), $raw);
+        list($_middle, $after) = explode(cbEndMarker($mark), $_rest);
 
         return [trim($before), trim($_middle), trim($after)];
     }
@@ -36,9 +36,9 @@ class FileManipulator
         $_code = $top."\n\n";
         $indent = str_repeat(' ', 8);
 
-        $_code .= $indent."# START $mark DO NOT REMOVE THIS LINE\n";
+        $_code .= $indent.cbStartMarker($mark)."\n";
         $_code .= $indent.$newCode."\n";
-        $_code .= $indent."# END $mark DO NOT REMOVE THIS LINE\n\n";
+        $_code .= $indent.cbEndMarker($mark)."\n\n";
         $_code .= $indent.$bottom;
 
         return $_code;

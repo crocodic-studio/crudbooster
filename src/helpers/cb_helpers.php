@@ -15,6 +15,20 @@ if (! function_exists('cbModulesNS')) {
     }
 }
 
+if (! function_exists('cbStartMarker')) {
+    function cbStartMarker($section)
+    {
+        return "# START $section DO NOT REMOVE THIS LINE";
+    }
+}
+
+if (! function_exists('cbEndMarker')) {
+    function cbEndMarker($section)
+    {
+        return "# END $section DO NOT REMOVE THIS LINE";
+    }
+}
+
 if (! function_exists('cbAdminPath')) {
     function cbAdminPath()
     {

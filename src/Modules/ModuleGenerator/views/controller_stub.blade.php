@@ -10,40 +10,39 @@ use \crocodicstudio\crudbooster\controllers\CBController;
 class {{$controllerName}} extends CBController {
 
     public function cbInit() {
-        # START CONFIGURATION DO NOT REMOVE THIS LINE
-        $this->table 			   = "{{$table}}";
-        $this->title_field         = "{{DbInspector::colName($coloms)}}";
-        $this->limit               = 20;
-        $this->showNumbering       = false;
-        $this->buttonTableAction   = true;
-        $this->orderby             = "{{$pk}},desc";
+        {!! cbStartMarker('CONFIGURATION') !!}
+        $this->table = "{{$table}}";
+        $this->title_field = "{{DbInspector::colName($coloms)}}";
+        $this->limit = 20;
+        $this->showNumbering = false;
+        $this->buttonTableAction = true;
+        $this->orderby = "{{$pk}},desc";
         $this->button_action_style = "button_icon";
         $this->button_add          = true;
-        $this->deleteBtn           = true;
-        $this->button_edit         = true;
-        $this->buttonDetail        = true;
-        $this->button_show         = true;
-        $this->button_filter       = true;
-        $this->buttonExport        = false;
-        $this->button_import       = false;
+        $this->deleteBtn = true;
+        $this->button_edit = true;
+        $this->buttonDetail = true;
+        $this->button_show = true;
+        $this->button_filter = true;
+        $this->buttonExport = false;
+        $this->button_import = false;
         $this->button_bulk_action  = true;
-        # END CONFIGURATION DO NOT REMOVE THIS LINE
+        {!! cbEndMarker('CONFIGURATION') !!}
 
-        # START COLUMNS DO NOT REMOVE THIS LINE
+        {!! cbStartMarker('COLUMNS') !!}
         $this->col = [];
         @foreach($cols as $col)
         $this->col[] = ['label' => '{!! $col['label'] !!}', 'name' => {!! $col["name"] !!}];
         @endforeach
-        # END COLUMNS DO NOT REMOVE THIS LINE
+        {!! cbEndMarker('COLUMNS') !!}
 
 
-        # START FORM DO NOT REMOVE THIS LINE
+        {!! cbStartMarker('FORM') !!}
         $this->form = [];
         @foreach($formArrayString as $formArray)
         $this->form[] = {!! $formArray  !!};
         @endforeach
-
-        # END FORM DO NOT REMOVE THIS LINE
+        {!! cbEndMarker('FORM') !!}
 
         /*
         | ----------------------------------------------------------------------

@@ -48,9 +48,9 @@ class Step3Handler
         //ARRANGE THE FULL SCRIPT
         $fileContent = $top."\n\n";
         $indent = str_repeat(' ', 8);
-        $fileContent .= $indent."# START FORM DO NOT REMOVE THIS LINE\n";
+        $fileContent .= $indent.cbStartMarker("FORM")."\n";
         $fileContent .= $scripts;
-        $fileContent .= "\n".$indent."# END FORM DO NOT REMOVE THIS LINE\n\n";
+        $fileContent .= "\n".$indent.cbEndMarker('FORM')."\n\n";
 
         //CREATE A BACKUP SCAFFOLDING TO OLD TAG
         if ($currentScaffold) {
