@@ -216,5 +216,6 @@ return [
 
     'toggle_navigation' => "Toggle navigation",
     'information' => "Information",
+    'at_least_one_row' => 'Please select at least one row!',
 
 ];
