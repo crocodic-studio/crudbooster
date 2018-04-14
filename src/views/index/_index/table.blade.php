@@ -59,7 +59,7 @@
             @endif
 
             @foreach ($columns as $col)
-                @if ($col['visible'] === false) @continue
+                @if ($col['visible'] === false) @continue @endif
                 <?php
                 $sort_column = Request::get('filter_column');
                 $colname = $col['label'];
@@ -91,15 +91,15 @@
                         <a href='$url' title='{!! cbtrans('click_to_sort_ascending') !!}'>$colname &nbsp; <i class='fa fa-sort'></i></a>
                     @endif
 
-                    @endforeach
                 </th>
+            @endforeach
 
-                @if($buttonTableAction)
-                    @if(CRUDBooster::canUpdate() || CRUDBooster::canDelete() || CRUDBooster::canRead())
-                        <th width='{{$button_action_width?:"auto"}}'
-                            style="text-align:right">{{cbTrans("action_label")}}</th>
-                    @endif
+            @if($buttonTableAction)
+                @if(CRUDBooster::canUpdate() || CRUDBooster::canDelete() || CRUDBooster::canRead())
+                    <th width='{{$button_action_width?:"auto"}}'
+                        style="text-align:right">{{cbTrans("action_label")}}</th>
                 @endif
+            @endif
         </tr>
         </thead>
         <tbody>
