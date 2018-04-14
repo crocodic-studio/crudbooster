@@ -25,7 +25,7 @@ class Step2Handler
     {
         $id = request('id');
         $controller = ModulesRepo::getControllerName($id);
-        $newCode = PhpColConfig::makeColumnPhpCode();
+        $newCode = view('CbModulesGen::templates.col')->render();
         $code = FileManipulator::readCtrlContent($controller);
         $fileResult = FileManipulator::replaceBetweenMark($code, 'COLUMNS', $newCode);
 

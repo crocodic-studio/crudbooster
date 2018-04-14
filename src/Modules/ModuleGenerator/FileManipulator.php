@@ -31,12 +31,15 @@ class FileManipulator
     public static function replaceBetweenMark($phpCode, $mark, $newCode)
     {
         list($top, $_middle, $bottom) = self::extractBetween($phpCode, $mark);
+        unset($_middle);
 
         $_code = $top."\n\n";
-        $_code .= str_repeat(' ', 12)."# START $mark DO NOT REMOVE THIS LINE\n";
-        $_code .= $newCode."\n";
-        $_code .= str_repeat(' ', 12)."# END $mark DO NOT REMOVE THIS LINE\n\n";
-        $_code .= str_repeat(' ', 12).$bottom;
+        $indent = str_repeat(' ', 8);
+
+        $_code .= $indent."# START $mark DO NOT REMOVE THIS LINE\n";
+        $_code .= $indent.$newCode."\n";
+        $_code .= $indent."# END $mark DO NOT REMOVE THIS LINE\n\n";
+        $_code .= $indent.$bottom;
 
         return $_code;
     }
