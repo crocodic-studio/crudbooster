@@ -58,13 +58,13 @@ class MenusController extends CBController
 					$('#form-group-module_slug').show();
 					$('#form-group-statistic_slug,#form-group-path').hide();
 					$('#module_slug').prop('required',true);
-					$('#form-group-module_slug label').append('<span class=\"text-danger\" title=\"{!! trans('crudbooster.this_field_is_required') !!}\">*</span>');
+					$('#form-group-module_slug label').append('<span class=\"text-danger\" title=\"".trans('crudbooster.this_field_is_required')."\">*</span>');
 				}else if(type_menu == 'Statistic') {
 					$('#form-group-statistic_slug').show();
 					$('#module_slug').prop('required',false);
 					$('#form-group-module_slug,#form-group-path').hide();
 					$('#statistic_slug').prop('required',true);
-					$('#form-group-statistic_slug label').append('<span class=\"text-danger\" title=\"{!! trans('crudbooster.this_field_is_required') !!}\">*</span>');
+					$('#form-group-statistic_slug label').append('<span class=\"text-danger\" title=\"".trans('crudbooster.this_field_is_required')."\">*</span>');
 				}else{
 					$('#module_slug').prop('required',false);
 					$('#form-group-module_slug,#form-group-statistic_slug').hide();
@@ -101,7 +101,6 @@ class MenusController extends CBController
 						$('#form-group-module_slug').show();
 						$('#module_slug').prop('required',true);
 						$('#form-group-module_slug label .text-danger').remove();
-						$('#form-group-module_slug label').append('<span class=\"text-danger\" title=\"{!! trans('crudbooster.this_field_is_required') !!}\">*</span>');
 					}else if (n == 'Statistic') {
 						$('#form-group-path').hide();
 						$('#form-group-module_slug').hide();
@@ -110,13 +109,13 @@ class MenusController extends CBController
 						$('#form-group-statistic_slug').show();
 						$('#statistic_slug').prop('required',true);
 						$('#form-group-statistic_slug label .text-danger').remove();
-						$('#form-group-statistic_slug label').append('<span class=\"text-danger\" title=\"{!! trans('crudbooster.this_field_is_required') !!}\">*</span>');
+						$('#form-group-statistic_slug label').append('<span class=\"text-danger\" title=\"".trans('crudbooster.this_field_is_required')."\">*</span>');
 					}else if (n == 'URL') {
 						$('input[name=path]').attr('placeholder','Please enter your URL');
 
 						$('#path').prop('required',true);
 						$('#form-group-path label .text-danger').remove();
-						$('#form-group-path label').append('<span class=\"text-danger\" title=\"{!! trans('crudbooster.this_field_is_required') !!}\">*</span>');
+						$('#form-group-path label').append('<span class=\"text-danger\" title=\"".trans('crudbooster.this_field_is_required')."\">*</span>');
 
 						$('#form-group-path').show();
 						$('#form-group-module_slug,#form-group-statistic_slug').hide();
@@ -125,7 +124,7 @@ class MenusController extends CBController
 
 						$('#path').prop('required',true);
 						$('#form-group-path label .text-danger').remove();
-						$('#form-group-path label').append('<span class=\"text-danger\" title=\"{!! trans('crudbooster.this_field_is_required') !!}\">*</span>');
+						$('#form-group-path label').append('<span class=\"text-danger\" title=\"".trans('crudbooster.this_field_is_required')."\">*</span>');
 
 						$('#form-group-path').show();
 						$('#form-group-module_slug,#form-group-statistic_slug').hide();					
@@ -134,7 +133,7 @@ class MenusController extends CBController
 						
 						$('#path').prop('required',true);
 						$('#form-group-path label .text-danger').remove();
-						$('#form-group-path label').append('<span class=\"text-danger\" title=\"{!! trans('crudbooster.this_field_is_required') !!}\">*</span>');
+						$('#form-group-path label').append('<span class=\"text-danger\" title=\"".trans('crudbooster.this_field_is_required')."\">*</span>');
 
 						$('#form-group-path').show();
 						$('#form-group-module_slug,#form-group-statistic_slug').hide();
