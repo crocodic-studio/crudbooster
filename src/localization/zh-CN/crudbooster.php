@@ -145,7 +145,7 @@ return [
     'settings' => '配置管理',
     'Users_Management' => '用户管理',
     'list_API' => 'API列表',
-    'Generate_Screet_Key' => '生成密钥',
+    'Generate_Secret_Key' => '生成密钥',
     'Add_New_Email' => '新建邮件',
     'List_Email_Template' => '邮件模块列表',
     'Email_Templates' => '邮件模块',

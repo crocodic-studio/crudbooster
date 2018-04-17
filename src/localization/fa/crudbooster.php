@@ -147,7 +147,7 @@ return [
     'settings' => 'تنظیمات',
     'Users_Management' => 'مدیریت کاربران',
     'list_API' => 'لیست API (مستندات)',
-    'Generate_Screet_Key' => 'ساخت Secret Key',
+    'Generate_Secret_Key' => 'ساخت Secret Key',
     'Add_New_Email' => 'افزودن ایمیل جدید',
     'List_Email_Template' => 'لیست قالب های ایمیل',
     'Email_Templates' => 'قالب های ایمیل',

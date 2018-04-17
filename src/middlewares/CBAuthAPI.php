@@ -30,7 +30,7 @@ class CBAuthAPI
 
         $this->validateRequest();
 
-        list($userAgent, $serverToken, $server_token_screet) = $this->getTokens();
+        list($userAgent, $serverToken, $server_token_Secret) = $this->getTokens();
 
         $senderToken = Request::header('X-Authorization-Token');
 
@@ -39,8 +39,8 @@ class CBAuthAPI
         $this->tokenMissMatchDevice($senderToken, $userAgent, $serverToken);
 
         $id = array_search($senderToken, $serverToken);
-        $server_screet = $server_token_screet[$id];
-        DB::table('cms_apikey')->where('screetkey', $server_screet)->increment('hit');
+        $server_Secret = $server_token_Secret[$id];
+        DB::table('cms_apikey')->where('secretkey', $server_Secret)->increment('hit');
 
         $expired_token = date('Y-m-d H:i:s', strtotime('+5 seconds'));
         Cache::put($senderToken, $userAgent, $expired_token);
@@ -80,7 +80,7 @@ class CBAuthAPI
         $userAgent = Request::header('User-Agent');
         $time = Request::header('X-Authorization-Time');
 
-        $keys = DB::table('cms_apikey')->where('status', 'active')->pluck('screetkey');
+        $keys = DB::table('cms_apikey')->where('status', 'active')->pluck('Secretkey');
         $serverToken = [];
         $serverTokenSecret = [];
         foreach ($keys as $key) {

@@ -144,7 +144,7 @@ return [
     'settings' => 'Pengaturan',
     'Users_Management' => 'Manajemen Pengguna',
     'list_API' => 'Daftar API (Dokumentasi)',
-    'Generate_Screet_Key' => 'Buat Kunci Rahasia (API)',
+    'Generate_Secret_Key' => 'Buat Kunci Rahasia (API)',
     'Add_New_Email' => 'Tambah Kerangka Email',
     'List_Email_Template' => 'Daftar Kerangka Email',
     'Email_Templates' => 'Kerangka Email',

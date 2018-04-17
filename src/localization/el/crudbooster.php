@@ -147,7 +147,7 @@ return [
     'settings' => 'Ρυθμίσεις',
     'Users_Management' => 'Διαχείριση χρηστών',
     'list_API' => 'List API (Documentation)',
-    'Generate_Screet_Key' => 'Generate Secret Key',
+    'Generate_Secret_Key' => 'Generate Secret Key',
     'Add_New_Email' => 'Προσθήκη Email',
     'List_Email_Template' => 'List Email Template',
     'Email_Templates' => 'Email Templates',

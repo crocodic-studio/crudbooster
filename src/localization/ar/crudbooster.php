@@ -142,7 +142,7 @@ return [
     'settings' => 'اعدادات النظام',
     'Users_Management' => 'ادارة المستخدمين',
     'list_API' => 'عرض API',
-    'Generate_Screet_Key' => 'انشاء مفتاح',
+    'Generate_Secret_Key' => 'انشاء مفتاح',
     'Add_New_Email' => 'اضافة قالب جديد',
     'List_Email_Template' => 'عرض القوالب',
     'Email_Templates' => 'قوالب البريد الإلكتروني',

@@ -56,10 +56,10 @@
             </div>
             <div class='form-group'>
                 <label>How To Use</label><br/>
-                SCREETKEY : ABCDEF123456 <br/>
+                SECRETKEY : ABCDEF123456 <br/>
                 TIME : UNIX CURRENT TIME <br/>
                 <label>Header :</label><br/>
-                X-Authorization-Token : md5( SCREETKEY + TIME + USER_AGENT )<br/>
+                X-Authorization-Token : md5( SECRETKEY + TIME + USER_AGENT )<br/>
                 X-Authorization-Time : TIME
             </div>
             <table class='table table-striped table-api table-bordered'>

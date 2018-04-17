@@ -8,7 +8,7 @@
     </li>
 
     <li class="active">
-        <a href="{{ CRUDBooster::mainpath('screet-key') }}">{!! cbIcon('key') !!}API Secret Key</a>
+        <a href="{{ CRUDBooster::mainpath('secret-key') }}">{!! cbIcon('key') !!}API Secret Key</a>
     </li>
 
     <li>

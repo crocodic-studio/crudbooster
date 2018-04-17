@@ -15,7 +15,7 @@ class CreateCmsApikeyTable extends Migration {
 		Schema::create('cms_apikey', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->string('screetkey')->nullable();
+			$table->string('secretkey')->nullable();
 			$table->integer('hit')->nullable();
 			$table->string('status', 25)->default('active');
 			$table->timestamps();

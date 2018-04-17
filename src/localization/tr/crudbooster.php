@@ -146,7 +146,7 @@ return [
     'settings' => 'Ayarlar',
     'Users_Management' => 'Kullanıcı Yönetimi',
     'list_API' => 'API Listesi (Dökümantasyon)',
-    'Generate_Screet_Key' => 'Güvenli Anahtar Oluşturma',
+    'Generate_Secret_Key' => 'Güvenli Anahtar Oluşturma',
     'Add_New_Email' => 'Yeni E-Posta Ekle',
     'List_Email_Template' => 'E-Posta Şablonu Listesi',
     'Email_Templates' => 'E-Posta Şablonları',

@@ -1,13 +1,13 @@
 <script>
     var lastno = {!! $no + 1 !!};
 
-    function generate_screet_key() {
-        $.get("{!! route('AdminApiGeneratorControllerGetGenerateScreetKey') !!}", function (resp) {
+    function generate_secret_key() {
+        $.get("{!! route('AdminApiGeneratorControllerGetGenerateSecretKey') !!}", function (resp) {
             lastno += 1;
             $('#table-apikey').append("<tr><td>" + lastno + "</td><td>" + resp.key + "</td><td>0</td><td><span class='label label-success'>Active</span></td><td>" +
                 "<a class='btn btn-xs btn-default' href='{{CRUDBooster::mainpath("status-apikey")}}?id=" + resp.id + "&status=0'>Non Active</a> <a class='btn btn-xs btn-danger' href='javascript:void(0)' onclick='deleteApi(" + resp.id + ")'>Delete</a> </td></tr>"
             );
-            $('.no-screetkey').remove();
+            $('.no-secretkey').remove();
             swal("Success!", "Your new screet key has been generated successfully", "success");
         })
     }

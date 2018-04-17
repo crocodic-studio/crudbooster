@@ -11,7 +11,7 @@
 
             <p>
                 <a title='Generate API Key' class='btn btn-primary' href='javascript:void(0)'
-                   onclick='generate_screet_key()'>
+                   onclick='generate_Secret_key()'>
                     {!! cbIcon('key') !!} Generate Secret Key
                 </a>
             </p>
@@ -20,7 +20,7 @@
                 <thead>
                 <tr>
                     <th width="3%">No</th>
-                    <th>Screet Key</th>
+                    <th>Secret Key</th>
                     <th width="10%">Hit</th>
                     <th width="10%">Status</th>
                     <th width="15%">-</th>

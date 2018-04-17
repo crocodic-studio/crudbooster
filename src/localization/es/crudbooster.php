@@ -140,7 +140,7 @@ return [
     'settings' => 'Ajustes',
     'Users_Management' => 'Gestión de usuarios',
     'list_API' => 'Ver API (Documentación)',
-    'Generate_Screet_Key' => 'Generar Secret Key',
+    'Generate_Secret_Key' => 'Generar Secret Key',
     'Add_New_Email' => 'Añadir Nuevo Email',
     'List_Email_Template' => 'Ver Plantillas de Correo',
     'Email_Templates' => 'Plantillas de Correo',

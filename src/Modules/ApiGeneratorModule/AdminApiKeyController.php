@@ -30,7 +30,7 @@ class AdminApiKeyController extends CBController
         return view('CbApiGen::api_key', $data);
     }
 
-    function getGenerateScreetKey()
+    function getGenerateSecretKey()
     {
         $this->cbLoader();
         //Generate a random string.
@@ -40,7 +40,7 @@ class AdminApiKeyController extends CBController
         $token = bin2hex($token);
 
         $id = DB::table('cms_apikey')->insertGetId([
-                'screetkey' => $token,
+                'secretkey' => $token,
                 'created_at' => date('Y-m-d H:i:s'),
                 'status' => 'active',
                 'hit' => 0,

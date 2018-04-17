@@ -147,7 +147,7 @@ return [
     'settings' => 'Impostazioni',
     'Users_Management' => 'Gestione utenti',
     'list_API' => 'Elenco API (Documentazione)',
-    'Generate_Screet_Key' => 'Crea Secret Key',
+    'Generate_Secret_Key' => 'Crea Secret Key',
     'Add_New_Email' => 'Aggiungi nuova Email',
     'List_Email_Template' => 'Elenco Template Email',
     'Email_Templates' => 'Template Email',

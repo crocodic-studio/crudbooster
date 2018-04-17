@@ -131,7 +131,7 @@ return [
     'settings' => 'Configurações',
     'Users_Management' => 'Gestão de usuários',
     'list_API' => 'Listar API (Documentação)',
-    'Generate_Screet_Key' => 'Gerar nova chave secreta',
+    'Generate_Secret_Key' => 'Gerar nova chave secreta',
     'Add_New_Email' => 'Adicionar novo e-mail',
     'List_Email_Template' => 'Listar modelos de e-mail',
     'Email_Templates' => 'Modelos de e-mail',

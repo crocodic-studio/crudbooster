@@ -1,6 +1,6 @@
 <tr>
     <td>{{ $no + 1 }}</td>
-    <td>{{ $row->screetkey }}</td>
+    <td>{{ $row->secretkey }}</td>
     <td>{{ $row->hit }}</td>
     <td>{!! ($row->status=='active')?"<span class='label label-success'>Active</span>":"<span class='label label-default'>Non Active</span>" !!}</td>
     <td>
