@@ -26,14 +26,7 @@ class ExecuteApi
     public function execute()
     {
         $rowApi = DB::table('cms_apicustom')->where('permalink', $this->ctrl->permalink)->first();
-        /* Check the row is exists or not */
-        $this->checkApiDefined($rowApi);
-
-        /* Method Type validation */
-        $this->validateMethodType($rowApi->method_type);
-
-        /* Do some custome pre-checking for posted data, if failed discard API execution */
-        $this->doCustomePrecheck();
+        ApiValidations::doValidations($rowApi, $this->ctrl);
 
         $table = $rowApi->tabel;
 
@@ -367,50 +360,6 @@ class ExecuteApi
         }
 
         return $nameTmp;
-    }
-
-    /**
-     * @param $methodType
-     * @return mixed
-     */
-    private function validateMethodType($methodType)
-    {
-        if (!is_null($methodType) && request()->isMethod($methodType)) {
-            return true;
-        }
-
-        $result = ApiResponder::makeResult(0, "The request method is not allowed !");
-        ApiResponder::send($result, request()->all(), $this->ctrl);
-    }
-
-    /**
-     * @return mixed
-     */
-    private function doCustomePrecheck()
-    {
-        $this->ctrl->hookValidate();
-
-        if (! $this->ctrl->validate) {
-            return true;
-        }  // hook have to return true
-
-        $result = ApiResponder::makeResult(0, 'Failed to execute API !');
-        ApiResponder::send($result, request()->all(), $this->ctrl);
-    }
-
-    /**
-     * @param $rowApi
-     * @return mixed
-     */
-    private function checkApiDefined($rowApi)
-    {
-        if (!is_null($rowApi)) {
-            return true;
-        }
-
-        $msg = 'Sorry this API is no longer available, maybe has changed by admin, or please make sure api url is correct.';
-        $result = ApiResponder::makeResult(0, $msg);
-        ApiResponder::send($result, request()->all(), $this->ctrl);
     }
 
     /**
