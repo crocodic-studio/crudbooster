@@ -66,7 +66,7 @@ class ExecuteApi
             } elseif ($actionType == 'delete') {
                 $result = $this->handleDeleteAction($table, $data);
             }
-            $this->show($result, $posts);
+            ApiResponder::send($result, $posts, $this->ctrl);
         } elseif (in_array($actionType, ['save_add', 'save_edit'])) {
             $rowAssign = array_filter($input_validator, function ($column) use ($table) {
                 return Schema::hasColumn($table, $column);
@@ -75,23 +75,6 @@ class ExecuteApi
             $this->handleAddEdit($parameters, $posts, $rowAssign);
         }
 
-    }
-
-    /**
-     * @param $result
-     * @param $posts
-     * @return mixed
-     */
-    private function show($result, $posts)
-    {
-        $this->ctrl->hookAfter($posts, $result);
-        $result['api_status'] = $this->ctrl->hook_api_status ?: $result['api_status'];
-        $result['api_message'] = $this->ctrl->hook_api_message ?: $result['api_message'];
-
-        if (cbGetsetting('api_debug_mode') == 'true') {
-            $result['api_authorization'] = 'You are in debug mode !';
-        }
-        sendAndTerminate(response()->json($result));
     }
 
     /**
@@ -122,9 +105,9 @@ class ExecuteApi
         if ($rows) {
             return $this->handleRows($responsesFields, $rows);
         }
-        $result = $this->makeResult(0, 'No data found !');
+        $result = ApiResponder::makeResult(0, 'No data found !');
         $result['data'] = [];
-        $this->show($result, request()->all());
+        ApiResponder::send($result, request()->all(), $this->ctrl);
     }
 
     /**
@@ -143,7 +126,7 @@ class ExecuteApi
         $status = ($delete) ? 1 : 0;
         $msg = ($delete) ? "success" : "failed";
 
-        return $this->makeResult($status, $msg);
+        return ApiResponder::makeResult($status, $msg);
     }
 
     /**
@@ -240,7 +223,7 @@ class ExecuteApi
             $this->handleFile($row, $responsesFields);
         }
 
-        $result = $this->makeResult(1, 'success');
+        $result = ApiResponder::makeResult(1, 'success');
         $result['data'] = $rows;
 
         return $result;
@@ -269,9 +252,9 @@ class ExecuteApi
      */
     private function passwordError($posts)
     {
-        $result = $this->makeResult(0, cbTrans('alert_password_wrong'));
+        $result = ApiResponder::makeResult(0, cbTrans('alert_password_wrong'));
 
-        $this->show($result, $posts);
+        ApiResponder::send($result, $posts, $this->ctrl);
     }
 
     /**
@@ -337,7 +320,7 @@ class ExecuteApi
      */
     private function success($rows)
     {
-        $result = $this->makeResult(1, 'success');
+        $result = ApiResponder::makeResult(1, 'success');
 
         return array_merge($result, (array)$rows);
     }
@@ -396,8 +379,8 @@ class ExecuteApi
             return true;
         }
 
-        $result = $this->makeResult(0, "The request method is not allowed !");
-        $this->show($result, request()->all());
+        $result = ApiResponder::makeResult(0, "The request method is not allowed !");
+        ApiResponder::send($result, request()->all(), $this->ctrl);
     }
 
     /**
@@ -411,8 +394,8 @@ class ExecuteApi
             return true;
         }  // hook have to return true
 
-        $result = $this->makeResult(0, 'Failed to execute API !');
-        $this->show($result, request()->all());
+        $result = ApiResponder::makeResult(0, 'Failed to execute API !');
+        ApiResponder::send($result, request()->all(), $this->ctrl);
     }
 
     /**
@@ -426,8 +409,8 @@ class ExecuteApi
         }
 
         $msg = 'Sorry this API is no longer available, maybe has changed by admin, or please make sure api url is correct.';
-        $result = $this->makeResult(0, $msg);
-        $this->show($result, request()->all());
+        $result = ApiResponder::makeResult(0, $msg);
+        ApiResponder::send($result, request()->all(), $this->ctrl);
     }
 
     /**
@@ -444,9 +427,9 @@ class ExecuteApi
         }
         $message = $validator->errors()->all();
         $message = implode(', ', $message);
-        $result = $this->makeResult(0, $message);
+        $result = ApiResponder::makeResult(0, $message);
 
-        $this->show($result, $posts);
+        ApiResponder::send($result, $posts, $this->ctrl);
     }
 
     /**
@@ -461,7 +444,7 @@ class ExecuteApi
         $row = $data->first();
 
         if (! $row) {
-            return $this->makeResult(0, 'There is no data found !');
+            return ApiResponder::makeResult(0, 'There is no data found !');
         }
 
         foreach ($parameters as $param) {
@@ -568,25 +551,6 @@ class ExecuteApi
         }
 
         return $data;
-    }
-
-    /**
-     * @param $status
-     * @param $msg
-     * @return array
-     */
-    private function makeResult($status, $msg)
-    {
-        $result = [
-            'api_status'=> $status,
-            'api_message'=> $msg,
-        ];
-
-        if (cbGetsetting('api_debug_mode') == 'true') {
-            $result['api_authorization'] = 'You are in debug mode !';
-        }
-
-        return $result;
     }
 
     /**
