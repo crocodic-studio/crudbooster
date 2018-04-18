@@ -5,7 +5,6 @@ namespace crocodicstudio\crudbooster\controllers\ApiController;
 use crocodicstudio\crudbooster\helpers\DbInspector;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 
@@ -55,7 +54,7 @@ class ExecuteApi
             if ($actionType == 'list') {
                 $result = $this->handleListAction($table, $data, $responses_fields);
             } elseif ($actionType == 'detail') {
-                $result = $this->handleDetailsAction($data, $parameters, $posts, $responses_fields);
+                $result = HandleDetailsAction::handle($data, $parameters, $posts, $responses_fields, $this);
             } elseif ($actionType == 'delete') {
                 $result = $this->handleDeleteAction($table, $data);
             }
@@ -239,16 +238,6 @@ class ExecuteApi
         }
     }
 
-    /**
-     * @param $posts
-     * @return mixed
-     */
-    private function passwordError($posts)
-    {
-        $result = ApiResponder::makeResult(0, cbTrans('alert_password_wrong'));
-
-        ApiResponder::send($result, $posts, $this->ctrl);
-    }
 
     /**
      * @param $rows
@@ -305,17 +294,6 @@ class ExecuteApi
         }
 
         return $data;
-    }
-
-    /**
-     * @param $rows
-     * @return array
-     */
-    private function success($rows)
-    {
-        $result = ApiResponder::makeResult(1, 'success');
-
-        return array_merge($result, (array)$rows);
     }
 
     /**
@@ -379,49 +357,6 @@ class ExecuteApi
         $result = ApiResponder::makeResult(0, $message);
 
         ApiResponder::send($result, $posts, $this->ctrl);
-    }
-
-    /**
-     * @param $data
-     * @param $parameters
-     * @param $posts
-     * @param $responsesFields
-     * @return array
-     */
-    private function handleDetailsAction($data, $parameters, $posts, $responsesFields)
-    {
-        $row = $data->first();
-
-        if (! $row) {
-            return ApiResponder::makeResult(0, 'There is no data found !');
-        }
-
-        foreach ($parameters as $param) {
-            $name = $param['name'];
-            $type = $param['type'];
-            $value = $posts[$name];
-            $used = $param['used'];
-            $required = $param['required'];
-
-            if ($param['config'] != '' && substr($param['config'], 0, 1) != '*') {
-                $value = $param['config'];
-            }
-            if (Hash::check($value, $row->{$name})) {
-                continue;
-            }
-
-            if ($required && $type == 'password') {
-                $this->passwordError($posts);
-            }
-
-            if (! $required && $used && $value) {
-                $this->passwordError($posts);
-            }
-        }
-
-        $this->handleFile($row, $responsesFields);
-
-        return $this->success($row);
     }
 
     /**
