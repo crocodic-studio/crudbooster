@@ -2,6 +2,7 @@
 
 namespace crocodicstudio\crudbooster\controllers\ApiController;
 
+use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
 use Illuminate\Support\Facades\Hash;
 
 class HandleDetailsAction
@@ -76,7 +77,7 @@ class HandleDetailsAction
      * @param $rows
      * @param $responsesFields
      */
-    public function handleFile($rows, $responsesFields)
+    public static function handleFile($rows, $responsesFields)
     {
         foreach ($rows as $k => $v) {
             if (FieldDetector::isUploadField(\File::extension($v))) {

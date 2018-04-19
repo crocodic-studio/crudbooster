@@ -76,7 +76,6 @@ trait CbIndexLoader
         $this->data['addaction'] = ($this->show_addaction) ? $this->addaction : null;
         $this->data['buttonDetail'] = $this->buttonDetail;
         $this->data['buttonAdd'] = $this->buttonAdd;
-
     }
 
 }
