@@ -52,7 +52,7 @@ class ExecuteApi
             $this->ctrl->hookQuery($data);
             $result = [];
             if ($actionType == 'list') {
-                $result = $this->handleListAction($table, $data, $responses_fields);
+                $result = HandleListAction::handle($table, $data, $responses_fields, $this);
             } elseif ($actionType == 'detail') {
                 $result = HandleDetailsAction::handle($data, $parameters, $posts, $responses_fields, $this);
             } elseif ($actionType == 'delete') {

@@ -8,9 +8,10 @@ class HandleListAction
      * @param $table
      * @param $data
      * @param $responsesFields
+     * @param $ctrl
      * @return array
      */
-    public static function handleListAction($table, $data, $responsesFields, $ctrl)
+    public static function handle($table, $data, $responsesFields, $ctrl)
     {
         $rows = self::sortRows($table, $data);
         if ($rows) {
