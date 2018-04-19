@@ -19,8 +19,10 @@ use Illuminate\Support\Facades\DB;
 use crocodicstudio\crudbooster\helpers\CRUDBooster;
 use Schema;
 
-class CBController extends Controller
+abstract class CBController extends Controller
 {
+    abstract public function cbInit();
+
     use Hooks;
     use Deleter, CbFormLoader, CbIndexLoader, CbLayoutLoader, IndexAjax, ImportData, ExportData, FormSubmitHandlers;
 
