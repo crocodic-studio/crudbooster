@@ -19,7 +19,7 @@ class {{$controllerName}} extends CBController {
         $this->button_edit = true;
         $this->buttonDetail = true;
         $this->buttonShow = true;
-        $this->button_filter = true;
+        $this->buttonFilter = true;
         $this->buttonExport = false;
         $this->button_import = false;
         $this->buttonBulkAction = true;

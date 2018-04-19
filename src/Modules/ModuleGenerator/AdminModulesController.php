@@ -20,7 +20,7 @@ class AdminModulesController extends CBController
         $this->buttonAdd = false;
         $this->buttonExport = false;
         $this->button_import = false;
-        $this->button_filter = false;
+        $this->buttonFilter = false;
         $this->buttonDetail = false;
         $this->buttonBulkAction = false;
         $this->button_action_style = 'button_icon';

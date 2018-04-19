@@ -62,7 +62,7 @@ trait CbIndexLoader
         $this->data['button_selected'] = $this->button_selected;
         $this->data['buttonExport'] = $this->buttonExport;
         $this->data['button_import'] = $this->buttonImport;
-        $this->data['button_filter'] = $this->buttonFilter;
+        $this->data['buttonFilter'] = $this->buttonFilter;
         $this->data['showNumbering'] = $this->showNumbering;
         $this->data['preIndexHtml'] = $this->preIndexHtml;
         $this->data['postIndexHtml'] = $this->postIndexHtml;

@@ -32,7 +32,7 @@
             <div class="box-tools pull-{{ cbTrans('right') }}"
                  style="position: relative;margin-top: -5px;margin-right: -10px">
 
-                @if($button_filter)
+                @if($buttonFilter)
                     <a style="margin-top:-23px" href="javascript:void(0)" id='btn_advanced_filter'
                        data-url-parameter='{{$build_query}}' title='{{ cbTrans('filter_dialog_title')}}'
                        class="btn btn-sm btn-default {{(Request::get('filter_column'))?'active':''}}">
