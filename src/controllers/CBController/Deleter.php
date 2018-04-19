@@ -11,7 +11,7 @@ trait Deleter
 {
     public function getDelete($id)
     {
-        $this->cbLoader();
+        $this->genericLoader();
         (new DataRemover($this))->doDeleteWithHook([$id]);
         $this->insertLog('log_delete', $id);
         $url = request('return_url') ?: CRUDBooster::referer();
@@ -20,7 +20,7 @@ trait Deleter
 
     public function postActionSelected()
     {
-        $this->cbLoader();
+        $this->genericLoader();
         $selectedIds = request('checkbox');
         $btnName = request('button_name');
         if (! $selectedIds) {
@@ -56,7 +56,7 @@ trait Deleter
 
     public function getDeleteImage()
     {
-        $this->cbLoader();
+        $this->genericLoader();
         $id = request('id');
         $column = request('column');
 

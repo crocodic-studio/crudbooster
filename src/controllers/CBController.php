@@ -162,8 +162,8 @@ abstract class CBController extends Controller
 
     protected function genericLoader()
     {
-        $this->cbInit();
         $this->primaryKey = DbInspector::findPk($this->table);
+        $this->cbInit();
         $this->data['pk'] = $this->primaryKey;
         $this->data['hide_form'] = $this->hide_form;
         $this->data['table'] = $this->table;
