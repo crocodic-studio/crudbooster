@@ -32,7 +32,7 @@ class ApiController extends Controller
 
     public function execute_api()
     {
-        return (new ExecuteApi($this))->execute();
+        (new ExecuteApi($this))->execute();
     }
 
     /**
