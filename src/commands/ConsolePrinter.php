@@ -18,7 +18,7 @@ class ConsolePrinter
         $this->console = $console;
     }
 
-    function printHeader()
+    public function printHeader()
     {
         $this->console->info("
 
@@ -34,7 +34,7 @@ class ConsolePrinter
     }
 
 
-    function printFooter($success = true)
+    public function printFooter($success = true)
     {
         $this->console->info('--');
         $this->console->info('Homepage : http://www.crudbooster.com');
