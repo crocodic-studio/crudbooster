@@ -72,7 +72,7 @@ trait CbIndexLoader
         $this->data['buttonTableAction'] = $this->buttonTableAction;
         $this->data['index_additional_view'] = $this->indexAdditionalView;
         $this->data['button_action_width'] = $this->buttonActionWidth;
-        $this->data['button_show'] = $this->buttonShow;
+        $this->data['buttonShow'] = $this->buttonShow;
         $this->data['addaction'] = ($this->show_addaction) ? $this->addaction : null;
         $this->data['buttonDetail'] = $this->buttonDetail;
         $this->data['buttonAdd'] = $this->buttonAdd;

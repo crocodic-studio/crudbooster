@@ -27,7 +27,7 @@ class AdminUsersController extends CBController
         $this->cbFormLoader();
         $this->button_addmore = false;
         $this->button_cancel = false;
-        $this->button_show = false;
+        $this->buttonShow = false;
         $this->buttonAdd = false;
         $this->deleteBtn = false;
         $this->hide_form = ['id_cms_privileges'];

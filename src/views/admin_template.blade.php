@@ -31,7 +31,7 @@
                     <!--START BUTTON -->
 
                     @if(CRUDBooster::getCurrentMethod() == 'getIndex')
-                        @if($button_show)
+                        @if($buttonShow)
                             <a href="{{ CRUDBooster::mainpath().'?'.http_build_query(request()->all()) }}"
                                id='btn_show_data' class="btn btn-sm btn-primary"
                                title="{{ cbTrans('action_show_data')}}">

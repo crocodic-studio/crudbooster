@@ -124,7 +124,7 @@ class AdminMenusController extends CBController
         $this->deleteBtn = true;
         $this->button_edit = true;
         $this->buttonDetail = true;
-        $this->button_show = false;
+        $this->buttonShow = false;
         $this->button_filter = true;
         $this->buttonExport = false;
         $this->button_import = false;
