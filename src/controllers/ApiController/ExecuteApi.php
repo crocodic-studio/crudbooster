@@ -88,23 +88,6 @@ class ExecuteApi
     /**
      * @param $table
      * @param $data
-     * @param $responsesFields
-     * @return array
-     */
-    private function handleListAction($table, $data, $responsesFields)
-    {
-        $rows = $this->sortRows($table, $data);
-        if ($rows) {
-            return $this->handleRows($responsesFields, $rows);
-        }
-        $result = ApiResponder::makeResult(0, 'No data found !');
-        $result['data'] = [];
-        ApiResponder::send($result, request()->all(), $this->ctrl);
-    }
-
-    /**
-     * @param $table
-     * @param $data
      * @return mixed
      */
     private function handleDeleteAction($table, $data)
@@ -205,23 +188,6 @@ class ExecuteApi
     }
 
     /**
-     * @param $responsesFields
-     * @param $rows
-     * @return array
-     */
-    private function handleRows($responsesFields, $rows)
-    {
-        foreach ($rows as &$row) {
-            $this->handleFile($row, $responsesFields);
-        }
-
-        $result = ApiResponder::makeResult(1, 'success');
-        $result['data'] = $rows;
-
-        return $result;
-    }
-
-    /**
      * @param $parameters
      * @param $posts
      * @param $rowAssign
@@ -234,24 +200,6 @@ class ExecuteApi
             $value = $posts[$name];
             if ($used == '1' && $value == '') {
                 unset($rowAssign[$name]);
-            }
-        }
-    }
-
-
-    /**
-     * @param $rows
-     * @param $responsesFields
-     */
-    private function handleFile($rows, $responsesFields)
-    {
-        foreach ($rows as $k => $v) {
-            if (FieldDetector::isUploadField(\File::extension($v))) {
-                $rows->$k = asset($v);
-            }
-
-            if (! in_array($k, $responsesFields)) {
-                unset($rows->$k);
             }
         }
     }
@@ -435,21 +383,5 @@ class ExecuteApi
         }
 
         return $data;
-    }
-
-    /**
-     * @param $table
-     * @param $data
-     * @return mixed
-     */
-    private function sortRows($table, $data)
-    {
-        $orderBy = request('orderby', $table.'.id,desc');
-
-        list($orderByCol, $orderByVal) = explode(',', $orderBy);
-
-        $rows = $data->orderby($orderByCol, $orderByVal)->get();
-
-        return $rows;
     }
 }

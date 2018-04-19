@@ -76,7 +76,7 @@ class HandleDetailsAction
      * @param $rows
      * @param $responsesFields
      */
-    private function handleFile($rows, $responsesFields)
+    public function handleFile($rows, $responsesFields)
     {
         foreach ($rows as $k => $v) {
             if (FieldDetector::isUploadField(\File::extension($v))) {
