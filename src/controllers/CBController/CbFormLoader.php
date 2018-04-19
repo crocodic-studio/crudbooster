@@ -4,6 +4,7 @@ namespace crocodicstudio\crudbooster\controllers\CBController;
 
 trait CbFormLoader
 {
+    public $data_inputan;
 
     public $hide_form = [];
 

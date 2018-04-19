@@ -26,8 +26,6 @@ abstract class CBController extends Controller
     use Hooks;
     use Deleter, CbFormLoader, CbIndexLoader, CbLayoutLoader, IndexAjax, ImportData, ExportData, FormSubmitHandlers;
 
-    public $data_inputan;
-
     public $module_name;
 
     public $table;
@@ -166,9 +164,7 @@ abstract class CBController extends Controller
     {
         $this->cbInit();
         $this->primaryKey = DbInspector::findPk($this->table);
-        $this->data_inputan = $this->form;
         $this->data['pk'] = $this->primaryKey;
-        $this->data['forms'] = $this->data_inputan;
         $this->data['hide_form'] = $this->hide_form;
         $this->data['table'] = $this->table;
         $this->data['titleField'] = $this->titleField;
