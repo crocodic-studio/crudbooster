@@ -67,7 +67,7 @@ class AdminPrivilegesController extends CBController
     public function postAddSave()
     {
         $this->cbInit();
-        app(FormValidator::class)->validate(null, $this->form, $this->table);
+        app(FormValidator::class)->validate(null, $this->form, $this);
         $this->inputAssignment();
 
         $this->table()->insert($this->arr);

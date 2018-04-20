@@ -140,7 +140,7 @@ class AdminModulesController extends CBController
     public function postAddSave()
     {
         $this->cbLoader();
-        app(FormValidator::class)->validate(null, $this->form, $this->table);
+        app(FormValidator::class)->validate(null, $this->form, $this);
         $this->inputAssignment();
 
         //Generate Controller 
@@ -192,7 +192,7 @@ class AdminModulesController extends CBController
         $row = $this->table()->where($this->primaryKey, $id)->first();
 
 
-        app(FormValidator::class)->validate($id, $this->form, $this->table);
+        app(FormValidator::class)->validate($id, $this->form, $this);
 
         $this->inputAssignment();
 

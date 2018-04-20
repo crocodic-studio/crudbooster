@@ -14,10 +14,10 @@ class FormValidator
 
     private $ctrl;
 
-    public function validate($id = null, $form, $table, $ctrl)
+    public function validate($id = null, $form, $ctrl)
     {
         $this->ctrl = $ctrl;
-        $this->table = $table;
+        $this->table = $ctrl->table;
         $rules = $this->getRules($id, $form);
 
         $validator = Validator::make(request()->all(), $rules);
