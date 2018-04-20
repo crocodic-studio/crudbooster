@@ -11,7 +11,7 @@
 
             <p>
                 <a title='Generate API Key' class='btn btn-primary' href='javascript:void(0)'
-                   onclick='generate_Secret_key()'>
+                   onclick='generate_secret_key()'>
                     {!! cbIcon('key') !!} Generate Secret Key
                 </a>
             </p>
