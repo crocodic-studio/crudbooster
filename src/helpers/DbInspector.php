@@ -37,12 +37,16 @@ class DbInspector
 
     /**
      * @param $table
-     * @param $field
+     * @param $colName
      * @return bool
      */
-    public static function isNullableColumn($table, $field)
+    public static function isNullableColumn($table, $colName)
     {
-        return !\DB::getDoctrineSchemaManager()->listTableColumns($table)[$field]->getNotnull();
+        $colObj = \DB::getDoctrineSchemaManager()->listTableColumns($table)[$colName];
+        if(!$colObj){
+           return ;
+        }
+        return !$colObj->getNotnull();
     }
 
     /**
