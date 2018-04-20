@@ -164,6 +164,7 @@ abstract class CBController extends Controller
     {
         $this->primaryKey = DbInspector::findPk($this->table);
         $this->cbInit();
+        $this->data_inputan = $this->form;
         $this->data['pk'] = $this->primaryKey;
         $this->data['hide_form'] = $this->hide_form;
         $this->data['table'] = $this->table;

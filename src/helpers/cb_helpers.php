@@ -211,7 +211,7 @@ if (! function_exists('array_get_keys')) {
     /**
      * @param array $_array
      * @param array $keys
-     * @param null $default
+     * @param mixed $default
      * @return array
      */
     function array_get_keys(array $_array, array $keys, $default = null)

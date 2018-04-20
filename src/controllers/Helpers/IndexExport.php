@@ -8,19 +8,20 @@ class IndexExport
 {
     /**
      * @param $response
-     * @param $papersize
-     * @param $paperorientation
-     * @param $filename
+     * @param $paperSize
+     * @param $paperOrientation
+     * @param $fileName
      * @return mixed
+     * @throws \Throwable
      */
-    public function pdf($filename, $response, $paperorientation, $papersize)
+    public function pdf($fileName, $response, $paperOrientation, $paperSize)
     {
         $view = view('crudbooster::export', $response)->render();
         $pdf = app('dompdf.wrapper');
         $pdf->loadHTML($view);
-        $pdf->setPaper($papersize, $paperorientation);
+        $pdf->setPaper($paperSize, $paperOrientation);
 
-        return $pdf->stream($filename.'.pdf');
+        return $pdf->stream($fileName.'.pdf');
     }
 
     /**

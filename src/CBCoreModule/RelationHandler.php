@@ -4,7 +4,6 @@ namespace crocodicstudio\crudbooster\CBCoreModule;
 
 use crocodicstudio\crudbooster\helpers\DbInspector;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\PDF;
 use crocodicstudio\crudbooster\helpers\CRUDBooster;
 use Schema;
 

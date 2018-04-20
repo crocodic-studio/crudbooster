@@ -6,8 +6,6 @@ use crocodicstudio\crudbooster\controllers\CBController;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\PDF;
-use Illuminate\Support\Facades\Excel;
 use crocodicstudio\crudbooster\helpers\CRUDBooster;
 
 class AdminMenusController extends CBController

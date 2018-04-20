@@ -50,7 +50,7 @@ trait FormSubmitHandlers
     {
         $this->genericLoader();
 
-        app(FormValidator::class)->validate(null, $this->form, $this->table);
+        app(FormValidator::class)->validate(null, $this->form, $this->table, $this);
         $this->inputAssignment();
 
         $this->setTimeStamps('created_at');

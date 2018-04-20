@@ -12,8 +12,11 @@ class FormValidator
 {
     private $table;
 
-    public function validate($id = null, $form, $table)
+    private $ctrl;
+
+    public function validate($id = null, $form, $table, $ctrl)
     {
+        $this->ctrl = $ctrl;
         $this->table = $table;
         $rules = $this->getRules($id, $form);
 
