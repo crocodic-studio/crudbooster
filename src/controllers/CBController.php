@@ -99,7 +99,7 @@ abstract class CBController extends Controller
     }
 
     /**
-     * @param null $tableName
+     * @param string $tableName
      * @return mixed
      */
     public function table($tableName = null)

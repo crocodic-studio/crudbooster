@@ -13,7 +13,7 @@ use crocodicstudio\crudbooster\helpers\CRUDBooster, CB;
 class AuthController extends Controller
 {
     /**
-     * @param null $tableName
+     * @param string $tableName
      * @return mixed
      */
     public function table($tableName = null)
