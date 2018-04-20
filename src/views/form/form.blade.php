@@ -2,18 +2,8 @@
 @section('content')
 
     <div>
-
-        @if(CRUDBooster::getCurrentMethod() != 'getProfile' && $button_cancel)
-            @if(request('return_url'))
-                <p><a title='Return' href='{{request("return_url")}}'><i class='fa fa-chevron-circle-left '></i>
-                        &nbsp; {{ cbTrans("form_back_to_list",['module'=>CRUDBooster::getCurrentModule()->name])}}</a>
-                </p>
-            @else
-                <p><a title='Main Module' href='{{CRUDBooster::mainpath()}}'><i class='fa fa-chevron-circle-left '></i>
-                        &nbsp; {{ cbTrans("form_back_to_list",['module'=>CRUDBooster::getCurrentModule()->name])}}</a>
-                </p>
-            @endif
-        @endif
+        
+        @include('form._form_body.returnLinks')
 
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -51,32 +41,7 @@
                             <label class="control-label col-sm-2"></label>
                             <div class="col-sm-10">
 
-
-                                @if($button_cancel && CRUDBooster::getCurrentMethod() != 'getDetail')
-                                        <a href='
-                                    @if(request('return_url'))
-                                           {{request("return_url")}}
-                                    @else
-                                           {{CRUDBooster::mainpath("?".http_build_query(@$_GET)) }}
-                                    @endif
-                                            ' class='btn btn-default'>
-                                            <i class='fa fa-chevron-circle-left'></i> {{ cbTrans("button_back")}}
-                                        </a>
-                                @endif
-
-
-                                @if(CRUDBooster::canCreate() || CRUDBooster::canUpdate())
-                                    <input type="submit" name="submit" value='
-                                    @if(CRUDBooster::canCreate() && $button_addmore==TRUE && $command == 'add')
-                                        {{ cbTrans("button_save_more")}}
-                                    @endif
-
-                                    @if(($button_save && $command != 'detail') || CB::getCurrentMethod() == 'getProfile')
-                                      {{ cbTrans("button_save")}}
-                                    @endif
-                                    ' class='btn btn-success'>
-
-                                @endif
+                                @include('form._form_body.saveButtons')
 
                             </div>
                         </div>
