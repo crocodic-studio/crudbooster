@@ -2,8 +2,8 @@
 @section('content')
 
     <div>
-        
-        @include('form._form_body.returnLinks')
+
+        @include('crudbooster::form._form_body.returnLinks')
 
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -35,7 +35,7 @@
                             <label class="control-label col-sm-2"></label>
                             <div class="col-sm-10">
 
-                                @include('form._form_body.saveButtons')
+                                @include('crudbooster::form._form_body.saveButtons')
 
                             </div>
                         </div>
