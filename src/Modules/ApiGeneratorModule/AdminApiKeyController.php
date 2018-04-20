@@ -24,6 +24,7 @@ class AdminApiKeyController extends CBController
     public function getSecretKey()
     {
         $this->cbLoader();
+        $data = [];
         $data['page_title'] = 'API Generator';
         $data['apikeys'] = DB::table('cms_apikey')->get();
 
