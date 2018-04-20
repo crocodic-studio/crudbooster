@@ -6,7 +6,8 @@ use Request;
 use DB;
 use \crocodicstudio\crudbooster\controllers\ApiController;
 
-class Api{{$controller_name}}Controller extends ApiController {
+class Api{{$controller_name}}Controller extends ApiController
+{
 
     public function __construct()
     {
@@ -29,3 +30,4 @@ class Api{{$controller_name}}Controller extends ApiController {
     {
         //This method will be execute after run the main process
     }
+}
