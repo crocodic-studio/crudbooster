@@ -217,17 +217,17 @@ return [
 
     //datamodal
     'datamodal_select' => 'انتخاب',
-    'datamodal_search_and_enter' => '...متن جستجو را وارد کرده و اینتر را بزنید',
+    'datamodal_search_and_enter' => '...متن را وارد کرده و اینتر را بزنید',
     'datamodal_enter_to_search' => 'برای جستجو اینتر را بزنید',
     'datamodal_browse_data' => 'مشاهده داده',
     'datamodal_browse_file' => 'مشاهده فایل',
 
     //child
-    'table_detail' => 'جزییات جدول',
+    'table_detail' => 'جزئیات جدول',
     'your_file_size_is_too_big' => 'حجم فایل شما بسیار سنگین است',
     'save_changes' => 'ذخیره تغییرات',
     'please_complete_the_form' => 'لطفا فرم را تکمیل نمایید',
-    'this_field_is_required' => 'تکمیل این فیلد اجباری است',
+    'this_field_is_required' => 'این فیلد اجباری است',
     'text_form' => 'فرم',
     "your_file_extension_is_not_allowed " => "نوع فایل شما مجاز نیست",
 

@@ -16,8 +16,7 @@
                 $action = (@$row) ? CRUDBooster::mainpath("edit-save/$id") : CRUDBooster::mainpath("add-save");
                 $return_url = ($return_url) ?: request('return_url');
                 ?>
-                <form class='form-horizontal' method='post' id="form" enctype="multipart/form-data"
-                      action='{{$action}}'>
+                <form class='form-horizontal' method='post' id="form" enctype="multipart/form-data" action='{{$action}}'>
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <input type='hidden' name='return_url' value='{{ @$return_url }}'/>
                     <input type='hidden' name='ref_mainpath' value='{{ CRUDBooster::mainpath() }}'/>
@@ -26,12 +25,7 @@
                         <input type="hidden" name="hide_form" value='{!! serialize($hide_form) !!}'>
                     @endif
                     <div class="box-body" id="parent-form-area">
-
-                        @if($command == 'detail')
-                            @include("crudbooster::form.form_detail", ['forms' => $forms])
-                        @else
-                            @include("crudbooster::form.form_body", ['forms' => $forms])
-                        @endif
+                        @include("crudbooster::form.form_body", ['forms' => $forms])
                     </div><!-- /.box-body -->
 
                     <br><br><br><br><br>
