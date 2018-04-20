@@ -176,7 +176,7 @@
                     </button>
 
                     <button class="btn btn-success btn-sm" type="submit">
-                        {!! cbIcon('save') !!}Save Module
+                        {!! cbIcon('save') !!}Save Index Config
                     </button>
 
                 </div>
@@ -185,15 +185,6 @@
         </div>
 
     @push('bottom')
-        {!! cbScript("codemirror/lib/codemirror.js") !!}
-        {!! cbScript("codemirror/addon/edit/matchbrackets.js") !!}
-        {!! cbScript("codemirror/mode/htmlmixed/htmlmixed.js") !!}
-        {!! cbScript("codemirror/mode/xml/xml.js") !!}
-        {!! cbScript("codemirror/mode/javascript/javascript.js") !!}
-        {!! cbScript("codemirror/mode/css/css.js") !!}
-        {!! cbScript("codemirror/mode/clike/clike.js") !!}
-        {!! cbScript("codemirror/mode/php/php.js") !!}
-        {!! cbScript("codemirror/keymap/sublime.js") !!}
         @include('CbModulesGen::step2.script')
 
         @include('CbModulesGen::step2.modal')
