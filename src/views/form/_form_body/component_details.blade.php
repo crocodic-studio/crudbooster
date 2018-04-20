@@ -9,7 +9,7 @@ $userLocation = CbPublishedComponentsPath($type.'/component_detail.blade.php');
         @include('crudbooster::form.type_components.'.$type.'.component_detail')
     @else
         <tr>
-            <td>{{$label}}</td>
+            <td>{{$formInput['label']}}</td>
             <td>@include('crudbooster::form.type_components.'.$type.'.component_detail')</td>
         </tr>
     @endif
@@ -19,7 +19,7 @@ $userLocation = CbPublishedComponentsPath($type.'/component_detail.blade.php');
         @include('vendor.crudbooster.type_components.'.$type.'.component_detail')
     @else
         <tr>
-            <td>{{$label}}</td>
+            <td>{{$formInput['label']}}</td>
             <td>@include('vendor.crudbooster.type_components.'.$type.'.component_detail')</td>
         </tr>
     @endif

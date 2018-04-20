@@ -43,7 +43,7 @@
             $join_query_{$join_table} = DB::table($join_table)->select($join_title)->where($join_table_pk, $row->{$join_fk})->first();
             $value = @$join_query_{$join_table}->{$join_title};
         }
-
+        $type = @$formInput['type'] ?: 'text';
         $required = $formInput['required'] ? "required" : "";
         $readonly = $formInput['readonly'] ? "readonly" : "";
         $disabled = $formInput['disabled'] ? "disabled" : "";
