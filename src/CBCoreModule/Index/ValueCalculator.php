@@ -11,13 +11,13 @@ class ValueCalculator
      * @param $title
      * @return string
      */
-    function calculate($col, $row, $table, $title)
+    public function calculate($col, $row, $table, $title)
     {
         $value = @$row->{$col['field']};
         $label = $col['label'];
 
         if (isset($col['image'])) {
-            $value = $this->image($col, $table, $value, $label, $title);
+            $value = $this->image($table, $value, $label, $title);
         }
 
         if (isset($col['download'])) {
