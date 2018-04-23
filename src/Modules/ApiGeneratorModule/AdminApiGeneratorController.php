@@ -48,9 +48,10 @@ class AdminApiGeneratorController extends CBController
     public function getGenerator()
     {
         $this->cbLoader();
-
-        $data['page_title'] = 'API Generator';
-        $data['tables'] = CRUDBooster::listCbTables();
+        $data = [
+            'page_title' => 'API Generator',
+            'tables' => CRUDBooster::listCbTables(),
+        ];
 
         return view('CbApiGen::api_generator', $data);
     }
@@ -60,7 +61,7 @@ class AdminApiGeneratorController extends CBController
         $this->cbLoader();
 
         $row = $this->findRow($id)->first();
-
+        $data = [];
         $data['row'] = $row;
         $data['parameters'] = json_encode(unserialize($row->parameters));
         $data['responses'] = json_encode(unserialize($row->responses));
