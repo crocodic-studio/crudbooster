@@ -68,7 +68,7 @@ class Index
         if ($filter_is_orderby === true) {
             (new Order($this->cb))->handle($result, $table);
         }
-        $limit = is_int($limit) ? $limit : 15;
+        $limit = is_string($limit) ? (int)$limit : 15;
         $data['result'] = $result->paginate($limit);
 
         $data['columns'] = $columns_table;
