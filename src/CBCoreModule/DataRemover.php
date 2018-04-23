@@ -36,7 +36,7 @@ class DataRemover
      */
     function doDeleteWithHook($idsArray)
     {
-        $this->ctrl->hookBeforeDelete($idsArray);
+        $idsArray = $this->ctrl->hookBeforeDelete($idsArray);
         $this->deleteIds($idsArray);
         $this->ctrl->hookAfterDelete($idsArray);
     }

@@ -43,7 +43,7 @@ class AdminMenusController extends CBController
         return view('CbMenu::menus_management', compact('return_url', 'page_title'));
     }
 
-    public function hookBeforeAdd(&$postData)
+    public function hookBeforeAdd($postData)
     {
         $postData['parent_id'] = 0;
 
@@ -57,9 +57,10 @@ class AdminMenusController extends CBController
             $this->table()->where('is_dashboard', 1)->update(['is_dashboard' => 0]);
             Cache::forget('sidebarDashboard'.CRUDBooster::myPrivilegeId());
         }
+        return $postData;
     }
 
-    public function hookBeforeEdit(&$postData, $id)
+    public function hookBeforeEdit($postData, $id)
     {
         if ($postData['is_dashboard'] == 1) {
             //If set dashboard, so unset for first all dashboard
@@ -71,6 +72,7 @@ class AdminMenusController extends CBController
 
         unset($postData['module_slug']);
         unset($postData['statistic_slug']);
+        return $postData;
     }
 
     public function hookAfterDelete($id)

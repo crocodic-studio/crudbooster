@@ -16,7 +16,7 @@ trait ApiHooks
     {
     }
 
-    public function hookQuery(&$query)
+    public function hookQuery($query)
     {
     }
 }

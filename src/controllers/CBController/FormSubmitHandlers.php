@@ -55,7 +55,7 @@ trait FormSubmitHandlers
 
         $this->setTimeStamps('created_at');
 
-        $this->hookBeforeAdd($this->arr);
+        $this->arr = $this->hookBeforeAdd($this->arr);
         $id = $this->table()->insertGetId($this->arr);
         app(RelationHandler::class)->save($this->table, $id, $this->data_inputan);
         $this->hookAfterAdd($id);
@@ -74,7 +74,7 @@ trait FormSubmitHandlers
 
         $this->setTimeStamps('updated_at');
 
-        $this->hookBeforeEdit($this->arr, $id);
+        $this->arr = $this->hookBeforeEdit($this->arr, $id);
         $this->findRow($id)->update($this->arr);
         app(RelationHandler::class)->save($this->table, $id, $this->data_inputan);
         $this->hookAfterEdit($id);

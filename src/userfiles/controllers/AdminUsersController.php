@@ -15,7 +15,7 @@ class AdminUsersController extends CBController
         $this->makeForm();
     }
 
-    public function hookQueryIndex(&$query)
+    public function hookQueryIndex($query)
     {
         $query->join('cms_privileges', 'cms_privileges.id', '=', 'id_cms_privileges');
         $query->addSelect('cms_privileges.name as cms_privileges_name');

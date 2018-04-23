@@ -186,7 +186,7 @@ class {{$controllerName}} extends CBController {
     | ----------------------------------------------------------------------
     | @query = current sql query
     */
-    public function hookQueryindex(&$query)
+    public function hookQueryindex($query)
     {
         //Your code here
     @foreach ($joinList as $join)
@@ -210,9 +210,10 @@ class {{$controllerName}} extends CBController {
     | ----------------------------------------------------------------------
     | @arr
     */
-    public function hookBeforeAdd(&$postData)
+    public function hookBeforeAdd($postData)
     {
-        //Your code here
+        //You modify the $postData
+        return $postData;
     }
 
     /*
@@ -233,9 +234,10 @@ class {{$controllerName}} extends CBController {
     | @postdata = input post data
     | @id       = current id
     */
-    public function hookBeforeEdit(&$postData, $id)
+    public function hookBeforeEdit($postData, $id)
     {
         //Your code here
+        return $postData;
     }
 
     /*

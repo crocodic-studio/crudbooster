@@ -53,11 +53,14 @@ class AdminModulesController extends CBController
     // 	$this->cbView('CbModulesGen::index',$data);
     // }	
 
-    function hookBeforeDelete($id)
+    function hookBeforeDelete($ids)
     {
-        $controller = ModulesRepo::getControllerName($id);
-        DB::table('cms_menus')->where('path', 'like', '%'.$controller.'%')->delete();
-        @unlink(controller_path($controller));
+        foreach ($ids as $id){
+            $controller = ModulesRepo::getControllerName($id);
+            DB::table('cms_menus')->where('path', 'like', '%'.$controller.'%')->delete();
+            @unlink(controller_path($controller));
+        }
+        return $ids;
     }
 
     public function getTableColumns($table)

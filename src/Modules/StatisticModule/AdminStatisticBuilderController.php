@@ -181,15 +181,17 @@ class AdminStatisticBuilderController extends CBController
         return response()->json(['status' => true]);
     }
 
-    public function hookBeforeAdd(&$arr)
+    public function hookBeforeAdd($arr)
     {
         //Your code here
         $arr['slug'] = str_slug($arr['name']);
+        return $arr;
     }
 
-    public function hookBeforeEdit(&$postdata, $id)
+    public function hookBeforeEdit($postData, $id)
     {
-        $postdata['slug'] = str_slug($postdata['name']);
+        $postData['slug'] = str_slug($postData['name']);
+        return $postData;
     }
 
     private function allowOnlySuperAdmin($name)

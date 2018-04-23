@@ -42,9 +42,10 @@ class AdminSettingsController extends CBController
         return view('CbSettings::setting', $data);
     }
 
-    function hookBeforeEdit(&$posdata, $id)
+    function hookBeforeEdit($postData, $id)
     {
-        $this->return_url = CRUDBooster::mainpath("show")."?group=".$posdata['group_setting'];
+        $this->return_url = CRUDBooster::mainpath("show")."?group=".$postData['group_setting'];
+        return $postData;
     }
 
     function getDeleteFileSetting()
@@ -84,15 +85,16 @@ class AdminSettingsController extends CBController
         backWithMsg(cbTrans('Update_Setting'));
     }
 
-    function hookBeforeAdd(&$arr)
+    function hookBeforeAdd($arr)
     {
         $arr['name'] = str_slug($arr['label'], '_');
         $this->return_url = CRUDBooster::mainpath("show")."?group=".$arr['group_setting'];
+        return $arr;
     }
 
     function hookAfterEdit($id)
     {
-        $row = $this->table()->where($this->primaryKey, $id)->first();
+        $row = $this->findRow($id)->first();
 
         /* REMOVE CACHE */
         Cache::forget('setting_'.$row->name);
