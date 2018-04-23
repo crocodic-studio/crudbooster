@@ -22,7 +22,7 @@ class AdminSettingsController extends CBController
 
     public function cbInit()
     {
-        $this->index_orderby = ['name' => 'asc'];
+        $this->orderby = ['name' => 'asc'];
 
         $this->setButtons();
 
@@ -31,7 +31,7 @@ class AdminSettingsController extends CBController
         $this->form = SettingsForm::makeForm(request('group_setting', 'General Setting'));
     }
 
-    function getShow()
+    public function getShow()
     {
         $this->cbLoader();
 
@@ -42,13 +42,13 @@ class AdminSettingsController extends CBController
         return view('CbSettings::setting', $data);
     }
 
-    function hookBeforeEdit($postData, $id)
+    public function hookBeforeEdit($postData, $id)
     {
         $this->return_url = CRUDBooster::mainpath("show")."?group=".$postData['group_setting'];
         return $postData;
     }
 
-    function getDeleteFileSetting()
+    public function getDeleteFileSetting()
     {
         $id = request('id');
         $content = CRUDBooster::first($this->table, $id)->content;
@@ -60,7 +60,7 @@ class AdminSettingsController extends CBController
         CRUDBooster::redirect(Request::server('HTTP_REFERER'), cbTrans('alert_delete_data_success'), 'success');
     }
 
-    function postSaveSetting()
+    public function postSaveSetting()
     {
         $this->allowOnlySuperAdmin();
 
@@ -85,14 +85,14 @@ class AdminSettingsController extends CBController
         backWithMsg(cbTrans('Update_Setting'));
     }
 
-    function hookBeforeAdd($arr)
+    public function hookBeforeAdd($arr)
     {
         $arr['name'] = str_slug($arr['label'], '_');
         $this->return_url = CRUDBooster::mainpath("show")."?group=".$arr['group_setting'];
         return $arr;
     }
 
-    function hookAfterEdit($id)
+    public function hookAfterEdit($id)
     {
         $row = $this->findRow($id)->first();
 
@@ -101,7 +101,6 @@ class AdminSettingsController extends CBController
     }
 
     /**
-     * @param $name
      * @param $set
      */
     private function validateFileType($set)
@@ -128,7 +127,6 @@ class AdminSettingsController extends CBController
 
     /**
      * @param $set
-     * @param $name
      * @return string
      */
     private function uploadFile($set)

@@ -19,7 +19,6 @@ class Order
     /**
      * @param $result
      * @param $table
-     * @param $index
      */
     function handle($result, $table)
     {
