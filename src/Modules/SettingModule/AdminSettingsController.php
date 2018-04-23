@@ -50,12 +50,13 @@ class AdminSettingsController extends CBController
 
     public function getDeleteFileSetting()
     {
+        $this->genericLoader();
         $id = request('id');
         $content = CRUDBooster::first($this->table, $id)->content;
 
         Storage::delete($content);
 
-        $this->table()->where('id', $id)->update(['content' => null]);
+        $this->findRow($id)->update(['content' => null]);
 
         CRUDBooster::redirect(Request::server('HTTP_REFERER'), cbTrans('alert_delete_data_success'), 'success');
     }
@@ -141,10 +142,8 @@ class AdminSettingsController extends CBController
         //Move file to storage
         $filename = md5(str_random(5)).'.'.$file->getClientOriginalExtension();
         if ($file->move(storage_path('app'.DIRECTORY_SEPARATOR.$month), $filename)) {
-            $content = 'uploads/'.$month.'/'.$filename;
+            return 'uploads/'.$month.'/'.$filename;
         }
-
-        return $content;
     }
 
     private function setButtons()

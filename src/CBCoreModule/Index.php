@@ -68,6 +68,7 @@ class Index
         if ($filter_is_orderby === true) {
             (new Order($this->cb))->handle($result, $table);
         }
+        $limit = is_int($limit) ? $limit : 15;
         $data['result'] = $result->paginate($limit);
 
         $data['columns'] = $columns_table;
@@ -79,7 +80,7 @@ class Index
         //LISTING INDEX HTML
         $addAction = $CbCtrl->data['addaction'];
 
-        if (!empty($CbCtrl->sub_module)) {
+        if (! empty($CbCtrl->sub_module)) {
             $addAction = $this->_handleSubModules($addAction);
         }
 
@@ -93,6 +94,7 @@ class Index
 
         return $data;
     }
+
     /**
      * @return array
      */
@@ -103,7 +105,7 @@ class Index
         if (request('foreign_key')) {
             $data['parent_field'] = request('foreign_key');
         } else {
-            $data['parent_field'] = DbInspector::getTableForeignKey(request('parent_table'), $this->table);
+            $data['parent_field'] = DbInspector::getTableForeignKey(request('parent_table'));
         }
 
         if (! $data['parent_field']) {
