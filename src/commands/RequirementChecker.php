@@ -2,6 +2,8 @@
 
 namespace crocodicstudio\crudbooster\commands;
 
+use Illuminate\Foundation\Application;
+
 class RequirementChecker
 {
 
@@ -47,8 +49,7 @@ class RequirementChecker
 
     private function checkLaravelVersion()
     {
-        $laravel = app();
-        if ($laravel::VERSION >= 5.3) {
+        if (Application::VERSION >= 5.3) {
             $this->console->info('Laravel Version (>= 5.3.*): [Good]');
             return;
         }
@@ -70,7 +71,7 @@ class RequirementChecker
 
     /**
      * @param $extension
-     * @return true
+     * @return boolean
      */
     private function chechExtension($extension)
     {
