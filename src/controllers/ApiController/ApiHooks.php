@@ -4,19 +4,23 @@ namespace crocodicstudio\crudbooster\controllers\ApiController;
 
 trait ApiHooks
 {
-    public function hookBefore(&$postdata)
+    public function hookBefore($data)
     {
+        return $data;
     }
 
-    public function hookAfter($postdata, &$result)
+    public function hookAfter($data, $result)
     {
+        return $result;
     }
 
-    public function hookValidate(&$postdata)
+    public function hookValidate($data)
     {
+        return $data;
     }
 
     public function hookQuery($query)
     {
+        return $query;
     }
 }
