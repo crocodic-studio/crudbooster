@@ -101,11 +101,14 @@ class Index
     private function _handleParentTable()
     {
         $data = [];
-        $data['parent_table'] = DB::table(request('parent_table'))->where(DbInspector::findPk(request('parent_table')), request('parent_id'))->first();
+        $parent = (string)request('parent_table');
+        $pk = DbInspector::findPk(request('parent_table'));
+
+        $data['parent_table'] = DB::table($parent)->where($pk, request('parent_id'))->first();
         if (request('foreign_key')) {
             $data['parent_field'] = request('foreign_key');
         } else {
-            $data['parent_field'] = DbInspector::getTableForeignKey(request('parent_table'));
+            $data['parent_field'] = DbInspector::getTableForeignKey($parent);
         }
 
         if (! $data['parent_field']) {
