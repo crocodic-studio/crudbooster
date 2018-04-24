@@ -8,7 +8,6 @@ use Symfony\Component\Process\Process;
 use DB;
 use Cache;
 use Request;
-use crocodicstudio\crudbooster\helpers\CRUDBooster;
 use App;
 
 class CrudboosterInstallationCommand extends Command
