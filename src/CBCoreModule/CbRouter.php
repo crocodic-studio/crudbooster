@@ -30,8 +30,7 @@ class CbRouter
     private static function routePost($prefix, $controller, $method, $wildcards)
     {
         $methodName = substr($method, 4);
-        $slug = array_filter(preg_split('/(?=[A-Z])/', $methodName));
-        $slug = strtolower(implode('-', $slug));
+        $slug = self::makeSlug($methodName);
         Route::post($prefix.$slug.$wildcards, [
             'uses' => $controller.'@'.$method,
             'as' => $controller.'Post'.$methodName,
@@ -47,12 +46,12 @@ class CbRouter
     private static function routeGet($prefix, $controller, $method, $wildcards)
     {
         $methodName = substr($method, 3);
-        $slug = array_filter(preg_split('/(?=[A-Z])/', $methodName));
-        $slug = strtolower(implode('-', $slug));
+        $slug = self::makeSlug($methodName);
         $slug = ($slug == 'index') ? '' : $slug;
-        Route::get($prefix.$slug.$wildcards,
-            ['uses' => $controller.'@'.$method,
-            'as' => $controller.'Get'.$methodName]);
+        Route::get($prefix.$slug.$wildcards, [
+            'uses' => $controller.'@'.$method,
+            'as' => $controller.'Get'.$methodName
+        ]);
     }
 
     /**
@@ -96,5 +95,18 @@ class CbRouter
         } elseif (starts_with($method, 'post')) {
             self::routePost($prefix, $controller, $method, $wildcards);
         }
+    }
+
+    /**
+     * @param $methodName
+     * @return array|string
+     */
+    private static function makeSlug($methodName)
+    {
+        $slug = preg_split('/(?=[A-Z])/', $methodName) ?: [];
+        $slug = array_filter($slug);
+        $slug = strtolower(implode('-', $slug));
+
+        return $slug;
     }
 }
