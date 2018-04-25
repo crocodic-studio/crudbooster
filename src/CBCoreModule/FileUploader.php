@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Request;
 
 class FileUploader
 {
-    function uploadFile($name)
+    public function uploadFile($name)
     {
         if (! Request::hasFile($name)) {
             return null;
@@ -34,8 +34,7 @@ class FileUploader
     private function validateExtension($ext)
     {
         if (! FieldDetector::isUploadField($ext)) {
-            echo "The filetype is not allowed!";
-            exit;
+            sendAndTerminate(response()->json("The filetype is not allowed!"));
         }
     }
 
@@ -46,8 +45,7 @@ class FileUploader
     {
         $fileSize = $file->getClientSize() / 1024;
         if ($fileSize > cbConfig('UPLOAD_MAX_SIZE', 5000)) {
-            echo "The file Size is too large!";
-            exit;
+            sendAndTerminate(response()->json("The file Size is too large!"));
         }
     }
 }
