@@ -54,6 +54,8 @@ trait CbIndexLoader
 
     public $buttonAdd = true;
 
+    public $button_action_style = 'button_icon';
+
     protected function cbIndexLoader()
     {
         $this->data['button_edit'] = $this->button_edit;

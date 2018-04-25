@@ -40,8 +40,6 @@ abstract class CBController extends Controller
 
     //public $global_privilege = false;
 
-    public $button_action_style = 'button_icon';
-
     public $parent_field = null;
 
     public $parent_id = null;
