@@ -75,6 +75,7 @@ class FilterIndexRows
      */
     private function applySorting($result, $sorting, $key)
     {
+        $filter_is_orderby = false;
         if ($sorting != '' && $key) {
             $result->orderby($key, $sorting);
             $filter_is_orderby = true;
