@@ -120,9 +120,9 @@ if (! function_exists('cbTrans')) {
     /**
      * Translate the given message.
      *
-     * @param  string $key
+     * @param string $key
      * @param array $replace
-     * @return string
+     * @return \Illuminate\Contracts\Translation\Translator|string|array|null
      */
     function cbTrans($key, $replace = [])
     {
