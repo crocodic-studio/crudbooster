@@ -22,6 +22,7 @@ Route::group([
             CbRouter::routeController($module->path, $module->controller);
         }
     } catch (Exception $e) {
+        // we skip if routing was not successful
     }
 });
 
