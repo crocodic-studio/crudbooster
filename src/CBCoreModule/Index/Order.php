@@ -20,7 +20,7 @@ class Order
      * @param $result
      * @param $table
      */
-    function handle($result, $table)
+    public function handle($result, $table)
     {
         $orderby = $this->ctrl->orderby;
         if (! $orderby) {
