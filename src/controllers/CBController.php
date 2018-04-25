@@ -34,8 +34,6 @@ abstract class CBController extends Controller
 
     public $primaryKey = 'id';
 
-    public $arr = [];
-
     public $form = [];
 
     public $data = [];
@@ -43,8 +41,6 @@ abstract class CBController extends Controller
     //public $global_privilege = false;
 
     public $button_action_style = 'button_icon';
-
-    public $return_url = null;
 
     public $parent_field = null;
 

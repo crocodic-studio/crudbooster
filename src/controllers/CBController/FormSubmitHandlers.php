@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\Schema;
 
 trait FormSubmitHandlers
 {
+    public $arr = [];
+
+    public $return_url = null;
+
     public function inputAssignment($id = null)
     {
         $hide_form = (request('hide_form')) ? unserialize(request('hide_form')) : [];
