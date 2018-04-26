@@ -9,7 +9,7 @@
             <a href='{{route("AdminApiGeneratorControllerGetIndex")}}'>{!! cbIcon('bars') !!} {{ cbTrans('list_API') }}</a>
         </li>
         <li class="{{ (Request::is(cbAdminPath().'/api-generator/secret-key*')) ? 'active' : '' }}">
-            <a href='{{ CRUDBooster::mainpath() }}'>{!! cbIcon('bars') !!} {{ cbTrans('Generate_Secret_Key') }}</a>
+            <a href='{{ route("AdminApiKeyControllerGetIndex") }}'>{!! cbIcon('bars') !!} {{ cbTrans('Generate_Secret_Key') }}</a>
         </li>
     </ul>
 </li>
