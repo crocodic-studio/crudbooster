@@ -56,7 +56,7 @@ class FileController extends Controller
         }
         $hasImageExtension = $this->isImage($fullStoragePath);
         $imageFileSize = 0;
-
+        $imgRaw = '';
         if ($hasImageExtension) {
             list($imgRaw, $imageFileSize) = $this->resizeImage($fullStoragePath);
         }
