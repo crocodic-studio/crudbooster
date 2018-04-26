@@ -54,8 +54,8 @@ class CrudboosterInstallationCommand extends Command
 
             $this->info('Publishing CRUDBooster needs file...');
             $this->call('vendor:publish', ['--provider' => 'crocodicstudio\crudbooster\CRUDBoosterServiceProvider']);
+            $this->call('vendor:publish', ['--provider' => 'Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider']);
             $this->call('vendor:publish', ['--tag' => 'cb_migration', '--force' => true]);
-            $this->call('vendor:publish', ['--tag' => 'cb_lfm', '--force' => true]);
             $this->call('vendor:publish', ['--tag' => 'cb_localization', '--force' => true]);
 
             $configLFM = config_path('lfm.php');
