@@ -120,17 +120,17 @@ class CRUDBooster
         $controllerName = strtok(Route::currentRouteAction(), '@');
         // $controllerName = array_pop(explode('\\', $controllerName));
         $controllerName = basename($controllerName);
-        $route_url = route($controllerName.'GetIndex');
+        $routeUrl = route($controllerName.'GetIndex');
 
         if (! $path) {
-            return trim($route_url, '/');
+            return trim($routeUrl, '/');
         }
 
         if (substr($path, 0, 1) == '?') {
-            return trim($route_url, '/').$path;
+            return trim($routeUrl, '/').$path;
         }
 
-        return $route_url.'/'.$path;
+        return $routeUrl.'/'.$path;
     }
 
     public static function insertTryLog($action, $name = '')
