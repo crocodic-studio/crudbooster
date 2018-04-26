@@ -84,7 +84,9 @@ class CrudboosterInstallationCommand extends Command
             }
             $this->call('db:seed', ['--class' => 'CBSeeder']);
             $this->call('config:clear');
-            $this->call('optimize');
+            if (app()->version() < 5.6) {
+                $this->call('optimize');
+            }
 
             $this->info('Installing CRUDBooster Is Completed ! Thank You :)');
         } else {
