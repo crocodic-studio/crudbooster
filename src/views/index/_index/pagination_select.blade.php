@@ -1,7 +1,7 @@
 <form method='get' id='form-limit-paging' style="display:inline-block" action='{{Request::url()}}'>
     {!! CRUDBooster::getUrlParameters(['limit']) !!}
     <div class="input-group">
-        <select onchange="$('#form-limit-paging').submit()" name='limit' style="width: 56px;"
+        <select onchange="$('#form-limit-paging').submit()" name='limit' style="width: 66px;"
                 class='form-control input-sm'>
             <option {{($limit==5)?'selected':''}} value='5'>5</option>
             <option {{($limit==10)?'selected':''}} value='10'>10</option>
