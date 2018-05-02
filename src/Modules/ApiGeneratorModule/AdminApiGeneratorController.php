@@ -15,7 +15,7 @@ class AdminApiGeneratorController extends CBController
         $this->buttonShow = false;
         $this->deleteBtn = false;
         $this->buttonAdd = false;
-        $this->button_import = false;
+        $this->buttonImport = false;
         $this->buttonExport = false;
     }
 

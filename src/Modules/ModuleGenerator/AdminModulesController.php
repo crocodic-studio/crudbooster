@@ -19,7 +19,7 @@ class AdminModulesController extends CBController
         $this->limit = 100;
         $this->buttonAdd = false;
         $this->buttonExport = false;
-        $this->button_import = false;
+        $this->buttonImport = false;
         $this->buttonFilter = false;
         $this->buttonDetail = false;
         $this->buttonBulkAction = false;

@@ -151,7 +151,7 @@ class AdminSettingsController extends CBController
         $this->deleteBtn = true;
         $this->buttonShow = false;
         $this->button_cancel = false;
-        $this->button_import = false;
+        $this->buttonImport = false;
         $this->buttonExport = false;
     }
 }

@@ -174,7 +174,7 @@ class AdminPrivilegesController extends CBController
 
     private function setButtons()
     {
-        $this->button_import = false;
+        $this->buttonImport = false;
         $this->buttonExport = false;
         $this->button_action_style = 'button_icon';
         $this->buttonDetail = false;
