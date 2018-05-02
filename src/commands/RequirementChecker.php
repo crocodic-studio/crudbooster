@@ -21,7 +21,7 @@ class RequirementChecker
 
     private $requirements = true;
 
-    function check()
+    public function check()
     {
         $this->console->info('System Requirements Checking:');
         $this->checkLaravelVersion();
@@ -39,22 +39,22 @@ class RequirementChecker
 
     private function checkPHPversion()
     {
-        if (version_compare(phpversion(), '5.6.0', '>=')) {
-            $this->console->info('PHP Version (>= 5.6.*): [Good]');
+        if (version_compare(phpversion(), '7.0', '>=')) {
+            $this->console->info('PHP Version (>= 7.0): [Good]');
             return;
         }
-        $this->console->info('PHP Version (>= 5.6.*): [Bad] Yours: '.phpversion());
+        $this->console->info('PHP Version (>= 7.0): [Bad] Yours: '.phpversion());
         $this->requirements = false;
     }
 
     private function checkLaravelVersion()
     {
-        if (Application::VERSION >= 5.3) {
-            $this->console->info('Laravel Version (>= 5.3.*): [Good]');
+        if (Application::VERSION >= 5.4) {
+            $this->console->info('Laravel Version (>= 5.4.*): [Good]');
             return;
         }
 
-        $this->console->info('Laravel Version (>= 5.3.*): [Bad]');
+        $this->console->info('Laravel Version (>= 5.4.*): [Bad]');
         $this->requirements = false;
 
     }
