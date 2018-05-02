@@ -22,8 +22,8 @@
                     @endif
                     <?php
                     $help = '';
-                    if (substr($column, 0, 3) == 'id_') {
-                        $relational_table = substr($column, 3);
+                    if (starts_with($column, 'id_')) {
+                        $relational_table = str_after($column, 'id_');
                         $help = "<a href='#' title='This is foreign key, so the System will be inserting new data to table `$relational_table` if doesn`t exists'><strong>(?)</strong></a>";
                     }
                     ?>
