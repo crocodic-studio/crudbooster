@@ -4,9 +4,7 @@ namespace crocodicstudio\crudbooster\Modules\ApiGeneratorModule;
 
 use crocodicstudio\crudbooster\controllers\CBController;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Route;
 
 class AdminColumnsTableController extends CBController
 {
@@ -16,7 +14,6 @@ class AdminColumnsTableController extends CBController
         $this->primaryKey = "id";
         $this->titleField = "nama";
         $this->buttonShow = false;
-        $this->button_new = false;
         $this->deleteBtn = false;
         $this->buttonAdd = false;
         $this->buttonImport = false;
@@ -35,8 +32,8 @@ class AdminColumnsTableController extends CBController
 
         $newResult = [];
         foreach ($result as $row) {
-            $type_field = \Schema::getColumnType($table, $row);
-            $newResult[] = ['name' => $row, 'type' => $this->getFieldType($row, $type_field)];
+            $type = \Schema::getColumnType($table, $row);
+            $newResult[] = ['name' => $row, 'type' => $this->getFieldType($row, $type)];
 
             if (! in_array($type, ['list', 'detail']) || ! starts_with($row, 'id_')) {
                 continue;
