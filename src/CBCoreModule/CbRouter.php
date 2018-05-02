@@ -14,7 +14,8 @@ class CbRouter
             Route::get($prefix, ['uses' => $controller.'@getIndex', 'as' => $controller.'GetIndex']);
             $ctrl = self::getControllerPath($controller, $namespace);
             foreach (self::getControllerMethods($ctrl) as $method) {
-                self::setRoute($prefix, $controller, $method->name);
+                $wildcards = self::getWildCard($method->getNumberOfParameters());
+                self::setRoute($prefix, $controller, $method->name, $wildcards);
             }
         } catch (\Exception $e) {
 
@@ -57,12 +58,11 @@ class CbRouter
      */
     private static function getControllerMethods($ctrl)
     {
-        $controller_methods = (new \ReflectionClass($ctrl))->getMethods(\ReflectionMethod::IS_PUBLIC);
-        $controller_methods = array_filter($controller_methods, function ($method) {
+        $methods = (new \ReflectionClass($ctrl))->getMethods(\ReflectionMethod::IS_PUBLIC);
+
+        return array_filter($methods, function ($method) {
             return ($method->class !== 'Illuminate\Routing\Controller' && $method->name !== 'getIndex');
         });
-
-        return $controller_methods;
     }
 
     /**
@@ -81,15 +81,15 @@ class CbRouter
     /**
      * @param $prefix
      * @param $controller
-     * @param $method
+     * @param $methodName
+     * @param $wildcards
      */
-    private static function setRoute($prefix, $controller, $method)
+    private static function setRoute($prefix, $controller, $methodName, $wildcards)
     {
-        $wildcards = '/{one?}/{two?}/{three?}/{four?}/{five?}';
-        if (starts_with($method, 'get')) {
-            self::routeGet($prefix, $controller, $method, $wildcards);
-        } elseif (starts_with($method, 'post')) {
-            self::routePost($prefix, $controller, $method, $wildcards);
+        if (starts_with($methodName, 'get')) {
+            self::routeGet($prefix, $controller, $methodName, $wildcards);
+        } elseif (starts_with($methodName, 'post')) {
+            self::routePost($prefix, $controller, $methodName, $wildcards);
         }
     }
 
@@ -104,5 +104,12 @@ class CbRouter
         $slug = strtolower(implode('-', $slug));
 
         return $slug;
+    }
+
+    private static function getWildCard($count)
+    {
+        $wildcards = explode('/', '{one?}/{two?}/{three?}/{four?}/{five?}');
+        $fr = array_splice($wildcards, 0, $count);
+        return  implode('/', $fr);
     }
 }
