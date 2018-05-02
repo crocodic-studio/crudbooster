@@ -10,9 +10,9 @@ class ValidationRules
      * @param $param
      * @param $typeExcept
      * @param $table
-     * @return array
+     * @return string
      */
-    function make($param, $typeExcept, $table)
+    public function make($param, $typeExcept, $table): string
     {
         $type = $param['type'];
         $config = $param['config'];
@@ -25,7 +25,7 @@ class ValidationRules
 
         if (in_array($type, ['unique', 'exists'])) {
             $format_validation[] = $this->existOrUnique($config, $type);
-        } elseif (in_array($type, ['date_format','digits_between', 'in', 'mimes', 'min', 'max', 'not_in'])) {
+        } elseif (in_array($type, ['date_format', 'digits_between', 'in', 'mimes', 'min', 'max', 'not_in'])) {
             $format_validation[] = $type.':'.$config;
         } elseif (! in_array($type, $typeExcept)) {
             $format_validation[] = $type;
@@ -50,6 +50,7 @@ class ValidationRules
         $table_exist = CRUDBooster::parseSqlTable($table_exist)['table'];
         $field_exist = $config[1];
         $config = ($field_exist) ? $table_exist.','.$field_exist : $table_exist;
+
         return $type.':'.$config;
     }
 }
