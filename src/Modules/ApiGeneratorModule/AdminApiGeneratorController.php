@@ -3,9 +3,6 @@
 namespace crocodicstudio\crudbooster\Modules\ApiGeneratorModule;
 
 use crocodicstudio\crudbooster\controllers\CBController;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Route;
 use crocodicstudio\crudbooster\helpers\CRUDBooster;
 
 class AdminApiGeneratorController extends CBController
@@ -16,7 +13,6 @@ class AdminApiGeneratorController extends CBController
         $this->primaryKey = "id";
         $this->titleField = "nama";
         $this->buttonShow = false;
-        $this->button_new = false;
         $this->deleteBtn = false;
         $this->buttonAdd = false;
         $this->button_import = false;
@@ -38,11 +34,8 @@ class AdminApiGeneratorController extends CBController
     public function apiDocumentation()
     {
         $this->cbLoader();
-        $data = [];
-
-        $data['apis'] = $this->table()->orderby('nama', 'asc')->get();
-
-        return view('CbApiGen::api_documentation_public', $data);
+        $apis = $this->table()->orderby('nama', 'asc')->get();
+        return view('CbApiGen::api_documentation_public', compact('apis'));
     }
 
     public function getGenerator()
@@ -61,13 +54,13 @@ class AdminApiGeneratorController extends CBController
         $this->cbLoader();
 
         $row = $this->findRow($id)->first();
-        $data = [];
-        $data['row'] = $row;
-        $data['parameters'] = json_encode(unserialize($row->parameters));
-        $data['responses'] = json_encode(unserialize($row->responses));
-        $data['page_title'] = 'API Generator';
-
-        $data['tables'] = CRUDBooster::listCbTables();
+        $data = [
+            'row' => $row,
+            'parameters' => json_encode(unserialize($row->parameters)),
+            'responses' => json_encode(unserialize($row->responses)),
+            'page_title' => 'API Generator',
+            'tables' => CRUDBooster::listCbTables(),
+        ];
 
         return view('CbApiGen::api_generator', $data);
     }
@@ -77,24 +70,17 @@ class AdminApiGeneratorController extends CBController
         $this->cbLoader();
         $posts = request()->all();
 
-        $_data = [];
-
-        $_data['nama'] = g('nama');
-        $_data['tabel'] = $posts['tabel'];
-        $_data['aksi'] = $posts['aksi'];
-        $_data['permalink'] = g('permalink');
-        $_data['method_type'] = g('method_type');
-
-        $json = $this->json();
-
-        $_data['parameters'] = serialize(array_filter($json));
-
-        $_data['sql_where'] = g('sql_where');
-
-        $json = $this->json2();
-        $json = array_filter($json);
-        $_data['responses'] = serialize($json);
-        $_data['keterangan'] = g('keterangan');
+        $_data = [
+            'nama' => g('nama'),
+            'tabel' => $posts['tabel'],
+            'aksi' => $posts['aksi'],
+            'permalink' => g('permalink'),
+            'method_type' => g('method_type'),
+            'sql_where' => g('sql_where'),
+            'keterangan' => g('keterangan'),
+            'parameters' => serialize(array_filter($this->json())),
+            'responses' => serialize(array_filter($this->json2())),
+        ];
 
         $this->saveToDB($_data);
 
