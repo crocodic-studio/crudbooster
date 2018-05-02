@@ -191,7 +191,7 @@ class CRUDBooster
             return false;
         }*/
 
-    public static function routeController($prefix, $controller, $namespace = null)
+    public static function routeController(string $prefix, string $controller, $namespace = null)
     {
         CbRouter::routeController($prefix, $controller, $namespace);
     }

@@ -66,7 +66,7 @@ class CbRouter
      * @param $methodName
      * @param $wildcards
      */
-    private static function setRoute(string $prefix, string $controller, string $methodName, string $wildcards): null
+    private static function setRoute(string $prefix, string $controller, string $methodName, string $wildcards)
     {
         if (starts_with($methodName, 'get')) {
             self::routeGet($prefix, $controller, $methodName, $wildcards);
