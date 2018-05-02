@@ -29,12 +29,10 @@ class CbRouter
      */
     private static function routePost($prefix, $controller, $method, $wildcards)
     {
-        $methodName = substr($method, 4);
+        $methodName = str_after($method, 'post');
         $slug = self::makeSlug($methodName);
-        Route::post($prefix.$slug.$wildcards, [
-            'uses' => $controller.'@'.$method,
-            'as' => $controller.'Post'.$methodName,
-        ]);
+        Route::post($prefix.$slug.$wildcards, $controller.'@'.$method)
+            ->name($controller.'Post'.$methodName);
     }
 
     /**
@@ -45,13 +43,11 @@ class CbRouter
      */
     private static function routeGet($prefix, $controller, $method, $wildcards)
     {
-        $methodName = substr($method, 3);
+        $methodName = str_after($method, 'get');
         $slug = self::makeSlug($methodName);
         $slug = ($slug == 'index') ? '' : $slug;
-        Route::get($prefix.$slug.$wildcards, [
-            'uses' => $controller.'@'.$method,
-            'as' => $controller.'Get'.$methodName
-        ]);
+        Route::get($prefix.$slug.$wildcards, $controller.'@'.$method)
+            ->name($controller.'Get'.$methodName);
     }
 
     /**
