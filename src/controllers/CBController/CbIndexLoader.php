@@ -63,7 +63,7 @@ trait CbIndexLoader
         $this->data['deleteBtn'] = $this->deleteBtn;
         $this->data['button_selected'] = $this->button_selected;
         $this->data['buttonExport'] = $this->buttonExport;
-        $this->data['button_import'] = $this->buttonImport;
+        $this->data['buttonImport'] = $this->buttonImport;
         $this->data['buttonFilter'] = $this->buttonFilter;
         $this->data['showNumbering'] = $this->showNumbering;
         $this->data['preIndexHtml'] = $this->preIndexHtml;

@@ -21,7 +21,7 @@ class {{$controllerName}} extends CBController {
         $this->buttonShow = true;
         $this->buttonFilter = true;
         $this->buttonExport = false;
-        $this->button_import = false;
+        $this->buttonImport = false;
         $this->buttonBulkAction = true;
         {!! cbEndMarker('CONFIGURATION') !!}
 

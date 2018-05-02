@@ -42,7 +42,7 @@
                         @endif
 
                         @include('crudbooster::_admin_template.addButton')
-                        @include('crudbooster::_admin_template.export_import_buttons', ['exportBtn' => $buttonExport, 'importBtn' => $button_import, 'query' => $build_query])
+                        @include('crudbooster::_admin_template.export_import_buttons', ['exportBtn' => $buttonExport, 'importBtn' => $buttonImport, 'query' => $build_query])
                     @endif
 
 

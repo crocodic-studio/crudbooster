@@ -14,10 +14,9 @@ class AdminApiKeyController extends CBController
         $this->primaryKey = "id";
         $this->titleField = "nama";
         $this->buttonShow = false;
-        $this->button_new = false;
         $this->deleteBtn = false;
         $this->buttonAdd = false;
-        $this->button_import = false;
+        $this->buttonImport = false;
         $this->buttonExport = false;
     }
 

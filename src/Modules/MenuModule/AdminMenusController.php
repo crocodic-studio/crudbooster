@@ -127,7 +127,7 @@ class AdminMenusController extends CBController
         $this->buttonShow = false;
         $this->buttonFilter = true;
         $this->buttonExport = false;
-        $this->button_import = false;
+        $this->buttonImport = false;
     }
 
     /**

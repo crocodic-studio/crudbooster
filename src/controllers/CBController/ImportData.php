@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 trait ImportData
 {
-    public $button_import = true;
+    public $buttonImport = true;
 
     public function getImportData()
     {
