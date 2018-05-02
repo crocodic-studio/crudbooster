@@ -5,7 +5,7 @@
 @endif
 <script type="text/javascript">
     var site_url = "{{url('/')}}";
-    @if($script_js)
-        {!! $script_js !!}
+    @if($scriptJs)
+        {!! $scriptJs !!}
     @endif
 </script>

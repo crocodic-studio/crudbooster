@@ -8,7 +8,7 @@ trait CbLayoutLoader
 
     public $load_css = [];
 
-    public $script_js = null;
+    public $scriptJs = null;
 
     public $style_css = null;
 
@@ -19,7 +19,7 @@ trait CbLayoutLoader
         $this->data['alerts'] = $this->alert;
         $this->data['style_css'] = $this->style_css;
         $this->data['load_js'] = $this->load_js;
-        $this->data['script_js'] = $this->script_js;
+        $this->data['scriptJs'] = $this->scriptJs;
         $this->data['load_css'] = $this->load_css;
     }
 }

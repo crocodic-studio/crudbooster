@@ -24,7 +24,7 @@ class AdminMenusController extends CBController
         $row = CRUDBooster::first($this->table, $id);
         $row = (Request::segment(3) == 'edit') ? $row : null;
 
-        $this->script_js = view('CbMenu::js', ['id' => $id, 'type' => $row->type])->render();
+        $this->scriptJs = view('CbMenu::js', ['id' => $id, 'type' => $row->type])->render();
 
         $this->setCols();
 

@@ -117,9 +117,9 @@ class {{$controllerName}} extends CBController {
         | Add javascript at body
         | ----------------------------------------------------------------------
         | javascript code in the variable
-        | $this->script_js = "function() { ... }";
+        | $this->scriptJs = "function() { ... }";
         */
-        $this->script_js = NULL;
+        $this->scriptJs = NULL;
 
         /*
         | ----------------------------------------------------------------------

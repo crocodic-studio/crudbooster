@@ -30,7 +30,7 @@ class AdminModulesController extends CBController
 
         $this->form = Form::makeForm($this->table);
 
-        $this->script_js = "
+        $this->scriptJs = "
  			$(function() {
  				$('#table_name').change(function() {
 					var v = $(this).val();

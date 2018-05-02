@@ -78,7 +78,7 @@ class Index
         }
 
         //LISTING INDEX HTML
-        $addAction = $CbCtrl->data['addaction'];
+        $addAction = $CbCtrl->data['addAction'];
 
         if (! empty($CbCtrl->sub_module)) {
             $addAction = $this->_handleSubModules($addAction);
