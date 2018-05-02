@@ -38,7 +38,7 @@ class AdminModulesController extends CBController
 				})	
  			}) ";
 
-        $this->addaction[] = [
+        $this->addAction[] = [
             'label' => 'Module Wizard',
             'icon' => 'fa fa-wrench',
             'url' => CRUDBooster::mainpath('step1').'/[id]',

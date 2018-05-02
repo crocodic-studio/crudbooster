@@ -24,11 +24,11 @@ class CellContent
      * @param $number
      * @param $columnsTable
      * @param $table
-     * @param $addaction
+     * @param $addAction
      *
      * @return array
      */
-    public function calculate($data, $tablePK, $number, $columnsTable, $table, $addaction)
+    public function calculate($data, $tablePK, $number, $columnsTable, $table, $addAction)
     {
         $htmlContents = [];
         foreach ($data['result'] as $row) {
@@ -37,7 +37,7 @@ class CellContent
             $htmlContent = $this->addCheckBox($tablePK, $row, $htmlContent);
             $htmlContent = $this->addRowNumber($number, $htmlContent);
             $htmlContent = $this->addOtherColumns($columnsTable, $table, $row, $htmlContent);
-            $htmlContent = $this->addActionButtons($addaction, $row, $htmlContent);
+            $htmlContent = $this->addActionButtons($addAction, $row, $htmlContent);
             $htmlContent = $this->performHookOnRow($htmlContent);
             $htmlContents[] = $htmlContent;
             $number++;
@@ -110,13 +110,13 @@ class CellContent
     }
 
     /**
-     * @param $addaction
+     * @param $addAction
      * @param $row
      * @param $htmlContent
      * @return array
      * @throws \Throwable
      */
-    private function addActionButtons($addaction, $row, $htmlContent)
+    private function addActionButtons($addAction, $row, $htmlContent)
     {
         if (!$this->cb->buttonTableAction) {
             return $htmlContent;
@@ -127,7 +127,7 @@ class CellContent
         $deleteBtn = $this->cb->deleteBtn;
         $id = ($row->{$this->cb->primaryKey});
 
-        $data = compact('addaction', 'row', 'id', 'button_action_style', 'parent_field', 'button_edit', 'deleteBtn', 'buttonDetail');
+        $data = compact('addAction', 'row', 'id', 'button_action_style', 'parent_field', 'button_edit', 'deleteBtn', 'buttonDetail');
         $htmlContent[] = "<div class='button_action' style='text-align:right'>".view('crudbooster::index.action', $data)->render().'</div>';
 
         return $htmlContent;

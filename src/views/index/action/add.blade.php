@@ -1,4 +1,4 @@
-@foreach($addaction as $a)
+@foreach($addAction as $a)
     <?php
     foreach ($row as $key => $val) {
         $a['url'] = str_replace("[$key]", $val, $a['url']);

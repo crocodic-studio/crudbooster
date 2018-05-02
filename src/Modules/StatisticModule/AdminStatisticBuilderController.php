@@ -24,8 +24,8 @@ class AdminStatisticBuilderController extends CBController
 
         $this->form = StatisticForm::makeForm();
 
-        $this->addaction = [];
-        $this->addaction[] = ['label' => 'Builder', 'url' => CRUDBooster::mainpath('builder').'/[id]', 'icon' => 'fa fa-wrench'];
+        $this->addAction = [];
+        $this->addAction[] = ['label' => 'Builder', 'url' => CRUDBooster::mainpath('builder').'/[id]', 'icon' => 'fa fa-wrench'];
     }
 
     public function getShowDashboard()

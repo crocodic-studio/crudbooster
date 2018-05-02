@@ -63,7 +63,7 @@ class {{$controllerName}} extends CBController {
         | @color    = Default is primary. (primary, warning, succecss, info)
         | @showIf  = If condition when action show. Use field alias. e.g : [id] == 1
         */
-        $this->addaction = [];
+        $this->addAction = [];
 
         /*
         | ----------------------------------------------------------------------

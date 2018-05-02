@@ -40,7 +40,7 @@ trait CbIndexLoader
 
     public $buttonActionWidth = null;
 
-    public $addaction = [];
+    public $addAction = [];
 
     public $buttonDetail = true;
 
@@ -75,7 +75,7 @@ trait CbIndexLoader
         $this->data['index_additional_view'] = $this->indexAdditionalView;
         $this->data['button_action_width'] = $this->buttonActionWidth;
         $this->data['buttonShow'] = $this->buttonShow;
-        $this->data['addaction'] = ($this->show_addaction) ? $this->addaction : null;
+        $this->data['addAction'] = ($this->show_addAction) ? $this->addAction : null;
         $this->data['buttonDetail'] = $this->buttonDetail;
         $this->data['buttonAdd'] = $this->buttonAdd;
     }

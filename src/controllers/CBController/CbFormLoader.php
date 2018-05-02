@@ -14,7 +14,7 @@ trait CbFormLoader
 
     public $button_addmore = true;
 
-    public $show_addaction = true;
+    public $show_addAction = true;
 
     protected function cbFormLoader()
     {

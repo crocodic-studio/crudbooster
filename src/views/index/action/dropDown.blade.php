@@ -5,7 +5,7 @@
         <span class='sr-only'>Toggle Dropdown</span>
     </button>
     <ul class='dropdown-menu dropdown-menu-action' role='menu'>
-        @foreach($addaction as $a)
+        @foreach($addAction as $a)
             <?php
             foreach ($row as $key => $val) {
                 $a['url'] = str_replace("[".$key."]", $val, $a['url']);
