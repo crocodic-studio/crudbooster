@@ -8,7 +8,7 @@ trait CbFormLoader
 
     public $hide_form = [];
 
-    public $button_cancel = true;
+    public $buttonCancel = true;
 
     public $button_save = true;
 
@@ -19,7 +19,7 @@ trait CbFormLoader
         $this->data_inputan = $this->form;
         $this->data['forms'] = $this->data_inputan;
         $this->data['button_addmore'] = $this->button_addmore;
-        $this->data['button_cancel'] = $this->button_cancel;
+        $this->data['buttonCancel'] = $this->buttonCancel;
         $this->data['button_save'] = $this->button_save;
     }
 

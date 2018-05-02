@@ -4,10 +4,10 @@ namespace crocodicstudio\crudbooster\Modules\SettingModule;
 
 use crocodicstudio\crudbooster\controllers\CBController;
 use crocodicstudio\crudbooster\helpers\CbValidator;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\Cache;
 use crocodicstudio\crudbooster\helpers\CRUDBooster;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AdminSettingsController extends CBController
 {
@@ -37,7 +37,7 @@ class AdminSettingsController extends CBController
 
         $this->allowOnlySuperAdmin();
 
-        $data['page_title'] = urldecode(request('group'));
+        $data = ['page_title' => urldecode(request('group'))];
 
         return view('CbSettings::setting', $data);
     }
@@ -150,7 +150,7 @@ class AdminSettingsController extends CBController
     {
         $this->deleteBtn = true;
         $this->buttonShow = false;
-        $this->button_cancel = false;
+        $this->buttonCancel = false;
         $this->buttonImport = false;
         $this->buttonExport = false;
     }

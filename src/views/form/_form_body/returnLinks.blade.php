@@ -1,4 +1,4 @@
-@if(CRUDBooster::getCurrentMethod() != 'getProfile' && $button_cancel)
+@if(CRUDBooster::getCurrentMethod() != 'getProfile' && $buttonCancel)
     @if(request('return_url'))
         <p><a title='Return' href='{{request("return_url")}}'>
                 <i class='fa fa-chevron-circle-left '></i>

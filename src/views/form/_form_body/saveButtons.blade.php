@@ -1,4 +1,4 @@
-@if($button_cancel && CRUDBooster::getCurrentMethod() != 'getDetail')
+@if($buttonCancel && CRUDBooster::getCurrentMethod() != 'getDetail')
     @php
         $url = request('return_url') ? request("return_url"): CRUDBooster::mainpath("?".http_build_query(@$_GET));
     @endphp

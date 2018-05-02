@@ -4,10 +4,10 @@ namespace crocodicstudio\crudbooster\Modules\PrivilegeModule;
 
 use crocodicstudio\crudbooster\controllers\CBController;
 use crocodicstudio\crudbooster\controllers\FormValidator;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Route;
 use crocodicstudio\crudbooster\helpers\CRUDBooster;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Route;
 
 class AdminPrivilegesController extends CBController
 {
@@ -24,22 +24,8 @@ class AdminPrivilegesController extends CBController
     public function cbInit()
     {
         $this->setButtons();
-
-        $this->col = [];
-        $this->col[] = ['label' => 'ID', 'name' => 'id'];
-        $this->col[] = ['label' => 'Name', 'name' => 'name'];
-        $this->col[] = [
-            'label' => 'Superadmin',
-            'name' => 'is_superadmin',
-            'callback' => function ($row) {
-                return ($row->is_superadmin) ? "<span class='label label-success'>Superadmin</span>" : "<span class='label label-default'>Standard</span>";
-            },
-        ];
-
-        $this->form = [];
-        $this->form[] = ['label' => 'Name', 'name' => 'name', 'required' => true];
-        $this->form[] = ['label' => 'Is Superadmin', 'name' => 'is_superadmin', 'required' => true];
-        $this->form[] = ['label' => 'Theme Color', 'name' => 'theme_color', 'required' => true];
+        $this->makeCols();
+        $this->makeForm();
     }
 
     public function getAdd()
@@ -47,7 +33,10 @@ class AdminPrivilegesController extends CBController
         $this->cbLoader();
 
         $id = 0;
-        $data['page_title'] = 'Add Data';
+        $data = [
+            'page_title' => 'Add Data',
+            'page_menu' => Route::getCurrentRoute()->getActionName(),
+        ];
         $data['moduls'] = $this->table('cms_moduls')
             ->where('is_protected', 0)
             ->select('cms_moduls.*',
@@ -59,7 +48,6 @@ class AdminPrivilegesController extends CBController
             ->orderby('name', 'asc')
             ->get();
 
-        $data['page_menu'] = Route::getCurrentRoute()->getActionName();
 
         return view('CbPrivilege::privileges', $data);
     }
@@ -179,5 +167,27 @@ class AdminPrivilegesController extends CBController
         $this->button_action_style = 'button_icon';
         $this->buttonDetail = false;
         $this->buttonBulkAction = false;
+    }
+
+    private function makeForm()
+    {
+        $this->form = [];
+        $this->form[] = ['label' => 'Name', 'name' => 'name', 'required' => true];
+        $this->form[] = ['label' => 'Is Superadmin', 'name' => 'is_superadmin', 'required' => true];
+        $this->form[] = ['label' => 'Theme Color', 'name' => 'theme_color', 'required' => true];
+    }
+
+    private function makeCols()
+    {
+        $this->col = [];
+        $this->col[] = ['label' => 'ID', 'name' => 'id'];
+        $this->col[] = ['label' => 'Name', 'name' => 'name'];
+        $this->col[] = [
+            'label' => 'Superadmin',
+            'name' => 'is_superadmin',
+            'callback' => function ($row) {
+                return ($row->is_superadmin) ? "<span class='label label-success'>Superadmin</span>" : "<span class='label label-default'>Standard</span>";
+            },
+        ];
     }
 }
