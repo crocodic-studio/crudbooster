@@ -37,7 +37,7 @@ Route::group([
     Route::get('api-generator/import-data', 'AdminApiGeneratorController@getImportData')->name('AdminApiGeneratorControllerGetImportData');
     Route::get('api-generator/delete-image', 'AdminApiGeneratorController@getDeleteImage')->name('AdminApiGeneratorControllerGetDeleteImage');
 
-    Route::post('api-generator/export-data', 'AdminApiGeneratorController@postExportData',)->name('AdminApiGeneratorControllerPostExportData');
+    Route::post('api-generator/export-data', 'AdminApiGeneratorController@postExportData')->name('AdminApiGeneratorControllerPostExportData');
     Route::post('api-generator/save-api-custom', 'AdminApiGeneratorController@postSaveApiCustom')->name('AdminApiGeneratorControllerPostSaveApiCustom');
     Route::post('api-generator/find-data', 'AdminApiGeneratorController@postFindData')->name('AdminApiGeneratorControllerPostFindData');
     Route::post('api-generator/add-save', 'AdminApiGeneratorController@postAddSave')->name('AdminApiGeneratorControllerPostAddSave');
@@ -46,8 +46,8 @@ Route::group([
     Route::post('api-generator/do-import-chunk', 'AdminApiGeneratorController@postDoImportChunk')->name('AdminApiGeneratorControllerPostDoImportChunk');
     //Route::post('api-generator/do-upload-import-data', 'AdminApiGeneratorController@postDoUploadImportData')->name('AdminApiGeneratorControllerPostDoUploadImportData');
     Route::post('api-generator/action-selected', 'AdminApiGeneratorController@postActionSelected')->name('AdminApiGeneratorControllerPostActionSelected');
-    //Route::post('api-generator/upload-summernote', 'AdminApiGeneratorController@postUploadSummernote',)->name('AdminApiGeneratorControllerPostUploadSummernote');
-    //Route::post('api-generator/upload-file', 'AdminApiGeneratorController@postUploadFile',)->name('AdminApiGeneratorControllerPostUploadFile');
+    //Route::post('api-generator/upload-summernote', 'AdminApiGeneratorController@postUploadSummernote')->name('AdminApiGeneratorControllerPostUploadSummernote');
+    //Route::post('api-generator/upload-file', 'AdminApiGeneratorController@postUploadFile')->name('AdminApiGeneratorControllerPostUploadFile');
 });
 
 
