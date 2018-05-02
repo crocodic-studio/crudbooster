@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Validator;
 
 class CbValidator
 {
-    public static function valid($rules = [], $type = 'json')
+    public static function valid($rules = [], string $type = 'json')
     {
         $validator = Validator::make(request()->all(), $rules);
 

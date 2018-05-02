@@ -9,35 +9,35 @@
 |
 */
 if (! function_exists('cbModulesNS')) {
-    function cbModulesNS($path = '')
+    function cbModulesNS(string $path = ''): string
     {
         return \crocodicstudio\crudbooster\helpers\CbStructure::cbModulesNS($path);
     }
 }
 
 if (! function_exists('cbStartMarker')) {
-    function cbStartMarker($section)
+    function cbStartMarker(string $section): string
     {
         return "# START $section DO NOT REMOVE THIS LINE";
     }
 }
 
 if (! function_exists('cbEndMarker')) {
-    function cbEndMarker($section)
+    function cbEndMarker(string $section): string
     {
         return "# END $section DO NOT REMOVE THIS LINE";
     }
 }
 
 if (! function_exists('cbAdminPath')) {
-    function cbAdminPath()
+    function cbAdminPath(): string
     {
         return cbConfig('ADMIN_PATH');
     }
 }
 
 if (! function_exists('ctrlNamespace')) {
-    function ctrlNamespace()
+    function ctrlNamespace(): string
     {
         return \crocodicstudio\crudbooster\helpers\CbStructure::ctrlNamespace();
     }
@@ -50,7 +50,7 @@ if (! function_exists('is_checked')) {
      * @param $option_value
      * @return string
      */
-    function is_checked($format, $value, $option_value)
+    function is_checked(string $format, $value, $option_value): string
     {
         if ($format == 'JSON') {
             $valueFormat = json_decode($value, true);
@@ -68,28 +68,28 @@ if (! function_exists('is_checked')) {
 }
 
 if (! function_exists('CbComponentsPath')) {
-    function CbComponentsPath($type = '')
+    function CbComponentsPath(string $type = ''): string
     {
         return \crocodicstudio\crudbooster\helpers\CbStructure::componentsPath($type);
     }
 }
 
 if (! function_exists('CbPublishedComponentsPath')) {
-    function CbPublishedComponentsPath($type = '')
+    function CbPublishedComponentsPath(string $type = ''): string
     {
         return \crocodicstudio\crudbooster\helpers\CbStructure::publishedComponentsPath($type);
     }
 }
 
 if (! function_exists('controllers_dir')) {
-    function controllers_dir()
+    function controllers_dir(): string
     {
         return \crocodicstudio\crudbooster\helpers\CbStructure::controllersDir();
     }
 }
 
 if (! function_exists('controller_path')) {
-    function controller_path($controller)
+    function controller_path(string $controller): string
     {
         return \crocodicstudio\crudbooster\helpers\CbStructure::controllerPath($controller);
     }
@@ -239,7 +239,8 @@ if (! function_exists('backWithMsg')) {
 if (! function_exists('underField')) {
     function underField($help, $error)
     {
-        $error = $error ? "<i class='fa fa-info-circle'></i> $error":'' ;
+        $error = $error ? "<i class='fa fa-info-circle'></i> $error" : '';
+
         return "<div class='text-danger'>$error</div><p class='help-block'>$help</p>";
     }
 }

@@ -6,12 +6,12 @@ use Route;
 
 class CbRouter
 {
-    public static function routeController($prefix, $controller, $namespace = null)
+    public static function routeController(string $prefix, string $controller, string $namespace = null)
     {
         $prefix = trim($prefix, '/').'/';
 
         try {
-            Route::get($prefix, ['uses' => $controller.'@getIndex', 'as' => $controller.'GetIndex']);
+            Route::get($prefix, $controller.'GetIndex')->name($controller.'@getIndex');
             $ctrl = self::getControllerPath($controller, $namespace);
             foreach (self::getControllerMethods($ctrl) as $method) {
                 $wildcards = self::getWildCard($method->getNumberOfParameters());
@@ -23,32 +23,16 @@ class CbRouter
     }
 
     /**
-     * @param $prefix
      * @param $controller
-     * @param $method
-     * @param $wildcards
+     * @param $namespace
+     * @return string
      */
-    private static function routePost($prefix, $controller, $method, $wildcards)
+    private static function getControllerPath(string $controller, string $namespace) : string
     {
-        $methodName = str_after($method, 'post');
-        $slug = self::makeSlug($methodName);
-        Route::post($prefix.$slug.$wildcards, $controller.'@'.$method)
-            ->name($controller.'Post'.$methodName);
-    }
+        $ns = $namespace ?: ctrlNamespace();
+        $ctrl = $ns.'\\'.$controller;
 
-    /**
-     * @param $prefix
-     * @param $controller
-     * @param $method
-     * @param $wildcards
-     */
-    private static function routeGet($prefix, $controller, $method, $wildcards)
-    {
-        $methodName = str_after($method, 'get');
-        $slug = self::makeSlug($methodName);
-        $slug = ($slug == 'index') ? '' : $slug;
-        Route::get($prefix.$slug.$wildcards, $controller.'@'.$method)
-            ->name($controller.'Get'.$methodName);
+        return $ctrl;
     }
 
     /**
@@ -56,7 +40,7 @@ class CbRouter
      * @return array|\ReflectionMethod[]
      * @throws \ReflectionException
      */
-    private static function getControllerMethods($ctrl)
+    private static function getControllerMethods(string $ctrl) : array
     {
         $methods = (new \ReflectionClass($ctrl))->getMethods(\ReflectionMethod::IS_PUBLIC);
 
@@ -66,16 +50,14 @@ class CbRouter
     }
 
     /**
-     * @param $controller
-     * @param $namespace
+     * @param int $count
      * @return string
      */
-    private static function getControllerPath($controller, $namespace)
+    private static function getWildCard(int $count) : string
     {
-        $ns = $namespace ?: ctrlNamespace();
-        $ctrl = $ns.'\\'.$controller;
+        $wildcards = ['{one?}', '{two?}', '{three?}', '{four?}', '{five?}'];
 
-        return $ctrl;
+        return implode('/', array_splice($wildcards, 0, $count));
     }
 
     /**
@@ -84,7 +66,7 @@ class CbRouter
      * @param $methodName
      * @param $wildcards
      */
-    private static function setRoute($prefix, $controller, $methodName, $wildcards)
+    private static function setRoute(string $prefix, string $controller, string $methodName, string $wildcards): null
     {
         if (starts_with($methodName, 'get')) {
             self::routeGet($prefix, $controller, $methodName, $wildcards);
@@ -94,10 +76,24 @@ class CbRouter
     }
 
     /**
-     * @param $methodName
+     * @param $prefix
+     * @param $controller
+     * @param $method
+     * @param $wildcards
+     */
+    private static function routeGet(string $prefix, string $controller, string $method, string $wildcards)
+    {
+        $methodName = str_after($method, 'get');
+        $slug = self::makeSlug($methodName);
+        $slug = ($slug == 'index') ? '' : $slug;
+        Route::get($prefix.$slug.$wildcards, $controller.'@'.$method)->name($controller.'Get'.$methodName);
+    }
+
+    /**
+     * @param string $methodName
      * @return array|string
      */
-    private static function makeSlug($methodName)
+    private static function makeSlug(string $methodName): string
     {
         $slug = preg_split('/(?=[A-Z])/', $methodName) ?: [];
         $slug = array_filter($slug);
@@ -106,10 +102,16 @@ class CbRouter
         return $slug;
     }
 
-    private static function getWildCard($count)
+    /**
+     * @param $prefix
+     * @param $controller
+     * @param $method
+     * @param $wildcards
+     */
+    private static function routePost(string $prefix, string $controller, string $method, string $wildcards)
     {
-        $wildcards = explode('/', '{one?}/{two?}/{three?}/{four?}/{five?}');
-        $fr = array_splice($wildcards, 0, $count);
-        return  implode('/', $fr);
+        $methodName = str_after($method, 'post');
+        $slug = self::makeSlug($methodName);
+        Route::post($prefix.$slug.$wildcards, $controller.'@'.$method)->name($controller.'Post'.$methodName);
     }
 }

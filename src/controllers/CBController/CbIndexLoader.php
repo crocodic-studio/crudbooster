@@ -42,6 +42,8 @@ trait CbIndexLoader
 
     public $addAction = [];
 
+    public $show_addAction = true;
+
     public $buttonDetail = true;
 
     public $deleteBtn = true;

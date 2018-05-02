@@ -37,23 +37,33 @@ class DbInspector
 
     /**
      * @param $table
+     * @return array
+     */
+    private static function findPKname($table)
+    {
+        return \DB::getDoctrineSchemaManager()->listTableDetails($table)->getPrimaryKey()->getColumns()[0];
+    }
+
+    /**
+     * @param $table
      * @param $colName
      * @return bool
      */
     public static function isNullableColumn($table, $colName)
     {
         $colObj = \DB::getDoctrineSchemaManager()->listTableColumns($table)[$colName];
-        if(!$colObj){
-           return ;
+        if (! $colObj) {
+            return;
         }
-        return !$colObj->getNotnull();
+
+        return ! $colObj->getNotnull();
     }
 
     /**
      * @param $columns
      * @return string
      */
-    public static function colName($columns)
+    public static function colName(array $columns): string
     {
         $nameColCandidate = explode(',', cbConfig('NAME_FIELDS_CANDIDATE'));
 
@@ -91,13 +101,11 @@ class DbInspector
         return $hasTable;
     }
 
-    /**
-     * @param $table
-     * @return array
-     */
-    private static function findPKname($table)
+    public static function getTableForeignKey($fieldName)
     {
-        return \DB::getDoctrineSchemaManager()->listTableDetails($table)->getPrimaryKey()->getColumns()[0];
+        if (self::isForeignKey($fieldName)) {
+            return str_replace(['_id', 'id_'], '', $fieldName);
+        }
     }
 
     public static function listTables()
@@ -113,13 +121,7 @@ class DbInspector
         if (\Schema::hasColumn($child_table, 'id_'.$parent_table)) {
             return 'id_'.$parent_table;
         }
-        return $parent_table.'_id';
-    }
 
-    public static function getTableForeignKey($fieldName)
-    {
-        if (self::isForeignKey($fieldName)) {
-            return str_replace(['_id', 'id_'], '', $fieldName);
-        }
+        return $parent_table.'_id';
     }
 }

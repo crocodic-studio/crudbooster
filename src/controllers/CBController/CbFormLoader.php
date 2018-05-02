@@ -14,8 +14,6 @@ trait CbFormLoader
 
     public $button_addmore = true;
 
-    public $show_addAction = true;
-
     protected function cbFormLoader()
     {
         $this->data_inputan = $this->form;
