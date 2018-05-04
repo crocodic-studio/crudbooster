@@ -58,6 +58,8 @@ trait CbIndexLoader
 
     public $buttonActionStyle = 'button_icon';
 
+    public $buttonExport = true;
+
     protected function cbIndexLoader()
     {
         $this->data['buttonEdit'] = $this->buttonEdit;
