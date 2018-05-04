@@ -2,14 +2,13 @@
 
 namespace crocodicstudio\crudbooster\controllers\Helpers;
 
-use crocodicstudio\crudbooster\helpers\DbInspector;
 use crocodicstudio\crudbooster\helpers\CRUDBooster;
+use crocodicstudio\crudbooster\helpers\DbInspector;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Cache;
-
 
 class IndexImport
 {
@@ -25,10 +24,10 @@ class IndexImport
         return view('crudbooster::import', $data);
     }
 
-
     /**
      * @param $file_md5
      * @return mixed
+     * @throws \Exception
      */
     public function handleImportProgress($file_md5)
     {
@@ -50,7 +49,7 @@ class IndexImport
     public function uploadImportData($file)
     {
         $dir = 'uploads/'.date('Y-m');
-        $filename = md5(str_random(5)).'.'. $file->getClientOriginalExtension();
+        $filename = md5(str_random(5)).'.'.$file->getClientOriginalExtension();
 
         //Create Directory Monthly
         Storage::makeDirectory($dir);
@@ -63,13 +62,12 @@ class IndexImport
 
     /**
      * @param $file
-     * @return array
+     * @return \Illuminate\Contracts\Validation\Validator
      */
     public function validateForImport($file)
     {
         return Validator::make(['extension' => $file->getClientOriginalExtension(),], ['extension' => 'in:xls,xlsx,csv']);
     }
-
 
     /**
      * @param $file_md5
@@ -117,15 +115,15 @@ class IndexImport
     }
 
     /**
-     * @param $select_column
+     * @param $selectColumn
      * @param $table_columns
      * @param $value
      * @return array
      */
-    private function readAndInsert($select_column, $table_columns, $value)
+    private function readAndInsert($selectColumn, $table_columns, $value)
     {
         $a = [];
-        foreach ($select_column as $sk => $s) {
+        foreach ($selectColumn as $sk => $s) {
             $colname = $table_columns[$sk];
 
             if (! DbInspector::isForeignKey($colname) || intval($value->$s)) {
@@ -162,7 +160,7 @@ class IndexImport
 
                 $a[$colname] = $relation_id;
             } catch (\Exception $e) {
-                exit($e);
+                //exit($e);
             }
         }
 
@@ -170,16 +168,17 @@ class IndexImport
     }
 
     /**
-     * @param $relation_table
-     * @return string
+     * @param $table
      */
-    private function resolveController($relation_table)
+    private function resolveController($table)
     {
-        $relation_moduls = DB::table('cms_moduls')->where('table_name', $relation_table)->first();
-
-        $relation_class = __NAMESPACE__.'\\'.$relation_moduls->controller;
+        $module = DB::table('cms_moduls')->where('table_name', $table)->first();
+        if (is_null($module)) {
+            return ;
+        }
+        $relation_class = __NAMESPACE__.'\\'.$module->controller;
         if (! class_exists($relation_class)) {
-            $relation_class = ctrlNamespace().'\\'.$relation_moduls->controller;
+            $relation_class = ctrlNamespace().'\\'.$module->controller;
         }
 
         return new $relation_class;

@@ -17,7 +17,6 @@ Route::group([
 
     Route::post('email-templates/export-data', [ 'uses' => 'AdminEmailTemplatesController@postExportData', 'as' => 'AdminEmailTemplatesControllerPostExportData',]);
     Route::post('email-templates/find-data', ['uses' => 'AdminEmailTemplatesController@postFindData', 'as' => 'AdminEmailTemplatesControllerPostFindData',]);
-    Route::post('email-templates/find-data-old', ['uses' => 'AdminEmailTemplatesController@postFindDataOld', 'as' => 'AdminEmailTemplatesControllerPostFindDataOld',]);
     Route::post('email-templates/add-save', ['uses' => 'AdminEmailTemplatesController@postAddSave', 'as' => 'AdminEmailTemplatesControllerPostAddSave',]);
     Route::post('email-templates/edit-save/{id?}', ['uses' => 'AdminEmailTemplatesController@postEditSave', 'as' => 'AdminEmailTemplatesControllerPostEditSave',]);
     Route::post('email-templates/do-import-chunk', ['uses' => 'AdminEmailTemplatesController@postDoImportChunk', 'as' => 'AdminEmailTemplatesControllerPostDoImportChunk',]);

@@ -111,12 +111,12 @@ class DbInspector
         }
     }
 
-    public static function listTables()
+    public static function listTables(): array
     {
         return \DB::getDoctrineSchemaManager()->listTableNames();
     }
 
-    public static function getForeignKey($parentTable, $childTable)
+    public static function getForeignKey($parentTable, $childTable) : string
     {
         $parentTable = CRUDBooster::parseSqlTable($parentTable)['table'];
         $childTable = CRUDBooster::parseSqlTable($childTable)['table'];
