@@ -41,7 +41,10 @@ class DbInspector
      */
     private static function findPKname($table)
     {
-        return \DB::getDoctrineSchemaManager()->listTableDetails($table)->getPrimaryKey()->getColumns()[0];
+        $cols = \DB::getDoctrineSchemaManager()->listTableDetails($table)->getPrimaryKey()->getColumns();
+        if (! empty($cols)) {
+            return $cols[0];
+        }
     }
 
     /**

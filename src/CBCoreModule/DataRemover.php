@@ -21,7 +21,7 @@ class DataRemover
     /**
      * @param $idsArray
      */
-    public function deleteIds($idsArray)
+    public function deleteIds(array $idsArray)
     {
         $query = $this->ctrl->table()->whereIn($this->ctrl->primaryKey, $idsArray);
         if (Schema::hasColumn($this->ctrl->table, 'deleted_at')) {
@@ -34,7 +34,7 @@ class DataRemover
     /**
      * @param $idsArray
      */
-    public function doDeleteWithHook($idsArray)
+    public function doDeleteWithHook(array $idsArray)
     {
         $idsArray = $this->ctrl->hookBeforeDelete($idsArray);
         $this->deleteIds($idsArray);
