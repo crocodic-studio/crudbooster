@@ -3,7 +3,6 @@
 namespace crocodicstudio\crudbooster\helpers;
 
 use Cache;
-use crocodicstudio\crudbooster\helpers\Cache as CbCache;
 use DB;
 use Illuminate\Support\Facades\Schema;
 
@@ -11,28 +10,18 @@ class DbInspector
 {
     /**
      * @param $table
-     * @return bool|null|string
+     * @return string
      * @throws \Exception
      */
-    public static function findPK($table)
+    public static function findPK(string $table): string
     {
         if (! $table) {
             return 'id';
         }
 
-        if (CbCache::get('table_'.$table, 'primaryKey')) {
-            return CbCache::get('table_'.$table, 'primaryKey');
-        }
-        //$table = CRUDBooster::parseSqlTable($table);
-
-        $primaryKey = self::findPKname($table);
-
-        if (! $primaryKey) {
-            return 'id';
-        }
-        CbCache::put('table_'.$table, 'primaryKey', $primaryKey);
-
-        return $primaryKey;
+        return cache()->remember('CrudBooster_pk_'.$table, 10, function () use ($table) {
+            return self::findPKname($table) ?: 'id';
+        });
     }
 
     /**
@@ -116,7 +105,7 @@ class DbInspector
         return \DB::getDoctrineSchemaManager()->listTableNames();
     }
 
-    public static function getForeignKey($parentTable, $childTable) : string
+    public static function getForeignKey($parentTable, $childTable): string
     {
         $parentTable = CRUDBooster::parseSqlTable($parentTable)['table'];
         $childTable = CRUDBooster::parseSqlTable($childTable)['table'];

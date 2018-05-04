@@ -31,7 +31,7 @@ class ViewHelpers
 
     public static function delConfirm($redirectTo)
     {
-        echo 'swal({   
+        return 'swal({   
 				title: "'.cbTrans('delete_title_confirm').'",   
 				text: "'.cbTrans('delete_description_confirm').'",   
 				type: "warning",   

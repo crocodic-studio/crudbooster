@@ -67,12 +67,12 @@ class CRUDBooster
 
     public static function deleteConfirm($redirectTo)
     {
-        ViewHelpers::delConfirm($redirectTo);
+        return ViewHelpers::delConfirm($redirectTo);
     }
 
     public static function getValueFilter($field)
     {
-        self::getFilter($field, 'value');
+        return self::getFilter($field, 'value');
     }
 
     private static function getFilter($field, $index)
