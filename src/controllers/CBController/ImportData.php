@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\Route;
 
 trait ImportData
 {
-    public $buttonImport = true;
-
     public function getImportData()
     {
         $this->genericLoader();
@@ -29,20 +27,20 @@ trait ImportData
 
         session()->put('total_data_import', count($rows));
 
-        $data_import_column = [];
+        $import_column = [];
         foreach ($rows as $value) {
             $a = [];
             foreach ($value as $k => $v) {
                 $a[] = $k;
             }
             if (count($a)) {
-                $data_import_column = $a;
+                $import_column = $a;
             }
             break;
         }
 
         $data['table_columns'] = DB::getSchemaBuilder()->getColumnListing($this->table);
-        $data['data_import_column'] = $data_import_column;
+        $data['data_import_column'] = $import_column;
 
         return $this->cbView('crudbooster::import', $data);
     }

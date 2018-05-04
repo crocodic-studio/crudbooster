@@ -60,6 +60,8 @@ trait CbIndexLoader
 
     public $buttonExport = true;
 
+    public $buttonImport = true;
+
     public $indexReturn = false; //for export
 
     protected function cbIndexLoader()
