@@ -17,8 +17,8 @@
                 </li>
             @endif
 
-            @if($button_selected)
-                @foreach($button_selected as $button)
+            @if($buttonSelected)
+                @foreach($buttonSelected as $button)
                     <li>
                         <a href="javascript:void(0)" data-name='{{$button["name"]}}'
                            title='{{$button["label"]}}'>

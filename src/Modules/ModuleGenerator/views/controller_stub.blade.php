@@ -74,7 +74,7 @@ class {{$controllerName}} extends CBController {
         | @name  = Name of button
         | Then about the action, you should code at actionButtonSelected method
         */
-        $this->button_selected = [];
+        $this->buttonSelected = [];
 
         /*
         | ----------------------------------------------------------------------
@@ -93,7 +93,7 @@ class {{$controllerName}} extends CBController {
         | @url   = URL Target
         | @icon  = Icon from Awesome.
         */
-        $this->index_button = [];
+        $this->indexButton = [];
 
         /*
         | ----------------------------------------------------------------------

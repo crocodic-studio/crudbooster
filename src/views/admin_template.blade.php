@@ -46,7 +46,7 @@
                     @endif
 
 
-                    @include('crudbooster::_admin_template.action_buttons', ['index_button' => $index_button])
+                    @include('crudbooster::_admin_template.action_buttons', ['index_button' => $indexButton])
 
                 </h1>
 

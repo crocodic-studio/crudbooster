@@ -22,7 +22,7 @@ trait CbIndexLoader
 
     public $showNumbering = false;
 
-    public $index_button = [];
+    public $indexButton = [];
 
     public $limit = 20;
 
@@ -42,7 +42,7 @@ trait CbIndexLoader
 
     public $addAction = [];
 
-    public $show_addAction = true;
+    public $showAddAction = true;
 
     public $buttonDetail = true;
 
@@ -50,7 +50,7 @@ trait CbIndexLoader
 
     public $col = [];
 
-    public $button_selected = [];
+    public $buttonSelected = [];
 
     public $buttonEdit = true;
 
@@ -69,7 +69,7 @@ trait CbIndexLoader
         $this->data['buttonEdit'] = $this->buttonEdit;
         $this->columns_table = $this->col;
         $this->data['deleteBtn'] = $this->deleteBtn;
-        $this->data['button_selected'] = $this->button_selected;
+        $this->data['buttonSelected'] = $this->buttonSelected;
         $this->data['buttonExport'] = $this->buttonExport;
         $this->data['buttonImport'] = $this->buttonImport;
         $this->data['buttonFilter'] = $this->buttonFilter;
@@ -83,7 +83,7 @@ trait CbIndexLoader
         $this->data['index_additional_view'] = $this->indexAdditionalView;
         $this->data['button_action_width'] = $this->buttonActionWidth;
         $this->data['buttonShow'] = $this->buttonShow;
-        $this->data['addAction'] = ($this->show_addAction) ? $this->addAction : null;
+        $this->data['addAction'] = ($this->showAddAction) ? $this->addAction : null;
         $this->data['buttonDetail'] = $this->buttonDetail;
         $this->data['buttonAdd'] = $this->buttonAdd;
     }

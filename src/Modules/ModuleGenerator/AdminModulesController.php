@@ -45,7 +45,7 @@ class AdminModulesController extends CBController
             "showIf" => "[is_protected] == 0",
         ];
 
-        $this->index_button[] = ['label' => 'Generate New Module', 'icon' => 'fa fa-plus', 'url' => CRUDBooster::mainpath('step1'), 'color' => 'success'];
+        $this->indexButton[] = ['label' => 'Generate New Module', 'icon' => 'fa fa-plus', 'url' => CRUDBooster::mainpath('step1'), 'color' => 'success'];
     }
     // public function getIndex() {
     // 	$data['page_title'] = 'Module Generator';

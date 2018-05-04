@@ -1,5 +1,5 @@
-@if(!empty($index_button))
-    @foreach($index_button as $ib)
+@if(!empty($indexButton))
+    @foreach($indexButton as $ib)
         <a href='{{$ib["url"]}}' id='{{str_slug($ib["label"])}}'
            class='btn {{($ib['color'])?'btn-'.$ib['color']:'btn-primary'}} btn-sm'
            @if($ib['onClick']) onClick='return {{$ib["onClick"]}}' @endif

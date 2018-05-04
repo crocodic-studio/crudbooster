@@ -156,7 +156,7 @@ abstract class CBController extends Controller
         $this->data['table'] = $this->table;
         $this->data['titleField'] = $this->titleField;
         $this->data['appname'] = cbGetsetting('appname');
-        $this->data['index_button'] = $this->index_button;
+        $this->data['indexButton'] = $this->indexButton;
 
         $this->data['sub_module'] = $this->sub_module;
         $this->data['parent_field'] = (request('parent_field')) ?: $this->parent_field;
