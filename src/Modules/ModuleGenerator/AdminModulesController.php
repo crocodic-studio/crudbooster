@@ -23,7 +23,7 @@ class AdminModulesController extends CBController
         $this->buttonFilter = false;
         $this->buttonDetail = false;
         $this->buttonBulkAction = false;
-        $this->button_action_style = 'button_icon';
+        $this->buttonActionStyle = 'button_icon';
         $this->orderby = ['is_protected' => 'asc', 'name' => 'asc'];
 
         $this->makeColumns();

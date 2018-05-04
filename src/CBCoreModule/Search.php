@@ -58,7 +58,7 @@ class Search
      */
     private function limitRows($data)
     {
-        $num = $data['limit'] ?: 10;
+        $num = (int)$data['limit'] ?: 10;
         $this->rows->take($num);
     }
 

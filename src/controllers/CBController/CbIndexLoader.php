@@ -52,15 +52,15 @@ trait CbIndexLoader
 
     public $button_selected = [];
 
-    public $button_edit = true;
+    public $buttonEdit = true;
 
     public $buttonAdd = true;
 
-    public $button_action_style = 'button_icon';
+    public $buttonActionStyle = 'button_icon';
 
     protected function cbIndexLoader()
     {
-        $this->data['button_edit'] = $this->button_edit;
+        $this->data['buttonEdit'] = $this->buttonEdit;
         $this->columns_table = $this->col;
         $this->data['deleteBtn'] = $this->deleteBtn;
         $this->data['button_selected'] = $this->button_selected;

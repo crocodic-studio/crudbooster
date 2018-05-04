@@ -3,7 +3,7 @@
        href='{{CRUDBooster::mainpath("detail/".$row->$pk)."?return_url=".urlencode(Request::fullUrl())}}'>{{cbTrans("action_detail_data")}}</a>
 @endif
 
-@if(CRUDBooster::canUpdate() && $button_edit)
+@if(CRUDBooster::canUpdate() && $buttonEdit)
     <a class='btn btn-xs btn-success btn-edit' title='{{cbTrans("action_edit_data")}}'
        href='{{CRUDBooster::mainpath("edit/".$row->$pk)."?return_url=".urlencode(Request::fullUrl())."&parent_id=".g("parent_id")."&parent_field=".$parent_field }}'>{{cbTrans("action_edit_data")}}</a>
 @endif

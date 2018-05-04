@@ -45,7 +45,7 @@
                     {{cbTrans("action_detail_data")}}</a></li>
         @endif
 
-        @if(CRUDBooster::canUpdate() && $button_edit)
+        @if(CRUDBooster::canUpdate() && $buttonEdit)
             <li><a class='btn-edit' title='{{cbTrans("action_edit_data")}}'
                    href='{{CRUDBooster::mainpath("edit/".$row->$pk)."?return_url=".urlencode(Request::fullUrl())."&parent_id=".g("parent_id")."&parent_field=".$parent_field}}'>
                     {!! cbIcon('pencil') !!}

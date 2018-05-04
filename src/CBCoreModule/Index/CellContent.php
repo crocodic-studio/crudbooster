@@ -121,13 +121,13 @@ class CellContent
         if (!$this->cb->buttonTableAction) {
             return $htmlContent;
         }
-        $button_action_style = $this->cb->button_action_style;
-        $button_edit = $this->cb->button_edit;
+        $buttonActionStyle = $this->cb->buttonActionStyle;
+        $buttonEdit = $this->cb->buttonEdit;
         $buttonDetail = $this->cb->buttonDetail;
         $deleteBtn = $this->cb->deleteBtn;
         $id = ($row->{$this->cb->primaryKey});
 
-        $data = compact('addAction', 'row', 'id', 'button_action_style', 'parent_field', 'button_edit', 'deleteBtn', 'buttonDetail');
+        $data = compact('addAction', 'row', 'id', 'buttonActionStyle', 'parent_field', 'buttonEdit', 'deleteBtn', 'buttonDetail');
         $htmlContent[] = "<div class='button_action' style='text-align:right'>".view('crudbooster::index.action', $data)->render().'</div>';
 
         return $htmlContent;

@@ -13,10 +13,10 @@ class {{$controllerName}} extends CBController {
         $this->showNumbering = false;
         $this->buttonTableAction = true;
         $this->orderby = "{{$pk}},desc";
-        $this->button_action_style = "button_icon";
+        $this->buttonActionStyle = "button_icon";
         $this->buttonAdd = true;
         $this->deleteBtn = true;
-        $this->button_edit = true;
+        $this->buttonEdit = true;
         $this->buttonDetail = true;
         $this->buttonShow = true;
         $this->buttonFilter = true;

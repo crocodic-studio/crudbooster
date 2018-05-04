@@ -91,7 +91,7 @@ class AdminUsersController extends CBController
         # START CONFIGURATION DO NOT REMOVE THIS LINE
         $this->table = 'cms_users';
         $this->titleField = 'name';
-        $this->button_action_style = 'button_icon';
+        $this->buttonActionStyle = 'button_icon';
         $this->buttonImport = false;
         $this->buttonExport = false;
         $this->button_save = true;
