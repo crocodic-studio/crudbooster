@@ -116,15 +116,15 @@ class DbInspector
         return \DB::getDoctrineSchemaManager()->listTableNames();
     }
 
-    public static function getForeignKey($parent_table, $child_table)
+    public static function getForeignKey($parentTable, $childTable)
     {
-        $parent_table = CRUDBooster::parseSqlTable($parent_table)['table'];
-        $child_table = CRUDBooster::parseSqlTable($child_table)['table'];
+        $parentTable = CRUDBooster::parseSqlTable($parentTable)['table'];
+        $childTable = CRUDBooster::parseSqlTable($childTable)['table'];
 
-        if (\Schema::hasColumn($child_table, 'id_'.$parent_table)) {
-            return 'id_'.$parent_table;
+        if (\Schema::hasColumn($childTable, 'id_'.$parentTable)) {
+            return 'id_'.$parentTable;
         }
 
-        return $parent_table.'_id';
+        return $parentTable.'_id';
     }
 }
