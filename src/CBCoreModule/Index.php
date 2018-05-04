@@ -73,7 +73,7 @@ class Index
 
         $data['columns'] = $columns_table;
 
-        if ($CbCtrl->index_return) {
+        if ($CbCtrl->indexReturn) {
             return $data;
         }
 

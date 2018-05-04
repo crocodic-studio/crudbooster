@@ -60,6 +60,8 @@ trait CbIndexLoader
 
     public $buttonExport = true;
 
+    public $indexReturn = false; //for export
+
     protected function cbIndexLoader()
     {
         $this->data['buttonEdit'] = $this->buttonEdit;

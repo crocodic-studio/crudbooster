@@ -26,8 +26,6 @@ abstract class CBController extends Controller
     use Hooks;
     use Deleter, CbFormLoader, CbIndexLoader, CbLayoutLoader, IndexAjax, ImportData, ExportData, FormSubmitHandlers;
 
-    public $module_name;
-
     public $table;
 
     public $titleField;
@@ -39,8 +37,6 @@ abstract class CBController extends Controller
     public $data = [];
 
     public $parent_field = null;
-
-    public $index_return = false; //for export
 
     public function cbView($template, $data)
     {

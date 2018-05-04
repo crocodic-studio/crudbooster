@@ -9,7 +9,7 @@ trait ExportData
     public function postExportData()
     {
         $this->limit = request('limit');
-        $this->index_return = true;
+        $this->indexReturn = true;
         $filename = request('filename');
         $papersize = request('page_size');
         $paperorientation = request('page_orientation');
