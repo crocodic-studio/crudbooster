@@ -32,9 +32,9 @@ Route::group([
     'prefix' => cbAdminPath(),
     'namespace' => $namespace,
 ], function () {
-    Route::post('{module}/do-upload-import-data', ['uses' => 'FileController@uploadImportData', 'as' => 'UploadImportData',]);
-    Route::post('{module}/upload-summernote', ['uses' => 'FileController@uploadSummernote', 'as' => 'UploadImportData',]);
-    Route::post('{module}/upload-file', ['uses' => 'FileController@uploadFile', 'as' => 'UploadImportData',]);
-    Route::post('{module}/done-import', ['uses' => 'FileController@doneImport', 'as' => 'doneImportData',]);
+    Route::post('{module}/do-upload-import-data', 'FileController@uploadImportData')->name('UploadImportData');
+    Route::post('{module}/upload-summernote', 'FileController@uploadSummernote')->name('UploadImportData');
+    Route::post('{module}/upload-file', 'FileController@uploadFile')->name('UploadImportData');
+    Route::post('{module}/done-import', 'FileController@doneImport')->name('doneImportData');
 });
 

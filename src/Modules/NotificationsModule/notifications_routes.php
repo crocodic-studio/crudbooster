@@ -7,13 +7,13 @@ Route::group([
     'prefix' => cbAdminPath(),
     'namespace' => cbModulesNS('NotificationsModule'),
 ], function () {
-    Route::get('notifications/', ['uses' => 'AdminNotificationsController@getIndex', 'as' => 'AdminNotificationsControllerGetIndex']);
-    Route::get('notifications/latest-json', ['uses' => 'AdminNotificationsController@getLatestJson', 'as' => 'AdminNotificationsControllerGetLatestJson']);
-    Route::get('notifications/read/{id?}', ['uses' => 'AdminNotificationsController@getRead', 'as' => 'AdminNotificationsControllerGetRead']);
-    Route::get('notifications/data-query', ['uses' => 'AdminNotificationsController@getDataQuery', 'as' => 'AdminNotificationsControllerGetDataQuery']);
-    Route::get('notifications/update-single', ['uses' => 'AdminNotificationsController@getUpdateSingle', 'as' => 'AdminNotificationsControllerGetUpdateSingle']);
-    Route::get('notifications/add', ['uses' => 'AdminNotificationsController@getAdd', 'as' => 'AdminNotificationsControllerGetAdd']);
-    Route::get('notifications/edit/{id?}', ['uses' => 'AdminNotificationsController@getEdit', 'as' => 'AdminNotificationsControllerGetEdit']);
-    Route::get('notifications/delete/{id?}', ['uses' => 'AdminNotificationsController@getDelete', 'as' => 'AdminNotificationsControllerGetDelete']);
-    Route::get('notifications/detail/{id?}', ['uses' => 'AdminNotificationsController@getDetail', 'as' => 'AdminNotificationsControllerGetDetail']);
+    Route::get('notifications/', 'AdminNotificationsController@getIndex')->name('AdminNotificationsControllerGetIndex');
+    Route::get('notifications/latest-json', 'AdminNotificationsController@getLatestJson')->name('AdminNotificationsControllerGetLatestJson');
+    Route::get('notifications/read/{id?}', 'AdminNotificationsController@getRead')->name('AdminNotificationsControllerGetRead');
+    Route::get('notifications/data-query', 'AdminNotificationsController@getDataQuery')->name('AdminNotificationsControllerGetDataQuery');
+    Route::get('notifications/update-single', 'AdminNotificationsController@getUpdateSingle')->name('AdminNotificationsControllerGetUpdateSingle');
+    Route::get('notifications/add', 'AdminNotificationsController@getAdd')->name('AdminNotificationsControllerGetAdd');
+    Route::get('notifications/edit/{id?}', 'AdminNotificationsController@getEdit')->name('AdminNotificationsControllerGetEdit');
+    Route::get('notifications/delete/{id?}', 'AdminNotificationsController@getDelete')->name('AdminNotificationsControllerGetDelete');
+    Route::get('notifications/detail/{id?}', 'AdminNotificationsController@getDetail')->name('AdminNotificationsControllerGetDetail');
 });
