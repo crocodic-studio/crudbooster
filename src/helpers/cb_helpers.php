@@ -43,6 +43,13 @@ if (! function_exists('ctrlNamespace')) {
     }
 }
 
+if (! function_exists('cbControllersNS')) {
+    function cbControllersNS(): string
+    {
+        return \crocodicstudio\crudbooster\helpers\CbStructure::cbControllersNS();
+    }
+}
+
 if (! function_exists('is_checked')) {
     /**
      * @param $format

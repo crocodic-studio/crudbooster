@@ -4,7 +4,7 @@ namespace {!! ctrlNamespace() !!};
 use Session;
 use Request;
 use DB;
-use \crocodicstudio\crudbooster\controllers\ApiController;
+use {!! cbControllersNS() !!}\ApiController;
 
 class Api{{$controller_name}}Controller extends ApiController
 {

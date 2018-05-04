@@ -69,7 +69,7 @@ Route::group([
 Route::group([
     'middleware' => ['web', CBBackend::class],
     'prefix' => cbAdminPath(),
-    'namespace' => '\crocodicstudio\crudbooster\controllers',
+    'namespace' => cbControllersNS(),
 ], function () use ($dashboardMenu) {
     if (! $dashboardMenu) {
         CRUDBooster::routeController('/', cbModulesNS('AuthModule\AuthController'));

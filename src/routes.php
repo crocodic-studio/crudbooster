@@ -3,7 +3,7 @@
 use crocodicstudio\crudbooster\CBCoreModule\CbRouter;
 use crocodicstudio\crudbooster\middlewares\CBBackend;
 
-$namespace = '\crocodicstudio\crudbooster\controllers';
+$namespace = cbControllersNS();
 /* ROUTER FOR UPLOADS */
 Route::group(['middleware' => ['web'], 'namespace' => $namespace], function () {
     Route::get('uploads/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'FileController@getPreview', 'as' => 'fileControllerPreview']);

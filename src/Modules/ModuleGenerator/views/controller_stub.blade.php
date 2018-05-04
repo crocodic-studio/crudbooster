@@ -1,7 +1,7 @@
 
 namespace {!! ctrlNamespace() !!};
 
-use \crocodicstudio\crudbooster\controllers\CBController;
+use {!! cbControllersNS() !!}\CBController;
 
 class {{$controllerName}} extends CBController {
 

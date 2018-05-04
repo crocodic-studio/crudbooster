@@ -35,6 +35,11 @@ class CbStructure
         return '\crocodicstudio\crudbooster\Modules\\'.$path;
     }
 
+    public static function cbControllersNS(): string
+    {
+        return '\crocodicstudio\crudbooster\controllers';
+    }
+
     public static function ctrlNamespace(): string
     {
         return 'App\Http\Controllers';
