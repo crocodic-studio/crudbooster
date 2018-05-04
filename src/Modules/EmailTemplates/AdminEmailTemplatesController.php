@@ -13,7 +13,6 @@ class AdminEmailTemplatesController extends CBController
         $this->titleField = 'name';
         $this->limit = 20;
         $this->orderby = ['id' => 'desc'];
-        $this->global_privilege = false;
 
         $this->setButtons();
 

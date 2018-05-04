@@ -38,11 +38,7 @@ abstract class CBController extends Controller
 
     public $data = [];
 
-    //public $global_privilege = false;
-
     public $parent_field = null;
-
-    public $parent_id = null;
 
     public $index_return = false; //for export
 
@@ -168,7 +164,6 @@ abstract class CBController extends Controller
 
         $this->data['sub_module'] = $this->sub_module;
         $this->data['parent_field'] = (request('parent_field')) ?: $this->parent_field;
-        $this->data['parent_id'] = (request('parent_id')) ?: $this->parent_id;
     }
 
     /**

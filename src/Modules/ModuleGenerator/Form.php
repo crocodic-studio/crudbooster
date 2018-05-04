@@ -38,15 +38,6 @@ class Form
      */
     private static function addStep4fields($form)
     {
-        $form[] = [
-            'label' => "Global Privilege",
-            'name' => "global_privilege",
-            'type' => "radio",
-            'dataenum' => ['0|No', '1|Yes'],
-            'value' => 0,
-            'help' => 'Global Privilege allows you to make the module to be accessible by all privileges',
-            'exception' => true,
-        ];
 
         $form[] = [
             'label' => 'Button Action Style',

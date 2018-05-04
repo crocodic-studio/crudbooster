@@ -2,20 +2,6 @@
 
     <div class="col-sm-12">
         <div class="form-group">
-            <label>Global Privilege</label>
-            <label class='radio-inline'>
-                <input type='radio' name='global_privilege'
-                       {{($config['global_privilege'])?"checked":""}} value='true'/> TRUE
-            </label>
-            <label class='radio-inline'>
-                <input {{(!$config['global_privilege'])?"checked":""}} type='radio'
-                       name='global_privilege' value='false'/> FALSE
-            </label>
-        </div>
-    </div>
-
-    <div class="col-sm-12">
-        <div class="form-group">
             <label>Show Button Table Action</label>
             <label class='radio-inline'>
                 <input {{($config['button_table_action'])?"checked":""}} type='radio'
