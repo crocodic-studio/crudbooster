@@ -4,7 +4,7 @@ namespace crocodicstudio\crudbooster\Modules\ApiGeneratorModule;
 
 use Illuminate\Support\Facades\DB;
 
-class Repository
+class ApiKeysRepository
 {
     public static function incrementHit($serverSecret)
     {

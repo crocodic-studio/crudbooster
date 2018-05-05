@@ -24,7 +24,7 @@ class AdminApiKeyController extends CBController
         $this->cbLoader();
         $data = [
             'page_title' => 'API Generator',
-            'apikeys' => Repository::get(),
+            'apikeys' => ApiKeysRepository::get(),
         ];
 
         return view('CbApiGen::api_key', $data);
@@ -38,7 +38,7 @@ class AdminApiKeyController extends CBController
 
         //Convert the binary data into hexadecimal representation.
         $token = bin2hex($token);
-        $id = Repository::insertGetId($token);
+        $id = ApiKeysRepository::insertGetId($token);
 
         $response = [
             'id' => $id,
@@ -55,14 +55,14 @@ class AdminApiKeyController extends CBController
         $id = request('id');
         $status = (request('status') == 1) ? "active" : "non active";
 
-        Repository::updateById($status, $id);
+        ApiKeysRepository::updateById($status, $id);
 
         backWithMsg('You have been update api key status !');
     }
 
     public function getDeleteApiKey()
     {
-        if (Repository::deleteById(request('id'))) {
+        if (ApiKeysRepository::deleteById(request('id'))) {
             return response()->json(['status' => 1]);
         }
 
