@@ -4,7 +4,6 @@ namespace crocodicstudio\crudbooster\Modules\ApiGeneratorModule;
 
 use crocodicstudio\crudbooster\controllers\CBController;
 use crocodicstudio\crudbooster\helpers\CbValidator;
-use Illuminate\Support\Facades\DB;
 
 class AdminApiKeyController extends CBController
 {
@@ -23,9 +22,10 @@ class AdminApiKeyController extends CBController
     public function getSecretKey()
     {
         $this->cbLoader();
-        $data = [];
-        $data['page_title'] = 'API Generator';
-        $data['apikeys'] = DB::table('cms_apikey')->get();
+        $data = [
+            'page_title' => 'API Generator',
+            'apikeys' => Repository::get(),
+        ];
 
         return view('CbApiGen::api_key', $data);
     }
@@ -38,17 +38,12 @@ class AdminApiKeyController extends CBController
 
         //Convert the binary data into hexadecimal representation.
         $token = bin2hex($token);
+        $id = Repository::insertGetId($token);
 
-        $id = DB::table('cms_apikey')->insertGetId([
-                'secretkey' => $token,
-                'created_at' => date('Y-m-d H:i:s'),
-                'status' => 'active',
-                'hit' => 0,
-            ]);
-
-        $response = [];
-        $response['key'] = $token;
-        $response['id'] = $id;
+        $response = [
+            'id' => $id,
+            'key' => $token,
+        ];
 
         return response()->json($response);
     }
@@ -60,19 +55,17 @@ class AdminApiKeyController extends CBController
         $id = request('id');
         $status = (request('status') == 1) ? "active" : "non active";
 
-        DB::table('cms_apikey')->where('id', $id)->update(['status' => $status]);
+        Repository::updateById($status, $id);
 
         backWithMsg('You have been update api key status !');
     }
 
     public function getDeleteApiKey()
     {
-        $id = request('id');
-        if (DB::table('cms_apikey')->where('id', $id)->delete()) {
+        if (Repository::deleteById(request('id'))) {
             return response()->json(['status' => 1]);
         }
 
         return response()->json(['status' => 0]);
     }
-
 }

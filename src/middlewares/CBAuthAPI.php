@@ -3,15 +3,15 @@
 namespace crocodicstudio\crudbooster\middlewares;
 
 use Closure;
+use Config;
+use crocodicstudio\crudbooster\Modules\ApiGeneratorModule\Repository;
+use crocodicstudio\crudbooster\Modules\SettingModule\SettingRepo;
+use DB;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Validator;
-use crocodicstudio\crudbooster\helpers\CRUDBooster;
-use crocodicstudio\crudbooster\Modules\SettingModule\SettingRepo;
-use Session;
 use Schema;
-use DB;
-use Config;
+use Session;
 
 class CBAuthAPI
 {
@@ -39,11 +39,11 @@ class CBAuthAPI
         $this->tokenMissMatchDevice($senderToken, $userAgent, $serverToken);
 
         $id = array_search($senderToken, $serverToken);
-        $server_Secret = $server_token_Secret[$id];
-        DB::table('cms_apikey')->where('secretkey', $server_Secret)->increment('hit');
+        $serverSecret = $server_token_Secret[$id];
+        Repository::incrementHit($serverSecret);
 
-        $expired_token = date('Y-m-d H:i:s', strtotime('+5 seconds'));
-        Cache::put($senderToken, $userAgent, $expired_token);
+        $expiredToken = date('Y-m-d H:i:s', strtotime('+5 seconds'));
+        Cache::put($senderToken, $userAgent, $expiredToken);
 
         return $next($request);
     }
@@ -62,13 +62,13 @@ class CBAuthAPI
             'X-Authorization-Time' => 'required',
             'useragent' => 'required',
         ]);
-        $result = [];
         if (!$validator->fails()) {
             return;
         }
-        $message = $validator->errors()->all();
-        $result['api_status'] = 0;
-        $result['api_message'] = implode(', ', $message);
+        $result = [
+            'api_status' => 0,
+            'api_message' => implode(', ', $validator->errors()->all()),
+        ];
         sendAndTerminate(response()->json($result, 200));
     }
 
@@ -80,7 +80,7 @@ class CBAuthAPI
         $userAgent = Request::header('User-Agent');
         $time = Request::header('X-Authorization-Time');
 
-        $keys = DB::table('cms_apikey')->where('status', 'active')->pluck('Secretkey');
+        $keys = Repository::getSecretKeys();
         $serverToken = [];
         $serverTokenSecret = [];
         foreach ($keys as $key) {
@@ -119,11 +119,12 @@ class CBAuthAPI
         if (! Cache::has($senderToken) || Cache::get($senderToken) == $userAgent) {
             return;
         }
-        $result = [];
-        $result['api_status'] = false;
-        $result['api_message'] = "THE TOKEN IS ALREADY BUT NOT MATCH WITH YOUR DEVICE";
-        $result['sender_token'] = $senderToken;
-        $result['server_token'] = $serverToken;
+        $result = [
+            'api_status' => false,
+            'api_message' => "THE TOKEN IS ALREADY BUT NOT MATCH WITH YOUR DEVICE",
+            'sender_token' => $senderToken,
+            'server_token' => $serverToken,
+        ];
         sendAndTerminate(response()->json($result, 200));
     }
 }
