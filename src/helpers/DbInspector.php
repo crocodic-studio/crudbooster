@@ -76,25 +76,10 @@ class DbInspector
      */
     public static function isForeignKey($fieldName)
     {
-
-        if (Cache::has('isForeignKey_'.$fieldName)) {
-            return Cache::get('isForeignKey_'.$fieldName);
-        }
-
-        $table = self::getTableForeignKey($fieldName);
-        if (! $table) {
-            return false;
-        }
-        $hasTable = Schema::hasTable($table);
-
-        if ($hasTable) {
-            Cache::forever('isForeignKey_'.$fieldName, true);
-
-            return true;
-        }
-        Cache::forever('isForeignKey_'.$fieldName, false);
-
-        return false;
+        return Cache::rememberForever('crudbooster_isForeignKey_'.$fieldName, function () use ($fieldName) {
+            $table = self::getTableForeignKey($fieldName);
+            return ($table && Schema::hasTable($table));
+        });
     }
 
     public static function getTableForeignKey($fieldName)
