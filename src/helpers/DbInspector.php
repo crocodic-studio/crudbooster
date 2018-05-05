@@ -76,26 +76,30 @@ class DbInspector
      */
     public static function isForeignKey($fieldName)
     {
-        $cacheKey = 'isForeignKey_'.$fieldName;
 
-        if (Cache::has($cacheKey)) {
-            return Cache::get($cacheKey);
+        if (Cache::has('isForeignKey_'.$fieldName)) {
+            return Cache::get('isForeignKey_'.$fieldName);
         }
 
         $table = self::getTableForeignKey($fieldName);
         if (! $table) {
             return false;
         }
-
         $hasTable = Schema::hasTable($table);
-        Cache::forever($cacheKey, $hasTable);
 
-        return $hasTable;
+        if ($hasTable) {
+            Cache::forever('isForeignKey_'.$fieldName, true);
+
+            return true;
+        }
+        Cache::forever('isForeignKey_'.$fieldName, false);
+
+        return false;
     }
 
     public static function getTableForeignKey($fieldName)
     {
-        if (self::isForeignKey($fieldName)) {
+        if (starts_with($fieldName, 'id_') || ends_with($fieldName, '_id')) {
             return str_replace(['_id', 'id_'], '', $fieldName);
         }
     }
