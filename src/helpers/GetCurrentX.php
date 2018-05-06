@@ -23,7 +23,7 @@ class GetCurrentX
     public static function getCurrentModule()
     {
         $modulepath = self::getModulePath();
-        cache()->remember('crudbooster_modules_'.$modulepath, 2, function () use ($modulepath) {
+        return cache()->remember('crudbooster_modules_'.$modulepath, 2, function () use ($modulepath) {
             return DB::table('cms_moduls')->where('path', $modulepath)->first();
         });
     }
