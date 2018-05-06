@@ -2,43 +2,31 @@
 
 namespace crocodicstudio\crudbooster\helpers;
 
-use Session;
-use Request;
-use Schema;
-use Cache;
 use DB;
+use Request;
 use Route;
-use Config;
-use Validator;
+use Session;
 
 class GetCurrentX
 {
-    public static function getCurrentId()
+    public static function getCurrentId() : int
     {
-        $id = intval(session('current_row_id'));
-        $id = $id ?: Request::segment(4);
-        $id = intval($id);
+        $id = session('current_row_id') ?: Request::segment(4);
 
-        return $id;
+        return intval($id);
     }
 
-    public static function getCurrentMethod()
+    public static function getCurrentMethod() : string
     {
-        $action = str_replace(ctrlNamespace(), "", Route::currentRouteAction());
-        $atloc = strpos($action, '@') + 1;
-        $method = substr($action, $atloc);
-
-        return $method;
+        return str_after(Route::currentRouteAction(), "@");
     }
 
     public static function getCurrentModule()
     {
         $modulepath = self::getModulePath();
-        if (Cache::has('moduls_'.$modulepath)) {
-            return Cache::get('moduls_'.$modulepath);
-        }
-
-        return DB::table('cms_moduls')->where('path', self::getModulePath())->first();
+        cache()->remember('crudbooster_modules_'.$modulepath, 2, function () use ($modulepath) {
+            return DB::table('cms_moduls')->where('path', $modulepath)->first();
+        });
     }
 
     public static function getCurrentDashboardId()
@@ -65,7 +53,8 @@ class GetCurrentX
 
     private static function getModulePath()
     {
-        $adminPathSegments = count(explode('/',config('crudbooster.ADMIN_PATH')));
+        $adminPathSegments = count(explode('/', config('crudbooster.ADMIN_PATH')));
+
         return Request::segment(1 + $adminPathSegments);
     }
 }
