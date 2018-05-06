@@ -23,7 +23,7 @@ class Step1Handler
         $path = request('path');
 
         if (! request('id')) {
-            if (DB::table('cms_moduls')->where('path', $path)->where('deleted_at', null)->count()) {
+            if ($this->modulePathExists($path)) {
                 backWithMsg('Sorry the slug has already exists, please choose another !', 'warning');
             }
             $id = $this->registerNewModule($table_name, $path, $name, $icon);
@@ -131,5 +131,14 @@ class Step1Handler
         $roles = DB::table('cms_privileges_roles')->where('id_cms_privileges', CRUDBooster::myPrivilegeId())->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')->get();
 
         session()->put('admin_privileges_roles', $roles);
+    }
+
+    /**
+     * @param $path
+     * @return mixed
+     */
+    private function modulePathExists($path)
+    {
+        return (boolean)DB::table('cms_moduls')->where('path', $path)->where('deleted_at', null)->count();
     }
 }
