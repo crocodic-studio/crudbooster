@@ -43,7 +43,7 @@ class Time
      */
     private function getNow($datetime_from)
     {
-        $datetime_from = ($datetime_from) ?: date('Y-m-d H:i:s');
+        $datetime_from = ($datetime_from) ?: YmdHis();
         $now = new \DateTime;
         if ($datetime_from != '') {
             $now = new \DateTime($datetime_from);

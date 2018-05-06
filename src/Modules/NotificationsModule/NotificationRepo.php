@@ -15,7 +15,7 @@ class NotificationRepo
         $id_cms_users = ($id_cms_users) ?: [CRUDBooster::myId()];
         foreach ($id_cms_users as $id) {
             $notif = [
-                'created_at' => date('Y-m-d H:i:s'),
+                'created_at' => YmdHis(),
                 'id_cms_users' => $id,
                 'content' => $content,
                 'is_read' => 0,

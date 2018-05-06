@@ -93,7 +93,7 @@ class ExecuteApi
     private function handleDeleteAction($table, $data)
     {
         if (\Schema::hasColumn($table, 'deleted_at')) {
-            $delete = $data->update(['deleted_at' => date('Y-m-d H:i:s')]);
+            $delete = $data->update(['deleted_at' => YmdHis()]);
         } else {
             $delete = $data->delete();
         }

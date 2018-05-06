@@ -25,7 +25,7 @@ class DataRemover
     {
         $query = $this->ctrl->table()->whereIn($this->ctrl->primaryKey, $idsArray);
         if (Schema::hasColumn($this->ctrl->table, 'deleted_at')) {
-            $query->update(['deleted_at' => date('Y-m-d H:i:s')]);
+            $query->update(['deleted_at' => YmdHis()]);
         } else {
             $query->delete();
         }

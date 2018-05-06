@@ -257,3 +257,10 @@ if (! function_exists('cbIcon')) {
         return '<i class=\'fa fa-'.$icon.'\'></i>';
     }
 }
+
+if (! function_exists('YmdHis')) {
+    function YmdHis()
+    {
+        return date('Y-m-d H:i:s');
+    }
+}

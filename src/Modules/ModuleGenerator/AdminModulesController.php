@@ -152,7 +152,7 @@ class AdminModulesController extends CBController
             $this->arr['controller'] = ControllerGenerator::generateController(request('table_name'), $route_basename);
         }
 
-        $this->arr['created_at'] = date('Y-m-d H:i:s');
+        $this->arr['created_at'] = YmdHis();
         $this->arr['id'] = $this->table()->max('id') + 1;
         $this->table()->insert($this->arr);
 
@@ -218,7 +218,7 @@ class AdminModulesController extends CBController
     {
         $parent_menu_sort = DB::table('cms_menus')->where('parent_id', 0)->max('sorting') + 1;
         $parent_menu_id = DB::table('cms_menus')->insertGetId([
-            'created_at' => date('Y-m-d H:i:s'),
+            'created_at' => YmdHis(),
             'name' => $this->arr['name'],
             'icon' => $this->arr['icon'],
             'path' => '#',
@@ -230,7 +230,7 @@ class AdminModulesController extends CBController
         ]);
 
         $arr = [
-            'created_at' => date('Y-m-d H:i:s'),
+            'created_at' => YmdHis(),
             'type' => 'Route',
             'is_active' => 1,
             'cms_privileges' => CRUDBooster::myPrivilegeId(),

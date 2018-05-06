@@ -102,7 +102,7 @@ class IndexImport
 
             try {
                 if (\Schema::hasColumn($table, 'created_at')) {
-                    $a['created_at'] = date('Y-m-d H:i:s');
+                    $a['created_at'] = YmdHis();
                 }
 
                 \DB::table($table)->insert($a);
@@ -146,7 +146,7 @@ class IndexImport
             $relation_insert_data[$titleField] = $value->$s;
 
             if (\Schema::hasColumn($relation_table, 'created_at')) {
-                $relation_insert_data['created_at'] = date('Y-m-d H:i:s');
+                $relation_insert_data['created_at'] = YmdHis();
             }
 
             try {

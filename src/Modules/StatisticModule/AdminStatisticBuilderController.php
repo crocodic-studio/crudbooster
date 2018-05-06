@@ -127,7 +127,7 @@ class AdminStatisticBuilderController extends CBController
         ];
 
         if (! $data['created_at'] && Schema::hasColumn('cms_statistic_components', 'created_at')) {
-            $data['created_at'] = date('Y-m-d H:i:s');
+            $data['created_at'] = YmdHis();
         }
 
         return DB::table('cms_statistic_components')->insertGetId($data);

@@ -68,7 +68,7 @@ class Step1Handler
             $parent_menu_sort = DB::table('cms_menus')->where('parent_id', 0)->max('sorting') + 1;
 
             DB::table('cms_menus')->insert([
-                'created_at' => date('Y-m-d H:i:s'),
+                'created_at' => YmdHis(),
                 'name' => $name,
                 'icon' => $icon,
                 'path' => $controller.'GetIndex',

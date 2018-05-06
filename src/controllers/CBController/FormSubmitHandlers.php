@@ -106,7 +106,7 @@ trait FormSubmitHandlers
     private function setTimeStamps($col)
     {
         if (Schema::hasColumn($this->table, $col)) {
-            $this->arr[$col] = date('Y-m-d H:i:s');
+            $this->arr[$col] = YmdHis();
         }
     }
 }
