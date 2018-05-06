@@ -13,7 +13,7 @@ class ApiKeysRepository
 
     public static function getSecretKeys()
     {
-        return self::table()->where('status', 'active')->pluck('Secretkey');
+        return self::table()->where('status', 'active')->pluck('secretkey');
     }
 
     public static function get()
@@ -35,7 +35,7 @@ class ApiKeysRepository
     {
         return self::table()->insertGetId([
             'secretkey' => $token,
-            'created_at' => date('Y-m-d H:i:s'),
+            'created_at' => YmdHis(),
             'status' => 'active',
             'hit' => 0,
         ]);
