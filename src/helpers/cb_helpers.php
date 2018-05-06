@@ -129,7 +129,7 @@ if (! function_exists('cbTrans')) {
      *
      * @param string $key
      * @param array $replace
-     * @return \Illuminate\Contracts\Translation\Translator|string|array|null
+     * @return string
      */
     function cbTrans($key, $replace = [])
     {

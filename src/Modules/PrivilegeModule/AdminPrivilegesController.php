@@ -142,15 +142,18 @@ class AdminPrivilegesController extends CBController
      */
     private function savePermissions($id, $moduleId, $arrs)
     {
-        $currentPermission = $this->table('cms_privileges_roles')->where('id_cms_moduls', $moduleId)->where('id_cms_privileges', $id)->first();
+        $conditions = [
+            'id_cms_moduls' => $moduleId,
+            'id_cms_privileges' => $id,
+        ];
+        $permissionID = $this->table('cms_privileges_roles')->where($conditions)->value('id');
 
-        if ($currentPermission) {
-            return $this->table('cms_privileges_roles')->where('id', $currentPermission->id)->update($arrs);
+        if ($permissionID) {
+            return $this->table('cms_privileges_roles')->where('id', $permissionID)->update($arrs);
         }
 
-        $arrs['id'] = $this->table('cms_privileges_roles')->max('id') + 1;
-        $arrs['id_cms_privileges'] = $id;
         $arrs['id_cms_moduls'] = $moduleId;
+        $arrs['id_cms_privileges'] = $id;
         $this->table('cms_privileges_roles')->insert($arrs);
         return $arrs;
     }

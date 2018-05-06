@@ -18,8 +18,8 @@ class ViewHelpers
             }
         }
 
-        $string_parameters = http_build_query($get);
-        foreach (explode('&', $string_parameters) as $s) {
+        $string_params = http_build_query($get);
+        foreach (explode('&', $string_params) as $s) {
             $part = explode('=', $s);
             $name = urldecode($part[0]);
             $value = urldecode($part[1]);
