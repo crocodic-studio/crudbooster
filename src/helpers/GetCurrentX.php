@@ -5,7 +5,6 @@ namespace crocodicstudio\crudbooster\helpers;
 use DB;
 use Request;
 use Route;
-use Session;
 
 class GetCurrentX
 {
@@ -34,9 +33,10 @@ class GetCurrentX
         if (request('d') == null) {
             return session('currentDashboardId');
         }
-        Session::put('currentDashboardId', request('d'));
-        Session::put('currentMenuId', 0);
-
+        session([
+            'currentDashboardId' => request('d'),
+            'currentMenuId' => 0,
+        ]);
         return request('d');
     }
 
@@ -45,15 +45,17 @@ class GetCurrentX
         if (request('m') == null) {
             return session('currentMenuId');
         }
-        Session::put('currentMenuId', request('m'));
-        Session::put('currentDashboardId', 0);
+        session([
+            'currentMenuId' => request('m'),
+            'currentDashboardId' => 0,
+        ]);
 
         return request('m');
     }
 
     private static function getModulePath()
     {
-        $adminPathSegments = count(explode('/', config('crudbooster.ADMIN_PATH')));
+        $adminPathSegments = count(explode('/', cbConfig('ADMIN_PATH')));
 
         return Request::segment(1 + $adminPathSegments);
     }
