@@ -101,11 +101,12 @@ class CBAuthAPI
         if (Cache::has($sender_token) || in_array($sender_token, $server_token)) {
             return;
         }
-        $result = [];
-        $result['api_status'] = false;
-        $result['api_message'] = "THE TOKEN IS NOT MATCH WITH SERVER TOKEN";
-        $result['sender_token'] = $sender_token;
-        $result['server_token'] = $server_token;
+        $result = [
+            'api_status' => false,
+            'api_message' => "THE TOKEN IS NOT MATCH WITH SERVER TOKEN",
+            'sender_token' => $sender_token,
+            'server_token' => $server_token,
+        ];
         sendAndTerminate(response()->json($result, 200));
     }
 
