@@ -24,22 +24,19 @@ class AdminColumnsTableController extends CBController
     {
         $this->cbLoader();
 
-        $result = \Schema::getColumnListing($table);
-
-        $result = array_filter($result, function ($row) {
-            return ! (in_array($row, ['created_at', 'deleted_at', 'updated_at']));
+        $columns = array_filter(\Schema::getColumnListing($table), function ($colName) {
+            return ! (in_array($colName, ['created_at', 'deleted_at', 'updated_at']));
         });
 
         $newResult = [];
-        foreach ($result as $row) {
-            $type = \Schema::getColumnType($table, $row);
-            $newResult[] = ['name' => $row, 'type' => $this->getFieldType($row, $type)];
+        foreach ($columns as $colName) {
+            $newResult[] = ['name' => $colName, 'type' => $this->getFieldType($colName, \Schema::getColumnType($table, $colName))];
 
-            if (! in_array($type, ['list', 'detail']) || ! starts_with($row, 'id_')) {
+            if (! in_array($type, ['list', 'detail']) || ! starts_with($colName, 'id_')) {
                 continue;
             }
-
-            $newResult = $this->prepareResults($row, $newResult);
+            $relatedTable = str_after($colName, 'id_');
+            $newResult = $this->addRelatedTableColTypes($relatedTable, $newResult);
         }
 
         return response()->json($newResult);
@@ -69,26 +66,22 @@ class AdminColumnsTableController extends CBController
     }
 
     /**
-     * @param $ro
-     * @param $newResult
+     * @param $table
+     * @param $result
      * @return array
      */
-    private function prepareResults($ro, $newResult)
+    private function addRelatedTableColTypes($table, $result)
     {
-        if (starts_with($ro, 'id_')) {
-            return $newResult;
-        }
-        $table2 = substr($ro, 3);
-        $columns = DB::getSchemaBuilder()->getColumnListing($table2);
+        $columns = DB::getSchemaBuilder()->getColumnListing($table);
         $columns = array_filter($columns, function ($col) {
-            return ! FieldDetector::isExceptional($col);
+            return ! FieldDetector::isExceptional($col) && !starts_with($col, 'id_');
         });
 
         foreach ($columns as $col) {
-            $col = str_replace("_$table2", "", $col);
-            $newResult[] = ['name' => $table2.'_'.$col, 'type' => \Schema::getColumnType($table2, $col)];
+            $col = str_replace("_$table", "", $col);
+            $result[] = ['name' => $table.'_'.$col, 'type' => \Schema::getColumnType($table, $col)];
         }
 
-        return $newResult;
+        return $result;
     }
 }
