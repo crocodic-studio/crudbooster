@@ -90,7 +90,7 @@ No one is obligated to understand you. Then explain your problem with clarity, d
 If there is no interaction for a long period of time, it will be assumed that it has been resolved or that it is irrelevant, and may be closed without notice. Feel free to reopen it if you think it is really necessary.
 
 ## Donation
-<a href='https://pledgie.com/campaigns/33366'><img alt='Click here to lend your support to: CRUDBooster is Laravel CRUD Generator and make a donation at pledgie.com !' src='https://pledgie.com/campaigns/33366.png?skin_name=chrome' border='0' ></a>
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=PCUGXUXXGX9WW)
 
 ## Credits
 1. Laravel Export HTML to Excel by [Maatwebsite](https://github.com/Maatwebsite/Laravel-Excel)
@@ -98,7 +98,7 @@ If there is no interaction for a long period of time, it will be assumed that it
 3. Admin Theme by [AdminLTE Almsaeed Studio](https://almsaeedstudio.com/preview)
 4. Laravel Framework by [Taylor Otwell](https://github.com/laravel/laravel)
 5. Thanks To All [Developers](https://github.com/crocodic-studio/crudbooster/graphs/contributors)
-6. Thanks To All [Funders](https://pledgie.com/campaigns/33366#donors)
+6. Thanks To All Funders
 
 ## License 
 CRUDBooster is under [MIT License](https://opensource.org/licenses/MIT)
