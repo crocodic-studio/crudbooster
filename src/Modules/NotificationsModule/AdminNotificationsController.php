@@ -27,6 +27,33 @@ class AdminNotificationsController extends CBController
         $this->form = NotificationForm::makeForm();
     }
 
+    private function setButtons()
+    {
+        $this->buttonShow = true;
+        $this->buttonAdd = false;
+        $this->deleteBtn = true;
+        $this->buttonExport = false;
+        $this->buttonImport = false;
+    }
+
+    private function makeColumns()
+    {
+        $read_notification_url = url(cbAdminPath()).'/notifications/read';
+
+        $this->col = [
+            [
+                "label" => "Content",
+                "name" => "content",
+                "callback_php" => '"<a href=\"'.$read_notification_url.'/$row->id\">$row->content</a>"'
+            ],
+            [
+                'label' => 'Read',
+                'name' => 'is_read',
+                'callback_php' => '($row->is_read)?"<span class=\"label label-default\">Already Read</span>":"<span class=\"label label-danger\">NEW</span>"',
+            ],
+        ];
+    }
+
     public function hookQueryIndex($query)
     {
         $query->where('id_cms_users', CRUDBooster::myId());
@@ -52,27 +79,5 @@ class AdminNotificationsController extends CBController
         $row = $this->findRow($id)->first();
 
         return redirect($row->url);
-    }
-
-    private function makeColumns()
-    {
-        $read_notification_url = url(cbAdminPath()).'/notifications/read';
-
-        $this->col = [];
-        $this->col[] = ["label" => "Content", "name" => "content", "callback_php" => '"<a href=\"'.$read_notification_url.'/$row->id\">$row->content</a>"'];
-        $this->col[] = [
-            'label' => 'Read',
-            'name' => 'is_read',
-            'callback_php' => '($row->is_read)?"<span class=\"label label-default\">Already Read</span>":"<span class=\"label label-danger\">NEW</span>"',
-        ];
-    }
-
-    private function setButtons()
-    {
-        $this->buttonShow = true;
-        $this->buttonAdd = false;
-        $this->deleteBtn = true;
-        $this->buttonExport = false;
-        $this->buttonImport = false;
     }
 }

@@ -3,10 +3,10 @@
 namespace crocodicstudio\crudbooster\Modules\MenuModule;
 
 use crocodicstudio\crudbooster\controllers\CBController;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Cache;
 use crocodicstudio\crudbooster\helpers\CRUDBooster;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request;
 
 class AdminMenusController extends CBController
 {
@@ -152,8 +152,9 @@ class AdminMenusController extends CBController
 
     private function setCols()
     {
-        $this->col = [];
-        $this->col[] = ["label" => "Name", "name" => "name"];
-        $this->col[] = ["label" => "Is Active", "name" => "is_active"];
+        $this->col = [
+            ["label" => "Name", "name" => "name"],
+            ["label" => "Is Active", "name" => "is_active"],
+        ];
     }
 }

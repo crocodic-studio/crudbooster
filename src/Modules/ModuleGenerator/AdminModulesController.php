@@ -4,10 +4,9 @@ namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
 use crocodicstudio\crudbooster\controllers\CBController;
 use crocodicstudio\crudbooster\controllers\FormValidator;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\DB;
 use crocodicstudio\crudbooster\helpers\CRUDBooster;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class AdminModulesController extends CBController
 {
@@ -15,7 +14,7 @@ class AdminModulesController extends CBController
     {
         $this->table = 'cms_moduls';
         $this->primaryKey = 'id';
-        $this->titleField = 'name' ;
+        $this->titleField = 'name';
         $this->limit = 100;
         $this->buttonAdd = false;
         $this->buttonExport = false;
@@ -53,13 +52,25 @@ class AdminModulesController extends CBController
     // 	$this->cbView('CbModulesGen::index',$data);
     // }	
 
+    private function makeColumns()
+    {
+        $this->col = [
+            ['label' => 'name', 'name' => 'name'],
+            ['label' => "Table", 'name' => "table_name"],
+            ['label' => "Path", 'name' => "path"],
+            ['label' => "Controller", 'name' => "controller"],
+            ['label' => "Protected", 'name' => "is_protected", "visible" => false],
+        ];
+    }
+
     function hookBeforeDelete($ids)
     {
-        foreach ($ids as $id){
+        foreach ($ids as $id) {
             $controller = ModulesRepo::getControllerName($id);
             DB::table('cms_menus')->where('path', 'like', '%'.$controller.'%')->delete();
             @unlink(controller_path($controller));
         }
+
         return $ids;
     }
 
@@ -88,12 +99,14 @@ class AdminModulesController extends CBController
     public function getStep1($id = 0, Step1Handler $handler)
     {
         $this->cbLoader();
+
         return $handler->showForm($id);
     }
 
     public function getStep2($id, Step2Handler $handler)
     {
         $this->cbLoader();
+
         return $handler->showForm($id);
     }
 
@@ -107,12 +120,14 @@ class AdminModulesController extends CBController
     public function postStep3(Step2Handler $handler)
     {
         $this->cbLoader();
+
         return $handler->handleFormSubmit();
     }
 
     public function getStep3($id, Step3Handler $step3)
     {
         $this->cbLoader();
+
         return $step3->showForm($id);
     }
 
@@ -125,18 +140,21 @@ class AdminModulesController extends CBController
     public function postStep4(Step3Handler $handler)
     {
         $this->cbLoader();
+
         return $handler->handleFormSubmit();
     }
 
     public function getStep4($id, Step4Handler $handler)
     {
         $this->cbLoader();
+
         return $handler->showForm($id);
     }
 
     public function postStepFinish(Step4Handler $handler)
     {
         $this->cbLoader();
+
         return $handler->handleFormSubmit();
     }
 
@@ -146,7 +164,7 @@ class AdminModulesController extends CBController
         app(FormValidator::class)->validate(null, $this->form, $this);
         $this->inputAssignment();
 
-        //Generate Controller 
+        //Generate Controller
         $route_basename = basename(request('path'));
         if ($this->arr['controller'] == '') {
             $this->arr['controller'] = ControllerGenerator::generateController(request('table_name'), $route_basename);
@@ -178,40 +196,14 @@ class AdminModulesController extends CBController
         $roles = DB::table('cms_privileges_roles')->where('id_cms_privileges', CRUDBooster::myPrivilegeId())->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')->get();
         Session::put('admin_privileges_roles', $roles);
 
-        $ref_parameter = Request::input('ref_parameter');
+        //$ref_parameter = Request::input('ref_parameter');
         if (request('return_url')) {
             CRUDBooster::redirect(request('return_url'), cbTrans("alert_add_data_success"), 'success');
-        } 
+        }
         if (request('submit') == cbTrans('button_save_more')) {
             CRUDBooster::redirect(CRUDBooster::mainpath('add'), cbTrans('alert_add_data_success'), 'success');
         }
         CRUDBooster::redirect(CRUDBooster::mainpath(), cbTrans('alert_add_data_success'), 'success');
-    }
-
-    public function postEditSave($id)
-    {
-        $this->cbLoader();
-
-        $row = $this->table()->where($this->primaryKey, $id)->first();
-
-
-        app(FormValidator::class)->validate($id, $this->form, $this);
-
-        $this->inputAssignment();
-
-        //Generate Controller 
-        $route_basename = basename(request('path'));
-        if ($this->arr['controller'] == '') {
-            $this->arr['controller'] = ControllerGenerator::generateController(request('table_name'), $route_basename);
-        }
-
-        $this->findRow($id)->update($this->arr);
-
-        //Refresh Session Roles
-        $roles = DB::table('cms_privileges_roles')->where('id_cms_privileges', CRUDBooster::myPrivilegeId())->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')->get();
-        Session::put('admin_privileges_roles', $roles);
-
-        CRUDBooster::redirect(Request::server('HTTP_REFERER'), cbTrans('alert_update_data_success'), 'success');
     }
 
     private function createMenuForModule()
@@ -238,29 +230,43 @@ class AdminModulesController extends CBController
         ];
 
         DB::table('cms_menus')->insert([
-            'name' => cbTrans('text_default_add_new_module', ['module' => $this->arr['name']]),
-            'icon' => 'fa fa-plus',
-            'path' => $this->arr['controller'].'GetAdd',
-            'sorting' => 1,
-        ] + $arr);
+                'name' => cbTrans('text_default_add_new_module', ['module' => $this->arr['name']]),
+                'icon' => 'fa fa-plus',
+                'path' => $this->arr['controller'].'GetAdd',
+                'sorting' => 1,
+            ] + $arr);
 
         DB::table('cms_menus')->insert([
-            'name' => cbTrans('text_default_list_module', ['module' => $this->arr['name']]),
-            'icon' => 'fa fa-bars',
-            'path' => $this->arr['controller'].'GetIndex',
-            'cms_privileges' => CRUDBooster::myPrivilegeId(),
-            'sorting' => 2,
-        ] + $arr);
-
+                'name' => cbTrans('text_default_list_module', ['module' => $this->arr['name']]),
+                'icon' => 'fa fa-bars',
+                'path' => $this->arr['controller'].'GetIndex',
+                'cms_privileges' => CRUDBooster::myPrivilegeId(),
+                'sorting' => 2,
+            ] + $arr);
     }
 
-    private function makeColumns()
+    public function postEditSave($id)
     {
-        $this->col = [];
-        $this->col[] = ['label' => 'name', 'name' => 'name'];
-        $this->col[] = ['label' => "Table", 'name' => "table_name"];
-        $this->col[] = ['label' => "Path", 'name' => "path"];
-        $this->col[] = ['label' => "Controller", 'name' => "controller"];
-        $this->col[] = ['label' => "Protected", 'name' => "is_protected", "visible" => false];
+        $this->cbLoader();
+
+        $row = $this->table()->where($this->primaryKey, $id)->first();
+
+        app(FormValidator::class)->validate($id, $this->form, $this);
+
+        $this->inputAssignment();
+
+        //Generate Controller
+        $route_basename = basename(request('path'));
+        if ($this->arr['controller'] == '') {
+            $this->arr['controller'] = ControllerGenerator::generateController(request('table_name'), $route_basename);
+        }
+
+        $this->findRow($id)->update($this->arr);
+
+        //Refresh Session Roles
+        $roles = DB::table('cms_privileges_roles')->where('id_cms_privileges', CRUDBooster::myPrivilegeId())->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')->get();
+        Session::put('admin_privileges_roles', $roles);
+
+        backWithMsg(cbTrans('alert_update_data_success'));
     }
 }

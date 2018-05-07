@@ -58,7 +58,7 @@ class AdminSettingsController extends CBController
 
         $this->findRow($id)->update(['content' => null]);
 
-        CRUDBooster::redirect(Request::server('HTTP_REFERER'), cbTrans('alert_delete_data_success'), 'success');
+        backWithMsg(cbTrans('alert_delete_data_success'));
     }
 
     public function postSaveSetting()

@@ -14,7 +14,7 @@ trait Deleter
         $this->genericLoader();
         (new DataRemover($this))->doDeleteWithHook([$id]);
         $this->insertLog('log_delete', $id);
-        $url = request('return_url') ?: CRUDBooster::referer();
+        $url = request('return_url') ?: Request::server('HTTP_REFERER');
         CRUDBooster::redirect($url, cbTrans('alert_delete_data_success'), 'success');
     }
 
@@ -24,7 +24,7 @@ trait Deleter
         $selectedIds = request('checkbox');
         $btnName = request('button_name');
         if (! $selectedIds) {
-            CRUDBooster::redirect($_SERVER['HTTP_REFERER'], cbTrans('at_least_one_row'), 'warning');
+            backWithMsg(cbTrans('at_least_one_row'), 'warning');
         }
         if ($btnName == 'delete') {
             (new DataRemover($this))->doDeleteWithHook($selectedIds);
@@ -69,6 +69,6 @@ trait Deleter
 
         $this->insertLog('log_delete_image', $id . ' - '. $this->table);
 
-        CRUDBooster::redirect(Request::server('HTTP_REFERER'), cbTrans('alert_delete_data_success'), 'success');
+        backWithMsg(cbTrans('alert_delete_data_success'));
     }
 }

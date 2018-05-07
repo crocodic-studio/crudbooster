@@ -239,7 +239,7 @@ if (! function_exists('cbGetSetting')) {
 if (! function_exists('backWithMsg')) {
     function backWithMsg($msg, $type = 'success')
     {
-        sendAndTerminate(redirect()->back()->with(['message_type' => $type, 'message' => $msg]));
+        sendAndTerminate(redirect()->back()->with(['message' => $msg, 'message_type' => $type,]));
     }
 }
 

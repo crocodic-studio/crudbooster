@@ -3,7 +3,6 @@
 namespace crocodicstudio\crudbooster\Modules\EmailTemplates;
 
 use crocodicstudio\crudbooster\controllers\CBController;
-use crocodicstudio\crudbooster\helpers\CRUDBooster;
 
 class AdminEmailTemplatesController extends CBController
 {
@@ -37,9 +36,10 @@ class AdminEmailTemplatesController extends CBController
 
     private function setColumns()
     {
-        $this->col = [];
-        $this->col[] = ['label' => 'Template Name', 'name' => 'name'];
-        $this->col[] = ['label' => 'Slug', 'name' => 'slug'];
+        $this->col = [
+            ['label' => 'Template Name', 'name' => 'name'],
+            ['label' => 'Slug', 'name' => 'slug'],
+        ];
     }
     //By the way, you can still create your own method in here... :)
 

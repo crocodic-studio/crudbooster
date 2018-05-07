@@ -93,7 +93,7 @@ trait FormSubmitHandlers
         $this->return_url = $this->return_url ?: request('return_url');
         if ($this->return_url) {
             if (request('submit') == cbTrans('button_save_more')) {
-                CRUDBooster::redirect(Request::server('HTTP_REFERER'), cbTrans($msg), 'success');
+                backWithMsg(cbTrans($msg), 'success');
             }
             CRUDBooster::redirect($this->return_url, cbTrans($msg), 'success');
         }
