@@ -2,6 +2,7 @@
 
 namespace crocodicstudio\crudbooster\helpers;
 
+use crocodicstudio\crudbooster\Modules\ModuleGenerator\ModulesRepo;
 use DB;
 use Request;
 use Route;
@@ -24,7 +25,7 @@ class GetCurrentX
     {
         $modulepath = self::getModulePath();
         return cache()->remember('crudbooster_modules_'.$modulepath, 2, function () use ($modulepath) {
-            return DB::table('cms_moduls')->where('path', $modulepath)->first();
+            return ModulesRepo::getByPath();
         });
     }
 

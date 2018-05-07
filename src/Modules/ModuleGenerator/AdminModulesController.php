@@ -83,7 +83,7 @@ class AdminModulesController extends CBController
 
     public function getCheckSlug($slug)
     {
-        $check = DB::table('cms_moduls')->where('path', $slug)->count();
+        $check = ModulesRepo::countByPath($slug);
         $lastId = DB::table('cms_moduls')->max('id') + 1;
 
         return response()->json(['total' => $check, 'lastid' => $lastId]);

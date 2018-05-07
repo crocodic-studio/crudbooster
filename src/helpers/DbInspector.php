@@ -82,11 +82,12 @@ class DbInspector
         });
     }
 
-    public static function getTableForeignKey($fieldName)
+    public static function getTableForeignKey(string $fieldName): string 
     {
         if (starts_with($fieldName, 'id_') || ends_with($fieldName, '_id')) {
             return str_replace(['_id', 'id_'], '', $fieldName);
         }
+        return '';
     }
 
     public static function listTables(): array

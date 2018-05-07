@@ -4,6 +4,7 @@ namespace crocodicstudio\crudbooster\controllers\Helpers;
 
 use crocodicstudio\crudbooster\helpers\CRUDBooster;
 use crocodicstudio\crudbooster\helpers\DbInspector;
+use crocodicstudio\crudbooster\Modules\ModuleGenerator\ModulesRepo;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -172,7 +173,7 @@ class IndexImport
      */
     private function resolveController($table)
     {
-        $module = DB::table('cms_moduls')->where('table_name', $table)->first();
+        $module = ModulesRepo::getByTableName($table);
         if (is_null($module)) {
             return ;
         }
