@@ -28,26 +28,26 @@ class AdminColumnsTableController extends CBController
             return ! (in_array($colName, ['created_at', 'deleted_at', 'updated_at']));
         });
 
-        $newResult = [];
+        $result = [];
         foreach ($columns as $colName) {
-            $newResult[] = ['name' => $colName, 'type' => $this->getFieldType($colName, \Schema::getColumnType($table, $colName))];
+            $result[] = ['name' => $colName, 'type' => $this->getFieldType($colName, $table)];
 
             if (! in_array($type, ['list', 'detail']) || ! starts_with($colName, 'id_')) {
                 continue;
             }
             $relatedTable = str_after($colName, 'id_');
-            $newResult = $this->addRelatedTableColTypes($relatedTable, $newResult);
+            $result = $this->addRelatedTableColTypes($relatedTable, $result);
         }
 
-        return response()->json($newResult);
+        return response()->json($result);
     }
 
     /**
-     * @param $ro string
-     * @param $default string
+     * @param $colName string
+     * @param $table
      * @return string
      */
-    private function getFieldType($ro, $default)
+    private function getFieldType($colName, $table)
     {
         $MAP = [
             'isEmail' => "email",
@@ -57,12 +57,12 @@ class AdminColumnsTableController extends CBController
         ];
 
         foreach ($MAP as $methodName => $type) {
-            if (FieldDetector::$methodName($ro)) {
+            if (FieldDetector::$methodName($colName)) {
                 return $type;
             }
         }
 
-        return $default;
+        return \Schema::getColumnType($table, $colName);
     }
 
     /**
