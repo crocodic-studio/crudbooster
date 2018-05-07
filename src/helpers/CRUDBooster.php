@@ -143,11 +143,6 @@ class CRUDBooster
         LogsRepository::insertLog('crudbooster: '.$description, self::myId());
     }
 
-    public static function referer()
-    {
-        return Request::server('HTTP_REFERER');
-    }
-
     public static function listCbTables()
     {
         $tables = DbInspector::listTables();
