@@ -67,4 +67,9 @@ class ModulesRepo
     {
         return self::where($conditions)->count();
     }
+
+    public static function getAll($cols = null)
+    {
+        return self::where(['is_protected' => 0])->orderby("name", "asc")->get($cols);
+    }
 }

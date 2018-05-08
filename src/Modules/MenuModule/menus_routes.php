@@ -3,6 +3,7 @@
 use crocodicstudio\crudbooster\middlewares\CBBackend;
 use crocodicstudio\crudbooster\middlewares\CBSuperadmin;
 use crocodicstudio\crudbooster\Modules\MenuModule\MenuTypes;
+use crocodicstudio\crudbooster\Modules\ModuleGenerator\ModulesRepo;
 
 Route::group([
     'middleware' => ['web', CBSuperadmin::class],
@@ -53,7 +54,7 @@ Route::group([
     if ($dashboardType == MenuTypes::Statistic) {
         Route::get('/', cbModulesNS('StatisticModule\\AdminStatisticBuilderController@getDashboard'));
     } elseif ($dashboardType == MenuTypes::Module) {
-        $module = CRUDBooster::first('cms_moduls', ['path' => $path]);
+        $module = ModulesRepo::getByPath($path);
         Route::get('/', $module->controller.'@getIndex');
     } elseif ($dashboardType == MenuTypes::route) {
         $action = str_replace("Controller", "Controller@", $path);

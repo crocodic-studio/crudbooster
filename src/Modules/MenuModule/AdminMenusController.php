@@ -4,6 +4,7 @@ namespace crocodicstudio\crudbooster\Modules\MenuModule;
 
 use crocodicstudio\crudbooster\controllers\CBController;
 use crocodicstudio\crudbooster\helpers\CRUDBooster;
+use crocodicstudio\crudbooster\Modules\ModuleGenerator\ModulesRepo;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
@@ -112,7 +113,7 @@ class AdminMenusController extends CBController
         }
 
         if ($postdata['type'] == 'Module') {
-            return CRUDBooster::first('cms_moduls', ['id' => $postdata['module_slug']])->path;
+            return ModulesRepo::find($postdata['module_slug'])->path;
         }
     }
 
@@ -139,7 +140,7 @@ class AdminMenusController extends CBController
         $idModule = $idStatistic = 0;
 
         if ($row->type == 'Module') {
-            $idModule = DB::table('cms_moduls')->where('path', $row->path)->first()->id;
+            $idModule = ModulesRepo::getByPath($row->path)->id;
         }
 
         if ($row->type == 'Statistic') {
