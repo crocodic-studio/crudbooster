@@ -19,7 +19,7 @@ class MenusForm
             'label' => 'Privilege(s)',
             'name' => 'cms_privileges',
             'type' => 'select2_datatable',
-            'placeholder' => '** You can choose multiple privileges',
+            'placeholder' => '** You can choose multiple privileges',  // todo: translation
             'options' => [
                 'table' => 'cms_privileges',
                 'field_label' => 'name',
@@ -39,7 +39,7 @@ class MenusForm
             'type' => 'text',
             'required' => true,
             'validation' => 'required|min:3|max:255|alpha_spaces',
-            'placeholder' => 'You can only enter the letter only',
+            'placeholder' => 'You can only enter the letter only', //todo: translation needed
         ];
         $form[] = [
             'label' => 'Type',
@@ -80,8 +80,8 @@ class MenusForm
             'label' => 'Value',
             'name' => 'path',
             'type' => 'text',
-            'help' => 'If you select type controller, you can fill this field with controller name, you may include the method also',
-            'placeholder' => 'NameController or NameController@methodName',
+            'help' => 'If you select type controller, you can fill this field with controller name, you may include the method also', // todo: translation
+            'placeholder' => 'NameController or NameController@methodName', // todo: translation
             'style' => 'display:none',
         ];
 
@@ -127,7 +127,7 @@ class MenusForm
             'type' => 'radio',
             'required' => true,
             'validation' => 'required|integer',
-            'dataenum' => ['1|Yes', '0|No'],
+            'dataenum' => ['1|Yes', '0|No'],  // todo: translation
             'value' => '0',
         ];
 

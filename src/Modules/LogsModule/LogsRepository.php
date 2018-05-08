@@ -10,8 +10,8 @@ class LogsRepository
     {
         $log = [
             'created_at' => YmdHis(),
-            'ipaddress' => $_SERVER['REMOTE_ADDR'],
-            'useragent' => $_SERVER['HTTP_USER_AGENT'],
+            'ipaddress' => request()->server('REMOTE_ADDR'),
+            'useragent' => request()->server('HTTP_USER_AGENT'),
             'url' => request()->url(),
             'user_id' => $uid,
         ];
