@@ -1,8 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\commands;
-
-use Illuminate\Console\Command;
+namespace crocodicstudio\crudbooster\CBCoreModule\Installer;
 
 class ConsolePrinter
 {
@@ -13,7 +11,7 @@ class ConsolePrinter
      *
      * @param $console
      */
-    public function __construct(Command $console)
+    public function __construct($console)
     {
         $this->console = $console;
     }
