@@ -27,7 +27,7 @@ class ModulesRepo
      */
     public static function modulePathExists($path)
     {
-        return (boolean)DB::table('cms_moduls')->where('path', $path)->where('deleted_at', null)->count();
+        return (boolean) DB::table('cms_moduls')->where('path', $path)->where('deleted_at', null)->count();
     }
 
     public static function updateById($id, $data)
@@ -38,13 +38,10 @@ class ModulesRepo
     public static function getByPath($modulepath)
     {
         return DB::table('cms_moduls')->where('path', $modulepath)->first();
-
-
     }
+
     public static function countByPath($modulepath)
     {
         return DB::table('cms_moduls')->where('path', $modulepath)->count();
     }
-
-
 }

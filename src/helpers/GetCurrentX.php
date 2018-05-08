@@ -25,7 +25,7 @@ class GetCurrentX
     {
         $modulepath = self::getModulePath();
         return cache()->remember('crudbooster_modules_'.$modulepath, 2, function () use ($modulepath) {
-            return ModulesRepo::getByPath();
+            return ModulesRepo::getByPath($modulepath);
         });
     }
 
