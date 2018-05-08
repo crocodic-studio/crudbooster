@@ -2,11 +2,9 @@
 
 use crocodicstudio\crudbooster\helpers\Mailer;
 use Illuminate\Console\Command;
-use Illuminate\Foundation\Inspiring;
 use DB;
 use Cache;
 use Request;
-use crocodicstudio\crudbooster\helpers\CRUDBooster;
 
 class Mailqueues extends Command
 {

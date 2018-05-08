@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\commands;
+namespace crocodicstudio\crudbooster\CBCoreModule\Installer;
 
 use Illuminate\Foundation\Application;
 
