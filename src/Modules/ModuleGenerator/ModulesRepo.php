@@ -13,12 +13,17 @@ class ModulesRepo
 
     public static function find($id)
     {
-        return DB::table('cms_moduls')->where('id', $id)->first();
+        return self::first(['id' => $id]);
+    }
+
+    private static function where($conditions)
+    {
+        return DB::table('cms_moduls')->where($conditions);
     }
 
     public static function getByTableName($table)
     {
-        return DB::table('cms_moduls')->where('table_name', $table)->first();
+        return self::first(['table_name' => $table]);
     }
 
     /**
@@ -27,21 +32,39 @@ class ModulesRepo
      */
     public static function modulePathExists($path)
     {
-        return (boolean) DB::table('cms_moduls')->where('path', $path)->where('deleted_at', null)->count();
+        return (boolean) self::count(['path' => $path, 'deleted_at' => null]);
     }
 
     public static function updateById($id, $data)
     {
-        return DB::table('cms_moduls')->where('id', $id)->update($data);
+        return self::where(['id' => $id])->update($data);
     }
 
     public static function getByPath($modulepath)
     {
-        return DB::table('cms_moduls')->where('path', $modulepath)->first();
+        return self::first(['path' => $modulepath]);
     }
 
     public static function countByPath($modulepath)
     {
-        return DB::table('cms_moduls')->where('path', $modulepath)->count();
+        return self::count(['path' => $modulepath]);
+    }
+
+    /**
+     * @param $conditions
+     * @return mixed
+     */
+    private static function first($conditions)
+    {
+        return self::where($conditions)->first();
+    }
+
+    /**
+     * @param $conditions
+     * @return mixed
+     */
+    private static function count($conditions)
+    {
+        return self::where($conditions)->count();
     }
 }
