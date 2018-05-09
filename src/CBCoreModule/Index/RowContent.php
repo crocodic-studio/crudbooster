@@ -75,45 +75,45 @@ class RowContent
      * @param $columnsTable
      * @param $table
      * @param $row
-     * @param $htmlContent
+     * @param $rowCells
      * @return array
      */
-    private function addOtherColumns($columnsTable, $row, $htmlContent)
+    private function addOtherColumns($columnsTable, $row, $rowCells)
     {
         foreach ($columnsTable as $col) {
-            $htmlContent[] = (new ValueCalculator)->calculate($col, $row, @$row->{$this->cb->titleField});
+            $rowCells[] = (new ValueCalculator)->calculate($col, $row, @$row->{$this->cb->titleField});
         }
 
-        return $htmlContent;
+        return $rowCells;
     }
 
 
 
     /**
-     * @param $htmlContent
+     * @param $rowCells
      * @return mixed
      */
-    private function performHookOnRow($htmlContent)
+    private function performHookOnRow($rowCells)
     {
-        foreach ($htmlContent as $i => $v) {
+        foreach ($rowCells as $i => $v) {
             $this->cb->hookRowIndex($i, $v);
-            $htmlContent[$i] = $v;
+            $rowCells[$i] = $v;
         }
 
-        return $htmlContent;
+        return $rowCells;
     }
 
     /**
      * @param $addAction
      * @param $row
-     * @param $htmlContent
+     * @param $rowCells
      * @return array
      * @throws \Throwable
      */
-    private function addActionButtons($addAction, $row, $htmlContent)
+    private function addActionButtons($addAction, $row, $rowCells)
     {
         if (!$this->cb->buttonTableAction) {
-            return $htmlContent;
+            return $rowCells;
         }
         $buttonActionStyle = $this->cb->buttonActionStyle;
         $buttonEdit = $this->cb->buttonEdit;
@@ -122,9 +122,9 @@ class RowContent
         $id = ($row->{$this->cb->primaryKey});
 
         $data = compact('addAction', 'row', 'id', 'buttonActionStyle', 'parent_field', 'buttonEdit', 'deleteBtn', 'buttonDetail');
-        $htmlContent[] = "<div class='button_action' style='text-align:right'>".view('crudbooster::index.action', $data)->render().'</div>';
+        $rowCells[] = "<div class='button_action' style='text-align:right'>".view('crudbooster::index.action', $data)->render().'</div>';
 
-        return $htmlContent;
+        return $rowCells;
     }
 
 }
