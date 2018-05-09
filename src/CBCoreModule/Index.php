@@ -3,7 +3,7 @@
 namespace crocodicstudio\crudbooster\CBCoreModule;
 
 use crocodicstudio\crudbooster\CBCoreModule\Index\FilterIndexRows;
-use crocodicstudio\crudbooster\CBCoreModule\Index\CellContent;
+use crocodicstudio\crudbooster\CBCoreModule\Index\RowContent;
 use crocodicstudio\crudbooster\CBCoreModule\Index\Order;
 use crocodicstudio\crudbooster\controllers\CBController;
 use crocodicstudio\crudbooster\helpers\DbInspector;
@@ -88,7 +88,7 @@ class Index
         //$orig_mainpath = $CbCtrl->data['mainpath'];
         //$titleField = $CbCtrl->titleField;
         $number = (request('page', 1) - 1) * $limit + 1;
-        $htmlContents = (new CellContent($CbCtrl))->calculate($data, $tablePK, $number, $columns_table, $table, $addAction); //end foreach data[result]
+        $htmlContents = (new RowContent($CbCtrl))->calculate($data, $tablePK, $number, $columns_table, $table, $addAction); //end foreach data[result]
 
         $data['html_contents'] = ['html' => $htmlContents, 'data' => $data['result']];
 
@@ -102,9 +102,7 @@ class Index
     {
         $data = [];
         $parent = (string)request('parent_table');
-        $pk = DbInspector::findPk(request('parent_table'));
-
-        $data['parent_table'] = DB::table($parent)->where($pk, request('parent_id'))->first();
+        $data['parent_table'] = CRUDBooster::first(request('parent_table'), request('parent_id'));
         if (request('foreign_key')) {
             $data['parent_field'] = request('foreign_key');
         } else {

@@ -4,7 +4,7 @@ namespace crocodicstudio\crudbooster\CBCoreModule\Index;
 
 use crocodicstudio\crudbooster\controllers\CBController;
 
-class CellContent
+class RowContent
 {
     private $cb;
 
@@ -30,35 +30,31 @@ class CellContent
      */
     public function calculate($data, $tablePK, $number, $columnsTable, $table, $addAction)
     {
-        $htmlContents = [];
+        $tableRows = [];
         foreach ($data['result'] as $row) {
-            $htmlContent = [];
-
-            $htmlContent = $this->addCheckBox($tablePK, $row, $htmlContent);
-            $htmlContent = $this->addRowNumber($number, $htmlContent);
-            $htmlContent = $this->addOtherColumns($columnsTable, $table, $row, $htmlContent);
-            $htmlContent = $this->addActionButtons($addAction, $row, $htmlContent);
-            $htmlContent = $this->performHookOnRow($htmlContent);
-            $htmlContents[] = $htmlContent;
+            $rowContent = [];
+            if ($this->cb->buttonBulkAction) {
+                $rowContent[] = $this->addCheckBox($row->{$tablePK});
+            }
+            $rowContent = $this->addRowNumber($number, $rowContent);
+            $rowContent = $this->addOtherColumns($columnsTable, $table, $row, $rowContent);
+            $rowContent = $this->addActionButtons($addAction, $row, $rowContent);
+            $rowContent = $this->performHookOnRow($rowContent);
+            $tableRows[] = $rowContent;
             $number++;
         }
 
-        return $htmlContents;
+        return $tableRows;
     }
 
     /**
-     * @param $tablePK
-     * @param $row
+     * @param $id
      * @param $htmlContent
      * @return array
      */
-    private function addCheckBox($tablePK, $row, $htmlContent)
+    private function addCheckBox($id)
     {
-        if ($this->cb->buttonBulkAction) {
-            $htmlContent[] = "<input type='checkbox' class='checkbox' name='checkbox[]' value='".$row->{$tablePK}."'/>";
-        }
-
-        return $htmlContent;
+        return "<input type='checkbox' class='checkbox' name='checkbox[]' value='".$id."'/>";
     }
 
     /**
