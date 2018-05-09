@@ -9,13 +9,13 @@ class MenuRepo
 {
     public static function sidebarMenu()
     {
-        $menuActive = self::table()
-            ->where('cms_privileges', CRUDBooster::myPrivilegeId())
-            ->where('parent_id', 0)->where('is_active', 1)
-            ->where('is_dashboard', 0)
-            ->orderby('sorting', 'asc')
-            ->select('cms_menus.*')
-            ->get();
+       $conditions = [
+            'cms_privileges' => CRUDBooster::myPrivilegeId(),
+            'parent_id' => 0,
+            'is_active' => 1,
+            'is_dashboard'=> 0
+        ];
+        $menuActive = self::where($conditions)->orderby('sorting', 'asc')->get();
 
         foreach ($menuActive as &$menu) {
 
@@ -23,15 +23,13 @@ class MenuRepo
 
             $menu->url = $url;
             $menu->url_path = trim(str_replace(url('/'), '', $url), "/");
-
-            $child = self::table()
-                ->where('is_dashboard', 0)
-                ->where('is_active', 1)
-                ->where('cms_privileges', 'like', '%"'.CRUDBooster::myPrivilegeName().'"%')
-                ->where('parent_id', $menu->id)
-                ->select('cms_menus.*')
-                ->orderby('sorting', 'asc')
-                ->get();
+            $conditions = [
+                ['is_dashboard', '=', 0],
+                ['is_active', '=', 1],
+                ['parent_id', '=', $menu->id],
+                ['cms_privileges', 'like', '%"'.CRUDBooster::myPrivilegeName().'"%'],
+            ];
+            $child = self::where($conditions)->orderby('sorting', 'asc')->get();
 
             if (count($child)) {
                 foreach ($child as &$c) {
@@ -44,6 +42,11 @@ class MenuRepo
         }
 
         return $menuActive;
+    }
+
+    private static function table()
+    {
+        return DB::table('cms_menus');
     }
 
     private static function menuUrl($menu)
@@ -73,19 +76,16 @@ class MenuRepo
 
     public static function sidebarDashboard()
     {
-        $menu = self::table()
-            ->where('cms_privileges', CRUDBooster::myPrivilegeId())
-            ->where('is_dashboard', 1)
-            ->where('is_active', 1)->first() ?: new \stdClass();
+        $conditions = [
+            'cms_privileges' => CRUDBooster::myPrivilegeId(),
+            'is_dashboard' => 1,
+            'is_active' => 1,
+        ];
+        $menu = self::where($conditions)->first() ?: new \stdClass();
 
         $menu->url = self::menuUrl($menu);
 
         return $menu;
-    }
-
-    private static function table()
-    {
-        return DB::table('cms_menus');
     }
 
     public static function fetchMenuWithChilds($status = 1)
@@ -101,8 +101,23 @@ class MenuRepo
 
         return $menus;
     }
+
     public static function fetchMenu($parent, $status = 1)
     {
-        return self::table()->where('parent_id', $parent)->where('is_active', $status)->orderby('sorting', 'asc')->get();
+        $conditions = [
+            'parent_id' => $parent,
+            'is_active' => $status,
+        ];
+        return self::where($conditions)->orderby('sorting', 'asc')->get();
+    }
+
+    public static function getDashboard()
+    {
+        return self::where(['is_dashboard' => 1])->first();
+    }
+
+    private static function where($conditions)
+    {
+        return self::table()->where($conditions);
     }
 }
