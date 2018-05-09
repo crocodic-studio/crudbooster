@@ -50,6 +50,7 @@ class AdminColumnsTableController extends CBController
     private function getFieldType($colName, $table)
     {
         $MAP = [
+            // methodName => type,
             'isEmail' => "email",
             'isImage' => "image",
             'isPassword' => "password",
