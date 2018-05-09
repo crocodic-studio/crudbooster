@@ -36,15 +36,13 @@ class Index
         $data['limit'] = $limit = request('limit', $CbCtrl->limit);
 
 
-        $result = $CbCtrl->table()->select(DB::raw($CbCtrl->table.".".$CbCtrl->primaryKey));
+        $query = $CbCtrl->table()->select(DB::raw($CbCtrl->table.".".$CbCtrl->primaryKey));
 
-        $this->_filterForParent($result);
+        $this->_filterForParent($query);
 
-        $CbCtrl->hookQueryIndex($result);
+        $CbCtrl->hookQueryIndex($query);
 
-        $tableCols = \Schema::getColumnListing($CbCtrl->table);
-        $this->_filterOutSoftDeleted($tableCols, $result);
-        unset($tableCols);
+        $this->_filterOutSoftDeleted(\Schema::getColumnListing($CbCtrl->table), $query);
 
         $table = $CbCtrl->table;
         $columns_table = $CbCtrl->columns_table;
@@ -52,24 +50,24 @@ class Index
             $field = @$coltab['name'];
 
             if (strpos($field, '.')) {
-                $columns_table = $this->addDotField($columns_table, $index, $field, $result);
+                $columns_table = $this->addDotField($columns_table, $index, $field, $query);
             } else {
-                $columns_table = $this->_addField($columns_table, $index, $field, $result, $table);
+                $columns_table = $this->_addField($columns_table, $index, $field, $query, $table);
             }
         }
 
-        $this->_applyWhereAndQfilters($result, $columns_table, $table);
+        $this->_applyWhereAndQfilters($query, $columns_table, $table);
 
         $filter_is_orderby = false;
         if (request('filter_column')) {
-            $filter_is_orderby = app(FilterIndexRows::class)->filterIndexRows($result, request('filter_column'));
+            $filter_is_orderby = app(FilterIndexRows::class)->filterIndexRows($query, request('filter_column'));
         }
 
         if ($filter_is_orderby === true) {
-            (new Order($this->cb))->handle($result, $table);
+            (new Order($this->cb))->handle($query, $table);
         }
         $limit = is_string($limit) ? (int)$limit : 15;
-        $data['result'] = $result->paginate($limit);
+        $data['result'] = $query->paginate($limit);
 
         $data['columns'] = $columns_table;
 
