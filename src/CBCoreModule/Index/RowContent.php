@@ -30,6 +30,9 @@ class RowContent
      */
     public function calculate($data, $tablePK, $number, $columnsTable, $table, $addAction)
     {
+        $columnsTable = array_filter($columnsTable, function ($col) {
+            return $col['visible'] !== false;
+        });
         $tableRows = [];
         foreach ($data['result'] as $row) {
             $rowContent = [];
@@ -80,9 +83,6 @@ class RowContent
     private function addOtherColumns($columnsTable, $table, $row, $htmlContent)
     {
         foreach ($columnsTable as $col) {
-            if ($col['visible'] === false) {
-                continue;
-            }
             $htmlContent[] = (new ValueCalculator)->calculate($col, $row, $table, @$row->{$this->cb->titleField});
         }
 
