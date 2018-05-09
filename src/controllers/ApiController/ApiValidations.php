@@ -14,7 +14,7 @@ class ApiValidations
         if (!is_null($rowApi)) {
             return true;
         }
-
+        //todo : translation
         $msg = 'Sorry this API is no longer available, maybe has changed by admin, or please make sure api url is correct.';
         $result = ApiResponder::makeResult(0, $msg);
         ApiResponder::send($result, request()->all(), $ctrl);
@@ -31,7 +31,7 @@ class ApiValidations
         if (!is_null($methodType) && request()->isMethod($methodType)) {
             return true;
         }
-
+        //todo : translation
         $result = ApiResponder::makeResult(0, "The request method is not allowed !");
         ApiResponder::send($result, request()->all(), $ctrl);
     }
@@ -47,7 +47,7 @@ class ApiValidations
         if (! $ctrl->validate) {
             return true;
         }  // hook have to return true
-
+        //todo : translation
         $result = ApiResponder::makeResult(0, 'Failed to execute API !');
         ApiResponder::send($result, request()->all(), $ctrl);
     }

@@ -7,17 +7,16 @@ class ValueCalculator
     /**
      * @param $col
      * @param $row
-     * @param $table
      * @param $title
      * @return string
      */
-    public function calculate($col, $row, $table, $title)
+    public function calculate($col, $row, $title)
     {
         $value = @$row->{$col['field']};
         $label = $col['label'];
 
         if (isset($col['image'])) {
-            $value = $this->image($table, $value, $label, $title);
+            $value = $this->image($value, $label, $title);
         }
 
         if (isset($col['download'])) {
@@ -53,19 +52,18 @@ class ValueCalculator
     }
 
     /**
-     * @param $table
      * @param $value
      * @param $label
      * @param $title
      * @return string
      */
-    private function image($table, $value, $label, $title)
+    private function image($value, $label, $title)
     {
         if ($value == '') {
-            return "<a  data-lightbox='roadtrip' rel='group_{{$table}}' title='$label: $title' href='".asset('vendor/crudbooster/avatar.jpg')."'><img width='40px' height='40px' src='".asset('vendor/crudbooster/avatar.jpg')."'/></a>";
+            return "<a  data-lightbox='roadtrip' title='$label: $title' href='".asset('vendor/crudbooster/avatar.jpg')."'><img width='40px' height='40px' src='".asset('vendor/crudbooster/avatar.jpg')."'/></a>";
         }
         $pic = (strpos($value, 'http://') !== false) ? $value : asset($value);
-        return "<a data-lightbox='roadtrip'  rel='group_{{$table}}' title='$label: $title' href='".$pic."'><img width='40px' height='40px' src='".$pic."'/></a>";
+        return "<a data-lightbox='roadtrip' title='$label: $title' href='$pic'><img width='40px' height='40px' src='$pic'/></a>";
     }
 
     /**

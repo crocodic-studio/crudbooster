@@ -23,24 +23,21 @@ class RowContent
      * @param $tablePK
      * @param $number
      * @param $columnsTable
-     * @param $table
      * @param $addAction
      *
      * @return array
      */
-    public function calculate($data, $tablePK, $number, $columnsTable, $table, $addAction)
+    public function calculate($data, $number, $columnsTable, $addAction)
     {
-        $columnsTable = array_filter($columnsTable, function ($col) {
-            return $col['visible'] !== false;
-        });
         $tableRows = [];
+        $tablePK = DbInspector::findPk($this->cb->table);
         foreach ($data['result'] as $row) {
             $rowContent = [];
             if ($this->cb->buttonBulkAction) {
                 $rowContent[] = $this->addCheckBox($row->{$tablePK});
             }
             $rowContent = $this->addRowNumber($number, $rowContent);
-            $rowContent = $this->addOtherColumns($columnsTable, $table, $row, $rowContent);
+            $rowContent = $this->addOtherColumns($columnsTable, $row, $rowContent);
             $rowContent = $this->addActionButtons($addAction, $row, $rowContent);
             $rowContent = $this->performHookOnRow($rowContent);
             $tableRows[] = $rowContent;
@@ -80,10 +77,10 @@ class RowContent
      * @param $htmlContent
      * @return array
      */
-    private function addOtherColumns($columnsTable, $table, $row, $htmlContent)
+    private function addOtherColumns($columnsTable, $row, $htmlContent)
     {
         foreach ($columnsTable as $col) {
-            $htmlContent[] = (new ValueCalculator)->calculate($col, $row, $table, @$row->{$this->cb->titleField});
+            $htmlContent[] = (new ValueCalculator)->calculate($col, $row, @$row->{$this->cb->titleField});
         }
 
         return $htmlContent;

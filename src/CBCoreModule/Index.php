@@ -88,7 +88,10 @@ class Index
         //$orig_mainpath = $CbCtrl->data['mainpath'];
         //$titleField = $CbCtrl->titleField;
         $number = (request('page', 1) - 1) * $limit + 1;
-        $htmlContents = (new RowContent($CbCtrl))->calculate($data, $tablePK, $number, $columns_table, $table, $addAction); //end foreach data[result]
+        $columnsTable = array_filter($columns_table, function ($col) {
+            return $col['visible'] !== false;
+        });
+        $htmlContents = (new RowContent($CbCtrl))->calculate($data, $number, $columnsTable, $addAction); //end foreach data[result]
 
         $data['html_contents'] = ['html' => $htmlContents, 'data' => $data['result']];
 

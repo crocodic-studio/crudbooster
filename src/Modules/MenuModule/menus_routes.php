@@ -37,7 +37,7 @@ if (! Request::is(cbAdminPath())) {
     return;
 }
 
-$dashboardMenu = DB::table('cms_menus')->where('is_dashboard', 1)->first();
+$dashboardMenu = \crocodicstudio\crudbooster\Modules\MenuModule\MenuRepo::getDashboard();
 // ROUTER FOR OWN CONTROLLER FROM CB
 Route::group([
     'middleware' => ['web', CBBackend::class],
