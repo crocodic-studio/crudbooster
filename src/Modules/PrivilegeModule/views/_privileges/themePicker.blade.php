@@ -1,6 +1,6 @@
-<label>{{ trans('privilege.chose_theme_color')}}</label>
+<label>{{ trans('crudbooster_privilege.chose_theme_color')}}</label>
 <select name='theme_color' class='form-control' required>
-    <option value=''>{{ trans('privilege.chose_theme_color')}}</option>
+    <option value=''>{{ trans('crudbooster_privilege.chose_theme_color')}}</option>
     <?php
     $skins = array(
         'skin-blue',
