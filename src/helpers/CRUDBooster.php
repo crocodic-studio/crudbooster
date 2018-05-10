@@ -135,7 +135,7 @@ class CRUDBooster
 
     public static function insertTryLog($action, $name = '')
     {
-        self::insertLog(trans("logging.log_try_".$action, ['name' => $name, 'module' => GetCurrentX::getCurrentModule()]));
+        self::insertLog(trans("crudbooster_logging.log_try_".$action, ['name' => $name, 'module' => GetCurrentX::getCurrentModule()]));
     }
 
     public static function insertLog($description)

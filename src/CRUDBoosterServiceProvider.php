@@ -119,8 +119,6 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->app->singleton('crudboosterinstall', function () {
             return new CrudboosterInstallationCommand;
         });
-
-        /*$this->app->singleton('crudboosterupdate', function () { return new CrudboosterUpdateCommand; });*/
     }
 
     private function defineValidationRules()

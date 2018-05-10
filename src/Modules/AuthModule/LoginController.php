@@ -78,7 +78,7 @@ class LoginController
      */
     private function LogIt($users)
     {
-        CRUDBooster::insertLog(trans('logging.log_login', ['email' => $users->email, 'ip' => Request::server('REMOTE_ADDR')]));
+        CRUDBooster::insertLog(trans('crudbooster_logging.log_login', ['email' => $users->email, 'ip' => Request::server('REMOTE_ADDR')]));
     }
 
     /**
