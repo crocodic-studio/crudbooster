@@ -22,11 +22,6 @@ class AuthController extends Controller
         return \DB::table($tableName);
     }
 
-    function getIndex()
-    {
-        return view('CbAuth::home', ['page_title' => '<strong>Dashboard</strong>']);
-    }
-
     public function getLockscreen()
     {
         if (! CRUDBooster::myId()) {
