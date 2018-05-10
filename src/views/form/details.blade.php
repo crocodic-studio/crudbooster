@@ -24,19 +24,15 @@
                 $action = (@$row) ? CRUDBooster::mainpath("edit-save/$id") : CRUDBooster::mainpath("add-save");
                 $return_url = ($return_url) ?: request('return_url');
                 ?>
-                <form class='form-horizontal' method='post' id="form" enctype="multipart/form-data" action='{{$action}}'>
-                    <input type='hidden' name='return_url' value='{{ @$return_url }}'/>
-                    <input type='hidden' name='ref_mainpath' value='{{ CRUDBooster::mainpath() }}'/>
-                    <input type='hidden' name='ref_parameter' value='{{urldecode(http_build_query(@$_GET))}}'/>
-                    <div class="box-body" id="parent-form-area">
-                        @include("crudbooster::form.form_detail", ['forms' => $forms])
-                    </div><!-- /.box-body -->
+                <div class="box-body" id="parent-form-area">
+                    @include("crudbooster::form.form_detail", ['forms' => $forms])
+                </div><!-- /.box-body -->
 
-                    <br><br><br>
-                    <div class="box-footer" style="background: #F5F5F5">
-                        <br>
-                    </div><!-- /.box-footer-->
-                </form>
+                <br><br><br>
+                <div class="box-footer" style="background: #F5F5F5">
+                    <br>
+                </div><!-- /.box-footer-->
+
 
             </div>
         </div>
