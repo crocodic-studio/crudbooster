@@ -6,19 +6,19 @@ use Route;
 
 class CbRouter
 {
-    public static function routeController(string $prefix, string $controller, string $namespace = null)
+    public static function routeController(string $prefix, string $controller, string $namespace = '')
     {
         $prefix = trim($prefix, '/').'/';
 
         try {
-            Route::get($prefix, $controller.'GetIndex')->name($controller.'@getIndex');
+            Route::get($prefix, $controller.'@getIndex')->name($controller.'GetIndex');
             $ctrl = self::getControllerPath($controller, $namespace);
             foreach (self::getControllerMethods($ctrl) as $method) {
                 $wildcards = self::getWildCard($method->getNumberOfParameters());
                 self::setRoute($prefix, $controller, $method->name, $wildcards);
             }
         } catch (\Exception $e) {
-
+            dd($e);
         }
     }
 

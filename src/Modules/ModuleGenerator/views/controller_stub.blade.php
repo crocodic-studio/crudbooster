@@ -199,7 +199,7 @@ $this->form[] = {!! $formArray  !!};
     | Hook for manipulate row of index table html
     | ----------------------------------------------------------------------
     */
-    public function hookRowIndex($column_index,&$column_value)
+    public function hookRowIndex($index, $value)
     {
         //Your code here
     }
