@@ -28,7 +28,7 @@ class {{$controllerName}} extends CBController {
         {!! cbStartMarker('COLUMNS') !!}
         $this->col = [];
         @foreach($cols as $col)
-        $this->col[] = ['label' => '{!! $col['label'] !!}', 'name' => {!! $col["name"] !!}];
+$this->col[] = ['label' => '{!! $col['label'] !!}', 'name' => {!! $col["name"] !!}];
         @endforeach
         {!! cbEndMarker('COLUMNS') !!}
 
@@ -36,7 +36,7 @@ class {{$controllerName}} extends CBController {
         {!! cbStartMarker('FORM') !!}
         $this->form = [];
         @foreach($formArrayString as $formArray)
-        $this->form[] = {!! $formArray  !!};
+$this->form[] = {!! $formArray  !!};
         @endforeach
         {!! cbEndMarker('FORM') !!}
 
