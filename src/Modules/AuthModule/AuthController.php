@@ -40,7 +40,7 @@ class AuthController extends Controller
         if (\Hash::check(request('password'), $user->password)) {
             Session::put('admin_lock', 0);
 
-            return redirect()->route('AuthControllerGetIndex');
+            return redirect()->route('CbDashboard');
         }
         echo "<script>alert('".cbTrans('alert_password_wrong')."');history.go(-1);</script>";
     }
@@ -57,7 +57,7 @@ class AuthController extends Controller
     public function getForgot()
     {
         if (CRUDBooster::myId()) {
-            return redirect()->action('\\'.AuthController::class.'@getIndex');
+            return redirect()->route('CbDashboard');
         }
 
         return view('CbAuth::forgot');

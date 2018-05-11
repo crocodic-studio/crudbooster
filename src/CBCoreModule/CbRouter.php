@@ -29,6 +29,9 @@ class CbRouter
      */
     private static function getControllerPath(string $controller, string $namespace) : string
     {
+        if (starts_with($controller, '\\')) {
+            return $controller;
+        }
         $ns = $namespace ?: ctrlNamespace();
         $ctrl = $ns.'\\'.$controller;
 
