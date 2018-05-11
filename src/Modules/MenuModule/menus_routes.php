@@ -33,9 +33,9 @@ Route::group([
     Route::post('menus/action-selected', $ctrl.'@postActionSelected')->name($ctrl.'PostActionSelected');
 });
 
-if (! Request::is(cbAdminPath())) {
-    return;
-}
+//if (! Request::is(cbAdminPath())) {
+    //return;
+//}
 
 $dashboardMenu = \crocodicstudio\crudbooster\Modules\MenuModule\MenuRepo::getDashboard();
 // ROUTER FOR OWN CONTROLLER FROM CB
