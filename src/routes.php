@@ -3,10 +3,6 @@
 use crocodicstudio\crudbooster\CBCoreModule\CbRouter;
 use crocodicstudio\crudbooster\middlewares\CBBackend;
 
-Route::group(['middleware' => ['web']], function () {
-    Route::get(cbAdminPath(), '\crocodicstudio\crudbooster\controllers\DashboardController@index')->name('CbDashboard');
-});
-
 $namespace = cbControllersNS();
 /* ROUTER FOR UPLOADS */
 Route::group(['middleware' => ['web'], 'namespace' => $namespace], function () {

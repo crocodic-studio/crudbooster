@@ -39,40 +39,32 @@ if (! Request::is(cbAdminPath())) {
 
 $dashboardMenu = \crocodicstudio\crudbooster\Modules\MenuModule\MenuRepo::getDashboard();
 // ROUTER FOR OWN CONTROLLER FROM CB
-Route::group([
-    'middleware' => ['web', CBBackend::class],
-    'prefix' => cbAdminPath(),
-    'namespace' => ctrlNamespace(),
-], function () use ($dashboardMenu) {
+if ($dashboardMenu) {
+    Route::group([
+        'middleware' => ['web', CBBackend::class],
+        'prefix' => cbAdminPath(),
+        'namespace' => ctrlNamespace(),
+    ], function () use ($dashboardMenu) {
+        $dashboardType = $dashboardMenu->type;
+        $path = $dashboardMenu->path;
 
-    if (! $dashboardMenu) {
-        return;
-    }
-    $dashboardType = $dashboardMenu->type;
-    $path = $dashboardMenu->path;
-
-    if ($dashboardType == MenuTypes::Statistic) {
-        Route::get('/', cbModulesNS('StatisticModule\\AdminStatisticBuilderController@getDashboard'));
-    } elseif ($dashboardType == MenuTypes::Module) {
-        $module = ModulesRepo::getByPath($path);
-        Route::get('/', $module->controller.'@getIndex');
-    } elseif ($dashboardType == MenuTypes::route) {
-        $action = str_replace("Controller", "Controller@", $path);
-        $action = str_replace(['Get', 'Post'], ['get', 'post'], $action);
-        Route::get('/', $action);
-    } elseif ($dashboardType == MenuTypes::ControllerMethod) {
-        Route::get('/', $path);
-    } elseif ($dashboardType == MenuTypes::url) {
-        redirect($path);
-    }
-});
-
-Route::group([
-    'middleware' => ['web', CBBackend::class],
-    'prefix' => cbAdminPath(),
-    'namespace' => cbControllersNS(),
-], function () use ($dashboardMenu) {
-    if (! $dashboardMenu) {
-        CRUDBooster::routeController('/', cbModulesNS('AuthModule\AuthController'));
-    }
-});
+        if ($dashboardType == MenuTypes::Statistic) {
+            Route::get('/', cbModulesNS('StatisticModule\\AdminStatisticBuilderController@getDashboard'));
+        } elseif ($dashboardType == MenuTypes::Module) {
+            $module = ModulesRepo::getByPath($path);
+            Route::get('/', $module->controller.'@getIndex');
+        } elseif ($dashboardType == MenuTypes::route) {
+            $action = str_replace("Controller", "Controller@", $path);
+            $action = str_replace(['Get', 'Post'], ['get', 'post'], $action);
+            Route::get('/', $action);
+        } elseif ($dashboardType == MenuTypes::ControllerMethod) {
+            Route::get('/', $path);
+        } elseif ($dashboardType == MenuTypes::url) {
+            redirect($path);
+        }
+    });
+} else {
+    Route::group(['middleware' => ['web']], function () {
+        Route::get(cbAdminPath(), '\crocodicstudio\crudbooster\controllers\DashboardController@index')->name('CbDashboard');
+    });
+}
