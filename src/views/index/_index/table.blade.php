@@ -68,7 +68,7 @@
                 $width = ($col['width']) ?: "auto";
                 $mainpath = trim(CRUDBooster::mainpath(), '/').$build_query;
                 ?>
-                <th width='$width'>
+                <th width='{!! $width !!}'>
                     @if (isset($sort_column[$field]))
                         <?php
                         switch ($sort_column[$field]['sorting']) {
@@ -88,7 +88,7 @@
                         ?>
                     @else
                         @php $url = CRUDBooster::urlFilterColumn($field, 'sorting', 'asc'); @endphp
-                        <a href='$url' title='{!! cbtrans('click_to_sort_ascending') !!}'>{!! $colname !!}&nbsp; <i class='fa fa-sort'></i></a>
+                        <a href='{!! $url !!}' title='{!! cbtrans('click_to_sort_ascending') !!}'>{!! $colname !!}&nbsp; <i class='fa fa-sort'></i></a>
                     @endif
 
                 </th>

@@ -3,6 +3,7 @@
 namespace crocodicstudio\crudbooster\CBCoreModule\Index;
 
 use crocodicstudio\crudbooster\controllers\CBController;
+use crocodicstudio\crudbooster\helpers\DbInspector;
 
 class RowContent
 {
