@@ -16,5 +16,6 @@ class LogsRepository
             'user_id' => $uid,
         ];
         Log::info($description, $log);
+        \DB::table('cms_logs')->insert($log);
     }
 }
