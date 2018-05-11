@@ -26,9 +26,9 @@ abstract class CBController extends Controller
     use Hooks;
     use Deleter, CbFormLoader, CbIndexLoader, CbLayoutLoader, IndexAjax, ImportData, ExportData, FormSubmitHandlers;
 
-    public $table;
+    public $table = '';
 
-    public $titleField;
+    public $titleField = '';
 
     public $primaryKey = 'id';
 
@@ -148,8 +148,8 @@ abstract class CBController extends Controller
 
     protected function genericLoader()
     {
-        $this->primaryKey = DbInspector::findPk($this->table);
         $this->cbInit();
+        $this->primaryKey = $this->primaryKey?: DbInspector::findPk($this->table);
         $this->data_inputan = $this->form;
         $this->data['pk'] = $this->primaryKey;
         $this->data['hide_form'] = $this->hide_form;
