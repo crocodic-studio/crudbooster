@@ -7,7 +7,7 @@
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                <strong><i class='{{CRUDBooster::getCurrentModule()->icon}}'></i> {!! $page_title or "Page Title" !!}
+                <strong><i class='{{CRUDBooster::getCurrentModule()->icon}}'></i> {!! $page_title ?: "Page Title" !!}
                 </strong>
             </div>
 
@@ -25,6 +25,7 @@
                         <input type="hidden" name="hide_form" value='{!! serialize($hide_form) !!}'>
                     @endif
                     <div class="box-body" id="parent-form-area">
+
                         @include("crudbooster::form.form_body", ['forms' => $forms])
                     </div><!-- /.box-body -->
 

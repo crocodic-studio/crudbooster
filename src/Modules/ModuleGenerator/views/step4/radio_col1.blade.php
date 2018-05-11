@@ -2,30 +2,30 @@
 
     <div class="col-sm-12">
         <div class="form-group">
-            <label>Show Button Table Action</label>
+            <label>Button Table Action</label>
             <label class='radio-inline'>
                 <input {{($config['button_table_action'])?"checked":""}} type='radio'
-                       name='button_table_action' value='true'/> TRUE
+                       name='button_table_action' value='true'/> True
             </label>
             <label class='radio-inline'>
                 <input {{(!$config['button_table_action'])?"checked":""}} type='radio'
-                       name='button_table_action' value='false'/> FALSE
+                       name='button_table_action' value='false'/> False
             </label>
         </div>
     </div>
 
     <div class="col-sm-12">
         <div class="form-group">
-            <label>Show Bulk Action Button</label>
+            <label>Bulk Action Button</label>
 
             <label class='radio-inline'>
                 <input {{($config['button_bulk_action'])?"checked":""}} type='radio'
-                       name='button_bulk_action' value='true'/> TRUE
+                       name='button_bulk_action' value='true'/> True
             </label>
 
             <label class='radio-inline'>
                 <input {{(!$config['button_bulk_action'])?"checked":""}} type='radio'
-                       name='button_bulk_action' value='false'/> FALSE
+                       name='button_bulk_action' value='false'/> False
             </label>
 
         </div>

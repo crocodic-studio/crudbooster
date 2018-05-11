@@ -2,42 +2,42 @@
 
     <div class="col-sm-12">
         <div class="form-group">
-            <label>Show Button Add</label>
+            <label>Add Button</label>
             <label class='radio-inline'>
                 <input {{($config['button_add'])?"checked":""}} type='radio' name='button_add'
-                       value='true'/> TRUE
+                       value='true'/> True
             </label>
             <label class='radio-inline'>
                 <input {{(!$config['button_add'])?"checked":""}} type='radio' name='button_add'
-                       value='false'/> FALSE
+                       value='false'/> False
             </label>
         </div>
     </div>
 
     <div class="col-sm-12">
         <div class="form-group">
-            <label>Show Button Edit</label>
+            <label>Edit Button</label>
             <label class='radio-inline'>
                 <input {{($config['button_edit'])?"checked":""}} type='radio' name='button_edit'
-                       value='true'/> TRUE
+                       value='true'/> True
             </label>
             <label class='radio-inline'>
                 <input {{(!$config['button_edit'])?"checked":""}} type='radio'
-                       name='button_edit' value='false'/> FALSE
+                       name='button_edit' value='false'/> False
             </label>
         </div>
     </div>
 
     <div class="col-sm-12">
         <div class="form-group">
-            <label>Show Button Delete</label>
+            <label>Delete Button</label>
             <label class='radio-inline'>
                 <input {{($config['button_delete'])?"checked":""}} type='radio'
-                       name='button_delete' value='true'/> TRUE
+                       name='button_delete' value='true'/> True
             </label>
             <label class='radio-inline'>
                 <input {{(!$config['button_delete'])?"checked":""}} type='radio'
-                       name='button_delete' value='false'/> FALSE
+                       name='button_delete' value='false'/> False
             </label>
         </div>
     </div>
@@ -45,14 +45,14 @@
 
     <div class="col-sm-12">
         <div class="form-group">
-            <label>Show Button Detail</label>
+            <label>Detail Button</label>
             <label class='radio-inline'>
                 <input {{($config['button_detail'])?"checked":""}} type='radio'
-                       name='button_detail' value='true'/> TRUE
+                       name='button_detail' value='true'/> True
             </label>
             <label class='radio-inline'>
                 <input {{(!$config['button_detail'])?"checked":""}} type='radio'
-                       name='button_detail' value='false'/> FALSE
+                       name='button_detail' value='false'/> False
             </label>
         </div>
     </div>

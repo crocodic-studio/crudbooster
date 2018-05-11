@@ -2,56 +2,56 @@
 
     <div class="col-sm-12">
         <div class="form-group">
-            <label>Show Button Show Data</label>
+            <label>Show Data Button</label>
             <label class='radio-inline'>
                 <input {{($config['button_show'])?"checked":""}} type='radio' name='button_show'
-                       value='true'/> TRUE
+                       value='true'/> True
             </label>
             <label class='radio-inline'>
                 <input {{(!$config['button_show'])?"checked":""}} type='radio'
-                       name='button_show' value='false'/> FALSE
+                       name='button_show' value='false'/> False
             </label>
         </div>
     </div>
 
     <div class="col-sm-12">
         <div class="form-group">
-            <label>Show Button Filter & Sorting</label>
+            <label>Filter & Sorting Button</label>
             <label class='radio-inline'>
                 <input {{($config['button_filter'])?"checked":""}} type='radio'
-                       name='button_filter' value='true'/> TRUE
+                       name='button_filter' value='true'/> True
             </label>
             <label class='radio-inline'>
                 <input {{(!$config['button_filter'])?"checked":""}} type='radio'
-                       name='button_filter' value='false'/> FALSE
+                       name='button_filter' value='false'/> False
             </label>
         </div>
     </div>
 
     <div class="col-sm-12">
         <div class="form-group">
-            <label>Show Button Import</label>
+            <label>Import Button</label>
             <label class='radio-inline'>
                 <input {{($config['button_import'])?"checked":""}} type='radio'
-                       name='button_import' value='true'/> TRUE
+                       name='button_import' value='true'/> True
             </label>
             <label class='radio-inline'>
                 <input {{(!$config['button_import'])?"checked":""}} type='radio'
-                       name='button_import' value='false'/> FALSE
+                       name='button_import' value='false'/> False
             </label>
         </div>
     </div>
 
     <div class="col-sm-12">
         <div class="form-group">
-            <label>Show Button Export</label>
+            <label>Export Button</label>
             <label class='radio-inline'>
                 <input {{($config['button_export'])?"checked":""}} type='radio'
-                       name='button_export' value='true'/> TRUE
+                       name='button_export' value='true'/> True
             </label>
             <label class='radio-inline'>
                 <input {{(!$config['button_export'])?"checked":""}} type='radio'
-                       name='button_export' value='false'/> FALSE
+                       name='button_export' value='false'/> False
             </label>
         </div>
     </div>
