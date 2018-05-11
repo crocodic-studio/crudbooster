@@ -75,7 +75,7 @@ class AuthController extends Controller
         $user->password = $randString;
         (new Mailer())->send(['to' => $user->email, 'data' => $user, 'template' => 'forgot_password_backend']);
 
-        CRUDBooster::insertLog(cbTrans('log_forgot', ['email' => request('email'), 'ip' => Request::server('REMOTE_ADDR')]));
+        CRUDBooster::insertLog(trans('crudbooster_logging.log_forgot', ['email' => request('email'), 'ip' => Request::server('REMOTE_ADDR')]));
 
         return redirect()->route('getLogin')->with('message', cbTrans('message_forgot_password'));
     }
