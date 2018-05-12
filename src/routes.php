@@ -15,7 +15,6 @@ Route::group([
     'prefix' => cbAdminPath(),
     'namespace' => ctrlNamespace(),
 ], function () {
-    //CbRouter::routeController('users', 'AdminUsersController');
     try {
         $modules = DB::table('cms_moduls')->where('path', '!=', '')->where('controller', '!=', '')->where('is_protected', 0)->get();
         foreach ($modules as $module) {

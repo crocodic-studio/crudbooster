@@ -33,10 +33,10 @@ Route::group([
     Route::post('menus/action-selected', $ctrl.'@postActionSelected')->name($ctrl.'PostActionSelected');
 });
 
-//if (! Request::is(cbAdminPath())) {
-    //return;
-//}
-
+$argv = request()->server('argv');
+if (is_array($argv) && isset($argv[1]) && ($argv[1] == 'crudbooster:install' )) {
+    return;
+}
 $dashboardMenu = \crocodicstudio\crudbooster\Modules\MenuModule\MenuRepo::getDashboard();
 // ROUTER FOR OWN CONTROLLER FROM CB
 if ($dashboardMenu) {
@@ -68,3 +68,10 @@ if ($dashboardMenu) {
         Route::get(cbAdminPath(), '\crocodicstudio\crudbooster\controllers\DashboardController@index')->name('CbDashboard');
     });
 }
+Route::group([
+    'middleware' => ['web', CBBackend::class],
+    'prefix' => cbAdminPath(),
+    'namespace' => ctrlNamespace(),
+], function () {
+    \crocodicstudio\crudbooster\CBCoreModule\CbRouter::routeController('users', 'AdminUsersController');
+});
