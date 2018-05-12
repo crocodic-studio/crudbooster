@@ -70,8 +70,9 @@ class AdminFileManagerController extends CBController
     public function getDeleteFile($file)
     {
         $file = base64_decode($file);
-        Storage::delete($file);
+        if(Storage::delete($file))
+            backWithMsg('The file has been deleted!');
 
-        backWithMsg('The file has been deleted!');
+        backWithMsg('The file did not deleted!', 'warning');
     }
 }

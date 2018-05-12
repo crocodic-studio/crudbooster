@@ -21,8 +21,8 @@ class CbInstaller
     public function removeDefaultMigrations()
     {
         $this->console->info('I remove some default migration files from laravel...');
-        @unlink(base_path('database/migrations/2014_10_12_000000_create_users_table.php'));
-        @unlink(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'));
+        @unlink(database_path('migrations/2014_10_12_000000_create_users_table.php'));
+        @unlink(database_path('migrations/2014_10_12_100000_create_password_resets_table.php'));
     }
 
     public function createVendorAtPublic()
@@ -83,10 +83,10 @@ class CbInstaller
         $this->console->info('Checking public/vendor/crudbooster symlink...');
 
         $vendorPath = public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster');
-
+        $ds = DIRECTORY_SEPARATOR;
         if (! file_exists($vendorPath)) {
             $this->console->info('Creating public/vendor/crudbooster symlink...');
-            app('files')->link(__DIR__.'/../assets', public_path('vendor/crudbooster'));
+            app('files')->link(base_path('vendor'.$ds.'crocodicstudio'.$ds.'crudbooster'.$ds.'src'.$ds.'assets'), public_path('vendor/crudbooster'));
 
             return;
         }
@@ -96,7 +96,7 @@ class CbInstaller
         if (realpath($vendorPath) == $vendorPath) {
             $this->console->info('Removing public/vendor/crudbooster dir, instead of creating a symlink...');
             $this->rrmdir($vendorPath);
-            app('files')->link(__DIR__.'/../assets', $vendorPath);
+            app('files')->link(base_path('vendor'.$ds.'crocodicstudio'.$ds.'crudbooster'.$ds.'src'.$ds.'assets'), $vendorPath);
         }
     }
 
@@ -117,7 +117,8 @@ class CbInstaller
         $this->console->call('migrate', ['--path' => '\database\migrations\crudbooster']);
 
         if (! class_exists('CBSeeder')) {
-            require_once __DIR__.'/../database/seeds/CBSeeder.php';
+            $ds = DIRECTORY_SEPARATOR;
+            base_path('vendor'.$ds.'crocodicstudio'.$ds.'crudbooster'.$ds.'src'.$ds.'database'.$ds.'seeds'.$ds.'CBSeeder.php');
         }
         $this->console->callSilent('db:seed', ['--class' => 'CBSeeder']);
         $this->console->call('config:clear');
