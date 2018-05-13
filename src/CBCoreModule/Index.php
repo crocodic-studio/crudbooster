@@ -21,7 +21,7 @@ class Index
     public function index(CBController $CbCtrl)
     {
         $this->cb = $CbCtrl;
-        $this->table = $CbCtrl->table;
+        $table = $this->table = $CbCtrl->table;
 
         $data = [];
         if (request('parent_table')) {
@@ -29,22 +29,23 @@ class Index
         }
 
         $data['table'] = $CbCtrl->table;
-        $tablePK = $data['table_pk'] = DbInspector::findPk($CbCtrl->table);
+        $data['table_pk'] = DbInspector::findPk($table);
         $data['page_title'] = CRUDBooster::getCurrentModule()->name;
         $data['page_description'] = cbTrans('default_module_description');
         //$data['date_candidate'] = $CbCtrl->date_candidate;
         $data['limit'] = $limit = request('limit', $CbCtrl->limit);
 
 
-        $query = $CbCtrl->table()->select(DB::raw($CbCtrl->table.".".$CbCtrl->primaryKey));
+        $query = $CbCtrl->table()->select(DB::raw($table.".".$CbCtrl->primaryKey));
 
         $this->_filterForParent($query);
 
         $CbCtrl->hookQueryIndex($query);
 
-        $this->_filterOutSoftDeleted(\Schema::getColumnListing($CbCtrl->table), $query);
+        if (\Schema::hasColumn($table, 'deleted_at')) {
+            $this->_filterOutSoftDeleted($query);
+        }
 
-        $table = $CbCtrl->table;
         $columns_table = $CbCtrl->columns_table;
         foreach ($columns_table as $index => $coltab) {
             $field = @$coltab['name'];
@@ -107,7 +108,7 @@ class Index
         if (request('foreign_key')) {
             $data['parent_field'] = request('foreign_key');
         } else {
-            $data['parent_field'] = DbInspector::getTableForeignKey($parent);
+            $data['parent_field'] = DbInspector::getRelatedTableName($parent);
         }
 
         if (! $data['parent_field']) {
@@ -137,14 +138,10 @@ class Index
     }
 
     /**
-     * @param $tableColumns
      * @param $result
      */
-    private function _filterOutSoftDeleted($tableColumns, $result)
+    private function _filterOutSoftDeleted($result)
     {
-        if (! in_array('deleted_at', $tableColumns)) {
-            return;
-        }
         $result->where($this->table.'.deleted_at', '=', null);
     }
 

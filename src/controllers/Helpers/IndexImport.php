@@ -137,7 +137,7 @@ class IndexImport
                 continue;
             }
 
-            $relation_table = DbInspector::getTableForeignKey($colname);
+            $relation_table = DbInspector::getRelatedTableName($colname);
             $relation_class = $this->resolveController($relation_table);
             $relation_class->genericLoader();
 

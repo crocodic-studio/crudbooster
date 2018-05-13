@@ -77,12 +77,12 @@ class DbInspector
     public static function isForeignKey($fieldName)
     {
         return Cache::rememberForever('crudbooster_isForeignKey_'.$fieldName, function () use ($fieldName) {
-            $table = self::getTableForeignKey($fieldName);
+            $table = self::getRelatedTableName($fieldName);
             return ($table && Schema::hasTable($table));
         });
     }
 
-    public static function getTableForeignKey(string $fieldName): string 
+    public static function getRelatedTableName(string $fieldName): string
     {
         if (starts_with($fieldName, 'id_') || ends_with($fieldName, '_id')) {
             return str_replace(['_id', 'id_'], '', $fieldName);

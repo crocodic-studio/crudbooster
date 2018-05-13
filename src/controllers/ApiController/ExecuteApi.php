@@ -275,7 +275,7 @@ class ExecuteApi
         if (! DbInspector::isForeignKey($name)) {
             return $nameTmp;
         }
-        $joinTable = DbInspector::getTableForeignKey($name);
+        $joinTable = DbInspector::getRelatedTableName($name);
         $data->leftjoin($joinTable, $joinTable.'.id', '=', $table.'.'.$name);
         foreach (\Schema::getColumnListing($joinTable) as $jf) {
             $jfAlias = $joinTable.'_'.$jf;
