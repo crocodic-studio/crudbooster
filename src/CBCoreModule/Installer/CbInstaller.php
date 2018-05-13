@@ -130,9 +130,10 @@ class CbInstaller
     }
 
 
-    /*
-    * http://stackoverflow.com/questions/3338123/how-do-i-recursively-delete-a-directory-and-its-entire-contents-files-sub-dir
-    */
+    /**
+     *
+     * http://stackoverflow.com/questions/3338123/how-do-i-recursively-delete-a-directory-and-its-entire-contents-files-sub-dir
+     */
 
     /**
      * Get the composer command for the environment.
