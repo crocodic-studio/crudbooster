@@ -1,6 +1,7 @@
 <?php
 namespace crocodicstudio\crudbooster;
 
+use crocodicstudio\crudbooster\CBCoreModule\Facades\CbRouter;
 use crocodicstudio\crudbooster\Modules\ApiGeneratorModule\CbApiGeneratorServiceProvider;
 use crocodicstudio\crudbooster\Modules\AuthModule\CbAuthServiceProvider;
 use crocodicstudio\crudbooster\Modules\EmailTemplates\CbEmailTemplatesServiceProvider;
@@ -101,6 +102,8 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $loader->alias('CRUDBooster', 'crocodicstudio\crudbooster\helpers\CRUDBooster');
         $loader->alias('CB', 'crocodicstudio\crudbooster\helpers\CB');
         $loader->alias('DbInspector', 'crocodicstudio\crudbooster\helpers\DbInspector');
+        $loader->alias('CbRouter', CbRouter::class);
+        $this->app->singleton(\crocodicstudio\crudbooster\CBCoreModule\CbRouter::class);
         $this->app->register(CbAuthServiceProvider::class);
         $this->app->register(CbApiGeneratorServiceProvider::class);
         $this->app->register(CbModulesGeneratorServiceProvider::class);

@@ -6,16 +6,16 @@ use Route;
 
 class CbRouter
 {
-    public static function routeController(string $prefix, string $controller, string $namespace = '')
+    public function routeController(string $prefix, string $controller, string $namespace = '')
     {
         $prefix = trim($prefix, '/').'/';
 
         try {
             Route::get($prefix, $controller.'@getIndex')->name($controller.'GetIndex');
-            $ctrl = self::getControllerPath($controller, $namespace);
-            foreach (self::getControllerMethods($ctrl) as $method) {
-                $wildcards = self::getWildCard($method->getNumberOfParameters());
-                self::setRoute($prefix, $controller, $method->name, $wildcards);
+            $ctrl = $this->getControllerPath($controller, $namespace);
+            foreach ($this->getControllerMethods($ctrl) as $method) {
+                $wildcards = $this->getWildCard($method->getNumberOfParameters());
+                $this->setRoute($prefix, $controller, $method->name, $wildcards);
             }
         } catch (\Exception $e) {
             dd($e);
@@ -27,7 +27,7 @@ class CbRouter
      * @param $namespace
      * @return string
      */
-    private static function getControllerPath(string $controller, string $namespace) : string
+    private function getControllerPath(string $controller, string $namespace) : string
     {
         if (starts_with($controller, '\\')) {
             return $controller;
@@ -43,7 +43,7 @@ class CbRouter
      * @return array|\ReflectionMethod[]
      * @throws \ReflectionException
      */
-    private static function getControllerMethods(string $ctrl) : array
+    private function getControllerMethods(string $ctrl) : array
     {
         $methods = (new \ReflectionClass($ctrl))->getMethods(\ReflectionMethod::IS_PUBLIC);
 
@@ -56,7 +56,7 @@ class CbRouter
      * @param int $count
      * @return string
      */
-    private static function getWildCard(int $count) : string
+    private function getWildCard(int $count) : string
     {
         $wildcards = ['{one?}', '{two?}', '{three?}', '{four?}', '{five?}'];
 
@@ -69,12 +69,12 @@ class CbRouter
      * @param $methodName
      * @param $wildcards
      */
-    private static function setRoute(string $prefix, string $controller, string $methodName, string $wildcards)
+    private function setRoute(string $prefix, string $controller, string $methodName, string $wildcards)
     {
         if (starts_with($methodName, 'get')) {
-            self::routeGet($prefix, $controller, $methodName, $wildcards);
+            $this->routeGet($prefix, $controller, $methodName, $wildcards);
         } elseif (starts_with($methodName, 'post')) {
-            self::routePost($prefix, $controller, $methodName, $wildcards);
+            $this->routePost($prefix, $controller, $methodName, $wildcards);
         }
     }
 
@@ -84,10 +84,10 @@ class CbRouter
      * @param $method
      * @param $wildcards
      */
-    private static function routeGet(string $prefix, string $controller, string $method, string $wildcards)
+    private function routeGet(string $prefix, string $controller, string $method, string $wildcards)
     {
         $methodName = str_after($method, 'get');
-        $slug = self::makeSlug($methodName);
+        $slug = $this->makeSlug($methodName);
         $slug = ($slug == 'index') ? '' : $slug;
         Route::get($prefix.$slug.$wildcards, $controller.'@'.$method)->name($controller.'Get'.$methodName);
     }
@@ -96,7 +96,7 @@ class CbRouter
      * @param string $methodName
      * @return array|string
      */
-    private static function makeSlug(string $methodName): string
+    private function makeSlug(string $methodName): string
     {
         $slug = preg_split('/(?=[A-Z])/', $methodName) ?: [];
         $slug = array_filter($slug);
@@ -111,10 +111,10 @@ class CbRouter
      * @param $method
      * @param $wildcards
      */
-    private static function routePost(string $prefix, string $controller, string $method, string $wildcards)
+    private function routePost(string $prefix, string $controller, string $method, string $wildcards)
     {
         $methodName = str_after($method, 'post');
-        $slug = self::makeSlug($methodName);
+        $slug = $this->makeSlug($methodName);
         Route::post($prefix.$slug.$wildcards, $controller.'@'.$method)->name($controller.'Post'.$methodName);
     }
 }

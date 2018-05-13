@@ -1,6 +1,6 @@
 <?php
 
-use crocodicstudio\crudbooster\CBCoreModule\CbRouter;
+use crocodicstudio\crudbooster\CBCoreModule\Facades\CbRouter;
 use crocodicstudio\crudbooster\middlewares\CBBackend;
 
 $namespace = cbControllersNS();
@@ -21,7 +21,7 @@ Route::group([
             CbRouter::routeController($module->path, $module->controller);
         }
     } catch (Exception $e) {
-        // we skip if routing was not successful
+       dd($e);
     }
 });
 

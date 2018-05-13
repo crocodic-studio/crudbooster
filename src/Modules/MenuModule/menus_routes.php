@@ -1,5 +1,6 @@
 <?php
 
+use crocodicstudio\crudbooster\CBCoreModule\Facades\CbRouter;
 use crocodicstudio\crudbooster\middlewares\CBBackend;
 use crocodicstudio\crudbooster\middlewares\CBSuperadmin;
 use crocodicstudio\crudbooster\Modules\MenuModule\MenuTypes;
@@ -73,5 +74,5 @@ Route::group([
     'prefix' => cbAdminPath(),
     'namespace' => ctrlNamespace(),
 ], function () {
-    \crocodicstudio\crudbooster\CBCoreModule\CbRouter::routeController('users', 'AdminUsersController');
+    CbRouter::routeController('users', 'AdminUsersController');
 });
