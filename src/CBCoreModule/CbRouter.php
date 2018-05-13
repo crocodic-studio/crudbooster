@@ -60,7 +60,7 @@ class CbRouter
     {
         $wildcards = ['{one?}', '{two?}', '{three?}', '{four?}', '{five?}'];
 
-        return implode('/', array_splice($wildcards, 0, $count));
+        return '/'.implode('/', array_splice($wildcards, 0, $count));
     }
 
     /**
