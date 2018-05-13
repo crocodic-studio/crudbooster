@@ -46,7 +46,7 @@ class CrudboosterInstallationCommand extends Command
         /* Removing the default user and password reset, it makes you ambigous when using CRUDBooster */
         $installer = new CbInstaller($this);
 
-        $installer->removeDefaultMigrations();
+        //$installer->removeDefaultMigrations();
 
         $installer->createVendorAtPublic();
 

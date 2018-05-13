@@ -18,12 +18,12 @@ class CbInstaller
         $this->console = $console;
     }
 
-    public function removeDefaultMigrations()
+    /*public function removeDefaultMigrations()
     {
         $this->console->info('I remove some default migration files from laravel...');
         @unlink(database_path('migrations/2014_10_12_000000_create_users_table.php'));
         @unlink(database_path('migrations/2014_10_12_100000_create_password_resets_table.php'));
-    }
+    }*/
 
     public function createVendorAtPublic()
     {
