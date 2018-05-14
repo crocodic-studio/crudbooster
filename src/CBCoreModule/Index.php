@@ -3,13 +3,13 @@
 namespace crocodicstudio\crudbooster\CBCoreModule;
 
 use crocodicstudio\crudbooster\CBCoreModule\Index\FilterIndexRows;
-use crocodicstudio\crudbooster\CBCoreModule\Index\RowContent;
 use crocodicstudio\crudbooster\CBCoreModule\Index\Order;
+use crocodicstudio\crudbooster\CBCoreModule\Index\RowContent;
 use crocodicstudio\crudbooster\controllers\CBController;
-use crocodicstudio\crudbooster\helpers\DbInspector;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\DB;
 use crocodicstudio\crudbooster\helpers\CRUDBooster;
+use crocodicstudio\crudbooster\helpers\DbInspector;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request;
 use Schema;
 
 class Index
@@ -35,7 +35,6 @@ class Index
         //$data['date_candidate'] = $CbCtrl->date_candidate;
         $data['limit'] = $limit = request('limit', $CbCtrl->limit);
 
-
         $query = $CbCtrl->table()->select(DB::raw($table.".".$CbCtrl->primaryKey));
 
         $this->_filterForParent($query);
@@ -51,9 +50,9 @@ class Index
             $field = @$coltab['name'];
 
             if (strpos($field, '.')) {
-                $columns_table = $this->addDotField($columns_table, $index, $field, $query);
+                $columns_table[$index] = array_merge($columns_table[$index], $this->addDotField($field, $query));
             } else {
-                $columns_table = $this->_addField($columns_table, $index, $field, $query, $table);
+                $columns_table[$index] = array_merge($columns_table[$index], $this->_addField($field, $query, $table));
             }
         }
 
@@ -67,7 +66,7 @@ class Index
         if ($filter_is_orderby === true) {
             (new Order($this->cb))->handle($query, $table);
         }
-        $limit = is_string($limit) ? (int)$limit : 15;
+        $limit = is_string($limit) ? (int) $limit : 15;
         $data['result'] = $query->paginate($limit);
 
         $data['columns'] = $columns_table;
@@ -103,7 +102,7 @@ class Index
     private function _handleParentTable()
     {
         $data = [];
-        $parent = (string)request('parent_table');
+        $parent = (string) request('parent_table');
         $data['parent_table'] = CRUDBooster::first(request('parent_table'), request('parent_id'));
         if (request('foreign_key')) {
             $data['parent_field'] = request('foreign_key');
@@ -148,45 +147,44 @@ class Index
     /**
      * @param $result
      * @param $field
-     * @param $columnsTable
-     * @param $index
      * @return mixed
      */
-    private function addDotField($columnsTable, $index, $field, $result)
+    private function addDotField($field, $result)
     {
         $result->addselect($field.' as '.str_slug($field, '_'));
         $tableField = substr($field, 0, strpos($field, '.'));
         $fieldOrign = substr($field, strpos($field, '.') + 1);
-        $columnsTable[$index]['type_data'] = \Schema::getColumnType($tableField, $fieldOrign);
-        $columnsTable[$index]['field'] = str_slug($field, '_');
-        $columnsTable[$index]['field_raw'] = $field;
-        $columnsTable[$index]['field_with'] = $tableField.'.'.$fieldOrign;
 
-        return $columnsTable;
+        return [
+            'type_data' => \Schema::getColumnType($tableField, $fieldOrign),
+            'field' => str_slug($field, '_'),
+            'field_raw' => $field,
+            'field_with' => $tableField.'.'.$fieldOrign,
+        ];
     }
 
     /**
-     * @param $columnsTable
-     * @param $index
      * @param $field
      * @param $table
      * @param $result
      * @return mixed
      */
-    private function _addField($columnsTable, $index, $field, $result, $table)
+    private function _addField($field, $result, $table)
     {
-        $columnsTable[$index]['type_data'] = 'varchar';
-        $columnsTable[$index]['field_with'] = null;
-        $columnsTable[$index]['field'] = $field;
-        $columnsTable[$index]['field_raw'] = $field;
+        $t = [
+            'type_data' => 'varchar',
+            'field_with' => null,
+            'field' => $field,
+            'field_raw' => $field,
+        ];
 
         if (\Schema::hasColumn($table, $field)) {
             $result->addselect($table.'.'.$field);
-            $columnsTable[$index]['type_data'] = \Schema::getColumnType($table, $field);
-            $columnsTable[$index]['field_with'] = $table.'.'.$field;
+            $t['type_data'] = \Schema::getColumnType($table, $field);
+            $t['field_with'] = $table.'.'.$field;
         }
 
-        return $columnsTable;
+        return $t;
     }
 
     /**
