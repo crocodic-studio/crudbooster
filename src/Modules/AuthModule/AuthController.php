@@ -13,6 +13,21 @@ use crocodicstudio\crudbooster\helpers\CRUDBooster, CB;
 class AuthController extends Controller
 {
     /**
+     * @var \crocodicstudio\crudbooster\CBCoreModule\CbUsersRepo
+     */
+    private $usersRepo;
+
+    /**
+     * AuthController constructor.
+     *
+     * @param \crocodicstudio\crudbooster\CBCoreModule\CbUsersRepo $usersRepo
+     */
+    public function __construct(CbUsersRepo $usersRepo)
+    {
+        $this->usersRepo = $usersRepo;
+    }
+
+    /**
      * @param string $tableName
      * @return mixed
      */
@@ -35,7 +50,7 @@ class AuthController extends Controller
 
     public function postUnlockScreen()
     {
-        $user = CbUsersRepo::find(CRUDBooster::myId());
+        $user = $this->usersRepo->find(CRUDBooster::myId());
 
         if (\Hash::check(request('password'), $user->password)) {
             Session::put('admin_lock', 0);
@@ -68,10 +83,10 @@ class AuthController extends Controller
         $this->validateForgotPass();
 
         $randString = str_random(5);
-        CbUsersRepo::updateByMail(request('email'), ['password' => \Hash::make($randString)]);
+        $this->usersRepo->updateByMail(request('email'), ['password' => \Hash::make($randString)]);
 
         //$appname = cbGetsetting('appname');
-        $user = CbUsersRepo::findByMail(request('email'));
+        $user = $this->usersRepo->findByMail(request('email'));
         $user->password = $randString;
         (new Mailer())->send(['to' => $user->email, 'data' => $user, 'template' => 'forgot_password_backend']);
 

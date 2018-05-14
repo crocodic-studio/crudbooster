@@ -5,18 +5,34 @@ namespace crocodicstudio\crudbooster\Modules\AuthModule;
 use App\Http\Controllers\CBHook;
 use crocodicstudio\crudbooster\CBCoreModule\CbUsersRepo;
 use crocodicstudio\crudbooster\helpers\CRUDBooster;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Validator;
 
-class LoginController
+class LoginController extends Controller
 {
+    /**
+     * @var \crocodicstudio\crudbooster\CBCoreModule\CbUsersRepo
+     */
+    private $usersRepo;
+
+    /**
+     * AuthController constructor.
+     *
+     * @param \crocodicstudio\crudbooster\CBCoreModule\CbUsersRepo $usersRepo
+     */
+    public function __construct(CbUsersRepo $usersRepo)
+    {
+        $this->usersRepo = $usersRepo;
+    }
+
     public function postLogin()
     {
         $this->validateLogin();
 
         $password = request("password");
 
-        $user = CbUsersRepo::findByMail(request("email"));
+        $user = $this->usersRepo->findByMail(request("email"));
 
         $this->validatePassword($password, $user);
 

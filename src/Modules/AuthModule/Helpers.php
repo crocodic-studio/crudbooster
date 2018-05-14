@@ -8,7 +8,7 @@ trait Helpers
 {
     public static function me()
     {
-        return CbUsersRepo::find(session('admin_id'));
+        return app(CbUsersRepo::class)->find(session('admin_id'));
     }
 
     public static function myName()

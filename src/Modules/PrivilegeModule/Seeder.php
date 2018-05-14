@@ -20,10 +20,10 @@ class Seeder
             'theme_color' => 'skin-red',
         ]);
 
-        CbUsersRepo::table()->insert([
+        app(CbUsersRepo::class)->insert([
             'name' => 'Super Admin',
             'email' => 'admin@crudbooster.com',
-            'password' => \Hash::make('123456'),
+            'password' => bcrypt('123456'),
             'id_cms_privileges' => $pid,
             'status' => 'Active',
         ]);

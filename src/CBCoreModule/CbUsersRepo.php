@@ -4,28 +4,33 @@ namespace crocodicstudio\crudbooster\CBCoreModule;
 
 class CbUsersRepo
 {
-    public static function find($id)
+    public function find($id)
     {
-        return self::where(['id' => $id])->first();
+        return $this->where(['id' => $id])->first();
     }
 
-    public static function where($conditions)
+    public function where($conditions)
     {
-        return self::table()->where($conditions);
+        return $this->table()->where($conditions);
     }
 
-    public static function table()
+    public function table()
     {
         return \DB::table(cbConfig('USER_TABLE'));
     }
 
-    public static function findByMail($email)
+    public function findByMail($email)
     {
-        return self::where(['email' => $email])->first();
+        return $this->where(['email' => $email])->first();
     }
 
-    public static function updateByMail($email, $data)
+    public function updateByMail($email, $data)
     {
-        return self::where(['email' => $email])->update($data);
+        return $this->where(['email' => $email])->update($data);
+    }
+
+    public function insert($data)
+    {
+        return $this->table()->insert($data);
     }
 }
