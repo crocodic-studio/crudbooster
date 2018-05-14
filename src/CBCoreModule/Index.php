@@ -41,9 +41,7 @@ class Index
 
         $CbCtrl->hookQueryIndex($query);
 
-        if (\Schema::hasColumn($table, 'deleted_at')) {
-            $this->_filterOutSoftDeleted($query);
-        }
+        $this->_filterOutSoftDeleted($table, $query);
 
         $columns_table = $CbCtrl->columns_table;
         foreach ($columns_table as $index => $coltab) {
@@ -125,6 +123,7 @@ class Index
 
     /**
      * @param $result
+     * @return null
      */
     private function _filterForParent($result)
     {
@@ -137,11 +136,14 @@ class Index
     }
 
     /**
-     * @param $result
+     * @param $table
+     * @param $query
      */
-    private function _filterOutSoftDeleted($result)
+    private function _filterOutSoftDeleted($table, $query)
     {
-        $result->where($this->table.'.deleted_at', '=', null);
+        if (\Schema::hasColumn($table, 'deleted_at')) {
+            $query->where($table.'.deleted_at', '=', null);
+        }
     }
 
     /**
