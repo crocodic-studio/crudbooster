@@ -35,7 +35,7 @@ Route::group([
 });
 
 $argv = request()->server('argv');
-if (is_array($argv) && isset($argv[1]) && ($argv[1] == 'crudbooster:install' )) {
+if (is_array($argv) && isset($argv[1]) && !starts_with($argv[1], 'route:')) {
     return;
 }
 $dashboardMenu = \crocodicstudio\crudbooster\Modules\MenuModule\MenuRepo::getDashboard();

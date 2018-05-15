@@ -30,11 +30,9 @@ class LoginController extends Controller
     {
         $this->validateLogin();
 
-        $password = request("password");
-
         $user = $this->usersRepo->findByMail(request("email"));
 
-        $this->validatePassword($password, $user);
+        $this->validatePassword(request("password"), $user->password);
 
         $this->setSession($user);
 
@@ -61,11 +59,11 @@ class LoginController extends Controller
 
     /**
      * @param $password
-     * @param $users
+     * @param $realPassword
      */
-    private function validatePassword($password, $users)
+    private function validatePassword($password, $realPassword)
     {
-        if (! \Hash::check($password, $users->password)) {
+        if (! \Hash::check($password, $realPassword)) {
             $resp = redirect()->route('getLogin')->with('message', cbTrans('alert_password_wrong'));
             sendAndTerminate($resp);
         }

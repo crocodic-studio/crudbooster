@@ -16,6 +16,10 @@ Route::group([
     'namespace' => ctrlNamespace(),
 ], function () {
     try {
+        $argv = request()->server('argv');
+        if (is_array($argv) && isset($argv[1]) && !starts_with($argv[1], 'route:')) {
+            return;
+        }
         $modules = DB::table('cms_moduls')->where('path', '!=', '')->where('controller', '!=', '')->where('is_protected', 0)->get();
         foreach ($modules as $module) {
             CbRouter::routeController($module->path, $module->controller);
