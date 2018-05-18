@@ -112,3 +112,30 @@ If there is no interaction for a long period of time, it will be assumed that it
 
 ## License 
 CRUDBooster is under [MIT License](https://opensource.org/licenses/MIT)
+
+
+### More from the authors:
+
+
+ :gem: A minimal yet powerful package to give you opportunity to refactor your controllers.
+
+- https://github.com/imanghafoori1/laravel-terminator
+
+------------------
+
+ :gem: A minimal yet powerful package to give a better structure and caching opportunity for your laravel apps.
+
+- https://github.com/imanghafoori1/laravel-widgetize
+
+-------------------
+
+ :gem: A simple package that lets you easily impersonate your users.
+
+- https://github.com/imanghafoori1/laravel-MasterPass
+
+
+------------
+
+:gem: It allows you login with any password in local environment only.
+
+- https://github.com/imanghafoori1/laravel-anypass
