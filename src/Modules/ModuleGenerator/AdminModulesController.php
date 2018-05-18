@@ -193,8 +193,7 @@ class AdminModulesController extends CBController
         ]);
 
         //Refresh Session Roles
-        $roles = DB::table('cms_privileges_roles')->where('id_cms_privileges', CRUDBooster::myPrivilegeId())->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')->get();
-        Session::put('admin_privileges_roles', $roles);
+        CRUDBooster::refreshSessionRoles();
 
         //$ref_parameter = Request::input('ref_parameter');
         if (request('return_url')) {
@@ -249,7 +248,7 @@ class AdminModulesController extends CBController
     {
         $this->cbLoader();
 
-        $row = $this->table()->where($this->primaryKey, $id)->first();
+        //$row = $this->table()->where($this->primaryKey, $id)->first();
 
         app(FormValidator::class)->validate($id, $this->form, $this);
 
@@ -264,8 +263,7 @@ class AdminModulesController extends CBController
         $this->findRow($id)->update($this->arr);
 
         //Refresh Session Roles
-        $roles = DB::table('cms_privileges_roles')->where('id_cms_privileges', CRUDBooster::myPrivilegeId())->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')->get();
-        Session::put('admin_privileges_roles', $roles);
+        CRUDBooster::refreshSessionRoles();
 
         backWithMsg(cbTrans('alert_update_data_success'));
     }

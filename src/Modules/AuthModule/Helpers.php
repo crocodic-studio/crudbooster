@@ -18,7 +18,8 @@ trait Helpers
 
     public static function myPhoto()
     {
-        return session('admin_photo');
+        $photo =  session('admin_photo', 'vendor/crudbooster/avatar.jpg');
+        return asset($photo);
     }
 
     public static function isLocked()

@@ -77,17 +77,6 @@ class LoginController extends Controller
     }
 
     /**
-     * @param $user
-     * @return mixed
-     */
-    private function fetchRoles($user)
-    {
-        $roles = $this->table('cms_privileges_roles')->where('id_cms_privileges', $user->id_cms_privileges)->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')->get();
-
-        return $roles;
-    }
-
-    /**
      * @param $users
      */
     private function LogIt($users)
@@ -105,16 +94,12 @@ class LoginController extends Controller
     {
         $session = [
             'admin_id' => $user->id,
-            'admin_is_superadmin' => $this->table('cms_privileges')->where('id', $user->id_cms_privileges)->first()->is_superadmin,
             'admin_name' => $user->name,
-            'admin_photo' => ($user->photo) ? asset($user->photo) : asset('vendor/crudbooster/avatar.jpg'),
-            'admin_privileges_roles' => $this->fetchRoles($user),
-            'admin_privileges' => $user->id_cms_privileges,
-            'admin_privileges_name' => $this->table('cms_privileges')->where('id', $user->id_cms_privileges)->first()->name,
+            'admin_photo' => $user->photo,
+            'admin_role_id' => $user->id_cms_privileges,
             'admin_lock' => 0,
-            'theme_color' => $this->table('cms_privileges')->where('id', $user->id_cms_privileges)->first()->theme_color,
-            'appname' => cbGetsetting('appname'),
         ];
         session($session);
+        CRUDBooster::refreshSessionRoles();
     }
 }

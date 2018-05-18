@@ -6,7 +6,7 @@ trait PrivilegeHelpers
 {
     public static function isSuperadmin()
     {
-        return session('admin_is_superadmin');
+        return self::findUserRole()->is_superadmin;
     }
 
     public static function canView()
@@ -69,7 +69,7 @@ trait PrivilegeHelpers
 
     public static function myPrivilegeId()
     {
-        return session('admin_privileges');
+        return session('admin_role_id');
     }
 
     public static function myPrivilege()
@@ -93,11 +93,31 @@ trait PrivilegeHelpers
 
     public static function myPrivilegeName()
     {
-        return session('admin_privileges_name');
+        return self::findUserRole()->name;
+    }
+
+    public static function themeColor()
+    {
+        return self::findUserRole()->theme_color ?: 'skin-blue';
     }
 
     public static function denyAccess()
     {
         static::redirect(static::adminPath(), cbTrans('denied_access'));
+    }
+
+    /**
+     * @param $roleId
+     * @return mixed
+     */
+    private static function findUserRole()
+    {
+        return \DB::table('cms_privileges')->where('id', self::myPrivilegeId())->first();
+    }
+
+    public static function refreshSessionRoles()
+    {
+        $roles = \DB::table('cms_privileges_roles')->where('id_cms_privileges', self::myPrivilegeId())->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')->get();
+        session()->put('admin_privileges_roles', $roles);
     }
 }

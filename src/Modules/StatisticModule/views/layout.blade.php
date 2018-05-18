@@ -40,7 +40,7 @@
     {!! cbStyleSheet('sweetalert/dist/sweetalert.css') !!}
     @stack('head')
 </head>
-<body class="<?php echo (session('theme_color')) ?: 'skin-blue'?> old-transition layout-top-nav fixed">
+<body class="{!! CRUDBooster::themeColor() !!} old-transition layout-top-nav fixed">
 <div id='app' class="wrapper">
 
     <header class="main-header">

@@ -69,7 +69,7 @@ class Step1Handler
         $this->grantAllPermissions($id);
 
         //Refresh Session Roles
-        $this->refreshSessionRoles();
+        CRUDBooster::refreshSessionRoles();
 
         return $id;
     }
@@ -125,12 +125,5 @@ class Step1Handler
             'is_edit' => 1,
             'is_delete' => 1,
         ]);
-    }
-
-    private function refreshSessionRoles()
-    {
-        $roles = DB::table('cms_privileges_roles')->where('id_cms_privileges', CRUDBooster::myPrivilegeId())->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')->get();
-
-        session()->put('admin_privileges_roles', $roles);
     }
 }

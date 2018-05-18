@@ -7,10 +7,10 @@
 
     @stack('head')
 </head>
-<body class="{!! session('theme_color','skin-blue') !!} {!! cbConfig('ADMIN_LAYOUT') !!}">
+<body class="{!! CRUDBooster::themeColor() !!} {!! cbConfig('ADMIN_LAYOUT') !!}">
 <div id='app' class="wrapper">
 
-    <!-- Header -->
+<!-- Header -->
 @include('crudbooster::_admin_template.header')
 
 <!-- Sidebar -->
@@ -34,10 +34,10 @@
                         @if($buttonShow)
                             <a href="{{ CRUDBooster::mainpath().'?'.http_build_query(request()->all()) }}"
                                id='btn_show_data' class="btn btn-sm btn-primary"
-                               title="{{ cbTrans('action_show_data')}}">
+                               title="{{ cbTrans('action_show_data') }}">
 
-                                {!!  cbIcon('table') !!}
-                                {{ cbTrans('action_show_data')}}
+                                {!! cbIcon('table') !!}
+                                {{ cbTrans('action_show_data') }}
                             </a>
                         @endif
 
@@ -53,15 +53,15 @@
 
                 <ol class="breadcrumb">
                     <li>
-                        <a href="{{CRUDBooster::adminPath()}}">
-                            {!!  cbIcon('dashboard') !!}
+                        <a href="{{ CRUDBooster::adminPath() }}">
+                            {!! cbIcon('dashboard') !!}
                             {{ cbTrans('home') }}
                         </a>
                     </li>
                     <li class="active">{{$module->name}}</li>
                 </ol>
             @else
-                <h1>{{cbGetsetting('appname')}}
+                <h1>{{ cbGetsetting('appname') }}
                     <small>{!! cbTrans('information') !!}</small>
                 </h1>
             @endif
