@@ -6,8 +6,6 @@ use App\Http\Controllers\CBHook;
 use crocodicstudio\crudbooster\CBCoreModule\CbUsersRepo;
 use crocodicstudio\crudbooster\helpers\CRUDBooster;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
 {
@@ -45,7 +43,7 @@ class LoginController extends Controller
 
     private function validateLogin()
     {
-        $validator = Validator::make(request()->only(['email', 'password']), [
+        $validator = \Validator::make(request()->only(['email', 'password']), [
             'email' => 'required|email|exists:cms_users',
             'password' => 'required',
         ]);
@@ -81,7 +79,7 @@ class LoginController extends Controller
      */
     private function LogIt($users)
     {
-        CRUDBooster::insertLog(trans('crudbooster_logging.log_login', ['email' => $users->email, 'ip' => Request::server('REMOTE_ADDR')]));
+        CRUDBooster::insertLog(trans('crudbooster_logging.log_login', ['email' => $users->email, 'ip' => request()->server('REMOTE_ADDR')]));
     }
 
     /**

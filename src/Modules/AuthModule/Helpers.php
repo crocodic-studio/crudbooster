@@ -16,9 +16,9 @@ trait Helpers
         return session('admin_name');
     }
 
-    public static function myPhoto()
+    public static function myPhoto() : string
     {
-        $photo =  session('admin_photo', 'vendor/crudbooster/avatar.jpg');
+        $photo =  (string) session()->get('admin_photo', 'vendor/crudbooster/avatar.jpg');
         return asset($photo);
     }
 

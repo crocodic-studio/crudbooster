@@ -104,7 +104,7 @@ class AdminPrivilegesController extends CBController
         }
 
         if ($id == CRUDBooster::myPrivilegeId()) {
-            $this->refreshSessionRoles();
+            CRUDBooster::refreshSessionRoles();
             $this->setTheme();
         }
 
