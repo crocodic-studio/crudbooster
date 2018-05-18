@@ -26,11 +26,15 @@ class LoginController extends Controller
 
     public function postLogin()
     {
-        $this->validateLogin();
+        $cred = request()->only(['email', 'password']);
+        $this->validateLogin($cred);
 
         $user = $this->usersRepo->findByMail(request("email"));
 
-        $this->validatePassword(request("password"), $user->password);
+        if (! auth('cbAdmin')->attempt($cred)) {
+            $resp = redirect()->route('getLogin')->with('message', cbTrans('alert_password_wrong'));
+            sendAndTerminate($resp);
+        }
 
         $this->setSession($user);
 
@@ -41,9 +45,9 @@ class LoginController extends Controller
         return redirect(CRUDBooster::adminPath());
     }
 
-    private function validateLogin()
+    private function validateLogin($cred)
     {
-        $validator = \Validator::make(request()->only(['email', 'password']), [
+        $validator = \Validator::make($cred, [
             'email' => 'required|email|exists:cms_users',
             'password' => 'required',
         ]);
@@ -56,22 +60,19 @@ class LoginController extends Controller
     }
 
     /**
-     * @param $password
-     * @param $realPassword
+     * @param $user
+     * @param $priv
+     * @param $photo
+     * @param $roles
      */
-    private function validatePassword($password, $realPassword)
+    private function setSession($user)
     {
-        if (! \Hash::check($password, $realPassword)) {
-            $resp = redirect()->route('getLogin')->with('message', cbTrans('alert_password_wrong'));
-            sendAndTerminate($resp);
-        }
-    }
-
-    public function table($tableName = null)
-    {
-        $tableName = $tableName ?: $this->table;
-
-        return \DB::table($tableName);
+        $session = [
+            'admin_role_id' => $user->id_cms_privileges,
+            'admin_lock' => 0,
+        ];
+        session($session);
+        CRUDBooster::refreshSessionRoles();
     }
 
     /**
@@ -82,22 +83,10 @@ class LoginController extends Controller
         CRUDBooster::insertLog(trans('crudbooster_logging.log_login', ['email' => $users->email, 'ip' => request()->server('REMOTE_ADDR')]));
     }
 
-    /**
-     * @param $user
-     * @param $priv
-     * @param $photo
-     * @param $roles
-     */
-    private function setSession($user)
+    public function table($tableName = null)
     {
-        $session = [
-            'admin_id' => $user->id,
-            'admin_name' => $user->name,
-            'admin_photo' => $user->photo,
-            'admin_role_id' => $user->id_cms_privileges,
-            'admin_lock' => 0,
-        ];
-        session($session);
-        CRUDBooster::refreshSessionRoles();
+        $tableName = $tableName ?: $this->table;
+
+        return \DB::table($tableName);
     }
 }

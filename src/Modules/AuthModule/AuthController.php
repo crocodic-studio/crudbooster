@@ -39,7 +39,7 @@ class AuthController extends Controller
 
     public function getLockscreen()
     {
-        if (! CRUDBooster::myId()) {
+        if (! auth('cbAdmin')->id()) {
             Session::flush();
             return redirect()->route('getLogin')->with('message', cbTrans('alert_session_expired'));
         }
@@ -50,7 +50,7 @@ class AuthController extends Controller
 
     public function postUnlockScreen()
     {
-        $user = $this->usersRepo->find(CRUDBooster::myId());
+        $user = (auth()->user());
 
         if (\Hash::check(request('password'), $user->password)) {
             Session::put('admin_lock', 0);
@@ -62,7 +62,7 @@ class AuthController extends Controller
 
     public function getLogin()
     {
-        if (CRUDBooster::myId()) {
+        if (auth('cbAdmin')->id()) {
             return redirect(cbAdminPath());
         }
 
@@ -71,7 +71,7 @@ class AuthController extends Controller
 
     public function getForgot()
     {
-        if (CRUDBooster::myId()) {
+        if (auth('cbAdmin')->id()) {
             return redirect()->route('CbDashboard');
         }
 
@@ -97,7 +97,7 @@ class AuthController extends Controller
 
     public function getLogout()
     {
-        CRUDBooster::insertLog(trans('crudbooster_logging.log_logout', ['email' => CRUDBooster::me()->email]));
+        CRUDBooster::insertLog(trans('crudbooster_logging.log_logout', ['email' => auth('cbAdmin')->user()->email]));
         Session::flush();
 
         return redirect()->route('getLogin')->with('message', cbTrans('message_after_logout'));

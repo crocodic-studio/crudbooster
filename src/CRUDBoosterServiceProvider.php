@@ -1,6 +1,7 @@
 <?php
 namespace crocodicstudio\crudbooster;
 
+use crocodicstudio\crudbooster\CBCoreModule\CbUser;
 use crocodicstudio\crudbooster\CBCoreModule\Facades\CbRouter;
 use crocodicstudio\crudbooster\Modules\ApiGeneratorModule\CbApiGeneratorServiceProvider;
 use crocodicstudio\crudbooster\Modules\AuthModule\CbAuthServiceProvider;
@@ -62,6 +63,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
             $this->publishes([__DIR__.'/userfiles/controllers/AdminUsersController.php' => app_path('Http/Controllers/AdminUsersController.php')], 'cb_user_controller');
         }
 
+
         $this->defineValidationRules();
         $this->loadRoutesFrom( __DIR__.'/routes.php');
     }
@@ -84,6 +86,8 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         ]);
 
         $this->registerCrudboosterCommand();
+
+        $this->defineAuthGuard();
 
         $this->commands('crudboosterinstall');
         //$this->commands('crudboosterupdate');
@@ -131,5 +135,11 @@ class CRUDBoosterServiceProvider extends ServiceProvider
             // If you want to accept hyphens use: /^[\pL\s-]+$/u.
             return preg_match('/^[\pL\s]+$/u', $value);
         }, 'The :attribute should be letters only');
+    }
+
+    private function defineAuthGuard()
+    {
+        config()->offsetSet('auth.providers.cb_users', ['driver' => 'eloquent', 'model' => CbUser::class,]);
+        config()->offsetSet('auth.guards.cbAdmin', ['driver' => 'session', 'provider' => 'cb_users']);
     }
 }

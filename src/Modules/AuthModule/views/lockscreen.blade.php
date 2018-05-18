@@ -43,7 +43,7 @@
         </a>
     </div>
     <!-- User name -->
-    <div class="lockscreen-name">{{session('admin_name')}}</div>
+    <div class="lockscreen-name">{{ auth('cbAdmin')->user()->name }}</div>
 
     <!-- START LOCK SCREEN ITEM -->
     <div class="lockscreen-item">

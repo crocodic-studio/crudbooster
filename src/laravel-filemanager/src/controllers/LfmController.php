@@ -123,7 +123,7 @@ class LfmController extends Controller {
 
     public function getUserSlug()
     {
-        return empty(CRUDBooster::myId()) ? '' : CRUDBooster::myId();
+        return auth()->id() ?: '';
     }
 
 

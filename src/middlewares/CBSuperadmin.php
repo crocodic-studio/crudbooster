@@ -18,7 +18,7 @@ class CBSuperadmin
     {   
         $adminPath = cbConfig('ADMIN_PATH', 'admin');
 
-        if(CRUDBooster::myId()==''){
+        if(!auth('cbAdmin')->id()){
             $url = url($adminPath.'/login');
             return redirect($url)->with('message', cbTrans('not_logged_in'));
         }

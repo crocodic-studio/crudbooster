@@ -2,17 +2,17 @@
     <!-- Menu Toggle Button -->
     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
         <!-- The user image in the navbar-->
-        <img src="{{ CRUDBooster::myPhoto() }}" class="user-image" alt="User Image"/>
+        <img src="{{ auth('cbAdmin')->user()->myPhoto() }}" class="user-image" alt="User Image"/>
         <!-- hidden-xs hides the username on small devices so only the image appears. -->
-        <span class="hidden-xs">{{ CRUDBooster::myName() }}</span>
+        <span class="hidden-xs">{{ auth('cbAdmin')->user()->name }}</span>
     </a>
     <ul class="dropdown-menu">
         <!-- The user image in the menu -->
         <li class="user-header">
-            <img src="{{ CRUDBooster::myPhoto() }}" class="img-circle" alt="User Image"/>
+            <img src="{{ auth('cbAdmin')->user()->myPhoto() }}" class="img-circle" alt="User Image"/>
             <p>
-                {{ CRUDBooster::myName() }}
-                <small>{{ CRUDBooster::myPrivilegeName() }}</small>
+                {{ auth('cbAdmin')->user()->name }}
+                <small>{{ auth('cbAdmin')->user()->role()->name }}</small>
                 <small><em>{!! date('d F Y') !!} </em></small>
             </p>
         </li>

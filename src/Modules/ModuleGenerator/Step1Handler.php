@@ -88,7 +88,7 @@ class Step1Handler
             'path' => $controller.'GetIndex',
             'type' => 'Route',
             'is_active' => 1,
-            'cms_privileges' => CRUDBooster::myPrivilegeId(),
+            'cms_privileges' => auth('cbAdmin')->user()->id_cms_privileges,
             'sorting' => DB::table('cms_menus')->where('parent_id', 0)->max('sorting') + 1,
             'parent_id' => 0,
         ]);
@@ -118,7 +118,7 @@ class Step1Handler
     {
         DB::table('cms_privileges_roles')->insert([
             'id_cms_moduls' => $id,
-            'id_cms_privileges' => CRUDBooster::myPrivilegeId(),
+            'id_cms_privileges' => auth('cbAdmin')->user()->id_cms_privileges,
             'is_visible' => 1,
             'is_create' => 1,
             'is_read' => 1,

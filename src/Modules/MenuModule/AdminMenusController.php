@@ -56,7 +56,7 @@ class AdminMenusController extends CBController
         if ($postData['is_dashboard'] == 1) {
             //If set dashboard, so unset for first all dashboard
             $this->table()->where('is_dashboard', 1)->update(['is_dashboard' => 0]);
-            Cache::forget('sidebarDashboard'.CRUDBooster::myPrivilegeId());
+            Cache::forget('sidebarDashboard'.auth('cbAdmin')->user()->id_cms_privileges);
         }
         return $postData;
     }
@@ -66,7 +66,7 @@ class AdminMenusController extends CBController
         if ($postData['is_dashboard'] == 1) {
             //If set dashboard, so unset for first all dashboard
             $this->table()->where('is_dashboard', 1)->update(['is_dashboard' => 0]);
-            Cache::forget('sidebarDashboard'.CRUDBooster::myPrivilegeId());
+            Cache::forget('sidebarDashboard'.auth('cbAdmin')->user()->id_cms_privileges);
         }
 
         $postData['path'] = $this->getMenuPath($postData);

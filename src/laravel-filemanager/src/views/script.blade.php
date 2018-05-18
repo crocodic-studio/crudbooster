@@ -1,6 +1,6 @@
 <script>
 var ds            = '/';
-var home_dir      = ds + "{{ (Config::get('lfm.allow_multi_user')) ? CRUDBooster::myId() : '' }}";
+var home_dir      = ds + "{{ (Config::get('lfm.allow_multi_user')) ? auth('cbAdmin')->id() : '' }}";
 var shared_folder = ds + "{{ Config::get('lfm.shared_folder_name') }}";
 var image_url     = "{{ asset(Config::get('lfm.images_url')) }}";
 var file_url      = "{{ asset(Config::get('lfm.files_url')) }}";

@@ -140,7 +140,7 @@ class CRUDBooster
 
     public static function insertLog($description)
     {
-        LogsRepository::insertLog('crudbooster: '.$description, self::myId());
+        LogsRepository::insertLog('crudbooster: '.$description, auth('cbAdmin')->id());
     }
 
     public static function listCbTables()

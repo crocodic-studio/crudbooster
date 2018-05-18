@@ -12,7 +12,7 @@ class NotificationRepo
         $content = $config['content'];
         $to = $config['to'];
         $id_cms_users = $config['id_cms_users'];
-        $id_cms_users = ($id_cms_users) ?: [CRUDBooster::myId()];
+        $id_cms_users = ($id_cms_users) ?: [auth('cbAdmin')->id()];
         foreach ($id_cms_users as $id) {
             $notif = [
                 'created_at' => YmdHis(),

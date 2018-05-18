@@ -4,14 +4,36 @@ namespace crocodicstudio\crudbooster\Modules\PrivilegeModule;
 
 trait PrivilegeHelpers
 {
-    public static function isSuperadmin()
-    {
-        return self::findUserRole()->is_superadmin;
-    }
-
     public static function canView()
     {
         return self::canDo('is_visible');
+    }
+
+    private static function canDo($verb)
+    {
+        if (self::isSuperadmin()) {
+            return true;
+        }
+
+        foreach (session('admin_privileges_roles') as $role) {
+            if ($role->path == self::getModulePath()) {
+                return (bool) $role->{$verb};
+            }
+        }
+
+        return false;
+    }
+
+    public static function isSuperadmin()
+    {
+        return auth('cbAdmin')->user()->role()->is_superadmin;
+    }
+
+    private static function getModulePath()
+    {
+        $adminPathSegments = count(explode('/', cbConfig('ADMIN_PATH')));
+
+        return Request::segment(1 + $adminPathSegments);
     }
 
     public static function canUpdate()
@@ -53,25 +75,6 @@ trait PrivilegeHelpers
         }
     }
 
-    private static function canDo($verb)
-    {
-        if (self::isSuperadmin()) {
-            return true;
-        }
-
-        foreach (session('admin_privileges_roles') as $role) {
-            if ($role->path == self::getModulePath()) {
-                return (bool) $role->{$verb};
-            }
-        }
-        return false;
-    }
-
-    public static function myPrivilegeId()
-    {
-        return session('admin_role_id');
-    }
-
     public static function myPrivilege()
     {
         $roles = session('admin_privileges_roles');
@@ -85,20 +88,9 @@ trait PrivilegeHelpers
         }
     }
 
-    private static function getModulePath()
-    {
-        $adminPathSegments = count(explode('/',cbConfig('ADMIN_PATH')));
-        return Request::segment(1 + $adminPathSegments);
-    }
-
-    public static function myPrivilegeName()
-    {
-        return self::findUserRole()->name;
-    }
-
     public static function themeColor()
     {
-        return self::findUserRole()->theme_color ?: 'skin-blue';
+        return auth('cbAdmin')->user()->role()->theme_color ?: 'skin-blue';
     }
 
     public static function denyAccess()
@@ -106,18 +98,9 @@ trait PrivilegeHelpers
         static::redirect(static::adminPath(), cbTrans('denied_access'));
     }
 
-    /**
-     * @param $roleId
-     * @return mixed
-     */
-    private static function findUserRole()
-    {
-        return \DB::table('cms_privileges')->where('id', self::myPrivilegeId())->first();
-    }
-
     public static function refreshSessionRoles()
     {
-        $roles = \DB::table('cms_privileges_roles')->where('id_cms_privileges', self::myPrivilegeId())->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')->get();
+        $roles = \DB::table('cms_privileges_roles')->where('id_cms_privileges', auth('cbAdmin')->user()->id_cms_privileges)->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')->get();
         session()->put('admin_privileges_roles', $roles);
     }
 }

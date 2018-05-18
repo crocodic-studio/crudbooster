@@ -181,7 +181,7 @@ class AdminModulesController extends CBController
 
         $id_modul = $this->arr['id'];
 
-        $user_id_privileges = CRUDBooster::myPrivilegeId();
+        $user_id_privileges = auth('cbAdmin')->user()->id_cms_privileges;
         DB::table('cms_privileges_roles')->insert([
             'id_cms_moduls' => $id_modul,
             'id_cms_privileges' => $user_id_privileges,
@@ -215,7 +215,7 @@ class AdminModulesController extends CBController
             'path' => '#',
             'type' => 'URL External',
             'is_active' => 1,
-            'cms_privileges' => CRUDBooster::myPrivilegeId(),
+            'cms_privileges' => auth('cbAdmin')->user()->id_cms_privileges,
             'sorting' => $parent_menu_sort,
             'parent_id' => 0,
         ]);
@@ -224,7 +224,7 @@ class AdminModulesController extends CBController
             'created_at' => YmdHis(),
             'type' => 'Route',
             'is_active' => 1,
-            'cms_privileges' => CRUDBooster::myPrivilegeId(),
+            'cms_privileges' => auth('cbAdmin')->user()->id_cms_privileges,
             'parent_id' => $parent_menu_id,
         ];
 
@@ -239,7 +239,7 @@ class AdminModulesController extends CBController
                 'name' => cbTrans('text_default_list_module', ['module' => $this->arr['name']]),
                 'icon' => 'fa fa-bars',
                 'path' => $this->arr['controller'].'GetIndex',
-                'cms_privileges' => CRUDBooster::myPrivilegeId(),
+                'cms_privileges' => auth('cbAdmin')->user()->id_cms_privileges,
                 'sorting' => 2,
             ] + $arr);
     }
