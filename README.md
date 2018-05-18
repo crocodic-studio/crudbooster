@@ -113,6 +113,10 @@ If there is no interaction for a long period of time, it will be assumed that it
 CRUDBooster is under [MIT License](https://opensource.org/licenses/MIT)
 
 
+### :star: Your Stars Make Us Do More :star:
+As always if you found this package useful and you want to encourage us to maintain and work on it. Just press the star button to declare your willing.
+
+
 ### More from the authors:
 
 
