@@ -21,27 +21,6 @@ class CRUDBooster
 {
     use PrivilegeHelpers, GetCurrentX, Helpers;
 
-    public static function get($table, $string_conditions = null, $orderby = null, $limit = null, $skip = null)
-    {
-        $table = self::parseSqlTable($table);
-        $table = $table['table'];
-        $query = DB::table($table);
-        if ($string_conditions) {
-            $query->whereraw($string_conditions);
-        }
-        if ($orderby) {
-            $query->orderbyraw($orderby);
-        }
-        if ($limit) {
-            $query->take($limit);
-        }
-        if ($skip) {
-            $query->skip($skip);
-        }
-
-        return $query->get();
-    }
-
     public static function parseSqlTable($table)
     {
         $f = explode('.', $table);

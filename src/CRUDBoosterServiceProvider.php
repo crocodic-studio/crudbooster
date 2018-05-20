@@ -55,10 +55,6 @@ class CRUDBoosterServiceProvider extends ServiceProvider
             __DIR__.'/userfiles/views/vendor/crudbooster/type_components/readme.txt' => resource_path('views/vendor/crudbooster/type_components/readme.txt'),
         ], 'cb_type_components');
 
-        if (! file_exists(app_path('Http/Controllers/CBHook.php'))) {
-            $this->publishes([__DIR__.'/userfiles/controllers/CBHook.php' => app_path('Http/Controllers/CBHook.php')], 'CBHook');
-        }
-
         if (! file_exists(app_path('Http/Controllers/AdminUsersController.php'))) {
             $this->publishes([__DIR__.'/userfiles/controllers/AdminUsersController.php' => app_path('Http/Controllers/AdminUsersController.php')], 'cb_user_controller');
         }

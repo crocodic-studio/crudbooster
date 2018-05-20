@@ -2,10 +2,13 @@
 if ($col['datatable']) {
     $tableJoin = explode(',', $col['datatable'])[0];
     $titleField = explode(',', $col['datatable'])[1];
+    $table = self::parseSqlTable($tableJoin);
+    $query = \DB::table($table['table']);
+
     if (! $col['datatable_where']) {
-        $data = CRUDBooster::get($tableJoin, NULL, "$titleField ASC");
+        $data = $query->orderByRaw("$titleField ASC");
     } else {
-        $data = CRUDBooster::get($tableJoin, $col['datatable_where'], "$titleField ASC");
+        $data = $query->whereRaw($col['datatable_where'])->orderByRaw("$titleField ASC");
     }
     foreach ($data as $i => $d) {
         $options[$i]['value'] = $d->id;
