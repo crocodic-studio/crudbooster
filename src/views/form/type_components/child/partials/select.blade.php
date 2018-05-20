@@ -5,11 +5,10 @@ if ($col['datatable']) {
     $table = self::parseSqlTable($tableJoin);
     $query = \DB::table($table['table']);
 
-    if (! $col['datatable_where']) {
-        $data = $query->orderByRaw("$titleField ASC");
-    } else {
-        $data = $query->whereRaw($col['datatable_where'])->orderByRaw("$titleField ASC");
+    if ($col['datatable_where']) {
+        $data = $query->whereRaw($col['datatable_where']);
     }
+    $data = $data->orderByRaw("$titleField ASC");
     foreach ($data as $i => $d) {
         $options[$i]['value'] = $d->id;
         $options[$i]['label'] = $d->$titleField;
