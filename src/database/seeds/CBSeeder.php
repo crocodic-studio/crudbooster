@@ -11,11 +11,11 @@ class CBSeeder extends Seeder
      */
     public function run()
     {
-        $this->command->info('Please wait updating the data...');
+
         $this->call('PrivilegeSeeder');
         $this->call('SettingsSeeder');
         $this->call('EmailTemplates');
-        $this->command->info('Updating the data completed !');
+
     }
 }
 

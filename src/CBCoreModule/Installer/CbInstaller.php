@@ -75,11 +75,13 @@ class CbInstaller
     {
         $this->console->info('Checking public/vendor/crudbooster symlink...');
 
-        $vendorPath = public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster');
         $ds = DIRECTORY_SEPARATOR;
+        $vendorPath = public_path('vendor'.$ds.'crudbooster');
+        $assetPath = base_path('vendor'.$ds.'crocodicstudio'.$ds.'crudbooster'.$ds.'src'.$ds.'assets');
+
         if (! file_exists($vendorPath)) {
             $this->console->info('Creating public/vendor/crudbooster symlink...');
-            app('files')->link(base_path('vendor'.$ds.'crocodicstudio'.$ds.'crudbooster'.$ds.'src'.$ds.'assets'), public_path('vendor/crudbooster'));
+            app('files')->link($assetPath, public_path('vendor/crudbooster'));
 
             return;
         }
@@ -89,26 +91,16 @@ class CbInstaller
         if (realpath($vendorPath) == $vendorPath) {
             $this->console->info('Removing public/vendor/crudbooster dir, instead of creating a symlink...');
             $this->rrmdir($vendorPath);
-            app('files')->link(base_path('vendor'.$ds.'crocodicstudio'.$ds.'crudbooster'.$ds.'src'.$ds.'assets'), $vendorPath);
+            app('files')->link($assetPath, $vendorPath);
         }
     }
 
     public function installCrudbooster()
     {
         $this->publishFiles();
-
-        $this->console->info('Dumping the autoloaded files and reloading all new files...');
-        $composer = $this->findComposer();
-        $process = new Process($composer.' dumpautoload');
-        $process->setWorkingDirectory(base_path())->run();
-
+        $this->composerDumpAutoload();
         $this->migrateDatabase();
-
-        if (! class_exists('CBSeeder')) {
-            $ds = DIRECTORY_SEPARATOR;
-            require_once base_path('vendor'.$ds.'crocodicstudio'.$ds.'crudbooster'.$ds.'src'.$ds.'database'.$ds.'seeds'.$ds.'CBSeeder.php');
-        }
-        $this->console->callSilent('db:seed', ['--class' => 'CBSeeder']);
+        $this->seedDatabase();
         $this->console->call('config:clear');
         if (app()->version() < 5.6) {
             $this->console->call('optimize');
@@ -128,7 +120,7 @@ class CbInstaller
      *
      * @return string
      */
-    protected function findComposer()
+    private function findComposer()
     {
         if (file_exists(getcwd().'/composer.phar')) {
             return '"'.PHP_BINARY.'" '.getcwd().'/composer.phar';
@@ -151,5 +143,24 @@ class CbInstaller
         $this->console->info('Migrating database...');
         $this->console->call('migrate', ['--path' => '\database\migrations\crudbooster']);
         $this->console->call('migrate');
+    }
+
+    private function seedDatabase()
+    {
+        //if (! class_exists('CBSeeder')) {
+        //    $ds = DIRECTORY_SEPARATOR;
+        //    require_once base_path('vendor'.$ds.'crocodicstudio'.$ds.'crudbooster'.$ds.'src'.$ds.'database'.$ds.'seeds'.$ds.'CBSeeder.php');
+        //}
+        $this->console->info('Please wait updating the data...');
+        $this->console->callSilent('db:seed', ['--class' => 'CBSeeder']);
+        $this->command->info('Updating the data completed !');
+    }
+
+    private function composerDumpAutoload()
+    {
+        $this->console->info('Dumping the autoloaded files and reloading all new files...');
+        $composer = $this->findComposer();
+        $process = new Process($composer.' dumpautoload');
+        $process->setWorkingDirectory(base_path())->run();
     }
 }
