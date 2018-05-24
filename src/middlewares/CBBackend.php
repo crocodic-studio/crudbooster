@@ -22,7 +22,7 @@ class CBBackend
     {
         $adminPath = cbConfig('ADMIN_PATH', 'admin');
 
-        if (!auth('cbAdmin')->id()) {
+        if (auth('cbAdmin')->guest()) {
             return redirect(url($adminPath.'/login'))->with('message', cbTrans('not_logged_in'));
         }
 
