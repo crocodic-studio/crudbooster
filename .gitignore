@@ -9,3 +9,4 @@ Homestead.yaml
 /220167236106441921631927013956130477515463548.ico
 *.php_cs.cache
 /composer.lock
+.phpstorm.meta.php
