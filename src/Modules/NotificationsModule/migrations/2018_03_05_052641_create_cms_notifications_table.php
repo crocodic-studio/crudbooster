@@ -18,7 +18,7 @@ class CreateCmsNotificationsTable extends Migration {
 			$table->integer('id_cms_users')->nullable();
 			$table->string('content')->nullable();
 			$table->string('url')->nullable();
-			$table->boolean('is_read')->nullable();
+			$table->boolean('can_read')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 		});

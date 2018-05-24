@@ -14,6 +14,7 @@ class CbNotificationsServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadRoutesFrom( __DIR__.'/notifications_routes.php');
+        $this->loadMigrationsFrom(__DIR__ . '/migrations');
     }
 
     /**

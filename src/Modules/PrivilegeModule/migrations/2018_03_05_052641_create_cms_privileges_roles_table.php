@@ -17,7 +17,7 @@ class CreateCmsPrivilegesRolesTable extends Migration {
 			$table->increments('id');
 			$table->boolean('is_visible')->nullable();
 			$table->boolean('is_create')->nullable();
-			$table->boolean('is_read')->nullable();
+			$table->boolean('can_read')->nullable();
 			$table->boolean('is_edit')->nullable();
 			$table->boolean('is_delete')->nullable();
 			$table->integer('id_cms_privileges')->nullable();

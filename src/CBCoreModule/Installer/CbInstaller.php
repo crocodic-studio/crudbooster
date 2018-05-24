@@ -102,12 +102,11 @@ class CbInstaller
         $process = new Process($composer.' dumpautoload');
         $process->setWorkingDirectory(base_path())->run();
 
-        $this->console->info('Migrating database...');
-        $this->console->call('migrate', ['--path' => '\database\migrations\crudbooster']);
+        $this->migrateDatabase();
 
         if (! class_exists('CBSeeder')) {
             $ds = DIRECTORY_SEPARATOR;
-            base_path('vendor'.$ds.'crocodicstudio'.$ds.'crudbooster'.$ds.'src'.$ds.'database'.$ds.'seeds'.$ds.'CBSeeder.php');
+            require_once base_path('vendor'.$ds.'crocodicstudio'.$ds.'crudbooster'.$ds.'src'.$ds.'database'.$ds.'seeds'.$ds.'CBSeeder.php');
         }
         $this->console->callSilent('db:seed', ['--class' => 'CBSeeder']);
         $this->console->call('config:clear');
@@ -145,5 +144,12 @@ class CbInstaller
         $this->console->callSilent('vendor:publish', ['--tag' => 'cb_migration', '--force' => true]);
         $this->console->callSilent('vendor:publish', ['--tag' => 'cb_lfm', '--force' => true]);
         $this->console->callSilent('vendor:publish', ['--tag' => 'cb_localization', '--force' => true]);
+    }
+
+    private function migrateDatabase()
+    {
+        $this->console->info('Migrating database...');
+        $this->console->call('migrate', ['--path' => '\database\migrations\crudbooster']);
+        $this->console->call('migrate');
     }
 }
