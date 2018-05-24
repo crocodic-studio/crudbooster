@@ -121,7 +121,7 @@ class Step1Handler
             'id_cms_privileges' => auth('cbAdmin')->user()->id_cms_privileges,
             'is_visible' => 1,
             'is_create' => 1,
-            'is_read' => 1,
+            'can_read' => 1,
             'is_edit' => 1,
             'is_delete' => 1,
         ]);

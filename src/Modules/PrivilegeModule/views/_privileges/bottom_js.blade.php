@@ -12,9 +12,9 @@
             $(".is_create").prop("checked", is_ch);
             console.log('Create all');
         })
-        $("#is_read").click(function () {
+        $("#can_read").click(function () {
             var is_ch = $(this).is(':checked');
-            $(".is_read").prop("checked", is_ch);
+            $(".can_read").prop("checked", is_ch);
         })
         $("#is_edit").click(function () {
             var is_ch = $(this).is(':checked');
