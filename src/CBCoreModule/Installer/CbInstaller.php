@@ -102,11 +102,7 @@ class CbInstaller
 
     public function installCrudbooster()
     {
-        $this->console->info('Publishing CRUDBooster needs file...');
-        $this->console->callSilent('vendor:publish', ['--provider' => 'crocodicstudio\\crudbooster\\CRUDBoosterServiceProvider', '--force' => true]);
-        $this->console->callSilent('vendor:publish', ['--tag' => 'cb_migration', '--force' => true]);
-        $this->console->callSilent('vendor:publish', ['--tag' => 'cb_lfm', '--force' => true]);
-        $this->console->callSilent('vendor:publish', ['--tag' => 'cb_localization', '--force' => true]);
+        $this->publishFiles();
 
         $this->console->info('Dumping the autoloaded files and reloading all new files...');
         $composer = $this->findComposer();
@@ -147,5 +143,14 @@ class CbInstaller
         }
 
         return 'composer';
+    }
+
+    private function publishFiles()
+    {
+        $this->console->info('Publishing CRUDBooster needs file...');
+        $this->console->callSilent('vendor:publish', ['--provider' => 'crocodicstudio\\crudbooster\\CRUDBoosterServiceProvider', '--force' => true]);
+        $this->console->callSilent('vendor:publish', ['--tag' => 'cb_migration', '--force' => true]);
+        $this->console->callSilent('vendor:publish', ['--tag' => 'cb_lfm', '--force' => true]);
+        $this->console->callSilent('vendor:publish', ['--tag' => 'cb_localization', '--force' => true]);
     }
 }
