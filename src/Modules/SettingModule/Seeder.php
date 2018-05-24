@@ -3,8 +3,9 @@
 namespace crocodicstudio\crudbooster\Modules\SettingModule;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Seeder as BaseSeeder;
 
-class Seeder
+class Seeder extends BaseSeeder
 {
     public static function run()
     {

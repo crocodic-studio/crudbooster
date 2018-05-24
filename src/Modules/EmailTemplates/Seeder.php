@@ -4,7 +4,9 @@ namespace crocodicstudio\crudbooster\Modules\EmailTemplates;
 
 use Illuminate\Support\Facades\DB;
 
-class Seeder
+use Illuminate\Database\Seeder as BaseSeeder;
+
+class Seeder extends BaseSeeder
 {
     public static function run()
     {

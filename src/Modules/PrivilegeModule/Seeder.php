@@ -4,8 +4,9 @@ namespace crocodicstudio\crudbooster\Modules\PrivilegeModule;
 
 use crocodicstudio\crudbooster\CBCoreModule\CbUsersRepo;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Seeder as BaseSeeder;
 
-class Seeder
+class Seeder extends BaseSeeder
 {
     public static function run()
     {

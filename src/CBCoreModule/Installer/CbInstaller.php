@@ -147,13 +147,10 @@ class CbInstaller
 
     private function seedDatabase()
     {
-        //if (! class_exists('CBSeeder')) {
-        //    $ds = DIRECTORY_SEPARATOR;
-        //    require_once base_path('vendor'.$ds.'crocodicstudio'.$ds.'crudbooster'.$ds.'src'.$ds.'database'.$ds.'seeds'.$ds.'CBSeeder.php');
-        //}
-        $this->console->info('Please wait updating the data...');
-        $this->console->callSilent('db:seed', ['--class' => 'CBSeeder']);
-        $this->command->info('Updating the data completed !');
+        $this->console->callSilent('db:seed', ['--class' => '\crocodicstudio\crudbooster\Modules\EmailTemplates\Seeder']);
+        $this->console->callSilent('db:seed', ['--class' => '\crocodicstudio\crudbooster\Modules\SettingModule\Seeder']);
+        $this->console->callSilent('db:seed', ['--class' => '\crocodicstudio\crudbooster\Modules\PrivilegeModule\Seeder']);
+        $this->console->info('Database Seeding completed !');
     }
 
     private function composerDumpAutoload()
