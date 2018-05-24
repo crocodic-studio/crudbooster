@@ -15,7 +15,7 @@ trait PrivilegeHelpers
             return true;
         }
 
-        foreach (session('admin_privileges_roles') as $role) {
+        foreach (self::getPrivileges() as $role) {
             if ($role->path == self::getModulePath()) {
                 return (bool) $role->{$verb};
             }
@@ -62,12 +62,11 @@ trait PrivilegeHelpers
             return true;
         }
 
-        $session = session('admin_privileges_roles');
-        foreach ($session as $v) {
-            if ($v->path !== self::getModulePath()) {
+        foreach (self::getPrivileges() as $role) {
+            if ($role->path !== self::getModulePath()) {
                 continue;
             }
-            if ($v->is_visible && $v->is_create && $v->is_read && $v->is_edit && $v->is_delete) {
+            if ($role->is_visible && $role->is_create && $role->is_read && $role->is_edit && $role->is_delete) {
                 return true;
             }
 
@@ -77,10 +76,8 @@ trait PrivilegeHelpers
 
     public static function myPrivilege()
     {
-        $roles = session('admin_privileges_roles');
-        if (! $roles) {
-            return;
-        }
+        $roles = self::getPrivileges();
+
         foreach ($roles as $role) {
             if ($role->path == self::getModulePath()) {
                 return $role;
@@ -100,7 +97,15 @@ trait PrivilegeHelpers
 
     public static function refreshSessionRoles()
     {
-        $roles = \DB::table('cms_privileges_roles')->where('id_cms_privileges', auth('cbAdmin')->user()->id_cms_privileges)->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')->get();
-        session()->put('admin_privileges_roles', $roles);
+        return cache()->forget('cb_admin_privileges_roles');
+    }
+
+    public static function getPrivileges()
+    {
+        $uid = auth('cbAdmin')->user()->id_cms_privileges;
+
+        return cache()->rememberForever('cb_admin_privileges_roles', function () use ($uid) {
+            return \DB::table('cms_privileges_roles')->where('id_cms_privileges', $uid)->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')->get() ?: [];
+        });
     }
 }

@@ -25,18 +25,17 @@ class LoginController extends Controller
 
     public function postLogin()
     {
-        $cred = request()->only(['email', 'password']);
-        $this->validateLogin($cred);
+        $credentials = request()->only(['email', 'password']);
+        $this->validateLogin($credentials);
 
         $user = $this->usersRepo->findByMail(request("email"));
 
-        if (! auth('cbAdmin')->attempt($cred)) {
+        if (! auth('cbAdmin')->attempt($credentials)) {
             $resp = redirect()->route('getLogin')->with('message', cbTrans('alert_password_wrong'));
             sendAndTerminate($resp);
         }
 
-        $this->setSession($user);
-
+        CRUDBooster::refreshSessionRoles();
         $this->LogIt($user);
 
         return redirect(CRUDBooster::adminPath());
@@ -54,22 +53,6 @@ class LoginController extends Controller
 
             backWithMsg(implode(', ', $message), 'danger');
         }
-    }
-
-    /**
-     * @param $user
-     * @param $priv
-     * @param $photo
-     * @param $roles
-     */
-    private function setSession($user)
-    {
-        $session = [
-            'admin_role_id' => $user->id_cms_privileges,
-            'admin_lock' => 0,
-        ];
-        session($session);
-        CRUDBooster::refreshSessionRoles();
     }
 
     /**

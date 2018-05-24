@@ -123,7 +123,7 @@ class LfmController extends Controller {
 
     public function getUserSlug()
     {
-        return auth()->id() ?: '';
+        return auth('cbAdmin')->id() ?: '';
     }
 
 

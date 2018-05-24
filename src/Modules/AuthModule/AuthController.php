@@ -50,7 +50,7 @@ class AuthController extends Controller
 
     public function postUnlockScreen()
     {
-        $user = (auth()->user());
+        $user = (auth('cbAdmin')->user());
 
         if (\Hash::check(request('password'), $user->password)) {
             Session::put('admin_lock', 0);
