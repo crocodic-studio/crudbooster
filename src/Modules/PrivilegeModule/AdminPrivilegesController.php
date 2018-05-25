@@ -41,10 +41,10 @@ class AdminPrivilegesController extends CBController
             ->where('is_protected', 0)
             ->select('cms_moduls.*',
                 DB::raw("(select is_visible from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id') as is_visible"),
-                DB::raw("(select is_create  from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id') as is_create"),
+                DB::raw("(select can_create  from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id') as can_create"),
                 DB::raw("(select can_read    from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id') as can_read"),
-                DB::raw("(select is_edit    from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id') as is_edit"),
-                DB::raw("(select is_delete  from cms_privileges_roles where id_cms_moduls  = cms_moduls.id and id_cms_privileges = '$id') as is_delete"))
+                DB::raw("(select can_edit    from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id') as can_edit"),
+                DB::raw("(select can_delete  from cms_privileges_roles where id_cms_moduls  = cms_moduls.id and id_cms_privileges = '$id') as can_delete"))
             ->orderby('name', 'asc')
             ->get();
 
@@ -64,7 +64,7 @@ class AdminPrivilegesController extends CBController
         $this->setTheme();
 
         foreach (Request::input('privileges', []) as $moduleId => $data) {
-            $arrs = array_get_keys($data, ['is_visible', 'is_create', 'can_read', 'is_edit', 'is_delete'], 0);
+            $arrs = array_get_keys($data, ['is_visible', 'can_create', 'can_read', 'can_edit', 'can_delete'], 0);
             $arrs['id_cms_privileges'] = $id;
             $arrs['id_cms_moduls'] = $moduleId;
             $this->table('cms_privileges_roles')->insert($arrs);
@@ -99,7 +99,7 @@ class AdminPrivilegesController extends CBController
         foreach (Request::input('privileges', []) as $moduleId => $data) {
             //Check Menu
 
-            $arrs = array_get_keys($data, ['is_visible', 'is_create', 'can_read', 'is_edit', 'is_delete',], 0);
+            $arrs = array_get_keys($data, ['is_visible', 'can_create', 'can_read', 'can_edit', 'can_delete',], 0);
             $this->savePermissions($id, $moduleId, $arrs);
         }
 

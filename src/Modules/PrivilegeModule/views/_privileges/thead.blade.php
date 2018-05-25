@@ -13,9 +13,9 @@
     <th>&nbsp;</th>
     <th>&nbsp;</th>
     <td align="center"><input title='Check all vertical' type='checkbox' id='is_visible'/></td>
-    <td align="center"><input title='Check all vertical' type='checkbox' id='is_create'/></td>
+    <td align="center"><input title='Check all vertical' type='checkbox' id='can_create'/></td>
     <td align="center"><input title='Check all vertical' type='checkbox' id='can_read'/></td>
-    <td align="center"><input title='Check all vertical' type='checkbox' id='is_edit'/></td>
-    <td align="center"><input title='Check all vertical' type='checkbox' id='is_delete'/></td>
+    <td align="center"><input title='Check all vertical' type='checkbox' id='can_edit'/></td>
+    <td align="center"><input title='Check all vertical' type='checkbox' id='can_delete'/></td>
 </tr>
                             

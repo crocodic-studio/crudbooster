@@ -186,10 +186,10 @@ class AdminModulesController extends CBController
             'id_cms_moduls' => $id_modul,
             'id_cms_privileges' => $user_id_privileges,
             'is_visible' => 1,
-            'is_create' => 1,
+            'can_create' => 1,
             'can_read' => 1,
-            'is_edit' => 1,
-            'is_delete' => 1,
+            'can_edit' => 1,
+            'can_delete' => 1,
         ]);
 
         //Refresh Session Roles

@@ -38,12 +38,12 @@ trait PrivilegeHelpers
 
     public static function canUpdate()
     {
-        return self::canDo('is_edit');
+        return self::canDo('can_edit');
     }
 
     public static function canCreate()
     {
-        return self::canDo('is_create');
+        return self::canDo('can_create');
     }
 
     public static function canRead()
@@ -53,7 +53,7 @@ trait PrivilegeHelpers
 
     public static function canDelete()
     {
-        return self::canDo('is_delete');
+        return self::canDo('can_delete');
     }
 
     public static function canCRUD()
@@ -66,7 +66,7 @@ trait PrivilegeHelpers
             if ($role->path !== self::getModulePath()) {
                 continue;
             }
-            if ($role->is_visible && $role->is_create && $role->can_read && $role->is_edit && $role->is_delete) {
+            if ($role->is_visible && $role->can_create && $role->can_read && $role->can_edit && $role->can_delete) {
                 return true;
             }
 
@@ -105,7 +105,7 @@ trait PrivilegeHelpers
         $uid = auth('cbAdmin')->user()->id_cms_privileges;
 
         return cache()->rememberForever('cb_admin_privileges_roles', function () use ($uid) {
-            return \DB::table('cms_privileges_roles')->where('id_cms_privileges', $uid)->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'can_read', 'is_edit', 'is_delete')->get() ?: [];
+            return \DB::table('cms_privileges_roles')->where('id_cms_privileges', $uid)->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'can_create', 'can_read', 'can_edit', 'can_delete')->get() ?: [];
         });
     }
 }
