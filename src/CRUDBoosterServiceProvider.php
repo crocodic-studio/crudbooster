@@ -77,10 +77,6 @@ class CRUDBoosterServiceProvider extends ServiceProvider
             return true;
         });
 
-        $this->commands([
-            commands\Mailqueues::class,
-        ]);
-
         $this->registerCrudboosterCommand();
 
         $this->defineAuthGuard();
