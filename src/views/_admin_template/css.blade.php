@@ -12,7 +12,7 @@
     <link href="{{ cbAsset("rtl.css")}}" rel="stylesheet" type="text/css"/>
 @endif
 
-<link rel='stylesheet' href='{{cbAsset("css/main.css").'?r='.time()}}'/>
+<link rel='stylesheet' href='{{cbAsset("css/main.css")}}'/>
 
 <!-- load css -->
 <style type="text/css">
