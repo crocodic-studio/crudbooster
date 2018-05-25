@@ -140,17 +140,17 @@ class CbInstaller
 
     private function migrateDatabase()
     {
-        $this->console->info('Migrating database...');
-        $this->console->call('migrate', ['--path' => '\database\migrations\crudbooster']);
-        $this->console->call('migrate');
+        $this->console->info('Migrating Database...');
+        $this->console->callSilent('migrate', ['--path' => '\database\migrations\crudbooster']);
+        $this->console->callSilent('migrate');
     }
 
     private function seedDatabase()
     {
+        $this->console->info('Seeding Database...');
         $this->console->callSilent('db:seed', ['--class' => '\crocodicstudio\crudbooster\Modules\EmailTemplates\Seeder']);
         $this->console->callSilent('db:seed', ['--class' => '\crocodicstudio\crudbooster\Modules\SettingModule\Seeder']);
         $this->console->callSilent('db:seed', ['--class' => '\crocodicstudio\crudbooster\Modules\PrivilegeModule\Seeder']);
-        $this->console->info('Database Seeding completed !');
     }
 
     private function composerDumpAutoload()
