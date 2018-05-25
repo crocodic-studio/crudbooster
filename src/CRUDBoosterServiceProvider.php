@@ -52,11 +52,11 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         ], 'cb_lfm');
 
         $this->publishes([
-            __DIR__.'/CBCoreModule/publieshed_files/views/vendor/crudbooster/type_components/readme.txt' => resource_path('views/vendor/crudbooster/type_components/readme.txt'),
+            __DIR__.'/CBCoreModule/publieshed_files/readme.txt' => resource_path('views/vendor/crudbooster/type_components/readme.txt'),
         ], 'cb_type_components');
 
         if (! file_exists(app_path('Http/Controllers/AdminUsersController.php'))) {
-            $this->publishes([__DIR__.'/CBCoreModule/publieshed_files/controllers/AdminUsersController.php' => app_path('Http/Controllers/AdminUsersController.php')], 'cb_user_controller');
+            $this->publishes([__DIR__.'/CBCoreModule/publieshed_files/AdminUsersController.php' => app_path('Http/Controllers/AdminUsersController.php')], 'cb_user_controller');
         }
 
 
