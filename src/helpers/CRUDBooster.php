@@ -74,18 +74,12 @@ class CRUDBooster
     public static function first($table, $id)
     {
         $table = self::parseSqlTable($table)['table'];
+
         if (! is_array($id)) {
-            $pk = DbInspector::findPK($table);
-
-            return DB::table($table)->where($pk, $id)->first();
+            $id = [DbInspector::findPK($table) => $id];
         }
 
-        $first = DB::table($table);
-        foreach ($id as $k => $v) {
-            $first->where($k, $v);
-        }
-
-        return $first->first();
+        return DB::table($table)->where($id)->first();
     }
 
     public static function urlFilterColumn($key, $type, $value = '', $singleSorting = true)
