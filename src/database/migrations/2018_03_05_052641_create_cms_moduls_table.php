@@ -12,7 +12,7 @@ class CreateCmsModulsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('cms_moduls', function(Blueprint $table)
+		Schema::create('cms_modules', function(Blueprint $table)
 		{
 			$table->increments('id');
 			$table->string('name', 50)->nullable();
@@ -35,7 +35,7 @@ class CreateCmsModulsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('cms_moduls');
+		Schema::drop('cms_modules');
 	}
 
 }

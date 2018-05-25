@@ -106,7 +106,7 @@ class Step1Handler
         $created_at = YmdHis();
 
         $controller = ControllerGenerator::generateController($table_name, $path);
-        $id = \DB::table('cms_moduls')->insertGetId(compact("controller", "name", "table_name", "icon", "path", "created_at"));
+        $id = \DB::table('cms_modules')->insertGetId(compact("controller", "name", "table_name", "icon", "path", "created_at"));
 
         return [$controller, $id];
     }
@@ -117,7 +117,7 @@ class Step1Handler
     private function grantAllPermissions($id)
     {
         DB::table('cms_privileges_roles')->insert([
-            'id_cms_moduls' => $id,
+            'id_cms_modules' => $id,
             'id_cms_privileges' => auth('cbAdmin')->user()->id_cms_privileges,
             'can_see_module' => 1,
             'can_create' => 1,

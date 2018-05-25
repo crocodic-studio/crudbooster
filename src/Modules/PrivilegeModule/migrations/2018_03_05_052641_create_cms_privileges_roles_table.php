@@ -21,7 +21,7 @@ class CreateCmsPrivilegesRolesTable extends Migration {
 			$table->boolean('can_edit')->nullable();
 			$table->boolean('can_delete')->nullable();
 			$table->integer('id_cms_privileges')->nullable();
-			$table->integer('id_cms_moduls')->nullable();
+			$table->integer('id_cms_modules')->nullable();
 			$table->timestamps();
 		});
 	}

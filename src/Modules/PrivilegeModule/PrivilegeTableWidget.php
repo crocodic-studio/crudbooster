@@ -15,7 +15,7 @@ class PrivilegeTableWidget
         $modules = ModulesRepo::getAll(['id', 'name']);
 
         foreach ($modules as $module) {
-            $module->privilege = \DB::table('cms_privileges_roles')->where('id_cms_moduls', $module->id)->where('id_cms_privileges', $roleId)->first() ?: new \stdClass();
+            $module->privilege = \DB::table('cms_privileges_roles')->where('id_cms_modules', $module->id)->where('id_cms_privileges', $roleId)->first() ?: new \stdClass();
         }
 
         return $modules;

@@ -55,7 +55,7 @@ class MenusForm
             'name' => 'module_slug',
             'type' => 'select2_datatable',
             'options' => [
-                'table' => 'cms_moduls',
+                'table' => 'cms_modules',
                 'field_label' => 'name',
                 'field_value' => 'id',
                 'sql_where' => 'is_protected = 0',

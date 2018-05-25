@@ -18,7 +18,7 @@ class ModulesRepo
 
     private static function where($conditions)
     {
-        return DB::table('cms_moduls')->where($conditions);
+        return DB::table('cms_modules')->where($conditions);
     }
 
     public static function getByTableName($table)

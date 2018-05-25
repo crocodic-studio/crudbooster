@@ -12,7 +12,7 @@ class AdminModulesController extends CBController
 {
     public function cbInit()
     {
-        $this->table = 'cms_moduls';
+        $this->table = 'cms_modules';
         $this->primaryKey = 'id';
         $this->titleField = 'name';
         $this->limit = 100;
@@ -48,7 +48,7 @@ class AdminModulesController extends CBController
     }
     // public function getIndex() {
     // 	$data['page_title'] = 'Module Generator';
-    // 	$data['result'] = DB::table('cms_moduls')->where('is_protected',0)->orderby('name','asc')->get();
+    // 	$data['result'] = DB::table('cms_modules')->where('is_protected',0)->orderby('name','asc')->get();
     // 	$this->cbView('CbModulesGen::index',$data);
     // }	
 
@@ -84,7 +84,7 @@ class AdminModulesController extends CBController
     public function getCheckSlug($slug)
     {
         $check = ModulesRepo::countByPath($slug);
-        $lastId = DB::table('cms_moduls')->max('id') + 1;
+        $lastId = DB::table('cms_modules')->max('id') + 1;
 
         return response()->json(['total' => $check, 'lastid' => $lastId]);
     }
@@ -183,7 +183,7 @@ class AdminModulesController extends CBController
 
         $user_id_privileges = auth('cbAdmin')->user()->id_cms_privileges;
         DB::table('cms_privileges_roles')->insert([
-            'id_cms_moduls' => $id_modul,
+            'id_cms_modules' => $id_modul,
             'id_cms_privileges' => $user_id_privileges,
             'can_see_module' => 1,
             'can_create' => 1,
