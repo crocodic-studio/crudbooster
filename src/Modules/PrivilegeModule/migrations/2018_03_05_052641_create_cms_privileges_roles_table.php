@@ -15,7 +15,7 @@ class CreateCmsPrivilegesRolesTable extends Migration {
 		Schema::create('cms_privileges_roles', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->boolean('is_visible')->nullable();
+			$table->boolean('can_see_module')->nullable();
 			$table->boolean('can_create')->nullable();
 			$table->boolean('can_read')->nullable();
 			$table->boolean('can_edit')->nullable();

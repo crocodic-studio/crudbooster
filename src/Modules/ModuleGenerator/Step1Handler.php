@@ -119,7 +119,7 @@ class Step1Handler
         DB::table('cms_privileges_roles')->insert([
             'id_cms_moduls' => $id,
             'id_cms_privileges' => auth('cbAdmin')->user()->id_cms_privileges,
-            'is_visible' => 1,
+            'can_see_module' => 1,
             'can_create' => 1,
             'can_read' => 1,
             'can_edit' => 1,

@@ -15,9 +15,9 @@
                            {!!($module->privilege->can_create && $module->privilege->can_read && $module->privilege->can_edit && $module->privilege->can_delete) ? "checked" : "" !!} class='select_horizontal'/>
                 </td>
                 <td class='active' align="center">
-                    <input type='checkbox' class='is_visible'
-                           name='privileges[{{$module->id}}][is_visible]'
-                           {!! $module->privilege->is_visible ? "checked" : "" !!} value='1'/>
+                    <input type='checkbox' class='can_see_module'
+                           name='privileges[{{$module->id}}][can_see_module]'
+                           {!! $module->privilege->can_see_module ? "checked" : "" !!} value='1'/>
                 </td>
                 <td class='warning' align="center">
                     <input type='checkbox' class='can_create'

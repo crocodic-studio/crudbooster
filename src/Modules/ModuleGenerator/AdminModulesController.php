@@ -185,7 +185,7 @@ class AdminModulesController extends CBController
         DB::table('cms_privileges_roles')->insert([
             'id_cms_moduls' => $id_modul,
             'id_cms_privileges' => $user_id_privileges,
-            'is_visible' => 1,
+            'can_see_module' => 1,
             'can_create' => 1,
             'can_read' => 1,
             'can_edit' => 1,

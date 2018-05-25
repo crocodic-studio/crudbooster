@@ -1,9 +1,9 @@
 <script>
     $(function () {
-        $("#is_visible").click(function () {
+        $("#can_see_module").click(function () {
             var is_ch = $(this).prop('checked');
             console.log('is checked create ' + is_ch);
-            $(".is_visible").prop("checked", is_ch);
+            $(".can_see_module").prop("checked", is_ch);
             console.log('Create all');
         })
         $("#can_create").click(function () {
