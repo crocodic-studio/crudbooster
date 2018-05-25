@@ -37,29 +37,6 @@ class AuthController extends Controller
         return \DB::table($tableName);
     }
 
-    public function getLockscreen()
-    {
-        if (! auth('cbAdmin')->id()) {
-            Session::flush();
-            return redirect()->route('getLogin')->with('message', cbTrans('alert_session_expired'));
-        }
-
-        Session::put('admin_lock', 1);
-        return view('CbAuth::lockscreen');
-    }
-
-    public function postUnlockScreen()
-    {
-        $user = (auth('cbAdmin')->user());
-
-        if (\Hash::check(request('password'), $user->password)) {
-            Session::put('admin_lock', 0);
-
-            return redirect()->route('CbDashboard');
-        }
-        echo "<script>alert('".cbTrans('alert_password_wrong')."');history.go(-1);</script>";
-    }
-
     public function getLogin()
     {
         if (auth('cbAdmin')->id()) {

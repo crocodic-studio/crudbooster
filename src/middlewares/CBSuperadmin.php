@@ -26,10 +26,6 @@ class CBSuperadmin
             return redirect($adminPath)->with(['message'=> cbTrans('denied_access'),'message_type'=>'warning']);
         }
 
-        if(CRUDBooster::isLocked()){
-            return redirect(url($adminPath.'/lock-screen'));
-        }
-
         return $next($request);
     }
 }

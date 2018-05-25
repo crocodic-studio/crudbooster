@@ -26,10 +26,6 @@ class CBBackend
             return redirect(url($adminPath.'/login'))->with('message', cbTrans('not_logged_in'));
         }
 
-        if (CRUDBooster::isLocked()) {
-            return redirect(url($adminPath.'/lock-screen'));
-        }
-
         $moduleName = $request->segment(2);
         $this->module = CRUDBooster::getCurrentModule();
 

@@ -3,8 +3,6 @@ $namespace = cbModulesNS('AuthModule');
 $prefix = cbAdminPath();
 
 Route::group(['middleware' => ['web'], 'prefix' => $prefix, 'namespace' => $namespace], function () {
-    Route::post('unlock-screen', 'AuthController@postUnlockScreen')->name('postUnlockScreen');
-    Route::get('lock-screen', 'AuthController@getLockscreen')->name('getLockScreen');
     Route::post('forgot', 'AuthController@postForgot')->name('postForgot');
     Route::get('forgot', 'AuthController@getForgot')->name('getForgot');
     Route::post('register', 'AuthController@postRegister')->name('postRegister');
