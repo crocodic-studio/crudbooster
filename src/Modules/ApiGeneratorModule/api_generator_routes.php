@@ -1,7 +1,5 @@
 <?php
 
-use crocodicstudio\crudbooster\middlewares\CBSuperadmin;
-
 $namespace = cbModulesNS('ApiGeneratorModule');
 
 Route::group(['middleware' => ['web'], 'namespace' => $namespace], function () {
@@ -10,7 +8,7 @@ Route::group(['middleware' => ['web'], 'namespace' => $namespace], function () {
 });
 
 Route::group([
-    'middleware' => ['web', CBSuperadmin::class],
+    'middleware' => ['web', \crocodicstudio\crudbooster\CBCoreModule\middlewares\CBSuperadmin::class],
     'prefix' => cbAdminPath(),
     'namespace' => $namespace,
 ], function () {

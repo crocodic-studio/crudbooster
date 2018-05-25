@@ -1,7 +1,6 @@
 <?php
 
 use crocodicstudio\crudbooster\CBCoreModule\Facades\CbRouter;
-use crocodicstudio\crudbooster\middlewares\CBBackend;
 
 $namespace = cbControllersNS();
 /* ROUTER FOR UPLOADS */
@@ -11,7 +10,7 @@ Route::group(['middleware' => ['web'], 'namespace' => $namespace], function () {
 
 // ROUTER FOR OWN CONTROLLER FROM CB
 Route::group([
-    'middleware' => ['web', CBBackend::class],
+    'middleware' => ['web', \crocodicstudio\crudbooster\CBCoreModule\middlewares\CBBackend::class],
     'prefix' => cbAdminPath(),
     'namespace' => ctrlNamespace(),
 ], function () {
@@ -31,7 +30,7 @@ Route::group([
 
 /* ROUTER FOR BACKEND CRUDBOOSTER */
 Route::group([
-    'middleware' => ['web', \crocodicstudio\crudbooster\middlewares\CBSuperadmin::class],
+    'middleware' => ['web', \crocodicstudio\crudbooster\CBCoreModule\middlewares\CBSuperadmin::class],
     'prefix' => cbAdminPath(),
     'namespace' => $namespace,
 ], function () {

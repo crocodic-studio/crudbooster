@@ -28,8 +28,6 @@ return [
 
     'MAIN_DB_DATABASE' => env('DB_DATABASE'), //Very useful if you use config:cache
 
-    'MULTIPLE_DATABASE_MODULE' => [],
-
     'USER_TABLE' => 'cms_users',
 
     /*

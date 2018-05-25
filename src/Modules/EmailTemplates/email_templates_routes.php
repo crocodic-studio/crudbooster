@@ -1,6 +1,6 @@
 <?php
 Route::group([
-    'middleware' => ['web', \crocodicstudio\crudbooster\middlewares\CBSuperadmin::class],
+    'middleware' => ['web', \crocodicstudio\crudbooster\CBCoreModule\middlewares\CBSuperadmin::class],
     'prefix' => cbAdminPath(),
     'namespace' => cbModulesNS('EmailTemplates'),
 ], function (){

@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\middlewares;
+namespace crocodicstudio\crudbooster\CBCoreModule\middlewares;
 
 use Closure;
 use crocodicstudio\crudbooster\helpers\CRUDBooster;

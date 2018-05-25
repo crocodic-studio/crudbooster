@@ -1,13 +1,11 @@
 <?php
 
 use crocodicstudio\crudbooster\CBCoreModule\Facades\CbRouter;
-use crocodicstudio\crudbooster\middlewares\CBBackend;
-use crocodicstudio\crudbooster\middlewares\CBSuperadmin;
 use crocodicstudio\crudbooster\Modules\MenuModule\MenuTypes;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\ModulesRepo;
 
 Route::group([
-    'middleware' => ['web', CBSuperadmin::class],
+    'middleware' => ['web', \crocodicstudio\crudbooster\CBCoreModule\middlewares\CBSuperadmin::class],
     'prefix' => cbAdminPath(),
     'namespace' => cbModulesNS('MenuModule'),
 ], function () {
@@ -42,7 +40,7 @@ $dashboardMenu = \crocodicstudio\crudbooster\Modules\MenuModule\MenuRepo::getDas
 // ROUTER FOR OWN CONTROLLER FROM CB
 if ($dashboardMenu) {
     Route::group([
-        'middleware' => ['web', CBBackend::class],
+        'middleware' => ['web', \crocodicstudio\crudbooster\CBCoreModule\middlewares\CBBackend::class],
         'prefix' => cbAdminPath(),
         'namespace' => ctrlNamespace(),
     ], function () use ($dashboardMenu) {
@@ -70,7 +68,7 @@ if ($dashboardMenu) {
     });
 }
 Route::group([
-    'middleware' => ['web', CBBackend::class],
+    'middleware' => ['web', \crocodicstudio\crudbooster\CBCoreModule\middlewares\CBBackend::class],
     'prefix' => cbAdminPath(),
     'namespace' => ctrlNamespace(),
 ], function () {

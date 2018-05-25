@@ -10,7 +10,7 @@ return [
     'use_package_routes' => true,
 
     // For laravel 5.2, please set to ['web', 'auth']
-    'middlewares' => ['web', '\crocodicstudio\crudbooster\middlewares\CBBackend'],
+    'middlewares' => ['web', \crocodicstudio\crudbooster\CBCoreModule\middlewares\CBBackend::class],
 
     // Add prefix for routes
     'prefix' => 'laravel-filemanager',
