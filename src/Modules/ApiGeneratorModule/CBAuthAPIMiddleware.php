@@ -1,10 +1,9 @@
 <?php
 
-namespace crocodicstudio\crudbooster\middlewares;
+namespace crocodicstudio\crudbooster\Modules\ApiGeneratorModule;
 
 use Closure;
 use Config;
-use crocodicstudio\crudbooster\Modules\ApiGeneratorModule\ApiKeysRepository;
 use crocodicstudio\crudbooster\Modules\SettingModule\SettingRepo;
 use DB;
 use Illuminate\Support\Facades\Cache;
@@ -13,8 +12,21 @@ use Illuminate\Support\Facades\Validator;
 use Schema;
 use Session;
 
-class CBAuthAPI
+class CBAuthAPIMiddleware
 {
+    /**
+     * @var \crocodicstudio\crudbooster\Modules\ApiGeneratorModule\ApiKeysRepository
+     */
+    private $apiKeysRepository;
+
+    /**
+     * CBAuthAPI constructor.
+     */
+    public function __construct(ApiKeysRepository $apiKeysRepository)
+    {
+        $this->apiKeysRepository = $apiKeysRepository;
+    }
+
     /**
      * Handle an incoming request.
      *
@@ -40,7 +52,7 @@ class CBAuthAPI
 
         $id = array_search($senderToken, $serverToken);
         $serverSecret = $server_token_Secret[$id];
-        ApiKeysRepository::incrementHit($serverSecret);
+        $this->apiKeysRepository->incrementHit($serverSecret);
 
         $expiredToken = date('Y-m-d H:i:s', strtotime('+5 seconds'));
         Cache::put($senderToken, $userAgent, $expiredToken);
@@ -80,7 +92,7 @@ class CBAuthAPI
         $userAgent = Request::header('User-Agent');
         $time = Request::header('X-Authorization-Time');
 
-        $keys = ApiKeysRepository::getSecretKeys();
+        $keys = $this->apiKeysRepository->getSecretKeys();
         $serverToken = [];
         $serverTokenSecret = [];
         foreach ($keys as $key) {
