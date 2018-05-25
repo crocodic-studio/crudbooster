@@ -11,7 +11,7 @@ class AdminApiGeneratorController extends CBController
     {
         $this->table = 'cms_apicustom';
         $this->primaryKey = "id";
-        $this->titleField = "nama";
+        $this->titleField = "name";
         $this->buttonShow = false;
         $this->deleteBtn = false;
         $this->buttonAdd = false;
@@ -26,7 +26,7 @@ class AdminApiGeneratorController extends CBController
         $data = [];
 
         $data['page_title'] = 'API Generator';
-        $data['apis'] = $this->table()->orderby('nama', 'asc')->get();
+        $data['apis'] = $this->table()->orderby('name', 'asc')->get();
 
         return view('CbApiGen::api_documentation', $data);
     }
@@ -34,7 +34,7 @@ class AdminApiGeneratorController extends CBController
     public function apiDocumentation()
     {
         $this->cbLoader();
-        $apis = $this->table()->orderby('nama', 'asc')->get();
+        $apis = $this->table()->orderby('name', 'asc')->get();
         return view('CbApiGen::api_documentation_public', compact('apis'));
     }
 
@@ -71,7 +71,7 @@ class AdminApiGeneratorController extends CBController
         $posts = request()->all();
 
         $_data = [
-            'nama' => g('nama'),
+            'name' => g('name'),
             'tabel' => $posts['tabel'],
             'aksi' => $posts['aksi'],
             'permalink' => g('permalink'),

@@ -7,11 +7,23 @@ use crocodicstudio\crudbooster\helpers\CbValidator;
 
 class AdminApiKeyController extends CBController
 {
+    private $apiKeysRepository;
+
+    /**
+     * AdminApiKeyController constructor.
+     *
+     * @param \crocodicstudio\crudbooster\Modules\ApiGeneratorModule\ApiKeysRepository $apiKeysRepository
+     */
+    public function __construct(ApiKeysRepository $apiKeysRepository)
+    {
+        $this->apiKeysRepository = $apiKeysRepository;
+    }
+
     public function cbInit()
     {
         $this->table = 'cms_apicustom';
         $this->primaryKey = "id";
-        $this->titleField = "nama";
+        $this->titleField = "name";
         $this->buttonShow = false;
         $this->deleteBtn = false;
         $this->buttonAdd = false;
@@ -24,7 +36,7 @@ class AdminApiKeyController extends CBController
         $this->cbLoader();
         $data = [
             'page_title' => 'API Generator',
-            'apikeys' => ApiKeysRepository::get(),
+            'apikeys' => $this->apiKeysRepository->get(),
         ];
 
         return view('CbApiGen::api_key', $data);
@@ -38,7 +50,7 @@ class AdminApiKeyController extends CBController
 
         //Convert the binary data into hexadecimal representation.
         $token = bin2hex($token);
-        $id = ApiKeysRepository::insertGetId($token);
+        $id = $this->apiKeysRepository->insertGetId($token);
 
         $response = [
             'id' => $id,
@@ -55,14 +67,14 @@ class AdminApiKeyController extends CBController
         $id = request('id');
         $status = (request('status') == 1) ? "active" : "non active";
 
-        ApiKeysRepository::updateById($status, $id);
+        $this->apiKeysRepository->updateById($status, $id);
 
         backWithMsg('You have been update api key status !');
     }
 
     public function getDeleteApiKey()
     {
-        if (ApiKeysRepository::deleteById(request('id'))) {
+        if ($this->apiKeysRepository->deleteById(request('id'))) {
             return response()->json(['status' => 1]);
         }
 

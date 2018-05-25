@@ -87,8 +87,8 @@
                     <tr>
                         <td><?= ++$no;?></td>
                         <td>
-                            <a href='javascript:void(0)' title='API {{$ac->nama}}' style='color:#009fe3'
-                               class='link_name_api'><?=$api->nama;?></a> &nbsp;
+                            <a href='javascript:void(0)' title='API {{$ac->name}}' style='color:#009fe3'
+                               class='link_name_api'><?=$api->name;?></a> &nbsp;
                             <sup>
                                 <a title='Delete this API' onclick="deleteApi({{$api->id}})"
                                    href="javascript:void(0)"><i class='fa fa-trash'></i></a>

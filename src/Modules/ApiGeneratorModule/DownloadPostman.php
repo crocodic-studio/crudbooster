@@ -10,7 +10,7 @@ class DownloadPostman extends CBController
     {
         $this->table = 'cms_apicustom';
         $this->primaryKey = "id";
-        $this->titleField = "nama";
+        $this->titleField = "name";
     }
 
     public function getDownloadPostman()
@@ -41,11 +41,11 @@ class DownloadPostman extends CBController
     private function makeItems()
     {
         $items = [];
-        foreach ($this->table()->orderby('nama', 'asc')->get() as $api) {
+        foreach ($this->table()->orderby('name', 'asc')->get() as $api) {
             list($httpbuilder, $formdata) = $this->processParams($api->parameters);
 
             $items[] = [
-                'name' => $api->nama,
+                'name' => $api->name,
                 'request' => [
                     'url' => url('api/'.$api->permalink).$this->httpBuilder($api, $httpbuilder),
                     'method' => $api->method_type ?: 'GET',

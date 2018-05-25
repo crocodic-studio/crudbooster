@@ -12,7 +12,7 @@ class AdminColumnsTableController extends CBController
     {
         $this->table = 'cms_apicustom';
         $this->primaryKey = "id";
-        $this->titleField = "nama";
+        $this->titleField = "name";
         $this->buttonShow = false;
         $this->deleteBtn = false;
         $this->buttonAdd = false;

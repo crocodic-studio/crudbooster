@@ -51,7 +51,7 @@
                     <div class='col-sm-8'>
                         <div class='form-group'>
                             <label>API Name</label>
-                            <input type='text' class='form-control' value='{{$row->nama}}' required name='nama'
+                            <input type='text' class='form-control' value='{{$row->name}}' required name='name'
                                    id='input-nama'/>
                         </div>
                     </div>

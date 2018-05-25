@@ -22,7 +22,7 @@ class CreateCmsApicustomTable extends Migration {
 			$table->string('orderby')->nullable();
 			$table->string('sub_query_1')->nullable();
 			$table->string('sql_where')->nullable();
-			$table->string('nama')->nullable();
+			$table->string('name')->nullable();
 			$table->string('keterangan')->nullable();
 			$table->string('parameter')->nullable();
 			$table->timestamps();
