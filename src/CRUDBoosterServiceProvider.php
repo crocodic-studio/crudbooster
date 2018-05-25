@@ -15,7 +15,7 @@ use crocodicstudio\crudbooster\Modules\PrivilegeModule\CbPrivilegesServiceProvid
 use crocodicstudio\crudbooster\Modules\SettingModule\CbSettingsServiceProvider;
 use crocodicstudio\crudbooster\Modules\StatisticModule\CbStatisticsServiceProvider;
 use Illuminate\Support\ServiceProvider;
-use crocodicstudio\crudbooster\commands\CrudboosterInstallationCommand;
+use crocodicstudio\crudbooster\commands\InstallationCommand;
 use Illuminate\Foundation\AliasLoader;
 
 class CRUDBoosterServiceProvider extends ServiceProvider
@@ -77,11 +77,9 @@ class CRUDBoosterServiceProvider extends ServiceProvider
             return true;
         });
 
-        $this->registerCrudboosterCommand();
+        $this->commands(InstallationCommand::class);
 
         $this->defineAuthGuard();
-
-        $this->commands('crudboosterinstall');
 
         $this->app->register('Barryvdh\DomPDF\ServiceProvider');
         $this->app->register('Maatwebsite\Excel\ExcelServiceProvider');
@@ -110,13 +108,6 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->app->register(CbNotificationsServiceProvider::class);
         $this->app->register(CbEmailTemplatesServiceProvider::class);
         $this->app->register(CbLogsServiceProvider::class);
-    }
-
-    private function registerCrudboosterCommand()
-    {
-        $this->app->singleton('crudboosterinstall', function () {
-            return new CrudboosterInstallationCommand;
-        });
     }
 
     private function defineValidationRules()

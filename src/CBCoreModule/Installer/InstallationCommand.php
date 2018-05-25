@@ -7,7 +7,7 @@ use crocodicstudio\crudbooster\CBCoreModule\Installer\ConsolePrinter;
 use crocodicstudio\crudbooster\CBCoreModule\Installer\RequirementChecker;
 use Illuminate\Console\Command;
 
-class CrudboosterInstallationCommand extends Command
+class InstallationCommand extends Command
 {
     /**
      * The console command name.
