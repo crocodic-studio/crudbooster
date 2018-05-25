@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateCmsModulsTable extends Migration {
+class CreateCmsModulesTable extends Migration {
 
 	/**
 	 * Run the migrations.

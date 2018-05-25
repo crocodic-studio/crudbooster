@@ -3,7 +3,6 @@
 namespace crocodicstudio\crudbooster\Modules\AuthModule;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Foundation\AliasLoader;
 
 class CbAuthServiceProvider extends ServiceProvider
 {
@@ -16,6 +15,7 @@ class CbAuthServiceProvider extends ServiceProvider
     {
         $this->app['view']->addNamespace('CbAuth', __DIR__.'/views');
         $this->loadRoutesFrom( __DIR__.'/auth_routes.php');
+        $this->loadMigrationsFrom(__DIR__.'/migrations');
     }
 
     /**
