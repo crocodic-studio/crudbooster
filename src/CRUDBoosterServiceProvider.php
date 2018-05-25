@@ -79,12 +79,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
 
         $this->defineAuthGuard();
 
-        $this->app->register('Barryvdh\DomPDF\ServiceProvider');
-        $this->app->register('Maatwebsite\Excel\ExcelServiceProvider');
-        $this->app->register('Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider');
-        $this->app->register('Intervention\Image\ImageServiceProvider');
-        $this->app->register('Imanghafoori\Widgets\WidgetsServiceProvider');
-        $this->app->register('Imanghafoori\Responder\LaravelResponderServiceProvider');
+        $this->registerThirdPartyPackages();
 
         $this->setAliases();
 
@@ -127,5 +122,15 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $loader->alias('CB', 'crocodicstudio\crudbooster\helpers\CRUDBooster');
         $loader->alias('DbInspector', 'crocodicstudio\crudbooster\helpers\DbInspector');
         $loader->alias('CbRouter', CbRouter::class);
+    }
+
+    private function registerThirdPartyPackages(): void
+    {
+        $this->app->register('Barryvdh\DomPDF\ServiceProvider');
+        $this->app->register('Maatwebsite\Excel\ExcelServiceProvider');
+        $this->app->register('Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider');
+        $this->app->register('Intervention\Image\ImageServiceProvider');
+        $this->app->register('Imanghafoori\Widgets\WidgetsServiceProvider');
+        $this->app->register('Imanghafoori\Responder\LaravelResponderServiceProvider');
     }
 }
