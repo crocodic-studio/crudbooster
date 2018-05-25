@@ -7,10 +7,9 @@ class ViewHelpers
     public static function getUrlParameters($exception = null)
     {
         @$get = $_GET;
-        $inputhtml = '';
 
         if (! $get) {
-            return $inputhtml;
+            return '';
         }
         if (is_array($exception)) {
             foreach ($exception as $e) {
@@ -18,6 +17,7 @@ class ViewHelpers
             }
         }
 
+        $inputhtml = '';
         $string_params = http_build_query($get);
         foreach (explode('&', $string_params) as $s) {
             $part = explode('=', $s);
@@ -27,19 +27,5 @@ class ViewHelpers
         }
 
         return $inputhtml;
-    }
-
-    public static function delConfirm($redirectTo)
-    {
-        return 'swal({   
-				title: "'.cbTrans('delete_title_confirm').'",   
-				text: "'.cbTrans('delete_description_confirm').'",   
-				type: "warning",   
-				showCancelButton: true,   
-				confirmButtonColor: "#ff0000",   
-				confirmButtonText: "'.cbTrans('confirmation_yes').'",  
-				cancelButtonText: "'.cbTrans('confirmation_no').'",  
-				closeOnConfirm: false }, 
-				function(){  location.href="'.$redirectTo.'" });';
     }
 }
