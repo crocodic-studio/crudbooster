@@ -53,7 +53,7 @@ Route::group([
 
 /* ROUTER FOR API GENERATOR */
 
-Route::group(['middleware' => ['api', '\crocodicstudio\crudbooster\middlewares\CBAuthAPI'], 'namespace' => ctrlNamespace()], function () {
+Route::group(['middleware' => ['api', \crocodicstudio\crudbooster\Modules\ApiGeneratorModule\ApiKeysRepository::class], 'namespace' => ctrlNamespace()], function () {
     //Router for custom api defeault
     $dir = scandir(controllers_dir());
     foreach ($dir as $Ctrl) {

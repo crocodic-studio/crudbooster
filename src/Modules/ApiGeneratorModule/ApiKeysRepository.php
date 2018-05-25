@@ -6,43 +6,48 @@ use Illuminate\Support\Facades\DB;
 
 class ApiKeysRepository
 {
-    public static function incrementHit($serverSecret)
+    public function incrementHit($serverSecret)
     {
-        return self::table()->where('secretkey', $serverSecret)->increment('hit');
+        return $this->where(['secretkey' => $serverSecret])->increment('hit');
     }
 
-    public static function getSecretKeys()
+    public function where($where)
     {
-        return self::table()->where('status', 'active')->pluck('secretkey');
-    }
-
-    public static function get()
-    {
-        return self::table()->get();
-    }
-
-    public static function deleteById($id)
-    {
-        return self::table()->where('id', $id)->delete();
-    }
-
-    public static function updateById($status, $id)
-    {
-        return self::table()->where('id', $id)->update(['status' => $status]);
-    }
-
-    public static function insertGetId($token)
-    {
-        return self::table()->insertGetId([
-            'secretkey' => $token,
-            'created_at' => YmdHis(),
-            'status' => 'active',
-            'hit' => 0,
-        ]);
+        return $this->table()->where($where);
     }
 
     private static function table()
     {
         return DB::table('cms_apikey');
+    }
+
+    public function getSecretKeys()
+    {
+        return $this->where(['status' => 'active'])->pluck('secretkey');
+    }
+
+    public function get()
+    {
+        return $this->table()->get();
+    }
+
+    public function deleteById($id)
+    {
+        return $this->where(['id' => $id])->delete();
+    }
+
+    public function updateById($status, $id)
+    {
+        return $this->where(['id' => $id])->update(['status' => $status]);
+    }
+
+    public function insertGetId($token)
+    {
+        return $this->table()->insertGetId([
+            'secretkey' => $token,
+            'created_at' => YmdHis(),
+            'status' => 'active',
+            'hit' => 0,
+        ]);
     }
 }
