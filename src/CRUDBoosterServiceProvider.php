@@ -84,17 +84,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->setAliases();
 
         $this->app->singleton(\crocodicstudio\crudbooster\CBCoreModule\CbRouter::class);
-        $this->app->register(CbAuthServiceProvider::class);
-        $this->app->register(CbApiGeneratorServiceProvider::class);
-        $this->app->register(CbModulesGeneratorServiceProvider::class);
-        $this->app->register(CbSettingsServiceProvider::class);
-        $this->app->register(CbStatisticsServiceProvider::class);
-        $this->app->register(CbPrivilegesServiceProvider::class);
-        $this->app->register(CbMenuServiceProvider::class);
-        $this->app->register(CbFileManagerServiceProvider::class);
-        $this->app->register(CbNotificationsServiceProvider::class);
-        $this->app->register(CbEmailTemplatesServiceProvider::class);
-        $this->app->register(CbLogsServiceProvider::class);
+        $this->registerCrudBoosterModules();
     }
 
     private function defineValidationRules()
@@ -132,5 +122,20 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->app->register('Intervention\Image\ImageServiceProvider');
         $this->app->register('Imanghafoori\Widgets\WidgetsServiceProvider');
         $this->app->register('Imanghafoori\Responder\LaravelResponderServiceProvider');
+    }
+
+    private function registerCrudBoosterModules()
+    {
+        $this->app->register(CbAuthServiceProvider::class);
+        $this->app->register(CbApiGeneratorServiceProvider::class);
+        $this->app->register(CbModulesGeneratorServiceProvider::class);
+        $this->app->register(CbSettingsServiceProvider::class);
+        $this->app->register(CbStatisticsServiceProvider::class);
+        $this->app->register(CbPrivilegesServiceProvider::class);
+        $this->app->register(CbMenuServiceProvider::class);
+        $this->app->register(CbFileManagerServiceProvider::class);
+        $this->app->register(CbNotificationsServiceProvider::class);
+        $this->app->register(CbEmailTemplatesServiceProvider::class);
+        $this->app->register(CbLogsServiceProvider::class);
     }
 }
