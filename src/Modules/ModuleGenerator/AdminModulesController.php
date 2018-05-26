@@ -170,7 +170,6 @@ class AdminModulesController extends CBController
         }
 
         $this->arr['created_at'] = YmdHis();
-        $this->arr['id'] = $this->table()->max('id') + 1;
         $this->table()->insert($this->arr);
 
         //Insert Menu
@@ -178,17 +177,9 @@ class AdminModulesController extends CBController
             (new CreateMenuForNewModule())->execute($this->arr['controller'], $this->arr['name'], $this->arr['icon']);
         }
 
-        $id_modul = $this->arr['id'];
+        $moduleId = $this->arr['id'];
 
-        DB::table('cms_privileges_roles')->insert([
-            'id_cms_modules' => $id_modul,
-            'id_cms_privileges' => auth('cbAdmin')->user()->id_cms_privileges,
-            'can_see_module' => 1,
-            'can_create' => 1,
-            'can_read' => 1,
-            'can_edit' => 1,
-            'can_delete' => 1,
-        ]);
+        $this->grantFullAccess($moduleId);
 
         //Refresh Session Roles
         CRUDBooster::refreshSessionRoles();
@@ -225,5 +216,21 @@ class AdminModulesController extends CBController
         CRUDBooster::refreshSessionRoles();
 
         backWithMsg(cbTrans('alert_update_data_success'));
+    }
+
+    /**
+     * @param $module_id
+     */
+    private function grantFullAccess($module_id)
+    {
+        DB::table('cms_privileges_roles')->insert([
+            'id_cms_modules' => $module_id,
+            'id_cms_privileges' => auth('cbAdmin')->user()->id_cms_privileges,
+            'can_see_module' => 1,
+            'can_create' => 1,
+            'can_read' => 1,
+            'can_edit' => 1,
+            'can_delete' => 1,
+        ]);
     }
 }
