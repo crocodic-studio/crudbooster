@@ -87,6 +87,6 @@ class CreateMenuForNewModule
      */
     private function table()
     {
-        return DB::table('cms_menus');
+        return \DB::table('cms_menus');
     }
 }
