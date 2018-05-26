@@ -12,11 +12,12 @@ class Step2Handler
 
         $controllerCode = (FileManipulator::readCtrlContent($module->controller));
 
-        $data = [];
-        $data['id'] = $id;
-        $data['columns'] = $columns;
+        $data = [
+            'id' => $id,
+            'columns' => $columns,
+            'cols' => ScaffoldingParser::parse($controllerCode, 'col')
+        ];
         //$data['table_list'] = \crocodicstudio\crudbooster\helpers\CRUDBooster::listCbTables();
-        $data['cols'] = ScaffoldingParser::parse($controllerCode, 'col');
 
         return view('CbModulesGen::step2', $data);
     }
