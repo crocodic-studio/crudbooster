@@ -26,24 +26,18 @@ class ControllerGenerator
      * @param $name
      * @return string
      */
-    private static function getControllerName($table, $name)
+    private static function getControllerName($table, $name = null)
     {
-        $controllerName = ucwords(str_replace('_', ' ', $table));
-        $controllerName = str_replace(' ', '', $controllerName).'Controller';
-        if ($name) {
-            $controllerName = ucwords(str_replace(['_', '-'], ' ', $name));
-            $controllerName = str_replace(' ', '', $controllerName).'Controller';
+        $controllerName = ucwords(str_replace(['_', '-'], ' ', $name ?: $table));
+        $controllerName = 'Admin'.str_replace(' ', '', $controllerName).'Controller';
+
+        $countSameFile = count(glob(controllers_dir().$controllerName.'*.php'));
+
+        if ($countSameFile > 0) {
+            $controllerName .= $countSameFile;
         }
 
-        $countSameFile = count(glob(controllers_dir().'Admin'.$controllerName.'.php'));
-
-        if ($countSameFile != 0) {
-            $suffix = $countSameFile;
-            $controllerName = ucwords(str_replace(['_', '-'], ' ', $name)).$suffix;
-            $controllerName = str_replace(' ', '', $controllerName).'Controller';
-        }
-
-        return 'Admin'.$controllerName;
+        return $controllerName;
     }
 
     /**
