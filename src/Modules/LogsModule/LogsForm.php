@@ -11,7 +11,7 @@ class LogsForm
         $form[] = ['label' => 'IP Address', 'name' => 'ipaddress', 'readonly' => true];
         $form[] = ['label' => 'User Agent', 'name' => 'useragent', 'readonly' => true];
         $form[] = ['label' => 'URL', 'name' => 'url', 'readonly' => true];
-        $form[] = ['label' => 'User', 'name' => 'id_cms_users', 'type' => 'select', 'datatable' => 'cms_users,name', 'readonly' => true];
+        $form[] = ['label' => 'User', 'name' => 'cms_users_id', 'type' => 'select', 'datatable' => 'cms_users,name', 'readonly' => true];
         $form[] = ['label' => 'Description', 'name' => 'description', 'readonly' => true];
 
         return $form;

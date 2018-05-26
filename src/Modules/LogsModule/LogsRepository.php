@@ -13,7 +13,7 @@ class LogsRepository
             'ipaddress' => request()->server('REMOTE_ADDR'),
             'useragent' => request()->server('HTTP_USER_AGENT'),
             'url' => request()->url(),
-            'id_cms_users' => $uid,
+            'cms_users_id' => $uid,
             'description' => $description
         ];
         Log::info($description, $log);

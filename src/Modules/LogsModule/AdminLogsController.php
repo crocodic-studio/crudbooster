@@ -24,7 +24,7 @@ class AdminLogsController extends CBController
         $this->col = [
             ['label' => 'Time Access', 'name' => 'created_at'],
             ['label' => 'IP Address', 'name' => 'ipaddress'],
-            ['label' => 'User', 'name' => 'id_cms_users', 'join' => 'cms_users,name'],
+            ['label' => 'User', 'name' => 'cms_users_id', 'join' => 'cms_users,name'],
             ['label' => 'Description', 'name' => 'description'],
         ];
     }

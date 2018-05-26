@@ -11,12 +11,12 @@ class NotificationRepo
     {
         $content = $config['content'];
         $to = $config['to'];
-        $id_cms_users = $config['id_cms_users'];
-        $id_cms_users = ($id_cms_users) ?: [auth('cbAdmin')->id()];
-        foreach ($id_cms_users as $id) {
+        $cms_users_id = $config['cms_users_id'];
+        $cms_users_id = ($cms_users_id) ?: [auth('cbAdmin')->id()];
+        foreach ($cms_users_id as $id) {
             $notif = [
                 'created_at' => YmdHis(),
-                'id_cms_users' => $id,
+                'cms_users_id' => $id,
                 'content' => $content,
                 'is_read' => 0,
                 'url' => $to,

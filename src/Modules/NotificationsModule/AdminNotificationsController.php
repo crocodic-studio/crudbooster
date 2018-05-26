@@ -56,14 +56,14 @@ class AdminNotificationsController extends CBController
 
     public function hookQueryIndex($query)
     {
-        $query->where('id_cms_users', auth('cbAdmin')->id());
+        $query->where('cms_users_id', auth('cbAdmin')->id());
     }
 
     public function getLatestJson()
     {
         $rows = $this->table()
-            ->where('id_cms_users', 0)
-            ->orWhere('id_cms_users', auth('cbAdmin')->id())
+            ->where('cms_users_id', 0)
+            ->orWhere('cms_users_id', auth('cbAdmin')->id())
             ->orderby('id', 'desc')
             ->where('is_read', 0)
             ->whereNull('deleted_at')

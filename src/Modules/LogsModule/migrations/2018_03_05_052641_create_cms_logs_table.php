@@ -19,7 +19,7 @@ class CreateCmsLogsTable extends Migration {
 			$table->string('useragent')->nullable();
 			$table->string('url')->nullable();
 			$table->string('description')->nullable();
-			$table->integer('id_cms_users')->nullable();
+			$table->integer('cms_users_id')->nullable();
 			$table->timestamps();
 		});
 	}
