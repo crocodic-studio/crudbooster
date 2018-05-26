@@ -17,8 +17,8 @@ class CreateMenuForNewModule
      */
     private function createParentMenu($name, $icon)
     {
-        $menu_sort = DB::table('cms_menus')->where('parent_id', 0)->max('sorting') + 1;
-        $menu_id = DB::table('cms_menus')->insertGetId([
+        $menu_sort = $this->table()->where('parent_id', 0)->max('sorting') + 1;
+        $menu_id = $this->table()->insertGetId([
             'created_at' => YmdHis(),
             'name' => $name,
             'icon' => $icon,
@@ -40,7 +40,7 @@ class CreateMenuForNewModule
      */
     private function createAddLinkSubmenu($arr , $name, $ctrl)
     {
-        DB::table('cms_menus')->insert([
+        $this->table()->insert([
                 'name' => cbTrans('text_default_add_new_module', ['module' => $name]),
                 'icon' => 'fa fa-plus',
                 'path' => $ctrl.'GetAdd',
@@ -55,7 +55,7 @@ class CreateMenuForNewModule
      */
     private function createIndexLinkSubMenu($arr, $name, $ctrl)
     {
-        DB::table('cms_menus')->insert([
+        $this->table()->insert([
                 'name' => cbTrans('text_default_list_module', ['module' => $name]),
                 'icon' => 'fa fa-bars',
                 'path' => $ctrl.'GetIndex',
@@ -80,5 +80,13 @@ class CreateMenuForNewModule
 
         $this->createAddLinkSubmenu($arr, $name, $ctrl);
         $this->createIndexLinkSubMenu($arr, $name, $ctrl);
+    }
+
+    /**
+     * @return mixed
+     */
+    private function table()
+    {
+        return DB::table('cms_menus');
     }
 }
