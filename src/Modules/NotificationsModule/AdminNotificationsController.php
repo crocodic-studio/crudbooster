@@ -16,7 +16,7 @@ class AdminNotificationsController extends CBController
         $this->primaryKey = "id";
         $this->titleField = "content";
         $this->limit = 20;
-        $this->index_orderby = ["id" => "desc"];
+        $this->orderby = ["id" => "desc"];
     }
 
     public function cbInit()
