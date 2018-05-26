@@ -3,6 +3,7 @@
 namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
 
 use crocodicstudio\crudbooster\helpers\CRUDBooster;
+use crocodicstudio\crudbooster\Modules\PrivilegeModule\PrivilegeRepo;
 use Illuminate\Support\Facades\DB;
 
 class Step1Handler
@@ -59,19 +60,19 @@ class Step1Handler
      */
     private function registerNewModule($table_name, $path, $name, $icon)
     {
-        list($controller, $id) = $this->insertModule($table_name, $path, $name, $icon);
+        list($controller, $moduleId) = $this->insertModule($table_name, $path, $name, $icon);
 
         //Insert Menu
         if ($controller && request('create_menu')) {
             $this->insertMenu($name, $icon, $controller);
         }
 
-        $this->grantAllPermissions($id);
+        (new PrivilegeRepo())->grantAllPermissions($moduleId);
 
         //Refresh Session Roles
         CRUDBooster::refreshSessionRoles();
 
-        return $id;
+        return $moduleId;
     }
 
     /**
@@ -109,21 +110,5 @@ class Step1Handler
         $id = \DB::table('cms_modules')->insertGetId(compact("controller", "name", "table_name", "icon", "path", "created_at"));
 
         return [$controller, $id];
-    }
-
-    /**
-     * @param $id
-     */
-    private function grantAllPermissions($id)
-    {
-        DB::table('cms_privileges_roles')->insert([
-            'id_cms_modules' => $id,
-            'id_cms_privileges' => auth('cbAdmin')->user()->id_cms_privileges,
-            'can_see_module' => 1,
-            'can_create' => 1,
-            'can_read' => 1,
-            'can_edit' => 1,
-            'can_delete' => 1,
-        ]);
     }
 }
