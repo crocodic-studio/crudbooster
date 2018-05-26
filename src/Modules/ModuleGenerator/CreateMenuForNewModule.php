@@ -17,7 +17,6 @@ class CreateMenuForNewModule
      */
     private function createParentMenu($name, $icon)
     {
-        $menu_sort = $this->table()->where('parent_id', 0)->max('sorting') + 1;
         $menu_id = $this->table()->insertGetId([
             'created_at' => YmdHis(),
             'name' => $name,
@@ -26,7 +25,7 @@ class CreateMenuForNewModule
             'type' => 'URL External',
             'is_active' => 1,
             'cms_privileges' => auth('cbAdmin')->user()->id_cms_privileges,
-            'sorting' => $menu_sort,
+            'sorting' => $this->table()->where('parent_id', 0)->max('sorting') + 1,
             'parent_id' => 0,
         ]);
 
