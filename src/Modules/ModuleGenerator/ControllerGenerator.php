@@ -80,7 +80,7 @@ class ControllerGenerator
             $label = str_replace('Cms ', '', $label);
 
             if (FieldDetector::isForeignKey($field)) {
-                list($cols, $joinList) = self::handleForeignKey($table, $pk, $field, $label, $cols, $joinList);
+                list($cols, $joinList) = self::handleForeignKey($table.'.'.$pk, $field, $label, $cols, $joinList);
             } else {
                 $cols = self::handleOtherFields($field, $label, $cols);
             }
@@ -90,8 +90,7 @@ class ControllerGenerator
     }
 
     /**
-     * @param $table
-     * @param $pk
+     * @param $field2
      * @param $field
      * @param $label
      * @param $cols
@@ -99,7 +98,7 @@ class ControllerGenerator
      * @return array
      * @throws \Exception
      */
-    private static function handleForeignKey($table, $pk, $field, $label, $cols, $joinList)
+    private static function handleForeignKey($field2, $field, $label, $cols, $joinList)
     {
         $jointable = str_replace(['id_', '_id'], '', $field);
 
@@ -113,7 +112,7 @@ class ControllerGenerator
         $joinList[] = [
             'table' => $jointable,
             'field1' => $jointable.'.'.$jointablePK,
-            'field2' => $table.'.'.$pk,
+            'field2' => $field2,
         ];
 
         return [$cols, $joinList];
