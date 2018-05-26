@@ -10,10 +10,9 @@ class Step1Handler
 {
     public function showForm($id)
     {
-        $tables_list = CRUDBooster::listCbTables();
         $row = ModulesRepo::find($id);
 
-        return view("CbModulesGen::step1", compact("tables_list", "row", "id"));
+        return view("CbModulesGen::step1", compact("row", "id"));
     }
 
     public function handleFormSubmit()

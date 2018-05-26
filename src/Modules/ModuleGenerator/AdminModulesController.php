@@ -165,9 +165,8 @@ class AdminModulesController extends CBController
         $this->inputAssignment();
 
         //Generate Controller
-        $route_basename = basename(request('path'));
         if ($this->arr['controller'] == '') {
-            $this->arr['controller'] = ControllerGenerator::generateController(request('table_name'), $route_basename);
+            $this->arr['controller'] = ControllerGenerator::generateController(request('table_name'), basename(request('path')));
         }
 
         $this->arr['created_at'] = YmdHis();

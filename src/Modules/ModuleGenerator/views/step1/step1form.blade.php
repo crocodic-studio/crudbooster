@@ -11,13 +11,13 @@
                 <select name="table" id="table" required class="select2 form-control" value="{{$row->table_name}}">
                     <option value="">{{cbTrans('text_prefix_option')}} Table</option>
 
-                    @foreach($tables_list as $table)
+                    @foreach(CRUDBooster::listCbTables() as $table)
                         <option {{($table == $row->table_name)?"selected":""}} value="{{$table}}">{{$table}}</option>
                     @endforeach
 
                 </select>
                 <div class="help-block">
-                    Do not use cms_* as prefix on your tables name
+                    Do not use cms_* as prefix on your tables name so they show up here.
                 </div>
             </div>
         </div>
