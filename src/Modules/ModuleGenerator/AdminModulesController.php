@@ -6,7 +6,6 @@ use crocodicstudio\crudbooster\controllers\CBController;
 use crocodicstudio\crudbooster\controllers\FormValidator;
 use crocodicstudio\crudbooster\helpers\CRUDBooster;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
 
 class AdminModulesController extends CBController
 {
@@ -176,7 +175,7 @@ class AdminModulesController extends CBController
 
         //Insert Menu
         if ($this->arr['controller']) {
-            $this->createMenuForModule();
+            (new CreateMenuForNewModule())->execute($this->arr['controller'], $this->arr['name'], $this->arr['icon']);
         }
 
         $id_modul = $this->arr['id'];
@@ -203,45 +202,6 @@ class AdminModulesController extends CBController
             CRUDBooster::redirect(CRUDBooster::mainpath('add'), cbTrans('alert_add_data_success'), 'success');
         }
         CRUDBooster::redirect(CRUDBooster::mainpath(), cbTrans('alert_add_data_success'), 'success');
-    }
-
-    private function createMenuForModule()
-    {
-        $parent_menu_sort = DB::table('cms_menus')->where('parent_id', 0)->max('sorting') + 1;
-        $parent_menu_id = DB::table('cms_menus')->insertGetId([
-            'created_at' => YmdHis(),
-            'name' => $this->arr['name'],
-            'icon' => $this->arr['icon'],
-            'path' => '#',
-            'type' => 'URL External',
-            'is_active' => 1,
-            'cms_privileges' => auth('cbAdmin')->user()->id_cms_privileges,
-            'sorting' => $parent_menu_sort,
-            'parent_id' => 0,
-        ]);
-
-        $arr = [
-            'created_at' => YmdHis(),
-            'type' => 'Route',
-            'is_active' => 1,
-            'cms_privileges' => auth('cbAdmin')->user()->id_cms_privileges,
-            'parent_id' => $parent_menu_id,
-        ];
-
-        DB::table('cms_menus')->insert([
-                'name' => cbTrans('text_default_add_new_module', ['module' => $this->arr['name']]),
-                'icon' => 'fa fa-plus',
-                'path' => $this->arr['controller'].'GetAdd',
-                'sorting' => 1,
-            ] + $arr);
-
-        DB::table('cms_menus')->insert([
-                'name' => cbTrans('text_default_list_module', ['module' => $this->arr['name']]),
-                'icon' => 'fa fa-bars',
-                'path' => $this->arr['controller'].'GetIndex',
-                'cms_privileges' => auth('cbAdmin')->user()->id_cms_privileges,
-                'sorting' => 2,
-            ] + $arr);
     }
 
     public function postEditSave($id)
