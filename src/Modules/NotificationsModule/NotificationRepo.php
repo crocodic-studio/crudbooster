@@ -7,22 +7,20 @@ use Illuminate\Support\Facades\DB;
 
 class NotificationRepo
 {
-    public static function sendNotification($config = [])
+    public static function sendNotification(array $config = [])
     {
-        $content = $config['content'];
-        $to = $config['to'];
-        $cms_users_id = $config['cms_users_id'];
-        $cms_users_id = ($cms_users_id) ?: [auth('cbAdmin')->id()];
+        $cms_users_id = ($config['cms_users_id']) ?: [auth('cbAdmin')->id()];
+        $notif = [];
         foreach ($cms_users_id as $id) {
-            $notif = [
+            $notif[] = [
                 'created_at' => YmdHis(),
                 'cms_users_id' => $id,
-                'content' => $content,
+                'content' => $config['content'],
                 'is_read' => 0,
-                'url' => $to,
+                'url' => $config['to'],
             ];
-            DB::table('cms_notifications')->insert($notif);
         }
+        DB::table('cms_notifications')->insert($notif);
 
         return true;
     }
