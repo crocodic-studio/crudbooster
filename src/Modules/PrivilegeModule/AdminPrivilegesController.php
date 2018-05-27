@@ -121,7 +121,7 @@ class AdminPrivilegesController extends CBController
         $row = $this->findRow($id)->first();
 
         $this->findRow($id)->delete();
-        $this->table('cms_privileges_roles')->where('cms_privileges_id', $row->id)->delete();
+        PrivilegeRepo::deleteByRoleId($row->id);
 
         CRUDBooster::redirect(CRUDBooster::mainpath(), cbTrans('alert_delete_data_success'), 'success');
     }
@@ -138,16 +138,7 @@ class AdminPrivilegesController extends CBController
             'cms_modules_id' => $moduleId,
             'cms_privileges_id' => $id,
         ];
-        $permissionID = $this->table('cms_privileges_roles')->where($conditions)->value('id');
-
-        if ($permissionID) {
-            return $this->table('cms_privileges_roles')->where('id', $permissionID)->update($arrs);
-        }
-
-        $arrs['cms_modules_id'] = $moduleId;
-        $arrs['cms_privileges_id'] = $id;
-        $this->table('cms_privileges_roles')->insert($arrs);
-        return $arrs;
+        return \DB::table('cms_privileges_roles')->updateOrInsert($conditions, $arrs);
     }
 
     private function setTheme()

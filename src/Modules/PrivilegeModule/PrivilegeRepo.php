@@ -4,6 +4,11 @@ namespace crocodicstudio\crudbooster\Modules\PrivilegeModule;
 
 class PrivilegeRepo
 {
+    public static function deleteByRoleId($id)
+    {
+        return \DB::table('cms_privileges_roles')->where('cms_privileges_id', $id)->delete();
+    }
+
     /**
      * @param $id
      */
