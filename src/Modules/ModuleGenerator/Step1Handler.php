@@ -88,7 +88,7 @@ class Step1Handler
             'path' => $controller.'GetIndex',
             'type' => 'Route',
             'is_active' => 1,
-            'cms_privileges' => auth('cbAdmin')->user()->cms_privileges_id,
+            'cms_privileges' => cbUser()->cms_privileges_id,
             'sorting' => DB::table('cms_menus')->where('parent_id', 0)->max('sorting') + 1,
             'parent_id' => 0,
         ]);

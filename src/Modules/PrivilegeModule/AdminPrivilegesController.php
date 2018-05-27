@@ -103,7 +103,7 @@ class AdminPrivilegesController extends CBController
             $this->savePermissions($id, $moduleId, $arrs);
         }
 
-        if ($id == auth('cbAdmin')->user()->cms_privileges_id) {
+        if ($id == cbUser()->cms_privileges_id) {
             CRUDBooster::refreshSessionRoles();
             $this->setTheme();
         }

@@ -264,3 +264,10 @@ if (! function_exists('YmdHis')) {
         return date('Y-m-d H:i:s');
     }
 }
+
+if (! function_exists('cbUser')) {
+    function cbUser()
+    {
+        return auth('cbAdmin')->user();
+    }
+}

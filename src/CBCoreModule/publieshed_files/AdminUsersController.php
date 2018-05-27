@@ -39,7 +39,7 @@ class AdminUsersController extends CBController
 
         $data = [
             'page_title' => cbTrans("label_button_profile"),
-            'row' => auth('cbAdmin')->user(),
+            'row' => cbUser(),
         ];
         return $this->cbView('crudbooster::form.form', $data);
     }

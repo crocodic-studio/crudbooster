@@ -74,7 +74,7 @@ class AuthController extends Controller
 
     public function getLogout()
     {
-        CRUDBooster::insertLog(trans('crudbooster_logging.log_logout', ['email' => auth('cbAdmin')->user()->email]));
+        CRUDBooster::insertLog(trans('crudbooster_logging.log_logout', ['email' => cbUser()->email]));
         auth('cbAdmin')->logout();
 
         return redirect()->route('getLogin')->with('message', cbTrans('message_after_logout'));

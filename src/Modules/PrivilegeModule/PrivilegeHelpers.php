@@ -26,7 +26,7 @@ trait PrivilegeHelpers
 
     public static function isSuperadmin()
     {
-        return auth('cbAdmin')->user()->role()->is_superadmin;
+        return cbUser()->role()->is_superadmin;
     }
 
     private static function getModulePath()
@@ -87,7 +87,7 @@ trait PrivilegeHelpers
 
     public static function themeColor()
     {
-        return auth('cbAdmin')->user()->role()->theme_color ?: 'skin-blue';
+        return cbUser()->role()->theme_color ?: 'skin-blue';
     }
 
     public static function denyAccess()
@@ -102,7 +102,7 @@ trait PrivilegeHelpers
 
     public static function getPrivileges()
     {
-        $uid = auth('cbAdmin')->user()->cms_privileges_id;
+        $uid = cbUser()->cms_privileges_id;
 
         return cache()->rememberForever('cb_admin_privileges_roles', function () use ($uid) {
             return \DB::table('cms_privileges_roles')->where('cms_privileges_id', $uid)->join('cms_modules', 'cms_modules.id', '=', 'id_cms_modules')->select('cms_modules.name', 'cms_modules.path', 'can_see_module', 'can_create', 'can_read', 'can_edit', 'can_delete')->get() ?: [];
