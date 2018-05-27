@@ -166,23 +166,25 @@ class AdminPrivilegesController extends CBController
 
     private function makeForm()
     {
-        $this->form = [];
-        $this->form[] = ['label' => 'Name', 'name' => 'name', 'required' => true];
-        $this->form[] = ['label' => 'Is Superadmin', 'name' => 'is_superadmin', 'required' => true];
-        $this->form[] = ['label' => 'Theme Color', 'name' => 'theme_color', 'required' => true];
+        $this->form = [
+            ['label' => 'Name', 'name' => 'name', 'required' => true],
+            ['label' => 'Is Superadmin', 'name' => 'is_superadmin', 'required' => true],
+            ['label' => 'Theme Color', 'name' => 'theme_color', 'required' => true],
+        ];
     }
 
     private function makeCols()
     {
-        $this->col = [];
-        $this->col[] = ['label' => 'ID', 'name' => 'id'];
-        $this->col[] = ['label' => 'Name', 'name' => 'name'];
-        $this->col[] = [
-            'label' => 'Superadmin',
-            'name' => 'is_superadmin',
-            'callback' => function ($row) {
-                return ($row->is_superadmin) ? "<span class='label label-success'>Superadmin</span>" : "<span class='label label-default'>Standard</span>";
-            },
+        $this->col = [
+            ['label' => 'ID', 'name' => 'id'],
+            ['label' => 'Name', 'name' => 'name'],
+            [
+                'label' => 'Superadmin',
+                'name' => 'is_superadmin',
+                'callback' => function ($row) {
+                    return ($row->is_superadmin) ? "<span class='label label-success'>Superadmin</span>" : "<span class='label label-default'>Standard</span>";
+                },
+            ],
         ];
     }
 }
