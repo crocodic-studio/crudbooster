@@ -10,7 +10,7 @@ class PrivilegeRepo
     public function grantAllPermissions($id)
     {
         \DB::table('cms_privileges_roles')->insert([
-            'id_cms_modules' => $id,
+            'cms_modules_id' => $id,
             'cms_privileges_id' => cbUser()->cms_privileges_id,
             'can_see_module' => 1,
             'can_create' => 1,
