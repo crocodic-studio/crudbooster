@@ -9,9 +9,9 @@ class NotificationRepo
 {
     public static function sendNotification(array $config = [])
     {
-        $cms_users_id = ($config['cms_users_id']) ?: [auth('cbAdmin')->id()];
+        $userIds = ($config['cms_users_id']) ?: [auth('cbAdmin')->id()];
         $notif = [];
-        foreach ($cms_users_id as $id) {
+        foreach ($userIds as $id) {
             $notif[] = [
                 'created_at' => YmdHis(),
                 'cms_users_id' => $id,
