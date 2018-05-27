@@ -11,7 +11,7 @@ class PrivilegeRepo
     {
         \DB::table('cms_privileges_roles')->insert([
             'id_cms_modules' => $id,
-            'id_cms_privileges' => auth('cbAdmin')->user()->id_cms_privileges,
+            'cms_privileges_id' => auth('cbAdmin')->user()->cms_privileges_id,
             'can_see_module' => 1,
             'can_create' => 1,
             'can_read' => 1,

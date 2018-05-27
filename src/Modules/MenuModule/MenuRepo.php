@@ -10,7 +10,7 @@ class MenuRepo
     public static function sidebarMenu()
     {
        $conditions = [
-            'cms_privileges' => auth('cbAdmin')->user()->id_cms_privileges,
+            'cms_privileges' => auth('cbAdmin')->user()->cms_privileges_id,
             'parent_id' => 0,
             'is_active' => 1,
             'is_dashboard'=> 0
@@ -77,7 +77,7 @@ class MenuRepo
     public static function sidebarDashboard()
     {
         $conditions = [
-            'cms_privileges' => auth('cbAdmin')->user()->id_cms_privileges,
+            'cms_privileges' => auth('cbAdmin')->user()->cms_privileges_id,
             'is_dashboard' => 1,
             'is_active' => 1,
         ];

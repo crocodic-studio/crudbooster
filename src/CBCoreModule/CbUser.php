@@ -34,7 +34,7 @@ class CbUser extends Authenticatable
 
     public function role()
     {
-        return \DB::table('cms_privileges')->where('id', $this->id_cms_privileges)->first();
+        return \DB::table('cms_privileges')->where('id', $this->cms_privileges_id)->first();
     }
 
     public function myPhoto() : string

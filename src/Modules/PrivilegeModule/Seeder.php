@@ -25,7 +25,7 @@ class Seeder extends BaseSeeder
             'name' => 'Super Admin',
             'email' => 'admin@crudbooster.com',
             'password' => bcrypt('123456'),
-            'id_cms_privileges' => $pid,
+            'cms_privileges_id' => $pid,
             'status' => 'Active',
         ]);
     }

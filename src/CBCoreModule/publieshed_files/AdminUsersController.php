@@ -18,7 +18,7 @@ class AdminUsersController extends CBController
 
     public function hookQueryIndex($query)
     {
-        $query->join('cms_privileges', 'cms_privileges.id', '=', 'id_cms_privileges');
+        $query->join('cms_privileges', 'cms_privileges.id', '=', 'cms_privileges_id');
         $query->addSelect('cms_privileges.name as cms_privileges_name');
     }
 
@@ -31,7 +31,7 @@ class AdminUsersController extends CBController
         $this->buttonShow = false;
         $this->buttonAdd = false;
         $this->deleteBtn = false;
-        $this->hide_form = ['id_cms_privileges'];
+        $this->hide_form = ['cms_privileges_id'];
 
         session()->put('current_row_id', auth('cbAdmin')->id());
 
@@ -66,7 +66,7 @@ class AdminUsersController extends CBController
         ];
         $this->form[] = [
             'label' => "Privilege",
-            'name' => "id_cms_privileges",
+            'name' => "cms_privileges_id",
             'type' => "select_datatable",
             "options" => ["table" => "cms_privileges", "field_value" => "id", "field_label" => 'name'],
             'required' => true,
