@@ -1624,11 +1624,9 @@ class CBController extends Controller {
 				{
 					if ($a['consignmentno'] != '') 
 					{
-						DB::table($this->table)->([['email', '=', $a['email']],['mobileno', '=', $a['mobileno']],['firstname', '=', $a['firstname']],['lastname', '=', $a['lastname']],['m_product', '!=', '']])
-						->update([
-							['consignmentno' => $a['consignmentno']],
-							['batchno' => $a['batchno']]
-						]);
+						/*DB::table($this->table)
+						->([['email', '=', $a['email']],['mobileno', '=', $a['mobileno']],['firstname', '=', $a['firstname']],['lastname', '=', $a['lastname']],['m_product', '!=', '']])
+						->update([['consignmentno' => $a['consignmentno']],['batchno' => $a['batchno']]]);*/
 					}
 				}
 				Cache::increment('success_'.$file_md5);
