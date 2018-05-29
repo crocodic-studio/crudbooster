@@ -1633,7 +1633,7 @@ class CBController extends Controller {
 							    ['firstname', '=', $a['firstname']],
 							    ['lastname', '=', $a['lastname']],
 							    ['m_product', '!=', '']
-							])->get();
+							])->get()
 						);
 						DB::table($this->table)->where([
 						    ['email', '=', $a['email']],
