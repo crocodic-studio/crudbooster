@@ -1639,7 +1639,7 @@ class CBController extends Controller {
 						    ['firstname', '=', $a['firstname']],
 						    ['lastname', '=', $a['lastname']],
 						    ['m_product', '!=', '']						
-						])
+						]);
 
 						DB::table($this->table)->where($arr)->update(
 							['consigmentno' => $a['consigmentno'],'batchno' => $a['batchno']]
