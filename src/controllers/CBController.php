@@ -1626,12 +1626,12 @@ class CBController extends Controller {
 					//Log::error($a);
 					if ($a['consigmentno'] != '') 
 					{
-						/*$arr = array();
+						$arr = array();
 						foreach ($a as $key => $value)
-							if (($key!=='consigmentno')&&($key!='batchno'))
+							if (($key!=='consigmentno')&&($key!='batchno')&&($key!='created_at'))
 								$arr[] = array($key,'=',$value);
 
-						Log::error($arr);*/
+						Log::error($arr);
     	
 						/*DB::table($this->table)->where([
 						    ['email', '=', $a['email']],
@@ -1641,13 +1641,13 @@ class CBController extends Controller {
 						    ['m_product', '!=', '']						
 						]);*/
 
-						$arr = [
+						/*$arr = [
 						    ['email', '=', $a['email']],
 						    ['mobileno', '=', $a['mobileno']],
 						    ['firstname', '=', $a['firstname']],
 						    ['lastname', '=', $a['lastname']],
 						    ['m_product', '!=', '']						
-						];
+						];*/
 
 						DB::table($this->table)->where($arr)->update(
 							['consigmentno' => $a['consigmentno'],'batchno' => $a['batchno']]
