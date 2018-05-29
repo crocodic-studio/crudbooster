@@ -79,6 +79,7 @@ class CBController extends Controller {
 	public $index_return 		  = FALSE; //for export
 	public $option_id			  = FALSE;
 	public $option_fields		  = array();
+	public $import_consignment	  = FALSE;
 
 
 	public function cbLoader() {
@@ -1605,16 +1606,33 @@ class CBController extends Controller {
 				if($has_created_at) {
 					$a['created_at'] = date('Y-m-d H:i:s');
 				}
-
-				$v = $this->validationArray($a);
-				if (!$v->fails())
-					DB::table($this->table)->insert($a);
+				if ($import_consignment == FALSE)
+				{
+					$v = $this->validationArray($a);
+					if (!$v->fails())
+						DB::table($this->table)->insert($a);
+					else
+					{
+						Log::error('Validation issue');
+						$errors = $v->errors();
+						foreach ($errors->all() as $message) {
+	    					Log::error($message);	
+						}
+					}
+				}
 				else
 				{
-					Log::error('Validation issue');
-					$errors = $v->errors();
-					foreach ($errors->all() as $message) {
-    					Log::error($message);	
+					if ($a['consignmentno'] != '') 
+					{
+						DB::table($this->table)->([
+						    ['email', '=', $a['email']],
+						    ['mobileno', '=', $a['mobileno']],
+						    ['firstname', '=', $a['firstname']],
+						    ['lastname', '=', $a['lastname']],
+						])->update([
+							['consignmentno' => $a['consignmentno']],
+							['batchno' => $a['batchno']]
+						]);
 					}
 				}
 				Cache::increment('success_'.$file_md5);
