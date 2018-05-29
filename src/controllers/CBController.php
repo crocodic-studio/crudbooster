@@ -1629,7 +1629,7 @@ class CBController extends Controller {
 						    ['mobileno', '=', $a['mobileno']],
 						    ['firstname', '=', $a['firstname']],
 						    ['lastname', '=', $a['lastname']],
-						    ['m_product', '!=', ''],
+						    ['m_product', '!=', '']
 						])->update([
 							['consignmentno' => $a['consignmentno']],
 							['batchno' => $a['batchno']]
