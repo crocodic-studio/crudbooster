@@ -1626,6 +1626,15 @@ class CBController extends Controller {
 					Log::error($a);
 					if ($a['consignmentno'] != '') 
 					{
+						Log::error(
+							DB::table($this->table)->where([
+							    ['email', '=', $a['email']],
+							    ['mobileno', '=', $a['mobileno']],
+							    ['firstname', '=', $a['firstname']],
+							    ['lastname', '=', $a['lastname']],
+							    ['m_product', '!=', '']
+							])->get();
+						);
 						DB::table($this->table)->where([
 						    ['email', '=', $a['email']],
 						    ['mobileno', '=', $a['mobileno']],
