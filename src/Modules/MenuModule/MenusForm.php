@@ -17,11 +17,11 @@ class MenusForm
         $form = [];
         $form[] = [
             'label' => 'Privilege(s)',
-            'name' => 'cms_privileges',
+            'name' => 'cms_roles',
             'type' => 'select2_datatable',
             'placeholder' => '** You can choose multiple privileges',  // todo: translation
             'options' => [
-                'table' => 'cms_privileges',
+                'table' => 'cms_roles',
                 'field_label' => 'name',
                 'field_value' => 'name',
                 'sql_where' => null,

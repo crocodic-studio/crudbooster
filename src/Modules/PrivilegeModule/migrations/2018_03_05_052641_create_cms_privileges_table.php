@@ -12,7 +12,7 @@ class CreateCmsPrivilegesTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('cms_privileges', function(Blueprint $table)
+		Schema::create('cms_roles', function(Blueprint $table)
 		{
 			$table->increments('id');
 			$table->string('name', 50)->nullable();
@@ -30,7 +30,7 @@ class CreateCmsPrivilegesTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('cms_privileges');
+		Schema::drop('cms_roles');
 	}
 
 }

@@ -6,7 +6,7 @@ class PrivilegeRepo
 {
     public static function deleteByRoleId($id)
     {
-        return \DB::table('cms_privileges_roles')->where('cms_privileges_id', $id)->delete();
+        return \DB::table('cms_roles_privileges')->where('cms_roles_id', $id)->delete();
     }
 
     /**
@@ -14,9 +14,9 @@ class PrivilegeRepo
      */
     public function grantAllPermissions($id)
     {
-        \DB::table('cms_privileges_roles')->insert([
+        \DB::table('cms_roles_privileges')->insert([
             'cms_modules_id' => $id,
-            'cms_privileges_id' => cbUser()->cms_privileges_id,
+            'cms_roles_id' => cbUser()->cms_roles_id,
             'can_see_module' => 1,
             'can_create' => 1,
             'can_read' => 1,

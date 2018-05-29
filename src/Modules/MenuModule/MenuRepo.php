@@ -10,7 +10,7 @@ class MenuRepo
     public static function sidebarMenu()
     {
        $conditions = [
-            'cms_privileges' => cbUser()->cms_privileges_id,
+            'cms_roles' => cbUser()->cms_roles_id,
             'parent_id' => 0,
             'is_active' => 1,
             'is_dashboard'=> 0
@@ -27,7 +27,7 @@ class MenuRepo
                 ['is_dashboard', '=', 0],
                 ['is_active', '=', 1],
                 ['parent_id', '=', $menu->id],
-                ['cms_privileges', 'like', '%"'.cbUser()->role()->name.'"%'],
+                ['cms_roles', 'like', '%"'.cbUser()->role()->name.'"%'],
             ];
             $child = self::where($conditions)->orderby('sorting', 'asc')->get();
 
@@ -77,7 +77,7 @@ class MenuRepo
     public static function sidebarDashboard()
     {
         $conditions = [
-            'cms_privileges' => cbUser()->cms_privileges_id,
+            'cms_roles' => cbUser()->cms_roles_id,
             'is_dashboard' => 1,
             'is_active' => 1,
         ];

@@ -10,12 +10,12 @@ class Seeder extends BaseSeeder
 {
     public static function run()
     {
-        $exists = DB::table('cms_privileges')->where('name', 'Super Administrator')->exists();
+        $exists = DB::table('cms_roles')->where('name', 'Super Administrator')->exists();
         if ($exists) {
             return;
         }
         unset($exists);
-        $pid = DB::table('cms_privileges')->insertGetId([
+        $pid = DB::table('cms_roles')->insertGetId([
             'name' => 'Super Administrator',
             'is_superadmin' => 1,
             'theme_color' => 'skin-red',
@@ -25,7 +25,7 @@ class Seeder extends BaseSeeder
             'name' => 'Super Admin',
             'email' => 'admin@crudbooster.com',
             'password' => bcrypt('123456'),
-            'cms_privileges_id' => $pid,
+            'cms_roles_id' => $pid,
             'status' => 'Active',
         ]);
     }

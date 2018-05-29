@@ -24,7 +24,7 @@ class CreateMenuForNewModule
             'path' => '#',
             'type' => 'URL External',
             'is_active' => 1,
-            'cms_privileges' => cbUser()->cms_privileges_id,
+            'cms_roles' => cbUser()->cms_roles_id,
             'sorting' => $this->table()->where('parent_id', 0)->max('sorting') + 1,
             'parent_id' => 0,
         ]);
@@ -73,7 +73,7 @@ class CreateMenuForNewModule
             'created_at' => YmdHis(),
             'type' => 'Route',
             'is_active' => 1,
-            'cms_privileges' => cbUser()->cms_privileges_id,
+            'cms_roles' => cbUser()->cms_roles_id,
             'parent_id' => $parentMenuId,
         ];
 

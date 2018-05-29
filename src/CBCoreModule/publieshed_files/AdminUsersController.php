@@ -18,8 +18,8 @@ class AdminUsersController extends CBController
 
     public function hookQueryIndex($query)
     {
-        $query->join('cms_privileges', 'cms_privileges.id', '=', 'cms_privileges_id');
-        $query->addSelect('cms_privileges.name as cms_privileges_name');
+        $query->join('cms_roles', 'cms_roles.id', '=', 'cms_roles_id');
+        $query->addSelect('cms_roles.name as cms_roles_name');
     }
 
     public function getProfile()
@@ -31,7 +31,7 @@ class AdminUsersController extends CBController
         $this->buttonShow = false;
         $this->buttonAdd = false;
         $this->deleteBtn = false;
-        $this->hide_form = ['cms_privileges_id'];
+        $this->hide_form = ['cms_roles_id'];
 
         session()->put('current_row_id', auth('cbAdmin')->id());
 
@@ -66,9 +66,9 @@ class AdminUsersController extends CBController
         ];
         $this->form[] = [
             'label' => "Privilege",
-            'name' => "cms_privileges_id",
+            'name' => "cms_roles_id",
             'type' => "select_datatable",
-            "options" => ["table" => "cms_privileges", "field_value" => "id", "field_label" => 'name'],
+            "options" => ["table" => "cms_roles", "field_value" => "id", "field_label" => 'name'],
             'required' => true,
         ];
         $this->form[] = ['label' => "Password", 'name' => "password", 'type' => "password", "help" => "Please leave empty if not change"];
@@ -81,7 +81,7 @@ class AdminUsersController extends CBController
         $this->col = [];
         $this->col[] = ['label' => 'name', 'name' => 'name'];
         $this->col[] = ['label' => "Email", 'name' => "email"];
-        $this->col[] = ['label' => "Privilege", 'name' => "cms_privileges_name"];
+        $this->col[] = ['label' => "Privilege", 'name' => "cms_roles_name"];
         $this->col[] = ['label' => "Photo", 'name' => "photo", "image" => 1];
         # END COLUMNS DO NOT REMOVE THIS LINE
     }

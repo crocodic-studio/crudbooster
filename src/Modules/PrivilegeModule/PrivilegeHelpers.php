@@ -102,10 +102,10 @@ trait PrivilegeHelpers
 
     public static function getPrivileges()
     {
-        $uid = cbUser()->cms_privileges_id;
+        $uid = cbUser()->cms_roles_id;
 
         return cache()->rememberForever('cb_admin_privileges_roles', function () use ($uid) {
-            return \DB::table('cms_privileges_roles')->where('cms_privileges_id', $uid)->join('cms_modules', 'cms_modules.id', '=', 'cms_modules_id')->select('cms_modules.name', 'cms_modules.path', 'can_see_module', 'can_create', 'can_read', 'can_edit', 'can_delete')->get() ?: [];
+            return \DB::table('cms_roles_privileges')->where('cms_roles_id', $uid)->join('cms_modules', 'cms_modules.id', '=', 'cms_modules_id')->select('cms_modules.name', 'cms_modules.path', 'can_see_module', 'can_create', 'can_read', 'can_edit', 'can_delete')->get() ?: [];
         });
     }
 }

@@ -1,6 +1,6 @@
 <script type="text/javascript">
     $(function () {
-        var cms_privileges_id = '{{$cms_privileges_id}}';
+        var cms_roles_id = '{{$cms_roles_id}}';
         var sortactive = $(".draggable-menu").sortable({
             group: '.draggable-menu',
             delay: 200,

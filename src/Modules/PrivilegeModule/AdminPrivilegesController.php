@@ -16,7 +16,7 @@ class AdminPrivilegesController extends CBController
      */
     public function __construct()
     {
-        $this->table = 'cms_privileges';
+        $this->table = 'cms_roles';
         $this->primaryKey = 'id';
         $this->titleField = "name";
     }
@@ -40,11 +40,11 @@ class AdminPrivilegesController extends CBController
         $data['moduls'] = $this->table('cms_modules')
             ->where('is_protected', 0)
             ->select('cms_modules.*',
-                DB::raw("(select can_see_module from cms_privileges_roles where cms_modules_id = cms_modules.id and cms_privileges_id = '$id') as can_see_module"),
-                DB::raw("(select can_create  from cms_privileges_roles where cms_modules_id = cms_modules.id and cms_privileges_id = '$id') as can_create"),
-                DB::raw("(select can_read    from cms_privileges_roles where cms_modules_id = cms_modules.id and cms_privileges_id = '$id') as can_read"),
-                DB::raw("(select can_edit    from cms_privileges_roles where cms_modules_id = cms_modules.id and cms_privileges_id = '$id') as can_edit"),
-                DB::raw("(select can_delete  from cms_privileges_roles where cms_modules_id  = cms_modules.id and cms_privileges_id = '$id') as can_delete"))
+                DB::raw("(select can_see_module from cms_roles_privileges where cms_modules_id = cms_modules.id and cms_roles_id = '$id') as can_see_module"),
+                DB::raw("(select can_create  from cms_roles_privileges where cms_modules_id = cms_modules.id and cms_roles_id = '$id') as can_create"),
+                DB::raw("(select can_read    from cms_roles_privileges where cms_modules_id = cms_modules.id and cms_roles_id = '$id') as can_read"),
+                DB::raw("(select can_edit    from cms_roles_privileges where cms_modules_id = cms_modules.id and cms_roles_id = '$id') as can_edit"),
+                DB::raw("(select can_delete  from cms_roles_privileges where cms_modules_id  = cms_modules.id and cms_roles_id = '$id') as can_delete"))
             ->orderby('name', 'asc')
             ->get();
 
@@ -65,9 +65,9 @@ class AdminPrivilegesController extends CBController
 
         foreach (Request::input('privileges', []) as $moduleId => $data) {
             $arrs = array_get_keys($data, ['can_see_module', 'can_create', 'can_read', 'can_edit', 'can_delete'], 0);
-            $arrs['cms_privileges_id'] = $id;
+            $arrs['cms_roles_id'] = $id;
             $arrs['cms_modules_id'] = $moduleId;
-            $this->table('cms_privileges_roles')->insert($arrs);
+            $this->table('cms_roles_privileges')->insert($arrs);
             //$module = DB::table('cms_modules')->where('id', $moduleId)->first();
         }
 
@@ -96,14 +96,12 @@ class AdminPrivilegesController extends CBController
         $this->inputAssignment($id);
 
         $this->findRow($id)->update($this->arr);
-        foreach (Request::input('privileges', []) as $moduleId => $data) {
-            //Check Menu
-
+        foreach (request('privileges', []) as $moduleId => $data) {
             $arrs = array_get_keys($data, ['can_see_module', 'can_create', 'can_read', 'can_edit', 'can_delete',], 0);
             $this->savePermissions($id, $moduleId, $arrs);
         }
 
-        if ($id == cbUser()->cms_privileges_id) {
+        if ($id == cbUser()->cms_roles_id) {
             CRUDBooster::refreshSessionRoles();
             $this->setTheme();
         }
@@ -136,9 +134,9 @@ class AdminPrivilegesController extends CBController
     {
         $conditions = [
             'cms_modules_id' => $moduleId,
-            'cms_privileges_id' => $id,
+            'cms_roles_id' => $id,
         ];
-        return \DB::table('cms_privileges_roles')->updateOrInsert($conditions, $arrs);
+        return \DB::table('cms_roles_privileges')->updateOrInsert($conditions, $arrs);
     }
 
     private function setTheme()
