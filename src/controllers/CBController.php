@@ -1629,7 +1629,7 @@ class CBController extends Controller {
 						$arr = array();
 						foreach ($a as $key => $value)
 							if (($key!=='consigmentno')&&($key!='batchno'))
-								$arr[] = [$key,'=',$value];
+								$arr[] = array($key,'=',$value);
 
 						Log::error($arr);
     	
