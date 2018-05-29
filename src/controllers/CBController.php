@@ -1640,10 +1640,9 @@ class CBController extends Controller {
 						    ['firstname', '=', $a['firstname']],
 						    ['lastname', '=', $a['lastname']],
 						    ['m_product', '!=', '']
-						])->update([
-							['consigmentno' => $a['consigmentno']],
-							['batchno' => $a['batchno']]
-						]);
+						])->update(
+							['consigmentno' => $a['consigmentno'],'batchno' => $a['batchno']]
+						);
 					}
 				}
 				Cache::increment('success_'.$file_md5);
