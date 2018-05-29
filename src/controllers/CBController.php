@@ -1622,6 +1622,7 @@ class CBController extends Controller {
 				}
 				else
 				{
+					Log::info($a);
 					if ($a['consignmentno'] != '') 
 					{
 						DB::table($this->table)->where([
