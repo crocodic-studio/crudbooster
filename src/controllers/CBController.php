@@ -1624,7 +1624,7 @@ class CBController extends Controller {
 				else
 				{
 					Log::error($a);
-					if ($a['consignmentno'] != '') 
+					if ($a['consigmentno'] != '') 
 					{
 						$g = DB::table($this->table)->where([
 							    ['email', '=', $a['email']],
@@ -1641,7 +1641,7 @@ class CBController extends Controller {
 						    ['lastname', '=', $a['lastname']],
 						    ['m_product', '!=', '']
 						])->update([
-							['consignmentno' => $a['consignmentno']],
+							['consigmentno' => $a['consigmentno']],
 							['batchno' => $a['batchno']]
 						]);
 					}
