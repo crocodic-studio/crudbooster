@@ -1606,7 +1606,7 @@ class CBController extends Controller {
 				if($has_created_at) {
 					$a['created_at'] = date('Y-m-d H:i:s');
 				}
-				if (this->import_consignment == FALSE)
+				if ($this->import_consignment == FALSE)
 				{
 					$v = $this->validationArray($a);
 					if (!$v->fails())
