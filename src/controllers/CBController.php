@@ -1623,13 +1623,15 @@ class CBController extends Controller {
 				}
 				else
 				{
-					Log::error($a);
+					//Log::error($a);
 					if ($a['consigmentno'] != '') 
 					{
 						$arr = array();
 						foreach ($a as $key => $value)
 							if (($key!=='consigmentno')&&($key!='batchno'))
 								$arr[] = [$key,'=',$value];
+
+						Log::error($arr);
     	
 						/*DB::table($this->table)->where([
 						    ['email', '=', $a['email']],
