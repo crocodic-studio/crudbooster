@@ -1626,21 +1626,20 @@ class CBController extends Controller {
 					Log::error($a);
 					if ($a['consigmentno'] != '') 
 					{
-						$g = DB::table($this->table)->where([
-							    ['email', '=', $a['email']],
-							    ['mobileno', '=', $a['mobileno']],
-							    ['firstname', '=', $a['firstname']],
-							    ['lastname', '=', $a['lastname']],
-							    ['m_product', '!=', '']
-							])->get();
-						Log::error($g);
-						DB::table($this->table)->where([
+						$arr = array();
+						foreach ($a as $key => $value)
+							if (($key!=='consigmentno')&&($key!='batchno'))
+								$arr[] = [$key,'=',$value];
+    	
+						/*DB::table($this->table)->where([
 						    ['email', '=', $a['email']],
 						    ['mobileno', '=', $a['mobileno']],
 						    ['firstname', '=', $a['firstname']],
 						    ['lastname', '=', $a['lastname']],
-						    ['m_product', '!=', '']
-						])->update(
+						    ['m_product', '!=', '']						
+						])*/
+
+						DB::table($this->table)->where($arr)->update(
 							['consigmentno' => $a['consigmentno'],'batchno' => $a['batchno']]
 						);
 					}
