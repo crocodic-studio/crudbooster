@@ -31,11 +31,9 @@ class AdminLogsController extends CBController
 
     private function setButtons()
     {
-        $this->buttonBulkAction = true;
         $this->buttonExport = false;
         $this->buttonImport = false;
         $this->buttonAdd = false;
         $this->buttonEdit = false;
-        $this->deleteBtn = true;
     }
 }
