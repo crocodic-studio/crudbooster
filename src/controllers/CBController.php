@@ -2,8 +2,6 @@
 
 namespace crocodicstudio\crudbooster\controllers;
 
-error_reporting(E_ALL ^ E_NOTICE);
-
 use crocodicstudio\crudbooster\CBCoreModule\Hooks;
 use crocodicstudio\crudbooster\CBCoreModule\Index;
 use crocodicstudio\crudbooster\controllers\CBController\CbFormLoader;
