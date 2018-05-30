@@ -11,6 +11,11 @@ trait GetCurrentX
         return GetCurrentXClass::getCurrentModule();
     }
 
+    public static function getCurrentModuleName()
+    {
+        return GetCurrentXClass::getCurrentModule()->name;
+    }
+
     public static function getCurrentMenuId()
     {
         return GetCurrentXClass::getCurrentMenuId();

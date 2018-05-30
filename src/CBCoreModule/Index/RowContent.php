@@ -73,7 +73,6 @@ class RowContent
     }
     /**
      * @param $columnsTable
-     * @param $table
      * @param $row
      * @param $rowCells
      * @return array
