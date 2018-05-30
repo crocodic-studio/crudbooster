@@ -102,13 +102,6 @@ if (! function_exists('controller_path')) {
     }
 }
 
-if (! function_exists('now')) {
-    function now()
-    {
-        return date('Y-m-d H:i:s');
-    }
-}
-
 /* 
 | --------------------------------------------------------------------------------------------------------------
 | Get data from input post/get more simply
