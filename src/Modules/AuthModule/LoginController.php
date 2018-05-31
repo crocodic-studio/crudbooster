@@ -36,7 +36,7 @@ class LoginController extends Controller
         }
 
         CRUDBooster::refreshSessionRoles();
-        $this->LogIt($user);
+        event('cb.userLoggedIn', [$user, YmdHis(), request()->ip()]);
 
         return redirect(CRUDBooster::adminPath());
     }
@@ -53,14 +53,6 @@ class LoginController extends Controller
 
             backWithMsg(implode(', ', $message), 'danger');
         }
-    }
-
-    /**
-     * @param $users
-     */
-    private function LogIt($users)
-    {
-        CRUDBooster::insertLog(trans('crudbooster_logging.log_login', ['email' => $users->email, 'ip' => request()->server('REMOTE_ADDR')]));
     }
 
     public function table($tableName = null)

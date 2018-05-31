@@ -122,7 +122,7 @@ class AdminSettingsController extends CBController
             return true;
         }
 
-        CRUDBooster::insertTryLog('view', 'Setting');
+        event('cb.illegalTryToSuperAdminArea', [cbUser(), request()->fullUrlWithQuery()]);
         CRUDBooster::denyAccess();
     }
 
@@ -148,7 +148,6 @@ class AdminSettingsController extends CBController
 
     private function setButtons()
     {
-        $this->deleteBtn = true;
         $this->buttonShow = false;
         $this->buttonCancel = false;
         $this->buttonImport = false;

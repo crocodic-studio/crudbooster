@@ -6,11 +6,11 @@ use Illuminate\Support\Facades\Log;
 
 class LogsRepository
 {
-    public static function insertLog($description, $uid)
+    public static function insertLog($description, $uid, $ip = null)
     {
         $log = [
             'created_at' => YmdHis(),
-            'ipaddress' => request()->ip(),
+            'ipaddress' => $ip ?: request()->ip(),
             'useragent' => request()->userAgent(),
             'url' => request()->url(),
             'cms_users_id' => $uid,

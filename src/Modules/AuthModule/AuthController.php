@@ -67,14 +67,13 @@ class AuthController extends Controller
         $user->password = $randString;
         (new Mailer())->send(['to' => $user->email, 'data' => $user, 'template' => 'forgot_password_backend']);
 
-        CRUDBooster::insertLog(trans('crudbooster_logging.log_forgot', ['email' => request('email'), 'ip' => Request::server('REMOTE_ADDR')]));
-
+        event('cb.forgottenPasswordRequested', [request('email'), request()->ip()]);
         return redirect()->route('getLogin')->with('message', cbTrans('message_forgot_password'));
     }
 
     public function getLogout()
     {
-        CRUDBooster::insertLog(trans('crudbooster_logging.log_logout', ['email' => cbUser()->email]));
+        event('cb.userLoggedOut', [cbUser()]);
         auth('cbAdmin')->logout();
 
         return redirect()->route('getLogin')->with('message', cbTrans('message_after_logout'));

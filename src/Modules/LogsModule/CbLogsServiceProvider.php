@@ -2,6 +2,7 @@
 
 namespace crocodicstudio\crudbooster\Modules\LogsModule;
 
+use crocodicstudio\crudbooster\Modules\LogsModule\Listeners\Auth;
 use Illuminate\Support\ServiceProvider;
 
 class CbLogsServiceProvider extends ServiceProvider
@@ -16,6 +17,7 @@ class CbLogsServiceProvider extends ServiceProvider
         $this->loadRoutesFrom( __DIR__.'/logs_routes.php');
         $this->publishes([__DIR__.'/localization' => resource_path('lang')], 'cb_localization');
         $this->loadMigrationsFrom(__DIR__ . '/migrations');
+        Auth::registerListeners();
     }
 
     /**
