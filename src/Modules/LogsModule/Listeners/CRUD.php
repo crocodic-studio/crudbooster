@@ -4,6 +4,7 @@ namespace crocodicstudio\crudbooster\Modules\LogsModule\Listeners;
 
 use crocodicstudio\crudbooster\CBCoreModule\CbUser;
 use crocodicstudio\crudbooster\Modules\LogsModule\LogsRepository;
+use Illuminate\Support\Facades\Event;
 
 class CRUD
 {
