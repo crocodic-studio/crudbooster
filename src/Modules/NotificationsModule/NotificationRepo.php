@@ -2,25 +2,23 @@
 
 namespace crocodicstudio\crudbooster\Modules\NotificationsModule;
 
-use crocodicstudio\crudbooster\helpers\CRUDBooster;
-use Illuminate\Support\Facades\DB;
 
 class NotificationRepo
 {
     public static function sendNotification(array $config = [])
     {
         $userIds = ($config['cms_users_id']) ?: [auth('cbAdmin')->id()];
-        $notif = [];
-        foreach ($userIds as $id) {
-            $notif[] = [
+        $notifications = [];
+        foreach ($userIds as $userId) {
+            $notifications[] = [
                 'created_at' => YmdHis(),
-                'cms_users_id' => $id,
+                'cms_users_id' => $userId,
                 'content' => $config['content'],
                 'is_read' => 0,
                 'url' => $config['to'],
             ];
         }
-        DB::table('cms_notifications')->insert($notif);
+        \DB::table('cms_notifications')->insert($notifications);
 
         return true;
     }
