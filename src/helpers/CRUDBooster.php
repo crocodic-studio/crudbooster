@@ -105,11 +105,6 @@ class CRUDBooster
         return $routeUrl.'/'.$path;
     }
 
-    public static function insertTryLog($action, $name = '')
-    {
-        self::insertLog(trans("crudbooster_logging.log_try_".$action, ['name' => $name, 'module' => GetCurrentX::getCurrentModule()]));
-    }
-
     public static function insertLog($description)
     {
         LogsRepository::insertLog('crudbooster: '.$description, auth('cbAdmin')->id());

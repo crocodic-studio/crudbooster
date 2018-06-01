@@ -122,7 +122,7 @@ class AdminSettingsController extends CBController
             return true;
         }
 
-        event('cb.illegalTryToSuperAdminArea', [cbUser(), request()->fullUrlWithQuery()]);
+        event('cb.unauthorizedTryToSuperAdminArea', [cbUser(), request()->fullUrlWithQuery()]);
         CRUDBooster::denyAccess();
     }
 

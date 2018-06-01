@@ -23,6 +23,7 @@ class CBSuperadmin
         }
 
         if(!CRUDBooster::isSuperadmin()) {
+            event('cb.unauthorizedTryToSuperAdminArea', [cbUser(), request()->fullUrlWithQuery()]);
             return redirect($adminPath)->with(['message'=> cbTrans('denied_access'),'message_type'=>'warning']);
         }
 

@@ -105,7 +105,7 @@ class CBBackend
      */
     private function stopIllegalAction($action)
     {
-        CRUDBooster::insertTryLog($action, '');
+        event('cb.unauthorizedTryStopped', [cbUser(), $action]);
         CRUDBooster::denyAccess();
     }
 }
