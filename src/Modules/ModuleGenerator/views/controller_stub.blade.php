@@ -11,7 +11,7 @@ class {{$controllerName}} extends CBController {
         $this->titleField = "{{DbInspector::colName($coloms)}}";
         $this->limit = 20;
         $this->showNumbering = false;
-        $this->buttonTableAction = true;
+        $this->showButtonsOnIndexRows = true;
         $this->orderby = "{{$pk}},desc";
         $this->buttonActionStyle = "button_icon";
         $this->buttonAdd = true;

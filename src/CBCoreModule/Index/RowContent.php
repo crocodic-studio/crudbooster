@@ -111,7 +111,7 @@ class RowContent
      */
     private function addActionButtons($addAction, $row, $rowCells)
     {
-        if (!$this->cb->buttonTableAction) {
+        if (!$this->cb->showButtonsOnIndexRows) {
             return $rowCells;
         }
         $buttonActionStyle = $this->cb->buttonActionStyle;

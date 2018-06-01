@@ -94,7 +94,7 @@
                 </th>
             @endforeach
 
-            @if($buttonTableAction)
+            @if($showButtonsOnIndexRows)
                 @if(CRUDBooster::canUpdate() || CRUDBooster::canDelete() || CRUDBooster::canRead())
                     <th width='{{$button_action_width?:"auto"}}'
                         style="text-align:right">{{cbTrans("action_label")}}</th>
@@ -167,7 +167,7 @@
             }
             ?>
 
-            @if($buttonTableAction)
+            @if($showButtonsOnIndexRows)
                 @if(CRUDBooster::canUpdate() || CRUDBooster::canDelete() || CRUDBooster::canRead())
                     <th> -</th>
                 @endif
