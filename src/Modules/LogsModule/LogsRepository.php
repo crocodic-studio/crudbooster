@@ -2,8 +2,6 @@
 
 namespace crocodicstudio\crudbooster\Modules\LogsModule;
 
-use Illuminate\Support\Facades\Log;
-
 class LogsRepository
 {
     public static function insertLog($description, $uid, $ip = null)
@@ -16,7 +14,6 @@ class LogsRepository
             'cms_users_id' => $uid,
             'description' => $description
         ];
-        Log::info($description, $log);
         \DB::table('cms_logs')->insert($log);
     }
 }
