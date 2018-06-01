@@ -115,7 +115,7 @@ class AdminStatisticBuilderController extends CBController
         $component_name = request('component_name');
         $componentID = md5(time());
 
-        $command = 'layout';
+        //$command = 'layout';
 
         $data = [
             'id_cms_statistics' => request('id_cms_statistics'),
@@ -202,9 +202,7 @@ class AdminStatisticBuilderController extends CBController
     private function setButtons()
     {
         $this->buttonActionStyle = 'button_icon_text';
-        $this->buttonAdd = true;
         $this->buttonDetail = false;
-        $this->buttonShow = true;
         $this->buttonFilter = false;
         $this->buttonExport = false;
         $this->buttonImport = false;

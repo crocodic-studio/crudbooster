@@ -23,9 +23,6 @@ class AdminEmailTemplatesController extends CBController
     private function setButtons()
     {
         $this->buttonActionStyle = 'button_icon';
-        $this->buttonAdd = true;
-        $this->buttonEdit = true;
-        $this->buttonShow = true;
         $this->buttonExport = false;
         $this->buttonImport = false;
     }
