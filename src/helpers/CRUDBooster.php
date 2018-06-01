@@ -105,11 +105,6 @@ class CRUDBooster
         return $routeUrl.'/'.$path;
     }
 
-    public static function insertLog($description)
-    {
-        LogsRepository::insertLog('crudbooster: '.$description, auth('cbAdmin')->id());
-    }
-
     public static function listCbTables()
     {
         $tables = DbInspector::listTables();

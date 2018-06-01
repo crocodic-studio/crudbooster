@@ -55,7 +55,7 @@ trait Deleter
     public function getDeleteImage()
     {
         $this->genericLoader();
-        $id = request('id');
+        $id = (int) request('id');
         $column = request('column');
 
         $row = $this->findRow($id)->first();
@@ -65,7 +65,7 @@ trait Deleter
 
         $this->findRow($id)->update([$column => null]);
 
-        $this->insertLog('log_delete_image', $id . ' - '. $this->table);
+        event('cb.imageDeleted', [$this->table, compact('id', 'column', 'file'), YmdHis(), cbUser()]);
 
         backWithMsg(cbTrans('alert_delete_data_success'));
     }

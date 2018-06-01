@@ -129,11 +129,6 @@ abstract class CBController extends Controller
     {
     }
 
-    private function insertLog($msg, $name)
-    {
-        CRUDBooster::insertLog(trans('crudbooster_logging.'.$msg, ['module' => CRUDBooster::getCurrentModule()->name, 'name' => $name]));
-    }
-
     /**
      * @param $data
      * @return mixed

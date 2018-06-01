@@ -60,17 +60,17 @@ trait FormSubmitHandlers
         $this->setTimeStamps('created_at');
 
         $this->arr = $this->hookBeforeAdd($this->arr);
-        $id = $this->table()->insertGetId($this->arr);
+        $id = (int) $this->table()->insertGetId($this->arr);
         app(RelationHandler::class)->save($this->table, $id, $this->data_inputan);
         $this->hookAfterAdd($id);
 
-        $this->insertLog('log_add', $id. ' on ' . $this->table);
-
+        event('cb.dataInserted', [$this->table, $id, YmdHis(), cbUser()]);
         $this->sendResponseForSave('alert_add_data_success');
     }
 
     public function postEditSave($id)
     {
+        $id = (int) $id;
         $this->genericLoader();
 
         app(FormValidator::class)->validate($id, $this->form, $this);
@@ -83,7 +83,7 @@ trait FormSubmitHandlers
         app(RelationHandler::class)->save($this->table, $id, $this->data_inputan);
         $this->hookAfterEdit($id);
 
-        $this->insertLog('log_update', $id. ' on ' . $this->table);
+        event('cb.dataUpdated', [$this->table, $id, YmdHis(), cbUser()]);
 
         $this->sendResponseForSave('alert_update_data_success');
     }
