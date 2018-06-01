@@ -23,8 +23,11 @@
                     @include('crudbooster::_admin_template._sidebar.super_admin.static')
                     @include('crudbooster::_admin_template._sidebar.super_admin.api')
                     @include('CbEmailTpl::super_admin_menu')
-                    @include('crudbooster::_admin_template._sidebar.super_admin.log')
                 @endif
+
+                @foreach(app('CbDynamicMenus')->getMenus() as $menu)
+                    @include($menu)
+                @endforeach
             </ul>
         </div>
 
