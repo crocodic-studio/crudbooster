@@ -176,4 +176,14 @@ class CRUDBooster
 
         sendAndTerminate(redirect($to)->with(['message' => $message, 'message_type' => $type]));
     }
+
+    public static function allowOnlySuperAdmin()
+    {
+        event('cb.unauthorizedTryToSuperAdminArea', [cbUser(), request()->fullUrlWithQuery()]);
+        if (self::isSuperadmin()) {
+            return true;
+        }
+
+        self::denyAccess();
+    }
 }

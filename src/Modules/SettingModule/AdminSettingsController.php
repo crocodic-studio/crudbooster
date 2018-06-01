@@ -33,9 +33,9 @@ class AdminSettingsController extends CBController
 
     public function getShow()
     {
-        $this->cbLoader();
+        CRUDBooster::allowOnlySuperAdmin();
 
-        $this->allowOnlySuperAdmin();
+        $this->cbLoader();
 
         $data = ['page_title' => urldecode(request('group'))];
 
@@ -63,7 +63,7 @@ class AdminSettingsController extends CBController
 
     public function postSaveSetting()
     {
-        $this->allowOnlySuperAdmin();
+        CRUDBooster::allowOnlySuperAdmin();
 
         $group = request('group_setting');
 
@@ -114,16 +114,6 @@ class AdminSettingsController extends CBController
         }
 
         CbValidator::valid($rules, 'view');
-    }
-
-    private function allowOnlySuperAdmin()
-    {
-        if (CRUDBooster::isSuperadmin()) {
-            return true;
-        }
-
-        event('cb.unauthorizedTryToSuperAdminArea', [cbUser(), request()->fullUrlWithQuery()]);
-        CRUDBooster::denyAccess();
     }
 
     /**

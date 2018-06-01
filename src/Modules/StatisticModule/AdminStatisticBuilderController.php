@@ -69,8 +69,8 @@ class AdminStatisticBuilderController extends CBController
 
     public function getBuilder($id_cms_statistics)
     {
+       CRUDBooster::allowOnlySuperAdmin();
         $this->cbLoader();
-        $this->allowOnlySuperAdmin('Builder');
 
         $page_title = 'Statistic Builder';
 
@@ -149,8 +149,8 @@ class AdminStatisticBuilderController extends CBController
 
     public function getEditComponent($componentID)
     {
+       CRUDBooster::allowOnlySuperAdmin();
         $this->cbLoader();
-        $this->allowOnlySuperAdmin();
 
         $component_row = CRUDBooster::first('cms_statistic_components', ['componentID' => $componentID]);
 
@@ -173,7 +173,7 @@ class AdminStatisticBuilderController extends CBController
 
     public function getDeleteComponent($id)
     {
-        $this->allowOnlySuperAdmin();
+       CRUDBooster::allowOnlySuperAdmin();
 
         DB::table('cms_statistic_components')->where('componentID', $id)->delete();
 
@@ -191,15 +191,6 @@ class AdminStatisticBuilderController extends CBController
     {
         $postData['slug'] = str_slug($postData['name']);
         return $postData;
-    }
-
-    private function allowOnlySuperAdmin()
-    {
-        if (CRUDBooster::isSuperadmin()) {
-            return;
-        }
-        event('cb.unauthorizedTryToSuperAdminArea', [cbUser(), request()->fullUrlWithQuery()]);
-        CRUDBooster::denyAccess();
     }
 
     private function makeColumns()
