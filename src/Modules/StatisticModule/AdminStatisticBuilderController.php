@@ -201,11 +201,8 @@ class AdminStatisticBuilderController extends CBController
 
     private function setButtons()
     {
-        $this->buttonTableAction = true;
         $this->buttonActionStyle = 'button_icon_text';
         $this->buttonAdd = true;
-        $this->deleteBtn = true;
-        $this->buttonEdit = true;
         $this->buttonDetail = false;
         $this->buttonShow = true;
         $this->buttonFilter = false;
