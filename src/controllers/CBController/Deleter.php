@@ -13,7 +13,6 @@ trait Deleter
     {
         $this->genericLoader();
         (new DataRemover($this))->doDeleteWithHook([$id]);
-        $this->insertLog('log_delete', $id);
         $url = request('return_url') ?: Request::server('HTTP_REFERER');
         CRUDBooster::redirect($url, cbTrans('alert_delete_data_success'), 'success');
     }
@@ -28,7 +27,6 @@ trait Deleter
         }
         if ($btnName == 'delete') {
             (new DataRemover($this))->doDeleteWithHook($selectedIds);
-            $this->insertLog('log_delete', implode(',', $selectedIds) . ' - '. $this->table);
             backWithMsg(cbTrans('alert_delete_selected_success'));
         }
 

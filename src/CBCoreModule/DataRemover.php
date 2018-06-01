@@ -39,6 +39,6 @@ class DataRemover
         $idsArray = $this->ctrl->hookBeforeDelete($idsArray);
         $this->deleteIds($idsArray);
         $this->ctrl->hookAfterDelete($idsArray);
-        event('cb.rowsDeleted',[$this->ctrl->table, $idsArray, YmdHis(), cbUser()]);
+        event('cb.dataDeleted', [$this->ctrl->table, $idsArray, YmdHis(), cbUser()]);
     }
 }
