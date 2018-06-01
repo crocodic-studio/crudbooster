@@ -4,7 +4,6 @@ namespace crocodicstudio\crudbooster\helpers;
 
 use crocodicstudio\crudbooster\CBCoreModule\Facades\CbRouter;
 use crocodicstudio\crudbooster\CBCoreModule\ViewHelpers;
-use crocodicstudio\crudbooster\Modules\LogsModule\LogsRepository;
 use crocodicstudio\crudbooster\Modules\PrivilegeModule\GetCurrentX;
 use crocodicstudio\crudbooster\Modules\PrivilegeModule\PrivilegeHelpers;
 use Session;
