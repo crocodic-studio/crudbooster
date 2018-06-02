@@ -368,6 +368,7 @@ class CBController extends Controller {
 				$type  = @$fc['type'];
 				$sorting = @$fc['sorting'];
 				$type_data = @$fc['type_data'];
+				$label_data = @$fc['label'];
 
 				if($sorting!='') {
 					if($key) {
@@ -377,7 +378,7 @@ class CBController extends Controller {
 				}
 
 				if ($type=='between') {
-					if ($type_data == 'datetime')
+					if (($type_data == 'datetime')||((strpos($label_data,"date")!==false)&&(strpos($label_data,"time")!==false)))
 					{
 						if($key && $value)
 						{
