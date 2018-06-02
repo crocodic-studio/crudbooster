@@ -367,6 +367,7 @@ class CBController extends Controller {
 				$value = @$fc['value'];
 				$type  = @$fc['type'];
 				$sorting = @$fc['sorting'];
+				$type_data = @$fc['type_data'];
 
 				if($sorting!='') {
 					if($key) {
@@ -376,7 +377,17 @@ class CBController extends Controller {
 				}
 
 				if ($type=='between') {
-					if($key && $value) $result->whereBetween($key,$value);
+					if ($type_data == 'datetime')
+					{
+						if($key && $value)
+						{
+							$value[0] +=" 00:00:00";
+							$value[1] +=" 23:59:59";
+							$result->whereBetween($key,$value);
+						}
+					}
+					else
+						if($key && $value) $result->whereBetween($key,$value);
 				}else{
 					continue;
 				}
