@@ -1698,6 +1698,7 @@ class CBController extends Controller {
 
 			//Create Directory Monthly
 			Storage::makeDirectory(date('Y-m'));
+			return "bob";
 
 			//Move file to storage
 			$filename = md5(str_random(5)).'.'.$ext;
