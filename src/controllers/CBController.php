@@ -1484,10 +1484,7 @@ class CBController extends Controller {
 	    {
 	        while (($row = fgetcsv($handle, 1000, $delimiter)) !== false)
 	        {
-	            if (!$header)
-	                $header = $row;
-	            else
-	                $data[] = array_combine($header, $row);
+	        	$data[] = $row;
 	        }
 	        fclose($handle);
 	    }
