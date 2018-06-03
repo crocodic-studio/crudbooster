@@ -1566,8 +1566,8 @@ class CBController extends Controller {
 		$file = trim(str_replace('uploads','app',$file),'/');
 		$file = storage_path($file);
 
-		$rows = Excel::load($file,function($reader) {
-		})->get();
+		$rows = $this->csvToArray($file);
+		//$rows = Excel::load($file,function($reader) {})->get();
 
 		$has_created_at = false;
 		if(CRUDBooster::isColumnExists($this->table,'created_at')) {
