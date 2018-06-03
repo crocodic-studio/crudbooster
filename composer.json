@@ -20,7 +20,7 @@
         "php":">=5.6",
         "barryvdh/laravel-dompdf": "0.8.*",
         "doctrine/dbal": "~2.3",        
-        "maatwebsite/excel": "~2.1.0",                
+        "maatwebsite/excel": "~2.1.*",                
         "unisharp/laravel-filemanager": "1.7.*",
         "intervention/imagecache":"2.*",
         "proengsoft/laravel-jsvalidation":"1.*"
