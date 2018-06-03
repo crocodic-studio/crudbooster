@@ -1708,17 +1708,18 @@ class CBController extends Controller {
 			$ext  = $file->getClientOriginalExtension();
 
 
-			/*$validator = Validator::make([
+			$validator = Validator::make([
 				'extension'=>$ext,
 				],[
-				'extension'=>'in:xls,xlsx,csv'
+				//'extension'=>'in:xls,xlsx,csv'
+				'extension'=>'in:csv'
 				]);
 
 		    if ($validator->fails())
 		    {
 		        $message = $validator->errors()->all();
 		        return redirect()->back()->with(['message'=>implode('<br/>',$message),'message_type'=>'warning']);
-		    }*/
+		    }
 
 			//Create Directory Monthly
 			Storage::makeDirectory(date('Y-m'));
