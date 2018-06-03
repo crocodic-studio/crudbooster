@@ -1613,7 +1613,7 @@ class CBController extends Controller {
 
 			if($has_title_field==false) continue;
 
-			//try{
+			try{
 
 				if($has_created_at) {
 					$a['created_at'] = date('Y-m-d H:i:s');
@@ -1667,11 +1667,11 @@ class CBController extends Controller {
 					}
 				}
 				Cache::increment('success_'.$file_md5);
-			/*}catch(\Exception $e) {
+			}catch(\Exception $e) {
 				$e = (string) $e;
 				Log::error('Error'.$e);
 				Cache::put('error_'.$file_md5,$e,500);
-			}*/
+			}
 		}
 		return response()->json(['status'=>true]);
 	}
