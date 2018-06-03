@@ -1698,7 +1698,7 @@ class CBController extends Controller {
 
 			//Create Directory Monthly
 			Storage::makeDirectory(date('Y-m'));
-			return "bob";
+
 
 			//Move file to storage
 			$filename = md5(str_random(5)).'.'.$ext;
@@ -1706,6 +1706,7 @@ class CBController extends Controller {
 			if($file->move(storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m')),$filename)) {
 				$url_filename = 'uploads/'.date('Y-m').'/'.$filename;
 			}
+			return "bob";
 			$url = CRUDBooster::mainpath('import-data').'?file='.base64_encode($url_filename);
 			return redirect($url);
 		}else{
