@@ -1706,8 +1706,9 @@ class CBController extends Controller {
 			if($file->move(storage_path('app'.DIRECTORY_SEPARATOR.date('Y-m')),$filename)) {
 				$url_filename = 'uploads/'.date('Y-m').'/'.$filename;
 			}
-			return "bob";
+
 			$url = CRUDBooster::mainpath('import-data').'?file='.base64_encode($url_filename);
+			return $url;
 			return redirect($url);
 		}else{
 			return redirect()->back();
