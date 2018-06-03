@@ -1473,6 +1473,28 @@ class CBController extends Controller {
 		return view('crudbooster::default.form',compact('row','page_menu','page_title','command','id'));
 	}
 
+	function csvToArray($filename = '', $delimiter = ',')
+	{
+	    if (!file_exists($filename) || !is_readable($filename))
+	        return false;
+
+	    $header = null;
+	    $data = array();
+	    if (($handle = fopen($filename, 'r')) !== false)
+	    {
+	        while (($row = fgetcsv($handle, 1000, $delimiter)) !== false)
+	        {
+	            if (!$header)
+	                $header = $row;
+	            else
+	                $data[] = array_combine($header, $row);
+	        }
+	        fclose($handle);
+	    }
+
+	    return $data;
+	}
+
 	public function getImportData() {
 		$this->cbLoader();
 		$data['page_menu']       = Route::getCurrentRoute()->getActionName();
@@ -1482,8 +1504,10 @@ class CBController extends Controller {
 			$file = base64_decode(Request::get('file'));
 			$file = trim(str_replace('uploads','app',$file),'/');
 			$file = storage_path($file);
-			$rows = Excel::load($file,function($reader) {
-			})->get();
+			/*$rows = Excel::load($file,function($reader) {
+			})->get();*/
+			$rows = csvToArray($file);
+			return (count($rows));
 
 			Session::put('total_data_import',count($rows));
 
