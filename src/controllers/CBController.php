@@ -1506,7 +1506,7 @@ class CBController extends Controller {
 			$file = storage_path($file);
 			/*$rows = Excel::load($file,function($reader) {
 			})->get();*/
-			$rows = csvToArray($file);
+			$rows = $this->csvToArray($file);
 			return (count($rows));
 
 			Session::put('total_data_import',count($rows));
