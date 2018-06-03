@@ -1487,10 +1487,6 @@ class CBController extends Controller {
 
 			Session::put('total_data_import',count($rows));
 
-			//DEBUG MARKER START
-			return count($rows);
-			//DEBUG MARKER END
-
 			$data_import_column = array();
 			foreach($rows as $value) {
 				$a = array();
@@ -1713,9 +1709,6 @@ class CBController extends Controller {
 
 			$url = CRUDBooster::mainpath('import-data').'?file='.base64_encode($url_filename);
 
-			//DEBUG MARKER REMOVE START
-			return $url;
-			//DEBUG MARKER REMOVE END
 			return redirect($url);
 		}else{
 			return redirect()->back();
