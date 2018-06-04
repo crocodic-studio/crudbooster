@@ -15,10 +15,8 @@ Route::group([
     Route::get('email-templates/detail/{id?}', ['uses' => 'AdminEmailTemplatesController@getDetail', 'as' => 'AdminEmailTemplatesControllerGetDetail']);
     Route::get('email-templates/delete-image/{id?}', ['uses' => 'AdminEmailTemplatesController@getDeleteImage', 'as' => 'AdminEmailTemplatesControllerGetDeleteImage']);
 
-    Route::post('email-templates/export-data', [ 'uses' => 'AdminEmailTemplatesController@postExportData', 'as' => 'AdminEmailTemplatesControllerPostExportData',]);
     Route::post('email-templates/find-data', ['uses' => 'AdminEmailTemplatesController@postFindData', 'as' => 'AdminEmailTemplatesControllerPostFindData',]);
     Route::post('email-templates/add-save', ['uses' => 'AdminEmailTemplatesController@postAddSave', 'as' => 'AdminEmailTemplatesControllerPostAddSave',]);
     Route::post('email-templates/edit-save/{id?}', ['uses' => 'AdminEmailTemplatesController@postEditSave', 'as' => 'AdminEmailTemplatesControllerPostEditSave',]);
-    Route::post('email-templates/do-import-chunk', ['uses' => 'AdminEmailTemplatesController@postDoImportChunk', 'as' => 'AdminEmailTemplatesControllerPostDoImportChunk',]);
     Route::post('email-templates/action-selected', ['uses' => 'AdminEmailTemplatesController@postActionSelected', 'as' => 'AdminEmailTemplatesControllerPostActionSelected',]);
 });

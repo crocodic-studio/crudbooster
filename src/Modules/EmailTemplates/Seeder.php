@@ -2,9 +2,9 @@
 
 namespace crocodicstudio\crudbooster\Modules\EmailTemplates;
 
-use Illuminate\Support\Facades\DB;
-
+use crocodicstudio\crudbooster\Modules\SettingModule\SettingRepo;
 use Illuminate\Database\Seeder as BaseSeeder;
+use Illuminate\Support\Facades\DB;
 
 class Seeder extends BaseSeeder
 {
@@ -19,5 +19,64 @@ class Seeder extends BaseSeeder
             'from_email' => 'system@crudbooster.com',
             'cc_email' => null,
         ]);
+        $data = [
+            [
+                'name' => 'email_sender',
+                'label' => 'Email Sender',
+                'content' => 'support@crudbooster.com',
+                'content_input_type' => 'text',
+                'group_setting' => cbTrans('email_setting'),
+                'dataenum' => null,
+                'helper' => null,
+            ],
+            [
+                'name' => 'smtp_driver',
+                'label' => 'Mail Driver',
+                'content' => 'mail',
+                'content_input_type' => 'select',
+                'group_setting' => cbTrans('email_setting'),
+                'dataenum' => 'smtp,mail,sendmail',
+                'helper' => null,
+            ],
+            [
+                'name' => 'smtp_host',
+                'label' => 'SMTP Host',
+                'content' => '',
+                'content_input_type' => 'text',
+                'group_setting' => cbTrans('email_setting'),
+                'dataenum' => null,
+                'helper' => null,
+            ],
+            [
+                'name' => 'smtp_port',
+                'label' => 'SMTP Port',
+                'content' => '25',
+                'content_input_type' => 'text',
+                'group_setting' => cbTrans('email_setting'),
+                'dataenum' => null,
+                'helper' => 'default 25',
+            ],
+            [
+                'name' => 'smtp_username',
+                'label' => 'SMTP Username',
+                'content' => '',
+                'content_input_type' => 'text',
+                'group_setting' => cbTrans('email_setting'),
+                'dataenum' => null,
+                'helper' => null,
+            ],
+            [
+                'name' => 'smtp_password',
+                'label' => 'SMTP Password',
+                'content' => '',
+                'content_input_type' => 'text',
+                'group_setting' => cbTrans('email_setting'),
+                'dataenum' => null,
+                'helper' => null,
+            ],
+
+        ];
+
+        SettingRepo::resetSettings($data);
     }
 }

@@ -40,62 +40,6 @@ class Seeder extends BaseSeeder
                 'helper' => null,
             ],
 
-            //EMAIL SETTING
-            [
-                'name' => 'email_sender',
-                'label' => 'Email Sender',
-                'content' => 'support@crudbooster.com',
-                'content_input_type' => 'text',
-                'group_setting' => cbTrans('email_setting'),
-                'dataenum' => null,
-                'helper' => null,
-            ],
-            [
-                'name' => 'smtp_driver',
-                'label' => 'Mail Driver',
-                'content' => 'mail',
-                'content_input_type' => 'select',
-                'group_setting' => cbTrans('email_setting'),
-                'dataenum' => 'smtp,mail,sendmail',
-                'helper' => null,
-            ],
-            [
-                'name' => 'smtp_host',
-                'label' => 'SMTP Host',
-                'content' => '',
-                'content_input_type' => 'text',
-                'group_setting' => cbTrans('email_setting'),
-                'dataenum' => null,
-                'helper' => null,
-            ],
-            [
-                'name' => 'smtp_port',
-                'label' => 'SMTP Port',
-                'content' => '25',
-                'content_input_type' => 'text',
-                'group_setting' => cbTrans('email_setting'),
-                'dataenum' => null,
-                'helper' => 'default 25',
-            ],
-            [
-                'name' => 'smtp_username',
-                'label' => 'SMTP Username',
-                'content' => '',
-                'content_input_type' => 'text',
-                'group_setting' => cbTrans('email_setting'),
-                'dataenum' => null,
-                'helper' => null,
-            ],
-            [
-                'name' => 'smtp_password',
-                'label' => 'SMTP Password',
-                'content' => '',
-                'content_input_type' => 'text',
-                'group_setting' => cbTrans('email_setting'),
-                'dataenum' => null,
-                'helper' => null,
-            ],
-
             //APPLICATION SETTING
             [
                 'name' => 'appname',
@@ -164,16 +108,6 @@ class Seeder extends BaseSeeder
             ],
         ];
 
-        foreach ($data as $row) {
-            $count = DB::table('cms_settings')->where('name', $row['name'])->count();
-            if (! $count) {
-                DB::table('cms_settings')->insert($row);
-                continue;
-            }
-            if ($count > 1) {
-                $newsId = DB::table('cms_settings')->where('name', $row['name'])->orderby('id', 'asc')->take(1)->first();
-                DB::table('cms_settings')->where('name', $row['name'])->where('id', '!=', $newsId->id)->delete();
-            }
-        }
+        SettingRepo::resetSettings($data);
     }
 }
