@@ -1664,7 +1664,8 @@ class CBController extends Controller {
 				}
 				else
 				{
-					//Log::error($a);
+					Log::error("notinloop");
+					Log::error($a);
 					if ($a['consigmentno'] != '') 
 					{
 						$arr = array();
@@ -1673,22 +1674,6 @@ class CBController extends Controller {
 								$arr[] = array($key,'=',$value);
 
 						Log::error($arr);
-    	
-						/*DB::table($this->table)->where([
-						    ['email', '=', $a['email']],
-						    ['mobileno', '=', $a['mobileno']],
-						    ['firstname', '=', $a['firstname']],
-						    ['lastname', '=', $a['lastname']],
-						    ['m_product', '!=', '']						
-						]);*/
-
-						/*$arr = [
-						    ['email', '=', $a['email']],
-						    ['mobileno', '=', $a['mobileno']],
-						    ['firstname', '=', $a['firstname']],
-						    ['lastname', '=', $a['lastname']],
-						    ['m_product', '!=', '']						
-						];*/
 
 						DB::table($this->table)->where($arr)->update(
 							['consigmentno' => $a['consigmentno'],'batchno' => $a['batchno']]
