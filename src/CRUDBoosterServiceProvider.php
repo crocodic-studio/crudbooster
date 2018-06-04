@@ -7,7 +7,6 @@ use crocodicstudio\crudbooster\Modules\ApiGeneratorModule\CbApiGeneratorServiceP
 use crocodicstudio\crudbooster\Modules\AuthModule\CbAuthServiceProvider;
 use crocodicstudio\crudbooster\Modules\EmailTemplates\CbEmailTemplatesServiceProvider;
 use crocodicstudio\crudbooster\Modules\FileManagerModule\CbFileManagerServiceProvider;
-use crocodicstudio\crudbooster\Modules\LogsModule\CbLogsServiceProvider;
 use crocodicstudio\crudbooster\Modules\MenuModule\CbMenuServiceProvider;
 use crocodicstudio\crudbooster\Modules\ModuleGenerator\CbModulesGeneratorServiceProvider;
 use crocodicstudio\crudbooster\Modules\NotificationsModule\CbNotificationsServiceProvider;

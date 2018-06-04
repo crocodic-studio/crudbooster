@@ -51,7 +51,7 @@
         $('.datatables-simple').DataTable();
     })
 </script>
-{!! cbScript('js/main.js?r='.time()) !!}
+{!! cbScript('js/main.js') !!}
 
 
 	
