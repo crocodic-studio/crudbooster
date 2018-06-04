@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use CB;
 use crocodicstudio\crudbooster\controllers\CBController;
 use crocodicstudio\crudbooster\helpers\CRUDBooster;
 use Illuminate\Support\Facades\Request;
