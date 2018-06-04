@@ -51,6 +51,7 @@
         $('.datatables-simple').DataTable();
     })
 </script>
+{!! cbScript('js/notification.js') !!}
 {!! cbScript('js/main.js') !!}
 
 
