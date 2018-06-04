@@ -4,11 +4,7 @@ namespace crocodicstudio\crudbooster\Modules\AuthModule;
 
 use crocodicstudio\crudbooster\CBCoreModule\CbUsersRepo;
 use crocodicstudio\crudbooster\controllers\Controller;
-use crocodicstudio\crudbooster\helpers\Mailer;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Validator;
-use crocodicstudio\crudbooster\helpers\CRUDBooster, CB;
+use crocodicstudio\crudbooster\Modules\EmailTemplates\Mailer;
 
 class AuthController extends Controller
 {
@@ -81,7 +77,7 @@ class AuthController extends Controller
 
     private function validateForgotPass()
     {
-        $validator = Validator::make(request()->all(), ['email' => 'required|email|exists:cms_users',]);
+        $validator = \Validator::make(request()->all(), ['email' => 'required|email|exists:cms_users',]);
 
         if ($validator->fails()) {
             $message = $validator->errors()->all();

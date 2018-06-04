@@ -1,6 +1,10 @@
 <?php
 
-namespace crocodicstudio\crudbooster\helpers;
+namespace crocodicstudio\crudbooster\Modules\EmailTemplates;
+
+use crocodicstudio\crudbooster\helpers\CRUDBooster;
+use crocodicstudio\crudbooster\Modules\SettingModule\SettingRepo;
+use Illuminate\Support\Facades\Config;
 
 class Mailer
 {
