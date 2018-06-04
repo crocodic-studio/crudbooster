@@ -1572,6 +1572,7 @@ class CBController extends Controller {
 		$file = storage_path($file);
 
 		$rows = $this->csvToArray($file);
+		Log::error($row);
 		//$rows = Excel::load($file,function($reader) {})->get();
 
 		$has_created_at = false;
@@ -1664,8 +1665,8 @@ class CBController extends Controller {
 				}
 				else
 				{
-					Log::error("notinloop");
-					Log::error($a);
+					//Log::error("notinloop");
+					//Log::error($a);
 					if ($a['consigmentno'] != '') 
 					{
 						$arr = array();
