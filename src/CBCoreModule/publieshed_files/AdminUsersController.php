@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use crocodicstudio\crudbooster\controllers\CBController;
 use crocodicstudio\crudbooster\helpers\CRUDBooster;
-use Illuminate\Support\Facades\Request;
 
 class AdminUsersController extends CBController
 {
@@ -34,7 +33,7 @@ class AdminUsersController extends CBController
 
         session()->put('current_row_id', auth('cbAdmin')->id());
 
-        $this->data['return_url'] = Request::fullUrl();
+        $this->data['return_url'] = request()->fullUrl();
 
         $data = [
             'page_title' => cbTrans("label_button_profile"),
