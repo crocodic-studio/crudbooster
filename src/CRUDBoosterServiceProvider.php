@@ -136,6 +136,5 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->app->register(CbFileManagerServiceProvider::class);
         $this->app->register(CbNotificationsServiceProvider::class);
         $this->app->register(CbEmailTemplatesServiceProvider::class);
-        $this->app->register(CbLogsServiceProvider::class);
     }
 }
