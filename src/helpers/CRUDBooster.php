@@ -173,7 +173,7 @@ class CRUDBooster
 
     public static function allowOnlySuperAdmin()
     {
-        event('cb.unauthorizedTryToSuperAdminArea', [cbUser(), request()->fullUrlWithQuery()]);
+        event('cb.unauthorizedTryToSuperAdminArea', [cbUser(), request()->fullUrl()]);
         if (self::isSuperadmin()) {
             return true;
         }
