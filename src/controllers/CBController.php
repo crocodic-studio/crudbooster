@@ -1572,7 +1572,8 @@ class CBController extends Controller {
 		$file = storage_path($file);
 
 		$rows = $this->csvToArray($file);
-		Log::error($rows);
+		$f = $this->import_consignment;
+		
 		//$rows = Excel::load($file,function($reader) {})->get();
 
 		$has_created_at = false;
@@ -1632,6 +1633,9 @@ class CBController extends Controller {
 					$a[$colname] = $value->$s;
 				}
 			}
+			/*if ($f != FALSE)
+				array_filter($linksArray, function($value) { return $value[''] !== ''; });*/
+			Log::error($a);
 
 			$has_title_field = true;
 			foreach($a as $k=>$v) {
@@ -1642,6 +1646,8 @@ class CBController extends Controller {
 			}
 
 			if($has_title_field==false) continue;
+
+
 
 			try{
 
