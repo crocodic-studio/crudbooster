@@ -22,7 +22,6 @@
                     @include('crudbooster::_admin_template._sidebar.super_admin.module')
                     @include('crudbooster::_admin_template._sidebar.super_admin.static')
                     @include('crudbooster::_admin_template._sidebar.super_admin.api')
-                    @include('CbEmailTpl::super_admin_menu')
                 @endif
 
                 @foreach(app('CbDynamicMenus')->getMenus() as $menu)
