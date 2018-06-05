@@ -1581,13 +1581,15 @@ class CBController extends Controller {
 			$has_created_at = true;
 		}
 
+		Log::error($select_column);
+
 		$data_import_column = array();
 		foreach($rows as $value) {
 			$a = array();
 			foreach($select_column as $sk => $s) {
 				$colname = $table_columns[$sk];
 
-				if(CRUDBooster::isForeignKey($colname)) {
+				/*if(CRUDBooster::isForeignKey($colname)) {
 
 					//Skip if value is empty
 					if($value->$s == '') continue;
@@ -1629,13 +1631,13 @@ class CBController extends Controller {
 						}
 					} //END IS INT
 
-				}else{
+				}else{*/
 					$a[$colname] = $value->$s;
 				}
 			}
 			/*if ($f != FALSE)
 				array_filter($linksArray, function($value) { return $value[''] !== ''; });*/
-			Log::error($a);
+			
 
 			$has_title_field = true;
 			foreach($a as $k=>$v) {
@@ -1680,7 +1682,6 @@ class CBController extends Controller {
 							if (($key!=='consigmentno')&&($key!='batchno')&&($key!='created_at'))
 								$arr[] = array($key,'=',$value);
 
-						Log::error($arr);
 
 						DB::table($this->table)->where($arr)->update(
 							['consigmentno' => $a['consigmentno'],'batchno' => $a['batchno']]
