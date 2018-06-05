@@ -1588,7 +1588,7 @@ class CBController extends Controller {
 			$a = array();
 			foreach($select_column as $sk => $s) {
 				$colname = $table_columns[$sk];
-				Log::error($colname);
+				//Log::error($colname);
 
 				/*if(CRUDBooster::isForeignKey($colname)) {
 
@@ -1675,7 +1675,7 @@ class CBController extends Controller {
 				else
 				{
 					//Log::error("notinloop");
-					//Log::error($a);
+					Log::error($a);
 					if ($a['consigmentno'] != '') 
 					{
 						$arr = array();
