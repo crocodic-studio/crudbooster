@@ -1588,6 +1588,7 @@ class CBController extends Controller {
 			$a = array();
 			foreach($select_column as $sk => $s) {
 				$colname = $table_columns[$sk];
+				Log::error($colname);
 
 				/*if(CRUDBooster::isForeignKey($colname)) {
 
