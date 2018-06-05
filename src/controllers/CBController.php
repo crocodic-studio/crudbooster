@@ -1639,7 +1639,7 @@ class CBController extends Controller {
 			}
 			/*if ($f != FALSE)
 				array_filter($linksArray, function($value) { return $value[''] !== ''; });*/
-			Log::error($a);
+			//Log::error($a);
 
 			$has_title_field = true;
 			foreach($a as $k=>$v) {
