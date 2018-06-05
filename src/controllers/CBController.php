@@ -1653,13 +1653,12 @@ class CBController extends Controller {
 
 
 			try{
-
-				if($has_created_at) {
-					$a['created_at'] = date('Y-m-d H:i:s');
-				}
 				$f = $this->import_consignment;
 				if ($f == FALSE)
 				{
+					if($has_created_at) {
+						$a['created_at'] = date('Y-m-d H:i:s');
+					}
 					$v = $this->validationArray($a);
 					if (!$v->fails())
 						DB::table($this->table)->insert($a);
