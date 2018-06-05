@@ -1572,7 +1572,7 @@ class CBController extends Controller {
 		$file = storage_path($file);
 
 		$rows = $this->csvToArray($file);
-		Log::error($row);
+		Log::error($rows);
 		//$rows = Excel::load($file,function($reader) {})->get();
 
 		$has_created_at = false;
