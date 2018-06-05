@@ -1633,7 +1633,7 @@ class CBController extends Controller {
 
 				}else{*/
 					$a[$colname] = $value->$s;
-				}
+				//}
 			}
 			/*if ($f != FALSE)
 				array_filter($linksArray, function($value) { return $value[''] !== ''; });*/
