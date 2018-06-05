@@ -1585,7 +1585,7 @@ class CBController extends Controller {
 
 		$data_import_column = array();
 		foreach($rows as $value) {
-			Log::error($value);
+			
 			$a = array();
 			foreach($select_column as $sk => $s) {
 				$colname = $table_columns[$sk];
@@ -1634,12 +1634,12 @@ class CBController extends Controller {
 					} //END IS INT
 
 				}else{*/
-					$a[$colname] = $value->$s;
+					$a[$colname] = $value[$s];
 				//}
 			}
 			/*if ($f != FALSE)
 				array_filter($linksArray, function($value) { return $value[''] !== ''; });*/
-			
+			Log::error($a);
 
 			$has_title_field = true;
 			foreach($a as $k=>$v) {
