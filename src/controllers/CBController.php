@@ -1581,10 +1581,11 @@ class CBController extends Controller {
 			$has_created_at = true;
 		}
 
-		Log::error($select_column);
+		
 
 		$data_import_column = array();
 		foreach($rows as $value) {
+			Log::error($value);
 			$a = array();
 			foreach($select_column as $sk => $s) {
 				$colname = $table_columns[$sk];
@@ -1674,7 +1675,7 @@ class CBController extends Controller {
 				else
 				{
 					//Log::error("notinloop");
-					Log::error($a);
+					//Log::error($a);
 					if ($a['consigmentno'] != '') 
 					{
 						$arr = array();
