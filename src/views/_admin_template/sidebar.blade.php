@@ -17,11 +17,11 @@
                     <li class="header">{{ cbTrans('SUPERADMIN') }}</li>
                     @include('crudbooster::_admin_template._sidebar.super_admin.users')
                     @include('crudbooster::_admin_template._sidebar.super_admin.module')
+                    @foreach(app('CbDynamicMenus')->getSuperAdminMenus() as $menu)
+                        @include($menu)
+                    @endforeach
                 @endif
 
-                @foreach(app('CbDynamicMenus')->getMenus() as $menu)
-                    @include($menu)
-                @endforeach
             </ul>
         </div>
 

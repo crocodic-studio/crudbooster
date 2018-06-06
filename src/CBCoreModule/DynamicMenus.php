@@ -4,15 +4,15 @@ namespace crocodicstudio\crudbooster\CBCoreModule;
 
 class DynamicMenus
 {
-    private $menus = [];
+    private $superAdminMenus = [];
 
-    public function addMenu(string $partial)
+    public function addSuperAdminMenu(string $partial)
     {
-        return $this->menus[] = $partial;
+        return $this->superAdminMenus[] = $partial;
     }
 
-    public function getMenus()
+    public function getSuperAdminMenus()
     {
-        return $this->menus;
+        return $this->superAdminMenus;
     }
 }

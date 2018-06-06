@@ -17,7 +17,7 @@ class CbSettingsServiceProvider extends ServiceProvider
         $this->app['view']->addNamespace('CbSettings', __DIR__.'/views');
         $this->loadRoutesFrom( __DIR__.'/settings_routes.php');
         $this->loadMigrationsFrom(__DIR__ . '/migrations');
-        app('CbDynamicMenus')->addMenu('CbSettings::menu');
+        app('CbDynamicMenus')->addSuperAdminMenu('CbSettings::menu');
     }
 
     /**

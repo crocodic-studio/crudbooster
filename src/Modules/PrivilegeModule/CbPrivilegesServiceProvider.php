@@ -17,7 +17,7 @@ class CbPrivilegesServiceProvider extends ServiceProvider
         $this->loadRoutesFrom( __DIR__.'/privileges_routes.php');
         $this->publishes([__DIR__.'/localization' => resource_path('lang')], 'cb_localization');
         $this->loadMigrationsFrom(__DIR__ . '/migrations');
-        app('CbDynamicMenus')->addMenu('CbPrivilege::menu');
+        app('CbDynamicMenus')->addSuperAdminMenu('CbPrivilege::menu');
     }
 
     /**

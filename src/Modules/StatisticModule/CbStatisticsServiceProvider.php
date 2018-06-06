@@ -17,7 +17,7 @@ class CbStatisticsServiceProvider extends ServiceProvider
         $this->app['view']->addNamespace('CbStatistics', __DIR__.'/views');
         $this->loadRoutesFrom( __DIR__.'/statistic_route.php');
         $this->loadMigrationsFrom(__DIR__ . '/migrations');
-        app('CbDynamicMenus')->addMenu('CbStatistics::menu');
+        app('CbDynamicMenus')->addSuperAdminMenu('CbStatistics::menu');
     }
 
     /**

@@ -16,7 +16,7 @@ class CbMenuServiceProvider extends ServiceProvider
         $this->app['view']->addNamespace('CbMenu', __DIR__.'/views');
         $this->loadRoutesFrom( __DIR__.'/menus_routes.php');
         $this->loadMigrationsFrom(__DIR__ . '/migrations');
-        app('CbDynamicMenus')->addMenu('CbMenu::menu');
+        app('CbDynamicMenus')->addSuperAdminMenu('CbMenu::menu');
     }
 
     /**
