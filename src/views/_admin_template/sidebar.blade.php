@@ -15,7 +15,6 @@
 
                 @if(CRUDBooster::isSuperadmin())
                     <li class="header">{{ cbTrans('SUPERADMIN') }}</li>
-                    @include('CbPrivilege::super_admin_menu')
                     @include('crudbooster::_admin_template._sidebar.super_admin.users')
                     @include('crudbooster::_admin_template._sidebar.super_admin.module')
                 @endif
