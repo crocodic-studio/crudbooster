@@ -18,7 +18,6 @@
                     @include('CbPrivilege::super_admin_menu')
                     @include('crudbooster::_admin_template._sidebar.super_admin.users')
                     @include('CbMenu::super_admin_menu')
-                    @include('CbSettings::super_admin_menu')
                     @include('crudbooster::_admin_template._sidebar.super_admin.module')
                     @include('crudbooster::_admin_template._sidebar.super_admin.api')
                 @endif
