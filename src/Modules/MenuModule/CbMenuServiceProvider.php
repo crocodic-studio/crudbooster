@@ -26,6 +26,5 @@ class CbMenuServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('CbDynamicMenus', DynamicMenus::class);
     }
 }

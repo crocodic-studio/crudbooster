@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\MenuModule;
+namespace crocodicstudio\crudbooster\CBCoreModule;
 
 class DynamicMenus
 {
