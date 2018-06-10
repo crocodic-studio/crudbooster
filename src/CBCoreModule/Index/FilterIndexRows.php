@@ -4,6 +4,8 @@ namespace crocodicstudio\crudbooster\CBCoreModule\Index;
 
 class FilterIndexRows
 {
+    private $query;
+
     /**
      * @param $result
      * @param $filterColumn
@@ -11,35 +13,30 @@ class FilterIndexRows
      */
     public function filterIndexRows($result, $filterColumn)
     {
+        $this->query = $result;
         $filterIsOrderby = false;
-        $this->applyWhere($result, $filterColumn);
+        $this->applyWhere($filterColumn);
 
         foreach ($filterColumn as $key => $fc) {
-            $value = @$fc['value'];
-            $type = @$fc['type'];
-            $sorting = @$fc['sorting'];
-
-            $filterIsOrderby = $this->applySorting($result, $sorting, $key);
-
-            $this->applyBetween($result, $type, $key, $value);
+            $filterIsOrderby = $this->applySorting($key, array_get($fc, 'sorting'));
+            $this->applyBetween(array_get($fc, 'type'), $key, array_get($fc, 'value'));
         }
 
         return $filterIsOrderby;
     }
 
     /**
-     * @param $result
      * @param $filterColumn
      */
-    private function applyWhere($result, $filterColumn)
+    private function applyWhere($filterColumn)
     {
         $filterColumn = $this->filterFalsyValues($filterColumn);
 
-        $result->where(function ($query) use ($filterColumn) {
+        $this->query->where(function ($query) use ($filterColumn) {
             foreach ($filterColumn as $key => $fc) {
 
-                $value = @$fc['value'];
-                $type = @$fc['type'];
+                $value = array_get($fc, 'value');
+                $type = array_get($fc, 'type');
 
                 if ($type == 'empty') {
                     $query->whereNull($key)->orWhere($key, '');
@@ -68,32 +65,29 @@ class FilterIndexRows
     }
 
     /**
-     * @param $result
      * @param $sorting
      * @param $key
      * @return bool
      */
-    private function applySorting($result, $sorting, $key)
+    private function applySorting($key, $sorting)
     {
-        $filter_is_orderby = false;
         if ($sorting != '' && $key) {
-            $result->orderby($key, $sorting);
-            $filter_is_orderby = true;
+            $this->query->orderby($key, $sorting);
+            return true;
         }
 
-        return $filter_is_orderby;
+        return false;
     }
 
     /**
-     * @param $result
      * @param $type
      * @param $key
-     * @param $value
+     * @param $limits
      */
-    private function applyBetween($result, $type, $key, $value)
+    private function applyBetween($type, $key, $limits)
     {
-        if ($type == 'between' && $key && $value) {
-            $result->whereBetween($key, $value);
+        if ($type == 'between' && $key && is_array($limits)) {
+            $this->query->whereBetween($key, $limits);
         }
     }
 
@@ -104,8 +98,8 @@ class FilterIndexRows
     private function filterFalsyValues($filterColumn)
     {
         return array_filter($filterColumn, function ($fc) {
-            $value = @$fc['value'];
-            $type = @$fc['type'];
+            $value = array_get($fc, 'value');
+            $type = array_get($fc, 'type');
 
             if (($type == 'between') || ! $value || ! $type) {
                 return false;
