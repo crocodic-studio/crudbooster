@@ -3,6 +3,7 @@
 namespace crocodicstudio\crudbooster\CBCoreModule\Index;
 
 use crocodicstudio\crudbooster\controllers\CBController;
+use crocodicstudio\crudbooster\helpers\CRUDBooster;
 use crocodicstudio\crudbooster\helpers\DbInspector;
 
 class RowContent
@@ -21,14 +22,12 @@ class RowContent
 
     /**
      * @param $data
-     * @param $tablePK
      * @param $number
      * @param $columnsTable
-     * @param $addAction
      *
      * @return array
      */
-    public function calculate($data, $number, $columnsTable, $addAction)
+    public function calculate($data, $number, $columnsTable)
     {
         $tableRows = [];
         $tablePK = DbInspector::findPk($this->cb->table);
@@ -39,7 +38,7 @@ class RowContent
             }
             $rowContent = $this->addRowNumber($number, $rowContent);
             $rowContent = $this->addOtherColumns($columnsTable, $row, $rowContent);
-            $rowContent = $this->addActionButtons($addAction, $row, $rowContent);
+            $rowContent = $this->addActionButtons($row, $rowContent);
             $rowContent = $this->performHookOnRow($rowContent);
             $tableRows[] = $rowContent;
             $number++;
@@ -50,8 +49,7 @@ class RowContent
 
     /**
      * @param $id
-     * @param $htmlContent
-     * @return array
+     * @return string
      */
     private function addCheckBox($id)
     {
@@ -95,22 +93,27 @@ class RowContent
     private function performHookOnRow($rowCells)
     {
         foreach ($rowCells as $i => $v) {
-            $this->cb->hookRowIndex($i, $v);
-            $rowCells[$i] = $v;
+            $rowCells[$i] = $this->cb->hookRowIndex($i, $v);
         }
 
         return $rowCells;
     }
 
     /**
-     * @param $addAction
      * @param $row
      * @param $rowCells
      * @return array
      * @throws \Throwable
      */
-    private function addActionButtons($addAction, $row, $rowCells)
+    private function addActionButtons($row, $rowCells)
     {
+        //LISTING INDEX HTML
+        $addAction = $this->cb->data['addAction'];
+
+        if (! empty($this->cb->sub_module)) {
+            $addAction = $this->_handleSubModules($addAction);
+        }
+
         if (!$this->cb->showButtonsOnIndexRows) {
             return $rowCells;
         }
@@ -124,6 +127,40 @@ class RowContent
         $rowCells[] = "<div class='button_action' style='text-align:right'>".view('crudbooster::index.action', $data)->render().'</div>';
 
         return $rowCells;
+    }
+
+    /**
+     * @param $addAction
+     * @return array
+     */
+    private function _handleSubModules($addAction)
+    {
+        foreach ($this->cb->sub_module as $module) {
+            $addAction[] = [
+                'label' => $module['label'],
+                'icon' => $module['button_icon'],
+                'url' => $this->subModuleUrl($module, CRUDBooster::parseSqlTable($this->table)['table']),
+                'color' => $module['button_color'],
+                'showIf' => $module['showIf'],
+            ];
+        }
+
+        return $addAction;
+    }
+
+    /**
+     * @param $module
+     * @param $parentTable
+     * @return string
+     */
+    private function subModuleUrl($module, $parentTable)
+    {
+        return CRUDBooster::adminPath($module['path']).'?parent_table='.$parentTable.'&parent_columns='
+            .$module['parent_columns'].'&parent_columns_alias='
+            .$module['parent_columns_alias'].'&parent_id=['
+            .(! isset($module['custom_parent_id']) ? "id" : $module['custom_parent_id'])
+            .']&return_url='.urlencode(request()->fullUrl()).'&foreign_key='
+            .$module['foreign_key'].'&label='.urlencode($module['label']);
     }
 
 }
