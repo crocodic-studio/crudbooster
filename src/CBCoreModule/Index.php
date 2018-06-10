@@ -43,18 +43,18 @@ class Index
 
         $this->_filterOutSoftDeleted($table, $query);
 
-        $columns_table = $CbCtrl->columns_table;
-        foreach ($columns_table as $index => $coltab) {
-            $field = @$coltab['name'];
+        $columns = $CbCtrl->columns_table;
+        foreach ($columns as $index => $col) {
+            $field = array_get($col, 'name');
 
             if (strpos($field, '.')) {
-                $columns_table[$index] = array_merge($columns_table[$index], $this->addDotField($field, $query));
+                $columns[$index] = array_merge($columns[$index], $this->addDotField($field, $query));
             } else {
-                $columns_table[$index] = array_merge($columns_table[$index], $this->_addField($field, $query, $table));
+                $columns[$index] = array_merge($columns[$index], $this->_addField($field, $query, $table));
             }
         }
 
-        $this->_applyWhereAndQfilters($query, $columns_table, $table);
+        $this->_applyWhereAndQfilters($query, $columns, $table);
 
         $filter_is_orderby = false;
         if (request('filter_column')) {
@@ -67,27 +67,20 @@ class Index
         $limit = is_string($limit) ? (int) $limit : 15;
         $data['result'] = $query->paginate($limit);
 
-        $data['columns'] = $columns_table;
+        $data['columns'] = $columns;
 
         if ($CbCtrl->indexReturn) {
             return $data;
-        }
-
-        //LISTING INDEX HTML
-        $addAction = $CbCtrl->data['addAction'];
-
-        if (! empty($CbCtrl->sub_module)) {
-            $addAction = $this->_handleSubModules($addAction);
         }
 
         //$mainpath = CRUDBooster::mainpath();
         //$orig_mainpath = $CbCtrl->data['mainpath'];
         //$titleField = $CbCtrl->titleField;
         $number = (request('page', 1) - 1) * $limit + 1;
-        $columnsTable = array_filter($columns_table, function ($col) {
+        $columnsTable = array_filter($columns, function ($col) {
             return $col['visible'] !== false;
         });
-        $htmlContents = (new RowContent($CbCtrl))->calculate($data, $number, $columnsTable, $addAction); //end foreach data[result]
+        $htmlContents = (new RowContent($CbCtrl))->calculate($data, $number, $columnsTable); //end foreach data[result]
 
         $data['html_contents'] = ['html' => $htmlContents, 'data' => $data['result']];
 
@@ -175,9 +168,9 @@ class Index
     {
         $t = [
             'type_data' => 'varchar',
-            'field_with' => null,
             'field' => $field,
             'field_raw' => $field,
+            'field_with' => null,
         ];
 
         if (\Schema::hasColumn($table, $field)) {
@@ -213,40 +206,6 @@ class Index
                 $result->where($table.'.'.$k, $v);
             }
         }
-    }
-
-    /**
-     * @param $addAction
-     * @return array
-     */
-    private function _handleSubModules($addAction)
-    {
-        foreach ($this->cb->sub_module as $module) {
-            $addAction[] = [
-                'label' => $module['label'],
-                'icon' => $module['button_icon'],
-                'url' => $this->subModuleUrl($module, CRUDBooster::parseSqlTable($this->table)['table']),
-                'color' => $module['button_color'],
-                'showIf' => $module['showIf'],
-            ];
-        }
-
-        return $addAction;
-    }
-
-    /**
-     * @param $module
-     * @param $table_parent
-     * @return string
-     */
-    private function subModuleUrl($module, $table_parent)
-    {
-        return CRUDBooster::adminPath($module['path']).'?parent_table='.$table_parent.'&parent_columns='
-            .$module['parent_columns'].'&parent_columns_alias='
-            .$module['parent_columns_alias'].'&parent_id=['
-            .(! isset($module['custom_parent_id']) ? "id" : $module['custom_parent_id'])
-            .']&return_url='.urlencode(Request::fullUrl()).'&foreign_key='
-            .$module['foreign_key'].'&label='.urlencode($module['label']);
     }
 
 }
