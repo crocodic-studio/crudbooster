@@ -22,16 +22,16 @@ class Order
      */
     public function handle($result, $table)
     {
-        $orderby = $this->ctrl->orderby;
-        if (! $orderby) {
+        $orderBy = $this->ctrl->orderby;
+        if (! $orderBy) {
             $result->orderby($table.'.'.$this->ctrl->primaryKey, 'desc');
             return;
         }
-        if (is_string($orderby)) {
-            $orderby = $this->normalizeOrderBy($orderby);
+        if (is_string($orderBy)) {
+            $orderBy = $this->normalizeOrderBy($orderBy);
         }
 
-        $this->orderRows($result, $table, $orderby);
+        $this->orderRows($result, $table, $orderBy);
     }
 
     /**
