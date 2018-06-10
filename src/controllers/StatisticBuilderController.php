@@ -141,7 +141,9 @@
 	    				if (strpos($value,"WHERE")!==false)
 	    				{
 
-	    					$value .= " AND m_date>='".$startdate."' AND m_date<='".$enddate."'"; 
+	    					$value  = str_replace("WHERE", "WHERE m_date>='".$startdate."' AND m_date<='".$enddate."' AND",$value);
+	    					//$value .= " AND m_date>='".$startdate."' AND m_date<='".$enddate."'";
+
 	    				}
 	    				else
 	    				{
