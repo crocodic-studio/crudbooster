@@ -62,8 +62,9 @@ class Index
         }
 
         if ($filter_is_orderby === true) {
-            (new Order($this->cb))->handle($query, $table);
+            (new Order())->handle($query, $table, $this->cb->orderby, $this->cb->primaryKey);
         }
+
         $limit = is_string($limit) ? (int) $limit : 15;
         $data['result'] = $query->paginate($limit);
 

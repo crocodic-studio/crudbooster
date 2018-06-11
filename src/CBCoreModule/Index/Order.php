@@ -4,59 +4,48 @@ namespace crocodicstudio\crudbooster\CBCoreModule\Index;
 
 class Order
 {
-    private $ctrl;
-
     /**
-     * Order constructor.
-     *
-     * @param $ctrl
-     */
-    public function __construct($ctrl)
-    {
-        $this->ctrl = $ctrl;
-    }
-
-    /**
-     * @param $result
+     * @param $query
      * @param $table
+     * @param $orderBy
+     * @param $primaryKey
      */
-    public function handle($result, $table)
+    public function handle($query, $table, $orderBy, $primaryKey)
     {
-        $orderBy = $this->ctrl->orderby;
         if (! $orderBy) {
-            $result->orderby($table.'.'.$this->ctrl->primaryKey, 'desc');
+            $query->orderby($table.'.'.$primaryKey, 'desc');
             return;
         }
         if (is_string($orderBy)) {
             $orderBy = $this->normalizeOrderBy($orderBy);
         }
 
-        $this->orderRows($result, $table, $orderBy);
+        $this->orderRows($query, $table, $orderBy);
     }
 
     /**
-     * @param $result
+     * @param $query
      * @param $table
      * @param $orderby
      */
-    private function orderRows($result, $table, $orderby)
+    private function orderRows($query, $table, $orderby)
     {
         foreach ($orderby as $key => $value) {
             if (strpos($key, '.')) {
                 $table = explode(".", $key)[0];
             }
-            $result->orderby($table.'.'.$key, $value);
+            $query->orderby($table.'.'.$key, $value);
         }
     }
 
     /**
-     * @param $orderby
+     * @param $orderBy
      * @return array
      */
-    private function normalizeOrderBy($orderby)
+    private function normalizeOrderBy($orderBy)
     {
         $x = [];
-        foreach (explode(";", $orderby) as $by) {
+        foreach (explode(";", $orderBy) as $by) {
             $by = explode(",", $by);
             $x[$by[0]] = $by[1];
         }

@@ -12,7 +12,7 @@ class ValueCalculator
      */
     public function calculate($col, $row, $title)
     {
-        $value = @$row->{$col['field']};
+        $value = $row->{$col['field']};
         $label = $col['label'];
 
         if (isset($col['image'])) {
