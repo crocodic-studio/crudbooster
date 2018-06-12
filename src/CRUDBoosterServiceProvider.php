@@ -68,7 +68,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/configs/crudbooster.php', 'crudbooster');
+        $this->mergeConfigFrom(__DIR__.'/CBCoreModule/configs/crudbooster.php', 'crudbooster');
 
         $this->app->singleton('crudbooster', function () {
             return true;
