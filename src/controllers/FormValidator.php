@@ -3,9 +3,6 @@
 namespace crocodicstudio\crudbooster\controllers;
 
 use crocodicstudio\crudbooster\helpers\DbInspector;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Request;
 use crocodicstudio\crudbooster\helpers\CRUDBooster;
 
 class FormValidator
@@ -20,7 +17,7 @@ class FormValidator
         $this->table = $ctrl->table;
         $rules = $this->getRules($id, $form);
 
-        $validator = Validator::make(request()->all(), $rules);
+        $validator = \Validator::make(request()->all(), $rules);
 
         if (! $validator->fails()) {
             return null;
@@ -45,7 +42,7 @@ class FormValidator
             }
 
             $ai = [];
-            if ($formInput['required'] && ! Request::hasFile($name)) {
+            if ($formInput['required'] && ! \Request::hasFile($name)) {
                 $ai[] = 'required';
             }
 
@@ -99,7 +96,7 @@ class FormValidator
             }
 
             //Check whether deleted_at exists or not
-            if (Schema::hasColumn($uniqueTable, 'deleted_at')) {
+            if (\Schema::hasColumn($uniqueTable, 'deleted_at')) {
                 $uniqueRebuild[] = DbInspector::findPK($uniqueTable);
                 $uniqueRebuild[] = 'deleted_at';
                 $uniqueRebuild[] = 'NULL';
@@ -122,7 +119,7 @@ class FormValidator
             'message_type' => 'warning',
         ];
 
-        if (Request::ajax()) {
+        if (\Request::ajax()) {
             $resp = response()->json($msg);
             sendAndTerminate($resp);
         }
