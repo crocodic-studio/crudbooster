@@ -7,7 +7,7 @@ use crocodicstudio\crudbooster\helpers\CRUDBooster;
 
 class Form
 {
-    public static function makeForm($table)
+    public static function makeForm()
     {
         $form = [];
         $form[] = ['label' => 'Name', 'name' => 'name', 'placeholder' => 'Module name here', 'required' => true];
@@ -20,7 +20,7 @@ class Form
             'required' => true,
         ];
 
-        $form[] = ['label' => 'Icon', 'name' => 'icon', 'type' => 'custom_html', 'options' => ['html' => self::MakeIconList($table)], 'required' => true];
+        $form[] = ['label' => 'Icon', 'name' => 'icon', 'type' => 'custom_html', 'options' => ['html' => self::MakeIconList()], 'required' => true];
 
         $form[] = ['label' => 'Path', 'name' => 'path', 'required' => true, 'placeholder' => 'Optional'];
         $form[] = ['label' => 'Controller', 'name' => 'controller', 'type' => 'text', 'placeholder' => '(Optional) Auto Generated'];
@@ -124,15 +124,13 @@ class Form
     }
 
     /**
-     * @param $table
      * @return string
      * @throws \Throwable
      */
-    private static function MakeIconList($table)
+    private static function MakeIconList()
     {
         $fontawesome = FontAwesome::cssClass();
-        $row = CRUDBooster::first($table, CRUDBooster::getCurrentId());
 
-        return view('crudbooster::components.list_icon', compact('fontawesome', 'row'))->render();
+        return view('crudbooster::components.list_icon', compact('fontawesome'))->render();
     }
 }
