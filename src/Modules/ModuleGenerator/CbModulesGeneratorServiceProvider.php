@@ -16,6 +16,7 @@ class CbModulesGeneratorServiceProvider extends ServiceProvider
         $this->app['view']->addNamespace('CbModulesGen', __DIR__.'/views');
         $this->loadRoutesFrom( __DIR__.'/module_generator_routes.php');
         $this->loadMigrationsFrom(__DIR__.'/migrations');
+        $this->registerModule();
     }
 
     /**
@@ -25,5 +26,18 @@ class CbModulesGeneratorServiceProvider extends ServiceProvider
      */
     public function register()
     {
+    }
+
+    private function registerModule()
+    {
+        app('CbModulesRegistery')->addModule('modules', (object) [
+            'name' => trans('crudbooster.Module_Generator'),
+            'icon' => 'fa fa-database',
+            'path' => 'module_generator',
+            'table_name' => 'cms_moduls',
+            'controller' => 'AdminModulesController',
+            'is_protected' => 1,
+            'is_active' => 1,
+        ]);
     }
 }
