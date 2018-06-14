@@ -85,6 +85,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->app->singleton(\crocodicstudio\crudbooster\CBCoreModule\CbRouter::class);
         $this->registerCrudBoosterModules();
         $this->app->singleton('CbDynamicMenus', \crocodicstudio\crudbooster\CBCoreModule\DynamicMenus::class);
+        $this->app->singleton('CbModulesRegistery', \crocodicstudio\crudbooster\CBCoreModule\ModulesRegistery::class);
     }
 
     private function defineValidationRules()
