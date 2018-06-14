@@ -18,7 +18,7 @@ class DynamicMenus
         return $this->superAdminMenus;
     }
 
-    public function getSMenus()
+    public function getMenus()
     {
         return $this->userMenus;
     }
