@@ -6,8 +6,8 @@
         @php
             $label = $formInput['label'];
             $name = $formInput['name'];
-            $join = $formInput['join'];
-            $value = $formInput['value'] ?: '';
+            $join = array_get($formInput, 'join');
+            $value = array_get($formInput, 'value',  '');
             $value = (isset($row->{$name}))?$row->{$name}:$value;
             $old = old($name);
             $value = (!empty($old))?$old:$value;
