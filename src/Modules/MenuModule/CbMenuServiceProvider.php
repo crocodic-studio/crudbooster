@@ -19,10 +19,10 @@ class CbMenuServiceProvider extends ServiceProvider
         app('CbDynamicMenus')->addSuperAdminMenu('CbMenu::menu');
         app('CbDynamicMenus')->addMenu('CbMenu::dynamic_menus');
 
-        $hasDashboard = \crocodicstudio\crudbooster\Modules\MenuModule\MenuRepo::sidebarDashboard();
+  /*    $hasDashboard = \crocodicstudio\crudbooster\Modules\MenuModule\MenuRepo::sidebarDashboard();
         if (false && $hasDashboard) {
             app('CbDynamicMenus')->addMenu('CbMenu::dashboard');
-        }
+        }*/
     }
 
     /**

@@ -8,6 +8,10 @@ Route::group(['middleware' => ['web'], 'namespace' => $namespace], function () {
     Route::get('uploads/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'FileController@getPreview', 'as' => 'fileControllerPreview']);
 });
 
+Route::group(['middleware' => ['web']], function () {
+    Route::get(cbAdminPath(), '\crocodicstudio\crudbooster\controllers\DashboardController@index')->name('CbDashboard');
+});
+
 // ROUTER FOR OWN CONTROLLER FROM CB
 Route::group([
     'middleware' => ['web', \crocodicstudio\crudbooster\CBCoreModule\middlewares\CBBackend::class],
