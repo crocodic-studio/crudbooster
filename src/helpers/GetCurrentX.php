@@ -23,10 +23,10 @@ class GetCurrentX
 
     public static function getCurrentModule()
     {
-        $modulepath = self::getModulePath();
-        return cache()->remember('crudbooster_modules_'.$modulepath, 2, function () use ($modulepath) {
-            $module = app('CbModulesRegistery')->getModule($modulepath);
-            return $module?: ModulesRepo::getByPath($modulepath);
+        $modulePath = self::getModulePath();
+        return cache()->remember('crudbooster_modules_'.$modulePath, 2, function () use ($modulePath) {
+            $module = app('CbModulesRegistery')->getModule($modulePath);
+            return $module?: ModulesRepo::getByPath($modulePath);
         });
     }
 
