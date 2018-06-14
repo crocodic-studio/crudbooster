@@ -24,8 +24,6 @@
                     <i class='fa fa-user'></i> {{ cbTrans("label_button_profile")}}</a>
             </div>
             <div class="pull-{{ cbTrans('right') }}">
-                <a title='Lock Screen' href="{{ route('getLockScreen') }}"
-                   class='btn btn-default btn-flat'>{!! cbIcon('key') !!}</a>
                 <a href="javascript:void(0)" onclick="swal({
                         title: '{{ cbTrans('alert_want_to_logout')}}',
                         type:'info',
