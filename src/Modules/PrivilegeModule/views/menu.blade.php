@@ -5,7 +5,8 @@
     <ul class='treeview-menu'>
         <li class="{{ (Request::is(cbAdminPath().'/privileges/add*')) ? 'active' : '' }}">
             <a href='{{route("AdminPrivilegesControllerGetAdd")}}'>
-                {{ $current_path }}{!! cbIcon('plus') !!} {{ cbTrans('Add_New_Privilege') }}
+
+               {!! cbIcon('plus') !!} {{ cbTrans('Add_New_Privilege') }}
             </a>
         </li>
         <li class="{{ (Request::is(cbAdminPath().'/privileges')) ? 'active' : '' }}">
