@@ -110,14 +110,14 @@ class AdminModulesController extends CBController
         return $handler->showForm($id);
     }
 
-    public function postStep2(Step1Handler $handler)
+    public function postStep1(Step1Handler $handler)
     {
         $this->cbLoader();
 
         return $handler->handleFormSubmit();
     }
 
-    public function postStep3(Step2Handler $handler)
+    public function postStep2(Step2Handler $handler)
     {
         $this->cbLoader();
 
@@ -137,7 +137,7 @@ class AdminModulesController extends CBController
         echo file_get_contents(CbComponentsPath($type).'/info.json');
     }
 
-    public function postStep4(Step3Handler $handler)
+    public function postStep3(Step3Handler $handler)
     {
         $this->cbLoader();
 

@@ -61,7 +61,7 @@
         @include('CbModulesGen::step2.js')
     @endpush
 
-    <form method="post" action="{{route('AdminModulesControllerPostStep3')}}">
+    <form method="post" action="{{route('AdminModulesControllerpostStep2')}}">
 
         <div class="box box-default">
             <div class="box-header with-border">

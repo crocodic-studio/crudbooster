@@ -41,7 +41,7 @@
             <h3 class="box-title">Form Display</h3>
         </div>
         <div class="box-body">
-            <form method="post" autocomplete="off" action="{{route('AdminModulesControllerPostStep4')}}">
+            <form method="post" autocomplete="off" action="{{route('AdminModulesControllerpostStep3')}}">
                 <input type="hidden" name="_token" value="{{csrf_token()}}">
                 <input type="hidden" name="id" value="{{$id}}">
 

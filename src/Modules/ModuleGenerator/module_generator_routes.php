@@ -15,13 +15,13 @@ Route::group([
     Route::get('modules/add', ['uses' => 'AdminModulesController@getAdd', 'as' => 'AdminModulesControllerGetAdd']);
 
     Route::get('modules/step1/{id?}', ['uses' => 'AdminModulesController@getStep1', 'as' => 'AdminModulesControllerGetStep1']);
-    Route::post('modules/step2', ['uses' => 'AdminModulesController@postStep2', 'as' => 'AdminModulesControllerPostStep2',]);
+    Route::post('modules/step1', ['uses' => 'AdminModulesController@postStep1', 'as' => 'AdminModulesControllerPostStep1',]);
 
     Route::get('modules/step2/{id?}', ['uses' => 'AdminModulesController@getStep2', 'as' => 'AdminModulesControllerGetStep2']);
-    Route::post('modules/step3', ['uses' => 'AdminModulesController@postStep3', 'as' => 'AdminModulesControllerPostStep3',]);
+    Route::post('modules/step3', ['uses' => 'AdminModulesController@postStep2', 'as' => 'AdminModulesControllerpostStep2',]);
 
     Route::get('modules/step3/{id?}', ['uses' => 'AdminModulesController@getStep3', 'as' => 'AdminModulesControllerGetStep3']);
-    Route::post('modules/step4', ['uses' => 'AdminModulesController@postStep4', 'as' => 'AdminModulesControllerPostStep4',]);
+    Route::post('modules/step4', ['uses' => 'AdminModulesController@postStep3', 'as' => 'AdminModulesControllerpostStep3',]);
 
     Route::get('modules/type-info/{type?}', ['uses' => 'AdminModulesController@getTypeInfo', 'as' => 'AdminModulesControllerGetTypeInfo']);
 
