@@ -59,6 +59,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
 
         $this->defineValidationRules();
         $this->loadRoutesFrom( __DIR__.'/routes.php');
+        $this->registerUserModule();
     }
 
     /**
@@ -137,5 +138,18 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->app->register(CbFileManagerServiceProvider::class);
         $this->app->register(CbNotificationsServiceProvider::class);
         $this->app->register(CbEmailTemplatesServiceProvider::class);
+    }
+
+    private function registerUserModule()
+    {
+        app('CbModulesRegistery')->addModule('users', (object)[
+            'name' => trans('crudbooster.Users_Management'),
+            'icon' => 'fa fa-users',
+            'path' => 'users',
+            'table_name' => 'cms_users',
+            'controller' => 'AdminCmsUsersController',
+            'is_protected' => 0,
+            'is_active' => 1,
+        ]);
     }
 }
