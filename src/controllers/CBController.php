@@ -1527,6 +1527,7 @@ class CBController extends Controller {
 				}
 				break;
 			}
+			Log::error($colname);
 
 			$table_columns = DB::getSchemaBuilder()->getColumnListing($this->table);
 
@@ -1589,7 +1590,7 @@ class CBController extends Controller {
 			$a = array();
 			foreach($select_column as $sk => $s) {
 				$colname = $table_columns[$sk];
-				Log::error($colname);
+				//Log::error($colname);
 
 				/*if(CRUDBooster::isForeignKey($colname)) {
 
@@ -1639,7 +1640,7 @@ class CBController extends Controller {
 			}
 			/*if ($f != FALSE)
 				array_filter($linksArray, function($value) { return $value[''] !== ''; });*/
-			Log::error($a);
+			//Log::error($a);
 
 			$has_title_field = true;
 			foreach($a as $k=>$v) {
