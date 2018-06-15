@@ -1527,7 +1527,7 @@ class CBController extends Controller {
 				}
 				break;
 			}
-			Log::error($colname);
+			Log::error($data_import_column);
 
 			$table_columns = DB::getSchemaBuilder()->getColumnListing($this->table);
 
