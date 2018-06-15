@@ -24,7 +24,7 @@ class AdminUsersController extends CBController
     {
         $this->genericLoader();
         $this->cbFormLoader();
-        $this->button_addmore = false;
+        $this->addMoreButton = false;
         $this->buttonCancel = false;
         $this->buttonShow = false;
         $this->buttonAdd = false;

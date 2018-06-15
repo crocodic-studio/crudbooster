@@ -44,7 +44,7 @@ class AdminModulesController extends CBController
             "showIf" => "[is_protected] == 0",
         ];
 
-        $this->indexButton[] = ['label' => 'Generate New Module', 'icon' => 'fa fa-plus', 'url' => CRUDBooster::mainpath('step1'), 'color' => 'success'];
+        //$this->indexButton[] = ['label' => 'Generate New Module', 'icon' => 'fa fa-plus', 'url' => CRUDBooster::mainpath('step1'), 'color' => 'success'];
     }
     // public function getIndex() {
     // 	$data['page_title'] = 'Module Generator';
@@ -96,11 +96,11 @@ class AdminModulesController extends CBController
         return redirect()->route("ModulesControllerGetStep1");
     }
 
-    public function getStep1($id = 0, Step1Handler $handler)
+    public function getStep1(Step1Handler $handler)
     {
         $this->cbLoader();
 
-        return $handler->showForm($id);
+        return $handler->showForm();
     }
 
     public function getStep2($id, Step2Handler $handler)

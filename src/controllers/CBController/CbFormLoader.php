@@ -12,13 +12,13 @@ trait CbFormLoader
 
     public $button_save = true;
 
-    public $button_addmore = true;
+    public $addMoreButton = true;
 
     protected function cbFormLoader()
     {
         $this->data_inputan = $this->form;
         $this->data['forms'] = $this->data_inputan;
-        $this->data['button_addmore'] = $this->button_addmore;
+        $this->data['addMoreButton'] = $this->addMoreButton;
         $this->data['buttonCancel'] = $this->buttonCancel;
         $this->data['button_save'] = $this->button_save;
     }

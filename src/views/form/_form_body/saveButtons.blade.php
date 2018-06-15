@@ -9,7 +9,7 @@
 
 
 @if(CRUDBooster::canCreate() || CRUDBooster::canUpdate())
-    @if(CRUDBooster::canCreate() && $button_addmore==true && $command == 'add')
+    @if(CRUDBooster::canCreate() && $addMoreButton==true && $command == 'add')
         <input type="submit" name="submit" value='{{ cbTrans("button_save_more")}}' class='btn btn-success'>
     @endif
 
