@@ -1,22 +1,18 @@
-<?php
-$module = CRUDBooster::getCurrentModule();
-
-?>
 <form method="post" action="{{route('AdminModulesControllerPostStep1')}}">
 
     <div class="box-body">
 
         <input type="hidden" name="_token" value="{{csrf_token()}}">
-        <input type="hidden" name="id" value="{{$module->id}}">
+
 
         <div class="row">
             <div class="col-md-12 form-group">
-                <label for="">Table</label>
-                <select name="table" id="table" required class="select2 form-control" value="{{$module->table_name}}">
+                <label for="table">Table</label>
+                <select name="table" id="table" required class="select2 form-control">
                     <option value="">{{cbTrans('text_prefix_option')}} Table</option>
 
                     @foreach(CRUDBooster::listCbTables() as $table)
-                        <option {{($table == $module->table_name)?"selected":""}} value="{{$table}}">{{$table}}</option>
+                        <option value="{{$table}}">{{$table}}</option>
                     @endforeach
 
                 </select>
@@ -25,14 +21,16 @@ $module = CRUDBooster::getCurrentModule();
                 </div>
             </div>
         </div>
+
+
         <div class="row">
-
-
             <div class="col-md-12 form-group">
                 <label for="">Module Name</label>
-                <input type="text" class="form-control" required name="name" value="{{$module->name}}">
+                <input type="text" class="form-control" required name="name">
             </div>
         </div>
+
+
         <div class="row">
             <div class="col-md-12  form-group">
                 <label for="">Icon</label>
@@ -41,24 +39,28 @@ $module = CRUDBooster::getCurrentModule();
                         $fontAwesome = \crocodicstudio\crudbooster\controllers\Helpers\FontAwesome::cssClass();
                     @endphp
                     @foreach($fontAwesome as $font)
-                        <option {{($module->icon == 'fa fa-'.$font)?"selected":""}} value="fa fa-{{$font}}">{{$font}}</option>
+                        <option value="fa fa-{{$font}}">{{$font}}</option>
                     @endforeach
                 </select>
             </div>
         </div>
+
+
         <div class="row">
             <div class="col-md-12 form-group">
                 <label for="">Module Slug</label>
-                <input type="text" class="form-control" required name="path" value="{{$module->path}}">
+                <input type="text" class="form-control" required name="path">
                 <div class="help-block">
                     Please alpha numeric only, without space instead _ and or special character
                 </div>
             </div>
         </div>
 
-    </div>
-    <div class="box-footer">
 
+    </div>
+
+
+    <div class="box-footer">
         <input checked type='checkbox' name='create_menu' value='1'/> Also create menu for this module
         <a href='#' title='If you check this, we will create the menu for this module'>(?)</a>
 

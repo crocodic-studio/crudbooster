@@ -19,16 +19,10 @@
     @endpush
 
     <ul class="nav nav-tabs">
-        @if($id)
-
-            @include('CbModulesGen::partials.nav_tabs', ['step' => ['active','','',''], 'id' => $id ])
-
-        @else
-            <li role="presentation" class="active"><a href="#"> {!! cbIcon('info') !!} Step 1 - Module Information</a></li>
-            <li role="presentation"><a href="#"> {!! cbIcon('table') !!} Step 2 - Table Display</a></li>
-            <li role="presentation"><a href="#"> {!! cbIcon('plus-square-o') !!} Step 3 - Form Display</a></li>
-            <li role="presentation"><a href="#"> {!! cbIcon('wrench') !!} Step 4 - Configuration</a></li>
-        @endif
+        <li role="presentation" class="active">{!! cbIcon('info') !!} Step 1 - Module Information </li>
+        <li role="presentation">{!! cbIcon('table') !!} Step 2 - Table Display </li>
+        <li role="presentation">{!! cbIcon('plus-square-o') !!} Step 3 - Form Display </li>
+        <li role="presentation">{!! cbIcon('wrench') !!} Step 4 - Configuration </li>
     </ul>
 
     <div class="box box-default">

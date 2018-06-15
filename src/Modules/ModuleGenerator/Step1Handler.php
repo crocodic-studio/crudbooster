@@ -8,11 +8,9 @@ use Illuminate\Support\Facades\DB;
 
 class Step1Handler
 {
-    public function showForm($id)
+    public function showForm()
     {
-        $row = ModulesRepo::find($id);
-
-        return view("CbModulesGen::step1", compact("row", "id"));
+        return view('CbModulesGen::step1');
     }
 
     public function handleFormSubmit()
