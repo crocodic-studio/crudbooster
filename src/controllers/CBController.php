@@ -1699,7 +1699,7 @@ class CBController extends Controller {
 					{
 						$arr = array();
 						foreach ($a as $key => $value)
-							if (($key!=='consigmentno')&&($key!='batchno')&&($key!='created_at')&&($key!='date'))
+							if (($key!=='consigmentno')&&($key!='batchno')&&($key!='created_at')&&($key!='returnreason')&&($key!='m_date'))
 								$arr[] = array($key,'=',$value);
 
 						$checkDB = DB::table($this->table)->where($arr);
@@ -1711,7 +1711,7 @@ class CBController extends Controller {
 						
 						
 						$checkDB->update(
-							['consigmentno' => $a['consigmentno'],'batchno' => $a['batchno']]
+							['consigmentno' => $a['consigmentno'],'batchno' => $a['batchno'],'returnreason'=>$a['returnreason']]
 						);
 					}
 				}
