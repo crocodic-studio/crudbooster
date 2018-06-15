@@ -1713,6 +1713,7 @@ class CBController extends Controller {
 						$checkDB->update(
 							['consigmentno' => $a['consigmentno'],'batchno' => $a['batchno'],'returnreason'=>$a['returnreason']]
 						);
+						Log::error(DB::getQueryLog());
 					}
 				}
 				Cache::increment('success_'.$file_md5);
