@@ -1489,12 +1489,12 @@ class CBController extends Controller {
 	    {
 	        while (($row = fgetcsv($handle, 1000, $delimiter)) !== false)
 	        {
-	        	Log::error("in CSV");
-	        	Log::error($row);	
+	        	//Log::error("in CSV");
+	        	//Log::error($row);	
 	            if (!$header)
 	            {
 	                $header = $row;
-	                Log::error($header);	
+	                //Log::error($header);	
 	            }
 	            else
 	            {
@@ -1502,7 +1502,7 @@ class CBController extends Controller {
 	            		array_pad($row, count($header), '');	         
 	            	$data[] = array_combine($header, $row);
 	            }
-	            Log::error($data);	
+	            	
 	                
 	        }
 	        fclose($handle);
@@ -1528,8 +1528,8 @@ class CBController extends Controller {
 			/*$rows = Excel::load($file,function($reader) {
 			})->get();*/
 			$rows = $this->csvToArray($file);
-			Log::error($rows);
-			Log::error(count($rows));
+			//Log::error($rows);
+			//Log::error(count($rows));
 			//return (count($rows));
 
 			Session::put('total_data_import',count($rows));
@@ -1545,7 +1545,7 @@ class CBController extends Controller {
 				}
 				break;
 			}
-			Log::error($data_import_column);
+			//Log::error($data_import_column);
 
 			$table_columns = DB::getSchemaBuilder()->getColumnListing($this->table);
 
