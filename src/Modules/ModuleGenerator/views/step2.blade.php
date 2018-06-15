@@ -61,7 +61,7 @@
         @include('CbModulesGen::step2.js')
     @endpush
 
-    <form method="post" action="{{route('AdminModulesControllerpostStep2')}}">
+    <form method="post" action="{{route('AdminModulesControllerPostStep3')}}">
 
         <div class="box box-default">
             <div class="box-header with-border">
@@ -80,44 +80,47 @@
                         <th width="90px">Width (px)</th>
                         <th width='80px'>Image</th>
                         <th width='80px'>Download</th>
-                        <th>&nbsp;</th>
                         <th width="180px">Action</th>
                     </tr>
                     </thead>
                     <tbody>
                     @if($cols)
-                        @foreach($cols as $c)
+                        @foreach($cols as $col)
                             <tr>
-                                <td><input value='{{$c["label"]}}' type='text' name='column[]'
+                                <td><input value='{{$col["label"]}}' type='text' name='column[]'
                                            onclick='showColumnSuggest(this)' onKeyUp='showColumnSuggestLike(this)'
                                            placeholder='Column Name' class='column form-control notfocus' value=''/>
                                 </td>
-                                <td><input value='{{$c["name"]}}' type='text' name='name[]'
+                                <td>
+                                    <input value='{{$col["name"]}}' type='text' name='name[]'
                                            onclick='showNameSuggest(this)' onKeyUp='showNameSuggestLike(this)'
-                                           placeholder='Field Name' class='name form-control notfocus' value=''/></td>
-                                <td><input value='{{$c["width"]?:0}}' type='number' name='width[]'
-                                           class='form-control'/></td>
+                                           placeholder='Field Name' class='name form-control notfocus' value=''/>
+                                </td>
+                                <td>
+                                    <input value='{{ $col["width"] ?? 0}}' type='number' name='width[]' class='form-control'/>
+                                </td>
+
                                 <td>
                                     <select class='form-control is_image' name='is_image[]'>
-                                        <option {{ (!$c['image'])?"selected":""}} value='0'>N</option>
-                                        <option {{ ($c['image'])?"selected":""}} value='1'>Y</option>
+                                        <option {{ array_get($col,'image', 'false') == 'false' ? "selected" : "" }} value='0'>N</option>
+                                        <option {{ array_get($col,'image', 'false') == 'false' ? "" : "selected" }} value='1'>Y</option>
                                     </select>
                                 </td>
                                 <td>
                                     <select class='form-control is_download' name='is_download[]'>
-                                        <option {{ (!$c['download'])?"selected":""}} value='0'>N</option>
-                                        <option {{ ($c['download'])?"selected":""}} value='1'>Y</option>
+                                        <option {{ array_get($col,'download', 'false') == 'false' ? "selected" : ""   }} value='0'>N</option>
+                                        <option {{ array_get($col,'download', 'false') == 'false' ? "" : "selected"   }} value='1'>Y</option>
                                     </select>
                                 </td>
                                 <td>
                                     <a href="javascript:void(0)" class="btn btn-info btn-plus">
-                                         <i class='fa fa-plus'></i></a>
+                                        <i class='fa fa-plus'></i></a>
                                     <a href="javascript:void(0)" class="btn btn-danger btn-delete">
-                                         <i class='fa fa-trash'></i></a>
+                                        <i class='fa fa-trash'></i></a>
                                     <a href="javascript:void(0)" class="btn btn-success btn-up">
-                                         <i class='fa fa-arrow-up'></i></a>
+                                        <i class='fa fa-arrow-up'></i></a>
                                     <a href="javascript:void(0)" class="btn btn-success btn-down">
-                                         <i class='fa fa-arrow-down'></i></a>
+                                        <i class='fa fa-arrow-down'></i></a>
                                 </td>
                             </tr>
                         @endforeach
@@ -145,12 +148,12 @@
                         </td>
                         <td>
                             <a href="javascript:void(0)" class="btn btn-info btn-plus">
-                                 <i class='fa fa-plus'></i></a><a href="javascript:void(0)" class="btn btn-danger btn-delete">
-                                 <i class='fa fa-trash'></i></a>
+                                <i class='fa fa-plus'></i></a><a href="javascript:void(0)" class="btn btn-danger btn-delete">
+                                <i class='fa fa-trash'></i></a>
                             <a href="javascript:void(0)" class="btn btn-success btn-up">
-                                 <i class='fa fa-arrow-up'></i></a>
+                                <i class='fa fa-arrow-up'></i></a>
                             <a href="javascript:void(0)" class="btn btn-success btn-down">
-                                 <i class='fa fa-arrow-down'></i></a>
+                                <i class='fa fa-arrow-down'></i></a>
                         </td>
                     </tr>
 
@@ -165,7 +168,7 @@
                     </button>
 
                     <button class="btn btn-success btn-sm" type="submit">
-                        {!! cbIcon('save') !!}Save Index Config
+                        {!! cbIcon('save') !!}Save Table Config
                     </button>
 
                 </div>

@@ -30,10 +30,12 @@ class DbInspector
      */
     private static function findPKname($table)
     {
-        $cols = \DB::getDoctrineSchemaManager()->listTableDetails($table)->getPrimaryKey()->getColumns();
-        if (! empty($cols)) {
-            return $cols[0];
+        $pk = \DB::getDoctrineSchemaManager()->listTableDetails($table)->getPrimaryKey();
+        if(!$pk) {
+            throw new \Exception("The '$table' table does not have a primary key");
         }
+        $cols = $pk->getColumns();
+        return $cols[0];
     }
 
     /**
