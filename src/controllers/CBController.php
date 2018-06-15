@@ -1707,13 +1707,14 @@ class CBController extends Controller {
 						if (isset($a["m_date"]) || array_key_exists("m_date",$a))
 						{
 							$checkDB = $checkDB->whereRaw("m_date <= DATE_ADD(?, INTERVAL 1 MONTH)",$a["m_date"])->whereRaw("m_date >= DATE_SUB(?, INTERVAL 1 MONTH)",$a["m_date"]);
+							Log::error($checkDB->toSql());
 						}
 						
 						
 						$checkDB->update(
 							['consigmentno' => $a['consigmentno'],'batchno' => $a['batchno'],'returnreason'=>$a['returnreason']]
 						);
-						Log::error(DB::getQueryLog());
+						//Log::error(DB::getQueryLog());
 					}
 				}
 				Cache::increment('success_'.$file_md5);
