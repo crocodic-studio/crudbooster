@@ -1492,13 +1492,17 @@ class CBController extends Controller {
 	        	Log::error("in CSV");
 	        	Log::error($row);	
 	            if (!$header)
+	            {
 	                $header = $row;
+	                Log::error($header);	
+	            }
 	            else
 	            {
 	            	if (count($row)<count($header))
 	            		array_pad($row, count($header), '');	         
 	            	$data[] = array_combine($header, $row);
 	            }
+	            Log::error($data);	
 	                
 	        }
 	        fclose($handle);
