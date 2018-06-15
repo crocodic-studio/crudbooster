@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{{ ($page_title)?cbGetsetting('appname').': '.strip_tags($page_title):"Admin Area" }}</title>
+    <title>{{ isset($page_title) ? cbGetsetting('appname').': '.strip_tags($page_title) : "Crudbooster Admin Panel" }}</title>
     @include('crudbooster::_admin_template.meta')
     @include('crudbooster::_admin_template.css')
 
@@ -26,7 +26,7 @@
             @if($module)
                 <h1>
                     <i class='{{$module->icon}}'></i>
-                    {{($page_title)?:$module->name}} &nbsp;&nbsp;
+                    {{ isset($page_title) ? $page_title : $module->name }} &nbsp;&nbsp;
 
                     <!--START BUTTON -->
 
