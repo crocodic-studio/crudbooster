@@ -1489,7 +1489,8 @@ class CBController extends Controller {
 	    {
 	        while (($row = fgetcsv($handle, 1000, $delimiter)) !== false)
 	        {
-	        	Log::error("in CSV");	
+	        	Log::error("in CSV");
+	        	Log::error($row);	
 	            if (!$header)
 	                $header = $row;
 	            else
