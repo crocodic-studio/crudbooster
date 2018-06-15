@@ -15,23 +15,23 @@
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                <strong><i class='{{CRUDBooster::getCurrentModule()->icon}}'></i> {!! $page_title or "Page Title" !!}
+                <strong><i class='{{CRUDBooster::getCurrentModule()->icon}}'></i> {!! isset($page_title) ? $page_title : "Crudbooster Admin Area" !!}
                 </strong>
             </div>
 
             <div class="panel-body" style="padding:20px 0px 0px 0px">
                 <?php
-                $action = (@$row) ? CRUDBooster::mainpath("edit-save/$id") : CRUDBooster::mainpath("add-save");
+                $action = isset($row) ? CRUDBooster::mainpath("edit-save/$id") : CRUDBooster::mainpath("add-save");
                 $return_url = ($return_url) ?: request('return_url');
                 ?>
                 <div class="box-body" id="parent-form-area">
                     @include("crudbooster::form.form_detail", ['forms' => $forms])
-                </div><!-- /.box-body -->
+                </div>
 
                 <br><br><br>
                 <div class="box-footer" style="background: #F5F5F5">
                     <br>
-                </div><!-- /.box-footer-->
+                </div>
 
 
             </div>
