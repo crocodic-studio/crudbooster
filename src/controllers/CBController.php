@@ -1476,7 +1476,12 @@ class CBController extends Controller {
 	function csvToArray($filename = '', $delimiter = ',')
 	{
 	    if (!file_exists($filename) || !is_readable($filename))
-	        return false;
+	    {
+	    	Log::error("Can't find file or not readable");
+	    	Log::error($filename);
+	    	return false;
+	    }
+	        
 
 	    $header = null;
 	    $data = array();
@@ -1495,6 +1500,11 @@ class CBController extends Controller {
 	                
 	        }
 	        fclose($handle);
+	    }
+	    else
+	    {
+	    	Log::error("Can't find file");
+	    	Log::error($filename);
 	    }
 
 	    return $data;
