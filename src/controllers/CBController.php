@@ -1680,11 +1680,18 @@ class CBController extends Controller {
 					{
 						$arr = array();
 						foreach ($a as $key => $value)
-							if (($key!=='consigmentno')&&($key!='batchno')&&($key!='created_at'))
+							if (($key!=='consigmentno')&&($key!='batchno')&&($key!='created_at')&&($key!='date'))
 								$arr[] = array($key,'=',$value);
 
+						$checkDB = DB::table($this->table)->where($arr);
 
-						DB::table($this->table)->where($arr)->update(
+						if (isset($arr["date"]) || array_key_exists($arr["date"]))
+						{
+							$checkDB = $checkDB->whereRaw("date <= DATE_ADD(?, INTERVAL 1 MONTH)",$a["date"])->whereRaw("date >= DATE_SUB(?, INTERVAL 1 MONTH)",$a["date"]);
+						}
+						
+						
+						$checkDB->update(
 							['consigmentno' => $a['consigmentno'],'batchno' => $a['batchno']]
 						);
 					}
