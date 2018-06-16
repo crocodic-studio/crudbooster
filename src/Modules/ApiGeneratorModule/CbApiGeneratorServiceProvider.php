@@ -18,6 +18,7 @@ class CbApiGeneratorServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__.'/api_generator_routes.php');
         $this->loadMigrationsFrom(__DIR__ . '/migrations');
         app('CbDynamicMenus')->addSuperAdminMenu('CbApiGen::menu');
+        $this->registerModule();
     }
 
     /**
@@ -28,4 +29,18 @@ class CbApiGeneratorServiceProvider extends ServiceProvider
     public function register()
     {
     }
+
+    private function registerModule()
+    {
+        app('CbModulesRegistery')->addModule('api-generator', (object) [
+            'name' => trans('crudbooster.API_Generator'),
+            'icon' => 'fa fa-cloud-download',
+            'path' => 'api_generator',
+            'table_name' => '',
+            'controller' => 'ApiCustomController',
+            'is_protected' => 1,
+            'is_active' => 1,
+        ]);
+    }
+
 }

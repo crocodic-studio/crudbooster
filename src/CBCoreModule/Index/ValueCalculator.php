@@ -23,11 +23,11 @@ class ValueCalculator
             $value = $this->download($value);
         }
 
-        if ($col['str_limit']) {
-            $value = $this->str_limit($col, $value);
+        if (isset($col['str_limit'])) {
+            $value = $this->str_limit($col['str_limit'], $value);
         }
 
-        if ($col['nl2br']) {
+        if ($col['nl2br'] ?? false) {
             $value = nl2br($value);
         }
 
@@ -71,9 +71,9 @@ class ValueCalculator
      * @param $value
      * @return string
      */
-    private function str_limit($col, $value)
+    private function str_limit($limit, $value)
     {
-        return str_limit(trim(strip_tags($value)), $col['str_limit']);
+        return str_limit(trim(strip_tags($value)), $limit);
     }
 
     /**

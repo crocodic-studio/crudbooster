@@ -16,6 +16,7 @@ class CbNotificationsServiceProvider extends ServiceProvider
         $this->loadViewsFrom( __DIR__.'/views', 'CbNotifications');
         $this->loadRoutesFrom( __DIR__.'/notifications_routes.php');
         $this->loadMigrationsFrom(__DIR__ . '/migrations');
+        $this->registerModule();
     }
 
     /**
@@ -26,4 +27,18 @@ class CbNotificationsServiceProvider extends ServiceProvider
     public function register()
     {
     }
+
+    private function registerModule()
+    {
+        app('CbModulesRegistery')->addModule('notifications', (object) [
+            'name' => trans('crudbooster.Notifications'),
+            'icon' => 'fa fa-cog',
+            'path' => 'notifications',
+            'table_name' => 'cms_notifications',
+            'controller' => 'NotificationsController',
+            'is_protected' => 1,
+            'is_active' => 1,
+        ]);
+    }
+
 }

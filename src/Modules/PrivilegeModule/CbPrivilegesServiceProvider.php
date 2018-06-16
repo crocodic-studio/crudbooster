@@ -18,6 +18,7 @@ class CbPrivilegesServiceProvider extends ServiceProvider
         $this->publishes([__DIR__.'/localization' => resource_path('lang')], 'cb_localization');
         $this->loadMigrationsFrom(__DIR__ . '/migrations');
         app('CbDynamicMenus')->addSuperAdminMenu('CbPrivilege::menu');
+        $this->registerModule();
     }
 
     /**
@@ -28,4 +29,19 @@ class CbPrivilegesServiceProvider extends ServiceProvider
     public function register()
     {
     }
+
+
+    private function registerModule()
+    {
+        app('CbModulesRegistery')->addModule('privileges', (object) [
+            'name' => trans('crudbooster.Privileges'),
+            'icon' => 'fa fa-cog',
+            'path' => 'privileges',
+            'table_name' => 'cms_privileges',
+            'controller' => 'PrivilegesController',
+            'is_protected' => 1,
+            'is_active' => 1,
+        ]);
+    }
+
 }

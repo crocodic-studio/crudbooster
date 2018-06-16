@@ -79,7 +79,7 @@ class Index
         //$titleField = $CbCtrl->titleField;
         $number = (request('page', 1) - 1) * $limit + 1;
         $columnsTable = array_filter($columns, function ($col) {
-            return $col['visible'] !== false;
+            return $col['visible'] ?? true;
         });
         $htmlContents = (new RowContent($CbCtrl))->calculate($data, $number, $columnsTable); //end foreach data[result]
 
