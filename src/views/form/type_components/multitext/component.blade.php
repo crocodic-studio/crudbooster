@@ -9,8 +9,9 @@
 
         <div class="input-group">
             <input type='text' title="{{$label}}"
-                   {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} {{$validation['max']?"maxlength=$validation[max]":""}} class='form-control {{$name}} first_value'
-                   name="{{$name}}[]" id="{{$name}}" value='{{$value}}'/> <span class="input-group-addon"
+                   {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} {{ $validation['max'] ? "maxlength=".$validation['max'] : ""}} class='form-control {{$name}} first_value'
+                   name="{{$name}}[]" id="{{$name}}" value='{{$value}}'/>
+            <span class="input-group-addon"
                                                                                 style="padding: 1px;"><button
                         class="add_field_button {{$name}}  btn btn-danger  btn-xs"><i
                             class='fa fa-plus'></i></button></span>
@@ -23,10 +24,10 @@
     @push('bottom')
         <script>
             $(document).ready(function () {
-                var max_fields_{{$name}}    = "{{ @$formInput['options']['max_fields'] }}";
-                var max_fields_{{$name}}    = parseInt(max_fields_{{$name}}) ? max_fields_{{$name}} : 5; //maximum input boxes allowed
-                var wrapper_{{$name}}       = $(".input_fields_wrap").filter(".{{$name}}"); //Fields wrapper
-                var add_button_{{$name}}    = $(".add_field_button").filter(".{{$name}}"); //Add button ID
+                var max_fields_{{$name}} = "{{ @$formInput['options']['max_fields'] }}";
+                var max_fields_{{$name}} = parseInt(max_fields_{{$name}}) ? max_fields_{{$name}} : 5; //maximum input boxes allowed
+                var wrapper_{{$name}}    = $(".input_fields_wrap").filter(".{{$name}}"); //Fields wrapper
+                var add_button_{{$name}} = $(".add_field_button").filter(".{{$name}}"); //Add button ID
 
 
                 var count_{{$name}} = 1; //initlal text box count

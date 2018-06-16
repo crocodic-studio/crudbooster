@@ -4,7 +4,9 @@
 
     <div class="{{$col_width?:'col-sm-10'}}">
         <input type='number' step="{{($formInput['options']['step'])?:'1'}}" title="{{$label}}"
-               {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} {{$validation['min']?"min=$validation[min]":""}} {{$validation['max']?"max=$validation[max]":""}} class='form-control'
+               {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}}
+               {{$validation['min'] ? "min=".$validation['min'] : ""}}
+               {{$validation['max'] ? "max=".$validation['max'] : ""}} class='form-control'
                name="{{$name}}" id="{{$name}}" value='{{$value}}'/>
         {!! underField($formInput['help'], $errors->first($name)) !!}
     </div>

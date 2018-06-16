@@ -4,7 +4,7 @@
 
     <div class="{{$col_width?:'col-sm-10'}}">
         <input type='password' title="{{$label}}" id="{{$name}}"
-               {{$required}} {!!$placeholder!!} {{$readonly}} {{$disabled}} {{$validation['max']?"maxlength=$validation[max]":""}} class='form-control'
+               {{$required}} {!!$placeholder!!} {{$readonly}} {{$disabled}} {{ $validation['max'] ? "maxlength=".$validation['max'] : "" }} class='form-control'
                name="{{$name}}"/>
         {!! underField($formInput['help'], $errors->first($name)) !!}
     </div>
