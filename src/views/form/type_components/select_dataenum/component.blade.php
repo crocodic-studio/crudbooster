@@ -2,7 +2,7 @@
 
 <?php
 $options = [];
-$enumValue = $formInput['options']['value'];
+$enumValue = $formInput['options']['value'] ?? null;
 foreach ($formInput['options']['enum'] as $i => $e) {
     $options[$i]['label'] = $e;
     $options[$i]['value'] = ($enumValue) ? $enumValue[$i] : $e;
