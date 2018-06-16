@@ -2,7 +2,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#textarea_{{$name}}').summernote({
-                height: {{ ($formInput['options']['height'])?:"($(window).height() - 300)"}},
+                height: {{ array_get($formInput, 'options.height')?:"($(window).height() - 300)"}},
                 callbacks: {
                     onImageUpload: function (image) {
                         uploadImage{{$name}}(image[0]);
