@@ -161,17 +161,17 @@ if (! function_exists('makeValidationForHTML')) {
     function makeValidationForHTML($rules)
     {
         $validation = [];
-        $validation_raw = $rules ? explode('|', $rules) : [];
+        $validation_raw = is_string($rules)? explode('|', $rules) : $rules;
         foreach ($validation_raw as $vr) {
             $vr_a = explode(':', $vr);
-            if ($vr_a[1]) {
+            if (isset($vr_a[1])) {
                 $validation[$vr_a[0]] = $vr_a[1];
             } else {
                 $validation[$vr] = true;
             }
         }
 
-        return $validation;
+        return $validation + ['max' => ''];
     }
 }
 
