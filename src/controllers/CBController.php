@@ -378,7 +378,8 @@ class CBController extends Controller {
 				}
 
 				if ($type=='between') {
-					Log::error($fc);	
+					Log::error($fc);
+					Log::error($filter_column);	
 					if (($type_data == 'datetime')||((strpos(strtolower($label_data),"date")!==false)&&(strpos(strtolower($label_data),"time")!==false)))
 					{
 						if($key && $value)
