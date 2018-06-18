@@ -1694,7 +1694,7 @@ class CBController extends Controller {
 				else
 				{
 					//Log::error("notinloop");
-					//Log::error($a);
+					Log::error($a);
 					if ($a['consigmentno'] != '') 
 					{
 						$arr = array();
