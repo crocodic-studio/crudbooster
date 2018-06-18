@@ -381,7 +381,7 @@ class CBController extends Controller {
 					Log::error($fc);
 					Log::error($key);
 					Log::error($filter_column);	
-					if (($type_data == 'datetime')||((strpos(strtolower($label_data),"date")!==false)&&((strpos(strtolower($label_data),"time")!==false)||(strpos(strtolower($label_data),"create")!==false)))
+					if (($type_data == 'datetime')||((strpos(strtolower($label_data),"date")!==false)&&((strpos(strtolower($label_data),"time")!==false)||(strpos(strtolower($label_data),"create")!==false))))
 					{
 						if($key && $value)
 						{
