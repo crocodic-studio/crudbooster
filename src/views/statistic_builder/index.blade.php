@@ -266,12 +266,24 @@
 
         function runSortables() 
         {
+            var d2 = new Date();
+            var n2 = d2.getFullYear();
             if ($('#txtDateRange').text()=='All')
             {
                 var viewlink = "{{CRUDBooster::mainpath('view-component')}}/";
                 var addon = "";
             }
-            else
+            else if ($('#txtDateRange').text()=='This Year')
+            {
+                var viewlink = "{{CRUDBooster::mainpath('view-component-dates')}}/";
+                var addon = "/"+n2+"-01-01"+"/"+n2+"-12-31";
+            }
+            else if ($('#txtDateRange').text()=='Last Year')
+            {
+                var viewlink = "{{CRUDBooster::mainpath('view-component-dates')}}/";
+                var addon = "/"+(n2-1)+"-01-01"+"/"+(n2-1)+"-12-31";
+            }
+            else if ($('#txtDateRange').text()=='Date')
             {
                 var viewlink = "{{CRUDBooster::mainpath('view-component-dates')}}/";
                 var addon = "/"+$('#testdate1').val()+"/"+$('#testdate2').val();
@@ -435,6 +447,8 @@
               <span class="caret"></span></button>
               <ul class="dropdown-menu">
                 <li><a href="#">All</a></li>
+                <li><a href="#">This Year</a></li>
+                <li><a href="#">Last Year</a></li>
                 <li><a href="#">Date</a></li>
               </ul>
             </div>
