@@ -138,10 +138,10 @@
 	    		foreach($config as $key=>$value) {
 	    			if ($key=="sql")
 	    			{
-	    				if (strpos($value,"WHERE")!==false)
+	    				if (strpos(strtolower($value),"where")!==false)
 	    				{
 
-	    					$value  = str_replace("WHERE", "WHERE m_date>='".$startdate."' AND m_date<='".$enddate."' AND",$value);
+	    					$value  = str_replace("where", "where m_date>='".$startdate."' AND m_date<='".$enddate."' AND",strtolower($value));
 	    					//$value .= " AND m_date>='".$startdate."' AND m_date<='".$enddate."'";
 
 	    				}
