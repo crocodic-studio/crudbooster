@@ -195,6 +195,7 @@
 
         var chartColorsData = 
         $(".dropdown li a").click(function(){
+          $('.connectedSortable').empty();
 
           $(".btn:first-child #txtDateRange").text($(this).text());
           $(".btn:first-child").val($(this).text());
@@ -208,7 +209,7 @@
             $('.datestuff').show();
           }
 
-          $('.connectedSortable').empty();
+          
           runSortables();
 
        });       	      
