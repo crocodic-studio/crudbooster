@@ -383,10 +383,10 @@ class CBController extends Controller {
 					{
 						//if ($key && $value)
 						//{
-							Log::error("in between value check datetime");	
+							//Log::error("in between value check datetime");	
 							$value[0] .=" 00:00:00";
 							$value[1] .=" 23:59:59";
-							Log::error($value);
+							//Log::error($value);
 							$result->whereBetween($key,$value);
 						//}
 					}
