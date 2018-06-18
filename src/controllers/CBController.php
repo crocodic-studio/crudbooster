@@ -378,10 +378,12 @@ class CBController extends Controller {
 				}
 
 				if ($type=='between') {
+					Log::error($label_data);	
 					if (($type_data == 'datetime')||((strpos(strtolower($label_data),"date")!==false)&&(strpos(strtolower($label_data),"time")!==false)))
 					{
 						if($key && $value)
 						{
+							Log::error("in between value check datetime");	
 							$value[0] +=" 00:00:00";
 							$value[1] +=" 23:59:59";
 							$result->whereBetween($key,$value);
