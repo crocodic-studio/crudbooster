@@ -199,7 +199,7 @@
           $(".btn:first-child #txtDateRange").text($(this).text());
           $(".btn:first-child").val($(this).text());
 
-          if ($(this).text()=='All')
+          if ($(this).text()!='Date')
           {
             $('.datestuff').hide();
           }
