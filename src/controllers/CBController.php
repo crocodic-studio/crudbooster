@@ -1706,6 +1706,7 @@ class CBController extends Controller {
 
 						if (isset($a["m_date"]) || array_key_exists("m_date",$a))
 						{
+							Log::error("in m_date");
 							$checkDB = $checkDB->whereRaw("m_date <= DATE_ADD(?, INTERVAL 2 MONTH)",$a["m_date"])->whereRaw("m_date >= DATE_SUB(?, INTERVAL 2 MONTH)",$a["m_date"]);
 							Log::error($checkDB->toSql());
 						}
