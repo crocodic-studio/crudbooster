@@ -157,7 +157,11 @@
 	    						if ($pos !== FALSE)
 	    							$value = substr_replace($value, " WHERE m_date>='".$startdate."' AND m_date<='".$enddate."' ", $pos, 0); 
 	    						else
+	    						{
 	    							$value .= " WHERE m_date>='".$startdate."' AND m_date<='".$enddate."' ";
+	    							Log::error("m_date switched");
+	    							Log::error($value);
+	    						}
 	    					}
 	    					
 	    					$sqlstring = $value;
