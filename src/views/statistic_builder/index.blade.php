@@ -193,9 +193,16 @@
     <script type="text/javascript">
     $(function() {      
 
+        var sortablesList = [];
+
         //var chartColorsData = 
         $(".dropdown li a").click(function(){
-          $(".connectedSortable").sortable( "disable" )
+
+            for (var i = 0, len = sortablesList.length; i < len; i++) {
+                arr[i].abort();
+            }
+
+            sortablesList = [];
 
 
           $(".btn:first-child #txtDateRange").text($(this).text());
@@ -212,12 +219,13 @@
 
           $('.connectedSortable').empty();
           runSortables();
-          
+
 
        });       	      
         
 
         var cloneSidebar = $('.control-sidebar').clone();
+        
 
         @if(CRUDBooster::getCurrentMethod() == 'getBuilder')
             createSortable();        
@@ -253,9 +261,9 @@
                         var index = $('#'+componentID).index();
 
                         
-                        $.post("{{CRUDBooster::mainpath('update-area-component')}}",{componentid:componentID,sorting:index,areaname:areaname},function(response) {
+                        sortablesList.push($.post("{{CRUDBooster::mainpath('update-area-component')}}",{componentid:componentID,sorting:index,areaname:areaname},function(response) {
                             
-                        })
+                        }));
                     }
                 }
               });
