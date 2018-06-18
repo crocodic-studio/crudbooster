@@ -195,7 +195,7 @@
 
         //var chartColorsData = 
         $(".dropdown li a").click(function(){
-          $(ui.sender).sortable( "disable" )
+          $(".connectedSortable").sortable( "disable" )
 
 
           $(".btn:first-child #txtDateRange").text($(this).text());
@@ -212,6 +212,7 @@
 
           $('.connectedSortable').empty();
           runSortables();
+          
 
        });       	      
         
