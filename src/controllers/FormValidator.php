@@ -52,8 +52,8 @@ class FormValidator
             }
             unset($hookValidationPath);
 
-            if (@$formInput['validation']) {
-                $rules[$name] = $this->parseValidationRules($id, $formInput);
+            if (isset($formInput['validation'])) {
+                $rules[$name] = $this->parseValidationRules($id, $formInput['validation'], $formInput['name']);
             } else {
                 $rules[$name] = implode('|', $ai);
             }
@@ -64,12 +64,18 @@ class FormValidator
 
     /**
      * @param $id
-     * @param $formInput
+     * @param $rules
+     * @param $name
      * @return array
+     * @throws \Exception
      */
-    private function parseValidationRules($id, $formInput)
+    private function parseValidationRules($id, $rules, $name)
     {
-        $exp = explode('|', $formInput['validation']);
+        if (is_string($rules)) {
+            $exp = explode('|', $rules);
+        } elseif(is_array($rules)) {
+            $exp = $rules;
+        }
 
         $uniqueRules = array_filter($exp, function($item){
             return starts_with($item, 'unique');
@@ -78,7 +84,7 @@ class FormValidator
         foreach ($uniqueRules as &$validationItem) {
             $parseUnique = explode(',', str_replace('unique:', '', $validationItem));
             $uniqueTable = ($parseUnique[0]) ?: $this->table;
-            $uniqueColumn = ($parseUnique[1]) ?: $formInput['name'];
+            $uniqueColumn = ($parseUnique[1]) ?: $name;
             $uniqueIgnoreId = ($parseUnique[2]) ?: (($id) ?: '');
 
             //Make sure table name
@@ -123,6 +129,6 @@ class FormValidator
             $resp = response()->json($msg);
             sendAndTerminate($resp);
         }
-        sendAndTerminate(redirect()->back()->with("errors", $message)->with($msg)->withnput());
+        sendAndTerminate(redirect()->back()->with("errors", $message)->with($msg)->withInput());
     }
 }

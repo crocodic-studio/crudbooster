@@ -3,7 +3,6 @@
 namespace crocodicstudio\crudbooster\Modules\ApiGeneratorModule;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Foundation\AliasLoader;
 
 class CbApiGeneratorServiceProvider extends ServiceProvider
 {

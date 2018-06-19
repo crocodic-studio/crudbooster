@@ -2,6 +2,7 @@
 
 namespace crocodicstudio\crudbooster\helpers;
 
+error_reporting(E_ALL ^ E_NOTICE);
 use crocodicstudio\crudbooster\CBCoreModule\Facades\CbRouter;
 use crocodicstudio\crudbooster\CBCoreModule\ViewHelpers;
 use crocodicstudio\crudbooster\Modules\PrivilegeModule\GetCurrentX;
