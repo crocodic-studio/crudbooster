@@ -26,7 +26,7 @@
                 <div class="box-body">
 
                     <div class='form-group'>
-                        <label>{{ trans('crudbooster_privilege.privileges_name')}}</label>
+                        <label>{{ trans('crudbooster_privilege.roles_name')}}</label>
                         <input type='text' class='form-control' name='name' required value='{{ $role->name }}'/>
                         <div class="text-danger">{{ $errors->first('name') }}</div>
                     </div>
@@ -41,8 +41,8 @@
                     </div>
 
 
-                    <div id='privileges_configuration' class='form-group'>
-                        <label>{{ trans('crudbooster_privilege.privileges_configuration') }}</label>
+                    <div id='roles_configuration' class='form-group'>
+                        <label>{{ trans('crudbooster_privilege.roles_configuration') }}</label>
 
                         @push('bottom')
                             @include('CbPrivilege::_privileges.bottom_js')

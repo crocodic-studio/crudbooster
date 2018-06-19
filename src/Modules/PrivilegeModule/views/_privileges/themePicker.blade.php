@@ -1,6 +1,6 @@
-<label>{{ trans('crudbooster_privilege.chose_theme_color')}}</label>
+<label>{{ trans('crudbooster_privilege.choose_theme_color')}}</label>
 <select name='theme_color' class='form-control' required>
-    <option value=''>{{ trans('crudbooster_privilege.chose_theme_color')}}</option>
+    <option value=''>{{ trans('crudbooster_privilege.choose_theme_color')}}</option>
     <?php
     $skins = array(
         'skin-blue',
@@ -35,9 +35,9 @@
             $('#set_as_superadmin input').click(function () {
                 var n = $(this).val();
                 if (n == '1') {
-                    $('#privileges_configuration').hide();
+                    $('#roles_configuration').hide();
                 } else {
-                    $('#privileges_configuration').show();
+                    $('#roles_configuration').show();
                 }
             })
 
