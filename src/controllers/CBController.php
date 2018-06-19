@@ -1595,6 +1595,7 @@ class CBController extends Controller {
 
 		$rows = $this->csvToArray($file);
 		$f = $this->import_consignment;
+		set_time_limit ( 600 );
 		
 		//$rows = Excel::load($file,function($reader) {})->get();
 
