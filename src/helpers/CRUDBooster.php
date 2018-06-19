@@ -44,7 +44,7 @@ class CRUDBooster
 
     public static function deleteConfirm($redirectTo)
     {
-        return view('_admin_template.deleteConfirmModal', ['redirectTo'=> $redirectTo])->render();
+        return view('crudbooster::_admin_template.deleteConfirmModal', ['redirectTo'=> $redirectTo])->render();
     }
 
     public static function getValueFilter($field)
