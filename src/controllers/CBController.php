@@ -558,6 +558,7 @@ class CBController extends Controller {
 
 		$data['html_contents'] = $html_contents;
 		$data['limit'] = $result->count();
+		echo $result->toSql()."<br>";
 
 		return view("crudbooster::default.index",$data);
 	}
@@ -1595,7 +1596,7 @@ class CBController extends Controller {
 
 		$rows = $this->csvToArray($file);
 		$f = $this->import_consignment;
-		set_time_limit ( 600 );
+		//set_time_limit ( 600 );
 		
 		//$rows = Excel::load($file,function($reader) {})->get();
 
@@ -1699,7 +1700,7 @@ class CBController extends Controller {
 				{
 					//Log::error("notinloop");
 					//Log::error($a);
-					if ($a['consigmentno'] != '') 
+					if (($a['consigmentno'] != '')||($a['returnreason'] != ''))
 					{
 						$arr = array();
 						foreach ($a as $key => $value)
