@@ -2,7 +2,7 @@
 
 namespace Crocodicstudio\Crudbooster\Modules\EmailTemplates;
 
-use Crocodicstudio\Crudbooster\helpers\CRUDBooster;
+use Crocodicstudio\Crudbooster\Helpers\CRUDBooster;
 use Crocodicstudio\Crudbooster\Modules\SettingModule\SettingRepo;
 use Illuminate\Support\Facades\Config;
 

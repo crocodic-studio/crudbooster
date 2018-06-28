@@ -2,7 +2,7 @@
 
 namespace Crocodicstudio\Crudbooster\controllers\ApiController;
 
-use Crocodicstudio\Crudbooster\helpers\CRUDBooster;
+use Crocodicstudio\Crudbooster\Helpers\CRUDBooster;
 
 class ValidationRules
 {

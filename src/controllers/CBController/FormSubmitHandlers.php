@@ -4,8 +4,8 @@ namespace Crocodicstudio\Crudbooster\controllers\CBController;
 
 use Crocodicstudio\Crudbooster\CBCoreModule\RelationHandler;
 use Crocodicstudio\Crudbooster\controllers\FormValidator;
-use Crocodicstudio\Crudbooster\helpers\CRUDBooster;
-use Crocodicstudio\Crudbooster\helpers\DbInspector;
+use Crocodicstudio\Crudbooster\Helpers\CRUDBooster;
+use Crocodicstudio\Crudbooster\Helpers\DbInspector;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Schema;
 

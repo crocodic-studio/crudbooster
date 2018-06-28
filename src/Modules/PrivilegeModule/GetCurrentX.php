@@ -2,7 +2,7 @@
 
 namespace Crocodicstudio\Crudbooster\Modules\PrivilegeModule;
 
-use Crocodicstudio\Crudbooster\helpers\GetCurrentX as GetCurrentXClass;
+use Crocodicstudio\Crudbooster\Helpers\GetCurrentX as GetCurrentXClass;
 
 trait GetCurrentX
 {

@@ -2,7 +2,7 @@
 
 namespace Crocodicstudio\Crudbooster\controllers\ApiController;
 
-use Crocodicstudio\Crudbooster\helpers\DbInspector;
+use Crocodicstudio\Crudbooster\Helpers\DbInspector;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;

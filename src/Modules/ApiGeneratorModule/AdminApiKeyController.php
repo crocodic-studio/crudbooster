@@ -3,7 +3,7 @@
 namespace Crocodicstudio\Crudbooster\Modules\ApiGeneratorModule;
 
 use Crocodicstudio\Crudbooster\controllers\CBController;
-use Crocodicstudio\Crudbooster\helpers\CbValidator;
+use Crocodicstudio\Crudbooster\Helpers\CbValidator;
 
 class AdminApiKeyController extends CBController
 {

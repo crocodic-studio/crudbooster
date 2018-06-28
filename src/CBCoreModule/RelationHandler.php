@@ -2,9 +2,9 @@
 
 namespace Crocodicstudio\Crudbooster\CBCoreModule;
 
-use Crocodicstudio\Crudbooster\helpers\DbInspector;
+use Crocodicstudio\Crudbooster\Helpers\DbInspector;
 use Illuminate\Support\Facades\DB;
-use Crocodicstudio\Crudbooster\helpers\CRUDBooster;
+use Crocodicstudio\Crudbooster\Helpers\CRUDBooster;
 use Schema;
 
 class RelationHandler

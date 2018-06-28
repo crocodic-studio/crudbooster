@@ -4,7 +4,7 @@ namespace Crocodicstudio\Crudbooster\Modules\PrivilegeModule;
 
 use Crocodicstudio\Crudbooster\controllers\CBController;
 use Crocodicstudio\Crudbooster\controllers\FormValidator;
-use Crocodicstudio\Crudbooster\helpers\CRUDBooster;
+use Crocodicstudio\Crudbooster\Helpers\CRUDBooster;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;

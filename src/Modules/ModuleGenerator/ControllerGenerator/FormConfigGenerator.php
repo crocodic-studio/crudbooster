@@ -2,7 +2,7 @@
 
 namespace Crocodicstudio\Crudbooster\Modules\ModuleGenerator\ControllerGenerator;
 
-use Crocodicstudio\Crudbooster\helpers\DbInspector;
+use Crocodicstudio\Crudbooster\Helpers\DbInspector;
 use Crocodicstudio\Crudbooster\Modules\ModuleGenerator\FileManipulator;
 use Illuminate\Support\Facades\Schema;
 

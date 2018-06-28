@@ -2,8 +2,8 @@
 
 namespace Crocodicstudio\Crudbooster\controllers;
 
-use Crocodicstudio\Crudbooster\helpers\DbInspector;
-use Crocodicstudio\Crudbooster\helpers\CRUDBooster;
+use Crocodicstudio\Crudbooster\Helpers\DbInspector;
+use Crocodicstudio\Crudbooster\Helpers\CRUDBooster;
 
 class FormValidator
 {

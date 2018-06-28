@@ -2,7 +2,7 @@
 
 namespace Crocodicstudio\Crudbooster\CBCoreModule\Index;
 
-use Crocodicstudio\Crudbooster\helpers\CRUDBooster;
+use Crocodicstudio\Crudbooster\Helpers\CRUDBooster;
 
 class ViewHelpers
 {

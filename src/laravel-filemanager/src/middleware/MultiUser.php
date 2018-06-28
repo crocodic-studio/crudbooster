@@ -3,7 +3,7 @@
 namespace Unisharp\Laravelfilemanager\middleware;
 
 use Closure;
-use Crocodicstudio\Crudbooster\helpers\CRUDBooster;
+use Crocodicstudio\Crudbooster\Helpers\CRUDBooster;
 
 class MultiUser
 {

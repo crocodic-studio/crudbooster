@@ -17,7 +17,7 @@ class Step2Handler
             'columns' => $columns,
             'cols' => ScaffoldingParser::parse($controllerCode, 'col')
         ];
-        $data['table_list'] = \Crocodicstudio\Crudbooster\helpers\CRUDBooster::listCbTables();
+        $data['table_list'] = \Crocodicstudio\Crudbooster\Helpers\CRUDBooster::listCbTables();
 
         return view('CbModulesGen::step2', $data);
     }

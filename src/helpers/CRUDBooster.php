@@ -1,6 +1,6 @@
 <?php
 
-namespace Crocodicstudio\Crudbooster\helpers;
+namespace Crocodicstudio\Crudbooster\Helpers;
 
 error_reporting(E_ALL ^ E_NOTICE);
 use Crocodicstudio\Crudbooster\CBCoreModule\Facades\CbRouter;

@@ -3,7 +3,7 @@
 namespace Crocodicstudio\Crudbooster\Modules\AuthModule;
 
 use Crocodicstudio\Crudbooster\CBCoreModule\CbUsersRepo;
-use Crocodicstudio\Crudbooster\helpers\CRUDBooster;
+use Crocodicstudio\Crudbooster\Helpers\CRUDBooster;
 use Illuminate\Routing\Controller;
 
 class LoginController extends Controller

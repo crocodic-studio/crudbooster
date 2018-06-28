@@ -2,8 +2,8 @@
 
 namespace Crocodicstudio\Crudbooster\controllers\Helpers;
 
-use Crocodicstudio\Crudbooster\helpers\CRUDBooster;
-use Crocodicstudio\Crudbooster\helpers\DbInspector;
+use Crocodicstudio\Crudbooster\Helpers\CRUDBooster;
+use Crocodicstudio\Crudbooster\Helpers\DbInspector;
 use Crocodicstudio\Crudbooster\Modules\ModuleGenerator\ModulesRepo;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;

@@ -110,9 +110,9 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $loader->alias('PDF', 'Barryvdh\DomPDF\Facade');
         $loader->alias('Excel', 'Maatwebsite\Excel\Facades\Excel');
         $loader->alias('Image', 'Intervention\Image\Facades\Image');
-        $loader->alias('CRUDBooster', 'Crocodicstudio\Crudbooster\helpers\CRUDBooster');
-        $loader->alias('CB', 'Crocodicstudio\Crudbooster\helpers\CRUDBooster');
-        $loader->alias('DbInspector', 'Crocodicstudio\Crudbooster\helpers\DbInspector');
+        $loader->alias('CRUDBooster', 'Crocodicstudio\Crudbooster\Helpers\CRUDBooster');
+        $loader->alias('CB', 'Crocodicstudio\Crudbooster\Helpers\CRUDBooster');
+        $loader->alias('DbInspector', 'Crocodicstudio\Crudbooster\Helpers\DbInspector');
         $loader->alias('CbRouter', CbRouter::class);
     }
 

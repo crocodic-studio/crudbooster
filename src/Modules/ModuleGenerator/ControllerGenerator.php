@@ -2,7 +2,7 @@
 
 namespace Crocodicstudio\Crudbooster\Modules\ModuleGenerator;
 
-use Crocodicstudio\Crudbooster\helpers\DbInspector;
+use Crocodicstudio\Crudbooster\Helpers\DbInspector;
 use Crocodicstudio\Crudbooster\Modules\ModuleGenerator\ControllerGenerator\FormConfigGenerator;
 use Crocodicstudio\Crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
 use Schema;

@@ -5,7 +5,7 @@ namespace Crocodicstudio\Crudbooster\Modules\StatisticModule;
 use Crocodicstudio\Crudbooster\controllers\CBController;
 use Crocodicstudio\Crudbooster\Modules\MenuModule\MenuRepo;
 use Illuminate\Support\Facades\DB;
-use Crocodicstudio\Crudbooster\helpers\CRUDBooster;
+use Crocodicstudio\Crudbooster\Helpers\CRUDBooster;
 
 class AdminStatisticBuilderController extends CBController
 {

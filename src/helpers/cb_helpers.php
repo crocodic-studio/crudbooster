@@ -11,7 +11,7 @@
 if (! function_exists('cbModulesNS')) {
     function cbModulesNS(string $path = ''): string
     {
-        return \Crocodicstudio\Crudbooster\helpers\CbStructure::cbModulesNS($path);
+        return \Crocodicstudio\Crudbooster\Helpers\CbStructure::cbModulesNS($path);
     }
 }
 
@@ -39,14 +39,14 @@ if (! function_exists('cbAdminPath')) {
 if (! function_exists('ctrlNamespace')) {
     function ctrlNamespace(): string
     {
-        return \Crocodicstudio\Crudbooster\helpers\CbStructure::ctrlNamespace();
+        return \Crocodicstudio\Crudbooster\Helpers\CbStructure::ctrlNamespace();
     }
 }
 
 if (! function_exists('cbControllersNS')) {
     function cbControllersNS(): string
     {
-        return \Crocodicstudio\Crudbooster\helpers\CbStructure::cbControllersNS();
+        return \Crocodicstudio\Crudbooster\Helpers\CbStructure::cbControllersNS();
     }
 }
 
@@ -77,28 +77,28 @@ if (! function_exists('is_checked')) {
 if (! function_exists('CbComponentsPath')) {
     function CbComponentsPath(string $type = ''): string
     {
-        return \Crocodicstudio\Crudbooster\helpers\CbStructure::componentsPath($type);
+        return \Crocodicstudio\Crudbooster\Helpers\CbStructure::componentsPath($type);
     }
 }
 
 if (! function_exists('CbPublishedComponentsPath')) {
     function CbPublishedComponentsPath(string $type = ''): string
     {
-        return \Crocodicstudio\Crudbooster\helpers\CbStructure::publishedComponentsPath($type);
+        return \Crocodicstudio\Crudbooster\Helpers\CbStructure::publishedComponentsPath($type);
     }
 }
 
 if (! function_exists('controllers_dir')) {
     function controllers_dir(): string
     {
-        return \Crocodicstudio\Crudbooster\helpers\CbStructure::controllersDir();
+        return \Crocodicstudio\Crudbooster\Helpers\CbStructure::controllersDir();
     }
 }
 
 if (! function_exists('controller_path')) {
     function controller_path(string $controller): string
     {
-        return \Crocodicstudio\Crudbooster\helpers\CbStructure::controllerPath($controller);
+        return \Crocodicstudio\Crudbooster\Helpers\CbStructure::controllerPath($controller);
     }
 }
 

@@ -5,7 +5,7 @@ namespace Crocodicstudio\Crudbooster\controllers\CBController;
 use Crocodicstudio\Crudbooster\CBCoreModule\DataRemover;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Storage;
-use Crocodicstudio\Crudbooster\helpers\CRUDBooster;
+use Crocodicstudio\Crudbooster\Helpers\CRUDBooster;
 
 trait Deleter
 {

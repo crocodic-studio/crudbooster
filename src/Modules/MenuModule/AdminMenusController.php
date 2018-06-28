@@ -3,7 +3,7 @@
 namespace Crocodicstudio\Crudbooster\Modules\MenuModule;
 
 use Crocodicstudio\Crudbooster\controllers\CBController;
-use Crocodicstudio\Crudbooster\helpers\CRUDBooster;
+use Crocodicstudio\Crudbooster\Helpers\CRUDBooster;
 use Crocodicstudio\Crudbooster\Modules\ModuleGenerator\ModulesRepo;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;

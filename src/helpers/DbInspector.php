@@ -1,6 +1,6 @@
 <?php
 
-namespace Crocodicstudio\Crudbooster\helpers;
+namespace Crocodicstudio\Crudbooster\Helpers;
 
 use Cache;
 use DB;

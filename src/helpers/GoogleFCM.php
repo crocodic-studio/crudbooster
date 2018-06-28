@@ -1,8 +1,6 @@
 <?php
 
-namespace Crocodicstudio\Crudbooster\helpers;
-
-use Crocodicstudio\Crudbooster\Modules\SettingModule\SettingRepo;
+namespace Crocodicstudio\Crudbooster\Helpers;
 
 class GoogleFCM
 {
@@ -68,9 +66,9 @@ class GoogleFCM
      */
     private function getHeaders()
     {
-        $apikey = SettingRepo::getSetting('google_fcm_key');
+        $apiKey = env('oogle_fcm_key');
         $headers = [
-            'Authorization:key='.$apikey,
+            'Authorization:key='.$apiKey,
             'Content-Type:application/json',
         ];
 
