@@ -123,7 +123,6 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->app->register('Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider');
         $this->app->register('Intervention\Image\ImageServiceProvider');
         $this->app->register('Imanghafoori\Widgets\WidgetsServiceProvider');
-        $this->app->register('Imanghafoori\Responder\LaravelResponderServiceProvider');
     }
 
     private function registerCrudBoosterModules()
