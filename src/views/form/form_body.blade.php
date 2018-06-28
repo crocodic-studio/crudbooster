@@ -12,7 +12,7 @@
             $old = old($name);
             $value = (!empty($old))?$old:$value;
 
-            $validation = makeValidationForHTML($formInput['validation']);
+            $validation = makeValidationForHTML($formInput['validation'] ?? []);
 
             if(isset($formInput['callback'])) {
                 $value = call_user_func($formInput['callback'],$row);
