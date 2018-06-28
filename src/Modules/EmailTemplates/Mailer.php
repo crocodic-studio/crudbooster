@@ -10,13 +10,13 @@ class Mailer
 {
     private $attachments;
 
-    private $reciever;
+    private $receiver;
 
     public function send($config)
     {
         $this->setConfigs();
 
-        $this->reciever = $config['to'];
+        $this->receiver = $config['to'];
         $template = $config['template'];
 
         $template = CRUDBooster::first('cms_email_templates', ['slug' => $template]);
@@ -49,7 +49,7 @@ class Mailer
     {
         \Mail::send("CbEmailTpl::templates.blank", ['content' => $html], function ($message) use ($subject, $template) {
             $message->priority(1);
-            $message->to($this->reciever);
+            $message->to($this->receiver);
 
             if ($template->from_email) {
                 $from_name = ($template->from_name) ?: SettingRepo::getSetting('appname');
@@ -60,7 +60,7 @@ class Mailer
                 $message->cc($template->cc_email);
             }
 
-            if (count($this->attachments)) {
+            if (!empty($this->attachments)) {
                 foreach ($this->attachments as $attachment) {
                     $message->attach($attachment);
                 }
