@@ -1,9 +1,9 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
+namespace Crocodicstudio\Crudbooster\Modules\ModuleGenerator;
 
-use crocodicstudio\crudbooster\controllers\Helpers\FontAwesome;
-use crocodicstudio\crudbooster\helpers\CRUDBooster;
+use Crocodicstudio\Crudbooster\controllers\Helpers\FontAwesome;
+use Crocodicstudio\Crudbooster\helpers\CRUDBooster;
 
 class Form
 {

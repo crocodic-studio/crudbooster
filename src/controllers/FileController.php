@@ -1,16 +1,15 @@
 <?php
 
-namespace crocodicstudio\crudbooster\controllers;
+namespace Crocodicstudio\Crudbooster\controllers;
 
-use crocodicstudio\crudbooster\CBCoreModule\FileUploader;
-use crocodicstudio\crudbooster\controllers\Helpers\IndexImport;
-use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
+use Crocodicstudio\Crudbooster\CBCoreModule\FileUploader;
+use Crocodicstudio\Crudbooster\controllers\Helpers\IndexImport;
+use Crocodicstudio\Crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
 use Storage;
 use Response;
 use Image;
 use File;
 use Illuminate\Support\Facades\Request;
-use crocodicstudio\crudbooster\helpers\CRUDBooster;
 
 class FileController extends Controller
 {

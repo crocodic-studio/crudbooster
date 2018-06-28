@@ -1,10 +1,10 @@
 <?php
 
-namespace crocodicstudio\crudbooster\controllers\Helpers;
+namespace Crocodicstudio\Crudbooster\controllers\Helpers;
 
-use crocodicstudio\crudbooster\helpers\CRUDBooster;
-use crocodicstudio\crudbooster\helpers\DbInspector;
-use crocodicstudio\crudbooster\Modules\ModuleGenerator\ModulesRepo;
+use Crocodicstudio\Crudbooster\helpers\CRUDBooster;
+use Crocodicstudio\Crudbooster\helpers\DbInspector;
+use Crocodicstudio\Crudbooster\Modules\ModuleGenerator\ModulesRepo;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;

@@ -1,10 +1,10 @@
 <?php
 
-namespace crocodicstudio\crudbooster\commands;
+namespace Crocodicstudio\Crudbooster\commands;
 
-use crocodicstudio\crudbooster\CBCoreModule\Installer\CbInstaller;
-use crocodicstudio\crudbooster\CBCoreModule\Installer\ConsolePrinter;
-use crocodicstudio\crudbooster\CBCoreModule\Installer\RequirementChecker;
+use Crocodicstudio\Crudbooster\CBCoreModule\Installer\CbInstaller;
+use Crocodicstudio\Crudbooster\CBCoreModule\Installer\ConsolePrinter;
+use Crocodicstudio\Crudbooster\CBCoreModule\Installer\RequirementChecker;
 use Illuminate\Console\Command;
 
 class InstallationCommand extends Command

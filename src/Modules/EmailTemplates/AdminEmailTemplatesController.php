@@ -1,8 +1,8 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\EmailTemplates;
+namespace Crocodicstudio\Crudbooster\Modules\EmailTemplates;
 
-use crocodicstudio\crudbooster\controllers\CBController;
+use Crocodicstudio\Crudbooster\controllers\CBController;
 
 class AdminEmailTemplatesController extends CBController
 {

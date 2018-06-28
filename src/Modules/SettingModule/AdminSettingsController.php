@@ -1,10 +1,10 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\SettingModule;
+namespace Crocodicstudio\Crudbooster\Modules\SettingModule;
 
-use crocodicstudio\crudbooster\controllers\CBController;
-use crocodicstudio\crudbooster\helpers\CbValidator;
-use crocodicstudio\crudbooster\helpers\CRUDBooster;
+use Crocodicstudio\Crudbooster\controllers\CBController;
+use Crocodicstudio\Crudbooster\helpers\CbValidator;
+use Crocodicstudio\Crudbooster\helpers\CRUDBooster;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Storage;

@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\helpers;
+namespace Crocodicstudio\Crudbooster\helpers;
 
 use Illuminate\Support\Facades\Validator;
 

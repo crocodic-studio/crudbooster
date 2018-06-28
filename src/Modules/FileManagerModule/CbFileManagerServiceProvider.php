@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\FileManagerModule;
+namespace Crocodicstudio\Crudbooster\Modules\FileManagerModule;
 
 use Illuminate\Support\ServiceProvider;
 

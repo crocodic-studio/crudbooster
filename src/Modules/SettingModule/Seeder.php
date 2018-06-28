@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\SettingModule;
+namespace Crocodicstudio\Crudbooster\Modules\SettingModule;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder as BaseSeeder;

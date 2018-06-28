@@ -1,8 +1,8 @@
 <?php
 
-namespace crocodicstudio\crudbooster\CBCoreModule\Index;
+namespace Crocodicstudio\Crudbooster\CBCoreModule\Index;
 
-use crocodicstudio\crudbooster\helpers\CRUDBooster;
+use Crocodicstudio\Crudbooster\helpers\CRUDBooster;
 
 class ViewHelpers
 {

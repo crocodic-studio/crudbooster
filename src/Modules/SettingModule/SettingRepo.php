@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\SettingModule;
+namespace Crocodicstudio\Crudbooster\Modules\SettingModule;
 
 class SettingRepo
 {

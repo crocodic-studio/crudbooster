@@ -1,8 +1,8 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\MenuModule;
+namespace Crocodicstudio\Crudbooster\Modules\MenuModule;
 
-use crocodicstudio\crudbooster\controllers\Helpers\FontAwesome;
+use Crocodicstudio\Crudbooster\controllers\Helpers\FontAwesome;
 
 class MenusForm
 {

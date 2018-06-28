@@ -1,9 +1,9 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\ApiGeneratorModule;
+namespace Crocodicstudio\Crudbooster\Modules\ApiGeneratorModule;
 
-use crocodicstudio\crudbooster\controllers\CBController;
-use crocodicstudio\crudbooster\helpers\CRUDBooster;
+use Crocodicstudio\Crudbooster\controllers\CBController;
+use Crocodicstudio\Crudbooster\helpers\CRUDBooster;
 
 class AdminApiGeneratorController extends CBController
 {

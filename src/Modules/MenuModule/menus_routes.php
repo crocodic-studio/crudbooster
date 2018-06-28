@@ -1,11 +1,11 @@
 <?php
 
-use crocodicstudio\crudbooster\CBCoreModule\Facades\CbRouter;
-use crocodicstudio\crudbooster\Modules\MenuModule\MenuTypes;
-use crocodicstudio\crudbooster\Modules\ModuleGenerator\ModulesRepo;
+use Crocodicstudio\Crudbooster\CBCoreModule\Facades\CbRouter;
+use Crocodicstudio\Crudbooster\Modules\MenuModule\MenuTypes;
+use Crocodicstudio\Crudbooster\Modules\ModuleGenerator\ModulesRepo;
 
 Route::group([
-    'middleware' => ['web', \crocodicstudio\crudbooster\CBCoreModule\middlewares\CBSuperadmin::class],
+    'middleware' => ['web', \Crocodicstudio\Crudbooster\CBCoreModule\middlewares\CBSuperadmin::class],
     'prefix' => cbAdminPath(),
     'namespace' => cbModulesNS('MenuModule'),
 ], function () {
@@ -36,11 +36,11 @@ $argv = request()->server('argv');
 if (is_array($argv) && isset($argv[1]) && !starts_with($argv[1], 'route:')) {
     return;
 }
-$dashboardMenu = \crocodicstudio\crudbooster\Modules\MenuModule\MenuRepo::getDashboard();
+$dashboardMenu = \Crocodicstudio\Crudbooster\Modules\MenuModule\MenuRepo::getDashboard();
 // ROUTER FOR OWN CONTROLLER FROM CB
 if ($dashboardMenu) {
     Route::group([
-        'middleware' => ['web', \crocodicstudio\crudbooster\CBCoreModule\middlewares\CBBackend::class],
+        'middleware' => ['web', \Crocodicstudio\Crudbooster\CBCoreModule\middlewares\CBBackend::class],
         'prefix' => cbAdminPath(),
         'namespace' => ctrlNamespace(),
     ], function () use ($dashboardMenu) {
@@ -64,11 +64,11 @@ if ($dashboardMenu) {
     });
 } else {
     Route::group(['middleware' => ['web']], function () {
-        Route::get(cbAdminPath(), '\crocodicstudio\crudbooster\controllers\DashboardController@index')->name('CbDashboard');
+        Route::get(cbAdminPath(), '\Crocodicstudio\Crudbooster\controllers\DashboardController@index')->name('CbDashboard');
     });
 }
 Route::group([
-    'middleware' => ['web', \crocodicstudio\crudbooster\CBCoreModule\middlewares\CBBackend::class],
+    'middleware' => ['web', \Crocodicstudio\Crudbooster\CBCoreModule\middlewares\CBBackend::class],
     'prefix' => cbAdminPath(),
     'namespace' => ctrlNamespace(),
 ], function () {

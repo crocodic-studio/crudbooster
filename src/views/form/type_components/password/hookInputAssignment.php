@@ -1,6 +1,6 @@
 <?php
 
-use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
+use Crocodicstudio\Crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
 
 if (FieldDetector::isPassword($name)) {
     if (! empty($this->arr[$name])) {

@@ -1,8 +1,8 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\ApiGeneratorModule;
+namespace Crocodicstudio\Crudbooster\Modules\ApiGeneratorModule;
 
-use crocodicstudio\crudbooster\controllers\CBController;
+use Crocodicstudio\Crudbooster\controllers\CBController;
 
 class DownloadPostman extends CBController
 {

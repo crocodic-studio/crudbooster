@@ -1,8 +1,8 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\MenuModule;
+namespace Crocodicstudio\Crudbooster\Modules\MenuModule;
 
-use crocodicstudio\crudbooster\helpers\CRUDBooster;
+use Crocodicstudio\Crudbooster\helpers\CRUDBooster;
 use Illuminate\Support\Facades\DB;
 
 class MenuRepo

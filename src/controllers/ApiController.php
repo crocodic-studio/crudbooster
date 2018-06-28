@@ -1,9 +1,9 @@
 <?php
 
-namespace crocodicstudio\crudbooster\controllers;
+namespace Crocodicstudio\Crudbooster\controllers;
 
-use crocodicstudio\crudbooster\controllers\ApiController\ApiHooks;
-use crocodicstudio\crudbooster\controllers\ApiController\ExecuteApi;
+use Crocodicstudio\Crudbooster\controllers\ApiController\ApiHooks;
+use Crocodicstudio\Crudbooster\controllers\ApiController\ExecuteApi;
 
 class ApiController extends Controller
 {

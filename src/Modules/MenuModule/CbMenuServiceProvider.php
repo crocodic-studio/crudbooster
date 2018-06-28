@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\MenuModule;
+namespace Crocodicstudio\Crudbooster\Modules\MenuModule;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -20,7 +20,7 @@ class CbMenuServiceProvider extends ServiceProvider
         app('CbDynamicMenus')->addMenu('CbMenu::dynamic_menus');
         $this->registerModule();
 
-  /*    $hasDashboard = \crocodicstudio\crudbooster\Modules\MenuModule\MenuRepo::sidebarDashboard();
+  /*    $hasDashboard = \Crocodicstudio\Crudbooster\Modules\MenuModule\MenuRepo::sidebarDashboard();
         if (false && $hasDashboard) {
             app('CbDynamicMenus')->addMenu('CbMenu::dashboard');
         }*/

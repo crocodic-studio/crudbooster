@@ -1,22 +1,22 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\AuthModule;
+namespace Crocodicstudio\Crudbooster\Modules\AuthModule;
 
-use crocodicstudio\crudbooster\CBCoreModule\CbUsersRepo;
-use crocodicstudio\crudbooster\controllers\Controller;
-use crocodicstudio\crudbooster\Modules\EmailTemplates\Mailer;
+use Crocodicstudio\Crudbooster\CBCoreModule\CbUsersRepo;
+use Crocodicstudio\Crudbooster\controllers\Controller;
+use Crocodicstudio\Crudbooster\Modules\EmailTemplates\Mailer;
 
 class AuthController extends Controller
 {
     /**
-     * @var \crocodicstudio\crudbooster\CBCoreModule\CbUsersRepo
+     * @var \Crocodicstudio\Crudbooster\CBCoreModule\CbUsersRepo
      */
     private $usersRepo;
 
     /**
      * AuthController constructor.
      *
-     * @param \crocodicstudio\crudbooster\CBCoreModule\CbUsersRepo $usersRepo
+     * @param \Crocodicstudio\Crudbooster\CBCoreModule\CbUsersRepo $usersRepo
      */
     public function __construct(CbUsersRepo $usersRepo)
     {

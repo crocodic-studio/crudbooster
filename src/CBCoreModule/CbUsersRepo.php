@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\CBCoreModule;
+namespace Crocodicstudio\Crudbooster\CBCoreModule;
 
 class CbUsersRepo
 {

@@ -1,9 +1,8 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
+namespace Crocodicstudio\Crudbooster\Modules\ModuleGenerator;
 
-use crocodicstudio\crudbooster\helpers\DbInspector;
-use crocodicstudio\crudbooster\helpers\CRUDBooster, CB;
+use CB;
 
 class Step3Handler
 {

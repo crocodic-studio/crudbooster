@@ -8,7 +8,7 @@ Route::group(['middleware' => ['web'], 'namespace' => $namespace], function () {
 });
 
 Route::group([
-    'middleware' => ['web', \crocodicstudio\crudbooster\CBCoreModule\middlewares\CBSuperadmin::class],
+    'middleware' => ['web', \Crocodicstudio\Crudbooster\CBCoreModule\middlewares\CBSuperadmin::class],
     'prefix' => cbAdminPath(),
     'namespace' => $namespace,
 ], function () {
@@ -51,7 +51,7 @@ Route::group([
 
 /* ROUTER FOR API GENERATOR */
 
-Route::group(['middleware' => ['api', \crocodicstudio\crudbooster\Modules\ApiGeneratorModule\ApiKeysRepository::class], 'namespace' => ctrlNamespace()], function () {
+Route::group(['middleware' => ['api', \Crocodicstudio\Crudbooster\Modules\ApiGeneratorModule\ApiKeysRepository::class], 'namespace' => ctrlNamespace()], function () {
     //Router for custom api defeault
     $dir = scandir(controllers_dir());
     foreach ($dir as $Ctrl) {

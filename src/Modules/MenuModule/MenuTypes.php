@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\MenuModule;
+namespace Crocodicstudio\Crudbooster\Modules\MenuModule;
 
 class MenuTypes
 {

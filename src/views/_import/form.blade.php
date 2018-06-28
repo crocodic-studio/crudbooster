@@ -17,7 +17,7 @@
             <thead>
             <tr class='success'>
                 @foreach($table_columns as $k => $column)
-                    @if (\crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector::isExceptional($column))
+                    @if (\Crocodicstudio\Crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector::isExceptional($column))
                         @continue
                     @endif
                     <?php
@@ -35,7 +35,7 @@
 
             <tr>
                 @foreach($table_columns as $k => $column)
-                    @if (\crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector::isExceptional($column))
+                    @if (\Crocodicstudio\Crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector::isExceptional($column))
                         @continue
                     @endif
                     <td data-no-column='{{$k}}'>

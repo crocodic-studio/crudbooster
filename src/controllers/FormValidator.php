@@ -1,9 +1,9 @@
 <?php
 
-namespace crocodicstudio\crudbooster\controllers;
+namespace Crocodicstudio\Crudbooster\controllers;
 
-use crocodicstudio\crudbooster\helpers\DbInspector;
-use crocodicstudio\crudbooster\helpers\CRUDBooster;
+use Crocodicstudio\Crudbooster\helpers\DbInspector;
+use Crocodicstudio\Crudbooster\helpers\CRUDBooster;
 
 class FormValidator
 {

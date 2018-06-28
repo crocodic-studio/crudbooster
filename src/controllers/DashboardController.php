@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\controllers;
+namespace Crocodicstudio\Crudbooster\controllers;
 
 class DashboardController extends CBController
 {

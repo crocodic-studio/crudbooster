@@ -1,8 +1,8 @@
 <?php
 
-namespace crocodicstudio\crudbooster\controllers\ApiController;
+namespace Crocodicstudio\Crudbooster\controllers\ApiController;
 
-use crocodicstudio\crudbooster\helpers\CRUDBooster;
+use Crocodicstudio\Crudbooster\helpers\CRUDBooster;
 
 class ValidationRules
 {

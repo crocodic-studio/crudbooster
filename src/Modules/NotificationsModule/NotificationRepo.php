@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\NotificationsModule;
+namespace Crocodicstudio\Crudbooster\Modules\NotificationsModule;
 
 
 class NotificationRepo

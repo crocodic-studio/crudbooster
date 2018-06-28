@@ -1,8 +1,8 @@
 <?php
 
-namespace crocodicstudio\crudbooster\helpers;
+namespace Crocodicstudio\Crudbooster\helpers;
 
-use crocodicstudio\crudbooster\Modules\SettingModule\SettingRepo;
+use Crocodicstudio\Crudbooster\Modules\SettingModule\SettingRepo;
 
 class GoogleFCM
 {

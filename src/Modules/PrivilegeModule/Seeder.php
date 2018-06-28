@@ -1,8 +1,8 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\PrivilegeModule;
+namespace Crocodicstudio\Crudbooster\Modules\PrivilegeModule;
 
-use crocodicstudio\crudbooster\CBCoreModule\CbUsersRepo;
+use Crocodicstudio\Crudbooster\CBCoreModule\CbUsersRepo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder as BaseSeeder;
 

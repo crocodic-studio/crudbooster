@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\helpers;
+namespace Crocodicstudio\Crudbooster\helpers;
 
 class CbStructure
 {
@@ -32,12 +32,12 @@ class CbStructure
 
     public static function cbModulesNS(string $path = ''): string
     {
-        return '\crocodicstudio\crudbooster\Modules\\'.$path;
+        return '\Crocodicstudio\Crudbooster\Modules\\'.$path;
     }
 
     public static function cbControllersNS(): string
     {
-        return '\crocodicstudio\crudbooster\controllers';
+        return '\Crocodicstudio\Crudbooster\controllers';
     }
 
     public static function ctrlNamespace(): string

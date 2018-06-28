@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\CBCoreModule\Index;
+namespace Crocodicstudio\Crudbooster\CBCoreModule\Index;
 
 class Order
 {

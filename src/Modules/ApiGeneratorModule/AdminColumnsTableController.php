@@ -1,9 +1,9 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\ApiGeneratorModule;
+namespace Crocodicstudio\Crudbooster\Modules\ApiGeneratorModule;
 
-use crocodicstudio\crudbooster\controllers\CBController;
-use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
+use Crocodicstudio\Crudbooster\controllers\CBController;
+use Crocodicstudio\Crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
 use Illuminate\Support\Facades\DB;
 
 class AdminColumnsTableController extends CBController

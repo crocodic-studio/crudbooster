@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\controllers\ApiController;
+namespace Crocodicstudio\Crudbooster\controllers\ApiController;
 
 trait ApiHooks
 {

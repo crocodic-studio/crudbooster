@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\PrivilegeModule;
+namespace Crocodicstudio\Crudbooster\Modules\PrivilegeModule;
 
 class PrivilegeRepo
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\CBCoreModule\Facades;
+namespace Crocodicstudio\Crudbooster\CBCoreModule\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
@@ -13,7 +13,7 @@ class CbRouter extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return \crocodicstudio\crudbooster\CBCoreModule\CbRouter::class;
+        return \Crocodicstudio\Crudbooster\CBCoreModule\CbRouter::class;
     }
 }
 

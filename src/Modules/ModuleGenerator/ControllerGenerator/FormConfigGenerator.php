@@ -1,9 +1,9 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator;
+namespace Crocodicstudio\Crudbooster\Modules\ModuleGenerator\ControllerGenerator;
 
-use crocodicstudio\crudbooster\helpers\DbInspector;
-use crocodicstudio\crudbooster\Modules\ModuleGenerator\FileManipulator;
+use Crocodicstudio\Crudbooster\helpers\DbInspector;
+use Crocodicstudio\Crudbooster\Modules\ModuleGenerator\FileManipulator;
 use Illuminate\Support\Facades\Schema;
 
 class FormConfigGenerator

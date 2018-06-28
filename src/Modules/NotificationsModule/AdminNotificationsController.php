@@ -1,8 +1,8 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\NotificationsModule;
+namespace Crocodicstudio\Crudbooster\Modules\NotificationsModule;
 
-use crocodicstudio\crudbooster\controllers\CBController;
+use Crocodicstudio\Crudbooster\controllers\CBController;
 
 class AdminNotificationsController extends CBController
 {

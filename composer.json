@@ -38,7 +38,7 @@
             "src/helpers/cb_helpers.php"
         ],
         "psr-4": {
-          "crocodicstudio\\crudbooster\\": "src/"
+          "Crocodicstudio\\Crudbooster\\": "src/"
         }
     }
 }

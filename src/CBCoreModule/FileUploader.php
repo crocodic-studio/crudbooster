@@ -1,8 +1,8 @@
 <?php
 
-namespace crocodicstudio\crudbooster\CBCoreModule;
+namespace Crocodicstudio\Crudbooster\CBCoreModule;
 
-use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
+use Crocodicstudio\Crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;
 

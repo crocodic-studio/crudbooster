@@ -1,15 +1,14 @@
 <?php
 
-namespace crocodicstudio\crudbooster\CBCoreModule;
+namespace Crocodicstudio\Crudbooster\CBCoreModule;
 
-use crocodicstudio\crudbooster\CBCoreModule\Index\FilterIndexRows;
-use crocodicstudio\crudbooster\CBCoreModule\Index\Order;
-use crocodicstudio\crudbooster\CBCoreModule\Index\RowContent;
-use crocodicstudio\crudbooster\controllers\CBController;
-use crocodicstudio\crudbooster\helpers\CRUDBooster;
-use crocodicstudio\crudbooster\helpers\DbInspector;
+use Crocodicstudio\Crudbooster\CBCoreModule\Index\FilterIndexRows;
+use Crocodicstudio\Crudbooster\CBCoreModule\Index\Order;
+use Crocodicstudio\Crudbooster\CBCoreModule\Index\RowContent;
+use Crocodicstudio\Crudbooster\controllers\CBController;
+use Crocodicstudio\Crudbooster\helpers\CRUDBooster;
+use Crocodicstudio\Crudbooster\helpers\DbInspector;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Request;
 use Schema;
 
 class Index

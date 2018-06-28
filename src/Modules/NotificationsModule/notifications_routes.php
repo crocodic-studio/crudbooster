@@ -1,7 +1,7 @@
 <?php
 
 Route::group([
-    'middleware' => ['web', \crocodicstudio\crudbooster\CBCoreModule\middlewares\CBBackend::class],
+    'middleware' => ['web', \Crocodicstudio\Crudbooster\CBCoreModule\middlewares\CBBackend::class],
     'prefix' => cbAdminPath(),
     'namespace' => cbModulesNS('NotificationsModule'),
 ], function () {

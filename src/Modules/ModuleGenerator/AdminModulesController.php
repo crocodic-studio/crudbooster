@@ -1,11 +1,11 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
+namespace Crocodicstudio\Crudbooster\Modules\ModuleGenerator;
 
-use crocodicstudio\crudbooster\controllers\CBController;
-use crocodicstudio\crudbooster\controllers\FormValidator;
-use crocodicstudio\crudbooster\helpers\CRUDBooster;
-use crocodicstudio\crudbooster\Modules\PrivilegeModule\PrivilegeRepo;
+use Crocodicstudio\Crudbooster\controllers\CBController;
+use Crocodicstudio\Crudbooster\controllers\FormValidator;
+use Crocodicstudio\Crudbooster\helpers\CRUDBooster;
+use Crocodicstudio\Crudbooster\Modules\PrivilegeModule\PrivilegeRepo;
 use Illuminate\Support\Facades\DB;
 
 class AdminModulesController extends CBController

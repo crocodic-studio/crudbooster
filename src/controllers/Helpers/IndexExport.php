@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\controllers\Helpers;
+namespace Crocodicstudio\Crudbooster\controllers\Helpers;
 
 use Maatwebsite\Excel\Facades\Excel;
 

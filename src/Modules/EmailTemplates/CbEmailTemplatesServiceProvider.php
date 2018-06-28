@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\EmailTemplates;
+namespace Crocodicstudio\Crudbooster\Modules\EmailTemplates;
 
 use Illuminate\Support\ServiceProvider;
 

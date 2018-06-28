@@ -1,8 +1,8 @@
 <?php
 
-namespace crocodicstudio\crudbooster\helpers;
+namespace Crocodicstudio\Crudbooster\helpers;
 
-use crocodicstudio\crudbooster\Modules\ModuleGenerator\ModulesRepo;
+use Crocodicstudio\Crudbooster\Modules\ModuleGenerator\ModulesRepo;
 use DB;
 use Request;
 use Route;

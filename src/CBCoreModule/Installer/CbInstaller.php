@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\CBCoreModule\Installer;
+namespace Crocodicstudio\Crudbooster\CBCoreModule\Installer;
 
 use Symfony\Component\Process\Process;
 
@@ -132,7 +132,7 @@ class CbInstaller
     private function publishFiles()
     {
         $this->console->info('Publishing CRUDBooster needs file...');
-        $this->console->callSilent('vendor:publish', ['--provider' => 'crocodicstudio\\crudbooster\\CRUDBoosterServiceProvider', '--force' => true]);
+        $this->console->callSilent('vendor:publish', ['--provider' => 'Crocodicstudio\\Crudbooster\\CRUDBoosterServiceProvider', '--force' => true]);
         $this->console->callSilent('vendor:publish', ['--tag' => 'cb_migration', '--force' => true]);
         $this->console->callSilent('vendor:publish', ['--tag' => 'cb_lfm', '--force' => true]);
         $this->console->callSilent('vendor:publish', ['--tag' => 'cb_localization', '--force' => true]);
@@ -148,9 +148,9 @@ class CbInstaller
     private function seedDatabase()
     {
         $this->console->info('Seeding Database...');
-        $this->console->callSilent('db:seed', ['--class' => '\crocodicstudio\crudbooster\Modules\EmailTemplates\Seeder']);
-        $this->console->callSilent('db:seed', ['--class' => '\crocodicstudio\crudbooster\Modules\SettingModule\Seeder']);
-        $this->console->callSilent('db:seed', ['--class' => '\crocodicstudio\crudbooster\Modules\PrivilegeModule\Seeder']);
+        $this->console->callSilent('db:seed', ['--class' => '\Crocodicstudio\Crudbooster\Modules\EmailTemplates\Seeder']);
+        $this->console->callSilent('db:seed', ['--class' => '\Crocodicstudio\Crudbooster\Modules\SettingModule\Seeder']);
+        $this->console->callSilent('db:seed', ['--class' => '\Crocodicstudio\Crudbooster\Modules\PrivilegeModule\Seeder']);
     }
 
     private function composerDumpAutoload()

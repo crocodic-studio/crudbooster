@@ -1,9 +1,9 @@
 <?php
 
-namespace crocodicstudio\crudbooster\CBCoreModule\middlewares;
+namespace Crocodicstudio\Crudbooster\CBCoreModule\middlewares;
 
 use Closure;
-use crocodicstudio\crudbooster\helpers\CRUDBooster;
+use Crocodicstudio\Crudbooster\helpers\CRUDBooster;
 
 class CBSuperadmin
 {

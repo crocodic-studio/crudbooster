@@ -1,10 +1,10 @@
 <?php
 
-namespace crocodicstudio\crudbooster\CBCoreModule\Index;
+namespace Crocodicstudio\Crudbooster\CBCoreModule\Index;
 
-use crocodicstudio\crudbooster\controllers\CBController;
-use crocodicstudio\crudbooster\helpers\CRUDBooster;
-use crocodicstudio\crudbooster\helpers\DbInspector;
+use Crocodicstudio\Crudbooster\controllers\CBController;
+use Crocodicstudio\Crudbooster\helpers\CRUDBooster;
+use Crocodicstudio\Crudbooster\helpers\DbInspector;
 
 class RowContent
 {

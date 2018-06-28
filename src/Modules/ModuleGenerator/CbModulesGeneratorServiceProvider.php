@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
+namespace Crocodicstudio\Crudbooster\Modules\ModuleGenerator;
 
 use Illuminate\Support\ServiceProvider;
 

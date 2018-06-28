@@ -1,9 +1,8 @@
 <?php
 
-namespace crocodicstudio\crudbooster\controllers\ApiController;
+namespace Crocodicstudio\Crudbooster\controllers\ApiController;
 
-use crocodicstudio\crudbooster\helpers\DbInspector;
-use crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
+use Crocodicstudio\Crudbooster\helpers\DbInspector;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;

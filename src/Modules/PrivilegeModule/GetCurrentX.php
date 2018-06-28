@@ -1,8 +1,8 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\PrivilegeModule;
+namespace Crocodicstudio\Crudbooster\Modules\PrivilegeModule;
 
-use crocodicstudio\crudbooster\helpers\GetCurrentX as GetCurrentXClass;
+use Crocodicstudio\Crudbooster\helpers\GetCurrentX as GetCurrentXClass;
 
 trait GetCurrentX
 {

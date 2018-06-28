@@ -1,9 +1,9 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
+namespace Crocodicstudio\Crudbooster\Modules\ModuleGenerator;
 
-use crocodicstudio\crudbooster\helpers\CRUDBooster;
-use crocodicstudio\crudbooster\Modules\PrivilegeModule\PrivilegeRepo;
+use Crocodicstudio\Crudbooster\helpers\CRUDBooster;
+use Crocodicstudio\Crudbooster\Modules\PrivilegeModule\PrivilegeRepo;
 use Illuminate\Support\Facades\DB;
 
 class Step1Handler

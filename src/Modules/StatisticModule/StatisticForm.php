@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\StatisticModule;
+namespace Crocodicstudio\Crudbooster\Modules\StatisticModule;
 
 class StatisticForm
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace crocodicstudio\crudbooster\controllers\CBController;
+namespace Crocodicstudio\Crudbooster\controllers\CBController;
 
-use crocodicstudio\crudbooster\CBCoreModule\DataRemover;
+use Crocodicstudio\Crudbooster\CBCoreModule\DataRemover;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Storage;
-use crocodicstudio\crudbooster\helpers\CRUDBooster;
+use Crocodicstudio\Crudbooster\helpers\CRUDBooster;
 
 trait Deleter
 {

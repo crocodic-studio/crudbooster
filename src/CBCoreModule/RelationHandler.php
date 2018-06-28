@@ -1,10 +1,10 @@
 <?php
 
-namespace crocodicstudio\crudbooster\CBCoreModule;
+namespace Crocodicstudio\Crudbooster\CBCoreModule;
 
-use crocodicstudio\crudbooster\helpers\DbInspector;
+use Crocodicstudio\Crudbooster\helpers\DbInspector;
 use Illuminate\Support\Facades\DB;
-use crocodicstudio\crudbooster\helpers\CRUDBooster;
+use Crocodicstudio\Crudbooster\helpers\CRUDBooster;
 use Schema;
 
 class RelationHandler

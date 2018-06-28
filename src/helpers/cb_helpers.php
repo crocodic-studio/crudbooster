@@ -11,7 +11,7 @@
 if (! function_exists('cbModulesNS')) {
     function cbModulesNS(string $path = ''): string
     {
-        return \crocodicstudio\crudbooster\helpers\CbStructure::cbModulesNS($path);
+        return \Crocodicstudio\Crudbooster\helpers\CbStructure::cbModulesNS($path);
     }
 }
 
@@ -39,14 +39,14 @@ if (! function_exists('cbAdminPath')) {
 if (! function_exists('ctrlNamespace')) {
     function ctrlNamespace(): string
     {
-        return \crocodicstudio\crudbooster\helpers\CbStructure::ctrlNamespace();
+        return \Crocodicstudio\Crudbooster\helpers\CbStructure::ctrlNamespace();
     }
 }
 
 if (! function_exists('cbControllersNS')) {
     function cbControllersNS(): string
     {
-        return \crocodicstudio\crudbooster\helpers\CbStructure::cbControllersNS();
+        return \Crocodicstudio\Crudbooster\helpers\CbStructure::cbControllersNS();
     }
 }
 
@@ -77,28 +77,28 @@ if (! function_exists('is_checked')) {
 if (! function_exists('CbComponentsPath')) {
     function CbComponentsPath(string $type = ''): string
     {
-        return \crocodicstudio\crudbooster\helpers\CbStructure::componentsPath($type);
+        return \Crocodicstudio\Crudbooster\helpers\CbStructure::componentsPath($type);
     }
 }
 
 if (! function_exists('CbPublishedComponentsPath')) {
     function CbPublishedComponentsPath(string $type = ''): string
     {
-        return \crocodicstudio\crudbooster\helpers\CbStructure::publishedComponentsPath($type);
+        return \Crocodicstudio\Crudbooster\helpers\CbStructure::publishedComponentsPath($type);
     }
 }
 
 if (! function_exists('controllers_dir')) {
     function controllers_dir(): string
     {
-        return \crocodicstudio\crudbooster\helpers\CbStructure::controllersDir();
+        return \Crocodicstudio\Crudbooster\helpers\CbStructure::controllersDir();
     }
 }
 
 if (! function_exists('controller_path')) {
     function controller_path(string $controller): string
     {
-        return \crocodicstudio\crudbooster\helpers\CbStructure::controllerPath($controller);
+        return \Crocodicstudio\Crudbooster\helpers\CbStructure::controllerPath($controller);
     }
 }
 
@@ -225,7 +225,7 @@ if (! function_exists('array_get_keys')) {
 if (! function_exists('cbGetSetting')) {
     function cbGetSetting($name)
     {
-        return \crocodicstudio\crudbooster\Modules\SettingModule\SettingRepo::getSetting($name);
+        return \Crocodicstudio\Crudbooster\Modules\SettingModule\SettingRepo::getSetting($name);
     }
 }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\ModuleGenerator\ControllerGenerator;
+namespace Crocodicstudio\Crudbooster\Modules\ModuleGenerator\ControllerGenerator;
 
 class DefaultFormConfigs
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\ApiGeneratorModule;
+namespace Crocodicstudio\Crudbooster\Modules\ApiGeneratorModule;
 
 use Illuminate\Support\Facades\DB;
 

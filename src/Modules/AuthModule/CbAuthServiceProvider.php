@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\AuthModule;
+namespace Crocodicstudio\Crudbooster\Modules\AuthModule;
 
 use Illuminate\Support\ServiceProvider;
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\ApiGeneratorModule;
+namespace Crocodicstudio\Crudbooster\Modules\ApiGeneratorModule;
 
-use crocodicstudio\crudbooster\controllers\CBController;
-use crocodicstudio\crudbooster\helpers\CbValidator;
+use Crocodicstudio\Crudbooster\controllers\CBController;
+use Crocodicstudio\Crudbooster\helpers\CbValidator;
 
 class AdminApiKeyController extends CBController
 {
@@ -12,7 +12,7 @@ class AdminApiKeyController extends CBController
     /**
      * AdminApiKeyController constructor.
      *
-     * @param \crocodicstudio\crudbooster\Modules\ApiGeneratorModule\ApiKeysRepository $apiKeysRepository
+     * @param \Crocodicstudio\Crudbooster\Modules\ApiGeneratorModule\ApiKeysRepository $apiKeysRepository
      */
     public function __construct(ApiKeysRepository $apiKeysRepository)
     {

@@ -1,8 +1,8 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\MenuModule\widgets;
+namespace Crocodicstudio\Crudbooster\Modules\MenuModule\widgets;
 
-use crocodicstudio\crudbooster\Modules\MenuModule\MenuRepo;
+use Crocodicstudio\Crudbooster\Modules\MenuModule\MenuRepo;
 
 class InActiveMenus
 {

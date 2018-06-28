@@ -1,10 +1,10 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\ApiGeneratorModule;
+namespace Crocodicstudio\Crudbooster\Modules\ApiGeneratorModule;
 
 use Closure;
 use Config;
-use crocodicstudio\crudbooster\Modules\SettingModule\SettingRepo;
+use Crocodicstudio\Crudbooster\Modules\SettingModule\SettingRepo;
 use DB;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Request;
@@ -15,7 +15,7 @@ use Session;
 class CBAuthAPIMiddleware
 {
     /**
-     * @var \crocodicstudio\crudbooster\Modules\ApiGeneratorModule\ApiKeysRepository
+     * @var \Crocodicstudio\Crudbooster\Modules\ApiGeneratorModule\ApiKeysRepository
      */
     private $apiKeysRepository;
 

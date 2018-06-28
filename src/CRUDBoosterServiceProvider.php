@@ -1,20 +1,20 @@
 <?php
-namespace crocodicstudio\crudbooster;
+namespace Crocodicstudio\Crudbooster;
 
-use crocodicstudio\crudbooster\CBCoreModule\CbUser;
-use crocodicstudio\crudbooster\CBCoreModule\Facades\CbRouter;
-use crocodicstudio\crudbooster\Modules\ApiGeneratorModule\CbApiGeneratorServiceProvider;
-use crocodicstudio\crudbooster\Modules\AuthModule\CbAuthServiceProvider;
-use crocodicstudio\crudbooster\Modules\EmailTemplates\CbEmailTemplatesServiceProvider;
-use crocodicstudio\crudbooster\Modules\FileManagerModule\CbFileManagerServiceProvider;
-use crocodicstudio\crudbooster\Modules\MenuModule\CbMenuServiceProvider;
-use crocodicstudio\crudbooster\Modules\ModuleGenerator\CbModulesGeneratorServiceProvider;
-use crocodicstudio\crudbooster\Modules\NotificationsModule\CbNotificationsServiceProvider;
-use crocodicstudio\crudbooster\Modules\PrivilegeModule\CbPrivilegesServiceProvider;
-use crocodicstudio\crudbooster\Modules\SettingModule\CbSettingsServiceProvider;
-use crocodicstudio\crudbooster\Modules\StatisticModule\CbStatisticsServiceProvider;
+use Crocodicstudio\Crudbooster\CBCoreModule\CbUser;
+use Crocodicstudio\Crudbooster\CBCoreModule\Facades\CbRouter;
+use Crocodicstudio\Crudbooster\Modules\ApiGeneratorModule\CbApiGeneratorServiceProvider;
+use Crocodicstudio\Crudbooster\Modules\AuthModule\CbAuthServiceProvider;
+use Crocodicstudio\Crudbooster\Modules\EmailTemplates\CbEmailTemplatesServiceProvider;
+use Crocodicstudio\Crudbooster\Modules\FileManagerModule\CbFileManagerServiceProvider;
+use Crocodicstudio\Crudbooster\Modules\MenuModule\CbMenuServiceProvider;
+use Crocodicstudio\Crudbooster\Modules\ModuleGenerator\CbModulesGeneratorServiceProvider;
+use Crocodicstudio\Crudbooster\Modules\NotificationsModule\CbNotificationsServiceProvider;
+use Crocodicstudio\Crudbooster\Modules\PrivilegeModule\CbPrivilegesServiceProvider;
+use Crocodicstudio\Crudbooster\Modules\SettingModule\CbSettingsServiceProvider;
+use Crocodicstudio\Crudbooster\Modules\StatisticModule\CbStatisticsServiceProvider;
 use Illuminate\Support\ServiceProvider;
-use crocodicstudio\crudbooster\commands\InstallationCommand;
+use Crocodicstudio\Crudbooster\commands\InstallationCommand;
 use Illuminate\Foundation\AliasLoader;
 
 class CRUDBoosterServiceProvider extends ServiceProvider
@@ -83,10 +83,10 @@ class CRUDBoosterServiceProvider extends ServiceProvider
 
         $this->setAliases();
 
-        $this->app->singleton(\crocodicstudio\crudbooster\CBCoreModule\CbRouter::class);
+        $this->app->singleton(\Crocodicstudio\Crudbooster\CBCoreModule\CbRouter::class);
         $this->registerCrudBoosterModules();
-        $this->app->singleton('CbDynamicMenus', \crocodicstudio\crudbooster\CBCoreModule\DynamicMenus::class);
-        $this->app->singleton('CbModulesRegistery', \crocodicstudio\crudbooster\CBCoreModule\ModulesRegistery::class);
+        $this->app->singleton('CbDynamicMenus', \Crocodicstudio\Crudbooster\CBCoreModule\DynamicMenus::class);
+        $this->app->singleton('CbModulesRegistery', \Crocodicstudio\Crudbooster\CBCoreModule\ModulesRegistery::class);
     }
 
     private function defineValidationRules()
@@ -110,9 +110,9 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $loader->alias('PDF', 'Barryvdh\DomPDF\Facade');
         $loader->alias('Excel', 'Maatwebsite\Excel\Facades\Excel');
         $loader->alias('Image', 'Intervention\Image\Facades\Image');
-        $loader->alias('CRUDBooster', 'crocodicstudio\crudbooster\helpers\CRUDBooster');
-        $loader->alias('CB', 'crocodicstudio\crudbooster\helpers\CRUDBooster');
-        $loader->alias('DbInspector', 'crocodicstudio\crudbooster\helpers\DbInspector');
+        $loader->alias('CRUDBooster', 'Crocodicstudio\Crudbooster\helpers\CRUDBooster');
+        $loader->alias('CB', 'Crocodicstudio\Crudbooster\helpers\CRUDBooster');
+        $loader->alias('DbInspector', 'Crocodicstudio\Crudbooster\helpers\DbInspector');
         $loader->alias('CbRouter', CbRouter::class);
     }
 

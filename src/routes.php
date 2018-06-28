@@ -1,6 +1,6 @@
 <?php
 
-use crocodicstudio\crudbooster\CBCoreModule\Facades\CbRouter;
+use Crocodicstudio\Crudbooster\CBCoreModule\Facades\CbRouter;
 
 $namespace = cbControllersNS();
 /* ROUTER FOR UPLOADS */
@@ -9,12 +9,12 @@ Route::group(['middleware' => ['web'], 'namespace' => $namespace], function () {
 });
 
 Route::group(['middleware' => ['web']], function () {
-    Route::get(cbAdminPath(), '\crocodicstudio\crudbooster\controllers\DashboardController@index')->name('CbDashboard');
+    Route::get(cbAdminPath(), '\Crocodicstudio\Crudbooster\controllers\DashboardController@index')->name('CbDashboard');
 });
 
 // ROUTER FOR OWN CONTROLLER FROM CB
 Route::group([
-    'middleware' => ['web', \crocodicstudio\crudbooster\CBCoreModule\middlewares\CBBackend::class],
+    'middleware' => ['web', \Crocodicstudio\Crudbooster\CBCoreModule\middlewares\CBBackend::class],
     'prefix' => cbAdminPath(),
     'namespace' => ctrlNamespace(),
 ], function () {
@@ -34,7 +34,7 @@ Route::group([
 
 /* ROUTER FOR BACKEND CRUDBOOSTER */
 Route::group([
-    'middleware' => ['web', \crocodicstudio\crudbooster\CBCoreModule\middlewares\CBSuperadmin::class],
+    'middleware' => ['web', \Crocodicstudio\Crudbooster\CBCoreModule\middlewares\CBSuperadmin::class],
     'prefix' => cbAdminPath(),
     'namespace' => $namespace,
 ], function () {

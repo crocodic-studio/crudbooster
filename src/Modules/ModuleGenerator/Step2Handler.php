@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\ModuleGenerator;
+namespace Crocodicstudio\Crudbooster\Modules\ModuleGenerator;
 
 class Step2Handler
 {
@@ -17,7 +17,7 @@ class Step2Handler
             'columns' => $columns,
             'cols' => ScaffoldingParser::parse($controllerCode, 'col')
         ];
-        $data['table_list'] = \crocodicstudio\crudbooster\helpers\CRUDBooster::listCbTables();
+        $data['table_list'] = \Crocodicstudio\Crudbooster\helpers\CRUDBooster::listCbTables();
 
         return view('CbModulesGen::step2', $data);
     }

@@ -1,11 +1,11 @@
 <?php
 
-namespace crocodicstudio\crudbooster\Modules\StatisticModule;
+namespace Crocodicstudio\Crudbooster\Modules\StatisticModule;
 
-use crocodicstudio\crudbooster\controllers\CBController;
-use crocodicstudio\crudbooster\Modules\MenuModule\MenuRepo;
+use Crocodicstudio\Crudbooster\controllers\CBController;
+use Crocodicstudio\Crudbooster\Modules\MenuModule\MenuRepo;
 use Illuminate\Support\Facades\DB;
-use crocodicstudio\crudbooster\helpers\CRUDBooster;
+use Crocodicstudio\Crudbooster\helpers\CRUDBooster;
 
 class AdminStatisticBuilderController extends CBController
 {

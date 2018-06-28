@@ -1,12 +1,12 @@
 <?php
 
-namespace crocodicstudio\crudbooster\helpers;
+namespace Crocodicstudio\Crudbooster\helpers;
 
 error_reporting(E_ALL ^ E_NOTICE);
-use crocodicstudio\crudbooster\CBCoreModule\Facades\CbRouter;
-use crocodicstudio\crudbooster\CBCoreModule\ViewHelpers;
-use crocodicstudio\crudbooster\Modules\PrivilegeModule\GetCurrentX;
-use crocodicstudio\crudbooster\Modules\PrivilegeModule\PrivilegeHelpers;
+use Crocodicstudio\Crudbooster\CBCoreModule\Facades\CbRouter;
+use Crocodicstudio\Crudbooster\CBCoreModule\ViewHelpers;
+use Crocodicstudio\Crudbooster\Modules\PrivilegeModule\GetCurrentX;
+use Crocodicstudio\Crudbooster\Modules\PrivilegeModule\PrivilegeHelpers;
 use Session;
 use Request;
 use Schema;
@@ -84,7 +84,7 @@ class CRUDBooster
 
     public static function urlFilterColumn($key, $type, $value = '', $singleSorting = true)
     {
-        return \crocodicstudio\crudbooster\CBCoreModule\Index\ViewHelpers::urlFilterColumn($key, $type, $value, $singleSorting);
+        return \Crocodicstudio\Crudbooster\CBCoreModule\Index\ViewHelpers::urlFilterColumn($key, $type, $value, $singleSorting);
     }
 
     public static function mainpath($path = null)
