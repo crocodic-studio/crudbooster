@@ -1,4 +1,4 @@
-@include("crudbooster::emails.header")
+@include("crudbooster::header")
 
 {!!$content!!}
 

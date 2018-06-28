@@ -47,7 +47,7 @@ class Mailer
      */
     private function sendMail($html, $subject, $template)
     {
-        \Mail::send("crudbooster::emails.blank", ['content' => $html], function ($message) use ($subject, $template) {
+        \Mail::send("CbEmailTpl::templates.blank", ['content' => $html], function ($message) use ($subject, $template) {
             $message->priority(1);
             $message->to($this->reciever);
 
