@@ -32,10 +32,11 @@ Route::group([
     Route::post('menus/action-selected', $ctrl.'@postActionSelected')->name($ctrl.'PostActionSelected');
 });
 
-$argv = request()->server('argv');
-if (is_array($argv) && isset($argv[1]) && !starts_with($argv[1], 'route:')) {
-    return;
+$args = request()->server('argv');
+if ($args && $args !== ['artisan', 'route:list']) {
+    return ;
 }
+
 $dashboardMenu = \Crocodicstudio\Crudbooster\Modules\MenuModule\MenuRepo::getDashboard();
 // ROUTER FOR OWN CONTROLLER FROM CB
 if ($dashboardMenu) {
