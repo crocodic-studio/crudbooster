@@ -8,16 +8,8 @@ use Illuminate\Routing\Controller;
 
 class LoginController extends Controller
 {
-    /**
-     * @var \Crocodicstudio\Crudbooster\CBCoreModule\CbUsersRepo
-     */
     private $usersRepo;
 
-    /**
-     * AuthController constructor.
-     *
-     * @param \Crocodicstudio\Crudbooster\CBCoreModule\CbUsersRepo $usersRepo
-     */
     public function __construct(CbUsersRepo $usersRepo)
     {
         $this->usersRepo = $usersRepo;
@@ -55,10 +47,20 @@ class LoginController extends Controller
         }
     }
 
-    public function table($tableName = null)
+    public function login()
     {
-        $tableName = $tableName ?: $this->table;
+        if (auth('cbAdmin')->id()) {
+            return redirect(cbAdminPath());
+        }
 
-        return \DB::table($tableName);
+        return view('CbAuth::login');
+    }
+
+    public function logout()
+    {
+        event('cb.userLoggedOut', [cbUser()]);
+        auth('cbAdmin')->logout();
+
+        return redirect()->route('getLogin')->with('message', cbTrans('message_after_logout'));
     }
 }
