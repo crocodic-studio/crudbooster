@@ -3,7 +3,6 @@ $labels = request('column');
 $name = request('name');
 $isImage = request('is_image');
 $isDownload = request('is_download');
-$callback = request('callback');
 $width = request('width');
 ?>
 
@@ -17,8 +16,7 @@ $width = request('width');
 @endif
 @if ($isDownload[$i])           "download" => true,
 @endif
-@if ($callback[$i])            "callback" => function($row) {!! $callback[$i] !!}},
-@endif
+           "callback" => function($row) {},
 @if ($width[$i])        'width' => '{!! $width[$i] !!}',
 @endif
         ];

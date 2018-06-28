@@ -16,10 +16,10 @@ Route::group([
     Route::post('modules/step1', 'AdminModulesController@postStep1')->name('AdminModulesControllerPostStep1');
 
     Route::get('modules/step2/{id?}', 'AdminModulesController@getStep2')->name('AdminModulesControllerGetStep2');
-    Route::post('modules/step3', 'AdminModulesController@postStep2')->name('AdminModulesControllerPostStep2');
+    Route::post('modules/step2', 'AdminModulesController@postStep2')->name('AdminModulesControllerPostStep2');
 
     Route::get('modules/step3/{id?}', 'AdminModulesController@getStep3')->name('AdminModulesControllerGetStep3');
-    Route::post('modules/step4', 'AdminModulesController@postStep3')->name('AdminModulesControllerPostStep3');
+    Route::post('modules/step3', 'AdminModulesController@postStep3')->name('AdminModulesControllerPostStep3');
 
     Route::get('modules/type-info/{type?}', 'AdminModulesController@getTypeInfo')->name('AdminModulesControllerGetTypeInfo');
 
