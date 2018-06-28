@@ -46,7 +46,12 @@ class AdminUsersController extends CBController
     {
         # START FORM DO NOT REMOVE THIS LINE
         $this->form = [];
-        $this->form[] = ['label' => 'name', 'name' => 'name', 'required' => true, 'validation' => 'required|alpha_spaces|min:3'];
+        $this->form[] = [
+            'label' => 'name',
+            'name' => 'name',
+            'required' => true,
+            'validation' => 'required|alpha_spaces|min:3'
+        ];
         $this->form[] = [
             'label' => "Email",
             'name' => "email",
@@ -59,8 +64,7 @@ class AdminUsersController extends CBController
             'name' => "photo",
             'type' => "upload",
             "help" => "Recommended resolution is 200x200px",
-            'required' => true,
-            'validation' => 'required|image|max:1000',
+            'validation' => 'image|max:1000',
         ];
         $this->form[] = [
             'label' => "Privilege",
@@ -69,7 +73,7 @@ class AdminUsersController extends CBController
             "options" => ["table" => "cms_roles", "field_value" => "id", "field_label" => 'name'],
             'required' => true,
         ];
-        $this->form[] = ['label' => "Password", 'name' => "password", 'type' => "password", "help" => "Please leave empty if not change"];
+        $this->form[] = ['label' => "Password", 'name' => "password", 'type' => "password", "help" => "Please leave empty for no change"];
         # END FORM DO NOT REMOVE THIS LINE
     }
 
