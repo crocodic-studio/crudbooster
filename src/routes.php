@@ -9,7 +9,7 @@ Route::group(['middleware' => ['web'], 'namespace' => $namespace], function () {
 });
 
 Route::group(['middleware' => ['web']], function () {
-    Route::get(cbAdminPath(), '\Crocodicstudio\Crudbooster\controllers\DashboardController@index')->name('CbDashboard');
+    Route::get(cbAdminPath(), '\Crocodicstudio\Crudbooster\Controllers\DashboardController@index')->name('CbDashboard');
 });
 
 // ROUTER FOR OWN CONTROLLER FROM CB

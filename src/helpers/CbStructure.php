@@ -37,7 +37,7 @@ class CbStructure
 
     public static function cbControllersNS(): string
     {
-        return '\Crocodicstudio\Crudbooster\controllers';
+        return '\Crocodicstudio\Crudbooster\Controllers';
     }
 
     public static function ctrlNamespace(): string

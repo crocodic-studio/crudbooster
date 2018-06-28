@@ -36,7 +36,7 @@
                 <label for="">Icon</label>
                 <select name="icon" id="icon" required class="select2 form-control">
                     @php
-                        $fontAwesome = \Crocodicstudio\Crudbooster\controllers\Helpers\FontAwesome::cssClass();
+                        $fontAwesome = \Crocodicstudio\Crudbooster\Controllers\Helpers\FontAwesome::cssClass();
                     @endphp
                     @foreach($fontAwesome as $font)
                         <option value="fa fa-{{$font}}">{{$font}}</option>
