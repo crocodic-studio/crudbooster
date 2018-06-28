@@ -166,10 +166,10 @@ class CRUDBooster
     public static function redirect($to, $message, $type = 'warning')
     {
         if (Request::ajax()) {
-            sendAndTerminate(response()->json(['message' => $message, 'message_type' => $type, 'redirect_url' => $to]));
+            respondWith()->json(['message' => $message, 'message_type' => $type, 'redirect_url' => $to]);
         }
 
-        sendAndTerminate(redirect($to)->with(['message' => $message, 'message_type' => $type]));
+        respondWith(redirect($to)->with(['message' => $message, 'message_type' => $type]));
     }
 
     public static function allowOnlySuperAdmin()

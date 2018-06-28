@@ -81,7 +81,7 @@ class CBAuthAPIMiddleware
             'api_status' => 0,
             'api_message' => implode(', ', $validator->errors()->all()),
         ];
-        sendAndTerminate(response()->json($result, 200));
+        respondWith()->json($result, 200);
     }
 
     /**
@@ -119,7 +119,7 @@ class CBAuthAPIMiddleware
             'sender_token' => $sender_token,
             'server_token' => $server_token,
         ];
-        sendAndTerminate(response()->json($result, 200));
+        respondWith()->json($result, 200);
     }
 
     /**
@@ -138,6 +138,6 @@ class CBAuthAPIMiddleware
             'sender_token' => $senderToken,
             'server_token' => $serverToken,
         ];
-        sendAndTerminate(response()->json($result, 200));
+        respondWith()->json($result, 200);
     }
 }

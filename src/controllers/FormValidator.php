@@ -126,9 +126,8 @@ class FormValidator
         ];
 
         if (\Request::ajax()) {
-            $resp = response()->json($msg);
-            sendAndTerminate($resp);
+            respondWith()->json($msg);
         }
-        sendAndTerminate(redirect()->back()->with("errors", $message)->with($msg)->withInput());
+        respondWith(redirect()->back()->with("errors", $message)->with($msg)->withInput());
     }
 }

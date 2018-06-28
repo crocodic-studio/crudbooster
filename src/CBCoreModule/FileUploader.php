@@ -34,7 +34,7 @@ class FileUploader
     private function validateExtension($ext)
     {
         if (! FieldDetector::isUploadField($ext)) {
-            sendAndTerminate(response()->json("The filetype is not allowed!"));
+            respondWith()->json("The filetype is not allowed!");
         }
     }
 
@@ -45,7 +45,7 @@ class FileUploader
     {
         $fileSize = $file->getClientSize() / 1024;
         if ($fileSize > cbConfig('UPLOAD_MAX_SIZE', 5000)) {
-            sendAndTerminate(response()->json("The file Size is too large!"));
+            respondWith()->json("The file Size is too large!");
         }
     }
 }

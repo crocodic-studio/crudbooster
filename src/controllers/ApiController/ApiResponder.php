@@ -38,7 +38,7 @@ class ApiResponder
         if (cbGetsetting('api_debug_mode') == 'true') {
             $result['api_authorization'] = 'You are in debug mode !';
         }
-        sendAndTerminate(response()->json($result));
+        respondWith()->json($result);
     }
 
 }

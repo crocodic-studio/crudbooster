@@ -17,12 +17,12 @@ class CbValidator
         $message = $validator->errors()->all();
 
         if ($type != 'json') {
-            sendAndTerminate(redirect()->back()->with(['message' => implode('<br/>', $message), 'message_type' => 'warning'])->withInput());
+            respondWith(redirect()->back()->with(['message' => implode('<br/>', $message), 'message_type' => 'warning'])->withInput());
         }
         $result = [
             'api_status' => 0,
             'api_message' => implode(', ', $message),
         ];
-        sendAndTerminate(response()->json($result, 200));
+        respondWith()->json($result, 200);
     }
 }

@@ -32,7 +32,7 @@ class LoginController extends Controller
 
         if (! auth('cbAdmin')->attempt($credentials)) {
             $resp = redirect()->route('getLogin')->with('message', cbTrans('alert_password_wrong'));
-            sendAndTerminate($resp);
+            respondWith($resp);
         }
 
         CRUDBooster::refreshSessionRoles();
