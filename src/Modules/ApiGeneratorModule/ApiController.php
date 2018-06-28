@@ -1,13 +1,14 @@
 <?php
 
-namespace Crocodicstudio\Crudbooster\Controllers;
+namespace Crocodicstudio\Crudbooster\Modules\ApiGeneratorModule;
 
-use Crocodicstudio\Crudbooster\Controllers\ApiController\ApiHooks;
-use Crocodicstudio\Crudbooster\Controllers\ApiController\ExecuteApi;
+use Crocodicstudio\Crudbooster\Modules\ApiGeneratorModule\ApiController\ApiHooks;
+use Crocodicstudio\Crudbooster\Modules\ApiGeneratorModule\ApiController\ExecuteApi;
 
 class ApiController extends Controller
 {
     use ApiHooks;
+    
     var $method_type;
 
     var $permalink;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Crocodicstudio\Crudbooster\Controllers\ApiController;
+namespace Crocodicstudio\Crudbooster\Modules\ApiGeneratorModule\ApiController;
 
 class HandleListAction
 {
