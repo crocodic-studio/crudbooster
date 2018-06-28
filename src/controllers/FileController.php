@@ -1,9 +1,9 @@
 <?php
 
-namespace Crocodicstudio\Crudbooster\controllers;
+namespace Crocodicstudio\Crudbooster\Controllers;
 
 use Crocodicstudio\Crudbooster\CBCoreModule\FileUploader;
-use Crocodicstudio\Crudbooster\controllers\Helpers\IndexImport;
+use Crocodicstudio\Crudbooster\Controllers\Helpers\IndexImport;
 use Crocodicstudio\Crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
 use Storage;
 use Response;

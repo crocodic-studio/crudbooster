@@ -2,7 +2,7 @@
 
 namespace Crocodicstudio\Crudbooster\Modules\FileManagerModule;
 
-use Crocodicstudio\Crudbooster\controllers\CBController;
+use Crocodicstudio\Crudbooster\Controllers\CBController;
 use Crocodicstudio\Crudbooster\Modules\ModuleGenerator\ControllerGenerator\FieldDetector;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;

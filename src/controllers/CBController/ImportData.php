@@ -1,8 +1,8 @@
 <?php
 
-namespace Crocodicstudio\Crudbooster\controllers\CBController;
+namespace Crocodicstudio\Crudbooster\Controllers\CBController;
 
-use Crocodicstudio\Crudbooster\controllers\Helpers\IndexImport;
+use Crocodicstudio\Crudbooster\Controllers\Helpers\IndexImport;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Route;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Crocodicstudio\Crudbooster\controllers\CBController;
+namespace Crocodicstudio\Crudbooster\Controllers\CBController;
 
 use Crocodicstudio\Crudbooster\CBCoreModule\Search;
 use Illuminate\Support\Facades\Cache;

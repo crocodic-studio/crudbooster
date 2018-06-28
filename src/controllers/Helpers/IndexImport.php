@@ -1,6 +1,6 @@
 <?php
 
-namespace Crocodicstudio\Crudbooster\controllers\Helpers;
+namespace Crocodicstudio\Crudbooster\Controllers\Helpers;
 
 use Crocodicstudio\Crudbooster\Helpers\CRUDBooster;
 use Crocodicstudio\Crudbooster\Helpers\DbInspector;

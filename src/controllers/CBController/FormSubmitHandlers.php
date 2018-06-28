@@ -1,9 +1,9 @@
 <?php
 
-namespace Crocodicstudio\Crudbooster\controllers\CBController;
+namespace Crocodicstudio\Crudbooster\Controllers\CBController;
 
 use Crocodicstudio\Crudbooster\CBCoreModule\RelationHandler;
-use Crocodicstudio\Crudbooster\controllers\FormValidator;
+use Crocodicstudio\Crudbooster\Controllers\FormValidator;
 use Crocodicstudio\Crudbooster\Helpers\CRUDBooster;
 use Crocodicstudio\Crudbooster\Helpers\DbInspector;
 use Illuminate\Support\Facades\Request;

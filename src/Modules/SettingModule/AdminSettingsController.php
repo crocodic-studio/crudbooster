@@ -2,7 +2,7 @@
 
 namespace Crocodicstudio\Crudbooster\Modules\SettingModule;
 
-use Crocodicstudio\Crudbooster\controllers\CBController;
+use Crocodicstudio\Crudbooster\Controllers\CBController;
 use Crocodicstudio\Crudbooster\Helpers\CbValidator;
 use Crocodicstudio\Crudbooster\Helpers\CRUDBooster;
 use Illuminate\Support\Facades\Cache;

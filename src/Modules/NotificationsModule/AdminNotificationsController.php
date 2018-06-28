@@ -2,7 +2,7 @@
 
 namespace Crocodicstudio\Crudbooster\Modules\NotificationsModule;
 
-use Crocodicstudio\Crudbooster\controllers\CBController;
+use Crocodicstudio\Crudbooster\Controllers\CBController;
 
 class AdminNotificationsController extends CBController
 {

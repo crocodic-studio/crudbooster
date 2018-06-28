@@ -2,7 +2,7 @@
 
 namespace Crocodicstudio\Crudbooster\Modules\ApiGeneratorModule;
 
-use Crocodicstudio\Crudbooster\controllers\CBController;
+use Crocodicstudio\Crudbooster\Controllers\CBController;
 use Crocodicstudio\Crudbooster\Helpers\CRUDBooster;
 
 class AdminApiGeneratorController extends CBController

@@ -2,7 +2,7 @@
 
 namespace Crocodicstudio\Crudbooster\Modules\EmailTemplates;
 
-use Crocodicstudio\Crudbooster\controllers\CBController;
+use Crocodicstudio\Crudbooster\Controllers\CBController;
 
 class AdminEmailTemplatesController extends CBController
 {

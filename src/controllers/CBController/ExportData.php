@@ -1,8 +1,8 @@
 <?php
 
-namespace Crocodicstudio\Crudbooster\controllers\CBController;
+namespace Crocodicstudio\Crudbooster\Controllers\CBController;
 
-use Crocodicstudio\Crudbooster\controllers\Helpers\IndexExport;
+use Crocodicstudio\Crudbooster\Controllers\Helpers\IndexExport;
 
 trait ExportData
 {

@@ -5,7 +5,7 @@ namespace Crocodicstudio\Crudbooster\CBCoreModule;
 use Crocodicstudio\Crudbooster\CBCoreModule\Index\FilterIndexRows;
 use Crocodicstudio\Crudbooster\CBCoreModule\Index\Order;
 use Crocodicstudio\Crudbooster\CBCoreModule\Index\RowContent;
-use Crocodicstudio\Crudbooster\controllers\CBController;
+use Crocodicstudio\Crudbooster\Controllers\CBController;
 use Crocodicstudio\Crudbooster\Helpers\CRUDBooster;
 use Crocodicstudio\Crudbooster\Helpers\DbInspector;
 use Illuminate\Support\Facades\DB;

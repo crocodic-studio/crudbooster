@@ -1,6 +1,6 @@
 <?php
 
-namespace Crocodicstudio\Crudbooster\controllers\ApiController;
+namespace Crocodicstudio\Crudbooster\Controllers\ApiController;
 
 use Crocodicstudio\Crudbooster\Helpers\DbInspector;
 use Illuminate\Support\Facades\DB;

@@ -2,7 +2,7 @@
 
 namespace Crocodicstudio\Crudbooster\Modules\ModuleGenerator;
 
-use Crocodicstudio\Crudbooster\controllers\Helpers\FontAwesome;
+use Crocodicstudio\Crudbooster\Controllers\Helpers\FontAwesome;
 use Crocodicstudio\Crudbooster\Helpers\CRUDBooster;
 
 class Form

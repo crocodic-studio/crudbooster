@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Crocodicstudio\Crudbooster\controllers\CBController;
+use Crocodicstudio\Crudbooster\Controllers\CBController;
 use Crocodicstudio\Crudbooster\Helpers\CRUDBooster;
 
 class AdminUsersController extends CBController

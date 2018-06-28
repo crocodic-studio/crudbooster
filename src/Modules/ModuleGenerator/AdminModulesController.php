@@ -2,8 +2,8 @@
 
 namespace Crocodicstudio\Crudbooster\Modules\ModuleGenerator;
 
-use Crocodicstudio\Crudbooster\controllers\CBController;
-use Crocodicstudio\Crudbooster\controllers\FormValidator;
+use Crocodicstudio\Crudbooster\Controllers\CBController;
+use Crocodicstudio\Crudbooster\Controllers\FormValidator;
 use Crocodicstudio\Crudbooster\Helpers\CRUDBooster;
 use Crocodicstudio\Crudbooster\Modules\PrivilegeModule\PrivilegeRepo;
 use Illuminate\Support\Facades\DB;

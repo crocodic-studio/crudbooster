@@ -1,17 +1,17 @@
 <?php
 
-namespace Crocodicstudio\Crudbooster\controllers;
+namespace Crocodicstudio\Crudbooster\Controllers;
 
 use Crocodicstudio\Crudbooster\CBCoreModule\Hooks;
 use Crocodicstudio\Crudbooster\CBCoreModule\Index;
-use Crocodicstudio\Crudbooster\controllers\CBController\CbFormLoader;
-use Crocodicstudio\Crudbooster\controllers\CBController\CbIndexLoader;
-use Crocodicstudio\Crudbooster\controllers\CBController\CbLayoutLoader;
-use Crocodicstudio\Crudbooster\controllers\CBController\Deleter;
-use Crocodicstudio\Crudbooster\controllers\CBController\ExportData;
-use Crocodicstudio\Crudbooster\controllers\CBController\FormSubmitHandlers;
-use Crocodicstudio\Crudbooster\controllers\CBController\ImportData;
-use Crocodicstudio\Crudbooster\controllers\CBController\IndexAjax;
+use Crocodicstudio\Crudbooster\Controllers\CBController\CbFormLoader;
+use Crocodicstudio\Crudbooster\Controllers\CBController\CbIndexLoader;
+use Crocodicstudio\Crudbooster\Controllers\CBController\CbLayoutLoader;
+use Crocodicstudio\Crudbooster\Controllers\CBController\Deleter;
+use Crocodicstudio\Crudbooster\Controllers\CBController\ExportData;
+use Crocodicstudio\Crudbooster\Controllers\CBController\FormSubmitHandlers;
+use Crocodicstudio\Crudbooster\Controllers\CBController\ImportData;
+use Crocodicstudio\Crudbooster\Controllers\CBController\IndexAjax;
 use Crocodicstudio\Crudbooster\Helpers\DbInspector;
 use Illuminate\Support\Facades\DB;
 use Crocodicstudio\Crudbooster\Helpers\CRUDBooster;

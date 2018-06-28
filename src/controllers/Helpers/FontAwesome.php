@@ -1,6 +1,6 @@
 <?php
 
-namespace Crocodicstudio\Crudbooster\controllers\Helpers;
+namespace Crocodicstudio\Crudbooster\Controllers\Helpers;
 
 class FontAwesome
 {

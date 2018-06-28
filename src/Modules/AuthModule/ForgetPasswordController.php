@@ -3,7 +3,7 @@
 namespace Crocodicstudio\Crudbooster\Modules\AuthModule;
 
 use Crocodicstudio\Crudbooster\CBCoreModule\CbUsersRepo;
-use Crocodicstudio\Crudbooster\controllers\Controller;
+use Crocodicstudio\Crudbooster\Controllers\Controller;
 use Crocodicstudio\Crudbooster\Modules\EmailTemplates\Mailer;
 
 class ForgetPasswordController extends Controller
