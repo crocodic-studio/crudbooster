@@ -131,7 +131,6 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->app->register(CbApiGeneratorServiceProvider::class);
         $this->app->register(CbModulesGeneratorServiceProvider::class);
         $this->app->register(CbSettingsServiceProvider::class);
-        $this->app->register(CbStatisticsServiceProvider::class);
         $this->app->register(CbPrivilegesServiceProvider::class);
         $this->app->register(CbMenuServiceProvider::class);
         $this->app->register(CbFileManagerServiceProvider::class);
