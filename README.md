@@ -1,6 +1,3 @@
-# Next Major release of CRudBooster is about to come soon !!!
-
-
 # CRUDBOOSTER - Laravel CRUD Generator
 [![Code Climate](https://codeclimate.com/github/crocodic-studio/crudbooster/badges/gpa.svg)](https://codeclimate.com/github/crocodic-studio/crudbooster)
 <a href="https://scrutinizer-ci.com/g/crocodic-studio/crudbooster"><img src="https://img.shields.io/scrutinizer/g/crocodic-studio/crudbooster.svg?style=flat-square" alt="Quality Score"></img></a>
@@ -15,9 +12,7 @@
 
 [<img src="http://crudbooster.com/CrudBooster_Banner.png"/>](http://crudbooster.com) 
 
-# DISCUSSION MIGRATE
-### http://crudbooster.com/stack
-
+# WHAT IS CRUDBOOSTER?
 CRUDBooster is a Laravel CRUD Generator. With a new concept of scaffolding, very easy for the beginner and professional. It's easy to use, easy to custom, and very flexible. Don't limit your mind, CRUDBooster gives us a true flexibility to develop an app. You can utilize its built in CRUD Generator or even you just need for your master data only. (LARAVEL KNOWLEDGE IS A MUST)
 
 ## Features 
@@ -54,10 +49,6 @@ Dear Developer, you are not end new user, to use CRUDBooster, **Laravel knowledg
 ## Contribution
 
 All ways to contribute are welcome. 
-
-#### Money donation
-
-You can make a monetary contribution to the project. Help with whatever value you want or judge. To do this, just click the button below in the Donation session.
 
 #### Changing the source code
 
@@ -96,9 +87,6 @@ To post you should detail the most about what happened. Specify in detail:
 No one is obligated to understand you. Then explain your problem with clarity, detail and precision. Make yourself understandable. Once the problem is resolved, remember to thank those who helped and close the issue. 
 
 If there is no interaction for a long period of time, it will be assumed that it has been resolved or that it is irrelevant, and may be closed without notice. Feel free to reopen it if you think it is really necessary.
-
-## Donation
--
 
 ## Credits
 1. Laravel Export HTML to Excel by [Maatwebsite](https://github.com/Maatwebsite/Laravel-Excel)
