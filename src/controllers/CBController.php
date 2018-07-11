@@ -156,7 +156,7 @@ class CBController extends Controller {
 		foreach($this->form as $i=>$f)
 		{
 			if ($f["name"]==$name)
-				$isFind = $f["type"];
+				$isFind = $f;
 		}
 		return $isFind;
 	}
@@ -313,7 +313,22 @@ class CBController extends Controller {
 				$columns_table[$index]['field']      = $field;
 				$columns_table[$index]['field_raw']  = $field;
 				$columns_table[$index]['field_with'] = $table.'.'.$field;
-				$columns_table[$index]['type_form'] = $this->findNameFormType($field);
+
+				$f = $this->findNameFormType($field);
+				if ($f!==FALSE)
+				{
+					$columns_table[$index]['type_form'] = $f["type"];
+					if($f["type"]=='select')
+					{
+						if (array_key_exists('datatable',$f))
+						{
+							$farr = explode($f["datatable"]);
+							$columns_table[$index]['optionlist'] = DB::table($farr[0])->pluck($farr[1])->toArray();
+							print_r($columns_table[$index]['optionlist']);
+						}
+					}
+				}
+				
 			}
 		}
 

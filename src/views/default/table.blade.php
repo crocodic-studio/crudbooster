@@ -348,7 +348,7 @@
 
                           <div class='col-sm-5'>
                             @if($col["type_form"]=='select')
-                              <select class='filter-value form-control' name='filter_column[{{$col["field_with"]}}][value]' disabled>
+                              <select disabled class='filter-value form-control' name='filter_column[{{$col["field_with"]}}][value]' disabled>
                                 <option value="volvo">Volvo</option>
                                 <option value="saab">Saab</option>
                                 <option value="mercedes">Mercedes</option>
