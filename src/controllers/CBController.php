@@ -323,8 +323,12 @@ class CBController extends Controller {
 						if (array_key_exists('datatable',$f))
 						{
 							$farr = explode(",",$f["datatable"]);
-							$columns_table[$index]['optionlist'] = DB::table($farr[0])->pluck($farr[1])->toArray();
-							print_r($columns_table[$index]['optionlist']);
+							$columns_table[$index]['optionlist'] = DB::table($farr[0])->pluck($farr[1])->toArray();							
+						}
+						else if (array_key_exists('dataenum',$f))
+						{
+							$farr = explode(";",$f["dataenum"]);
+							$columns_table[$index]['optionlist'] = $farr;
 						}
 					}
 				}
