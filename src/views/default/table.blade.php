@@ -241,13 +241,11 @@
                     p.find('.between-group').find('input').prop('disabled',true);
                   break;
                   case 'like':
-                  case 'not like':
-                    alert(filter_value.data('isselect'));
-                    if (filter_value.data('isselect')=='false') 
-                    {
-                      alert("is false");
-                      filter_value.attr('placeholder','{{trans("crudbooster.filter_eg")}} : {{trans("crudbooster.filter_lorem_ipsum")}}').prop('disabled',false);
-                    }                                                                                    
+                  case 'not like':    
+                    if (filter_value.data('isselect')=='false')                     
+                      filter_value.attr('placeholder','{{trans("crudbooster.filter_eg")}} : {{trans("crudbooster.filter_lorem_ipsum")}}').prop('disabled',false);            
+                    else
+                      filter_value.val('').hide();                                                                 
                   break;
                   case 'asc':                                        
                     filter_value.prop('disabled',true).attr('placeholder','{{trans("crudbooster.filter_sort_ascending")}}');
