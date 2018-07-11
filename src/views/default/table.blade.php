@@ -310,10 +310,7 @@
                         <div class='row-filter-combo row'>
 
                           <div class="col-sm-2">
-                            <strong>{{$col['label']}}</strong>
-                            @if(array_key_exists('type_form',$col))
-                              {{$col['type_form']}}
-                            @endif
+                            <strong>{{$col['label']}}</strong>      
                           </div> 
 
                           <div class='col-sm-3'>
