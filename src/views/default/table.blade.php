@@ -352,7 +352,7 @@
                                 <option value=""></option>
                                 <?php $a = (!is_array(CRUDBooster::getValueFilter($col["field_with"])))?CRUDBooster::getValueFilter($col["field_with"]):"" ?>
                                 @foreach ($col["optionlist"] as $opt)
-                                  <option value="{{$opt}}" selected="{{($a==$opt)?"selected":""}}">{{$opt}}</option>                                  
+                                  <option value="{{$opt}}" {{($a==$opt)?"selected":""}}>{{$opt}}</option>                                  
                                 @endforeach
                               </select>                            
                             @else
