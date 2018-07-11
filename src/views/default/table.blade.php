@@ -242,6 +242,7 @@
                   break;
                   case 'like':
                   case 'not like':
+                    alert(filter_value.data('isselect'));
                     if (filter_value.data('isselect')=='false')                                                               
                       filter_value.attr('placeholder','{{trans("crudbooster.filter_eg")}} : {{trans("crudbooster.filter_lorem_ipsum")}}').prop('disabled',false);
                   break;
