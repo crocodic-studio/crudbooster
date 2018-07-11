@@ -322,7 +322,7 @@ class CBController extends Controller {
 					{
 						if (array_key_exists('datatable',$f))
 						{
-							$farr = explode($f["datatable"]);
+							$farr = explode(",",$f["datatable"]);
 							$columns_table[$index]['optionlist'] = DB::table($farr[0])->pluck($farr[1])->toArray();
 							print_r($columns_table[$index]['optionlist']);
 						}
