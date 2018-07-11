@@ -251,6 +251,7 @@
                     filter_value.prop('disabled',true).attr('placeholder','{{trans("crudbooster.filter_sort_descending")}}');
                   break;
                   case '=': 
+                    alert(filter_value.data('isselect'));
                     if (filter_value.data('isselect')=='false')                                       
                       filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : {{trans("crudbooster.filter_lorem_ipsum")}}');
                   break;
