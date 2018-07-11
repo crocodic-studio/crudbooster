@@ -311,7 +311,7 @@
 
                           <div class="col-sm-2">
                             <strong>{{$col['label']}}</strong>
-                            @if(array_key_exists($col,'type_form'))
+                            @if(array_key_exists('type_form',$col))
                               {{$col['type_form']}}
                             @endif
                           </div> 
