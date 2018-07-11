@@ -242,10 +242,10 @@
                   break;
                   case 'like':
                   case 'not like':    
-                    if (filter_value.data('isselect')=='false')                     
+                    //if (filter_value.data('isselect')=='false')                     
                       filter_value.attr('placeholder','{{trans("crudbooster.filter_eg")}} : {{trans("crudbooster.filter_lorem_ipsum")}}').prop('disabled',false);            
-                    else
-                      filter_value.val('').hide();                                                                 
+                    /*else
+                      filter_value.val('').hide();*/                                                                 
                   break;
                   case 'asc':                                        
                     filter_value.prop('disabled',true).attr('placeholder','{{trans("crudbooster.filter_sort_ascending")}}');
@@ -347,7 +347,16 @@
                           
 
                           <div class='col-sm-5'>
-                            <input type='text' class='filter-value form-control' data-isselect="{{($col["type_form"]=='select')?'true':'false'}}" style="{{ ((CRUDBooster::getTypeFilter($col["field_with"]) == 'between')||($col["type_form"]=='select'))?"display:none":"display:block"}}" disabled name='filter_column[{{$col["field_with"]}}][value]' value='{{ (!is_array(CRUDBooster::getValueFilter($col["field_with"])))?CRUDBooster::getValueFilter($col["field_with"]):"" }}'>
+                            @if($col["type_form"]=='select')
+                              <select class='filter-value form-control' disabled name='filter_column[{{$col["field_with"]}}][value]'>
+                                <option value="volvo">Volvo</option>
+                                <option value="saab">Saab</option>
+                                <option value="mercedes">Mercedes</option>
+                                <option value="audi">Audi</option>
+                              </select>                            
+                            @else
+                              <input type='text' class='filter-value form-control' style="{{ (CRUDBooster::getTypeFilter($col["field_with"]) == 'between')?"display:none":"display:block"}}" disabled name='filter_column[{{$col["field_with"]}}][value]' value='{{ (!is_array(CRUDBooster::getValueFilter($col["field_with"])))?CRUDBooster::getValueFilter($col["field_with"]):"" }}'>
+                            @endif
 
                             <div class='row between-group' style="{{ (CRUDBooster::getTypeFilter($col["field_with"]) == 'between')?"display:block":"display:none" }}">
                               <div class='col-sm-6'>
