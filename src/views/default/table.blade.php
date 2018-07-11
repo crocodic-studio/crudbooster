@@ -342,9 +342,9 @@
                           
 
                           <div class='col-sm-5'>
-                            <input type='text' class='filter-value form-control' style="{{ (CRUDBooster::getTypeFilter($col["field_with"]) == 'between')?"display:none":"display:block"}}" disabled name='filter_column[{{$col["field_with"]}}][value]' value='{{ (!is_array(CRUDBooster::getValueFilter($col["field_with"])))?CRUDBooster::getValueFilter($col["field_with"]):"" }}'>
+                            <input type='text' class='filter-value form-control' style="{{ ((CRUDBooster::getTypeFilter($col["field_with"]) == 'between')||($col["type_form"]=='select'))?"display:none":"display:block"}}" disabled name='filter_column[{{$col["field_with"]}}][value]' value='{{ (!is_array(CRUDBooster::getValueFilter($col["field_with"])))?CRUDBooster::getValueFilter($col["field_with"]):"" }}'>
 
-                            <div class='row between-group' style="{{ ((CRUDBooster::getTypeFilter($col["field_with"]) == 'between')||($col["type_form"]=='select'))?"display:block":"display:none" }}">
+                            <div class='row between-group' style="{{ (CRUDBooster::getTypeFilter($col["field_with"]) == 'between')?"display:block":"display:none" }}">
                               <div class='col-sm-6'>
                                 <div class='input-group'>
                                   <span class="input-group-addon">From:</span>
