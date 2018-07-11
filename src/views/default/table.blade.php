@@ -350,8 +350,9 @@
                             @if($col["type_form"]=='select')
                               <select disabled class='filter-value form-control' name='filter_column[{{$col["field_with"]}}][value]' disabled>
                                 <option value=""></option>
+                                <?php $a = (!is_array(CRUDBooster::getValueFilter($col["field_with"])))?CRUDBooster::getValueFilter($col["field_with"]):"" ?>
                                 @foreach ($col["optionlist"] as $opt)
-                                  <option value="{{$opt}}">{{$opt}}</option>                                  
+                                  <option value="{{$opt}}" selected="{{($a==$opt)?"selected":""}}">{{$opt}}</option>                                  
                                 @endforeach
                               </select>                            
                             @else
