@@ -241,8 +241,9 @@
                     p.find('.between-group').find('input').prop('disabled',true);
                   break;
                   case 'like':
-                  case 'not like':                                                              
-                    filter_value.attr('placeholder','{{trans("crudbooster.filter_eg")}} : {{trans("crudbooster.filter_lorem_ipsum")}}').prop('disabled',false);
+                  case 'not like':
+                    if (filter_value.data('isselect')=='false')                                                               
+                      filter_value.attr('placeholder','{{trans("crudbooster.filter_eg")}} : {{trans("crudbooster.filter_lorem_ipsum")}}').prop('disabled',false);
                   break;
                   case 'asc':                                        
                     filter_value.prop('disabled',true).attr('placeholder','{{trans("crudbooster.filter_sort_ascending")}}');
@@ -250,8 +251,7 @@
                   case 'desc':                                        
                     filter_value.prop('disabled',true).attr('placeholder','{{trans("crudbooster.filter_sort_descending")}}');
                   break;
-                  case '=': 
-                    alert(filter_value.data('isselect'));
+                  case '=':                     
                     if (filter_value.data('isselect')=='false')                                       
                       filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : {{trans("crudbooster.filter_lorem_ipsum")}}');
                   break;
