@@ -17,7 +17,7 @@
 		</div>
 		<div class="panel-body">
 			
-			{{-- <div class='row'>
+			<div class='row'>
 				<div class='col-sm-10'>
 					<div class="panel panel-default">
 						<div class="panel-heading"><i class="fa fa-pencil-square-o"></i> Form</div>
@@ -27,7 +27,9 @@
 							<div class='form-group'>
 								@if($col['type']!='hidden')
 								<label class="control-label col-sm-2">{{$col['label']}}
-								@if(!empty($col['required'])) <span class="text-danger" title="This field is required">*</span> @endif
+								@if(!empty($col['required'])) 
+								<span class="text-danger" title="This field is required">*</span> 
+								@endif
 								</label>
 								@endif
 								<div class="col-sm-10">
@@ -468,7 +470,7 @@
 						</div>
 					</div>
 				</div>
-			</div> --}}
+			</div>
 
 			<div class="panel panel-default">
 				<div class="panel-heading">
