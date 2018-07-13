@@ -34,7 +34,7 @@
                           @if($command == 'detail')
                              @include("crudbooster::default.without_form_detail")  
                           @else
-                             @include("crudbooster::default.form_body")         
+                             @include("crudbooster::default.without_form_body")         
                           @endif
                         </div><!-- /.box-body -->
                 
