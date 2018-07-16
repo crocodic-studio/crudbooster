@@ -447,7 +447,8 @@
 										@endif
 									@endforeach	
 									trRow += "<td>"+
-										"<a href='#panel-form-{{$name}}' onclick='editRow{{$name}}(this)' class='btn btn-warning btn-xs'><i class='fa fa-pencil'></i></a></td>";
+										"<a href='#panel-form-{{$name}}' onclick='editRow{{$name}}(this)' class='btn btn-warning btn-xs'><i class='fa fa-pencil'></i></a> "+
+										"<a href='javascript:void(0)' onclick='deleteRow{{$name}}(this)' class='btn btn-danger btn-xs'><i class='fa fa-trash'></i></a></td>";
 									trRow += '</tr>';
 									$('#table-{{$name}} tbody .trNull').remove();
 									if(currentRow==null) {
@@ -558,7 +559,6 @@
 							@endforeach		
 							<td>
 								<a href='#panel-form-{{$name}}' onclick='editRow{{$name}}(this)' class='btn btn-warning btn-xs'><i class='fa fa-pencil'></i></a>
-								<a href='javascript:void(0)' onclick='deleteRow{{$name}}(this)' class='btn btn-danger btn-xs'><i class='fa fa-trash'></i></a>
 							</td>					
 						</tr>
 
