@@ -1296,11 +1296,11 @@ class CBController extends Controller {
 		$option_id		 = $this->option_id;
 		$option_fields	 = $this->option_fields;
 		
-		if(DB::table('customer')){
+		/*if(DB::table('customer')){
 			return view('crudbooster::default.without_form',compact('id','row','page_menu','page_title','command','option_id','option_fields'));	
-		} else {
+		} else {*/
 			return view('crudbooster::default.form',compact('id','row','page_menu','page_title','command','option_id','option_fields'));
-		}
+		//}
 		
 	}
 
