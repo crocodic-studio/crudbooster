@@ -151,6 +151,16 @@ class CBController extends Controller {
 		}
 	}
 
+	private function findNameFormType($name) {
+		$isFind = FALSE;
+		foreach($this->form as $i=>$f)
+		{
+			if ($f["name"]==$name)
+				$isFind = $f;
+		}
+		return $isFind;
+	}
+
 	public function getIndex() {
 		$this->cbLoader();
 
@@ -303,6 +313,25 @@ class CBController extends Controller {
 				$columns_table[$index]['field']      = $field;
 				$columns_table[$index]['field_raw']  = $field;
 				$columns_table[$index]['field_with'] = $table.'.'.$field;
+				
+				$f = $this->findNameFormType($field);
+				if ($f!==FALSE)
+				{
+					$columns_table[$index]['type_form'] = $f["type"];
+					if($f["type"]=='select')
+					{
+						if (array_key_exists('datatable',$f))
+						{
+							$farr = explode(",",$f["datatable"]);
+							$columns_table[$index]['optionlist'] = DB::table($farr[0])->pluck($farr[1])->toArray();							
+						}
+						else if (array_key_exists('dataenum',$f))
+						{
+							$farr = explode(";",$f["dataenum"]);
+							$columns_table[$index]['optionlist'] = $farr;
+						}
+					}
+				}
 			}
 		}
 
