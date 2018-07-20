@@ -32,7 +32,6 @@ class CBController extends Controller {
 	public $arr                = array();
 	public $col                = array();
 	public $form               = array();
-	public $form2  			   = array(); //added
 	public $data               = array();
 	public $addaction          = array();
 	public $orderby            = NULL;
@@ -87,7 +86,6 @@ class CBController extends Controller {
 		$this->cbInit();
 
 		$this->checkHideForm();
-		$this->checkHideForm2();
 
 		$this->primary_key 					 = CB::pk($this->table);
 		$this->columns_table                 = $this->col;
@@ -148,16 +146,6 @@ class CBController extends Controller {
 			foreach($this->form as $i=>$f) {
 				if(in_array($f['name'], $this->hide_form)) {
 					unset($this->form[$i]);
-				}
-			}
-		}
-	}
-
-	private function checkHideForm2() {
-		if(count($this->hide_form)) {
-			foreach($this->form2 as $i=>$f) {
-				if(in_array($f['name'], $this->hide_form)) {
-					unset($this->form2[$i]);
 				}
 			}
 		}
