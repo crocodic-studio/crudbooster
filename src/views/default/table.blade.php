@@ -378,7 +378,17 @@
                           
 
                           <div class='col-sm-7'>
-                            <input type='text' class='filter-value form-control' style="{{ (CRUDBooster::getTypeFilter($col["field_with"]) == 'between')?"display:none":"display:block"}}" disabled name='filter_column[{{$col["field_with"]}}][value]' value='{{ (!is_array(CRUDBooster::getValueFilter($col["field_with"])))?CRUDBooster::getValueFilter($col["field_with"]):"" }}'>
+                            @if($col["type_form"]=='select')
+                              <select disabled class='filter-value form-control' name='filter_column[{{$col["field_with"]}}][value]' disabled>
+                                <option value=""></option>
+                                <?php $a = (!is_array(CRUDBooster::getValueFilter($col["field_with"])))?CRUDBooster::getValueFilter($col["field_with"]):"" ?>
+                                @foreach ($col["optionlist"] as $opt)
+                                  <option value="{{$opt}}" {{($a==$opt)?"selected":""}}>{{$opt}}</option>                                  
+                                @endforeach
+                              </select>                            
+                            @else
+                              <input type='text' class='filter-value form-control' style="{{ (CRUDBooster::getTypeFilter($col["field_with"]) == 'between')?"display:none":"display:block"}}" disabled name='filter_column[{{$col["field_with"]}}][value]' value='{{ (!is_array(CRUDBooster::getValueFilter($col["field_with"])))?CRUDBooster::getValueFilter($col["field_with"]):"" }}'>
+                            @endif                            
               
                             <div class='row between-group' style="{{ (CRUDBooster::getTypeFilter($col["field_with"]) == 'between')?"display:block":"display:none" }}">
                               <div class='col-sm-6'>
