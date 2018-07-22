@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
+use Request;
 
 class IndexImport
 {
@@ -58,7 +59,7 @@ class IndexImport
         //Move file to storage
         Storage::putFileAs($dir, $file, $filename);
 
-        return CRUDBooster::mainpath('import-data').'?file='.base64_encode($dir.'/'.$filename);
+        return CRUDBooster::adminPath(Request::segment(2).'/import-data?file='.base64_encode($dir.'/'.$filename));
     }
 
     /**

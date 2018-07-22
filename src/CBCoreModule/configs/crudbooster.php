@@ -4,6 +4,10 @@ return [
 
     'ADMIN_PATH' => 'admin',
 
+    'NOTIFICATION' => false,
+
+    'SUPERADMIN_MENU_VISIBILITY'=>true,
+
     'IMAGE_FIELDS_CANDIDATE' => 'image,picture,photo,photos,foto,gambar,thumbnail',
 
     'PASSWORD_FIELDS_CANDIDATE' => 'password,pass,pwd,passwrd,sandi,pin',

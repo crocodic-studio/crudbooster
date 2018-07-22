@@ -91,6 +91,7 @@ class CRUDBooster
     {
         $controllerName = strtok(Route::currentRouteAction(), '@');
         // $controllerName = array_pop(explode('\\', $controllerName));
+
         $controllerName = basename($controllerName);
         $routeUrl = route($controllerName.'GetIndex');
 

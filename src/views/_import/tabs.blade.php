@@ -1,6 +1,6 @@
 <li style="background:#eeeeee">
     <a style="color:#111"
-       onclick="if(confirm('Are you sure want to leave ?')) location.href='{{ CRUDBooster::mainpath("import-data") }}'"
+       onclick="if(confirm('Are you sure want to leave ?')) location.href='{{ CRUDBooster::adminPath(Request::segment(2).'/import-data') }}'"
        href='javascript:;'>
         {!! cbIcon('download') !!} Upload a File &raquo;
     </a>

@@ -30,17 +30,21 @@ class RowContent
     public function calculate($data, $number, $columnsTable)
     {
         $tableRows = [];
-        $tablePK = DbInspector::findPk($this->cb->table);
+        $tablePK = DbInspector::findPk($this->cb->table);        
         foreach ($data['result'] as $row) {
             $rowContent = [];
             if ($this->cb->buttonBulkAction) {
                 $rowContent[] = $this->addCheckBox($row->{$tablePK});
             }
+
             $rowContent = $this->addRowNumber($number, $rowContent);
+
             $rowContent = $this->addOtherColumns($columnsTable, $row, $rowContent);
-            $rowContent = $this->addActionButtons($row, $rowContent);
-            $rowContent = $this->performHookOnRow($rowContent);
+
+            $rowContent = $this->addActionButtons($row, $rowContent);            
+
             $tableRows[] = $rowContent;
+
             $number++;
         }
 
@@ -85,20 +89,6 @@ class RowContent
     }
 
 
-
-    /**
-     * @param $rowCells
-     * @return mixed
-     */
-    private function performHookOnRow($rowCells)
-    {
-        foreach ($rowCells as $i => $v) {
-            $rowCells[$i] = $this->cb->hookRowIndex($i, $v);
-        }
-
-        return $rowCells;
-    }
-
     /**
      * @param $row
      * @param $rowCells
@@ -114,16 +104,16 @@ class RowContent
             $addAction = $this->_handleSubModules($addAction);
         }
 
-        if (!$this->cb->showButtonsOnIndexRows) {
+        if (!$this->cb->buttonAction) {
             return $rowCells;
         }
         $buttonActionStyle = $this->cb->buttonActionStyle;
         $buttonEdit = $this->cb->buttonEdit;
         $buttonDetail = $this->cb->buttonDetail;
-        $deleteBtn = $this->cb->deleteBtn;
+        $buttonDelete = $this->cb->buttonDelete;
         $id = ($row->{$this->cb->primaryKey});
 
-        $data = compact('addAction', 'row', 'id', 'buttonActionStyle', 'parent_field', 'buttonEdit', 'deleteBtn', 'buttonDetail');
+        $data = compact('addAction', 'row', 'id', 'buttonActionStyle', 'parent_field', 'buttonEdit', 'buttonDelete', 'buttonDetail');
         $rowCells[] = "<div class='button_action' style='text-align:right'>".view('crudbooster::index.action', $data)->render().'</div>';
 
         return $rowCells;

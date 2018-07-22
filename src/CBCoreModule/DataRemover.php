@@ -3,6 +3,7 @@
 namespace Crocodicstudio\Crudbooster\CBCoreModule;
 
 use Illuminate\Support\Facades\Schema;
+use Crocodicstudio\Crudbooster\Helpers\DbInspector;
 
 class DataRemover
 {
@@ -23,7 +24,7 @@ class DataRemover
      */
     private function deleteIds(array $idsArray)
     {
-        $query = $this->ctrl->table()->whereIn($this->ctrl->primaryKey, $idsArray);
+        $query = $this->ctrl->table()->whereIn(DbInspector::findPk($this->ctrl->table), $idsArray);
         if (Schema::hasColumn($this->ctrl->table, 'deleted_at')) {
             $query->update(['deleted_at' => YmdHis()]);
         } else {
@@ -36,7 +37,7 @@ class DataRemover
      */
     public function doDeleteWithHook(array $idsArray)
     {
-        $idsArray = $this->ctrl->hookBeforeDelete($idsArray);
+        $this->ctrl->hookBeforeDelete($idsArray);
         $this->deleteIds($idsArray);
         $this->ctrl->hookAfterDelete($idsArray);
         event('cb.dataDeleted', [$this->ctrl->table, $idsArray, YmdHis(), cbUser()]);

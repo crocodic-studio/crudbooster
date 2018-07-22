@@ -8,11 +8,10 @@ class MenusForm
 {
     /**
      * @param $moduleId
-     * @param $statisticId
      * @param $row
      * @return array
      */
-    static function makeForm($statisticId, $moduleId, $row)
+    static function makeForm($moduleId, $row)
     {
         $form = [];
         $form[] = [
@@ -39,7 +38,7 @@ class MenusForm
             'type' => 'text',
             'required' => true,
             'validation' => 'required|min:3|max:255|alpha_spaces',
-            'placeholder' => 'You can only enter the letter only', //todo: translation needed
+            'placeholder' => 'You can enter the letter only', //todo: translation needed
         ];
         $form[] = [
             'label' => 'Type',
@@ -63,18 +62,6 @@ class MenusForm
             'value' => $moduleId,
         ];
 
-        $form[] = [
-            'label' => 'Statistic',
-            'name' => 'statistic_slug',
-            'type' => 'select2_datatable',
-            'options' => [
-                'table' => 'cms_statistics',
-                'field_label' => 'name',
-                'field_value' => 'id',
-            ],
-            'style' => 'display:none',
-            'value' => $statisticId,
-        ];
 
         $form[] = [
             'label' => 'Value',

@@ -12,7 +12,7 @@
     </a>
 @endif
 
-@if(CRUDBooster::canDelete() && $deleteBtn)
+@if(CRUDBooster::canDelete() && $buttonDelete)
     <?php $url = CRUDBooster::mainpath("delete/".$id);?>
     <a class='btn btn-xs btn-warning btn-delete' title='{{cbTrans("action_delete_data")}}' href='javascript:;'
        onclick='{{CRUDBooster::deleteConfirm($url)}}'>

@@ -81,9 +81,9 @@ class AdminUsersController extends CBController
     {
         # START COLUMNS DO NOT REMOVE THIS LINE
         $this->col = [];
-        $this->col[] = ['label' => 'name', 'name' => 'name'];
+        $this->col[] = ['label' => 'Name', 'name' => 'name'];
         $this->col[] = ['label' => "Email", 'name' => "email"];
-        $this->col[] = ['label' => "Privilege", 'name' => "cms_roles_name"];
+        $this->col[] = ['label' => "Role", 'name' => "cms_roles_name"];
         $this->col[] = ['label' => "Photo", 'name' => "photo", "image" => 1];
         # END COLUMNS DO NOT REMOVE THIS LINE
     }

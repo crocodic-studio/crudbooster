@@ -3,6 +3,7 @@
 namespace Crocodicstudio\Crudbooster\Modules\NotificationsModule;
 
 use Crocodicstudio\Crudbooster\Controllers\CBController;
+use CSSBootstrap;
 
 class AdminNotificationsController extends CBController
 {
@@ -41,17 +42,25 @@ class AdminNotificationsController extends CBController
             [
                 "label" => "Content",
                 "name" => "content",
-                "callback_php" => '"<a href=\"'.$read_notification_url.'/$row->id\">$row->content</a>"'
+                "callback"=>function($row) {
+                    return cbAnchor($read_notification_url.'/'.$row->id,$row->content);
+                }                
             ],
             [
                 'label' => 'Read',
-                'name' => 'is_read',
-                'callback_php' => '($row->is_read)?"<span class=\"label label-default\">Already Read</span>":"<span class=\"label label-danger\">NEW</span>"',
+                'name' => 'can_read',
+                "callback"=>function($row) {
+                    if($row->can_read) {
+                        return CSSBootstrap::label('Already Read','success');
+                    }else{
+                        return CSSBootstrap::label('New','danger');
+                    }
+                }                
             ],
         ];
     }
 
-    public function hookQueryIndex($query)
+    public function hookQueryIndex(&$query)
     {
         $query->where('cms_users_id', auth('cbAdmin')->id());
     }
@@ -62,7 +71,7 @@ class AdminNotificationsController extends CBController
             ->where('cms_users_id', 0)
             ->orWhere('cms_users_id', auth('cbAdmin')->id())
             ->orderby('id', 'desc')
-            ->where('is_read', 0)
+            ->where('can_read', 0)
             ->whereNull('deleted_at')
             ->take(25)
             ->get();
@@ -72,7 +81,7 @@ class AdminNotificationsController extends CBController
 
     public function getRead($id)
     {
-        $this->findRow($id)->update(['is_read' => 1]);
+        $this->findRow($id)->update(['can_read' => 1]);
         $row = $this->findRow($id)->first();
 
         return redirect($row->url);

@@ -29,8 +29,8 @@ class AdminMenusController extends CBController
 
         $this->setCols();
 
-        list($statisticId, $moduleId) = $this->getMenuId($row);
-        $this->form = MenusForm::makeForm($statisticId, $moduleId, $row);
+        list($moduleId) = $this->getMenuId($row);
+        $this->form = MenusForm::makeForm($moduleId, $row);
     }
 
     public function getIndex()
@@ -44,7 +44,7 @@ class AdminMenusController extends CBController
         return view('CbMenu::menus_management', compact('return_url', 'page_title'));
     }
 
-    public function hookBeforeAdd($postData)
+    public function hookBeforeAdd(&$postData)
     {
         $postData['parent_id'] = 0;
 
@@ -57,11 +57,10 @@ class AdminMenusController extends CBController
             //If set dashboard, so unset for first all dashboard
             $this->table()->where('is_dashboard', 1)->update(['is_dashboard' => 0]);
             Cache::forget('sidebarDashboard'.cbUser()->cms_roles_id);
-        }
-        return $postData;
+        }        
     }
 
-    public function hookBeforeEdit($postData, $id)
+    public function hookBeforeEdit(&$postData, $id)
     {
         if ($postData['is_dashboard'] == 1) {
             //If set dashboard, so unset for first all dashboard
@@ -72,8 +71,7 @@ class AdminMenusController extends CBController
         $postData['path'] = $this->getMenuPath($postData);
 
         unset($postData['module_slug']);
-        unset($postData['statistic_slug']);
-        return $postData;
+        unset($postData['statistic_slug']);        
     }
 
     public function hookAfterDelete($id)
@@ -107,11 +105,6 @@ class AdminMenusController extends CBController
      */
     private function getMenuPath($postdata)
     {
-        if ($postdata['type'] == 'Statistic') {
-            $stat = CRUDBooster::first('cms_statistics', ['id' => $postdata['statistic_slug']])->slug;
-            return 'statistic-builder/show/'.$stat;
-        }
-
         if ($postdata['type'] == 'Module') {
             return ModulesRepo::find($postdata['module_slug'])->path;
         }
@@ -132,18 +125,13 @@ class AdminMenusController extends CBController
      */
     private function getMenuId($row)
     {
-        $idModule = $idStatistic = 0;
+        $idModule = 0;
 
         if ($row->type == 'Module') {
             $idModule = ModulesRepo::getByPath($row->path)->id;
         }
 
-        if ($row->type == 'Statistic') {
-            $row->path = str_replace('statistic-builder/show/', '', $row->path);
-            $idStatistic = DB::table('cms_statistics')->where('slug', $row->path)->first()->id;
-        }
-
-        return [$idStatistic, $idModule];
+        return [$idModule];
     }
 
     private function setCols()

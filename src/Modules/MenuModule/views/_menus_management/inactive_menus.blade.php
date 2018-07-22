@@ -1,7 +1,7 @@
-<div class="panel-heading">
+<div class="box-header">
     <strong>Menu Order (Inactive)</strong>
 </div>
-<div class="panel-body clearfix">
+<div class="box-body clearfix">
     <ul class='draggable-menu draggable-menu-inactive'>
         @foreach($menu_inactive as $menu)
             <li data-id='{{$menu->id}}' data-name='{{$menu->name}}'>

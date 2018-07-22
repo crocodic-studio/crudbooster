@@ -28,7 +28,7 @@ trait CbIndexLoader
 
     public $tableRowColor = [];
 
-    public $showButtonsOnIndexRows = true;
+    public $buttonAction = true;
 
     public $buttonBulkAction = true;
 
@@ -46,7 +46,7 @@ trait CbIndexLoader
 
     public $buttonDetail = true;
 
-    public $deleteBtn = true;
+    public $buttonDelete = true;
 
     public $col = [];
 
@@ -68,7 +68,7 @@ trait CbIndexLoader
     {
         $this->data['buttonEdit'] = $this->buttonEdit;
         $this->columns_table = $this->col;
-        $this->data['deleteBtn'] = $this->deleteBtn;
+        $this->data['buttonDelete'] = $this->buttonDelete;
         $this->data['buttonSelected'] = $this->buttonSelected;
         $this->data['buttonExport'] = $this->buttonExport;
         $this->data['buttonImport'] = $this->buttonImport;
@@ -79,7 +79,7 @@ trait CbIndexLoader
         $this->data['index_statistic'] = $this->indexStatistic;
         $this->data['table_row_color'] = $this->tableRowColor;
         $this->data['buttonBulkAction'] = $this->buttonBulkAction;
-        $this->data['showButtonsOnIndexRows'] = $this->showButtonsOnIndexRows;
+        $this->data['buttonAction'] = $this->buttonAction;
         $this->data['index_additional_view'] = $this->indexAdditionalView;
         $this->data['button_action_width'] = $this->buttonActionWidth;
         $this->data['buttonShow'] = $this->buttonShow;

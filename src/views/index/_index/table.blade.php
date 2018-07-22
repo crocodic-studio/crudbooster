@@ -94,7 +94,7 @@
                 </th>
             @endforeach
 
-            @if($showButtonsOnIndexRows)
+            @if($buttonAction)
                 @if(CRUDBooster::canUpdate() || CRUDBooster::canDelete() || CRUDBooster::canRead())
                     <th width='{{$button_action_width?:"auto"}}'
                         style="text-align:right">{{cbTrans("action_label")}}</th>
@@ -103,7 +103,7 @@
         </tr>
         </thead>
         <tbody>
-        @if(empty($result))
+        @if($html_contents['total']==0)
             <tr class='warning'>
                 @if($buttonBulkAction && $showNumbering)
                     <td colspan='{{count($columns)+3}}' align="center">
@@ -138,13 +138,13 @@
                 <tr class='{!! $tr_color !!}'>
             @else
                 <tr>
-                    @endif
+            @endif
 
                     @foreach($hc as $h)
                         <td>{!! $h !!}</td>
                     @endforeach
                 </tr>
-                @endforeach
+        @endforeach
         </tbody>
 
 
@@ -167,7 +167,7 @@
             }
             ?>
 
-            @if($showButtonsOnIndexRows)
+            @if($buttonAction)
                 @if(CRUDBooster::canUpdate() || CRUDBooster::canDelete() || CRUDBooster::canRead())
                     <th> -</th>
                 @endif

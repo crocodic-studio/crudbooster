@@ -28,7 +28,7 @@ abstract class CBController extends Controller
 
     public $titleField = '';
 
-    public $primaryKey = 'id';
+    public $primaryKey = '';
 
     public $form = [];
 
@@ -58,7 +58,10 @@ abstract class CBController extends Controller
     {
         $this->genericLoader();
         $this->cbIndexLoader();
-        $data = app(Index::class)->index($this);
+
+        $data = app(Index::class)->index($this);     
+
+        if($this->indexReturn) return $data;
 
         return $this->cbView('crudbooster::index.index', $data);
     }

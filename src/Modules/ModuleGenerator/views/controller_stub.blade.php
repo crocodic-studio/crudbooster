@@ -10,12 +10,12 @@ class {{$controllerName}} extends CBController {
         $this->table = "{{$table}}";
         $this->titleField = "{{DbInspector::colName($coloms)}}";
         $this->limit = 20;
-        $this->showNumbering = false;
-        $this->showButtonsOnIndexRows = true;
+        $this->showNumbering = false;        
         $this->orderby = "{{$pk}},desc";
+        $this->buttonAction = true;
         $this->buttonActionStyle = "button_icon";
         $this->buttonAdd = true;
-        $this->deleteBtn = true;
+        $this->buttonDelete = true;
         $this->buttonEdit = true;
         $this->buttonDetail = true;
         $this->buttonShow = true;
@@ -60,7 +60,7 @@ $this->form[] = {!! $formArray  !!};
         | @label    = Label of action
         | @url      = Target URL, you can use field alias. e.g : [id], [name], [title], etc
         | @icon     = Font awesome class icon. e.g : fa fa-bars
-        | @color    = Default is primary. (primary, warning, succecss, info)
+        | @color    = Default is primary. (primary, warning, success, info)
         | @showIf  = If condition when action show. Use field alias. e.g : [id] == 1
         */
         $this->addAction = [];
@@ -186,7 +186,7 @@ $this->form[] = {!! $formArray  !!};
     | ----------------------------------------------------------------------
     | @query = current sql query
     */
-    public function hookQueryindex($query)
+    public function hookQueryindex(&$query)
     {
         //Your code here
     @foreach ($joinList as $join)
@@ -196,24 +196,14 @@ $this->form[] = {!! $formArray  !!};
 
     /*
     | ----------------------------------------------------------------------
-    | Hook for manipulate row of index table html
-    | ----------------------------------------------------------------------
-    */
-    public function hookRowIndex($index, $value)
-    {
-        //Your code here
-    }
-
-    /*
-    | ----------------------------------------------------------------------
     | Hook for manipulate data input before add data is execute
     | ----------------------------------------------------------------------
     | @arr
     */
-    public function hookBeforeAdd($postData)
+    public function hookBeforeAdd(&$postData)
     {
         //You modify the $postData
-        return $postData;
+
     }
 
     /*
@@ -234,10 +224,10 @@ $this->form[] = {!! $formArray  !!};
     | @postdata = input post data
     | @id       = current id
     */
-    public function hookBeforeEdit($postData, $id)
+    public function hookBeforeEdit(&$postData, $id)
     {
         //Your code here
-        return $postData;
+
     }
 
     /*

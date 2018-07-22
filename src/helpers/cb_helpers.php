@@ -137,6 +137,12 @@ if (! function_exists('cbAsset')) {
     }
 }
 
+if(! function_exists('cbAnchor')) {
+    function cbAnchor($url,$label,$attribute="") {        
+        return "<a href='".$url."' ".$attribute." >".$label."</a>";
+    }
+}
+
 if (! function_exists('cbScript')) {
     function cbScript($key)
     {

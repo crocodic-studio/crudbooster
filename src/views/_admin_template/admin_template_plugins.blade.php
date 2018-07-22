@@ -29,7 +29,7 @@
 {!! cbStyleSheet('sweetalert/dist/sweetalert.css') !!}
 
 <!--MONEY FORMAT-->
-<script src="{{asset('vendor/crudbooster/jquery.price_format.2.0.min.js')}}"></script>
+{!! cbScript('jquery.price_format.2.0.min.js') !!}
 
 <!--DATATABLE-->
 {!! cbStyleSheet('adminlte/plugins/datatables/dataTables.bootstrap.css') !!}
@@ -40,18 +40,23 @@
     var ASSET_URL = "{{asset('/')}}";
     var APP_NAME = "{{cbGetsetting('appname')}}";
     var ADMIN_PATH = '{{url(cbConfig("ADMIN_PATH")) }}';
-    var NOTIFICATION_JSON = "{{route('AdminNotificationsControllerGetLatestJson')}}";
-    var NOTIFICATION_INDEX = "{{route('AdminNotificationsControllerGetIndex')}}";
-
-    var NOTIFICATION_YOU_HAVE = "{{ cbTrans('notification_you_have')}}";
-    var NOTIFICATION_NOTIFICATIONS = "{{ cbTrans('notification_notification')}}";
-    var NOTIFICATION_NEW = "{{ cbTrans('notification_new')}}";
-
     $(function () {
         $('.datatables-simple').DataTable();
     })
 </script>
-{!! cbScript('js/notification.js') !!}
+
+@if(cbConfig('NOTIFICATION'))
+    <script>
+        var NOTIFICATION_JSON = "{{route('AdminNotificationsControllerGetLatestJson')}}";
+        var NOTIFICATION_INDEX = "{{route('AdminNotificationsControllerGetIndex')}}";
+        var NOTIFICATION_YOU_HAVE = "{{ cbTrans('notification_you_have')}}";
+        var NOTIFICATION_NOTIFICATIONS = "{{ cbTrans('notification_notification')}}";
+        var NOTIFICATION_NEW = "{{ cbTrans('notification_new')}}";    
+    </script>
+    {!! cbScript('js/notification.js') !!}    
+@endif
+
+
 {!! cbScript('js/main.js') !!}
 
 

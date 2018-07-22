@@ -69,9 +69,7 @@ class AdminModulesController extends CBController
             $controller = ModulesRepo::getControllerName($id);
             DB::table('cms_menus')->where('path', 'like', '%'.$controller.'%')->delete();
             @unlink(controller_path($controller));
-        }
-
-        return $ids;
+        }        
     }
 
     public function getTableColumns($table)
@@ -96,11 +94,11 @@ class AdminModulesController extends CBController
         return redirect()->route("ModulesControllerGetStep1");
     }
 
-    public function getStep1(Step1Handler $handler)
+    public function getStep1($id=null,Step1Handler $handler)
     {
         $this->cbLoader();
 
-        return $handler->showForm();
+        return $handler->showForm($id);
     }
 
     public function getStep2($id, Step2Handler $handler)

@@ -66,7 +66,7 @@ class GoogleFCM
      */
     private function getHeaders()
     {
-        $apiKey = env('oogle_fcm_key');
+        $apiKey = env('google_fcm_key');
         $headers = [
             'Authorization:key='.$apiKey,
             'Content-Type:application/json',

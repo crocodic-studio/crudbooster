@@ -10,12 +10,10 @@ class MenuTypes
 
     const url = 'URL';
 
-    const Statistic = 'Statistic';
-
     const route = 'Route';
 
     public static function all()
     {
-        return ['Module', 'Controller & Method', 'URL', 'Statistic', 'Route'];
+        return ['Module', 'Controller & Method', 'URL', 'Route'];
     }
 }

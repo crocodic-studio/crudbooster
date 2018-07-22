@@ -32,69 +32,6 @@ class CbInstaller
         }
     }
 
-    public function symlinkForUpload()
-    {
-        $this->console->info('Checking public/uploads symlink...');
-        if (! file_exists(public_path('uploads'))) {
-            $this->console->info('Creating public/uploads symlink...');
-            app('files')->link(storage_path('app'), public_path('uploads'));
-
-            return;
-        }
-        $uploadPath = public_path('uploads');
-        $this->console->info('Upload Path: '.$uploadPath);
-        if (realpath($uploadPath) == $uploadPath) {
-            $this->console->info('Remove the existing uploads dir, and create a symlink for it...');
-            $this->rrmdir(public_path('uploads'));
-            app('files')->link(storage_path('app'), public_path('uploads'));
-        }
-    }
-
-    private function rrmdir($dir)
-    {
-        if (! is_dir($dir)) {
-            return;
-        }
-        foreach (scandir($dir) as $object) {
-            if (in_array($object, ['.', '..'])) {
-                continue;
-            }
-
-            $objPath = $dir."/".$object;
-
-            if (is_dir($objPath)) {
-                $this->rrmdir($objPath);
-            } else {
-                unlink($objPath);
-            }
-        }
-        rmdir($dir);
-    }
-
-    public function symlinkForAsset()
-    {
-        $this->console->info('Checking public/vendor/crudbooster symlink...');
-
-        $ds = DIRECTORY_SEPARATOR;
-        $vendorPath = public_path('vendor'.$ds.'crudbooster');
-        $assetPath = base_path('vendor'.$ds.'crocodicstudio'.$ds.'crudbooster'.$ds.'src'.$ds.'assets');
-
-        if (! file_exists($vendorPath)) {
-            $this->console->info('Creating public/vendor/crudbooster symlink...');
-            app('files')->link($assetPath, public_path('vendor/crudbooster'));
-
-            return;
-        }
-
-        $this->console->info('Vendor Path: '.$vendorPath);
-
-        if (realpath($vendorPath) == $vendorPath) {
-            $this->console->info('Removing public/vendor/crudbooster dir, instead of creating a symlink...');
-            $this->rrmdir($vendorPath);
-            app('files')->link($assetPath, $vendorPath);
-        }
-    }
-
     public function installCrudbooster()
     {
         $this->publishFiles();
@@ -108,12 +45,6 @@ class CbInstaller
 
         $this->console->info('Installing CRUDBooster Is Completed ! Thank You :)');
     }
-
-
-    /**
-     *
-     * http://stackoverflow.com/questions/3338123/how-do-i-recursively-delete-a-directory-and-its-entire-contents-files-sub-dir
-     */
 
     /**
      * Get the composer command for the environment.

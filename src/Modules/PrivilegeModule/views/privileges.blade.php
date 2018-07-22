@@ -52,9 +52,14 @@
 
 
                     </div>
+
+                    <div class="form-group">
+                        @include('CbPrivilege::_privileges.alert')
+                    </div>
+                    <!-- /.form-group -->
                 </div>
 
-                @include('CbPrivilege::_privileges.alert')
+                
                 @include('CbPrivilege::_privileges.footer')
             </form>
         </div>

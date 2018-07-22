@@ -64,25 +64,26 @@ class Index
             (new Order())->handle($query, $table, $this->cb->orderby, $this->cb->primaryKey);
         }
 
-        $limit = is_string($limit) ? (int) $limit : 15;
-        $data['result'] = $query->paginate($limit);
-
-        $data['columns'] = $columns;
+        $data['columns'] = $columns;        
+        $limit = is_string($limit) ? (int) $limit : 15;                
 
         if ($CbCtrl->indexReturn) {
+            $data['result'] = $query->take($limit)->get();
+            $totalData = count($data['result']);
             return $data;
+        }else{
+            $data['result'] = $query->paginate($limit);
+            $totalData = $data['result']->total();
         }
 
-        //$mainpath = CRUDBooster::mainpath();
-        //$orig_mainpath = $CbCtrl->data['mainpath'];
-        //$titleField = $CbCtrl->titleField;
+
         $number = (request('page', 1) - 1) * $limit + 1;
         $columnsTable = array_filter($columns, function ($col) {
             return $col['visible'] ?? true;
         });
         $htmlContents = (new RowContent($CbCtrl))->calculate($data, $number, $columnsTable); //end foreach data[result]
 
-        $data['html_contents'] = ['html' => $htmlContents, 'data' => $data['result']];
+        $data['html_contents'] = ['html' => $htmlContents, 'data' => $data['result'],'total'=>$totalData];
 
         return $data;
     }

@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Request;
 
 class FileController extends Controller
 {
+    
     public function uploadSummernote()
     {
         echo asset(app( FileUploader::class)->uploadFile('userfile'));
@@ -26,9 +27,9 @@ class FileController extends Controller
     public function doUploadImportData()
     {
         $import = app(IndexImport::class);
-        //$this->cbLoader();
+   
         if (! Request::hasFile('userfile')) {
-            return redirect()->back();
+            backWithMsg('Please select a file for first!','warning');
         }
         $file = Request::file('userfile');
         $validator = $import->validateForImport($file);

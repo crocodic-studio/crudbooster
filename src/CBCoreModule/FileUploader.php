@@ -45,7 +45,7 @@ class FileUploader
     {
         $fileSize = $file->getClientSize() / 1024;
         if ($fileSize > cbConfig('UPLOAD_MAX_SIZE', 5000)) {
-            respondWith()->json("The file Size is too large!");
+            respondWith()->json("The file size is too large!");
         }
     }
 }

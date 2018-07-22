@@ -20,7 +20,7 @@ class CBBackend
      */
     public function handle($request, Closure $next)
     {
-        $adminPath = cbConfig('ADMIN_PATH', 'admin');
+        $adminPath = cbConfig('ADMIN_PATH', 'admin');        
 
         if (auth('cbAdmin')->guest()) {
             return redirect(url($adminPath.'/login'))->with('message', cbTrans('not_logged_in'));

@@ -21,10 +21,12 @@ trait Deleter
     {
         $this->genericLoader();
         $selectedIds = request('checkbox');
+
         $btnName = request('button_name');
         if (! $selectedIds) {
             backWithMsg(cbTrans('at_least_one_row'), 'warning');
         }
+        
         if ($btnName == 'delete') {
             (new DataRemover($this))->doDeleteWithHook($selectedIds);
             backWithMsg(cbTrans('alert_delete_selected_success'));

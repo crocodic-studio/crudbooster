@@ -6,6 +6,7 @@ use Crocodicstudio\Crudbooster\Controllers\Helpers\IndexImport;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Route;
+use CRUDBooster;
 
 trait ImportData
 {

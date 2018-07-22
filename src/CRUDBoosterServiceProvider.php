@@ -12,7 +12,6 @@ use Crocodicstudio\Crudbooster\Modules\ModuleGenerator\CbModulesGeneratorService
 use Crocodicstudio\Crudbooster\Modules\NotificationsModule\CbNotificationsServiceProvider;
 use Crocodicstudio\Crudbooster\Modules\PrivilegeModule\CbPrivilegesServiceProvider;
 use Crocodicstudio\Crudbooster\Modules\SettingModule\CbSettingsServiceProvider;
-use Crocodicstudio\Crudbooster\Modules\StatisticModule\CbStatisticsServiceProvider;
 use Illuminate\Support\ServiceProvider;
 use Crocodicstudio\Crudbooster\commands\InstallationCommand;
 use Illuminate\Foundation\AliasLoader;
@@ -113,6 +112,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $loader->alias('CRUDBooster', 'Crocodicstudio\Crudbooster\Helpers\CRUDBooster');
         $loader->alias('CB', 'Crocodicstudio\Crudbooster\Helpers\CRUDBooster');
         $loader->alias('DbInspector', 'Crocodicstudio\Crudbooster\Helpers\DbInspector');
+        $loader->alias('CSSBootstrap', 'Crocodicstudio\Crudbooster\Helpers\CSSBootstrap');
         $loader->alias('CbRouter', CbRouter::class);
     }
 

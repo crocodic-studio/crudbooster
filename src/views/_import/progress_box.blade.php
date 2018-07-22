@@ -21,7 +21,7 @@
 
                 var int_prog = setInterval(function () {
 
-                    $.post("{{ CRUDBooster::mainpath('do-import-chunk?file='.Request::get('file')) }}", {resume: 1}, function (resp) {
+                    $.post("{{ CRUDBooster::adminPath(Request::segment(2)).'/do-import-chunk?file='.Request::get('file') }}", {resume: 1}, function (resp) {
                         console.log(resp.progress);
                         $('#progress-import').css('width', resp.progress + '%');
                         $('#status-import').html("<i class='fa fa-spin fa-spinner'></i> Please wait importing... (" + resp.progress + "%)");
@@ -35,7 +35,7 @@
 
                 }, 2500);
 
-                $.post("{{ CRUDBooster::mainpath('do-import-chunk').'?file='.Request::get('file') }}", function (resp) {
+                $.post("{{ CRUDBooster::adminPath(Request::segment(2)).'/do-import-chunk?file='.Request::get('file') }}", function (resp) {
                     if (resp.status == true) {
                         $('#progress-import').css('width', '100%');
                         $('#progress-import').attr('aria-valuenow', 100);
@@ -55,8 +55,8 @@
 
 <div class="box-footer" id='upload-footer' style="display:none">
     <div class='pull-right'>
-        <a href='{{ CRUDBooster::mainpath("import-data") }}' class='btn btn-default'>
+        <a href='{{ CRUDBooster::adminPath(Request::segment(2)).'/import-data' }}' class='btn btn-default'>
             {!! cbIcon('upload') !!} Upload Other File</a>
-        <a href='{{CRUDBooster::mainpath()}}' class='btn btn-success'>Finish</a>
+        <a href='{{ CRUDBooster::adminPath(Request::segment(2)) }}' class='btn btn-success'>Finish</a>
     </div>
 </div>

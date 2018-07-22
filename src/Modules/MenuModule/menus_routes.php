@@ -48,9 +48,7 @@ if ($dashboardMenu) {
         $dashboardType = $dashboardMenu->type;
         $path = $dashboardMenu->path;
 
-        if ($dashboardType == MenuTypes::Statistic) {
-            Route::get('/', cbModulesNS('StatisticModule\\AdminStatisticBuilderController@getDashboard'));
-        } elseif ($dashboardType == MenuTypes::Module) {
+        if ($dashboardType == MenuTypes::Module) {
             $module = ModulesRepo::getByPath($path);
             Route::get('/', $module->controller.'@getIndex');
         } elseif ($dashboardType == MenuTypes::route) {

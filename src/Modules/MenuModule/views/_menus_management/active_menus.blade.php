@@ -1,9 +1,9 @@
-<div class="panel-heading">
+<div class="box-header">
     <strong>Menu Order (Active)</strong>
     <span id='menu-saved-info' style="display:none" class='pull-right text-success'>
                         {!! cbIcon('check') !!} Menu Saved !</span>
 </div>
-<div class="panel-body clearfix">
+<div class="box-body clearfix">
     <ul class='draggable-menu draggable-menu-active'>
         @foreach($menu_active as $menu)
             <li data-id='{{$menu->id}}' data-name='{{$menu->name}}'>

@@ -65,7 +65,7 @@ class MenuRepo
             return action($menu->path);
         }
 
-        if (in_array($menuType, [MenuTypes::Module, MenuTypes::Statistic])) {
+        if (in_array($menuType, [MenuTypes::Module])) {
             return CRUDBooster::adminPath($menu->path);
         }
 

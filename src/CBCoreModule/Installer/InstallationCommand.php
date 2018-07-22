@@ -41,19 +41,9 @@ class InstallationCommand extends Command
 
             return;
         }
-
         $this->info('Installing: ');
-        /* Removing the default user and password reset, it makes you ambigous when using CRUDBooster */
         $installer = new CbInstaller($this);
-
-        //$installer->removeDefaultMigrations();
-
         $installer->createVendorAtPublic();
-
-        $installer->symlinkForUpload();
-
-        $installer->symlinkForAsset();
-
         if ($this->confirm('Do you have setting the database configuration at .env ?')) {
             $installer->installCrudbooster();
         } else {

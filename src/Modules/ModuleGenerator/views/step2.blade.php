@@ -177,7 +177,7 @@
                     </button>
 
                     <button class="btn btn-success btn-sm" type="submit">
-                        {!! cbIcon('save') !!}Save Table Config
+                        {!! cbIcon('save') !!} Save Table Config
                     </button>
 
                 </div>

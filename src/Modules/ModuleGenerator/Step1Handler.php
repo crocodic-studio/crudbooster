@@ -8,9 +8,10 @@ use Illuminate\Support\Facades\DB;
 
 class Step1Handler
 {
-    public function showForm()
-    {
-        return view('CbModulesGen::step1');
+    public function showForm($id=null)
+    {   
+        $data['id'] = $id;
+        return view('CbModulesGen::step1',$data);
     }
 
     public function handleFormSubmit()

@@ -15,7 +15,9 @@
         <!-- Navbar Right Menu -->
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
-                @include('CbNotifications::notificationsMenu')
+                @if(cbConfig('NOTIFICATION'))
+                    @include('CbNotifications::notificationsMenu')
+                @endif
                 @include('crudbooster::_admin_template._header.userAccountMenu')
             </ul>
         </div>

@@ -86,8 +86,9 @@ trait PrivilegeHelpers
     }
 
     public static function themeColor()
-    {
-        return cbUser()->role()->theme_color ?: 'skin-blue';
+    {   
+        $cbUser = cbUser();
+        return ($cbUser)?$cbUser->role()->theme_color : 'skin-blue';
     }
 
     public static function denyAccess()

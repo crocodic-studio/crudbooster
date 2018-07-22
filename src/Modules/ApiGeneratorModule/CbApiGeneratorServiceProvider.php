@@ -14,7 +14,7 @@ class CbApiGeneratorServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->app['view']->addNamespace('CbApiGen', __DIR__.'/views');
-        $this->loadRoutesFrom(__DIR__.'/api_generator_routes.php');
+        $this->loadRoutesFrom(__DIR__.'/CbApiGeneratorRoutes.php');
         $this->loadMigrationsFrom(__DIR__ . '/migrations');
         app('CbDynamicMenus')->addSuperAdminMenu('CbApiGen::menu');
         $this->registerModule();

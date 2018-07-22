@@ -13,7 +13,7 @@
                     @include($menu)
                 @endforeach
 
-                @if(CRUDBooster::isSuperadmin())
+                @if(CRUDBooster::isSuperadmin() && cbConfig('SUPERADMIN_MENU_VISIBILITY'))
                     <li class="header">{{ cbTrans('SUPERADMIN') }}</li>
                     @include('crudbooster::_admin_template._sidebar.super_admin.users')
                     @include('crudbooster::_admin_template._sidebar.super_admin.module')

@@ -34,12 +34,12 @@
 
         <div class="col-sm-5">
 
-            <div class="panel panel-success">
+            <div class="box box-success">
                 @widget(cbModulesNS('MenuModule\widgets\ActiveMenus'))
             </div>
 
 
-            <div class="panel panel-danger">
+            <div class="box box-danger">
                 @widget(cbModulesNS('MenuModule\widgets\InActiveMenus'))
             </div>
 
