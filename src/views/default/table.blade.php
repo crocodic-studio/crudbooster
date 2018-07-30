@@ -363,7 +363,7 @@
 
                               <div class="form-check" style="margin-top : 4%; text-align: right;">
                                 
-                                @if($col['name'] == 't2.date_created')
+                                @if($col['type'] == 'date')
                                     <input name='filter_column[{{$col["field_with"]}}][type]' data-type='{{$col["type_data"]}}' class="filter-combo" type="checkbox" {{ (CRUDBooster::getTypeFilter($col["field_with"]) == 'between')?"checked":"" }} value='between'>
                                 @else
                                     <input name='filter_column[{{$col["field_with"]}}][type]' data-type='{{$col["type_data"]}}' class="filter-combo" type="checkbox" {{ (CRUDBooster::getTypeFilter($col["field_with"]) == '=')?"checked":"" }} value='=' >
