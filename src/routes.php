@@ -68,7 +68,8 @@ Route::group([
     }
 
     try {
-        $moduls = DB::table('cms_moduls')->where('path', '!=', '')->where('controller', '!=', '')->where('is_protected', 0)->get();
+        $moduls = DB::table('cms_moduls')->where('path', '!=', '')->where('controller', '!=', '')
+            ->where('is_protected', 0)->where('deleted_at', null)->get();
         foreach ($moduls as $v) {
             CRUDBooster::routeController($v->path, $v->controller);
         }
