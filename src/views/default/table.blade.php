@@ -226,78 +226,82 @@
                 $('#advanced_filter_modal').modal('show');
               })
 
-              $(".filter-combo").click(function() {                
+              $(".filter-combo").change(function() {         
+
                 var n = $(this).val();
-                // console.log(n);
+
                 var p = $(this).parents('.row-filter-combo');
-                // console.log(p);
+
                 var type_data = $(this).attr('data-type');
                 var filter_value = p.find('.filter-value');
+                
+                if($(this).is( ":checked" ))
+                {
+                  p.find('.between-group').hide();
+                  p.find('.between-group').find('input').prop('disabled',true);
+                  filter_value.val('').show().focus();
+                  switch(n) {
+                    default:
+                      filter_value.removeAttr('placeholder').val('').prop('disabled',true);                                                            
+                      p.find('.between-group').find('input').prop('disabled',true);
+                    break;
+                    case 'like':
+                    case 'not like':                                                              
+                      filter_value.attr('placeholder','{{trans("crudbooster.filter_eg")}} : {{trans("crudbooster.filter_lorem_ipsum")}}').prop('disabled',false);
+                    break;
+                    case 'asc':                                        
+                      filter_value.prop('disabled',true).attr('placeholder','{{trans("crudbooster.filter_sort_ascending")}}');
+                    break;
+                    case 'desc':                                        
+                      filter_value.prop('disabled',true).attr('placeholder','{{trans("crudbooster.filter_sort_descending")}}');
+                    break;
+                    case '=':                                        
+                      filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : {{trans("crudbooster.filter_lorem_ipsum")}}');
 
-                p.find('.between-group').hide();
-                p.find('.between-group').find('input').prop('disabled',true);
-                filter_value.val('').show().focus();
-                switch(n) {
-                  default:
-                    filter_value.removeAttr('placeholder').val('').prop('disabled',true);                                                            
-                    p.find('.between-group').find('input').prop('disabled',true);
-                  break;
-                  case 'like':
-                  case 'not like':                                                              
-                    filter_value.attr('placeholder','{{trans("crudbooster.filter_eg")}} : {{trans("crudbooster.filter_lorem_ipsum")}}').prop('disabled',false);
-                  break;
-                  case 'asc':                                        
-                    filter_value.prop('disabled',true).attr('placeholder','{{trans("crudbooster.filter_sort_ascending")}}');
-                  break;
-                  case 'desc':                                        
-                    filter_value.prop('disabled',true).attr('placeholder','{{trans("crudbooster.filter_sort_descending")}}');
-                  break;
-                  case '=':                                        
-                    filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : {{trans("crudbooster.filter_lorem_ipsum")}}');
-
-                  break;
-                  case '>=':                                                
-                    filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : 1000');
-                  break;
-                  case '<=':                                                
-                    filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : 1000');
-                  break;
-                  case '>':                                               
-                    filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : 1000');
-                  break;
-                  case '<':                                               
-                    filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : 1000'); 
-                  break; 
-                  case '!=':                                        
-                    filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : {{trans("crudbooster.filter_lorem_ipsum")}}');
-                  break;
-                  case 'in':                                        
-                    filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : {{trans("crudbooster.filter_lorem_ipsum_dolor_sit")}}');
-                  break;
-                  case 'not in':                                        
-                    filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : {{trans("crudbooster.filter_lorem_ipsum_dolor_sit")}}');
-                  break;
-                  case 'between':       
-                    filter_value.val('').hide();
-                    p.find('.between-group input').prop('disabled',false);
-                    p.find('.between-group').show().focus();
-                    p.find('.filter-value-between').prop('disabled',false);                    
-                  break;
+                    break;
+                    case '>=':                                                
+                      filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : 1000');
+                    break;
+                    case '<=':                                                
+                      filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : 1000');
+                    break;
+                    case '>':                                               
+                      filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : 1000');
+                    break;
+                    case '<':                                               
+                      filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : 1000'); 
+                    break; 
+                    case '!=':                                        
+                      filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : {{trans("crudbooster.filter_lorem_ipsum")}}');
+                    break;
+                    case 'in':                                        
+                      filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : {{trans("crudbooster.filter_lorem_ipsum_dolor_sit")}}');
+                    break;
+                    case 'not in':                                        
+                      filter_value.prop('disabled',false).attr('placeholder','{{trans("crudbooster.filter_eg")}} : {{trans("crudbooster.filter_lorem_ipsum_dolor_sit")}}');
+                    break;
+                    case 'between':       
+                      filter_value.val('').hide();
+                      p.find('.between-group input').prop('disabled',false);
+                      p.find('.between-group').show().focus();
+                      p.find('.filter-value-between').prop('disabled',false);                    
+                    break;
+                  }
                 }
+                else
+                {
+                  filter_value.removeAttr('placeholder').val('').prop('disabled',true);
+                }
+
+              
               })
 
               /* Remove disabled when reload page and input value is filled */
               $(".filter-value").each(function() {
                 var v = $(this).val();
-                // console.log(v);
                 if(v != '') $(this).prop('disabled',false);
               })
 
-              // $(".checkbox1").change(function() {
-              //   if()
-              //   $(".text1").prop('disabled', false);
-              // })
- 
             })
             </script>
             <!-- MODAL FOR SORTING DATA-->
@@ -311,10 +315,6 @@
                   </div>
                   <form method='get' action=''>                    
                     <div class="modal-body"> 
-
-                    {{-- <input type="checkbox" class="checkbox1">
-                    
-                    <input type="text" class="text1 form-control" disabled> --}}
 
                       <?php foreach($columns as $key => $col):?>
                         <?php if( isset($col['image']) || isset($col['download']) || $col['visible']===FALSE) continue;?>   
@@ -539,7 +539,7 @@
                           ?>
                           <option <?=$select?> value='B{{$i}}'>B{{$i}}</option>
                           <?php endfor;?>
-                        </select>   
+                        </select>
                         <div class='help-block'><input type='checkbox' name='default_paper_size' value='1'/> {{trans("crudbooster.export_dialog_set_default")}}</div>       
                       </div>
 
