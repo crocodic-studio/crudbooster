@@ -332,7 +332,7 @@ class CBController extends Controller {
 						}
 					}
 				}
-				
+
 			}
 		}
 
@@ -1325,8 +1325,13 @@ class CBController extends Controller {
 		Session::put('current_row_id',$id);
 		$option_id		 = $this->option_id;
 		$option_fields	 = $this->option_fields;
-
-		return view('crudbooster::default.form',compact('id','row','page_menu','page_title','command','option_id','option_fields'));
+		
+		/*if(DB::table('customer')){
+			return view('crudbooster::default.without_form',compact('id','row','page_menu','page_title','command','option_id','option_fields'));	
+		} else {*/
+			return view('crudbooster::default.form',compact('id','row','page_menu','page_title','command','option_id','option_fields'));
+		//}
+		
 	}
 
 	public function postEditSave($id) {

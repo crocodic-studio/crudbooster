@@ -1,4 +1,4 @@
-	<script>
+    <script>
         console.warn = function() {}
     </script>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">    
@@ -99,8 +99,8 @@
         .ui-datepicker{ z-index: 99999 !important;}
     </style>
 
-	<!-- ADDITION FUNCTION FOR BUTTON -->
-	<script type="text/javascript">
+    <!-- ADDITION FUNCTION FOR BUTTON -->
+    <script type="text/javascript">
         var id_cms_statistics = '{{$id_cms_statistics}}';
 
         function addWidget(id_cms_statistics,area,component) {      
@@ -114,11 +114,11 @@
             })
         }
 
-	</script>
-	<!--END HERE-->
+    </script>
+    <!--END HERE-->
 
 
-	<!-- jQuery UI 1.11.4 -->
+    <!-- jQuery UI 1.11.4 -->
     <style type="text/css">
         .sort-highlight {
             border:3px dashed #cccccc;                    
@@ -130,41 +130,41 @@
         .layout-grid + .layout-grid {
             border-left:1px dashed transparent;            
         }
-        .border-box {        	
-        	position: relative;        	
+        .border-box {           
+            position: relative;         
         }
-        .border-box .action {        	
-        	font-size: 20px;
-        	display: none;
-        	text-align: center;
-        	display: none;
-        	padding:3px 5px 3px 5px;
-        	background:#DD4B39;
-        	color:#ffffff;
-        	width: 70px;
-        	-webkit-border-bottom-right-radius: 5px;
-			-webkit-border-bottom-left-radius: 5px;
-			-moz-border-radius-bottomright: 5px;
-			-moz-border-radius-bottomleft: 5px;
-			border-bottom-right-radius: 5px;
-			border-bottom-left-radius: 5px;
-			position: absolute;
-			margin-top: -20px;			
-			right: 0;
-			z-index: 999;
-			opacity: 0.8;	
+        .border-box .action {           
+            font-size: 20px;
+            display: none;
+            text-align: center;
+            display: none;
+            padding:3px 5px 3px 5px;
+            background:#DD4B39;
+            color:#ffffff;
+            width: 70px;
+            -webkit-border-bottom-right-radius: 5px;
+            -webkit-border-bottom-left-radius: 5px;
+            -moz-border-radius-bottomright: 5px;
+            -moz-border-radius-bottomleft: 5px;
+            border-bottom-right-radius: 5px;
+            border-bottom-left-radius: 5px;
+            position: absolute;
+            margin-top: -20px;          
+            right: 0;
+            z-index: 999;
+            opacity: 0.8;   
         }
         .border-box .action a {
-        	color: #ffffff;
+            color: #ffffff;
         }
         
         .border-box:hover {
-        	/*border:2px dotted #BC3F30;*/
+            /*border:2px dotted #BC3F30;*/
         }
         
         @if(CRUDBooster::getCurrentMethod() == 'getBuilder')
         .border-box:hover .action {
-        	display: block;
+            display: block;
         }
         .panel-heading, .inner-box, .box-header, .btn-add-widget {
             cursor: move;
@@ -172,23 +172,23 @@
         @endif
         
         .connectedSortable {
-        	position: relative;
+            position: relative;
         }
         .area-loading {        
-        	position: relative;	
-        	width: 100%;  
-        	height: 130px;      	
-        	background: #dedede;
-        	border: 4px dashed #cccccc;
-        	font-size: 50px;
-        	color: #aaaaaa;
-        	margin-bottom: 20px;
+            position: relative; 
+            width: 100%;  
+            height: 130px;          
+            background: #dedede;
+            border: 4px dashed #cccccc;
+            font-size: 50px;
+            color: #aaaaaa;
+            margin-bottom: 20px;
         }
-        .area-loading i {        	
-        	position: absolute;
-        	left:45%;
-        	top:30%;        	
-        	transform: translate(-50%, -50%);        	      
+        .area-loading i {           
+            position: absolute;
+            left:45%;
+            top:30%;            
+            transform: translate(-50%, -50%);                 
         }
     </style>
     <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
@@ -224,7 +224,7 @@
           runSortables();
 
 
-       });       	      
+       });                
         
 
         var cloneSidebar = $('.control-sidebar').clone();
@@ -242,13 +242,13 @@
                 forcePlaceholderSize: true,
                 zIndex: 999999,
                 stop: function(event, ui) {
-                    console.log(ui.item.attr('class'));
+                    //console.log(ui.item.attr('class'));
                     var className = ui.item.attr('class');
                     var idName = ui.item.attr('id');
                     if(className == 'button-widget-area') {
                         var areaname = $('#'+idName).parent('.connectedSortable').attr('id');
                         var component = $('#'+idName+' > a').data('component');
-                        console.log(areaname);
+                        //console.log(areaname);
                         $('#'+idName).remove();
                         addWidget(id_cms_statistics,areaname,component);                        
                         $('.control-sidebar').html(cloneSidebar);
@@ -311,7 +311,7 @@
                         $.each(response.components,function(i,obj) {
                             $('#'+areaname).append("<div id='area-loading-"+obj.componentID+"' class='area-loading'><i class='fa fa-spin fa-spinner'></i></div>");
                             $.get(viewlink+obj.componentID+addon,function(view) {
-                                console.log('View For CID '+view.componentID);
+                                //console.log('View For CID '+view.componentID);
                                 $('#area-loading-'+obj.componentID).remove();
                                 $('#'+areaname).append(view.layout);
                                 
@@ -328,7 +328,7 @@
             var d = new Date();
             d.setMonth(d.getMonth() - 1);
             $('#testdate1').val(d.toJSON().slice(0,10));
-        	$('#testdate2').val(new Date().toJSON().slice(0,10));
+            $('#testdate2').val(new Date().toJSON().slice(0,10));
             $('.input_date').datepicker({
                 dateFormat: 'yy-mm-dd',
                 @if (App::getLocale() == 'ar')
@@ -350,40 +350,40 @@
             $('.open-datetimepicker').click(function() {
                   $(this).next('.input_date').datepicker('show');
             });
-        	
-        	runSortables();
+            
+            runSortables();
             
             $(document).on('click','.btn-delete-component',function() {
-            	var componentID = $(this).data('componentid');
-            	var $this = $(this);
+                var componentID = $(this).data('componentid');
+                var $this = $(this);
 
-            	swal({
-				  title: "Are you sure?",
-				  text: "You will not be able to recover this widget !",
-				  type: "warning",
-				  showCancelButton: true,
-				  confirmButtonColor: "#DD6B55",
-				  confirmButtonText: "Yes",
-				  closeOnConfirm: true
-				},
-				function(){
-				  	
-	            	$.get("{{CRUDBooster::mainpath('delete-component')}}/"+componentID,function() {
-	            		$this.parents('.border-box').remove();
-	            		
-	            	});
-				});
-            	
+                swal({
+                  title: "Are you sure?",
+                  text: "You will not be able to recover this widget !",
+                  type: "warning",
+                  showCancelButton: true,
+                  confirmButtonColor: "#DD6B55",
+                  confirmButtonText: "Yes",
+                  closeOnConfirm: true
+                },
+                function(){
+                    
+                    $.get("{{CRUDBooster::mainpath('delete-component')}}/"+componentID,function() {
+                        $this.parents('.border-box').remove();
+                        
+                    });
+                });
+                
             })
             $(document).on('click','.btn-edit-component',function() {
-				var componentID = $(this).data('componentid');
-				var name        = $(this).data('name');
+                var componentID = $(this).data('componentid');
+                var name        = $(this).data('name');
 
-            	$('#modal-statistic .modal-title').text(name);
-            	$('#modal-statistic .modal-body').html("<i class='fa fa-spin fa-spinner'></i> Please wait loading...");
-            	$('#modal-statistic').modal('show');
+                $('#modal-statistic .modal-title').text(name);
+                $('#modal-statistic .modal-body').html("<i class='fa fa-spin fa-spinner'></i> Please wait loading...");
+                $('#modal-statistic').modal('show');
 
-            	$.get("{{CRUDBooster::mainpath('edit-component')}}/"+componentID,function(response) {
+                $.get("{{CRUDBooster::mainpath('edit-component')}}/"+componentID,function(response) {
                     $('#modal-statistic .modal-body').html(response);
                 })
             })
@@ -413,44 +413,44 @@
                     return false;
                 }
 
-            	var $button = $(this).text('Saving...').addClass('disabled');
-            	
-            	$.ajax({
-            		data:$('#modal-statistic form').serialize(),
-            		type:'POST',
-            		url:"{{CRUDBooster::mainpath('save-component')}}",
-            		success:function() {
-            			
-            			$button.removeClass('disabled').text('Save Changes');
-            			$('#modal-statistic').modal('hide');
-            			window.location.href = "{{Request::fullUrl()}}";
-            		},
-            		error:function() {
-            			alert('Sorry something went wrong !');
-            			$button.removeClass('disabled').text('Save Changes');
-            		}
-            	})
+                var $button = $(this).text('Saving...').addClass('disabled');
+                
+                $.ajax({
+                    data:$('#modal-statistic form').serialize(),
+                    type:'POST',
+                    url:"{{CRUDBooster::mainpath('save-component')}}",
+                    success:function() {
+                        
+                        $button.removeClass('disabled').text('Save Changes');
+                        $('#modal-statistic').modal('hide');
+                        window.location.href = "{{Request::fullUrl()}}";
+                    },
+                    error:function() {
+                        alert('Sorry something went wrong !');
+                        $button.removeClass('disabled').text('Save Changes');
+                    }
+                })
             })
         })
     </script>
 
     <div id='modal-statistic' class="modal fade" tabindex="-1" role="dialog">
-	  <div class="modal-dialog" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	        <h4 class="modal-title">Modal title</h4>
-	      </div>
-	      <div class="modal-body">
-	        <p>One fine body&hellip;</p>
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	        <button type="button" class="btn-submit btn btn-primary" data-loading-text="Saving..." autocomplete="off">Save changes</button>
-	      </div>
-	    </div><!-- /.modal-content -->
-	  </div><!-- /.modal-dialog -->
-	</div><!-- /.modal -->
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Modal title</h4>
+          </div>
+          <div class="modal-body">
+            <p>One fine body&hellip;</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn-submit btn btn-primary" data-loading-text="Saving..." autocomplete="off">Save changes</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
     <div id='statistic-area'>
         
@@ -486,7 +486,7 @@
 
         </div>
         <div class="statistic-row row">
-            <div id='area1' class="col-sm-3 connectedSortable">            	
+            <div id='area1' class="col-sm-3 connectedSortable">             
 
             </div>
             <div id='area2' class="col-sm-3 connectedSortable">
@@ -496,7 +496,7 @@
 
             </div>
             <div id='area4' class="col-sm-3 connectedSortable">
-            	
+                
             </div>            
         </div>
 
