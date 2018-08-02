@@ -313,7 +313,7 @@ class CBController extends Controller {
 				$columns_table[$index]['field']      = $field;
 				$columns_table[$index]['field_raw']  = $field;
 				$columns_table[$index]['field_with'] = $table.'.'.$field;
-				
+
 				$f = $this->findNameFormType($field);
 				if ($f!==FALSE)
 				{
@@ -332,6 +332,7 @@ class CBController extends Controller {
 						}
 					}
 				}
+
 			}
 		}
 

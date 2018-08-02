@@ -234,6 +234,7 @@
 
                 var type_data = $(this).attr('data-type');
                 var filter_value = p.find('.filter-value');
+
                 
                 if($(this).is( ":checked" ))
                 {
@@ -291,6 +292,7 @@
                 else
                 {
                   filter_value.removeAttr('placeholder').val('').prop('disabled',true);
+
                 }
 
               
@@ -324,9 +326,11 @@
                         <div class='row-filter-combo row'>
 
                           <div class="col-sm-2">
+
                             <div class="label-filter" style="margin-top : 4%">
                               <strong>{{$col['label']}}</strong>
                             </div>
+
                           </div> 
 
                           <div class='col-sm-3'>
@@ -374,6 +378,7 @@
 
   
                           </div><!--END COL_SM_4-->
+
 
                           
 
