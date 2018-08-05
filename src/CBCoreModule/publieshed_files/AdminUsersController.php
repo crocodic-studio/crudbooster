@@ -72,8 +72,10 @@ class AdminUsersController extends CBController
             'type' => "select_datatable",
             "options" => ["table" => "cms_roles", "field_value" => "id", "field_label" => 'name'],
             'required' => true,
-        ];
-        $this->form[] = ['label' => "Password", 'name' => "password", 'type' => "password", "help" => "Please leave empty for no change"];
+        ];					
+		$this->form[] = array("label"=>"Password","name"=>"password","type"=>"password","help"=>"Please leave empty if not change");
+		$this->form[] = array("label"=>"Password Confirmation","name"=>"password_confirmation","type"=>"password","help"=>"Please leave empty if not change");
+		
         # END FORM DO NOT REMOVE THIS LINE
     }
 
@@ -99,4 +101,10 @@ class AdminUsersController extends CBController
         $this->button_save = true;
         # END CONFIGURATION DO NOT REMOVE THIS LINE
     }
+    public function hook_before_edit(&$postdata,$id) { 
+		unset($postdata['password_confirmation']);
+	}
+	public function hook_before_add(&$postdata) {      
+	    unset($postdata['password_confirmation']);
+	}
 }
