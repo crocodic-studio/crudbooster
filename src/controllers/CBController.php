@@ -1140,7 +1140,7 @@ class CBController extends Controller
 
         $this->hook_before_add($this->arr);
 
-        $this->arr[$this->primary_key] = $id = CRUDBooster::newId($this->table);
+//         $this->arr[$this->primary_key] = $id = CRUDBooster::newId($this->table); //error on sql server
         DB::table($this->table)->insert($this->arr);
 
         //Looping Data Input Again After Insert
@@ -1164,7 +1164,7 @@ class CBController extends Controller
                         $relationship_table_pk = CB::pk($ro['relationship_table']);
                         foreach ($inputdata as $input_id) {
                             DB::table($ro['relationship_table'])->insert([
-                                $relationship_table_pk => CRUDBooster::newId($ro['relationship_table']),
+//                                 $relationship_table_pk => CRUDBooster::newId($ro['relationship_table']),
                                 $foreignKey => $id,
                                 $foreignKey2 => $input_id,
                             ]);
@@ -1184,7 +1184,7 @@ class CBController extends Controller
                         foreach ($inputdata as $input_id) {
                             $relationship_table_pk = CB::pk($row['relationship_table']);
                             DB::table($ro['relationship_table'])->insert([
-                                $relationship_table_pk => CRUDBooster::newId($ro['relationship_table']),
+//                                 $relationship_table_pk => CRUDBooster::newId($ro['relationship_table']),
                                 $foreignKey => $id,
                                 $foreignKey2 => $input_id,
                             ]);
@@ -1300,7 +1300,7 @@ class CBController extends Controller
                         foreach ($inputdata as $input_id) {
                             $relationship_table_pk = CB::pk($ro['relationship_table']);
                             DB::table($ro['relationship_table'])->insert([
-                                $relationship_table_pk => CRUDBooster::newId($ro['relationship_table']),
+//                                 $relationship_table_pk => CRUDBooster::newId($ro['relationship_table']),
                                 $foreignKey => $id,
                                 $foreignKey2 => $input_id,
                             ]);
@@ -1321,7 +1321,7 @@ class CBController extends Controller
                         foreach ($inputdata as $input_id) {
                             $relationship_table_pk = CB::pk($ro['relationship_table']);
                             DB::table($ro['relationship_table'])->insert([
-                                $relationship_table_pk => CRUDBooster::newId($ro['relationship_table']),
+//                                 $relationship_table_pk => CRUDBooster::newId($ro['relationship_table']),
                                 $foreignKey => $id,
                                 $foreignKey2 => $input_id,
                             ]);
