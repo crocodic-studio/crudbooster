@@ -224,7 +224,6 @@ class Cms_settingsSeeder extends Seeder
                 }
                 continue;
             }
-            $row['id'] = DB::table('cms_settings')->max('id') + 1;
             DB::table('cms_settings')->insert($row);
         }
     }
