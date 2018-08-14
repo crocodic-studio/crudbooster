@@ -67,6 +67,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
 
         $this->commands('crudboosterinstall');
         $this->commands('crudboosterupdate');
+        $this->commands(['\crocodicstudio\crudbooster\commands\CrudboosterVersionCommand']);
 
         $this->app->register('Barryvdh\DomPDF\ServiceProvider');
         $this->app->register('Maatwebsite\Excel\ExcelServiceProvider');
@@ -80,14 +81,13 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $loader->alias('CRUDBooster', 'crocodicstudio\crudbooster\helpers\CRUDBooster');
         $loader->alias('CB', 'crocodicstudio\crudbooster\helpers\CB');
     }
-
-
+   
     private function registerCrudboosterCommand()
     {
         $this->app->singleton('crudboosterinstall',function() {
             return new CrudboosterInstallationCommand;
         });
-
+        
         $this->app->singleton('crudboosterupdate',function() {
             return new CrudboosterUpdateCommand;
         });        
