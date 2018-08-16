@@ -915,6 +915,11 @@ class CRUDBooster
 
 	public static function findPrimaryKey($table)
 	{
+		if(!$table)
+		{
+			return 'id';
+		}
+		
 		$pk = DB::getDoctrineSchemaManager()->listTableDetails($table)->getPrimaryKey();
 		if(!$pk) {
 		    return null;
