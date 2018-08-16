@@ -196,7 +196,7 @@ class CBController extends Controller
 
     private function checkHideForm()
     {
-        if (count($this->hide_form)) {
+        if ($this->hide_form && count($this->hide_form)) {
             foreach ($this->form as $i => $f) {
                 if (in_array($f['name'], $this->hide_form)) {
                     unset($this->form[$i]);
@@ -587,7 +587,7 @@ class CBController extends Controller
                                 $prevalue[] = $d['label'];
                             }
                         }
-                        if (count($prevalue)) {
+                        if ($prevalue && count($prevalue)) {
                             $value = implode(", ", $prevalue);
                         }
                     }
@@ -912,7 +912,7 @@ class CBController extends Controller
             if (@$di['validation']) {
 
                 $exp = explode('|', $di['validation']);
-                if (count($exp)) {
+                if ($exp && count($exp)) {
                     foreach ($exp as &$validationItem) {
                         if (substr($validationItem, 0, 6) == 'unique') {
                             $parseUnique = explode(',', str_replace('unique:', '', $validationItem));
@@ -999,7 +999,7 @@ class CBController extends Controller
                 continue;
             }
 
-            if (count($hide_form)) {
+            if ($hide_form && count($hide_form)) {
                 if (in_array($name, $hide_form)) {
                     continue;
                 }
@@ -1063,8 +1063,8 @@ class CBController extends Controller
             if ($ro['type'] == 'multitext') {
                 $name = $ro['name'];
                 $multitext = "";
-
-                for ($i = 0; $i <= count($this->arr[$name]) - 1; $i++) {
+                $maxI = ($this->arr[$name])?count($this->arr[$name]):0;
+                for ($i = 0; $i <= $maxI - 1; $i++) {
                     $multitext .= $this->arr[$name][$i]."|";
                 }
                 $multitext = substr($multitext, 0, strlen($multitext) - 1);
@@ -1140,7 +1140,7 @@ class CBController extends Controller
 
         $this->hook_before_add($this->arr);
 
-        $this->arr[$this->primary_key] = $id = CRUDBooster::newId($this->table);
+//         $this->arr[$this->primary_key] = $id = CRUDBooster::newId($this->table); //error on sql server
         DB::table($this->table)->insert($this->arr);
 
         //Looping Data Input Again After Insert
@@ -1164,7 +1164,7 @@ class CBController extends Controller
                         $relationship_table_pk = CB::pk($ro['relationship_table']);
                         foreach ($inputdata as $input_id) {
                             DB::table($ro['relationship_table'])->insert([
-                                $relationship_table_pk => CRUDBooster::newId($ro['relationship_table']),
+//                                 $relationship_table_pk => CRUDBooster::newId($ro['relationship_table']),
                                 $foreignKey => $id,
                                 $foreignKey2 => $input_id,
                             ]);
@@ -1184,7 +1184,7 @@ class CBController extends Controller
                         foreach ($inputdata as $input_id) {
                             $relationship_table_pk = CB::pk($row['relationship_table']);
                             DB::table($ro['relationship_table'])->insert([
-                                $relationship_table_pk => CRUDBooster::newId($ro['relationship_table']),
+//                                 $relationship_table_pk => CRUDBooster::newId($ro['relationship_table']),
                                 $foreignKey => $id,
                                 $foreignKey2 => $input_id,
                             ]);
@@ -1196,7 +1196,8 @@ class CBController extends Controller
             if ($ro['type'] == 'child') {
                 $name = str_slug($ro['label'], '');
                 $columns = $ro['columns'];
-                $count_input_data = count(Request::get($name.'-'.$columns[0]['name'])) - 1;
+                $getColName = Request::get($name.'-'.$columns[0]['name']);
+                $count_input_data = ($getColName)?(count($getColName) - 1):0;
                 $child_array = [];
 
                 for ($i = 0; $i <= $count_input_data; $i++) {
@@ -1300,7 +1301,7 @@ class CBController extends Controller
                         foreach ($inputdata as $input_id) {
                             $relationship_table_pk = CB::pk($ro['relationship_table']);
                             DB::table($ro['relationship_table'])->insert([
-                                $relationship_table_pk => CRUDBooster::newId($ro['relationship_table']),
+//                                 $relationship_table_pk => CRUDBooster::newId($ro['relationship_table']),
                                 $foreignKey => $id,
                                 $foreignKey2 => $input_id,
                             ]);
@@ -1321,7 +1322,7 @@ class CBController extends Controller
                         foreach ($inputdata as $input_id) {
                             $relationship_table_pk = CB::pk($ro['relationship_table']);
                             DB::table($ro['relationship_table'])->insert([
-                                $relationship_table_pk => CRUDBooster::newId($ro['relationship_table']),
+//                                 $relationship_table_pk => CRUDBooster::newId($ro['relationship_table']),
                                 $foreignKey => $id,
                                 $foreignKey2 => $input_id,
                             ]);
@@ -1333,7 +1334,8 @@ class CBController extends Controller
             if ($ro['type'] == 'child') {
                 $name = str_slug($ro['label'], '');
                 $columns = $ro['columns'];
-                $count_input_data = count(Request::get($name.'-'.$columns[0]['name'])) - 1;
+                $getColName = Request::get($name.'-'.$columns[0]['name']);
+                $count_input_data = ($getColName)?(count($getColName) - 1):0;
                 $child_array = [];
                 $childtable = CRUDBooster::parseSqlTable($ro['table'])['table'];
                 $fk = $ro['foreign_key'];
@@ -1450,8 +1452,10 @@ class CBController extends Controller
             $file = storage_path('app/'.$file);
             $rows = Excel::load($file, function ($reader) {
             })->get();
-
-            Session::put('total_data_import', count($rows));
+            
+            $countRows = ($rows)?count($rows):0;
+            
+            Session::put('total_data_import', $countRows);
 
             $data_import_column = [];
             foreach ($rows as $value) {
@@ -1459,7 +1463,7 @@ class CBController extends Controller
                 foreach ($value as $k => $v) {
                     $a[] = $k;
                 }
-                if (count($a)) {
+                if ($a && count($a)) {
                     $data_import_column = $a;
                 }
                 break;

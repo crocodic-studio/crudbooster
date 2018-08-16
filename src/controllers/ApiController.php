@@ -562,15 +562,15 @@ class ApiController extends Controller
 
             if ($action_type == 'save_add') {
 
-                $row_assign['id'] = CRUDBooster::newId($table);
-                DB::table($table)->insert($row_assign);
-                $result['api_status'] = ($row_assign['id']) ? 1 : 0;
-                $result['api_message'] = ($row_assign['id']) ? 'success' : 'failed';
+//                 $row_assign['id'] = CRUDBooster::newId($table);
+                $id = DB::table($table)->insertGetId($row_assign);
+                $result['api_status'] = ($id) ? 1 : 0;
+                $result['api_message'] = ($id) ? 'success' : 'failed';
                 if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
 
                     $result['api_authorization'] = $debug_mode_message;
                 }
-                $result['id'] = $row_assign['id'];
+                $result['id'] = $id;
             } else {
 
                 try {
