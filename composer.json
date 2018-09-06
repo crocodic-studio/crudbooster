@@ -23,22 +23,28 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "php":">=5.6",
-        "laravel/framework":"~5.3",
+        "php":">=7.1",
+        "laravel/framework":"~5.5",
         "barryvdh/laravel-dompdf": "0.8.*",
         "doctrine/dbal": "~2.3",
-        "maatwebsite/excel": "~2.1.0",
-        "unisharp/laravel-filemanager": "1.7.*",
+        "maatwebsite/excel": "~3.0",
         "intervention/imagecache":"2.*",
         "imanghafoori/laravel-widgetize":"1.8.*",
         "imanghafoori/laravel-terminator":"1.0.*"
     },
     "autoload": {
         "files": [
-            "src/helpers/cb_helpers.php"
+            "src/Helpers/CBHelper.php"
         ],
         "psr-4": {
           "Crocodicstudio\\Crudbooster\\": "src/"
         }
-    }
+    },
+      "extra": {
+        "laravel": {
+          "providers": [
+            "Crocodicstudio\\Crudbooster\\CBServiceProvider"
+          ]
+        }
+      }
 }
