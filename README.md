@@ -1,4 +1,7 @@
-# CRUDBOOSTER - Laravel CRUD Generator
+<p align="center">:rocket: <strong>CRUDBOOSTER<sup>v6</sup></strong>:new: will be available soon, stay tuned :revolving_hearts: :rocket:</p>
+<hr>
+
+# :rocket: CRUDBOOSTER - Laravel CRUD Generator
 [![Code Climate](https://codeclimate.com/github/crocodic-studio/crudbooster/badges/gpa.svg)](https://codeclimate.com/github/crocodic-studio/crudbooster)
 <a href="https://scrutinizer-ci.com/g/crocodic-studio/crudbooster"><img src="https://img.shields.io/scrutinizer/g/crocodic-studio/crudbooster.svg?style=flat-square" alt="Quality Score"></img></a>
 [![Latest Stable Version](https://poser.pugx.org/crocodicstudio/crudbooster/v/stable)](https://packagist.org/packages/crocodicstudio/crudbooster)
