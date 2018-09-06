@@ -1141,7 +1141,7 @@ class CBController extends Controller
         $this->hook_before_add($this->arr);
 
 //         $this->arr[$this->primary_key] = $id = CRUDBooster::newId($this->table); //error on sql server
-        DB::table($this->table)->insert($this->arr);
+        $lastInsertId = $id = DB::table($this->table)->insertGetId($this->arr);
 
         //Looping Data Input Again After Insert
         foreach ($this->data_inputan as $ro) {
@@ -1216,7 +1216,7 @@ class CBController extends Controller
             }
         }
 
-        $this->hook_after_add($this->arr[$this->primary_key]);
+        $this->hook_after_add($lastInsertId);
 
         $this->return_url = ($this->return_url) ? $this->return_url : Request::get('return_url');
 
