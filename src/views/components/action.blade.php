@@ -36,7 +36,7 @@
     $icon = $a['icon'];
     $color = $a['color'] ?: 'primary';
     $confirmation = $a['confirmation'];
-
+    $target = $a['target'] ?: '_self';
 
     $url = $a['url'];
     if (isset($confirmation) && ! empty($confirmation)) {
@@ -52,10 +52,10 @@
         }
 
         @eval("if($query) {
-          echo \"<a class='btn btn-xs btn-\$color' title='\$title' onclick='\$confirm_box' href='\$url'><i class='\$icon'></i> $label</a>&nbsp;\";
+          echo \"<a class='btn btn-xs btn-\$color' title='\$title' onclick='\$confirm_box' href='\$url' target='\$target'><i class='\$icon'></i> $label</a>&nbsp;\";
       }");
     } else {
-        echo "<a class='btn btn-xs btn-$color' title='$title' onclick='$confirm_box' href='$url'><i class='$icon'></i> $label</a>&nbsp;";
+        echo "<a class='btn btn-xs btn-$color' title='$title' onclick='$confirm_box' href='$url' target='$target'><i class='$icon'></i> $label</a>&nbsp;";
     }
     ?>
 @endforeach
