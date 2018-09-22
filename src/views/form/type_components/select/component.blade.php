@@ -11,13 +11,14 @@
                     var fk_value = $(this).val();
                     var datatable = "{{$formInput['datatable']}}".split(',');
                     var datatableWhere = "{{$formInput['datatable_where']}}";
+                    var datatableFormat = "{!!$formInput['datatable_format']!!}";
                     var table = datatable[0].trim('');
                     var label = datatable[1].trim('');
                     var value = "{{$value}}";
 
                     if (fk_value != '') {
                         $current.html("<option value=''>{{trans('crudbooster.text_loading')}} {{$label}}");
-                        $.get("{{CRUDBooster::mainpath('data-table')}}?table=" + table + "&label=" + label + "&fk_name=" + fk_name + "&fk_value=" + fk_value + "&datatable_where=" + encodeURI(datatableWhere), function (response) {
+                        $.get("{{CRUDBooster::mainpath('data-table')}}?table=" + table + "&label=" + label + "&fk_name=" + fk_name + "&fk_value=" + fk_value + "&datatable_format=" + encodeURI(datatableFormat) + "&datatable_where=" + encodeURI(datatableWhere), function (response) {
                             if (response) {
                                 $current.html("<option value=''>{{$default}}");
                                 $.each(response, function (i, obj) {
