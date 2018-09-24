@@ -132,22 +132,7 @@
     }
 
     $(function () {
-        function reassignAllOptionsIndexes(){
-            //reassign all options indexes in name attribute
-            var idx = 0;
-            $('.table-form tbody').find('tr').each(function (i, el) {
-                var $tds = $(this).find('td');
-                //find column options
-                $tds.eq(5).find('.option_area .form-group').each(function (i, el) {
-                    //reassign option index in name attribute of input
-                    var input = $(this).find('input');
-                    var name = input.attr('name');
-                    var lastpiece = input.attr('name').substr(8,name.length);                
-                    input.attr('name','option['+idx+lastpiece);
-                });
-                idx++;
-            });
-         }    
+
 
         $(document).on('click', '.btn-plus', function () {
             var tr_parent = $(this).parent().parent('tr');
@@ -155,7 +140,6 @@
             clone.removeAttr('id');
             tr_parent.after(clone);
             $('.table-form tr').not('#tr-sample').show();
-            reassignAllOptionsIndexes();
         })
 
 //init row
@@ -195,7 +179,6 @@
 
         $(document).on('click', '.table-form .btn-delete', function () {
             $(this).parent().parent().remove();
-            reassignAllOptionsIndexes();
         })
 
         $(document).on('click', '.table-form .btn-up', function () {
@@ -206,7 +189,6 @@
                 tr.prev('tr').before(tr.clone());
                 tr.remove();
             }
-            reassignAllOptionsIndexes();
         })
 
         $(document).on('click', '.table-form .btn-down', function () {
@@ -217,7 +199,6 @@
                 tr.next('tr').after(tr.clone());
                 tr.remove();
             }
-            reassignAllOptionsIndexes();
         })
 
         var handleOptions = null;
