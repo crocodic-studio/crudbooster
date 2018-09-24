@@ -398,7 +398,7 @@ class ApiController extends Controller
                             }
 
                             if (! in_array($k, $responses_fields)) {
-                                unset($row[$k]);
+                                unset($row->$k);
                             }
                         }
                     }
