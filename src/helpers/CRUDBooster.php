@@ -32,16 +32,14 @@ class CRUDBooster
         @$mime_type = explode('/', $mime_type);
         @$mime_type = $mime_type[1];
         if ($mime_type) {
-            if (in_array($mime_type, $uploads_format_candidate)) {
-                $filePath = 'uploads/'.$userID.'/'.date('Y-m');
-                Storage::makeDirectory($filePath);
-                $filename = md5(str_random(5)).'.'.$mime_type;
-                if (Storage::put($filePath.'/'.$filename, $filedata)) {
-                    self::resizeImage($filePath.'/'.$filename);
+            $filePath = 'uploads/'.$userID.'/'.date('Y-m');
+		Storage::makeDirectory($filePath);
+		$filename = md5(str_random(5)).'.'.$mime_type;
+		if (Storage::put($filePath.'/'.$filename, $filedata)) {
+		    self::resizeImage($filePath.'/'.$filename);
 
-                    return $filePath.'/'.$filename;
-                }
-            }
+		    return $filePath.'/'.$filename;
+		}
         }
     }
 
