@@ -271,7 +271,7 @@ class CBController extends Controller
             $join_table_temp[] = $table;
 
             if (! $field) {
-                die('Please make sure there is key `name` in each row of col');
+                continue;
             }
 
             if (strpos($field, ' as ') !== false) {
@@ -356,10 +356,18 @@ class CBController extends Controller
                 }
             } else {
 
-                $result->addselect($table.'.'.$field);
-                $columns_table[$index]['type_data'] = CRUDBooster::getFieldType($table, $field);
-                $columns_table[$index]['field'] = $field;
-                $columns_table[$index]['field_raw'] = $field;
+                if(isset($field_array[1])) {                    
+                    $result->addselect($table.'.'.$field.' as '.$table.'_'.$field);
+                    $columns_table[$index]['type_data'] = CRUDBooster::getFieldType($table, $field);
+                    $columns_table[$index]['field'] = $table.'_'.$field;
+                    $columns_table[$index]['field_raw'] = $table.'.'.$field;
+                }else{
+                    $result->addselect($table.'.'.$field);
+                    $columns_table[$index]['type_data'] = CRUDBooster::getFieldType($table, $field);
+                    $columns_table[$index]['field'] = $field;
+                    $columns_table[$index]['field_raw'] = $field;
+                }
+                
                 $columns_table[$index]['field_with'] = $table.'.'.$field;
             }
         }
