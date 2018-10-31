@@ -277,7 +277,7 @@ $name = str_slug($form['label'], '');
 
                                                                         if (fk_value != '') {
                                                                             $current.html("<option value=''>{{trans('crudbooster.text_loading')}} {{$col['label']}}");
-                                                                            $.get("{{CRUDBooster::mainpath('data-table')}}?table=" + table + "&label=" + label + "&fk_name=" + fk_name + "&fk_value=" + fk_value + "datatable_where=" + encodeURI(datatableWhere), function (response) {
+                                                                            $.get("{{CRUDBooster::mainpath('data-table')}}?table=" + table + "&label=" + label + "&fk_name=" + fk_name + "&fk_value=" + fk_value + "&datatable_where=" + encodeURI(datatableWhere), function (response) {
                                                                                 if (response) {
                                                                                     $current.html("<option value=''>{{$default}}");
                                                                                     $.each(response, function (i, obj) {
