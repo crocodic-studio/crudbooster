@@ -1,0 +1,272 @@
+﻿<?php
+return [
+    'email_footer'               => 'Пожалуйста, не отвечайте на это письмо. Письмо отправлено нашей системой автоматически. ',
+    'login_message'              => 'Пожалуйста, авторизируйтесь',
+    'text_forgot_password'       => 'Забыли пароль?',
+    'page_title_login'           => 'Панель входа',
+    'page_title_forgot'          => 'Вспомнить пароль',
+    'forgot_message'             => 'Для запроса пароля введите Ваш email',
+    "forgot_text_try_again"      => "Вернуться назад?",
+    'text_no_notification'       => "У вас нет сообщений",
+    'text_view_all_notification' => 'Показать все',
+    'label_button_profile'       => "Профиль",
+    'filter_dialog_title'        => 'Расширенная Сортировка & Отбор',
+    'there_is_no_option'         => 'Для этого типа входных данных нет никаких настроек',
+    'no'                         => 'Нет.',
+
+    'text_enter_the_password'     => 'Введите пароль, чтобы восстановить сессию',
+    'text_or_sign_in'             => 'Или авторизируйтесь под другим пользователем',
+    'text_default_add_new_module' => 'Добавить Новый :модуль',
+    'text_default_list_module'    => 'Список :модулей',
+    'text_default_help_password'  => 'Минимум 5 символов. Пожалуйста оставьте пустым если вы не меняли пароль.',
+    'text_default_help_upload'    => 'Поддерживаемые типы файлов : JPG, JPEG, PNG, GIF, BMP',
+    'text_default_help_number'    => 'Тут можно вводить только цифры',
+    'text_default_help_email'     => 'Введите правильный email адрес',
+    'text_default_help_text'      => 'Тут вы можете вводить текст',
+    'text_default_help_url'       => 'Введите правильный URL',
+    'text_dashboard'              => 'Рабочий стол',
+    'text_delete'                 => 'Удалить',
+    'text_prefix_option'          => '** Выберите ',
+    'text_loading'                => 'Подождите, данные загружаются...',
+
+    'message_after_logout'    => 'Пока, до новых встреч!',
+    'message_forgot_password' => 'Мы выслали ваш новый пароль по почте, проверьте папку Входящие или Спам!',
+
+    'page_not_found'      => 'Упс! Страница не найдена',
+    'page_not_found_text' => 'Мы не можем найти страницу, которую вы искали.',
+    'page_not_found_tips' => '* Пожалуйста убедитесь, что URL адрес правильный<br/>
+                * Пожалуйста, убедитесь, что адрес написан строчными или прописными буквами, т.к. он чувствителен к регистру<br/>
+                * Возможно эта страница была удалена Администраором<br/>
+                * Вы можете нажать кнопку "Назад" в браузере и вернуться на предыдущую страницу<br/>',
+
+    'log_try_view'            => 'Попробуйте просмотреть данные :name в :module',
+    'log_try_edit'            => 'Попробуйте отредактировать данные :name в :module',
+    'log_try_add'             => 'Попробуйте добавить данные в :module',
+    'log_try_add_save'        => 'Попробуйте добавить данные :name в :module',
+    'log_try_delete'          => 'Попробуйте удалить :name из :module',
+    'log_try_delete_selected' => 'Попробуйте удалить выделенное из :module',
+    'log_try_delete_image'    => 'Попробуйте удалить картинку :name из :module',
+    'log_try_update'          => 'Попробуйте обновить :name в :module',
+    'log_add'                 => 'Добавьте :name в :module',
+    'log_update'              => 'Обновите :name в :module',
+    'log_delete'              => 'Удалите :name из :module',
+    'log_delete_image'        => 'Удалите картинку :name из :module',
+    'log_login'               => ':email логин по IP :ip',
+    'log_forgot'              => 'Кто-то с IP :ip запросил пароль для :email',
+    'log_logout'              => ':email выход',
+
+    'alert_delete_selected'         => 'Вы уверены, что хотите удалить ВСЕ выбранные данные?',
+    'alert_delete_selected_success' => 'Успешное удаление выделенного!',
+    'alert_bulk_action_button'      => 'Вы уверены, что хотите',
+    'alert_action'                  => 'Вы сделали :action успешно!',
+    'alert_add_data_success'        => 'Данные были добавлены!',
+    'alert_add_data_failed'         => 'Ошибка сохранения данных!',
+    'alert_update_data_success'     => 'Данные были обновлены!',
+    'alert_update_data_failed'      => 'Ощибка обновления данных',
+    'alert_delete_data_success'     => 'Успешное удаление данных!',
+    'alert_want_to_logout'          => 'Вы действительно хотите выйти?',
+    'alert_warning'                 => "Упс!",
+    'alert_danger'                  => 'Что-то пошло не так (( ....',
+    'alert_success'                 => 'Супер!...',
+    'alert_info'                    => 'Информация',
+    'alert_primary'                 => 'Информация',
+    'alert_session_expired'         => 'Ваша сессия просрочена, пожалуйста залогиньтесь снова!',
+    'alert_password_wrong'          => 'Извините, неправильный пароль!',
+    'alert_required'                => 'Пожалуйста, убедитесь, что все необходимые поля заполнены правильно.',
+    'alert_error_ajax'              => 'Что-то пошло не так, мы это исправим в ближайшее время!',
+    'alert_validation_error'        => 'Пожалуйста, заполните форму правильно : :error',
+
+    'add_data_page_title'    => 'Добавить :module',
+    'edit_data_page_title'   => 'Изменить :module',
+    'detail_data_page_title' => 'Детально :module',
+
+    'default_module_description' => 'Список',
+
+    'delete_description_confirm' => "Вы не сможете восстановить эти данные!",
+    'delete_title_confirm'       => "Вы уверены?",
+
+
+    'action_show_data'       => 'Показать',
+    'action_add_data'        => 'Добавить',
+    'action_delete_selected' => 'Удалить выделенные',
+
+    'action_label'       => 'Действия',
+    'action_detail_data' => 'Детально',
+    'action_edit_data'   => 'Редактир.',
+    'action_delete_data' => 'Удалить',
+
+
+    'button_cancel'          => 'Отмена',
+    'button_add'             => 'Добавить',
+    'button_edit'            => 'Редактир.',
+    'button_back'            => 'Назад',
+    'button_save'            => 'Сохранить',
+    'button_save_more'       => 'Сохранить & Добавить еще...',
+    'button_import'          => 'Импорт данных',
+    'button_export'          => 'Экспорт данных',
+    'button_filter'          => 'Сортировка & Фильтр',
+    'button_close'           => 'Закрыть',
+    'button_submit'          => 'Отправить',
+    'button_logout'          => 'Выйти',
+    'button_sign_in'         => 'Войти',
+    'button_selected_action' => 'Групповые действия',
+    'button_download_file'   => 'Скачать файл',
+    'button_reset'           => 'Сбросить',
+    'button_add_to_table'    => 'Добавить в таблицу',
+
+    'export_dialog_title'            => "Экспорт данных",
+    'export_dialog_filename'         => 'Имя файла',
+    'export_dialog_help_filename'    => 'Вы можете переименовать имя файла в соответствии с вашими пожеланиями',
+    'export_dialog_maxdata'          => "Максимальные данные",
+    'export_dialog_help_maxdata'     => 'Возможно экспортировать от 1 до 100,000 строк за сессию',
+    'export_dialog_columns'          => 'Колонки',
+    'export_dialog_format_export'    => 'Форматы экспорта',
+    'export_dialog_show_advanced'    => 'Расширенный экспорт',
+    'export_dialog_page_size'        => 'Размер страницы',
+    'export_dialog_set_default'      => 'Установить размер бумаги по умолчанию',
+    'export_dialog_page_orientation' => 'Ориентация Страницы',
+
+    'import_page_title'         => 'Импорт данных :module',
+    'dashboard_default_text'    => 'Добро пожаловать за рабочий стол :appname',
+    'form_back_to_list'         => 'Возврат к :module',
+    'not_logged_in'             => 'Вы не авторизованы!',
+    'menu_navigation'           => "Панель управления",
+    'table_data_not_found'      => "Нет данных",
+    "notice_delete_file_upload" => "* Если вы хотите загрузить другой файл, сначала удалить этот файл.",
+    "file_broken"               => "Упс! Искомый файл поврежден! Нажмите Удалить и Перезагрузить.",
+
+
+    'denied_access' => 'К сожалению, у вас нет прав доступа к этой области!',
+    'denied_update' => 'К сожалению, у вас нет прав на обновление данных!',
+    'denied_create' => 'К сожалению, у вас нет прав для создания данных !',
+    'denied_delete' => 'К сожалению, у вас нет прав для удаления данных !',
+
+    'user_image'           => 'Картинка Пользователя',
+    'online'               => 'Онлайн',
+    'controller_route_404' => 'Controller / Route НЕ НАЙДЕН !',
+    'home'                 => 'Главная',
+    'Notifications' 	  => 'Оповещения',
+    'Privileges'    	  => 'Доступ',
+    'Privileges_Roles'    => 'Роли',
+    'Add_New_Privilege'   => 'Добавить Роль',
+    'List_Privilege'      => 'Список Ролей',
+    'add_user'            => 'Добавить Пользователя',
+    'List_users'          => 'Список Пользователей',
+    'Menu_Management'     => 'Настройка Меню',
+    'Add_New_Setting'     => 'Добавить настройку',
+    'Add_New_Module'      => 'Добавить Модуль',
+    'List_Module'         => 'Модули',
+    'Add_New_Statistic'   => 'Создать Статистику',
+    'List_Statistic'      => 'Статистики',
+    'Add_New_API'         => 'Новый API',
+    'API_Generator'       => 'API',
+    'Statistic_Builder'   => 'Статистика',
+    'Module_Generator'    => 'Модули',
+    'settings'            => 'Настройки',
+    'Users_Management'    => 'Пользователи',
+    'list_API'            => 'Список API (Описание)',
+    'Generate_Screet_Key' => 'Сгенерировать Secret Key',
+    'Add_New_Email'       => 'Добавить новый Email',
+    'List_Email_Template' => 'Список шаблонов',
+    'Email_Templates'     => 'Шаблоны писем',
+    'Log_User_Access'     => 'Лог',
+    'SUPERADMIN'          => 'Администрирование',
+
+    'click_here' => 'Нажмите тут',
+
+    /*
+     * this is for html direction to use in html and css classes like :
+     * pull-left , pull-right , text-right ...
+     * to make it easy to use the the view for rtl langs .
+     * unless your language use right-to-left direction , you should keep it as it is :
+     */
+    'right'      => 'right',
+    'left'       => 'left',
+
+    'all_rights_reserved' => 'Все права защищены',
+    'copyright'           => 'Авторские права',
+    'powered_by'          => 'Создано на',
+
+    'notification_you_have'     => 'У вас есть',
+    'notification_notification' => 'Сообщения',
+    'notification_new'          => 'У вас есть новое сообщение !',
+
+    'login_register_style'         => 'Настройки стр.входа',
+    'email_setting'                => 'Настройки почты',
+    'application_setting'          => 'Основные настройки',
+
+    // table filter & sort
+    'filter_select_operator_type'  => 'Выберите тип сравнения',
+    'filter_ascending'             => 'по возрастанию',
+    'filter_descending'            => 'по убыванию',
+    'filter_equal_to'              => '= (равно)',
+    'filter_like'                  => 'СОДЕРЖИТ',
+    'filter_not_like'              => 'НЕ СОДЕРЖИТ',
+    'filter_greater_than_or_equal' => '>= (больше или равно)',
+    'filter_less_than_or_equal'    => '<= (меньше или равно)',
+    'filter_less_than'             => '< (меньше)',
+    'filter_greater_than'          => '> (больше)',
+    'filter_not_equal_to'          => '!= (не равно)',
+    'filter_in'                    => 'В',
+    'filter_not_in'                => 'НЕ В',
+    'filter_between'               => 'В ДИАПАЗОНЕ',
+    'filter_empty_or_null'         => '<Пусто> (или NULL)',  //SVV
+
+    'filter_sort_ascending'        => 'Сорт. по возр.',
+    'filter_sort_descending'       => 'Сорт. по убыв.',
+    'filter_eg'                    => 'например',
+    'filter_lorem_ipsum'           => 'Lorem ipsum',
+    'filter_lorem_ipsum_dolor_sit' => ' Lorem,Ipsum,Dolor Sit',
+    'filter_search'                => 'Найти',
+    'filter_from'                  => 'от',
+    'filter_to'                    => 'до',
+    'filter_sorting'               => '** Сортировать',
+
+    // confirmation
+    'confirmation_yes'             => 'Да!',
+    'confirmation_no'              => 'Нет',
+
+    //filemanager
+    'chose_an_image'               => 'Выберите картинку ',
+    'chose_an_file'                => 'Выберите файл ',
+
+    //action confirmation
+    'confirmation_title'            => 'Предупреждение',
+    'confirmation_text'             => 'Вы действительно хотите выполнить это действие?',
+    'confirmButtonText'             => 'Да',
+
+
+    // privilege
+    'privileges_name'               =>'Роль',
+    'privileges_super_admin'        =>'Super Admin',
+    'privileges_standart_user'      =>'Пользователь',
+    'privileges_ID'                 =>'ID',
+    'set_as_superadmin'             =>'Установить как Superadmin',
+    'chose_theme_color_select'      =>'** Выберите цветовую схему',
+    'chose_theme_color'             =>'Цветовая схема',
+    'privileges_configuration'      =>'Настройка Ролей',
+    'privileges_module_list_no'     =>'Нет.',
+    'privileges_module_list_mod_names'=>'Название модуля',
+    'privileges_module_list_view'   =>'Просмотр',
+    'privileges_module_list_create' =>'Создание',
+    'privileges_module_list_read'   =>'Чтение',
+    'privileges_module_list_update' =>'Обновление',
+    'privileges_module_list_delete' =>'Удаление',
+
+    //datamodal
+    'datamodal_select'=>'Выбрать',
+    'datamodal_search_and_enter'=>'Найти и войти...',
+    'datamodal_enter_to_search'=>'Нажмите Enter для поиска',
+    'datamodal_browse_data'=>'Выбрать данные' ,
+    'datamodal_browse_file'=>'Выбрать файл' ,
+
+
+    //child
+    'table_detail'             =>'Детальная Таблица',
+    'your_file_size_is_too_big'=>'Ваш файл очень большой',
+    'save_changes'             =>'Сохранить изменения',
+    'please_complete_the_form' =>'Пожалуйста заполните форму !',
+    'this_field_is_required'   =>'Это поле обязательное',
+    'text_form'                => 'Форма',
+     "your_file_extension_is_not_allowed "=>"Тип фашего файла не поддерживается !",
+];
