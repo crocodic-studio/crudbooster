@@ -62,7 +62,7 @@ $name = str_slug($form['label'], '');
                                                     <label class="radio-inline">
                                                         <input type="radio" name="child-{{$col['name']}}"
                                                                class='{{ ($e==0 && $col['required'])?"required":""}} {{$name_column}}'
-                                                               value="{{$radio_value}}"> {{$radio_label}}
+                                                               value="{{$radio_value}}"{{ ($e==0 && $col['required'])?" checked":""}}> {{$radio_label}}
                                                     </label>
                                                     <?php endforeach;?>
                                                     <?php endif;?>

@@ -25,7 +25,7 @@
                 } else {
                     $val = $label = $d;
                 }
-                $checked = ($value && in_array($val, $value)) ? "checked" : "";
+                $checked = ($k==0 && $form['validation'])?"checked":"";
                 ?>
                 <div class=" {{$disabled}}">
                     <label class='radio-inline'>
