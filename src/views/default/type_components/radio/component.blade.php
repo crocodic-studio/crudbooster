@@ -25,7 +25,7 @@
                 } else {
                     $val = $label = $d;
                 }
-                $checked = ($k==0 && $form['validation'])?"checked":"";
+				$checked = ( ($value && in_array($val, $value)) || (CRUDBooster::isCreate() && ($k==0 && $form['validation'])) ) ? "checked" : "";
                 ?>
                 <div class=" {{$disabled}}">
                     <label class='radio-inline'>
