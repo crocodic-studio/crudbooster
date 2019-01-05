@@ -190,6 +190,7 @@ class CBController extends Controller
 
     public function cbView($template, $data)
     {
+        header("Content-Type: text/html");
         $this->cbLoader();
         echo view($template, $data);
     }
