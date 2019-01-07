@@ -14,6 +14,16 @@ use Validator;
 
 class CRUDBooster
 {
+    /**
+    	Comma-delimited data output from the child table
+    */
+    public static function echoSelect2Mult($values, $table, $id, $name) {
+        $values = explode(",", $values);
+        return implode(", ", DB::table($table)->whereIn($id, $values)->pluck($name)->toArray());
+        //implode(", ", DB::table("syudo_list_pokemons_types")->whereIn("id", explode(",", $row->type))->pluck("name")->toArray())
+        
+    }
+    
     public static function uploadBase64($value, $id = null)
     {
         if (! self::myId()) {
