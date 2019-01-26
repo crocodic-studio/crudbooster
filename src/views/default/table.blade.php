@@ -66,8 +66,9 @@
                 $name = $col['name'];
                 $field = $col['field_with'];
                 $width = ($col['width']) ?: "auto";
+				$style = ($col['style']) ?: "";
                 $mainpath = trim(CRUDBooster::mainpath(), '/').$build_query;
-                echo "<th width='$width'>";
+                echo "<th width='$width' $style>";
                 if (isset($sort_column[$field])) {
                     switch ($sort_column[$field]['sorting']) {
                         case 'asc':
@@ -138,8 +139,8 @@
                 <tr>
                     @endif
 
-                    @foreach($hc as $h)
-                        <td>{!! $h !!}</td>
+                    @foreach($hc as $j=>$h)
+                        <td {{ $columns[$j]['style'] or ''}}>{!! $h !!}</td>
                     @endforeach
                 </tr>
                 @endforeach
@@ -161,7 +162,8 @@
                 if ($col['visible'] === FALSE) continue;
                 $colname = $col['label'];
                 $width = ($col['width']) ?: "auto";
-                echo "<th width='$width'>$colname</th>";
+				$style = ($col['style']) ?: "";
+                echo "<th width='$width' $style>$colname</th>";
             }
             ?>
 
