@@ -13,6 +13,7 @@
       "datatable_where": "string where condition",
       "datatable_format": "sql concat alike. e.g : id,' - ',title",
       "datatable_exception": "string value exception",
+      "datatable_orig": "original datatable|original column[|original key]",
       "datatable_ajax": "true or false"
     }
   }
