@@ -160,7 +160,7 @@
                 </ol>
             @else
                 <h1>{{Session::get('appname')}}
-                    <small>{{ trans('crudbooster.text_dashboard') }}</small>
+                    <small> {{ trans('crudbooster.text_dashboard') }} </small>
                 </h1>
             @endif
         </section>
