@@ -1361,15 +1361,17 @@ class CBController extends Controller
                 for ($i = 0; $i <= $count_input_data; $i++) {
 
                     $column_data = [];
-                    $column_data[$childtablePK] = $lastId;
-                    $column_data[$fk] = $id;
                     foreach ($columns as $col) {
                         $colname = $col['name'];
-                        $column_data[$colname] = Request::get($name.'-'.$colname)[$i];
+                        $colvalue = Request::get($name.'-'.$colname)[$i];
+                        if(!empty($colvalue)) $column_data[$colname] = $colvalue;
                     }
-                    $child_array[] = $column_data;
-
-                    $lastId++;
+                    if(!empty($column_data)){
+                        $column_data[$childtablePK] = $lastId;
+                        $column_data[$fk] = $id;
+                        $child_array[] = $column_data;
+                        $lastId++;
+                    }
                 }
 
                 $child_array = array_reverse($child_array);
