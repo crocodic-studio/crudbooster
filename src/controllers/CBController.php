@@ -1358,6 +1358,7 @@ class CBController extends Controller
                 $lastId = CRUDBooster::newId($childtable);
                 $childtablePK = CB::pk($childtable);
 
+                if ($count_input_data>0)
                 for ($i = 0; $i <= $count_input_data; $i++) {
 
                     $column_data = [];
