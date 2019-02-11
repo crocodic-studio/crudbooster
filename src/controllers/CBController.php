@@ -1209,16 +1209,19 @@ class CBController extends Controller
                 $getColName = Request::get($name.'-'.$columns[0]['name']);
                 $count_input_data = ($getColName)?(count($getColName) - 1):0;
                 $child_array = [];
+                $fk = $ro['foreign_key'];
 
                 for ($i = 0; $i <= $count_input_data; $i++) {
-                    $fk = $ro['foreign_key'];
                     $column_data = [];
-                    $column_data[$fk] = $id;
                     foreach ($columns as $col) {
                         $colname = $col['name'];
-                        $column_data[$colname] = Request::get($name.'-'.$colname)[$i];
+                        $colvalue = Request::get($name.'-'.$colname)[$i];
+                        if(!empty($colvalue)) $column_data[$colname] = $colvalue;
                     }
-                    $child_array[] = $column_data;
+                    if(!empty($column_data)){
+                        $column_data[$fk] = $id;
+                        $child_array[] = $column_data;
+                    }
                 }
 
                 $childtable = CRUDBooster::parseSqlTable($ro['table'])['table'];
