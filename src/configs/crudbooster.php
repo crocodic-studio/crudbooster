@@ -36,6 +36,8 @@ return [
 
     'MAIN_DB_DATABASE' => env('DB_DATABASE'), //Very useful if you use config:cache
 
+    'MAIN_DB_SCHEMA' => env('DB_SCHEMA'),
+
     'MULTIPLE_DATABASE_MODULE' => [],
 
     /*
@@ -70,6 +72,6 @@ return [
 
     /*
     * NOTE :
-    * Make sure yo clear your config cache by using command : php artisan config:clear
+    * Make sure to clear your config cache by using command : php artisan config:clear
     */
 ];
