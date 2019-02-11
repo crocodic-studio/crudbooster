@@ -2,6 +2,7 @@
 
 error_reporting(E_ALL ^ E_NOTICE);
 
+
 use CB;
 use CRUDBooster;
 use Illuminate\Support\Facades\App;
