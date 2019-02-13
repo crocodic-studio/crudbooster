@@ -76,6 +76,20 @@
         <p class='login-box-msg'>{{trans("crudbooster.login_message")}}</p>
         <form autocomplete='off' action="{{ route('postLogin') }}" method="post">
             <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
+            
+            @if(!empty(config('services.google')))
+
+                <div style="margin-bottom:10px" class='row'>
+                    <div class='col-xs-12'>
+
+                        <a href='{{route("redirect", 'google')}}' class="btn btn-primary btn-block btn-flat"><i class='fa fa-google'></i>
+                            Google Login</a>
+
+                        <hr>
+                    </div>
+                </div>
+            @endif
+            
             <div class="form-group has-feedback">
                 <input autocomplete='off' type="text" class="form-control" name='email' required placeholder="Email"/>
                 <span class="glyphicon glyphicon-user form-control-feedback"></span>
