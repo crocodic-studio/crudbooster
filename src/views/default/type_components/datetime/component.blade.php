@@ -9,14 +9,19 @@
     <div class="{{$col_width?:'col-sm-10'}}">
         <div class="input-group">
 
-            <span class="input-group-addon"><a href='javascript:void(0)' onclick='$("#{{$name}}").data("daterangepicker").toggle()'><i
+            <span class="input-group-addon"><a href='javascript:void(0)' onclick=f_opendrp();><i
                             class='fa fa-calendar'></i></a></span>
 
             <input type='text' title="{{$form['label']}}" readonly
-                   {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control notfocus datetimepicker' name="{{$name}}" id="{{$name}}"
-                   value='{{$value}}'/>
+                   {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control notfocus _datetimepicker' name="{{$name}}" id="{{$name}}"
+                   value='{{$value}}' />
         </div>
         <div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
         <p class='help-block'>{{ @$form['help'] }}</p>
     </div>
 </div>
+<script>
+    function f_opendrp() {
+        $("#{{$name}}").data("daterangepicker").toggle();
+    }
+</script>
