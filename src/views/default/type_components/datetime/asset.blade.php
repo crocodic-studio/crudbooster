@@ -8,7 +8,7 @@
         var lang = '{{App::getLocale()}}';
         moment.locale(lang);
         $(function() {
-            $('._datetimepicker').daterangepicker({
+            $('.input_datetime').daterangepicker({
                 singleDatePicker: true,
                 timePicker: true,
                 timePickerIncrement: 1,

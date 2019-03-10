@@ -13,7 +13,7 @@
                             class='fa fa-calendar'></i></a></span>
 
             <input type='text' title="{{$form['label']}}" readonly
-                   {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control notfocus _datetimepicker' name="{{$name}}" id="{{$name}}"
+                   {{$required}} {{$readonly}} {!!$placeholder!!} {{$disabled}} class='form-control notfocus input_datetime' name="{{$name}}" id="{{$name}}"
                    value='{{$value}}' />
         </div>
         <div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
