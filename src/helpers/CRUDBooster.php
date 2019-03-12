@@ -1045,15 +1045,17 @@ class CRUDBooster
 
     public static function insertLog($description, $details = '')
     {
-        $a = [];
-        $a['created_at'] = date('Y-m-d H:i:s');
-        $a['ipaddress'] = $_SERVER['REMOTE_ADDR'];
-        $a['useragent'] = $_SERVER['HTTP_USER_AGENT'];
-        $a['url'] = Request::url();
-        $a['description'] = $description;
-        $a['details'] = $details;
-        $a['id_cms_users'] = self::myId();
-        DB::table('cms_logs')->insert($a);
+        if (CRUDBooster::getSetting('api_debug_mode')) {
+            $a = [];
+            $a['created_at'] = date('Y-m-d H:i:s');
+            $a['ipaddress'] = $_SERVER['REMOTE_ADDR'];
+            $a['useragent'] = $_SERVER['HTTP_USER_AGENT'];
+            $a['url'] = Request::url();
+            $a['description'] = $description;
+            $a['details'] = $details;
+            $a['id_cms_users'] = self::myId();
+            DB::table('cms_logs')->insert($a);
+        }
     }
 
     public static function referer()
