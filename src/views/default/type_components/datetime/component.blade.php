@@ -9,7 +9,7 @@
     <div class="{{$col_width?:'col-sm-10'}}">
         <div class="input-group">
 
-            <span class="input-group-addon"><a href='javascript:void(0)' onclick=f_opendrp();><i
+            <span class="input-group-addon"><a href='javascript:void(0)' onclick='$("#{{$name}}").data("daterangepicker").toggle();'><i
                             class='fa fa-calendar'></i></a></span>
 
             <input type='text' title="{{$form['label']}}" readonly
@@ -20,8 +20,3 @@
         <p class='help-block'>{{ @$form['help'] }}</p>
     </div>
 </div>
-<script>
-    function f_opendrp() {
-        $("#{{$name}}").data("daterangepicker").toggle();
-    }
-</script>
