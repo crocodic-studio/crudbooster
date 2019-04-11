@@ -35,6 +35,18 @@
             </div>
         </div>
 
+        <div class="form-group">
+            <label>Column number to sort</label>
+            <input class="form-control" name='config[sort]' type='text' value='{{@$config->sort}}'/>
+        </div>
+        <div class="form-group">
+            <label>Sort Direction</label>
+            <select class='form-control' name='config[sort_dir]'>
+                <option value='asc' {{(@$config->sort_dir == 'asc')?"selected":""}}>ASC</option>
+                <option value='desc' {{(@$config->sort_dir == 'desc')?"selected":""}}>DESC</option>
+            </select>
+        </div>
+
     </form>
 @elseif($command=='showFunction')
     <?php
@@ -71,6 +83,9 @@
         </table>
         <script type="text/javascript">
             $('table.table').DataTable({
+                @if($config->sort!="")
+                    order: [[{{@$config->sort}}, "{{@$config->sort_dir}}" ]],
+                @endif
                 dom: "<'row'<'col-sm-6'l><'col-sm-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-5'i><'col-sm-7'p>>",
                 lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
             });
