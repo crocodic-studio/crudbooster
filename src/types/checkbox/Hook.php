@@ -6,7 +6,7 @@
  * Time: 5:43 PM
  */
 
-namespace crocodicstudio\crudbooster\types\money;
+namespace crocodicstudio\crudbooster\types\checkbox;
 
 use crocodicstudio\crudbooster\models\ColumnModel;
 use crocodicstudio\crudbooster\types\TypesHook;
@@ -18,7 +18,7 @@ class Hook extends TypesHook
      * @param ColumnModel $column
      * @return mixed|string
      */
-    public function assignment($value, $column)
+    public function assignment($value, ColumnModel $column)
     {
         return implode(";", request( $column->getName() ));
     }

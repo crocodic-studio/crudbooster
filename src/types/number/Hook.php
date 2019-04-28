@@ -6,7 +6,7 @@
  * Time: 5:43 PM
  */
 
-namespace crocodicstudio\crudbooster\types\text;
+namespace crocodicstudio\crudbooster\types\number;
 
 use crocodicstudio\crudbooster\types\TypesHook;
 
