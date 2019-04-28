@@ -2,6 +2,7 @@
 
 namespace crocodicstudio\crudbooster\middlewares;
 
+use App\Http\Controllers\CBHook;
 use Closure;
 use CRUDBooster;
 
@@ -16,19 +17,17 @@ class CBBackend
      */
     public function handle($request, Closure $next)
     {
-        $admin_path = config('crudbooster.ADMIN_PATH') ?: 'admin';
-
-        if (CRUDBooster::myId() == '') {
-            $url = url($admin_path.'/login');
-
-            return redirect($url)->with('message', trans('crudbooster.not_logged_in'));
-        }
-        if (CRUDBooster::isLocked()) {
-            $url = url($admin_path.'/lock-screen');
-
-            return redirect($url);
+        if(auth()->guest()) {
+            return cb()->redirect(getAdminLoginURL(),trans('crudbooster.not_logged_in'),'warning');
         }
 
-        return $next($request);
+        CBHook::beforeBackendMiddleware($request);
+
+        $response = $next($request);
+
+        CBHook::afterBackendMiddleware($request, $response);
+
+        return $response;
+
     }
 }

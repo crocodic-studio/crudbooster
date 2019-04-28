@@ -2,41 +2,53 @@
 
 return [
 
+    /*
+     * You can customize the main path admin url
+     */
     'ADMIN_PATH' => 'admin',
 
     /*
-        To Allowed Specific User Agent Only
-        E.g : ['Android','OkHttp','Mozilla','Mac']
-    */
-    'API_USER_AGENT_ALLOWED' => [],
+     * You can customize the admin login url
+     */
+    'ADMIN_LOGIN_PATH'=> 'login',
 
-    'USER_TABLE' => 'cms_users',
+    /*
+     * To customize the dashboard controller, you can set the value bellow
+     */
+    'ADMIN_DASHBOARD_CONTROLLER'=> null,
 
-    'IMAGE_FIELDS_CANDIDATE' => 'image,picture,photo,photos,foto,gambar,thumbnail',
+    /*
+     * Some setting use this dummy photo setting, you can edit the dummy photo url that you want
+     */
+    'DUMMY_PHOTO' => 'cb_asset/avatar.jpg',
 
-    'PASSWORD_FIELDS_CANDIDATE' => 'password,pass,pwd,passwrd,sandi,pin',
+    /*
+     * The default login form use this bellow view path, but you can customize the view set to your own
+     */
+    'LOGIN_FORM_VIEW'    => 'crudbooster::login',
 
-    'DATE_FIELDS_CANDIDATE' => 'date,tanggal,tgl,created_at,updated_at,deleted_at',
+    /*
+     * For security reason we have limit the upload file formats bellow
+     */
+    'UPLOAD_FILE_EXTENSION_ALLOWED' => ['jpg','jpeg','png','gif','pdf','xls','xlsx','doc','docx','txt','zip','rar','rtf'],
 
-    'EMAIL_FIELDS_CANDIDATE' => 'email,mail,email_address',
+    'UPLOAD_IMAGE_EXTENSION_ALLOWED' => ['jpg','jpeg','png','gif'],
 
-    'PHONE_FIELDS_CANDIDATE' => 'phone,phonenumber,phone_number,telp,hp,no_hp,no_telp',
+    /*
+     * Google FCM Server Key is used to send a notification via FireBase cloud message
+     * If you want to use FCM Helper you should set this setting
+     */
+    'GOOGLE_FCM_SERVER_KEY'=> null,
 
-    'NAME_FIELDS_CANDIDATE' => 'name,nama,person_name,person,fullname,full_name,nickname,nick,nick_name,title,judul,content',
 
-    'URL_FIELDS_CANDIDATE' => 'url,link',
+    /*
+     * Credential For Developer
+     */
+    'DEV_USERNAME'  => 'developer',
 
-    'UPLOAD_TYPES' => 'jpg,png,jpeg,gif,bmp,pdf,xls,xlsx,doc,docx,txt,zip,rar,7z',
+    'DEV_PASSWORD'  => 'developer',
 
-    'DEFAULT_THUMBNAIL_WIDTH' => 0,
-
-    'DEFEAULT_UPLOAD_MAX_SIZE' => 1000, //in KB
-
-    'IMAGE_EXTENSIONS' => 'jpg,png,jpeg,gif,bmp',
-
-    'MAIN_DB_DATABASE' => env('DB_DATABASE'), //Very useful if you use config:cache
-
-    'MULTIPLE_DATABASE_MODULE' => [],
+    'DEV_PATH'      => 'developer',
 
     /*
     * Layout for the Admin LTE backend theme

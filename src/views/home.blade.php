@@ -1,5 +1,4 @@
-@extends('crudbooster::admin_template')
-
+@extends('crudbooster::layouts.layout')
 @section('content')
 
 
