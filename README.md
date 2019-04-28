@@ -1,1 +1,2 @@
-<h2>CRUDBOOSTER</h2>
+<h2>CRUDBOOSTER DEVELOPMENT</h2>
+Do not use this master repository for production
