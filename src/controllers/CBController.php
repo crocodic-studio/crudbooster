@@ -1,169 +1,306 @@
-<?php
+<?php namespace crocodicstudio\crudbooster\controllers;
 
-namespace Crocodicstudio\Crudbooster\Controllers;
-
-use Crocodicstudio\Crudbooster\CBCoreModule\Hooks;
-use Crocodicstudio\Crudbooster\CBCoreModule\Index;
-use Crocodicstudio\Crudbooster\Controllers\CBController\CbFormLoader;
-use Crocodicstudio\Crudbooster\Controllers\CBController\CbIndexLoader;
-use Crocodicstudio\Crudbooster\Controllers\CBController\CbLayoutLoader;
-use Crocodicstudio\Crudbooster\Controllers\CBController\Deleter;
-use Crocodicstudio\Crudbooster\Controllers\CBController\ExportData;
-use Crocodicstudio\Crudbooster\Controllers\CBController\FormSubmitHandlers;
-use Crocodicstudio\Crudbooster\Controllers\CBController\ImportData;
-use Crocodicstudio\Crudbooster\Controllers\CBController\IndexAjax;
-use Crocodicstudio\Crudbooster\Helpers\DbInspector;
+use crocodicstudio\crudbooster\controllers\scaffolding\traits\Join;
+use crocodicstudio\crudbooster\exceptions\CBValidationException;
+use crocodicstudio\crudbooster\models\ColumnModel;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
-use Crocodicstudio\Crudbooster\Helpers\CRUDBooster;
-use Schema;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\PDF;
+use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Schema;
+use crocodicstudio\crudbooster\controllers\scaffolding\traits\ColumnsRegister;
+use crocodicstudio\crudbooster\controllers\traits\ControllerSetting;
 
-abstract class CBController extends Controller
+class CBController extends Controller
 {
-    abstract public function cbInit();
+    use ColumnsRegister, Join, ControllerSetting;
 
-    use Hooks;
-    use Deleter, CbFormLoader, CbIndexLoader, CbLayoutLoader, IndexAjax, ImportData, ExportData, FormSubmitHandlers;
+    private $assignmentData;
 
-    public $table = '';
-
-    public $titleField = '';
-
-    public $primaryKey = '';
-
-    public $form = [];
-
-    public $data = [];
-
-    public $parent_field = null;
-
-    public function cbView($template, $data)
+    public function __construct()
     {
-        $this->cbLayoutLoader();
+        $this->cbInit();
+        $this->data['columns'] = columnSingleton()->getColumns();
         view()->share($this->data);
-        return view($template, $data);
     }
 
-    public function cbLoader()
+    public function __call($method, $parameters)
     {
-        $this->genericLoader();
-        $this->cbLayoutLoader();
-        $this->cbFormLoader();
-        $this->cbIndexLoader();
-        $this->checkHideForm();
+        if($method == "getData") {
+            $key = $parameters[0];
+            return $this->data[$key];
+        }else{
+            return null;
+        }
+    }
 
-        view()->share($this->data);
+    private function repository()
+    {
+        $joins = columnSingleton()->getJoin();
+        $columns = columnSingleton()->getColumns();
+
+        $query = DB::table($this->data['table']);
+
+
+        $query->addSelect($this->data['table'].'.'.cb()->pk($this->data['table']).' as primary_key');
+
+        if(isset($this->data['hook_query_index']) && is_callable($this->data['hook_query_index']))
+        {
+            $query = call_user_func($this->data['hook_query_index'], $query);
+        }
+
+        $softDelete = isset($this->data['disable_soft_delete'])?$this->data['disable_soft_delete']:true;
+        if($softDelete === true && Schema::hasColumn($this->data['table'],'deleted_at')) {
+            $query->whereNull($this->data['table'].'.deleted_at');
+        }
+
+
+        if(isset($joins)) {
+            foreach($joins as $join)
+            {
+                $query->join($join['target_table'],
+                        $join['target_table_primary'],
+                    $join['operator'],
+                    $join['source_table_foreign'],
+                    $join['type']);
+            }
+        }
+
+        if(request()->has('q'))
+        {
+            if(isset($this->data['hook_search_query'])) {
+                $query = call_user_func($this->data['hook_search_query'], $query);
+            }else{
+                $query->where(function ($where) use ($columns) {
+                    /**
+                     * @var $where Builder
+                     */
+                    foreach($columns as $column)
+                    {
+                        $where->orWhere($column['name'], 'like', '%'.request('q').'%');
+                    }
+                });
+            }
+        }
+
+        if(isset($this->data['hook_query_index']) && is_callable($this->data['hook_query_index'])) {
+            $query = call_user_func($this->data['hook_query_index'], $query);
+        }
+
+
+        if(request()->has(['order_by','order_sort']))
+        {
+            if(in_array(request('order_by'),columnSingleton()->getColumnNameOnly())) {
+                $query->orderBy(request('order_by'), request('order_sort'));
+            }
+        }else{
+            $query->orderBy($this->data['order_by'][0], $this->data['order_by'][1]);
+        }
+
+        return $query;
     }
 
     public function getIndex()
     {
-        $this->genericLoader();
-        $this->cbIndexLoader();
+        if(!module()->canBrowse()) return cb()->redirect(cb()->getAdminUrl(),"You do not have access to this area");
 
-        $data = app(Index::class)->index($this);     
-
-        if($this->indexReturn) return $data;
-
-        return $this->cbView('crudbooster::index.index', $data);
+        $query = $this->repository();
+        $result = $query->paginate(20);
+        $data['result'] = $result;
+        return view("crudbooster::module.index.index", $data);
     }
 
-    public function getUpdateSingle()
-    {
-        $table = request('table');
-        $column = request('column');
-        $value = request('value');
-        $id = request('id');
-        DB::table($table)->where(DbInspector::findPk($table), $id)->update([$column => $value]);
 
-        backWithMsg(cbTrans('alert_update_data_success'));
+    /**
+     * @throws CBValidationException
+     */
+    private function validation()
+    {
+        $validator = Validator::make(request()->all(), $this->data['validation'], $this->data['validation_messages']);
+        if ($validator->fails()) {
+            $message = $validator->messages();
+            $message_all = $message->all();
+            throw new CBValidationException(implode(', ',$message_all));
+        }
+    }
+
+    private function assignment()
+    {
+        foreach (columnSingleton()->getColumns() as $index=>$column) {
+            /** @var ColumnModel $column */
+            $value = request($column->getName());
+
+            if (! $column->getName()) {
+                continue;
+            }
+
+            $value = getTypeHook($column->getType())->assignment($value, $column);
+            columnSingleton()->setColumn($index, ['value'=>$value]);
+        }
     }
 
     public function getAdd()
     {
-        $this->genericLoader();
-        $page_title = cbTrans('add_data_page_title', ['module' => CRUDBooster::getCurrentModule()->name]);
-        $command = 'add';
-        return $this->cbForm(compact('page_title', 'command'));
+        if(!module()->canCreate()) return cb()->redirect(cb()->getAdminUrl(),"You do not have access to this area");
+
+        $data = [];
+        $data['page_title'] = $this->data['page_title'].' : Add';
+        $data['action_url'] = module()->addSaveURL();
+        $data['form'] = view('crudbooster::module.form_body', $this->data)->render();
+        return view('crudbooster::module.form.form');
     }
 
-    /**
-     * @param string $tableName
-     * @return mixed
-     */
-    public function table($tableName = null)
+    public function postAddSave()
     {
-        $tableName = $tableName ?: $this->table;
-        return \DB::table($tableName);
+        if(!module()->canCreate()) return cb()->redirect(cb()->getAdminUrl(),"You do not have access to this area");
+
+        try {
+            $this->validation();
+            $this->assignment();
+            $data = columnSingleton()->getAssignmentData();
+
+            if(Schema::hasColumn($this->data['table'], 'created_at')) {
+                $data['created_at'] = date('Y-m-d H:i:s');
+            }
+
+            $id = DB::table($this->data['table'])->insertGetId($data);
+
+            if(isset($this->data['hook_after_insert']) && is_callable($this->data['hook_after_insert'])) {
+                call_user_func($this->data['hook_after_insert'], $id);
+            }
+
+        } catch (CBValidationException $e) {
+            Log::debug($e);
+            return cb()->redirectBack($e->getMessage(),'info');
+        } catch (\Exception $e) {
+            Log::error($e);
+            return cb()->redirectBack($e->getMessage(),'warning');
+        }
+
+        if (request('submit') == trans('crudbooster.button_save_more')) {
+            return cb()->redirect(module()->addURL(), trans("crudbooster.alert_add_data_success"), 'success');
+        } else {
+            return cb()->redirect(module()->url(), trans("crudbooster.alert_add_data_success"), 'success');
+        }
     }
 
     public function getEdit($id)
     {
-        $this->genericLoader();
-        $row = $this->findFirst($id);
+        if(!module()->canUpdate()) return cb()->redirect(cb()->getAdminUrl(),"You do not have access to this area");
 
-        $page_title = cbTrans("edit_data_page_title", ['module' => CRUDBooster::getCurrentModule()->name, 'name' => $row->{$this->titleField}]);
-        $command = 'edit';
-        session()->put('current_row_id', $id);
-
-        return $this->cbForm(compact('id', 'row', 'page_title', 'command'));
+        $data = [];
+        $data['row'] = $this->repository()->where(getPrimaryKey($this->data['table']), $id)->first();
+        $data['page_title'] = $this->data['page_title'].' : Edit';
+        $data['action_url'] = module()->editSaveURL($id);
+        $data['form'] = view('crudbooster::module.form_body', $this->data)->render();
+        return view('crudbooster::module.form.form', $data);
     }
 
-    /**
-     * @param $id
-     * @return mixed
-     */
-    public function findRow($id)
+    public function postEditSave($id)
     {
-        return $this->table()->where($this->primaryKey, $id);
+        if(!module()->canUpdate()) return cb()->redirect(cb()->getAdminUrl(),"You do not have access to this area");
+
+        try {
+            $this->validation();
+            $this->assignment();
+            $data = columnSingleton()->getAssignmentData();
+            if(Schema::hasColumn($this->data['table'], 'updated_at')) {
+                $data['updated_at'] = date('Y-m-d H:i:s');
+            }
+
+            if(isset($this->data['hook_before_update']) && is_callable($this->data['hook_before_update'])) {
+                call_user_func($this->data['hook_before_update'], $id);
+            }
+
+            DB::table($this->data['table'])
+                ->where(cb()->pk($this->data['table']), $id)
+                ->update($data);
+
+            if(isset($this->data['hook_after_update']) && is_callable($this->data['hook_after_update'])) {
+                call_user_func($this->data['hook_after_update'], $id);
+            }
+
+        } catch (CBValidationException $e) {
+            Log::debug($e);
+            return cb()->redirectBack($e->getMessage(),'info');
+        } catch (\Exception $e) {
+            Log::error($e);
+            return cb()->redirectBack($e->getMessage(),'warning');
+        }
+
+
+        if (request('submit') == trans('crudbooster.button_save_more')) {
+            return cb()->redirectBack(trans("crudbooster.alert_update_data_success"), 'success');
+        } else {
+            return cb()->redirect(module()->url(), trans("crudbooster.alert_update_data_success"), 'success');
+        }
+    }
+
+    public function getDelete($id)
+    {
+        if(!module()->canDelete()) return cb()->redirect(cb()->getAdminUrl(),"You do not have access to this area");
+
+        if(isset($this->data['hook_before_delete']) && is_callable($this->data['hook_before_delete'])) {
+            call_user_func($this->data['hook_before_delete'], $id);
+        }
+
+        $softDelete = isset($this->data['disable_soft_delete'])?$this->data['disable_soft_delete']:true;
+
+        if ($softDelete === true && Schema::hasColumn($this->data['table'],'deleted_at')) {
+            DB::table($this->data['table'])
+                ->where(getPrimaryKey($this->data['table']), $id)
+                ->update(['deleted_at' => date('Y-m-d H:i:s')]);
+        } else {
+            DB::table($this->data['table'])
+                ->where(getPrimaryKey($this->data['table']), $id)
+                ->delete();
+        }
+
+        if(isset($this->data['hook_after_delete']) && is_callable($this->data['hook_after_delete'])) {
+            call_user_func($this->data['hook_after_delete'], $id);
+        }
+
+        return cb()->redirectBack(trans("crudbooster.alert_delete_data_success"), 'success');
     }
 
     public function getDetail($id)
     {
-        $this->genericLoader();
-        $this->cbFormLoader();
-        $row = $this->findFirst($id);
+        if(!module()->canRead()) return cb()->redirect(cb()->getAdminUrl(),"You do not have access to this area");
 
-        $page_title = cbTrans('detail_data_page_title', ['module' => CRUDBooster::getCurrentModule()->name, 'name' => $row->{$this->titleField}]);
-
-        session()->put('current_row_id', $id);
-        return $this->cbView('crudbooster::form.details', compact('row', 'page_title', 'id'));
+        $data = [];
+        $data['row'] = $this->repository()->where(getPrimaryKey($this->data['table']), $id)->first();
+        $data['page_title'] = $this->data['page_title'].' : Detail';
+        $data['form'] = view('crudbooster::module.form_detail', $this->data)->render();
+        return view('crudbooster::default.form', $data);
     }
 
-    public function actionButtonSelected($id_selected, $button_name)
+    public function postUploadFile()
     {
-    }
+        if(auth()->guest()) return redirect(getAdminLoginURL());
 
-    /**
-     * @param $data
-     * @return mixed
-     */
-    private function cbForm($data)
-    {
-        $this->cbFormLoader();
-        return $this->cbView('crudbooster::form.form', $data);
-    }
+        $file = null;
+        try {
 
-    protected function genericLoader()
-    {
-        $this->cbInit();
-        $this->primaryKey = $this->primaryKey?: DbInspector::findPk($this->table);
-        $this->data_inputan = $this->form;
-        $this->data['pk'] = $this->primaryKey;
-        $this->data['hide_form'] = $this->hide_form;
-        $this->data['table'] = $this->table;
-        $this->data['titleField'] = $this->titleField;
-        $this->data['appname'] = cbGetsetting('appname');
-        $this->data['indexButton'] = $this->indexButton;
+            cb()->validation([
+                'userfile' => 'required|mimes:' . config('crudbooster.UPLOAD_TYPES')
+            ]);
 
-        $this->data['sub_module'] = $this->sub_module;
-        $this->data['parent_field'] = (request('parent_field')) ?: $this->parent_field;
-    }
+            $file = cb()->uploadFile('userfile', true);
 
-    /**
-     * @param $id
-     * @return mixed
-     */
-    private function findFirst($id)
-    {
-        return $this->findRow($id)->first();
+        } catch (CBValidationException $e) {
+            return response()->json(['status'=>false,'message'=>$e->getMessage()]);
+        } catch (\Exception $e) {
+            return response()->json(['status'=>false,'message'=>$e->getMessage()]);
+        }
+
+        return response()->json([
+            'status'=>true,
+            'filename'=>basename($file),
+            'full_url'=>asset($file),
+            'url'=>$file
+        ]);
     }
 }

@@ -1,9 +1,0 @@
-- Operating system (name, version and architecture)
-- Web server (name, version and architecture)
-- Browser (name, version and architecture)
-- CRUDBooster version
-- Laravel version
-- What is the problem?
-- How should it happen? What was the expected behavior?
-- Tell how to reproduce the problem step by step
-- If possible, take screenshots or send snippets of code

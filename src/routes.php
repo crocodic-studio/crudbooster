@@ -1,47 +1,65 @@
 <?php
 
-use Crocodicstudio\Crudbooster\CBCoreModule\Facades\CbRouter;
+// Developer Backend Middleware
+Route::group(['middleware' => ['web',\crocodicstudio\crudbooster\middlewares\CBDeveloper::class],
+    'prefix'=>cbConfig('DEV_PATH'),
+    'namespace' => 'crocodicstudio\crudbooster\controllers'], function () {
+    cb()->routeController("modules", "DeveloperModulesController");
+    cb()->routeController("menus", "DeveloperMenusController");
+    cb()->routeController("roles","DeveloperRolesController");
+});
 
-$namespace = cbControllersNS();
-/* ROUTER FOR UPLOADS */
-Route::group(['middleware' => ['web'], 'namespace' => $namespace], function () {
+// Developer Auth Middleware
+Route::group(['middleware' => ['web'],
+    'prefix'=>cbConfig('DEV_PATH'),
+    'namespace' => 'crocodicstudio\crudbooster\controllers'], function () {
+    Route::post("login","AdminAuthController@postLoginDeveloper");
+    Route::get("login","AdminAuthController@getLoginDeveloper");
+    Route::get("logout","AdminAuthController@getLogoutDeveloper");
+});
+
+// Routing without any middleware
+Route::group(['middleware' => ['web'], 'namespace' => '\crocodicstudio\crudbooster\controllers'], function () {
     Route::get('uploads/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'FileController@getPreview', 'as' => 'fileControllerPreview']);
 });
 
-Route::group(['middleware' => ['web',\Crocodicstudio\Crudbooster\CBCoreModule\middlewares\CBBackend::class]], function () {
-    Route::get(cbAdminPath(), '\Crocodicstudio\Crudbooster\Controllers\DashboardController@index')->name('CbDashboard');
+// Routing without any middleware with admin prefix
+Route::group(['middleware' => ['web'], 'prefix' => cbConfig('ADMIN_PATH'), 'namespace' => 'crocodicstudio\crudbooster\controllers'], function () {
+    Route::get('logout', ['uses' => 'AdminAuthController@getLogout', 'as' => 'getLogout']);
+    Route::post('login', ['uses' => 'AdminAuthController@postLogin', 'as' => 'postLogin']);
+    Route::get('login', ['uses' => 'AdminAuthController@getLogin', 'as' => 'getLogin']);
 });
 
-// ROUTER FOR OWN CONTROLLER FROM CB
+// Routing package controllers
 Route::group([
-    'middleware' => ['web', \Crocodicstudio\Crudbooster\CBCoreModule\middlewares\CBBackend::class],
-    'prefix' => cbAdminPath(),
-    'namespace' => ctrlNamespace(),
+    'middleware' => ['web', \crocodicstudio\crudbooster\middlewares\CBBackend::class],
+    'prefix' => cbConfig('ADMIN_PATH'),
+    'namespace' => 'crocodicstudio\crudbooster\controllers',
 ], function () {
-    try {
-        $args = request()->server('argv');
-        if ($args && $args !== ['artisan', 'route:list']) {
-            return ;
-        }
+    cb()->routeController('profile', 'AdminProfileController');
+});
 
-        $modules = DB::table('cms_modules')->where('path', '!=', '')->where('controller', '!=', '')->where('is_protected', 0)->get();
-        foreach ($modules as $module) {
-            CbRouter::routeController($module->path, $module->controller);
+// Auto Routing for App\Http\Controllers
+Route::group([
+    'middleware' => ['web', \crocodicstudio\crudbooster\middlewares\CBBackend::class],
+    'prefix' => cbConfig('ADMIN_PATH'),
+    'namespace' => 'App\Http\Controllers',
+], function () {
+
+    if (Request::is(cbConfig('ADMIN_PATH'))) {
+        if($dashboard = cbConfig("ADMIN_DASHBOARD_CONTROLLER")) {
+            Route::get("/", $dashboard);
+        }else{
+            Route::get("/", "crocodicstudio\crudbooster\controllers\AdminDashboardController@getIndex");
         }
-    } catch (Exception $e) {
-       dd($e);
+    }
+
+    $controllers = glob(app_path('Http/Controllers/*.php'));
+    foreach($controllers as $controller) {
+        $controllerName = basename($controller);
+        $controllerClass = new ('\App\Http\Controllers\\'.$controllerName)();
+        if(method_exists($controllerClass, 'cbInit')) {
+            cb()->routeController($controllerClass->getData('permalink'), $controllerName);
+        }
     }
 });
-
-/* ROUTER FOR BACKEND CRUDBOOSTER */
-Route::group([
-    'middleware' => ['web', \Crocodicstudio\Crudbooster\CBCoreModule\middlewares\CBSuperadmin::class],
-    'prefix' => cbAdminPath(),
-    'namespace' => $namespace,
-], function () {    
-    Route::post('{module}/do-upload-import-data', 'FileController@doUploadImportData')->name('FileControllerDoUploadImportData');
-    Route::post('{module}/upload-summernote', 'FileController@uploadSummernote')->name('FileControllerUploadSummernote');
-    Route::post('{module}/upload-file', 'FileController@uploadFile')->name('FileControllerUploadFile');
-    Route::post('{module}/done-import', 'FileController@doneImport')->name('FileControllerDoneImport');
-});
-

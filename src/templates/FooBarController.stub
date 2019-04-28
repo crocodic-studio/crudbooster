@@ -1,0 +1,16 @@
+<?php namespace App\Http\Controllers;
+
+use crocodicstudio\crudbooster\controllers\CBController;
+
+class FooBarController extends CBController {
+
+
+    public function cbInit()
+    {
+        $this->setTable({table});
+        $this->setPermalink({permalink});
+
+        {scaffolding}
+
+    }
+}

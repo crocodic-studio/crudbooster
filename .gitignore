@@ -1,12 +1,5 @@
-/node_modules
-/public/storage
+.idea
 /vendor
-/.idea
-Homestead.json
-Homestead.yaml
-.env
-*.ini
-/220167236106441921631927013956130477515463548.ico
-*.php_cs.cache
-/composer.lock
-.phpstorm.meta.php
+*.iml
+out
+gen
