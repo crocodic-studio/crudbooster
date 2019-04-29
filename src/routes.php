@@ -57,7 +57,8 @@ Route::group([
     $controllers = glob(app_path('Http/Controllers/*.php'));
     foreach($controllers as $controller) {
         $controllerName = basename($controller);
-        $controllerClass = new ('\App\Http\Controllers\\'.$controllerName)();
+        $className = '\App\Http\Controllers\\'.$controllerName;
+        $controllerClass = new $className();
         if(method_exists($controllerClass, 'cbInit')) {
             cb()->routeController($controllerClass->getData('permalink'), $controllerName);
         }
