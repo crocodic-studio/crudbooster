@@ -54,7 +54,7 @@ Route::group([
         }
     }
 
-    $controllers = glob(app_path('Http/Controllers/*.php'));
+    $controllers = glob(app_path('Http/Controllers/Admin*Controller.php'));
     foreach($controllers as $controller) {
         $controllerName = basename($controller);
         $className = '\App\Http\Controllers\\'.$controllerName;
