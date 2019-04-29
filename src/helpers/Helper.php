@@ -31,7 +31,8 @@ if(!function_exists('cbHook'))
      */
     function cbHook()
     {
-        return new \App\Http\CBHook();
+        $className = "\App\Http\CBHook";
+        return new $className();
     }
 }
 
@@ -42,7 +43,8 @@ if(!function_exists('getTypeHook'))
      * @return crocodicstudio\crudbooster\types\TypesHookInterface
      */
     function getTypeHook($type) {
-        $typeClass = new ('\crocodicstudio\crudbooster\types\\'.$type.'\Hook')();
+        $className = '\crocodicstudio\crudbooster\types\\'.$type.'\Hook';
+        $typeClass = new $className();
         return $typeClass;
     }
 }
