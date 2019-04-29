@@ -63,7 +63,6 @@ class CRUDBoosterServiceProvider extends ServiceProvider
             ]);
         }
 
-
         // Register additional library
         $this->app->register('Intervention\Image\ImageServiceProvider');
         $loader = AliasLoader::getInstance();

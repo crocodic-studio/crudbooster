@@ -2,7 +2,7 @@
 
 namespace crocodicstudio\crudbooster\middlewares;
 
-use App\Http\Controllers\CBHook;
+use App\Http\CBHook;
 use Closure;
 use CRUDBooster;
 

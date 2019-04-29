@@ -31,7 +31,7 @@ if(!function_exists('cbHook'))
      */
     function cbHook()
     {
-        return new ('\App\Http\CRUDBooster\CBHook')();
+        return new \App\Http\CBHook();
     }
 }
 
