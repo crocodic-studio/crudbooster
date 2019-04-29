@@ -8,16 +8,16 @@
     <meta name='robots' content='noindex,nofollow'/>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <!-- Bootstrap 3.3.2 -->
-    <link href="{{ asset("vendor/crudbooster/assets/adminlte/bootstrap/css/bootstrap.min.css") }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ cbAsset("adminlte/bootstrap/css/bootstrap.min.css") }}" rel="stylesheet" type="text/css"/>
     <!-- Font Awesome Icons -->
-    <link href="{{asset("vendor/crudbooster/assets/adminlte/font-awesome/css/font-awesome.min.css")}}" rel="stylesheet" type="text/css"/>
+    <link href="{{cbAsset("adminlte/font-awesome/css/font-awesome.min.css")}}" rel="stylesheet" type="text/css"/>
     <!-- Ionicons -->
     <link href="{{asset("vendor/crudbooster/ionic/css/ionicons.min.css")}}" rel="stylesheet" type="text/css"/>
     <!-- Theme style -->
-    <link href="{{ asset("vendor/crudbooster/assets/adminlte/dist/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset("vendor/crudbooster/assets/adminlte/dist/css/skins/_all-skins.min.css")}}" rel="stylesheet" type="text/css"/>
+    <link href="{{ cbAsset("adminlte/dist/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css"/>
+    <link href="{{ cbAsset("adminlte/dist/css/skins/_all-skins.min.css")}}" rel="stylesheet" type="text/css"/>
 
-    <link rel='stylesheet' href='{{asset("vendor/crudbooster/assets/css/main.css")}}'/>
+    <link rel='stylesheet' href='{{cbAsset("css/main.css")}}'/>
 
     @stack('head')
 </head>
@@ -32,13 +32,10 @@
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
-
         <section class="content-header">
-
             <h1>
                 {{ $pageTitle }}
             </h1>
-
 
             <ol class="breadcrumb">
                 <li><a href="{{ getAdminURL() }}"><i class="fa fa-dashboard"></i> {{ __('crudbooster.home') }}</a></li>

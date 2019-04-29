@@ -32,8 +32,8 @@
     <link rel='stylesheet' href='{{asset("vendor/crudbooster/assets/css/main.css")}}'/>
     <style type="text/css">
         .login-page {
-            background: {{ getSetting("login_background_color")?:'#dddddd'}} url('{{ getSetting("login_background_image")?asset(getSetting("login_background_image")):cbAsset('bg_blur3.jpg') }}');
-            color: {{ CRUDBooster::getSetting("login_font_color")?:'#ffffff' }}  !important;
+            background: #dddddd;
+            color: #111111  !important;
             background-repeat: no-repeat;
             background-position: center;
             background-size: cover;
@@ -46,7 +46,7 @@
         .login-box-body {
             box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.8);
             background: rgba(255, 255, 255, 0.9);
-            color: {{ CRUDBooster::getSetting("login_font_color")?:'#666666' }}  !important;
+            color: #666666 !important;
         }
 
         html, body {
