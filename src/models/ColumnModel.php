@@ -31,7 +31,24 @@ class ColumnModel
     private $validation;
     private $validation_messages;
     private $value;
+    private $default_value;
     private $style;
+
+    /**
+     * @return mixed
+     */
+    public function getDefaultValue()
+    {
+        return $this->default_value;
+    }
+
+    /**
+     * @param mixed $default_value
+     */
+    public function setDefaultValue($default_value): void
+    {
+        $this->default_value = $default_value;
+    }
 
     /**
      * @return mixed

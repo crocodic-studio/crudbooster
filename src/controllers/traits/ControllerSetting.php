@@ -17,7 +17,8 @@ use crocodicstudio\crudbooster\models\IndexActionButtonModel;
 trait ControllerSetting
 {
 
-    private $data;
+    private $data = [];
+
 
     public function setPermalink($path)
     {
@@ -239,6 +240,17 @@ trait ControllerSetting
         return $this;
     }
 
+
+    /**
+     * @param mixed $icon
+     * @return ControllerSetting
+     */
+    public function setPageIcon($icon = "fa fa-table")
+    {
+        $this->data['page_icon'] = $icon;
+        return $this;
+    }
+
     /**
      * @param mixed $table
      * @return ControllerSetting
@@ -269,15 +281,6 @@ trait ControllerSetting
         return $this;
     }
 
-    /**
-     * @param bool $button_export
-     * @return ControllerSetting
-     */
-    public function setButtonExport($button_export)
-    {
-        $this->data['button_export'] = $button_export;
-        return $this;
-    }
 
     /**
      * @param bool $button_add_more

@@ -1,6 +1,9 @@
 @extends("crudbooster::dev_layouts.layout")
 @section("content")
 
+    <div class="callout callout-info">
+        <strong>Tips</strong> You can find the role data by using <code>cb()->getRoleByName("Admin")</code> helper.
+    </div>
 
     <p>
         <a href="{{ route('DeveloperRolesControllerGetIndex') }}"><i class="fa fa-arrow-left"></i> Back To List</a>
@@ -15,7 +18,7 @@
         <div class="box-body">
             <div class="form-group">
                 <label for="">Name</label>
-                <input required type="text" placeholder="E.g : Book Manager" name="name" class="form-control">
+                <input required type="text" placeholder="E.g : Admin" name="name" class="form-control">
             </div>
             <div class="form-group">
                 <table class="table table-striped table-bordered">
@@ -31,6 +34,9 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <?php
+                            $no = 0;
+                        ?>
                         @foreach($menus as $menu)
                             <tr>
                                 <td>{{ ++$no }}</td>
@@ -62,7 +68,7 @@
             </div>
         </div>
         <div class="box-footer">
-            <input type="submit" class="btn btn-success" value="Generate">
+            <input type="submit" class="btn btn-success" value="Add Role">
         </div>
         </form>
     </div>

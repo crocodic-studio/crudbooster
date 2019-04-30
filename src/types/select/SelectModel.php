@@ -14,6 +14,25 @@ class SelectModel extends ColumnModel
 {
 
     private $options;
+    private $options_from_table;
+
+    /**
+     * @return mixed
+     */
+    public function getOptionsFromTable()
+    {
+        return $this->options_from_table;
+    }
+
+    /**
+     * @param mixed $options_from_table
+     */
+    public function setOptionsFromTable($options_from_table)
+    {
+        $this->options_from_table = $options_from_table;
+    }
+
+
 
     /**
      * @return mixed

@@ -19,7 +19,7 @@ class DeveloperModulesController extends Controller
 
     public function __construct()
     {
-        view()->share(['pageTitle'=>'Module Manager']);
+        view()->share(['page_title'=>'Module Manager']);
     }
 
 
@@ -41,7 +41,7 @@ class DeveloperModulesController extends Controller
 
             (new ModuleGenerator(request('table'), request('name'), request('icon')))->make();
 
-            return cb()->redirect(action("DeveloperModulesController@getIndex"),"New module has been created!","success");
+            return cb()->redirect(route("DeveloperModulesControllerGetIndex"),"New module has been created!","success");
 
         } catch (CBValidationException $e) {
             return cb()->redirectBack($e->getMessage());
@@ -60,7 +60,7 @@ class DeveloperModulesController extends Controller
 
             cb()->updateCompact("cb_modules", $id, ['name','icon']);
 
-            return cb()->redirect(action("DeveloperModulesController@getIndex"),"Module has been updated!","success");
+            return cb()->redirect(route("DeveloperModulesControllerGetIndex"),"Module has been updated!","success");
 
         } catch (CBValidationException $e) {
             return cb()->redirectBack($e->getMessage());

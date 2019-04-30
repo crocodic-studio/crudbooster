@@ -15,10 +15,10 @@ class Hook extends TypesHook
 {
     /**
      * @param $value
-     * @param ColumnModel $column
+     * @param CheckboxModel $column
      * @return mixed|string
      */
-    public function assignment($value, ColumnModel $column)
+    public function assignment($value, $column)
     {
         return implode(";", request( $column->getName() ));
     }

@@ -12,29 +12,33 @@
 			}
 		});
 
-		$('input[type=text]').first().not(".not_focus").focus();
+		$('input[type=text]').first().not(".not_focus,.datepicker,.datetimepicker").focus();
 
 		if($(".datepicker").length > 0) {
-			$('.datepicker').daterangepicker({
-				singleDatePicker: true,
-				showDropdowns: true,
-				minDate: '1900-01-01',
-				format:'YYYY-MM-DD'
-			})
+		    $(".datepicker").each(function () {
+                $(this).daterangepicker({
+                    singleDatePicker: true,
+                    showDropdowns: true,
+                    minDate: '1900-01-01',
+                    format: $(this).data("format")
+                })
+            });
 		}
 
 		if($(".datetimepicker").length > 0) {
-			$(".datetimepicker").daterangepicker({
-				minDate: '1900-01-01',
-				singleDatePicker: true,
-				showDropdowns: true,
-				timePicker:true,
-				timePicker12Hour: false,
-				timePickerIncrement: 5,
-				timePickerSeconds: true,
-				autoApply: true,
-				format:'YYYY-MM-DD HH:mm:ss'
-			})
+			$(".datetimepicker").each(function () {
+                $(this).daterangepicker({
+                    minDate: '1900-01-01',
+                    singleDatePicker: true,
+                    showDropdowns: true,
+                    timePicker:true,
+                    timePicker12Hour: false,
+                    timePickerIncrement: 5,
+                    timePickerSeconds: true,
+                    autoApply: true,
+                    format: $(this).data("format")
+                })
+            });
 		}
 
 		//Timepicker
@@ -64,7 +68,5 @@
                 this.attr('onclick',"showConfirm(this)");
             })
         }
-
-        $('.datatables-simple').DataTable();
 
 	});

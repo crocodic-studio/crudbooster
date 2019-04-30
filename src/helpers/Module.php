@@ -11,6 +11,7 @@ namespace crocodicstudio\crudbooster\helpers;
 
 use crocodicstudio\crudbooster\controllers\CBController;
 use crocodicstudio\crudbooster\controllers\scaffolding\ColumnSingleton;
+use Illuminate\Support\Facades\DB;
 
 class Module
 {
@@ -24,15 +25,19 @@ class Module
     {
         $routeArray = request()->route()->getAction();
         $this->controller = class_basename($routeArray['controller']);
-        $this->controller_class = new ("\App\Http\Controllers\\".$this->controller)();
+        $this->controller = strtok($this->controller,"@");
 
-        $this->module = cb()->find("cb_modules",["controller"=>$this->controller]);
-        $this->menu = cb()->find("cb_menus",["cb_modules_id"=>$this->module->id]);
-        $this->menu = (!$this->menu)?cb()->find("cb_menus",["type"=>"path","path"=>request()->segment(2)]):$this->menu;
-        $this->privilege = DB::table("cb_role_privileges")
-            ->where("cb_menus_id", $this->menu->id)
-            ->where("cb_roles_id", cb()->session()->roleId())
-            ->first();
+        $className = "\\".$routeArray["namespace"]."\\".$this->controller;
+        if(class_exists($className)) {
+            $this->controller_class = new $className();
+            $this->module = cb()->find("cb_modules",["controller"=>$this->controller]);
+            $this->menu = cb()->find("cb_menus",["cb_modules_id"=>$this->module->id]);
+            $this->menu = (!$this->menu)?cb()->find("cb_menus",["type"=>"path","path"=>request()->segment(2)]):$this->menu;
+            $this->privilege = DB::table("cb_role_privileges")
+                ->where("cb_menus_id", $this->menu->id)
+                ->where("cb_roles_id", cb()->session()->roleId())
+                ->first();
+        }
     }
 
     /**
@@ -43,19 +48,30 @@ class Module
         return app('ColumnSingleton');
     }
 
+    public function getData($key) {
+        return ($this->controller_class)?$this->controller_class->getData($key)?:cb()->getAppName():null;
+    }
+
+    /**
+     * @return CBController
+     */
+    public function getController() {
+        return ($this->controller_class)?$this->controller_class:null;
+    }
+
     public function getPageTitle()
     {
-        return $this->controller_class->getData("page_title")?:env('APP_NAME');
+        return ($this->controller_class)?$this->controller_class->getData("page_title")?:cb()->getAppName():null;
     }
 
     public function getTable()
     {
-        return $this->controller_class->getData("table");
+        return ($this->controller_class)?$this->controller_class->getData("table"):null;
     }
 
-    public function getIcon()
+    public function getPageIcon()
     {
-        return $this->controller_class->getData('icon')?:"fa fa-bars";
+        return ($this->controller_class)?$this->controller_class->getData('page_icon')?:"fa fa-bars":null;
     }
 
     public function canBrowse() {
@@ -105,7 +121,7 @@ class Module
 
     public function addURL()
     {
-        if(method_exists($this->controller_class, 'getAdd')) {
+        if($this->controller_class && method_exists($this->controller_class, 'getAdd')) {
             return action($this->controller.'@getAdd');
         }else{
             return null;
@@ -114,7 +130,7 @@ class Module
 
     public function addSaveURL()
     {
-        if(method_exists($this->controller_class, 'postAddSave')) {
+        if($this->controller_class && method_exists($this->controller_class, 'postAddSave')) {
             return action($this->controller.'@postAddSave');
         }else{
             return null;
@@ -123,7 +139,7 @@ class Module
 
     public function editURL($id = null)
     {
-        if(method_exists($this->controller_class, 'getEdit')) {
+        if($this->controller_class && method_exists($this->controller_class, 'getEdit')) {
             return action($this->controller.'@getEdit',['id'=>$id]);
         }else{
             return null;
@@ -141,7 +157,7 @@ class Module
 
     public function detailURL($id=null)
     {
-        if(method_exists($this->controller_class, 'getDetail')) {
+        if($this->controller_class && method_exists($this->controller_class, 'getDetail')) {
             return action($this->controller.'@getDetail',['id'=>$id]);
         }else{
             return null;
@@ -150,7 +166,7 @@ class Module
 
     public function deleteURL($id=null)
     {
-        if(method_exists($this->controller_class, 'getDelete')) {
+        if($this->controller_class && method_exists($this->controller_class, 'getDelete')) {
             return action($this->controller.'@getDelete',['id'=>$id]);
         }else{
             return null;
@@ -159,7 +175,7 @@ class Module
 
     public function url($path = null)
     {
-        if(method_exists($this->controller_class, 'getIndex')) {
+        if($this->controller_class && method_exists($this->controller_class, 'getIndex')) {
             return trim(action($this->controller.'@getIndex').'/'.$path,'/');
         }else{
             return null;

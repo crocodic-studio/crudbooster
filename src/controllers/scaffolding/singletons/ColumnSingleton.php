@@ -17,6 +17,10 @@ class ColumnSingleton
     private $columns;
     private $joins;
 
+    public function newColumns() {
+        $this->columns = [];
+    }
+
     public function addJoin($data)
     {
         $this->joins[] = $data;
@@ -33,6 +37,31 @@ class ColumnSingleton
     public function getColumns()
     {
         return $this->columns;
+    }
+
+    public function valueAssignment($data_row = null) {
+        foreach ($this->getColumns() as $index=>$column) {
+            /** @var ColumnModel $column */
+            if($data_row) {
+                $value = $data_row->{ $column->getField() };
+            }else{
+                $value = request($column->getName());
+            }
+
+            if (! $column->getName()) {
+                continue;
+            }
+
+            if(!$value && $column->getDefaultValue()) {
+                $value = $column->getDefaultValue();
+            }
+
+            $value = getTypeHook($column->getType())->assignment($value, $column);
+
+            $column->setValue($value);
+
+            $this->setColumn($index, $column);
+        }
     }
 
     public function getIndexColumns()
@@ -150,7 +179,7 @@ class ColumnSingleton
 
     /**
      * @param int $index
-     * @return mixed
+     * @return ColumnModel
      */
     public function getColumn($index) {
         return $this->columns[$index];

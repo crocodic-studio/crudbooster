@@ -19,6 +19,7 @@ class CBController extends Controller
 
     public function __construct()
     {
+        columnSingleton()->newColumns();
         $this->cbInit();
         $this->data['columns'] = columnSingleton()->getColumns();
         view()->share($this->data);
@@ -28,7 +29,11 @@ class CBController extends Controller
     {
         if($method == "getData") {
             $key = $parameters[0];
-            return $this->data[$key];
+            if(isset($this->data[$key])) {
+                return $this->data[$key];
+            }else{
+                return null;
+            }
         }else{
             return null;
         }
@@ -66,6 +71,17 @@ class CBController extends Controller
             }
         }
 
+        foreach($columns as $column) {
+            /** @var ColumnModel $column */
+            if(strpos($column->getField(),".") === false) {
+                $query->addSelect($this->data['table'].'.'.$column->getField());
+            }else{
+                $query->addSelect($column->getField());
+            }
+
+            $query = getTypeHook($column->getType())->query($query, $column);
+        }
+
         if(request()->has('q'))
         {
             if(isset($this->data['hook_search_query'])) {
@@ -94,7 +110,9 @@ class CBController extends Controller
                 $query->orderBy(request('order_by'), request('order_sort'));
             }
         }else{
-            $query->orderBy($this->data['order_by'][0], $this->data['order_by'][1]);
+            if(isset($this->data['order_by'])) {
+                $query->orderBy($this->data['order_by'][0], $this->data['order_by'][1]);
+            }
         }
 
         return $query;
@@ -116,26 +134,13 @@ class CBController extends Controller
      */
     private function validation()
     {
-        $validator = Validator::make(request()->all(), $this->data['validation'], $this->data['validation_messages']);
-        if ($validator->fails()) {
-            $message = $validator->messages();
-            $message_all = $message->all();
-            throw new CBValidationException(implode(', ',$message_all));
-        }
-    }
-
-    private function assignment()
-    {
-        foreach (columnSingleton()->getColumns() as $index=>$column) {
-            /** @var ColumnModel $column */
-            $value = request($column->getName());
-
-            if (! $column->getName()) {
-                continue;
+        if(isset($this->data['validation'])) {
+            $validator = Validator::make(request()->all(), @$this->data['validation'], @$this->data['validation_messages']);
+            if ($validator->fails()) {
+                $message = $validator->messages();
+                $message_all = $message->all();
+                throw new CBValidationException(implode(', ',$message_all));
             }
-
-            $value = getTypeHook($column->getType())->assignment($value, $column);
-            columnSingleton()->setColumn($index, ['value'=>$value]);
         }
     }
 
@@ -146,8 +151,7 @@ class CBController extends Controller
         $data = [];
         $data['page_title'] = $this->data['page_title'].' : Add';
         $data['action_url'] = module()->addSaveURL();
-        $data['form'] = view('crudbooster::module.form_body', $this->data)->render();
-        return view('crudbooster::module.form.form');
+        return view('crudbooster::module.form.form',$data);
     }
 
     public function postAddSave()
@@ -156,7 +160,7 @@ class CBController extends Controller
 
         try {
             $this->validation();
-            $this->assignment();
+            columnSingleton()->valueAssignment();
             $data = columnSingleton()->getAssignmentData();
 
             if(Schema::hasColumn($this->data['table'], 'created_at')) {
@@ -189,10 +193,9 @@ class CBController extends Controller
         if(!module()->canUpdate()) return cb()->redirect(cb()->getAdminUrl(),"You do not have access to this area");
 
         $data = [];
-        $data['row'] = $this->repository()->where(getPrimaryKey($this->data['table']), $id)->first();
+        $data['row'] = $this->repository()->where($this->data['table'].'.'.getPrimaryKey($this->data['table']), $id)->first();
         $data['page_title'] = $this->data['page_title'].' : Edit';
         $data['action_url'] = module()->editSaveURL($id);
-        $data['form'] = view('crudbooster::module.form_body', $this->data)->render();
         return view('crudbooster::module.form.form', $data);
     }
 
@@ -202,7 +205,7 @@ class CBController extends Controller
 
         try {
             $this->validation();
-            $this->assignment();
+            columnSingleton()->valueAssignment();
             $data = columnSingleton()->getAssignmentData();
             if(Schema::hasColumn($this->data['table'], 'updated_at')) {
                 $data['updated_at'] = date('Y-m-d H:i:s');
@@ -268,15 +271,14 @@ class CBController extends Controller
         if(!module()->canRead()) return cb()->redirect(cb()->getAdminUrl(),"You do not have access to this area");
 
         $data = [];
-        $data['row'] = $this->repository()->where(getPrimaryKey($this->data['table']), $id)->first();
+        $data['row'] = $this->repository()->where($this->data['table'].'.'.getPrimaryKey($this->data['table']), $id)->first();
         $data['page_title'] = $this->data['page_title'].' : Detail';
-        $data['form'] = view('crudbooster::module.form_detail', $this->data)->render();
-        return view('crudbooster::default.form', $data);
+        return view('crudbooster::module.form.form_detail', $data);
     }
 
     public function postUploadFile()
     {
-        if(auth()->guest()) return redirect(getAdminLoginURL());
+        if(auth()->guest()) return redirect(cb()->getLoginUrl());
 
         $file = null;
         try {

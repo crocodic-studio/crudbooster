@@ -18,7 +18,7 @@ trait ColumnsBasic
 
     private function name($label, $name = null)
     {
-        return (!$name)?strtolower(Str::slug($label,'_')):$name;
+        return (!$name)?strtolower(slug($label,"_")):$name;
     }
 
     /**

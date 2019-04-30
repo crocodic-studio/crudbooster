@@ -25,6 +25,12 @@
                 <!-- Optionally, you can add icons to the links -->
 
                 <li>
+                    <a href='{{ cb()->getDeveloperUrl("menus") }}'><i class='fa fa-bars'></i>
+                        <span>Menu Manager</span>
+                    </a>
+                </li>
+
+                <li>
                     <a href='{{ cb()->getDeveloperUrl("modules") }}'><i class='fa fa-cubes'></i>
                         <span>Module Manager</span>
                     </a>
@@ -37,8 +43,8 @@
                 </li>
 
                 <li>
-                    <a href='{{ cb()->getDeveloperUrl("menus") }}'><i class='fa fa-bars'></i>
-                        <span>Menu Manager</span>
+                    <a href='{{ cb()->getDeveloperUrl("users") }}'><i class='fa fa-users'></i>
+                        <span>User Manager</span>
                     </a>
                 </li>
 

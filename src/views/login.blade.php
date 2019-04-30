@@ -1,7 +1,7 @@
 @extends('crudbooster::layouts.layout_login')
 @section('content')
     <p class='login-box-msg'>{{trans("crudbooster.login_message")}}</p>
-    <form autocomplete='off' action="{{ route('postLogin') }}" method="post">
+    <form autocomplete='off' action="{{ route('AdminAuthControllerPostLogin') }}" method="post">
         {!! csrf_field() !!}
         <div class="form-group has-feedback">
             <input autocomplete='off' type="text" class="form-control" name='email' required placeholder="Email"/>

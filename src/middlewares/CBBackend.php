@@ -18,7 +18,7 @@ class CBBackend
     public function handle($request, Closure $next)
     {
         if(auth()->guest()) {
-            return cb()->redirect(getAdminLoginURL(),trans('crudbooster.not_logged_in'),'warning');
+            return cb()->redirect(cb()->getLoginUrl("login"),trans('crudbooster.not_logged_in'),'warning');
         }
 
         CBHook::beforeBackendMiddleware($request);

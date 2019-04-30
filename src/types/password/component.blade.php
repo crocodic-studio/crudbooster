@@ -1,5 +1,4 @@
-@extends('types::layout')
-@section('content')
+@include("types::layout_header")
     <?php /** @var \crocodicstudio\crudbooster\types\password\PasswordModel $column */ ?>
         <input type='password' title="{{ $column->getLabel() }}"
                placeholder="{{ $column->getPlaceholder() }}"
@@ -9,4 +8,4 @@
                class='form-control'
                name="{{ $column->getName() }}"
                id="{{ $column->getName() }}" />
-@endsection
+@include("types::layout_footer")

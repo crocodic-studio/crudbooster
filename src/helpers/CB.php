@@ -17,6 +17,10 @@ use Validator;
 class CB
 {
 
+    public function getRoleByName($roleName) {
+        return $this->find("cb_roles",['name'=>$roleName]);
+    }
+
     public function fcm() {
         return new FCM();
     }
@@ -43,7 +47,7 @@ class CB
     }
 
     public function getLoginUrl() {
-        return url(config('crudbooster.ADMIN_LOGIN_PATH'));
+        return $this->getAdminUrl("login");
     }
 
     public function getAdminUrl($path = null) {
@@ -160,14 +164,13 @@ class CB
     public function updateCompact($table, $id, $params) {
         $data = [];
         foreach ($params as $param) {
-            $data[$params] = request($param);
+            $data[$param] = request($param);
         }
         $this->update($table, $id, $data);
     }
 
     public function find($table, $id)
     {
-        $table = self::parseSqlTable($table)['table'];
         if (is_array($id)) {
             $first = DB::table($table);
             foreach ($id as $k => $v) {
@@ -176,10 +179,15 @@ class CB
 
             return $first->first();
         } else {
-            $pk = self::pk($table);
+            $pk = $this->pk($table);
 
             return DB::table($table)->where($pk, $id)->first();
         }
+    }
+
+    public function findAll($table, $condition_array = [])
+    {
+        return DB::table($table)->where($condition_array)->get();
     }
 
     public function redirectBack($message, $type = 'warning')
@@ -323,14 +331,14 @@ class CB
         $alias = str_replace("@"," ", $controller);
         $alias = ucwords($alias);
         $alias = str_replace(" ","",$alias);
-        Route::get($prefix, ['uses' => $controller.'@', 'as' => $alias]);
+        Route::get($prefix, ['uses' => $controller, 'as' => $alias]);
     }
 
     public function routePost($prefix, $controller) {
         $alias = str_replace("@"," ", $controller);
         $alias = ucwords($alias);
         $alias = str_replace(" ","",$alias);
-        Route::post($prefix, ['uses' => $controller.'@', 'as' => $alias]);
+        Route::post($prefix, ['uses' => $controller, 'as' => $alias]);
     }
 
     /*

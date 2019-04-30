@@ -30,4 +30,25 @@ class Checkbox
 
         return $this;
     }
+
+    /**
+     * @param $table string
+     * @param $key_field string
+     * @param $display_field string
+     * @param $SQLCondition string|callable
+     */
+    public function optionsFromTable($table, $key_field, $display_field, $SQLCondition = null) {
+        $data = DB::table($table);
+        if($SQLCondition && is_callable($SQLCondition)) {
+            $data = call_user_func($SQLCondition, $data);
+        }elseif ($SQLCondition && is_string($SQLCondition)) {
+            $data->whereRaw($SQLCondition);
+        }
+        $data = $data->get();
+        $options = [];
+        foreach ($data as $d) {
+            $options[ $d->$key_field ] = $d->$display_field;
+        }
+        $this->options($options);
+    }
 }

@@ -1,5 +1,4 @@
-@extends('types::layout')
-@section('content')
+@include("types::layout_header")
     <?php /** @var \crocodicstudio\crudbooster\types\select\SelectModel $column */?>
     <select style="width: 100%" class="form-control select2"
             {{ $column->getRequired()?'required':''}}
@@ -11,4 +10,4 @@
             <option {{ $column->getValue()==$key?'selected':'' }} value="{{ $key }}">{{ $value }}</option>
         @endforeach
     </select>
-@endsection
+@include("types::layout_footer")

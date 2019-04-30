@@ -1,5 +1,4 @@
-@extends('types::layout')
-@section('content')
+@include("types::layout_header")
         <?php /** @var \crocodicstudio\crudbooster\types\custom\CustomModel $column */?>
         {!! $column->getHtml() !!}
-@endsection
+@include("types::layout_footer")

@@ -7,7 +7,7 @@ class AdminAuthController extends CBController
 
     public function getLogin()
     {
-        if(!auth()->guest()) return redirect(getAdminURL());
+        if(!auth()->guest()) return redirect(cb()->getAdminUrl());
 
         cbHook()->hookGetLogin();
 
@@ -24,19 +24,19 @@ class AdminAuthController extends CBController
             $credential = request()->only(['email','password']);
             if (auth()->attempt($credential)) {
                 cbHook()->hookPostLogin();
-                return redirect(getAdminURL());
+                return redirect(cb()->getAdminUrl());
             } else {
-                return redirect(getAdminLoginURL())->with(['message'=>__('crudbooster.alert_password_wrong'),'message_type'=>'warning']);
+                return redirect(cb()->getLoginUrl())->with(['message'=>__('crudbooster.alert_password_wrong'),'message_type'=>'warning']);
             }
         }catch (CBValidationException $e) {
-            return cb()->redirect(getAdminLoginURL(),$e->getMessage(),'warning');
+            return cb()->redirect(cb()->getAdminUrl("login"),$e->getMessage(),'warning');
         }
     }
 
     public function getLogout()
     {
         auth()->logout();
-        return cb()->redirect(getAdminLoginURL(), __('crudbooster.message_after_logout'), 'success');
+        return cb()->redirect(cb()->getAdminUrl("login"), __('crudbooster.message_after_logout'), 'success');
     }
 
     public function getLoginDeveloper() {
@@ -62,7 +62,7 @@ class AdminAuthController extends CBController
             }
 
         }catch (CBValidationException $e) {
-            return cb()->redirect(getAdminLoginURL(),$e->getMessage(),'warning');
+            return cb()->redirect(cb()->getLoginUrl(),$e->getMessage(),'warning');
         }
     }
 

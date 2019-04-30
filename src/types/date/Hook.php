@@ -12,5 +12,23 @@ use crocodicstudio\crudbooster\types\TypesHook;
 
 class Hook extends TypesHook
 {
+    /**
+     * @param $row
+     * @param $column DatetimeModel
+     * @return mixed
+     */
+    public function indexRender($row, $column)
+    {
+        if($column->getFormat()) {
+            return date($column->getFormat(), strtotime($row->{$column->getField()}));
+        }else{
+            return $row->{$column->getField()};
+        }
+    }
+
+    public function detailRender($row, $column)
+    {
+        return $this->indexRender($row, $column);
+    }
 
 }

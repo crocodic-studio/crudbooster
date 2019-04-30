@@ -1,5 +1,4 @@
-@extends('types::layout')
-@section('content')
+@include("types::layout_header")
     <?php /** @var \crocodicstudio\crudbooster\types\checkbox\CheckboxModel $column */ ?>
     @foreach($column->getCheckboxOptions() as $key=>$value)
         <div class="{{ $column->getDisabled()?"disabled":"" }}">
@@ -12,4 +11,4 @@
             </label>
         </div>
     @endforeach
-@endsection
+@include("types::layout_footer")

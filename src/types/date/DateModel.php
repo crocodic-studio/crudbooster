@@ -13,5 +13,24 @@ use crocodicstudio\crudbooster\models\ColumnModel;
 class DateModel extends ColumnModel
 {
 
+    private $format;
+
+    /**
+     * @return mixed
+     */
+    public function getFormat()
+    {
+        return $this->format;
+    }
+
+    /**
+     * @param mixed $format
+     */
+    public function setFormat($format)
+    {
+        $this->format = $format;
+    }
+
+
 
 }

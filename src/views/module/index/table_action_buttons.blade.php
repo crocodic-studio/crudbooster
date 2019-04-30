@@ -1,4 +1,5 @@
-@foreach($add_action_button as $a)
+@if(is_array(module()->getData("add_action_button")))
+@foreach(module()->getData("add_action_button") as $a)
     <?php /** @var \crocodicstudio\crudbooster\models\AddActionButtonModel $a */?>
     @php
         if(is_callable($a->getUrl())) {
@@ -19,6 +20,7 @@
         </a>
     @endif
 @endforeach
+@endif
 
 
 @if(module()->canRead() && module()->getData("button_detail"))
@@ -26,7 +28,7 @@
        href='{{ module()->detailURL($row->primary_key) }}'><i class='fa fa-eye'></i></a>
 @endif
 
-@if(module()->canEdit() && module()->getData("button_edit"))
+@if(module()->canUpdate() && module()->getData("button_edit"))
     <a class='btn btn-xs btn-success btn-edit' title='{{trans("crudbooster.action_edit_data")}}'
        href='{{ module()->editURL($row->primary_key) }}'><i
                 class='fa fa-pencil'></i></a>

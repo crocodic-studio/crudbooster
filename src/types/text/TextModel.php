@@ -26,7 +26,7 @@ class TextModel extends ColumnModel
 
     /**
      * @param mixed $max_length
-     * @return TextAreaModel
+     * @return TextModel
      */
     public function setMaxLength($max_length)
     {
@@ -44,7 +44,7 @@ class TextModel extends ColumnModel
 
     /**
      * @param mixed $min_length
-     * @return TextAreaModel
+     * @return TextModel
      */
     public function setMinLength($min_length)
     {

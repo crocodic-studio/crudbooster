@@ -11,7 +11,7 @@
 <!-- AdminLTE App -->
 <script src="{{ cbAsset('adminlte/dist/js/app.js') }}" type="text/javascript"></script>
 
-<!--BOOTSTRAP DATERANGEPICKER-->
+<!--DateRangePicker http://www.daterangepicker.com/-->
 <script src="{{ cbAsset('adminlte/plugins/daterangepicker/moment.min.js') }}"></script>
 <script src="{{ cbAsset('adminlte/plugins/daterangepicker/daterangepicker.js') }}"></script>
 <link rel="stylesheet" href="{{ cbAsset('adminlte/plugins/daterangepicker/daterangepicker-bs3.css') }}">

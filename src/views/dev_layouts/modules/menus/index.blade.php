@@ -99,11 +99,10 @@
                     <?php /** @var \crocodicstudio\crudbooster\models\SidebarModel $menu */?>
                     <li data-id="{{ $menu->getId() }}" data-name="{{ $menu->getName() }}">
                         <div>
-                            <i class='{{$menu->getIcon()}}'></i>
                             <span>
                                 <a href="{{ route('DeveloperMenusControllerGetEdit',['id'=>$menu->getId()]) }}" class="btn btn-xs btn-success">Edit</a>
-                                <a onclick="if(!confirm('Are you sure want to delete?')) return false" href="{{ action('DeveloperMenusController@getDelete',['id'=>$menu->getId()]) }}" class="btn btn-xs btn-warning">Delete</a>
-                                {{$menu->getName()}}
+                                <a onclick="if(!confirm('Are you sure want to delete?')) return false" href="{{ route('DeveloperMenusControllerGetDelete',['id'=>$menu->getId()]) }}" class="btn btn-xs btn-warning">Delete</a>
+                                &nbsp;&nbsp;{{$menu->getName()}}
                             </span>
                         </div>
                         <ul>
@@ -111,11 +110,11 @@
                            @foreach($menu->getSub() as $sub)
                                 <li data-id="{{ $sub->getId() }}" data-name="{{ $sub->getName() }}">
                                     <div>
-                                        <i class='{{$sub->getIcon()}}'></i>
+
                                         <span>
                                             <a href="{{ route('DeveloperMenusControllerGetEdit',['id'=>$sub->getId()]) }}" class="btn btn-xs btn-success">Edit</a>
-                                            <a onclick="if(!confirm('Are you sure want to delete?')) return false" href="{{ action('DeveloperMenusController@getDelete',['id'=>$sub->getId()]) }}" class="btn btn-xs btn-warning">Delete</a>
-                                            {{$sub->getName()}}
+                                            <a onclick="if(!confirm('Are you sure want to delete?')) return false" href="{{ route('DeveloperMenusControllerGetDelete',['id'=>$sub->getId()]) }}" class="btn btn-xs btn-warning">Delete</a>
+                                            &nbsp;&nbsp;{{$sub->getName()}}
                                         </span>
                                     </div>
                                     <ul>
@@ -123,11 +122,11 @@
                                         @foreach($sub->getSub() as $sub2)
                                         <li data-id="{{ $sub2->getId() }}" data-name="{{ $sub2->getName() }}">
                                             <div>
-                                                <i class='{{$sub2->getIcon()}}'></i>
+
                                                 <span>
                                                     <a href="{{ route('DeveloperMenusControllerGetEdit',['id'=>$sub2->getId()]) }}" class="btn btn-xs btn-success">Edit</a>
-                                                    <a onclick="if(!confirm('Are you sure want to delete?')) return false" href="{{ action('DeveloperMenusController@getDelete',['id'=>$sub2->getId()]) }}" class="btn btn-xs btn-warning">Delete</a>
-                                                    {{$sub2->getName()}}
+                                                    <a onclick="if(!confirm('Are you sure want to delete?')) return false" href="{{ route('DeveloperMenusControllerGetDelete',['id'=>$sub2->getId()]) }}" class="btn btn-xs btn-warning">Delete</a>
+                                                    &nbsp;&nbsp;{{$sub2->getName()}}
                                                 </span>
                                             </div>
                                         </li>

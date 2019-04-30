@@ -1,13 +1,13 @@
-@extends('types::layout')
-@section('content')
+@include("types::layout_header")
     @php /** @var \crocodicstudio\crudbooster\types\datetime\DatetimeModel $column */  @endphp
         <input type='text' title="{{ $column->getLabel() }}"
-               placeholder="{{ $column->getPlaceholder() }}"
+               placeholder="{{ $column->getPlaceholder()?:$column->getFormat() }}"
                {{ $column->getRequired()?'required':''}}
-               {{ $column->getReadonly()?'readonly':''}}
+               readonly
                {{ $column->getDisabled()?'disabled':''}}
-               class='form-control datetime-picker'
+               class='form-control datetimepicker'
                name="{{ $column->getName() }}"
                id="{{ $column->getName() }}"
+               data-format="{{ $column->getFormat()?convertPHPToMomentFormat($column->getFormat()):"YYYY-MM-DD HH:mm:ss" }}"
                value='{{ $column->getValue() }}'/>
-@endsection
+@include("types::layout_footer")

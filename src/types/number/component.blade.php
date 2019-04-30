@@ -1,5 +1,4 @@
-@extends('types::layout')
-@section('content')
+@include("types::layout_header")
     @php /** @var \crocodicstudio\crudbooster\types\number\NumberModel $column */  @endphp
         <input type='number' title="{{ $column->getLabel() }}"
                placeholder="{{ $column->getPlaceholder() }}"
@@ -12,4 +11,4 @@
                name="{{ $column->getName() }}"
                id="{{ $column->getName() }}"
                value='{{ $column->getValue() }}'/>
-@endsection
+@include("types::layout_footer")

@@ -7,6 +7,7 @@ Route::group(['middleware' => ['web',\crocodicstudio\crudbooster\middlewares\CBD
     cb()->routeController("modules", "DeveloperModulesController",'crocodicstudio\crudbooster\controllers');
     cb()->routeController("menus", "DeveloperMenusController",'crocodicstudio\crudbooster\controllers');
     cb()->routeController("roles","DeveloperRolesController",'crocodicstudio\crudbooster\controllers');
+    cb()->routeController("users","DeveloperUsersController",'crocodicstudio\crudbooster\controllers');
     cb()->routeGet("/","DeveloperDashboardController@getIndex");
 });
 
@@ -51,13 +52,15 @@ Route::group([
         if($dashboard = cbConfig("ADMIN_DASHBOARD_CONTROLLER")) {
             cb()->routeGet("/", $dashboard);
         }else{
-            cb()->routeGet("/", "crocodicstudio\crudbooster\controllers\AdminDashboardController@getIndex");
+            cb()->routeGet("/", "\crocodicstudio\crudbooster\controllers\AdminDashboardController@getIndex");
         }
     }
 
     $controllers = glob(app_path('Http/Controllers/Admin*Controller.php'));
+
     foreach($controllers as $controller) {
         $controllerName = basename($controller);
+        $controllerName = rtrim($controllerName,".php");
         $className = '\App\Http\Controllers\\'.$controllerName;
         $controllerClass = new $className();
         if(method_exists($controllerClass, 'cbInit')) {

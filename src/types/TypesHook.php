@@ -16,21 +16,31 @@ class TypesHook implements TypesHookInterface
 
     /**
      * @param $value
-     * @param ColumnModel $column
+     * @param mixed|ColumnModel $column
      * @return mixed
      */
-    public function assignment($value, ColumnModel $column)
+    public function assignment($value, $column)
     {
         return $value;
     }
 
-    public function indexRender($row, ColumnModel $column)
+    public function indexRender($row, $column)
     {
-        return $column->getValue();
+        return $row->{ $column->getField() };
     }
 
-    public function detailRender($row, ColumnModel $column)
+    public function detailRender($row, $column)
     {
-        return $column->getValue();
+        return $row->{ $column->getField() };
+    }
+
+    /**
+     * @param \Illuminate\Database\Query\Builder $query
+     * @param mixed|ColumnModel $column
+     * @return mixed|void
+     */
+    public function query($query, $column)
+    {
+        return $query;
     }
 }

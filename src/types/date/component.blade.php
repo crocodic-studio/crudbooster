@@ -1,5 +1,4 @@
-@extends('types::layout')
-@section('content')
+@include("types::layout_header")
     @php /** @var \crocodicstudio\crudbooster\types\date\DateModel $column */ @endphp
         <input type='text' title="{{ $column->getLabel() }}"
                placeholder="{{ $column->getPlaceholder() }}"
@@ -9,5 +8,6 @@
                class='form-control date-picker'
                name="{{ $column->getName() }}"
                id="{{ $column->getName() }}"
+               data-format="{{ $column->getFormat()?convertPHPToMomentFormat($column->getFormat()):"YYYY-MM-DD HH:mm:ss" }}"
                value='{{ $column->getValue() }}'/>
-@endsection
+@include("types::layout_footer")

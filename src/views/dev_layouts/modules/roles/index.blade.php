@@ -1,6 +1,9 @@
 @extends("crudbooster::dev_layouts.layout")
 @section("content")
 
+    <div class="callout callout-info">
+        <strong>Tips</strong> You can find the role data by using <code>cb()->getRoleByName("Admin")</code> helper.
+    </div>
 
     <p>
         <a href="{{ route('DeveloperRolesControllerGetAdd') }}" class="btn btn-primary">Add Role</a>

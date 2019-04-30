@@ -11,6 +11,7 @@ namespace crocodicstudio\crudbooster\helpers;
 
 use crocodicstudio\crudbooster\controllers\CBController;
 use crocodicstudio\crudbooster\models\SidebarModel;
+use Illuminate\Support\Facades\DB;
 
 class SidebarMenus
 {
@@ -28,7 +29,8 @@ class SidebarMenus
             $model->setBasepath(basename($model->getUrl()));
         }elseif ($menu->type == "module") {
             $module = cb()->find("cb_modules", $menu->cb_modules_id);
-            $controllerClass = new ('\App\Http\Controllers\\'.$module->controller)();
+            $className = '\App\Http\Controllers\\'.$module->controller;
+            $controllerClass = new $className();
             /** @var CBController $controllerClass */
             $model->setUrl(cb()->getAdminUrl($controllerClass->getData("permalink")));
             $model->setIcon($module->icon);
@@ -69,7 +71,7 @@ class SidebarMenus
     }
 
     public function all($withPrivilege = true) {
-        $roles_id = cb()->session()->roleId();
+        $roles_id = ($withPrivilege)?cb()->session()->roleId():null;
         $menus = $this->loadData();
         $result = [];
         foreach($menus as $menu) {

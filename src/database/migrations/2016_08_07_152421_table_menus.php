@@ -15,11 +15,11 @@ class TableMenus extends Migration
         Schema::create('cb_menus', function (Blueprint $table) {
             $table->increments("id");
             $table->string('name');
-            $table->string("icon");
-            $table->string("path");
+            $table->string("icon")->nullable();
+            $table->string("path")->nullable();
             $table->string("type");
             $table->integer("sort_number")->default(0);
-            $table->integer("cb_modules_id");
+            $table->integer("cb_modules_id")->nullable();
             $table->integer("parent_cb_menus_id")->nullable();
         });
     }

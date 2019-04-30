@@ -19,7 +19,7 @@ class DeveloperMenusController extends Controller
 
     public function __construct()
     {
-        view()->share(['pageTitle'=>'Menu Manager']);
+        view()->share(['page_title'=>'Menu Manager']);
     }
 
     public function getIndex() {
@@ -30,7 +30,7 @@ class DeveloperMenusController extends Controller
     public function getAdd() {
         $data = [];
         $data['form_title'] = "Add Menu";
-        $data['form_url'] = action('DeveloperMenusController@postAddSave');
+        $data['form_url'] = route('DeveloperMenusControllerPostAddSave');
         $data['modules'] = DB::table("cb_modules")->orderBy("name","asc")->get();
         return view($this->view.".form", $data);
     }
@@ -38,7 +38,7 @@ class DeveloperMenusController extends Controller
     public function getEdit($id) {
         $data = [];
         $data['form_title'] = "Edit Menu";
-        $data['form_url'] = action('DeveloperMenusController@postEditSave',['id'=>$id]);
+        $data['form_url'] = route('DeveloperMenusControllerPostEditSave',['id'=>$id]);
         $data['modules'] = DB::table("cb_modules")->orderBy("name","asc")->get();
         $data['row'] = cb()->find("cb_menus", $id);
         return view($this->view.".form", $data);
@@ -46,16 +46,23 @@ class DeveloperMenusController extends Controller
 
     public function postAddSave() {
         try {
-            cb()->validation(["name", "icon", "type", "cb_modules_id"]);
+            cb()->validation(["name", "icon", "type"]);
 
             $menu = [];
             $menu['name'] = request('name');
             $menu['icon'] = request('icon');
             $menu['type'] = request('type');
-            $menu['cb_modules_id'] = request('cb_modules_id');
+            if(request('type') == 'module') {
+                $menu['cb_modules_id'] = request('cb_modules_id');
+            }elseif (request('type') == 'url') {
+                $menu['path'] = request('url_value');
+            }elseif (request('type') == 'path') {
+                $menu['path'] = request('path_value');
+            }
+
             DB::table("cb_menus")->insert($menu);
 
-            return cb()->redirect(action("DeveloperMenusController@getIndex"),"The menu has been added!","success");
+            return cb()->redirect(route("DeveloperMenusControllerGetIndex"),"The menu has been added!","success");
 
         } catch (CBValidationException $e) {
             return cb()->redirectBack($e->getMessage());
@@ -70,10 +77,16 @@ class DeveloperMenusController extends Controller
             $menu['name'] = request('name');
             $menu['icon'] = request('icon');
             $menu['type'] = request('type');
-            $menu['cb_modules_id'] = request('cb_modules_id');
+            if(request('type') == 'module') {
+                $menu['cb_modules_id'] = request('cb_modules_id');
+            }elseif (request('type') == 'url') {
+                $menu['path'] = request('url_value');
+            }elseif (request('type') == 'path') {
+                $menu['path'] = request('path_value');
+            }
             DB::table("cb_menus")->where("id",$id)->update($menu);
 
-            return cb()->redirect(action("DeveloperMenusController@getIndex"),"The menu has been saved!","success");
+            return cb()->redirect(route("DeveloperMenusControllerGetIndex"),"The menu has been saved!","success");
 
         } catch (CBValidationException $e) {
             return cb()->redirectBack($e->getMessage());
@@ -113,6 +126,12 @@ class DeveloperMenusController extends Controller
         } catch (CBValidationException $e) {
             return response()->json(['api_status'=>0,'api_message'=>$e->getMessage()]);
         }
+    }
+
+    public function getDelete($id) {
+        DB::table("cb_menus")->where("id",$id)->delete();
+
+        return cb()->redirectBack("The menu has been deleted!","success");
     }
 
 }

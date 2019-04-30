@@ -31,6 +31,18 @@ trait DefaultOption
         return $this;
     }
 
+    public function defaultValue($value)
+    {
+        /** @var ColumnModel $data */
+        $data = ColumnSingleton()->getColumn($this->index);
+        $data->setDefaultValue($value);
+
+        // Save Back
+        columnSingleton()->setColumn($this->index, $data);
+
+        return $this;
+    }
+
     public function inputWidth($width)
     {
         /** @var ColumnModel $data */

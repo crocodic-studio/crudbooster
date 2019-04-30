@@ -1,5 +1,4 @@
-@extends('types::layout')
-@section('content')
+@include("types::layout_header")
     @php /** @var \crocodicstudio\crudbooster\types\file\FileModel $column */  @endphp
     <div class="upload-wrapper">
         <div class="upload-preview">
@@ -19,5 +18,4 @@
             <input type="hidden" name="{{ $column->getName() }}" value="{{ $column->getValue() }}">
         </div>
     </div>
-
-@endsection
+@include("types::layout_footer")

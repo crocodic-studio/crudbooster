@@ -1,6 +1,5 @@
-@extends('types::layout')
-@section('content')
-        <?php /** @var \crocodicstudio\crudbooster\types\text\TextAreaModel $column */ ?>
+@include("types::layout_header")
+        <?php /** @var \crocodicstudio\crudbooster\types\text\TextModel $column */  ?>
         <input type='text'
                title="{{ $column->getLabel() }}"
                placeholder="{{ $column->getPlaceholder() }}"
@@ -8,8 +7,9 @@
                {{ $column->getReadonly()?'readonly':''}}
                {{ $column->getDisabled()?'disabled':''}}
                {{ $column->getMaxLength()?"maxlength=".$column->getMaxLength():""}}
+               {{ $column->getMinLength()?"minlength=".$column->getMinLength():""}}
                class='form-control'
                name="{{ $column->getName() }}"
                id="{{ $column->getName() }}"
                value='{{ $column->getValue() }}'/>
-@endsection
+@include("types::layout_footer")

@@ -19,12 +19,12 @@ class Hook extends TypesHook
         return Hash::make($value);
     }
 
-    public function indexRender($row, ColumnModel $column)
+    public function indexRender($row, $column)
     {
         return "*****";
     }
 
-    public function detailRender($row, ColumnModel $column)
+    public function detailRender($row, $column)
     {
         return "*****";
     }

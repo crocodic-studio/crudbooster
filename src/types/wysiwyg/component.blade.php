@@ -1,5 +1,4 @@
-@extends('types::layout')
-@section('content')
+@include("types::layout_header")
     <?php /** @var \crocodicstudio\crudbooster\types\wysiwyg\WysiwygModel $column */ ?>
     @push('bottom')
         <script type="text/javascript">
@@ -48,4 +47,4 @@
         name="{{ $column->getName() }}"
         class='form-control'
         rows='5'>{{ $column->getValue() }}</textarea>
-@endsection
+@include("types::layout_footer")

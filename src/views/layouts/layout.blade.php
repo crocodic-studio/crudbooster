@@ -2,22 +2,30 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>{{ ($pageTitle)?env('APP_NAME').': '.strip_tags($pageTitle):"Admin Area" }}</title>
+    <title>{{ (isset($page_title))?cb()->getAppName().': '.strip_tags($page_title):"Admin Area" }}</title>
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
     <meta name='generator' content='CRUDBooster'/>
     <meta name='robots' content='noindex,nofollow'/>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <!-- Bootstrap 3.3.2 -->
-    <link href="{{ asset("vendor/crudbooster/assets/adminlte/bootstrap/css/bootstrap.min.css") }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ cbAsset("adminlte/bootstrap/css/bootstrap.min.css") }}" rel="stylesheet" type="text/css"/>
     <!-- Font Awesome Icons -->
-    <link href="{{asset("vendor/crudbooster/assets/adminlte/font-awesome/css/font-awesome.min.css")}}" rel="stylesheet" type="text/css"/>
-    <!-- Ionicons -->
-    <link href="{{asset("vendor/crudbooster/ionic/css/ionicons.min.css")}}" rel="stylesheet" type="text/css"/>
-    <!-- Theme style -->
-    <link href="{{ asset("vendor/crudbooster/assets/adminlte/dist/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset("vendor/crudbooster/assets/adminlte/dist/css/skins/_all-skins.min.css")}}" rel="stylesheet" type="text/css"/>
+    <link href="{{cbAsset("adminlte/font-awesome/css/font-awesome.min.css")}}" rel="stylesheet" type="text/css"/>
 
-    <link rel='stylesheet' href='{{asset("vendor/crudbooster/assets/css/main.css")}}'/>
+    <!-- Theme style -->
+    <link href="{{ cbAsset("adminlte/dist/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css"/>
+    <link href="{{ cbAsset("adminlte/dist/css/skins/_all-skins.min.css")}}" rel="stylesheet" type="text/css"/>
+
+    <link rel='stylesheet' href='{{cbAsset("css/main.css")}}'/>
+
+    <style>
+        #table-module thead tr th {
+            border: 1px solid #cccccc;
+        }
+        #table-module tbody tr td {
+            border: 1px solid #cccccc;
+        }
+    </style>
 
     @if(isset($head_html))
         {!! $head_html !!}
@@ -40,15 +48,15 @@
         <section class="content-header">
 
             <h1>
-                <i class='{{ module()->getIcon()?:$pageIcon }}'></i> {{ module()->getPageTitle()?:$pageTitle }}&nbsp;
+                <i class='{{ (module()->getPageIcon()?:@$page_icon)?:"fa fa-dashboard" }}'></i> {{ (module()->getPageTitle()?:@$page_title)?:"Dashboard ".cb()->getAppName() }}&nbsp;
 
-                @include('crudbooster::module.index_head_buttons')
+                @include('crudbooster::module.index.index_head_buttons')
             </h1>
 
 
             <ol class="breadcrumb">
-                <li><a href="{{ getAdminURL() }}"><i class="fa fa-dashboard"></i> {{ __('crudbooster.home') }}</a></li>
-                <li class="active">{{ module()->getPageTitle()?:$pageTitle }}</li>
+                <li><a href="{{ cb()->getAdminUrl() }}"><i class="fa fa-dashboard"></i> {{ __('crudbooster.home') }}</a></li>
+                <li class="active">{{ (module()->getPageTitle()?:@$page_title)?:null }}</li>
             </ol>
         </section>
 

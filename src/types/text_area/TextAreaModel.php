@@ -6,7 +6,7 @@
  * Time: 10:51 PM
  */
 
-namespace crocodicstudio\crudbooster\types\text;
+namespace crocodicstudio\crudbooster\types\text_area;
 
 use crocodicstudio\crudbooster\models\ColumnModel;
 

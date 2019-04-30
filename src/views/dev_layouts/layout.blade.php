@@ -34,12 +34,12 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                {{ $pageTitle }}
+                {{ $page_title }}
             </h1>
 
             <ol class="breadcrumb">
-                <li><a href="{{ getAdminURL() }}"><i class="fa fa-dashboard"></i> {{ __('crudbooster.home') }}</a></li>
-                <li class="active">{{ $pageTitle }}</li>
+                <li><a href="{{ cb()->getDeveloperUrl() }}"><i class="fa fa-dashboard"></i> {{ __('crudbooster.home') }}</a></li>
+                <li class="active">{{ $page_title }}</li>
             </ol>
         </section>
 

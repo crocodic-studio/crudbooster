@@ -1,19 +1,22 @@
 
 <table id='table-module' class="table table-hover table-striped table-bordered">
     <thead>
-        <tr class="active">
+        <tr>
             @foreach(module()->getColumnSingleton()->getIndexColumns() as $column)
-                <td>
+                <th>
                     {{ $column->getLabel() }}
-                </td>
+                </th>
             @endforeach
+            <th width="150px" style="text-align: center">
+                Action
+            </th>
         </tr>
     </thead>
     <tbody>
 
     @if(!empty($result) && count($result)==0)
         <tr class='warning'>
-            <td colspan="{{ count(module()->getColumnSingleton()->getIndexColumns()) }}">
+            <td colspan="{{ count(module()->getColumnSingleton()->getIndexColumns()) }}" style="text-align: center">
                 <i class='fa fa-table'></i> {{trans("crudbooster.table_data_not_found")}}
             </td>
         </tr>
@@ -26,6 +29,9 @@
                     {!! getTypeHook($column->getType())->indexRender($row, $column) !!}
                 </td>
             @endforeach
+            <td style="text-align: center; white-space: nowrap">
+                @include("crudbooster::module.index.table_action_buttons")
+            </td>
         </tr>
     @endforeach
 

@@ -10,18 +10,26 @@ namespace crocodicstudio\crudbooster\types;
 
 
 use crocodicstudio\crudbooster\models\ColumnModel;
+use Illuminate\Database\Query\Builder;
 
 interface TypesHookInterface
 {
 
     /**
      * @param $value
-     * @param ColumnModel $column
+     * @param mixed|ColumnModel $column
      * @return mixed
      */
-    public function assignment($value, ColumnModel $column);
+    public function assignment($value, $column);
 
-    public function indexRender($row, ColumnModel $column);
+    public function indexRender($row, $column);
 
-    public function detailRender($row, ColumnModel $column);
+    public function detailRender($row, $column);
+
+    /**
+     * @param $query Builder
+     * @param mixed|ColumnModel $column
+     * @return mixed
+     */
+    public function query($query, $column);
 }

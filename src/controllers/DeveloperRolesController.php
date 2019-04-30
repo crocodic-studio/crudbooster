@@ -19,7 +19,7 @@ class DeveloperRolesController extends Controller
 
     public function __construct()
     {
-        view()->share(['pageTitle'=>'Role Manager']);
+        view()->share(['page_title'=>'Role Manager']);
     }
 
     public function getIndex() {
@@ -35,10 +35,10 @@ class DeveloperRolesController extends Controller
     }
 
     public function postAddSave() {
+        DB::beginTransaction();
+
         try {
             cb()->validation(["name", "menus"]);
-
-            DB::beginTransaction();
 
             $role = [];
             $role['name'] = request('name');
@@ -57,6 +57,8 @@ class DeveloperRolesController extends Controller
             }
 
             DB::commit();
+
+            return cb()->redirect(route("DeveloperRolesControllerGetIndex"),"The role has been saved!","success");
 
         } catch (CBValidationException $e) {
             return cb()->redirectBack($e->getMessage());
@@ -112,7 +114,7 @@ class DeveloperRolesController extends Controller
                 }
             }
 
-            return cb()->redirect(action("DeveloperRolesController@getIndex"),"The role has been saved!","success");
+            return cb()->redirect(route("DeveloperRolesControllerGetIndex"),"The role has been saved!","success");
 
         } catch (CBValidationException $e) {
 

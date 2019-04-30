@@ -36,7 +36,7 @@ class ModuleGenerator
             $controllerName = str_replace(' ', '', $controllerName).'Controller';
         }
 
-        return $controllerName;
+        return "Admin".$controllerName;
     }
 
     public function make() {
@@ -52,11 +52,15 @@ class ModuleGenerator
         $fields = DB::getSchemaBuilder()->getColumnListing($this->table);
         $scaffold = "";
         foreach($fields as $field) {
-            $scaffold .= '$this->addText("'.$field.'");'."\n";
+            $scaffold .= '$this->addText("'.$field.'");'."\n\t\t";
         }
         $template = str_replace("{scaffolding}", $scaffold, $template);
 
         $filename = $this->makeControllerName($this->table);
+
+        //Replace Controller Name
+        $template = str_replace("FooBarController", $filename, $template);
+
 
         file_put_contents(app_path("Http/Controllers/".$filename.".php"), $template);
 
@@ -72,7 +76,6 @@ class ModuleGenerator
         $menu = [];
         $menu['name'] = $module['name'];
         $menu['type'] = 'module';
-        $menu['icon'] = $this->icon;
         $menu['cb_modules_id'] = $id_modules;
         DB::table('cb_menus')->insertGetId($menu);
 

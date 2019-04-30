@@ -28,7 +28,7 @@ class Hook extends TypesHook
         }
     }
 
-    public function detailRender($row, ColumnModel $column)
+    public function detailRender($row, $column)
     {
         return view("types::image.detail",[
             'row'=>$row,
@@ -36,12 +36,9 @@ class Hook extends TypesHook
         ]);
     }
 
-    public function indexRender($row, ColumnModel $column)
+    public function indexRender($row, $column)
     {
-        return view("types::image.detail",[
-            'row'=>$row,
-            'column'=>$column
-        ]);
+        return $this->detailRender($row, $column);
     }
 
 }

@@ -8,11 +8,6 @@ return [
     'ADMIN_PATH' => 'admin',
 
     /*
-     * You can customize the admin login url
-     */
-    'ADMIN_LOGIN_PATH'=> 'login',
-
-    /*
      * To customize the dashboard controller, you can set the value bellow
      */
     'ADMIN_DASHBOARD_CONTROLLER'=> null,
