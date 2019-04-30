@@ -19,7 +19,7 @@ class DeveloperRolesController extends Controller
 
     public function __construct()
     {
-        view()->share(['pageTitle'=>'Data Roles']);
+        view()->share(['pageTitle'=>'Role Manager']);
     }
 
     public function getIndex() {

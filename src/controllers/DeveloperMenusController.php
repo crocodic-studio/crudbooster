@@ -19,7 +19,7 @@ class DeveloperMenusController extends Controller
 
     public function __construct()
     {
-        view()->share(['pageTitle'=>'Data Menus']);
+        view()->share(['pageTitle'=>'Menu Manager']);
     }
 
     public function getIndex() {

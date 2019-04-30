@@ -49,7 +49,7 @@ class ModuleGenerator
         $template = str_replace("{permalink}", '"'.$this->table.'"', $template);
 
         //Replace scaffolding
-        $fields = DB::getSchemaBuilder()->getColumnListing();
+        $fields = DB::getSchemaBuilder()->getColumnListing($this->table);
         $scaffold = "";
         foreach($fields as $field) {
             $scaffold .= '$this->addText("'.$field.'");'."\n";
