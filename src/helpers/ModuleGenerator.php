@@ -72,6 +72,7 @@ class ModuleGenerator
         $menu = [];
         $menu['name'] = $module['name'];
         $menu['type'] = 'module';
+        $menu['icon'] = $this->icon;
         $menu['cb_modules_id'] = $id_modules;
         DB::table('cb_menus')->insertGetId($menu);
 
