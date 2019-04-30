@@ -17,6 +17,11 @@ class DeveloperMenusController extends Controller
 
     private $view = "crudbooster::dev_layouts.modules.menus";
 
+    public function __construct()
+    {
+        view()->share(['pageTitle'=>'Data Menus']);
+    }
+
     public function getIndex() {
         $data = [];
         return view($this->view.".index",$data);

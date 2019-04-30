@@ -17,6 +17,11 @@ class DeveloperRolesController extends Controller
 {
     private $view = "crudbooster::dev_layouts.modules.roles";
 
+    public function __construct()
+    {
+        view()->share(['pageTitle'=>'Data Roles']);
+    }
+
     public function getIndex() {
         $data = [];
         $data['result'] = DB::table("cb_roles")->get();

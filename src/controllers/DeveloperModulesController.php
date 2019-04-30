@@ -19,7 +19,7 @@ class DeveloperModulesController extends Controller
 
     public function __construct()
     {
-        view()->share(['pageTitle'=>'Modules']);
+        view()->share(['pageTitle'=>'Data Modules']);
     }
 
 

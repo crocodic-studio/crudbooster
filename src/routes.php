@@ -21,14 +21,14 @@ Route::group(['middleware' => ['web'],
 
 // Routing without any middleware
 Route::group(['middleware' => ['web'], 'namespace' => '\crocodicstudio\crudbooster\controllers'], function () {
-    cb()->routeGet('uploads/{one?}/{two?}/{three?}/{four?}/{five?}', ['uses' => 'FileController@getPreview', 'as' => 'fileControllerPreview']);
+    cb()->routeGet('uploads/{one?}/{two?}/{three?}/{four?}/{five?}', "FileController@getPreview");
 });
 
 // Routing without any middleware with admin prefix
 Route::group(['middleware' => ['web'], 'prefix' => cbConfig('ADMIN_PATH'), 'namespace' => 'crocodicstudio\crudbooster\controllers'], function () {
-    cb()->routeGet('logout', ['uses' => 'AdminAuthController@getLogout', 'as' => 'getLogout']);
-    cb()->routePost('login', ['uses' => 'AdminAuthController@postLogin', 'as' => 'postLogin']);
-    cb()->routeGet('login', ['uses' => 'AdminAuthController@getLogin', 'as' => 'getLogin']);
+    cb()->routeGet('logout', "AdminAuthController@getLogout");
+    cb()->routePost('login', "AdminAuthController@postLogin");
+    cb()->routeGet('login', "AdminAuthController@getLogin");
 });
 
 // Routing package controllers
