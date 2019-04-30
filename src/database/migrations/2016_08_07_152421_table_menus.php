@@ -13,7 +13,7 @@ class TableMenus extends Migration
     public function up()
     {
         Schema::create('cb_menus', function (Blueprint $table) {
-            $table->increments();
+            $table->increments("id");
             $table->string('name');
             $table->string("icon");
             $table->string("path");

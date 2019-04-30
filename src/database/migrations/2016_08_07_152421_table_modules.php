@@ -13,7 +13,7 @@ class TableModules extends Migration
     public function up()
     {
         Schema::create('cb_modules', function (Blueprint $table) {
-            $table->increments();
+            $table->increments("id");
             $table->string('name');
             $table->string("icon");
             $table->string("table_name");

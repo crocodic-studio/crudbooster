@@ -13,7 +13,7 @@ class TableRoles extends Migration
     public function up()
     {
         Schema::create('cb_roles', function (Blueprint $table) {
-            $table->increments();
+            $table->increments("id");
             $table->string('name');
         });
     }

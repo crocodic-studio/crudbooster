@@ -13,7 +13,7 @@ class TableRolePrivileges extends Migration
     public function up()
     {
         Schema::create('cb_role_privileges', function (Blueprint $table) {
-            $table->increments();
+            $table->increments("id");
             $table->integer("cb_roles_id");
             $table->integer("cb_menus_id");
             $table->tinyInteger("can_browse")->default(1);
