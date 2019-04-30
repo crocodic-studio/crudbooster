@@ -17,6 +17,11 @@ class DeveloperModulesController extends Controller
 
     private $view = "crudbooster::dev_layouts.modules.modules";
 
+    public function __construct()
+    {
+        view()->share(['pageTitle'=>'Modules']);
+    }
+
 
     public function getIndex() {
         $data = [];

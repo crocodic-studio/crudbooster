@@ -34,4 +34,11 @@
 <link rel="stylesheet" href="{{ cbAsset('adminlte/plugins/datatables/dataTables.bootstrap.css')}}">
 <script src="{{ cbAsset('adminlte/plugins/datatables/jquery.dataTables.min.js')}}"></script>
 <script src="{{ cbAsset('adminlte/plugins/datatables/dataTables.bootstrap.min.js')}}"></script>
+<script>
+    $(function () {
+        $(".datatable").dataTable();
+    })
+</script>
+
+<!-- Default CB Script -->
 <script src="{{ cbAsset('js/main.js').'?r='.time()}}"></script>

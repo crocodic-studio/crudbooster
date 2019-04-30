@@ -3,7 +3,7 @@
 
 
     <p>
-        <a href="{{ action('DeveloperRolesController@getAdd') }}" class="btn btn-primary">Add Role</a>
+        <a href="{{ route('DeveloperRolesControllerGetAdd') }}" class="btn btn-primary">Add Role</a>
     </p>
 
     <div class="box box-default">
@@ -23,8 +23,8 @@
                     <tr>
                         <td>{{ $row->name }}</td>
                         <td>
-                            <a href="{{ action('DeveloperRolesController@getEdit',['id'=>$row->id]) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <a href="{{ action('DeveloperRolesController@getDelete',['id'=>$row->id]) }}" onclick="if(!confirm('Are you sure want to delete?')) return false" class="btn btn-danger btn-sm">Delete</a>
+                            <a href="{{ route('DeveloperRolesControllerGetEdit',['id'=>$row->id]) }}" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="{{ route('DeveloperRolesControllerGetDelete',['id'=>$row->id]) }}" onclick="if(!confirm('Are you sure want to delete?')) return false" class="btn btn-danger btn-sm">Delete</a>
                         </td>
                     </tr>
                 @endforeach

@@ -319,6 +319,20 @@ class CB
     }
 
 
+    public function routeGet($prefix, $controller) {
+        $alias = str_replace("@"," ", $controller);
+        $alias = ucwords($alias);
+        $alias = str_replace(" ","",$alias);
+        Route::get($prefix, ['uses' => $controller.'@', 'as' => $alias]);
+    }
+
+    public function routePost($prefix, $controller) {
+        $alias = str_replace("@"," ", $controller);
+        $alias = ucwords($alias);
+        $alias = str_replace(" ","",$alias);
+        Route::post($prefix, ['uses' => $controller.'@', 'as' => $alias]);
+    }
+
     /*
     | --------------------------------------------------------------------------------------------------------------
     | Alternate route for Laravel Route::controller

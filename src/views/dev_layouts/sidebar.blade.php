@@ -7,7 +7,7 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel">
             <div class="pull-{{ trans('crudbooster.left') }} image">
-                <img src="{{ dummyPhoto() }}" class="img-circle" />
+                <img src="{{ asset(dummyPhoto()) }}" class="img-circle" />
             </div>
             <div class="pull-{{ trans('crudbooster.left') }} info">
                 <p>Developer</p>

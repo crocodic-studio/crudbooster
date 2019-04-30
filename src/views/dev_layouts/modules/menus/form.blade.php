@@ -3,7 +3,7 @@
 
 
     <p>
-        <a href="{{ action('DeveloperMenusController@getIndex') }}"><i class="fa fa-arrow-left"></i> Back To List</a>
+        <a href="{{ route('DeveloperMenusControllerGetIndex') }}"><i class="fa fa-arrow-left"></i> Back To List</a>
     </p>
 
     <div class="box box-default">

@@ -3,14 +3,14 @@
 
 
     <p>
-        <a href="{{ action('DeveloperModulesController@getIndex') }}"><i class="fa fa-arrow-left"></i> Back To List</a>
+        <a href="{{ route('DeveloperModulesControllerGetIndex') }}"><i class="fa fa-arrow-left"></i> Back To List</a>
     </p>
 
     <div class="box box-default">
         <div class="box-header">
             <h1 class="box-title">Edit Module</h1>
         </div>
-        <form method="post" action="{{ action('DeveloperModulesController@postEditSave',['id'=>$row->id]) }}">
+        <form method="post" action="{{ route('DeveloperModulesControllerPostEditSave',['id'=>$row->id]) }}">
             {!! csrf_field() !!}
         <div class="box-body">
             <div class="form-group">

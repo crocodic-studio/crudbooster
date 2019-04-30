@@ -13,7 +13,9 @@ class DeveloperDashboardController extends Controller
 {
 
     public function getIndex() {
-        return view('crudbooster::dev_layouts.modules.dashboard');
+        $data = [];
+        $data['pageTitle'] = "Dashboard";
+        return view('crudbooster::dev_layouts.modules.dashboard',$data);
     }
     
 

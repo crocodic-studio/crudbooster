@@ -3,7 +3,7 @@
 
 
     <p>
-        <a href="{{ action('DeveloperModulesController@getAdd') }}" class="btn btn-primary">Add Module</a>
+        <a href="{{ route('DeveloperModulesControllerGetAdd') }}" class="btn btn-primary">Add Module</a>
     </p>
 
     <div class="box box-default">
@@ -25,8 +25,8 @@
                             <td>{{ $row->name }}</td>
                             <td>{{ $row->controller }}</td>
                             <td>
-                                <a href="{{ action('DeveloperModulesController@getEdit',['id'=>$row->id]) }}" class="btn btn-warning btn-sm">Edit</a>
-                                <a href="{{ action('DeveloperModulesController@getDelete',['id'=>$row->id]) }}" onclick="if(!confirm('Are you sure want to delete?')) return false" class="btn btn-danger btn-sm">Delete</a>
+                                <a href="{{ route('DeveloperModulesControllerGetEdit',['id'=>$row->id]) }}" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="{{ route('DeveloperModulesControllerGetDelete',['id'=>$row->id]) }}" onclick="if(!confirm('Are you sure want to delete?')) return false" class="btn btn-danger btn-sm">Delete</a>
                             </td>
                         </tr>
                         @endforeach

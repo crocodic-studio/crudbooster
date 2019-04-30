@@ -3,14 +3,14 @@
 
 
     <p>
-        <a href="{{ action('DeveloperRolesController@getIndex') }}"><i class="fa fa-arrow-left"></i> Back To List</a>
+        <a href="{{ route('DeveloperRolesControllerGetIndex') }}"><i class="fa fa-arrow-left"></i> Back To List</a>
     </p>
 
     <div class="box box-default">
         <div class="box-header">
             <h1 class="box-title">Add Role</h1>
         </div>
-        <form method="post" action="{{ action('DeveloperRolesController@postAddSave') }}">
+        <form method="post" action="{{ route('DeveloperRolesControllerPostAddSave') }}">
             {!! csrf_field() !!}
         <div class="box-body">
             <div class="form-group">

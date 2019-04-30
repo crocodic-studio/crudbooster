@@ -75,7 +75,7 @@
                     var data = $('.draggable-menu-active').sortable("serialize").get();
                     var jsonString = JSON.stringify(data, null, ' ');
 
-                    $.post("{{ action('DeveloperMenusController@postSaveSorting') }}", {menus: jsonString, _token: "{{csrf_token()}}"}, function (resp) {
+                    $.post("{{ route('DeveloperMenusControllerPostSaveSorting') }}", {menus: jsonString, _token: "{{csrf_token()}}"}, function (resp) {
                         console.log(resp);
                     });
 
@@ -86,7 +86,7 @@
     @endpush
 
     <p>
-        <a href="{{ action('DeveloperMenusController@getAdd') }}" class="btn btn-primary">Add Menu</a>
+        <a href="{{ route('DeveloperMenusControllerGetAdd') }}" class="btn btn-primary">Add Menu</a>
     </p>
 
     <div class="box box-default">
@@ -101,7 +101,7 @@
                         <div>
                             <i class='{{$menu->getIcon()}}'></i>
                             <span>
-                                <a href="{{ action('DeveloperMenusController@getEdit',['id'=>$menu->getId()]) }}" class="btn btn-xs btn-success">Edit</a>
+                                <a href="{{ route('DeveloperMenusControllerGetEdit',['id'=>$menu->getId()]) }}" class="btn btn-xs btn-success">Edit</a>
                                 <a onclick="if(!confirm('Are you sure want to delete?')) return false" href="{{ action('DeveloperMenusController@getDelete',['id'=>$menu->getId()]) }}" class="btn btn-xs btn-warning">Delete</a>
                                 {{$menu->getName()}}
                             </span>
@@ -113,7 +113,7 @@
                                     <div>
                                         <i class='{{$sub->getIcon()}}'></i>
                                         <span>
-                                            <a href="{{ action('DeveloperMenusController@getEdit',['id'=>$sub->getId()]) }}" class="btn btn-xs btn-success">Edit</a>
+                                            <a href="{{ route('DeveloperMenusControllerGetEdit',['id'=>$sub->getId()]) }}" class="btn btn-xs btn-success">Edit</a>
                                             <a onclick="if(!confirm('Are you sure want to delete?')) return false" href="{{ action('DeveloperMenusController@getDelete',['id'=>$sub->getId()]) }}" class="btn btn-xs btn-warning">Delete</a>
                                             {{$sub->getName()}}
                                         </span>
@@ -125,7 +125,7 @@
                                             <div>
                                                 <i class='{{$sub2->getIcon()}}'></i>
                                                 <span>
-                                                    <a href="{{ action('DeveloperMenusController@getEdit',['id'=>$sub2->getId()]) }}" class="btn btn-xs btn-success">Edit</a>
+                                                    <a href="{{ route('DeveloperMenusControllerGetEdit',['id'=>$sub2->getId()]) }}" class="btn btn-xs btn-success">Edit</a>
                                                     <a onclick="if(!confirm('Are you sure want to delete?')) return false" href="{{ action('DeveloperMenusController@getDelete',['id'=>$sub2->getId()]) }}" class="btn btn-xs btn-warning">Delete</a>
                                                     {{$sub2->getName()}}
                                                 </span>
