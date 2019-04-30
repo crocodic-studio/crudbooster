@@ -90,11 +90,11 @@ class DeveloperMenusController extends Controller
                         if($menu['children'][0]) {
                             foreach($menu['children'][0] as $ii=>$sub) {
                                 $id = $sub['id'];
-                                cb()->update("cb_menus",$id,["sort_number"=>$ii]);
+                                cb()->update("cb_menus",$id,["sort_number"=>$ii,"parent_cb_menus_id"=>$menu['id']]);
                                 if($sub['children'][0]) {
                                     foreach($sub['children'][0] as $iii=>$subsub) {
                                         $id = $subsub['id'];
-                                        cb()->update("cb_menus",$id,["sort_number"=>$iii]);
+                                        cb()->update("cb_menus",$id,["sort_number"=>$iii,"parent_cb_menus_id"=>$sub['id']]);
                                     }
                                 }
                             }
