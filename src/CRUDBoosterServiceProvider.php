@@ -28,9 +28,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->publishes([__DIR__.'/localization' => resource_path('lang')], 'cb_localization');                 
         $this->publishes([__DIR__.'/database' => base_path('database')],'cb_migration');
         $this->publishes([__DIR__.'/templates/CBHook.stub'=> app_path('Http/CBHook.php')],'cb_hook');
-        $this->publishes([
-            __DIR__ . '/assets' =>public_path('cb_asset')
-        ],'cb_asset');  
+        $this->publishes([__DIR__ . '/assets' =>public_path('cb_asset')],'cb_asset');
                     
         require __DIR__.'/validations/validation.php';        
         require __DIR__.'/routes.php';                        
