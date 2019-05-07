@@ -1,5 +1,6 @@
 @extends('crudbooster::layouts.layout_login')
 @section('content')
+    <h1 style="text-align: center">Developer</h1>
     <p class='login-box-msg'>{{trans("crudbooster.login_message")}}</p>
     <form autocomplete='off' action="{{ cb()->getDeveloperUrl("login")  }}" method="post">
         {!! csrf_field() !!}

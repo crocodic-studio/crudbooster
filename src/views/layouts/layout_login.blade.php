@@ -28,49 +28,54 @@
 
     <link rel='stylesheet' href='{{ cbAsset("css/main.css")}}'/>
     <style type="text/css">
-        .login-page {
-            background: #dddddd;
+        body {
+            background: #ffffff url("{{ cbAsset("images/bg_login.png") }}");
             color: #111111  !important;
             background-repeat: no-repeat;
             background-position: center;
             background-size: cover;
         }
 
-        .login-box, .register-box {
-            margin: 2% auto;
+        .login-box {
+            width: 850px;
+            margin: 10% auto;
+            border-radius: 15px;
+            background: #ffffff url("{{ cbAsset("images/image_login.png") }}");
+            background-repeat: no-repeat;
+            background-position: left;
+            box-shadow: 0px 0px 20px #bbbbbb;
         }
 
-        .login-box-body {
-            box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.8);
-            background: rgba(255, 255, 255, 0.9);
-            color: #666666 !important;
+        .login-body {
+            padding: 40px;
         }
 
         html, body {
             overflow: hidden;
         }
+
     </style>
 </head>
 
-<body class="login-page">
+<body>
 
 <div class="login-box">
-    <div class="login-logo">
-        <a href="{{ cb()->getLoginUrl() }}">
-            <img title='{{ cb()->getAppName() }}' src='{{ getSetting("login_logo")?asset(getSetting('login_logo')):cbAsset('logo.png') }}' style='max-width: 100%;max-height:170px'/>
-        </a>
-    </div><!-- /.login-logo -->
-    <div class="login-box-body">
+    <div class="row">
+        <div class="col-sm-6">
 
-        @if ( Session::get('message') != '' )
-            <div class='alert alert-warning'>
-                {{ Session::get('message') }}
-            </div>
-        @endif
+        </div>
+        <div class="col-sm-6">
+            <div class="login-body">
+                @if ( Session::get('message') != '' )
+                    <div class='alert alert-warning'>
+                        {{ Session::get('message') }}
+                    </div>
+                @endif
 
-        @yield('content')
-
-    </div><!-- /.login-box-body -->
+                @yield('content')
+            </div><!-- /.login-box-body -->
+        </div>
+    </div>
 
 </div><!-- /.login-box -->
 

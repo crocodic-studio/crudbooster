@@ -20,17 +20,24 @@
 
             <div class="form-group">
                 <label for="photo">Photo</label>
+
+                @if(auth()->user()->photo)
+                    <p>
+                        <img src="{{ asset(auth()->user()->photo) }}" width="150px" class="img-thumbnail" alt="Photo">
+                    </p>
+                @endif
+
                 <input type="file" class="form-control" name="photo" id="photo">
             </div>
 
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" class="form-control" name="password" id="password">
+                <input type="password" class="form-control" placeholder="Please leave empty if not change" name="password" id="password">
             </div>
 
             <div class="form-group">
                 <label for="password_confirmation">Re-type Password</label>
-                <input type="password" class="form-control" name="password_confirmation" id="password_confirmation">
+                <input type="password" class="form-control" placeholder="Re type the password" name="password_confirmation" id="password_confirmation">
             </div>
         </div>
         <div class="box-footer">

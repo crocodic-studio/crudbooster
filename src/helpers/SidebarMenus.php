@@ -35,12 +35,12 @@ class SidebarMenus
             $model->setUrl(cb()->getAdminUrl($controllerClass->getData("permalink")));
             $model->setIcon($module->icon);
             $model->setName($module->name);
-            $model->setBasepath(basename($model->getUrl()));
+            $model->setBasepath(config('crudbooster.ADMIN_PATH').'/'.basename($model->getUrl()));
         }elseif ($menu->type == "path") {
             $model->setUrl(cb()->getAdminUrl($menu->path));
             $model->setIcon($menu->icon);
             $model->setName($menu->name);
-            $model->setBasepath(basename($model->getUrl()));
+            $model->setBasepath(config('crudbooster.ADMIN_PATH').'/'.basename($model->getUrl()));
         }
         return $model;
     }

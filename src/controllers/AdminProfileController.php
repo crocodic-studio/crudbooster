@@ -26,7 +26,7 @@ class AdminProfileController extends BaseController {
             $data = [];
             $data['name'] = request('name');
             $data['email'] = request('email');
-            if(request()->has('password')) {
+            if(request('password')) {
                 $data['password'] = Hash::make(request('password'));
             }
             if(request()->hasFile('photo')) {

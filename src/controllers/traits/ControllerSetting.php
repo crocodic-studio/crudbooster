@@ -190,42 +190,42 @@ trait ControllerSetting
 
 
     /**
-     * @param mixed $before_index_table
+     * @param string $html_or_view
      * @return ControllerSetting
      */
-    public function setBeforeIndexTable($before_index_table)
+    public function setBeforeIndexTable($html_or_view)
     {
-        $this->data['before_index_table'] = $before_index_table;
+        $this->data['before_index_table'] = $html_or_view;
         return $this;
     }
 
     /**
-     * @param mixed $after_index_table
+     * @param mixed $html_or_view
      * @return ControllerSetting
      */
-    public function setAfterIndexTable($after_index_table)
+    public function setAfterIndexTable($html_or_view)
     {
-        $this->data['after_index_table'] = $after_index_table;
+        $this->data['after_index_table'] = $html_or_view;
         return $this;
     }
 
     /**
-     * @param mixed $before_detail_form
+     * @param callable|string $html_or_view
      * @return ControllerSetting
      */
-    public function setBeforeDetailForm($before_detail_form)
+    public function setBeforeDetailForm($html_or_view)
     {
-        $this->data['before_detail_form'] = $before_detail_form;
+        $this->data['before_detail_form'] = $html_or_view;
         return $this;
     }
 
     /**
-     * @param mixed $after_detail_form
+     * @param callable|string $html_or_view
      * @return ControllerSetting
      */
-    public function setAfterDetailForm($after_detail_form)
+    public function setAfterDetailForm($html_or_view)
     {
-        $this->data['after_detail_form'] = $after_detail_form;
+        $this->data['after_detail_form'] = $html_or_view;
         return $this;
     }
 

@@ -1,6 +1,9 @@
 @extends('crudbooster::layouts.layout_login')
 @section('content')
+
+    <h1 style="text-align: center">{{ cb()->getAppName() }}</h1>
     <p class='login-box-msg'>{{trans("crudbooster.login_message")}}</p>
+
     <form autocomplete='off' action="{{ route('AdminAuthControllerPostLogin') }}" method="post">
         {!! csrf_field() !!}
         <div class="form-group has-feedback">
@@ -17,4 +20,5 @@
             </div>
         </div>
     </form>
+
 @endsection

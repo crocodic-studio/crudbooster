@@ -31,8 +31,16 @@
                         <button type="button" class="btn btn-default" onclick="location.href='{{ module()->url() }}'">Cancel</button>
                         @endif
 
-                        @if(module()->canCreate() && module()->getData("button_save"))
-                            <input type="submit" name="submit" value='{{trans("crudbooster.button_save")}}' class='btn btn-success'>
+                        @if(cb()->getCurrentMethod()=="getAdd")
+                            @if(module()->canCreate() && module()->getData("button_save"))
+                                <input type="submit" name="submit" value='{{trans("crudbooster.button_save")}}' class='btn btn-success'>
+                            @endif
+                        @endif
+
+                        @if(cb()->getCurrentMethod()=="getEdit")
+                            @if(module()->canUpdate() && module()->getData("button_save"))
+                                <input type="submit" name="submit" value='{{trans("crudbooster.button_save")}}' class='btn btn-success'>
+                            @endif
                         @endif
                     </div>
 

@@ -27,14 +27,14 @@ class UserSession  {
     public function roleName()
     {
         $user = $this->user();
-        $role = cb()->find("cb_roles", $user->roles_id);
+        $role = cb()->find("cb_roles", $user->cb_roles_id);
         if($role) return $role->name;
         else return null;
     }
 
     public function roleId()
     {
-        return $this->user()->roles_id;
+        return $this->user()->cb_roles_id;
     }
 
 }

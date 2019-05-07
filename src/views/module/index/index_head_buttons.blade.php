@@ -15,7 +15,7 @@
         <?php /** @var \crocodicstudio\crudbooster\models\IndexActionButtonModel $button */ ?>
         <a href='{{$button->getUrl()}}'
            id='{{slug($button->getLabel())}}'
-           class='btn {{$button->getColor()}} btn-sm'
+           class='btn btn-{{$button->getColor()}} btn-sm'
                 {!! $button->getAttributes() !!}
         >
             <i class='{{$button->getIcon()}}'></i> {{$button->getLabel()}}

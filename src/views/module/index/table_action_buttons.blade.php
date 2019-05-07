@@ -12,7 +12,7 @@
     @endphp
 
     @if($isShown)
-        <a href="{{ $a->getUrl() }}" title="{{ $a->getLabel() }}" class="btn btn-sm btn-{{$a->getColor()}} {{ $a->getConfirmation()?"confirmation":"" }}">
+        <a href="{{ $a->getUrl() }}" title="{{ $a->getLabel() }}" class="btn btn-xs btn-{{$a->getColor()}} {{ $a->getConfirmation()?"confirmation":"" }}">
             @if($a->getIcon())
                 <i class="{{ $a->getIcon() }}"></i>
             @endif

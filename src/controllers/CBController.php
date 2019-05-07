@@ -21,8 +21,6 @@ class CBController extends Controller
     {
         columnSingleton()->newColumns();
         $this->cbInit();
-        $this->data['columns'] = columnSingleton()->getColumns();
-        view()->share($this->data);
     }
 
     public function __call($method, $parameters)
@@ -123,12 +121,13 @@ class CBController extends Controller
 
     public function getIndex()
     {
-        if(!module()->canBrowse()) return cb()->redirect(cb()->getAdminUrl(),"You do not have access to this area");
+        if(!module()->canBrowse()) return cb()->redirect(cb()->getAdminUrl(),"You do not have a privilege access to this area");
 
         $query = $this->repository();
         $result = $query->paginate(20);
         $data['result'] = $result;
-        return view("crudbooster::module.index.index", $data);
+
+        return view("crudbooster::module.index.index", array_merge($data, $this->data));
     }
 
 
@@ -149,17 +148,17 @@ class CBController extends Controller
 
     public function getAdd()
     {
-        if(!module()->canCreate()) return cb()->redirect(cb()->getAdminUrl(),"You do not have access to this area");
+        if(!module()->canCreate()) return cb()->redirect(cb()->getAdminUrl(),"You do not have a privilege access to this area");
 
         $data = [];
         $data['page_title'] = $this->data['page_title'].' : Add';
         $data['action_url'] = module()->addSaveURL();
-        return view('crudbooster::module.form.form',$data);
+        return view('crudbooster::module.form.form',array_merge($data, $this->data));
     }
 
     public function postAddSave()
     {
-        if(!module()->canCreate()) return cb()->redirect(cb()->getAdminUrl(),"You do not have access to this area");
+        if(!module()->canCreate()) return cb()->redirect(cb()->getAdminUrl(),"You do not have a privilege access to this area");
 
         try {
             $this->validation();
@@ -193,18 +192,18 @@ class CBController extends Controller
 
     public function getEdit($id)
     {
-        if(!module()->canUpdate()) return cb()->redirect(cb()->getAdminUrl(),"You do not have access to this area");
+        if(!module()->canUpdate()) return cb()->redirect(cb()->getAdminUrl(),"You do not have a privilege access to this area");
 
         $data = [];
         $data['row'] = $this->repository()->where($this->data['table'].'.'.getPrimaryKey($this->data['table']), $id)->first();
         $data['page_title'] = $this->data['page_title'].' : Edit';
         $data['action_url'] = module()->editSaveURL($id);
-        return view('crudbooster::module.form.form', $data);
+        return view('crudbooster::module.form.form', array_merge($data, $this->data));
     }
 
     public function postEditSave($id)
     {
-        if(!module()->canUpdate()) return cb()->redirect(cb()->getAdminUrl(),"You do not have access to this area");
+        if(!module()->canUpdate()) return cb()->redirect(cb()->getAdminUrl(),"You do not have a privilege access to this area");
 
         try {
             $this->validation();
@@ -244,7 +243,7 @@ class CBController extends Controller
 
     public function getDelete($id)
     {
-        if(!module()->canDelete()) return cb()->redirect(cb()->getAdminUrl(),"You do not have access to this area");
+        if(!module()->canDelete()) return cb()->redirect(cb()->getAdminUrl(),"You do not have a privilege access to this area");
 
         if(isset($this->data['hook_before_delete']) && is_callable($this->data['hook_before_delete'])) {
             call_user_func($this->data['hook_before_delete'], $id);
@@ -271,12 +270,12 @@ class CBController extends Controller
 
     public function getDetail($id)
     {
-        if(!module()->canRead()) return cb()->redirect(cb()->getAdminUrl(),"You do not have access to this area");
+        if(!module()->canRead()) return cb()->redirect(cb()->getAdminUrl(),"You do not have a privilege access to this area");
 
         $data = [];
         $data['row'] = $this->repository()->where($this->data['table'].'.'.getPrimaryKey($this->data['table']), $id)->first();
         $data['page_title'] = $this->data['page_title'].' : Detail';
-        return view('crudbooster::module.form.form_detail', $data);
+        return view('crudbooster::module.form.form_detail', array_merge($data, $this->data));
     }
 
     public function postUploadFile()
