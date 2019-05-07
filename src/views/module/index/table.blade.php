@@ -16,7 +16,7 @@
 
     @if(!empty($result) && count($result)==0)
         <tr class='warning'>
-            <td colspan="{{ count(module()->getColumnSingleton()->getIndexColumns()) }}" style="text-align: center">
+            <td colspan="{{ count(module()->getColumnSingleton()->getIndexColumns())+1 }}" style="text-align: center">
                 <i class='fa fa-table'></i> {{trans("crudbooster.table_data_not_found")}}
             </td>
         </tr>

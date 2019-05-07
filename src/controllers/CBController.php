@@ -93,7 +93,12 @@ class CBController extends Controller
                      */
                     foreach($columns as $column)
                     {
-                        $where->orWhere($column['name'], 'like', '%'.request('q').'%');
+                        if(strpos($column->getField(),".") === false) {
+                            $field = $this->data['table'].'.'.$column->getField();
+                        }else{
+                            $field = $column->getField();
+                        }
+                        $where->orWhere($field, 'like', '%'.request('q').'%');
                     }
                 });
             }
@@ -110,9 +115,7 @@ class CBController extends Controller
                 $query->orderBy(request('order_by'), request('order_sort'));
             }
         }else{
-            if(isset($this->data['order_by'])) {
-                $query->orderBy($this->data['order_by'][0], $this->data['order_by'][1]);
-            }
+            $query->orderBy($this->data['table'].'.'.cb()->findPrimaryKey($this->data['table']), "desc");
         }
 
         return $query;

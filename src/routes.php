@@ -38,7 +38,7 @@ Route::group([
     'prefix' => cbConfig('ADMIN_PATH'),
     'namespace' => 'crocodicstudio\crudbooster\controllers',
 ], function () {
-    cb()->routeController('profile', 'AdminProfileController');
+    cb()->routeController('profile', 'AdminProfileController','crocodicstudio\crudbooster\controllers');
 });
 
 // Auto Routing for App\Http\Controllers

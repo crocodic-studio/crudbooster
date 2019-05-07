@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Log;
 class AdminDashboardController extends BaseController {
 
     public function getIndex() {
-        return view('crudbooster::dashboard');
+        $data = [];
+        $data['page_title'] = "Dashboard ".cb()->getAppName();
+        return view('crudbooster::dashboard', $data);
     }
 }

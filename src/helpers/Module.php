@@ -29,14 +29,18 @@ class Module
 
         $className = "\\".$routeArray["namespace"]."\\".$this->controller;
         if(class_exists($className)) {
-            $this->controller_class = new $className();
             $this->module = cb()->find("cb_modules",["controller"=>$this->controller]);
-            $this->menu = cb()->find("cb_menus",["cb_modules_id"=>$this->module->id]);
-            $this->menu = (!$this->menu)?cb()->find("cb_menus",["type"=>"path","path"=>request()->segment(2)]):$this->menu;
-            $this->privilege = DB::table("cb_role_privileges")
-                ->where("cb_menus_id", $this->menu->id)
-                ->where("cb_roles_id", cb()->session()->roleId())
-                ->first();
+            if($this->module) {
+                $this->controller_class = new $className();
+                $this->menu = cb()->find("cb_menus",["cb_modules_id"=>$this->module->id]);
+                $this->menu = (!$this->menu)?cb()->find("cb_menus",["type"=>"path","path"=>request()->segment(2)]):$this->menu;
+                if($this->menu) {
+                    $this->privilege = DB::table("cb_role_privileges")
+                        ->where("cb_menus_id", $this->menu->id)
+                        ->where("cb_roles_id", cb()->session()->roleId())
+                        ->first();
+                }
+            }
         }
     }
 

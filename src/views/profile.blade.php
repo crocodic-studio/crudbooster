@@ -5,7 +5,8 @@
         <div class="box-header">
             <h1 class="box-title">Profile Data</h1>
         </div>
-        <form enctype="multipart/form-data" action="{{ action('AdminProfileController@postUpdate') }}">
+        <form enctype="multipart/form-data" method="post" action="{{ route('AdminProfileControllerPostUpdate') }}">
+            {!! csrf_field() !!}
         <div class="box-body">
             <div class="form-group">
                 <label for="name">Name</label>

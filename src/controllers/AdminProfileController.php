@@ -9,7 +9,9 @@ class AdminProfileController extends BaseController {
 
 
     public function getIndex() {
-        return view('crudbooster::profile');
+        $data = [];
+        $data['page_title'] = 'Profile';
+        return view('crudbooster::profile',$data);
     }
 
     public function postUpdate() {

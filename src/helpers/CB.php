@@ -313,12 +313,14 @@ class CB
             $string_parameters_array = explode('&', $string_parameters);
             foreach ($string_parameters_array as $s) {
                 $part = explode('=', $s);
-                $name = htmlspecialchars(urldecode($part[0]));
-                $name = strip_tags($name);
-                $value = htmlspecialchars(urldecode($part[1]));
-                $value = strip_tags($value);
-                if ($name) {
-                    $inputhtml .= "<input type='hidden' name='$name' value='$value'/>\n";
+                if(isset($part[0]) && isset($part[1])) {
+                    $name = htmlspecialchars(urldecode($part[0]));
+                    $name = strip_tags($name);
+                    $value = htmlspecialchars(urldecode($part[1]));
+                    $value = strip_tags($value);
+                    if ($name) {
+                        $inputhtml .= "<input type='hidden' name='$name' value='$value'/>\n";
+                    }
                 }
             }
         }
