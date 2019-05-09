@@ -13,6 +13,7 @@
 
             <div class="box-tools pull-{{ trans('crudbooster.right') }}" style="position: relative;margin-top: -5px;margin-right: -10px">
 
+                @if(isset($search_form) && $search_form===true)
                 <form method='get' style="display:inline-block;width: 260px;" action='{{ request()->url() }}'>
                     <div class="input-group">
                         <input type="text" name="q" value="{{ request('q') }}" class="form-control input-sm pull-{{ trans('crudbooster.right') }}"
@@ -22,8 +23,9 @@
                         </div>
                     </div>
                 </form>
+                @endif
 
-
+                @if(isset($button_limit_page) && $button_limit_page===true)
                 <form method='get' id='form-limit-paging' style="display:inline-block" action='{{ request()->url() }}'>
                     {!! cb()->getUrlParameters(['limit']) !!}
                     <div class="input-group">
@@ -37,6 +39,7 @@
                         </select>
                     </div>
                 </form>
+                @endif
 
             </div>
 
@@ -45,6 +48,18 @@
         </div>
         <div class="box-body table-responsive">
             @include("crudbooster::module.index.table")
+
+            <div class="col-md-8">{!! $result->appends(request()->all())->links() !!}</div>
+
+            <?php
+            $from = $result->count() ? ($result->perPage() * $result->currentPage() - $result->perPage() + 1) : 0;
+            $to = $result->perPage() * $result->currentPage() - $result->perPage() + $result->count();
+            $total = $result->total();
+            ?>
+            <div class="col-md-4" style="margin:30px 0;">
+                <span class="pull-right">{{ trans("crudbooster.filter_rows_total") }}
+                : {{ $from }} {{ trans("crudbooster.filter_rows_to") }} {{ $to }} {{ trans("crudbooster.filter_rows_of") }} {{ $total }}</span>
+            </div>
         </div>
     </div>
 

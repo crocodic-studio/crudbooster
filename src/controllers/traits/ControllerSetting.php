@@ -19,6 +19,49 @@ trait ControllerSetting
 
     private $data = [];
 
+    private function defaultData() {
+        $this->setSearchForm(true);
+        $this->setButtonDelete(true);
+        $this->setButtonEdit(true);
+        $this->setButtonAdd(true);
+        $this->setButtonCancel(true);
+        $this->setButtonAddMore(true);
+        $this->setButtonDetail(true);
+        $this->setButtonSave(true);
+        $this->setButtonLimitPage(true);
+        $this->hideButtonDeleteWhen(function ($row) { return false; });
+        $this->hideButtonDetailWhen(function ($row) { return false; });
+        $this->hideButtonEditWhen(function ($row) { return false; });
+    }
+
+
+    /**
+     * @param callable $condition
+     */
+    public function hideButtonDetailWhen(callable $condition) {
+        $this->data['hide_button_detail'] = $condition;
+    }
+
+    /**
+     * @param callable $condition
+     */
+    public function hideButtonEditWhen(callable $condition) {
+        $this->data['hide_button_edit'] = $condition;
+    }
+
+    /**
+     * @param callable $condition
+     */
+    public function hideButtonDeleteWhen(callable $condition) {
+        $this->data['hide_button_delete'] = $condition;
+    }
+
+    /**
+     * @param $enable boolean
+     */
+    public function setButtonLimitPage($enable) {
+        $this->data['button_limit_page'] = $enable;
+    }
 
     public function setPermalink($path)
     {
@@ -106,7 +149,16 @@ trait ControllerSetting
     }
 
     /**
-     * @param mixed $button_save
+     * @param boolean $enable
+     * @return $this
+     */
+    public function setSearchForm($enable) {
+        $this->data['search_form'] = $enable;
+        return $this;
+    }
+
+    /**
+     * @param boolean $button_save
      * @return ControllerSetting
      */
     public function setButtonSave($button_save)
@@ -115,6 +167,10 @@ trait ControllerSetting
         return $this;
     }
 
+    /**
+     * @param boolean $button_cancel
+     * @return $this
+     */
     public function setButtonCancel($button_cancel)
     {
         $this->data['button_cancel'] = $button_cancel;
@@ -124,8 +180,8 @@ trait ControllerSetting
 
     /**
      * @param $label
-     * @param Callback|string $url_target
-     * @param callback|string $condition_callback
+     * @param callable|string $url_target
+     * @param callable|string $condition_callback
      * @param $fontAwesome_icon
      * @param ButtonColor|string $color
      */

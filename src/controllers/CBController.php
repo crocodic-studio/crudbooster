@@ -20,6 +20,7 @@ class CBController extends Controller
     public function __construct()
     {
         columnSingleton()->newColumns();
+        $this->defaultData();
         $this->cbInit();
     }
 
@@ -278,6 +279,33 @@ class CBController extends Controller
         return view('crudbooster::module.form.form_detail', array_merge($data, $this->data));
     }
 
+    public function postUploadImage()
+    {
+        if(auth()->guest()) return redirect(cb()->getLoginUrl());
+
+        $file = null;
+        try {
+
+            cb()->validation([
+                'userfile' => 'required|mimes:' . implode(",",config('crudbooster.UPLOAD_IMAGE_EXTENSION_ALLOWED'))
+            ]);
+
+            $file = cb()->uploadFile('userfile', true);
+
+        } catch (CBValidationException $e) {
+            return response()->json(['status'=>false,'message'=>$e->getMessage()]);
+        } catch (\Exception $e) {
+            return response()->json(['status'=>false,'message'=>$e->getMessage()]);
+        }
+
+        return response()->json([
+            'status'=>true,
+            'filename'=>basename($file),
+            'full_url'=>asset($file),
+            'url'=>$file
+        ]);
+    }
+
     public function postUploadFile()
     {
         if(auth()->guest()) return redirect(cb()->getLoginUrl());
@@ -286,7 +314,7 @@ class CBController extends Controller
         try {
 
             cb()->validation([
-                'userfile' => 'required|mimes:' . config('crudbooster.UPLOAD_TYPES')
+                'userfile' => 'required|mimes:' . implode(",",config('crudbooster.UPLOAD_FILE_EXTENSION_ALLOWED'))
             ]);
 
             $file = cb()->uploadFile('userfile', true);

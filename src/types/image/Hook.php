@@ -21,15 +21,13 @@ class Hook extends TypesHook
      */
     public function assignment($value, $column)
     {
-        if(request()->hasFile($column->getName())) {
-            return cb()->uploadFile($column->getName());
-        }else{
-            return null;
-        }
+        // Direct return value because its been uploaded on client side
+        return $value;
     }
 
     public function detailRender($row, $column)
     {
+        $column->setValue($row->{ $column->getField() });
         return view("types::image.detail",[
             'row'=>$row,
             'column'=>$column
@@ -38,7 +36,11 @@ class Hook extends TypesHook
 
     public function indexRender($row, $column)
     {
-        return $this->detailRender($row, $column);
+        $column->setValue($row->{ $column->getField() });
+        return view("types::image.index",[
+            'row'=>$row,
+            'column'=>$column
+        ]);
     }
 
 }

@@ -1,10 +1,10 @@
 @include("types::layout_header")
     @php /** @var \crocodicstudio\crudbooster\models\ColumnModel $column */  @endphp
     <div class="upload-wrapper">
-        <div class="upload-preview">
+        <div class="upload-preview" style="padding: 5px">
             @if($column->getValue())
                 <a href="{{ asset($column->getValue()) }}" data-lightbox="thumbnail">
-                    <img src="{{ asset($column->getValue()) }}" style="max-width: 250px" alt="Preview Image">
+                    <img class="img-thumbnail" src="{{ asset($column->getValue()) }}" style="max-width: 250px" alt="Preview Image">
                 </a>
             @endif
         </div>

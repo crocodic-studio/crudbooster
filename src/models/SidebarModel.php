@@ -15,8 +15,46 @@ class SidebarModel
     private $name;
     private $url;
     private $sub;
+    private $sub_active;
     private $icon;
     private $basepath;
+    private $is_active;
+
+    /**
+     * @return mixed
+     */
+    public function getSubActive()
+    {
+        return $this->sub_active;
+    }
+
+    /**
+     * @param mixed $sub_active
+     */
+    public function setSubActive($sub_active)
+    {
+        $this->sub_active = $sub_active;
+    }
+
+
+
+    /**
+     * @return mixed
+     */
+    public function getisActive()
+    {
+        return $this->is_active;
+    }
+
+    /**
+     * @param mixed $is_active
+     */
+    public function setIsActive($is_active)
+    {
+        $this->is_active = $is_active;
+    }
+
+
 
     /**
      * @return mixed

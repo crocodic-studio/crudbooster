@@ -21,15 +21,12 @@ class Hook extends TypesHook
      */
     public function assignment($value, $column)
     {
-        if(request()->hasFile($column->getName())) {
-            return cb()->uploadFile($column->getName());
-        }else{
-            return null;
-        }
+        return $value;
     }
 
     public function detailRender($row, $column)
     {
+        $column->setValue($row->{ $column->getField() });
         return view("types::file.detail",[
             'row'=>$row,
             'column'=>$column
