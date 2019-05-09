@@ -179,8 +179,8 @@ Additional options available :
 
 | Method | Description |
 | --- | --- |
-| <code>->options($array);</code> | The options of check box |
-| <code>->optionsFromTable($table, $key_field, $display_field, $SQLCondition = null);</code> | The options of check box with table source |
+| <code>->options($array);</code> | The options of select |
+| <code>->optionsFromTable($table, $key_field, $display_field, $SQLCondition = null);</code> | The options of select with table source |
 
 Additional options example : 
 ```php
