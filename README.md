@@ -59,7 +59,9 @@ Show the input text
 <code>$this->addText("FooBar");</code>
 
 addText parameters available : <br/>
+
 | Name              | Description       |
+| ----------------- | ----------------- |
 | $label            | The input label   |
 | $name             | The input name    |
 | $field_to_save    | The field name if not same with the name |
