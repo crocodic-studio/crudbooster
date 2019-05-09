@@ -39,6 +39,7 @@ You can always change the admin login at /config/crudbooster.php
 <h3>Basic Code Knowledge</h3>
 In this new CRUDBooster, we use single scaffolding for index table and form. 
 For example : 
+
 ```php
 function cbInit() {
     $this->setTable("books");
@@ -47,7 +48,6 @@ function cbInit() {
     $this->addText("Title");
 }
 ```
-
 
 As you can see we add column title it will show at index table, detail, add and edit form.
 
