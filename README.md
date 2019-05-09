@@ -381,6 +381,15 @@ Parameters available : <br/>
 | <code>->placeholder("Enter the text");</code> | To set the input placeholder |
 | <code>->validation("string");</code> | To set the input validation (laravel validation) |
 
+**Example**
+```php
+    $this->addText("Foo Bar")
+            ->inputWidth(6)
+            ->columnWidth(150)
+            ->help("Enter the foo bar")
+            ->validation("required|string");
+```
+
 # Show column / input to specific page
 You can prevent input or column to show only at index table.
 ```php
