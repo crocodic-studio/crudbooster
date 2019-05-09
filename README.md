@@ -52,16 +52,32 @@ function cbInit() {
 As you can see we add column title it will show at index table, detail, add and edit form.
 
 <h3>Types</h3>
-These bellow are some types that you can use to make form input : 
-<h4>Text</h4>
-Show the input text
+These bellow are some types that you can use to make form input :
+ 
+## Text
+<strong>EXAMPLE</strong>
 
-<code>$this->addText("FooBar");</code>
+```php
+    $this->addText("Foo Bar");
+    $this->addText("Foo bar","foo_bar","field_foobar");
+```
 
-addText parameters available : <br/>
+Parameters available : <br/>
 
 | Name              | Description       |
 | ----------------- | ----------------- |
-| $label            | The input label   |
-| $name             | The input name    |
-| $field_to_save    | The field name if not same with the name |
+| $label            | The input label (Required)   |
+| $name             | The input name (Optional)    |
+| $field_to_save    | The field name if not same with the name (Optional) |
+
+Additional Options available : <br/>
+
+| Method            | Description       |
+| ------------------ | ---------------- |
+| <code>->maxLength(100);</code> | Set max length limit
+| <code>->minLength(5);</code> | Set min length limit |
+
+Additional options example :
+```php
+    $this->addText("Foo Bar")->maxLength(100)->minLength(5);
+```
