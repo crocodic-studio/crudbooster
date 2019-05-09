@@ -55,7 +55,7 @@ As you can see we add column title it will show at index table, detail, add and 
 These bellow are some types that you can use to make form input :
  
 ## Text
-<strong>EXAMPLE</strong>
+**Example**
 
 ```php
     $this->addText("Foo Bar");
@@ -80,4 +80,309 @@ Additional Options available : <br/>
 Additional options example :
 ```php
     $this->addText("Foo Bar")->maxLength(100)->minLength(5);
+```
+
+## Checkbox
+**Example**
+```php
+    $this->addCheckbox("Foo Bar");
+    $this->addCheckbox("Foo Bar","foo_bar","foo_bar_field");
+```
+
+Parameters available : <br/>
+
+| Name              | Description       |
+| ----------------- | ----------------- |
+| $label            | The input label (Required)   |
+| $name             | The input name (Optional)    |
+| $field_to_save    | The field name if not same with the name (Optional) |
+
+Additional options available : 
+
+| Method | Description |
+| --- | --- |
+| <code>->options($array);</code> | The options of check box |
+| <code>->optionsFromTable($table, $key_field, $display_field, $SQLCondition = null);</code> | The options of check box with table source |
+
+Additional options example : 
+```php
+    $this->addCheckbox("Foo bar")->options(["a"=>"Banana","b"=>"Melon"]);
+    $this->addCheckbox("Foo bar")->optionsFromTable("fruits","id","name");
+```
+
+## Password
+**Example**
+
+```php
+    $this->addPassword("Foo Bar");
+    $this->addPassword("Foo bar","foo_bar","field_foobar");
+```
+
+Parameters available : <br/>
+
+| Name              | Description       |
+| ----------------- | ----------------- |
+| $label            | The input label (Required)   |
+| $name             | The input name (Optional)    |
+| $field_to_save    | The field name if not same with the name (Optional) |
+
+
+## Image
+**Example**
+
+```php
+    $this->addImage("Foo Bar");
+    $this->addImage("Foo bar","foo_bar","field_foobar");
+```
+
+Parameters available : <br/>
+
+| Name              | Description       |
+| ----------------- | ----------------- |
+| $label            | The input label (Required)   |
+| $name             | The input name (Optional)    |
+| $field_to_save    | The field name if not same with the name (Optional) |
+
+
+## TextArea
+**Example**
+
+```php
+    $this->addTextArea("Foo Bar");
+    $this->addTextArea("Foo bar","foo_bar","field_foobar");
+```
+
+Parameters available : <br/>
+
+| Name              | Description       |
+| ----------------- | ----------------- |
+| $label            | The input label (Required)   |
+| $name             | The input name (Optional)    |
+| $field_to_save    | The field name if not same with the name (Optional) |
+
+## Select
+**Example**
+```php
+    $this->addSelect("Foo Bar");
+    $this->addSelect("Foo Bar","foo_bar","foo_bar_field");
+```
+
+Parameters available : <br/>
+
+| Name              | Description       |
+| ----------------- | ----------------- |
+| $label            | The input label (Required)   |
+| $name             | The input name (Optional)    |
+| $field_to_save    | The field name if not same with the name (Optional) |
+
+Additional options available : 
+
+| Method | Description |
+| --- | --- |
+| <code>->options($array);</code> | The options of check box |
+| <code>->optionsFromTable($table, $key_field, $display_field, $SQLCondition = null);</code> | The options of check box with table source |
+
+Additional options example : 
+```php
+    $this->addSelect("Foo bar")->options(["a"=>"Banana","b"=>"Melon"]);
+    $this->addSelect("Foo bar")->optionsFromTable("fruits","id","name");
+```
+
+## Custom
+**Example**
+
+```php
+    $this->addCustom("Foo Bar");
+    $this->addCustom("Foo bar","foo_bar","field_foobar");
+```
+
+Parameters available : <br/>
+
+| Name              | Description       |
+| ----------------- | ----------------- |
+| $label            | The input label (Required)   |
+| $name             | The input name (Optional)    |
+| $field_to_save    | The field name if not same with the name (Optional) |
+
+## Date
+**Example**
+
+```php
+    $this->addDate("Foo Bar");
+    $this->addDate("Foo bar","foo_bar","field_foobar");
+```
+
+Parameters available : <br/>
+
+| Name              | Description       |
+| ----------------- | ----------------- |
+| $label            | The input label (Required)   |
+| $name             | The input name (Optional)    |
+| $field_to_save    | The field name if not same with the name (Optional) |
+
+Additional options available : 
+
+| Name | Description |
+| --- | --- |
+| <code>->format("Y-m-d");</code> | The date php format |
+
+Additional options example : 
+```php
+    $this->addDate("foo bar")->format("Y-m-d");
+```
+
+## Date & Time
+**Example**
+
+```php
+    $this->addDateTime("Foo Bar");
+    $this->addDateTime("Foo bar","foo_bar","field_foobar");
+```
+
+Parameters available : <br/>
+
+| Name              | Description       |
+| ----------------- | ----------------- |
+| $label            | The input label (Required)   |
+| $name             | The input name (Optional)    |
+| $field_to_save    | The field name if not same with the name (Optional) |
+
+Additional options available : 
+
+| Name | Description | 
+| --- | --- |
+| <code>->format("Y-m-d H:i:s");</code> | The date time php format |
+
+Additional options example : 
+```php
+    $this->addDateTime("Foo bar")->format("Y-m-d H:i:s");
+```
+
+## Email
+**Example**
+
+```php
+    $this->addEmail("Foo Bar");
+    $this->addEmail("Foo bar","foo_bar","field_foobar");
+```
+
+Parameters available : <br/>
+
+| Name              | Description       |
+| ----------------- | ----------------- |
+| $label            | The input label (Required)   |
+| $name             | The input name (Optional)    |
+| $field_to_save    | The field name if not same with the name (Optional) |
+
+## File Upload
+**Example**
+
+```php
+    $this->addFile("Foo Bar");
+    $this->addFile("Foo bar","foo_bar","field_foobar");
+```
+
+Parameters available : <br/>
+
+| Name              | Description       |
+| ----------------- | ----------------- |
+| $label            | The input label (Required)   |
+| $name             | The input name (Optional)    |
+| $field_to_save    | The field name if not same with the name (Optional) |
+
+## Hidden Input
+**Example**
+
+```php
+    $this->addHidden("Foo Bar");
+    $this->addHidden("Foo bar","foo_bar","field_foobar");
+```
+
+Parameters available : <br/>
+
+| Name              | Description       |
+| ----------------- | ----------------- |
+| $label            | The input label (Required)   |
+| $name             | The input name (Optional)    |
+| $field_to_save    | The field name if not same with the name (Optional) |
+
+## Number
+**Example**
+
+```php
+    $this->addNumber("Foo Bar");
+    $this->addNumber("Foo bar","foo_bar","field_foobar");
+```
+
+Parameters available : <br/>
+
+| Name              | Description       |
+| ----------------- | ----------------- |
+| $label            | The input label (Required)   |
+| $name             | The input name (Optional)    |
+| $field_to_save    | The field name if not same with the name (Optional) |
+
+
+## Radio Button
+**Example**
+
+```php
+    $this->addRadio("Foo Bar");
+    $this->addRadio("Foo bar","foo_bar","field_foobar");
+```
+
+Parameters available : <br/>
+
+| Name              | Description       |
+| ----------------- | ----------------- |
+| $label            | The input label (Required)   |
+| $name             | The input name (Optional)    |
+| $field_to_save    | The field name if not same with the name (Optional) |
+
+Additional options available : 
+
+| Method | Description |
+| --- | --- |
+| <code>->options($array);</code> | The options of radio |
+| <code>->optionsFromTable($table, $key_field, $display_field, $SQLCondition = null);</code> | The options of radio with table source |
+
+Additional options example : 
+```php
+    $this->addSelect("Foo bar")->options(["a"=>"Banana","b"=>"Melon"]);
+    $this->addSelect("Foo bar")->optionsFromTable("fruits","id","name");
+```
+
+## Wysiwyg
+**Example**
+
+```php
+    $this->addWysiwyg("Foo Bar");
+    $this->addWysiwyg("Foo bar","foo_bar","field_foobar");
+```
+
+Parameters available : <br/>
+
+| Name              | Description       |
+| ----------------- | ----------------- |
+| $label            | The input label (Required)   |
+| $name             | The input name (Optional)    |
+| $field_to_save    | The field name if not same with the name (Optional) |
+
+
+# Additional Basic Options
+| Name | Description |
+| --- | --- |
+| <code>->visible($boolean);</code> | To set input visible false or true |
+| <code>->defaultValue($value);</code> | To set the default value |
+| <code>->inputWidth(12);</code> | To set width of input |
+| <code>->columnWidth(100);</code> | To set width of table column |
+| <code>->required(true);</code> | To set the mandatory of input | 
+| <code>->help("Help text");</code> | To set help text in the bellow of input | 
+| <code>->placeholder("Enter the text");</code> | To set the input placeholder |
+| <code>->validation("string");</code> | To set the input validation (laravel validation) |
+
+# Show column / input to specific page
+You can prevent input or column to show only at index table.
+```php
+    $this->addText("Foo Bar")->showIndex(true)->showEdit(false)->showAdd(false)->showDetail(false);
 ```

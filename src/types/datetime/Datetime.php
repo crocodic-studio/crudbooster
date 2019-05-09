@@ -15,7 +15,7 @@ class Datetime
 {
     use DefaultOption, Join;
 
-    public function format($formatString = "Y-m-d") {
+    public function format($formatString = "Y-m-d H:i:s") {
         $data = columnSingleton()->getColumn($this->index);
         /**
          * @var DateModel $data
