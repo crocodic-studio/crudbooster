@@ -5,9 +5,9 @@
                {{ $column->getRequired()?'required':''}}
                {{ $column->getReadonly()?'readonly':''}}
                {{ $column->getDisabled()?'disabled':''}}
-               class='form-control date-picker'
+               class='form-control datepicker'
                name="{{ $column->getName() }}"
                id="{{ $column->getName() }}"
-               data-format="{{ $column->getFormat()?convertPHPToMomentFormat($column->getFormat()):"YYYY-MM-DD HH:mm:ss" }}"
-               value='{{ $column->getValue() }}'/>
+               data-format="{{ $column->getFormat()?convertPHPToMomentFormat($column->getFormat()):"YYYY-MM-DD" }}"
+               value='{{ old($column->getName())?:$column->getValue() }}'/>
 @include("types::layout_footer")

@@ -67,66 +67,66 @@ class ColumnSingleton
     public function getIndexColumns()
     {
         $data = $this->columns;
+        $newData = [];
         foreach($data as $i=>$item) {
             /** @var ColumnModel $item */
-            if($item->getShowIndex() === false) {
-                unset($data[$i]);
+            if($item->getShowIndex()) {
+                $newData[] = $item;
             }
         }
-        return $data;
+        return $newData;
     }
 
     public function getAddEditColumns()
     {
         $data = $this->columns;
+        $newData = [];
         foreach($data as $i=>$item) {
             /** @var ColumnModel $item */
-            if($item->getShowIndex() === false) {
-                unset($data[$i]);
+            if($item->getShowAdd() || $item->getShowEdit()) {
+                $newData[] = $item;
             }
-
-            if($item->getShowDetail() === false) {
-                unset($data[$i]);
-            }
-
         }
-        return $data;
+        return $newData;
     }
 
     public function getEditColumns()
     {
         $data = $this->columns;
+        $newData = [];
         foreach($data as $i=>$item) {
             /** @var ColumnModel $item */
-            if($item->getShowEdit() === false) {
-                unset($data[$i]);
+            if($item->getShowEdit()) {
+                $newData[] = $item;
             }
         }
-        return $data;
+        return $newData;
     }
 
     public function getAddColumns()
     {
         $data = $this->columns;
+        $newData = [];
         foreach($data as $i=>$item) {
             /** @var ColumnModel $item */
-            if($item->getShowAdd() === false) {
-                unset($data[$i]);
+            if($item->getShowAdd()) {
+                $newData[] = $item;
             }
         }
-        return $data;
+        return $newData;
     }
 
     public function getDetailColumns()
     {
         $data = $this->columns;
+        $newData = [];
         foreach($data as $i=>$item) {
             /** @var ColumnModel $item */
-            if($item->getShowDetail() === false) {
-                unset($data[$i]);
+            if($item->getShowDetail()) {
+                $newData[] = $item;
             }
         }
-        return $data;
+        return $newData;
     }
 
     public function getAssignmentData()

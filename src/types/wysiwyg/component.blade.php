@@ -19,14 +19,14 @@
                         headers: {
                           "X-CSRF-TOKEN":"{{ csrf_token() }}"
                         },
-                        url: '{{ cb()->url('upload-file') }}',
+                        url: '{{ cb()->url('upload-image') }}',
                         cache: false,
                         contentType: false,
                         processData: false,
                         data: data,
                         type: "post",
-                        success: function (url) {
-                            var image = $('<img>').attr('src', url);
+                        success: function (resp) {
+                            var image = $('<img>').attr('src', resp.full_url);
                             $('#textarea_{{ $column->getName() }}').summernote("insertNode", image[0]);
                         },
                         error: function (data) {

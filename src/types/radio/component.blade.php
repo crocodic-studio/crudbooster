@@ -1,11 +1,14 @@
 @include("types::layout_header")
         <?php /** @var \crocodicstudio\crudbooster\types\radio\RadioModel $column */ ?>
         @foreach($column->getOptions() as $key=>$value)
+            <?php
+                $columnValue = old($column->getName())?:$column->getValue();
+            ?>
             <div class="{{ $column->getDisabled()?"disabled":"" }}">
                 <label class='radio-inline'>
                     <input type="radio"
                             {{ $column->getDisabled()?"disabled":"" }}
-                            {{ $column->getValue() == $key?"checked":"" }}
+                            {{ $columnValue == $key?"checked":"" }}
                            name="{{ $column->getName() }}"
                            value="{{ $key }}"> {{ $value }}
                 </label>

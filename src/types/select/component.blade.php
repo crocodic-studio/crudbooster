@@ -6,8 +6,11 @@
             {{ $column->getDisabled()?'disabled':''}}
             name="{{ $column->getName() }}" id="{{ $column->getName() }}">
         <option value="">** Select a {{ $column->getLabel() }}</option>
+        <?php
+            $columnValue = old($column->getName())?:$column->getValue();
+        ?>
         @foreach($column->getOptions() as $key=>$value)
-            <option {{ $column->getValue()==$key?'selected':'' }} value="{{ $key }}">{{ $value }}</option>
+            <option {{ $columnValue==$key?'selected':'' }} value="{{ $key }}">{{ $value }}</option>
         @endforeach
     </select>
 @include("types::layout_footer")
