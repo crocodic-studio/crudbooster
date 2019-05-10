@@ -3,7 +3,8 @@
     <thead>
         <tr>
             @foreach(module()->getColumnSingleton()->getIndexColumns() as $column)
-                <th>
+                @php /** @var $column \crocodicstudio\crudbooster\models\ColumnModel */ @endphp
+                <th width="{{ $column->getColumnWidth()?:"auto" }}">
                     <a title="Click to sorting by {{ $column->getLabel() }}" href="{{ request()->fullUrlWithQuery(['order_by'=>$column->getField(),'order_sort'=>((request('order_sort')=='desc')?'asc':'desc') ]) }}">{{ $column->getLabel() }}
                         @if(request('order_by')==$column->getField())
                             <i class="fa fa-arrow-circle-{{ (request('order_sort')=='asc')?'down':'up' }}"></i>
