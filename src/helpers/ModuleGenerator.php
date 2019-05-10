@@ -40,6 +40,8 @@ class ModuleGenerator
     }
 
     public function make() {
+        $name = ($this->name)?:ucwords(str_replace("_"," ",$this->table));
+
         $template = file_get_contents(__DIR__."/../templates/FooBarController.stub");
 
         //Replace table
@@ -47,6 +49,9 @@ class ModuleGenerator
 
         //Replace permalink
         $template = str_replace("{permalink}", '"'.$this->table.'"', $template);
+
+        //Replace Page title
+        $template = str_replace("{page_title}", '"'.$name.'"', $template);
 
         //Replace scaffolding
         $fields = DB::getSchemaBuilder()->getColumnListing($this->table);
@@ -66,7 +71,7 @@ class ModuleGenerator
 
         //Save to database
         $module = [];
-        $module['name'] = ($this->name)?:ucwords(str_replace("_"," ",$this->table));
+        $module['name'] = $name;
         $module['icon'] = $this->icon;
         $module['table_name'] = $this->table;
         $module['controller'] = $filename;

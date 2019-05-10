@@ -9,6 +9,7 @@ class FooBarController extends CBController {
     {
         $this->setTable({table});
         $this->setPermalink({permalink});
+        $this->setPageTitle({page_title});
 
         {scaffolding}
 
