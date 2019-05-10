@@ -4,6 +4,7 @@ namespace crocodicstudio\crudbooster\middlewares;
 
 use App\Http\CBHook;
 use Closure;
+use crocodicstudio\crudbooster\helpers\CB;
 use CRUDBooster;
 
 class CBBackend
@@ -21,11 +22,11 @@ class CBBackend
             return cb()->redirect(cb()->getLoginUrl("login"),trans('crudbooster.not_logged_in'),'warning');
         }
 
-        CBHook::beforeBackendMiddleware($request);
+        (new CBHook())->beforeBackendMiddleware($request);
 
         $response = $next($request);
 
-        CBHook::afterBackendMiddleware($request, $response);
+        (new CBHook())->afterBackendMiddleware($request, $response);
 
         return $response;
 
