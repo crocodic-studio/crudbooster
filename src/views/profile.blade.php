@@ -35,10 +35,6 @@
                 <input type="password" class="form-control" placeholder="Please leave empty if not change" name="password" id="password">
             </div>
 
-            <div class="form-group">
-                <label for="password_confirmation">Re-type Password</label>
-                <input type="password" class="form-control" placeholder="Re type the password" name="password_confirmation" id="password_confirmation">
-            </div>
         </div>
         <div class="box-footer">
             <input type="submit" class="btn btn-primary" value="Update Profile">
