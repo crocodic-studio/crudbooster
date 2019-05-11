@@ -25,6 +25,10 @@ Do not use this master repository for production
 1. [Additional Basic Options](#additional-basic-options)
 1. [Show Column To Specific Page](#show-column--input-to-specific-page)
 1. [Buttons Display Control](#buttons-display-control)
+1. [Additional View](#additional-view)
+1. [Additional Index Head Buttons](#additional-index-head-buttons)
+1. [Additional Table Grid Action Buttons](#additional-table-grid-action-buttons)
+1. [Hide Buttons With Condition](#hide-buttons-with-condition)
 
 <h3>Installation</h3>
 Make sure you have installed newest laravel
@@ -493,3 +497,86 @@ In this section you can disable / hide buttons in crudbooster
 | <code>$this->setButtonDelete(true);</code> | To show/hide delete button |
 | <code>$this->setButtonCancel(true);</code> | To show/hide cancel button at form |
 | <code>$this->setButtonAddMore(true);</code> | To show/hide add more button at form |
+
+# Additional View
+In this section you can add additional view or html on before or after CRUDBooster element
+
+| Name | Description |
+| --- | --- |
+| <code>$this->setBeforeIndexTable("<div>html</div>");</code> | To set additional html before index table data | 
+| <code>$this->setAfterIndexTable("<div>html</div>");</code> | To set additional html after index table data |  
+| <code>$this->setBeforeDetailForm(function($row) { return "<div>html</div>"; });</code> | To set additional html before detail form. You can use $row to get current data | 
+| <code>$this->setAfterDetailForm(function($row) { return "<div>html</div>"; });</code> | To set additional html after detail form. You can use $row to get current data |
+
+# Additional Index Head Buttons
+In this section you can add more buttons on the above of index table
+
+```php
+    $this->addIndexActionButton($label, $actionURL, $fontawesomeClass, $color, $attributes);
+```
+
+| Name | Description |
+| --- | --- |
+| <code>$label</code> | The button label |
+| <code>$actionURL</code> | The button action url | 
+| <code>$fontaweseomClass</code> | The button icon use font awesome class | 
+| <code>$color</code> | The button color use ButtonColor::GREEN, ButtonColor::RED, ButtonColor::YELLOW, ButtonColor::LIGHT_BLUE, ButtonColor::DARK_BLUE |
+
+Example : 
+
+```php
+    $this->addIndexActionButton("Export Data", module()->url('export-data'), 'fa fa-download', ButtonColor::GREEN);
+```
+
+# Additional Table Grid Action Buttons
+In this section you can add more buttons on the table grid data
+```php
+    $this->addActionButton($label, $actionURL,  $condition, $fontAwesome, $color, $confirmation);
+```
+
+| Name | Description | 
+| --- | --- |
+| <code>$label</code> | The button label | 
+| <code>$actionURL</code> | The button action url. You can set as callable with <code>$row</code> parameter | 
+| <code>$condition</code> | The button show condition, this type is callable with <code>$row</code> parameter | 
+| <code>$fontawesome</code> | The button icon, you can use font awesome class | 
+| <code>$color</code> | The button color, you can use ButtonColor::RED(YELLOW,LIGHT_BLUE,GREEN) |
+
+```php
+    $this->addActionButton("Download Invoice", function($row) {
+        return module()->url("download-invoice/".$row->primary_key);
+    },function($row) {
+        if($row->status == "PAID") return true;
+        else return false;
+    }, "fa fa-download");
+```
+
+In the example above you can use magic properties <code>->primary_key</code> to get the ID of record
+
+# Hide Buttons With Condition
+Some case you want to hide the detail button, edit button with specific condition.
+
+```php
+    $this->hideButtonDetailWhen(function($row) {
+        //Write if condition here
+    });
+```
+
+The output of this function should be a boolean. True to hide the button, False to show the button.
+
+Example 
+
+```php
+    $this->hideButtonDeleteWhen(function($row) {
+        if($row->status == "PAID") return true;
+        else return false;
+    });
+```
+
+Method available : 
+
+| Name | Description | 
+| --- | --- |
+| hideButtonDeleteWhen($callback) | To hide delete button | 
+| hideButtonEditWhen($callback) | To hide edit button |
+| hideButtonDetailWhen($callback) | To hide detail button |
