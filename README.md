@@ -282,6 +282,37 @@ Parameters available : <br/>
 | $name             | The input name (Optional)    |
 | $field_to_save    | The field name if not same with the name (Optional) |
 
+
+## Money
+**Example**
+
+```php
+    $this->addMoney("Foo Bar");
+    $this->addMoney("Foo bar","foo_bar","field_foobar");
+```
+
+Parameters available : <br/>
+
+| Name              | Description       |
+| ----------------- | ----------------- |
+| $label            | The input label (Required)   |
+| $name             | The input name (Optional)    |
+| $field_to_save    | The field name if not same with the name (Optional) |
+
+Additional options : 
+
+| Name | Description |
+| --- | --- |
+| <code>->prefix("Rp.");</code>| The prefix of money display |
+| <code>->precision(2);</code> | The precision of money input |
+| <code>->decimalSeparator(".");</code> | The decimal separator of money input |
+| <code>->thousandSeparator(",");</code> | The thousand separator of money input |
+
+Additional option example : 
+```php
+    $this->addMoney("Price")->prefix("Rp.")->precision(2);
+```
+
 ## File Upload
 **Example**
 
