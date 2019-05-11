@@ -1,6 +1,30 @@
 <h2>CRUDBOOSTER DEVELOPMENT</h2>
 Do not use this master repository for production
 
+## Table Of Index
+1. [Installation](#installation)
+1. [Quick Start](#quick-start)
+1. [Basic Code Knowledge](#basic-code-knowledge)
+1. **Type Available**
+    1. [Text](#text)
+    1. [Checkbox](#checkbox)
+    1. [Password](#password)
+    1. [Image](#image)
+    1. [Text Area](#textarea)
+    1. [Select](#select)
+    1. [Custom](#custom)
+    1. [Date](#date)
+    1. [Date & Time](#date--time)
+    1. [Email](#email)
+    1. [Money](#money)
+    1. [File Upload](#file-upload)
+    1. [Hidden Input](#hidden-input)
+    1. [Number](#number)
+    1. [Radio Button](#radio-button)
+    1. [WYSIWYG](#wysiwyg)
+1. [Additional Basic Options](#additional-basic-options)
+1. [Show Column To Specific Page](#show-column--input-to-specific-page)
+
 <h3>Installation</h3>
 Make sure you have installed newest laravel
 
