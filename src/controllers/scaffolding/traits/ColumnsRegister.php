@@ -21,6 +21,8 @@ use crocodicstudio\crudbooster\types\File;
 use crocodicstudio\crudbooster\types\file\FileModel;
 use crocodicstudio\crudbooster\types\Hidden;
 use crocodicstudio\crudbooster\types\image\HiddenModel;
+use crocodicstudio\crudbooster\types\Money;
+use crocodicstudio\crudbooster\types\money\MoneyModel;
 use crocodicstudio\crudbooster\types\Number;
 use crocodicstudio\crudbooster\types\number\NumberModel;
 use crocodicstudio\crudbooster\types\Radio;
@@ -256,6 +258,22 @@ trait ColumnsRegister
         columnSingleton()->setColumn($this->index, $data);
 
         return (new Number($this->index));
+    }
+
+    public function addMoney($label, $name = null, $field_to_save = null)
+    {
+        $this->index++;
+
+        $data = new MoneyModel();
+        $data = $this->setDefaultModelValue($data);
+        $data->setLabel($label);
+        $data->setName($this->name($label,$name));
+        $data->setField($field_to_save?:$this->name($label, $name));
+        $data->setType("money");
+
+        columnSingleton()->setColumn($this->index, $data);
+
+        return (new Money($this->index));
     }
 
     public function addRadio($label, $name = null, $field_to_save = null)

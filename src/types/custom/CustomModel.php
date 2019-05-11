@@ -25,7 +25,7 @@ class CustomModel extends ColumnModel
     /**
      * @param mixed $html
      */
-    public function setHtml($html): void
+    public function setHtml($html)
     {
         $this->html = $html;
     }

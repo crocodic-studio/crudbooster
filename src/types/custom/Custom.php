@@ -15,4 +15,15 @@ class Custom
 {
     use DefaultOption, Join;
 
+    /**
+     * @param $html string
+     * @return $this
+     */
+    public function setHtml($html) {
+        $data = columnSingleton()->getColumn($this->index);
+        $data->setHtml($html);
+        columnSingleton()->setColumn($this->index, $data);
+        return $this;
+    }
+
 }
