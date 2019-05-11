@@ -24,6 +24,7 @@ Do not use this master repository for production
     1. [WYSIWYG](#wysiwyg)
 1. [Additional Basic Options](#additional-basic-options)
 1. [Show Column To Specific Page](#show-column--input-to-specific-page)
+1. [Buttons Display Control](#buttons-display-control)
 
 <h3>Installation</h3>
 Make sure you have installed newest laravel
@@ -477,3 +478,18 @@ You can prevent input or column to show only at index table.
 ```php
     $this->addText("Foo Bar")->showIndex(true)->showEdit(false)->showAdd(false)->showDetail(false);
 ```
+
+# Buttons Display Control
+In this section you can disable / hide buttons in crudbooster
+
+| Name | Description |
+| --- | --- |
+| <code>$this->setSearchForm(true);</code> | To show/hide search form |
+| <code>$this->setButtonLimitPage(true);</code> | To show/hide limit button |
+| <code>$this->setButtonSave(true);</code> | To show/hide save button |
+| <code>$this->setButtonAdd(true);</code> | To show/hide add button |
+| <code>$this->setButtonEdit(true);</code> | To show/hide edit button |
+| <code>$this->setButtonDetail(true);</code> | To show/hide detail button |
+| <code>$this->setButtonDelete(true);</code> | To show/hide delete button |
+| <code>$this->setButtonCancel(true);</code> | To show/hide cancel button at form |
+| <code>$this->setButtonAddMore(true);</code> | To show/hide add more button at form |
