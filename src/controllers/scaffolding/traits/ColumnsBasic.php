@@ -39,6 +39,8 @@ trait ColumnsBasic
         $model->setShowAdd(true);
         $model->setShowEdit(true);
         $model->setShowDetail(true);
+        $model->setIndexDisplayTransform(function ($value, $row) { return $value; });
+        $model->setDetailDisplayTransform(function ($value, $row) { return $value; });
         return $model;
     }
 

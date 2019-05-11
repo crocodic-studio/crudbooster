@@ -61,6 +61,25 @@ class Select
         return $this;
     }
 
+    public function optionsFromQuery(callable $query) {
+        $data = columnSingleton()->getColumn($this->index);
+        /** @var $data SelectModel */
+        $data->setOptionsFromQuery($query);
+
+        columnSingleton()->setColumn($this->index, $data);
+
+        $result = call_user_func($query);
+        if($result) {
+            $options = [];
+            foreach($result as $r) {
+                $options[ $r->key ] = $r->label;
+            }
+            $this->options($options);
+        }
+
+        return $this;
+    }
+
     public function options($data_options) {
         $data = columnSingleton()->getColumn($this->index);
         /** @var $data SelectModel */

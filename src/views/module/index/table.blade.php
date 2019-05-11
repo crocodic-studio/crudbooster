@@ -31,7 +31,12 @@
         <tr>
             @foreach(module()->getColumnSingleton()->getIndexColumns() as $column)
                 <td>
-                    {!! getTypeHook($column->getType())->indexRender($row, $column) !!}
+                    <?php
+                        /** @var \crocodicstudio\crudbooster\models\ColumnModel $column */
+                        $value = getTypeHook($column->getType())->indexRender($row, $column);
+                        $value = call_user_func($column->getIndexDisplayTransform(), $value, $row);
+                        echo $value;
+                    ?>
                 </td>
             @endforeach
             <td style="text-align: center; white-space: nowrap">

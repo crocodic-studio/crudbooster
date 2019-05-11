@@ -43,10 +43,32 @@ trait DefaultOption
         return $this;
     }
 
+    /**
+     * @param callable $transform
+     */
+    public function indexDisplayTransform(callable $transform) {
+        $data = columnSingleton()->getColumn($this->index);
+        /** @var ColumnModel $data */
+        $data->setIndexDisplayTransform($transform);
+        columnSingleton()->setColumn($this->index, $data);
+        return $this;
+    }
+
+    /**
+     * @param callable $transform
+     */
+    public function detailDisplayTransform(callable $transform) {
+        $data = columnSingleton()->getColumn($this->index);
+        /** @var ColumnModel $data */
+        $data->setDetailDisplayTransform($transform);
+        columnSingleton()->setColumn($this->index, $data);
+        return $this;
+    }
+
     public function inputWidth($width)
     {
         /** @var ColumnModel $data */
-        $data = ColumnSingleton()->getColumn($this->index);
+        $data = columnSingleton()->getColumn($this->index);
         $data->setInputWidth($width);
 
         // Save back

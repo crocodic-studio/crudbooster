@@ -46,6 +46,15 @@
             box-shadow: 0px 0px 20px #bbbbbb;
         }
 
+        @media(max-width: 720px) {
+            .login-box {
+                width: 100%;
+                background-position: center;
+                color: #ffffff;
+                text-shadow: 0px 0px 3px #999999;
+            }
+        }
+
         .login-body {
             padding: 40px;
         }

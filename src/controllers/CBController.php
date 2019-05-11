@@ -72,10 +72,12 @@ class CBController extends Controller
 
         foreach($columns as $column) {
             /** @var ColumnModel $column */
-            if(strpos($column->getField(),".") === false) {
-                $query->addSelect($this->data['table'].'.'.$column->getField());
-            }else{
-                $query->addSelect($column->getField());
+            if($column->getType() != "custom") {
+                if(strpos($column->getField(),".") === false) {
+                    $query->addSelect($this->data['table'].'.'.$column->getField());
+                }else{
+                    $query->addSelect($column->getField());
+                }
             }
 
             $query = getTypeHook($column->getType())->query($query, $column);

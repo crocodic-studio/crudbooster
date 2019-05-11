@@ -15,7 +15,26 @@ class SelectModel extends ColumnModel
 
     private $options;
     private $options_from_table;
+    private $options_from_query;
     private $foreign_key;
+
+    /**
+     * @return mixed
+     */
+    public function getOptionsFromQuery()
+    {
+        return $this->options_from_query;
+    }
+
+    /**
+     * @param mixed $options_from_query
+     */
+    public function setOptionsFromQuery($options_from_query)
+    {
+        $this->options_from_query = $options_from_query;
+    }
+
+
 
     /**
      * @return mixed

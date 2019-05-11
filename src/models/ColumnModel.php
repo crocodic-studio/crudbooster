@@ -34,6 +34,43 @@ class ColumnModel
     private $default_value;
     private $style;
 
+    private $index_display_transform;
+    private $detail_display_transform;
+
+    /**
+     * @return mixed
+     */
+    public function getIndexDisplayTransform()
+    {
+        return $this->index_display_transform;
+    }
+
+    /**
+     * @param mixed $index_display_transform
+     */
+    public function setIndexDisplayTransform($index_display_transform)
+    {
+        $this->index_display_transform = $index_display_transform;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDetailDisplayTransform()
+    {
+        return $this->detail_display_transform;
+    }
+
+    /**
+     * @param mixed $detail_display_transform
+     */
+    public function setDetailDisplayTransform($detail_display_transform)
+    {
+        $this->detail_display_transform = $detail_display_transform;
+    }
+
+
+
     /**
      * @return mixed
      */

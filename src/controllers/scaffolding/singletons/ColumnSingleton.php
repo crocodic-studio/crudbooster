@@ -48,7 +48,7 @@ class ColumnSingleton
 
             /** @var ColumnModel $column */
             if($data_row) {
-                $value = $data_row->{ $column->getField() };
+                $value = (isset($data_row->{$column->getField()}))?$data_row->{ $column->getField() }:null;
             }else{
                 $value = request($column->getName());
 
@@ -134,6 +134,7 @@ class ColumnSingleton
         $data = [];
         foreach($this->columns as $column) {
             /** @var ColumnModel $column */
+
             if(is_array($column->getValue())) {
                 foreach($column->getValue() as $key=>$val) {
                     $data[$key] = $val;

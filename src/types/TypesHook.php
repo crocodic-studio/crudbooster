@@ -26,12 +26,12 @@ class TypesHook implements TypesHookInterface
 
     public function indexRender($row, $column)
     {
-        return $row->{ $column->getField() };
+        return (isset($row->{$column->getField()}))?$row->{ $column->getField() }:null;
     }
 
     public function detailRender($row, $column)
     {
-        return $row->{ $column->getField() };
+        return (isset($row->{$column->getField()}))?$row->{ $column->getField() }:null;
     }
 
     /**
