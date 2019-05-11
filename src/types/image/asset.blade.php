@@ -21,10 +21,13 @@
                     }
                 });
         }
-        function uploadImage(t, target_input_name, is_required) {
+        function uploadImage(t, target_input_name, is_required, encrypt, width, height) {
             $(t).parents('.upload-wrapper').find('.upload-preview').html("<p><i class='fa fa-spin fa-spinner'></i> Please wait uploading...</p>");
             var formData = new FormData();
             formData.append('userfile', t.files[0]);
+            formData.append("encrypt", encrypt);
+            formData.append("resize_width", width);
+            formData.append("resize_height", height);
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': "{{ csrf_token() }}"

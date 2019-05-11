@@ -1,5 +1,5 @@
 @include("types::layout_header")
-    @php /** @var \crocodicstudio\crudbooster\models\ColumnModel $column */  @endphp
+    @php /** @var \crocodicstudio\crudbooster\types\image\ImageModel $column */  @endphp
     <div class="upload-wrapper">
         <div class="upload-preview" style="padding: 5px">
             @if($column->getValue())
@@ -18,7 +18,7 @@
                    {{ (!$column->getValue() && $column->getRequired())?'required':''}}
                    {{ $column->getReadonly()?'readonly':''}}
                    {{ $column->getDisabled()?'disabled':''}}
-                   class='form-control' onchange="uploadImage(this, '{{ $column->getName() }}', '{{ $column->getRequired()?1:0 }}')"/>
+                   class='form-control' onchange="uploadImage(this, '{{ $column->getName() }}', '{{ $column->getRequired()?1:0 }}','{{ $column->getEncrypt() }}', '{{ $column->getResizeWidth() }}','{{ $column->getResizeHeight() }}')"/>
             <input type="hidden" name="{{ $column->getName() }}" value="{{ $column->getValue() }}">
         </div>
     </div>
