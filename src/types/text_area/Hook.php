@@ -9,8 +9,22 @@
 namespace crocodicstudio\crudbooster\types\text_area;
 
 use crocodicstudio\crudbooster\types\TypesHook;
+use Illuminate\Support\Str;
 
 class Hook extends TypesHook
 {
 
+    /**
+     * @param $row
+     * @param $column TextAreaModel
+     * @return string
+     */
+    public function indexRender($row, $column)
+    {
+        $value = trim(strip_tags($row->{ $column->getField() }));
+        if($column->getLimit()) {
+            $value = Str::limit($value, $column->getLimit());
+        }
+        return $value;
+    }
 }

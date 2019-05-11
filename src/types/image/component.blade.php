@@ -6,6 +6,7 @@
                 <a href="{{ asset($column->getValue()) }}" data-lightbox="thumbnail">
                     <img class="img-thumbnail" src="{{ asset($column->getValue()) }}" style="max-width: 250px" alt="Preview Image">
                 </a>
+                <a href="javascript:;" class="btn btn-danger" onclick="deleteImage(this, '{{ $column->getRequired()?1:0 }}')" title="Delete this image"><i class="fa fa-trash"></i></a>
             @endif
         </div>
 
@@ -14,10 +15,10 @@
                    accept="image/*"
                    id="{{$column->getName()}}"
                    title="{{$column->getLabel()}}"
-                   {{ $column->getRequired()?'required':''}}
+                   {{ (!$column->getValue() && $column->getRequired())?'required':''}}
                    {{ $column->getReadonly()?'readonly':''}}
                    {{ $column->getDisabled()?'disabled':''}}
-                   class='form-control' onchange="uploadImage(this, '{{ $column->getName() }}')"/>
+                   class='form-control' onchange="uploadImage(this, '{{ $column->getName() }}', '{{ $column->getRequired()?1:0 }}')"/>
             <input type="hidden" name="{{ $column->getName() }}" value="{{ $column->getValue() }}">
         </div>
     </div>

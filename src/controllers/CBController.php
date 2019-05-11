@@ -166,6 +166,9 @@ class CBController extends Controller
             columnSingleton()->valueAssignment();
             $data = columnSingleton()->getAssignmentData();
 
+            //Clear data from Primary Key
+            unset($data[ cb()->pk($this->data['table']) ]);
+
             if(Schema::hasColumn($this->data['table'], 'created_at')) {
                 $data['created_at'] = date('Y-m-d H:i:s');
             }
@@ -210,6 +213,10 @@ class CBController extends Controller
             $this->validation();
             columnSingleton()->valueAssignment();
             $data = columnSingleton()->getAssignmentData();
+
+            //Clear data from Primary Key
+            unset($data[ cb()->pk($this->data['table']) ]);
+
             if(Schema::hasColumn($this->data['table'], 'updated_at')) {
                 $data['updated_at'] = date('Y-m-d H:i:s');
             }
@@ -279,57 +286,4 @@ class CBController extends Controller
         return view('crudbooster::module.form.form_detail', array_merge($data, $this->data));
     }
 
-    public function postUploadImage()
-    {
-        if(auth()->guest()) return redirect(cb()->getLoginUrl());
-
-        $file = null;
-        try {
-
-            cb()->validation([
-                'userfile' => 'required|mimes:' . implode(",",config('crudbooster.UPLOAD_IMAGE_EXTENSION_ALLOWED'))
-            ]);
-
-            $file = cb()->uploadFile('userfile', true);
-
-        } catch (CBValidationException $e) {
-            return response()->json(['status'=>false,'message'=>$e->getMessage()]);
-        } catch (\Exception $e) {
-            return response()->json(['status'=>false,'message'=>$e->getMessage()]);
-        }
-
-        return response()->json([
-            'status'=>true,
-            'filename'=>basename($file),
-            'full_url'=>asset($file),
-            'url'=>$file
-        ]);
-    }
-
-    public function postUploadFile()
-    {
-        if(auth()->guest()) return redirect(cb()->getLoginUrl());
-
-        $file = null;
-        try {
-
-            cb()->validation([
-                'userfile' => 'required|mimes:' . implode(",",config('crudbooster.UPLOAD_FILE_EXTENSION_ALLOWED'))
-            ]);
-
-            $file = cb()->uploadFile('userfile', true);
-
-        } catch (CBValidationException $e) {
-            return response()->json(['status'=>false,'message'=>$e->getMessage()]);
-        } catch (\Exception $e) {
-            return response()->json(['status'=>false,'message'=>$e->getMessage()]);
-        }
-
-        return response()->json([
-            'status'=>true,
-            'filename'=>basename($file),
-            'full_url'=>asset($file),
-            'url'=>$file
-        ]);
-    }
 }

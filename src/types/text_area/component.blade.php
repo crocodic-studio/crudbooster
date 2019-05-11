@@ -6,5 +6,5 @@
               placeholder="{{ $column->getPlaceholder() }}"
               {{ $column->getDisabled()?'disabled':''}}
               class='form-control'
-              rows='5'>{{ old($column->getName())?:$column->getValue() }}</textarea>
+              rows='5'>{{ old($column->getName())?:($column->getDefaultValue())?:$column->getValue() }}</textarea>
 @include("types::layout_footer")

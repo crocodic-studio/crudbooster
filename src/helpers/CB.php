@@ -343,6 +343,14 @@ class CB
         Route::post($prefix, ['uses' => $controller, 'as' => $alias]);
     }
 
+    public function routeGroupBackend(callable $callback, $namespace = 'crocodicstudio\crudbooster\controllers') {
+        Route::group([
+            'middleware' => ['web', \crocodicstudio\crudbooster\middlewares\CBBackend::class],
+            'prefix' => cbConfig('ADMIN_PATH'),
+            'namespace' => $namespace,
+        ], $callback);
+    }
+
     /*
     | --------------------------------------------------------------------------------------------------------------
     | Alternate route for Laravel Route::controller

@@ -1,7 +1,7 @@
 @push('head')
-    <link rel="stylesheet" type="text/css" href="{{asset('vendor/crudbooster/assets/adminlte/summernote/summernote.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{cbAsset('adminlte/plugins/summernote/summernote.css')}}">
 @endpush
 @push('bottom')
-    <script type="text/javascript" src="{{asset('vendor/crudbooster/assets/adminlte/summernote/summernote.min.js')}}"></script>
+    <script type="text/javascript" src="{{cbAsset('adminlte/plugins/summernote/summernote.min.js')}}"></script>
 @endpush
 

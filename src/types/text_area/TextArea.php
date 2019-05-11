@@ -14,4 +14,14 @@ use crocodicstudio\crudbooster\controllers\scaffolding\traits\Join;
 class TextArea
 {
     use DefaultOption, Join;
+
+    public function strLimit($length = 100) {
+        $data = columnSingleton()->getColumn($this->index);
+        /** @var WysiwygModel $data */
+        $data->setLimit($length);
+
+        columnSingleton()->setColumn($this->index, $data);
+
+        return $this;
+    }
 }

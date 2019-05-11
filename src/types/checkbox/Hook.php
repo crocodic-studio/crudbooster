@@ -20,7 +20,7 @@ class Hook extends TypesHook
      */
     public function assignment($value, $column)
     {
-        return implode(";", request( $column->getName() ));
+        return @implode(";", request( $column->getName() ));
     }
 
 }

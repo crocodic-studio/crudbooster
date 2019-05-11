@@ -12,24 +12,21 @@ use crocodicstudio\crudbooster\models\ColumnModel;
 
 class WysiwygModel extends ColumnModel
 {
-
-    private $options;
+    private $limit;
 
     /**
      * @return mixed
      */
-    public function getOptions()
+    public function getLimit()
     {
-        return $this->options;
+        return $this->limit;
     }
 
     /**
-     * @param mixed $options
+     * @param mixed $limit
      */
-    public function setOptions($options): void
+    public function setLimit($limit)
     {
-        $this->options = $options;
+        $this->limit = $limit;
     }
-
-
 }

@@ -33,11 +33,7 @@ Route::group(['middleware' => ['web'], 'prefix' => cbConfig('ADMIN_PATH'), 'name
 });
 
 // Routing package controllers
-Route::group([
-    'middleware' => ['web', \crocodicstudio\crudbooster\middlewares\CBBackend::class],
-    'prefix' => cbConfig('ADMIN_PATH'),
-    'namespace' => 'crocodicstudio\crudbooster\controllers',
-], function () {
+cb()->routeGroupBackend(function () {
     cb()->routeController('profile', 'AdminProfileController','crocodicstudio\crudbooster\controllers');
 });
 

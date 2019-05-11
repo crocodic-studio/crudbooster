@@ -1,5 +1,6 @@
 @include("types::layout_header")
     <?php /** @var \crocodicstudio\crudbooster\types\checkbox\CheckboxModel $column */ ?>
+
     @foreach($column->getCheckboxOptions() as $key=>$value)
         <div class="{{ $column->getDisabled()?"disabled":"" }}">
             <label class='checkbox-inline'>

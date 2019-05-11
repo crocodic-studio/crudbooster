@@ -2,7 +2,7 @@
         <?php /** @var \crocodicstudio\crudbooster\types\radio\RadioModel $column */ ?>
         @foreach($column->getOptions() as $key=>$value)
             <?php
-                $columnValue = old($column->getName())?:$column->getValue();
+                $columnValue = old($column->getName())?:($column->getDefaultValue())?:$column->getValue();
             ?>
             <div class="{{ $column->getDisabled()?"disabled":"" }}">
                 <label class='radio-inline'>

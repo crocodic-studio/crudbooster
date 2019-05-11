@@ -11,6 +11,7 @@ namespace crocodicstudio\crudbooster\types;
 use crocodicstudio\crudbooster\controllers\scaffolding\traits\DefaultOption;
 use crocodicstudio\crudbooster\controllers\scaffolding\traits\Join;
 use crocodicstudio\crudbooster\types\checkbox\CheckboxModel;
+use Illuminate\Support\Facades\DB;
 
 class Checkbox
 {

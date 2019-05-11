@@ -7,7 +7,7 @@
             name="{{ $column->getName() }}" id="{{ $column->getName() }}">
         <option value="">** Select a {{ $column->getLabel() }}</option>
         <?php
-            $columnValue = old($column->getName())?:$column->getValue();
+            $columnValue = old($column->getName())?:($column->getDefaultValue())?:$column->getValue();
         ?>
         @foreach($column->getOptions() as $key=>$value)
             <option {{ $columnValue==$key?'selected':'' }} value="{{ $key }}">{{ $value }}</option>

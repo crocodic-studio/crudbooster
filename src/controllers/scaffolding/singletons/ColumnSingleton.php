@@ -41,25 +41,25 @@ class ColumnSingleton
 
     public function valueAssignment($data_row = null) {
         foreach ($this->getColumns() as $index=>$column) {
-            /** @var ColumnModel $column */
-            if($data_row) {
-                $value = $data_row->{ $column->getField() };
-            }else{
-                $value = request($column->getName());
-            }
 
             if (! $column->getName()) {
                 continue;
             }
 
-            if(!$value && $column->getDefaultValue()) {
-                $value = $column->getDefaultValue();
+            /** @var ColumnModel $column */
+            if($data_row) {
+                $value = $data_row->{ $column->getField() };
+            }else{
+                $value = request($column->getName());
+
+                if(!$value && $column->getDefaultValue()) {
+                    $value = $column->getDefaultValue();
+                }
+
+                $value = getTypeHook($column->getType())->assignment($value, $column);
             }
 
-            $value = getTypeHook($column->getType())->assignment($value, $column);
-
             $column->setValue($value);
-
             $this->setColumn($index, $column);
         }
     }

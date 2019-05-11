@@ -12,6 +12,22 @@ use crocodicstudio\crudbooster\models\ColumnModel;
 
 class TextAreaModel extends ColumnModel
 {
+    private $limit;
 
+    /**
+     * @return mixed
+     */
+    public function getLimit()
+    {
+        return $this->limit;
+    }
+
+    /**
+     * @param mixed $limit
+     */
+    public function setLimit($limit)
+    {
+        $this->limit = $limit;
+    }
 
 }

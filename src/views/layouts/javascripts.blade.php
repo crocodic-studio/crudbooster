@@ -24,8 +24,7 @@
 <script src="{{ cbAsset('adminlte/plugins/lightbox/dist/js/lightbox.min.js') }}"></script>
 
 <!--SWEET ALERT-->
-<script src="{{ cbAsset('adminlte/plugins/sweetalert/dist/sweetalert.min.js')}}"></script>
-<link rel="stylesheet" type="text/css" href="{{ cbAsset('adminlte/plugins/sweetalert/dist/sweetalert.css')}}">
+<script src="{{ cbAsset('adminlte/plugins/sweetalert/dist/sweetalert.min.js')}}?v=2.1.3"></script>
 
 <!--MONEY FORMAT-->
 <script src="{{ cbAsset('js/jquery.price_format.2.0.min.js')}}"></script>

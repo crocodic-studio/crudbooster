@@ -9,5 +9,5 @@
                name="{{ $column->getName() }}"
                id="{{ $column->getName() }}"
                data-format="{{ $column->getFormat()?convertPHPToMomentFormat($column->getFormat()):"YYYY-MM-DD" }}"
-               value='{{ old($column->getName())?:$column->getValue() }}'/>
+               value='{{ old($column->getName())?:($column->getDefaultValue())?:$column->getValue() }}'/>
 @include("types::layout_footer")

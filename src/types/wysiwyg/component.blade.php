@@ -19,7 +19,7 @@
                         headers: {
                           "X-CSRF-TOKEN":"{{ csrf_token() }}"
                         },
-                        url: '{{ cb()->url('upload-image') }}',
+                        url: '{{ cb()->getAdminUrl('upload-image') }}',
                         cache: false,
                         contentType: false,
                         processData: false,
@@ -39,12 +39,12 @@
         </script>
     @endpush
 
-    <textarea id='textarea_{{$name}}'
+    <textarea id='textarea_{{ $column->getName() }}'
       {{ $column->getRequired()?'required':''}}
       {{ $column->getReadonly()?'readonly':''}}
       {!! $column->getPlaceholder()?"placeholder='".$column->getPlaceholder()."' ":"" !!}
       {{ $column->getDisabled()?'disabled':''}}
         name="{{ $column->getName() }}"
         class='form-control'
-        rows='5'>{{ $column->getValue() }}</textarea>
+        rows='5'>{{ old($column->getName())?:($column->getDefaultValue())?:$column->getValue() }}</textarea>
 @include("types::layout_footer")

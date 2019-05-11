@@ -31,7 +31,9 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->publishes([__DIR__ . '/assets' =>public_path('cb_asset')],'cb_asset');
                     
         require __DIR__.'/validations/validation.php';        
-        require __DIR__.'/routes.php';                        
+        require __DIR__.'/routes.php';
+
+        $this->registerTypeRoutes();
     }
 
     /**
@@ -68,5 +70,14 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $loader->alias('Image', 'Intervention\Image\Facades\Image');
         $loader->alias('CB', 'crocodicstudio\crudbooster\helpers\CB');
     }
+
+    private function registerTypeRoutes() {
+        $routes = rglob(__DIR__.DIRECTORY_SEPARATOR."types".DIRECTORY_SEPARATOR."Route.php");
+        foreach($routes as $route) {
+            require $route;
+        }
+    }
+
+
 
 }

@@ -11,5 +11,5 @@
                class='form-control'
                name="{{ $column->getName() }}"
                id="{{ $column->getName() }}"
-               value='{{ old($column->getName())?:$column->getValue() }}'/>
+               value='{{ old($column->getName())?:($column->getDefaultValue())?:$column->getValue() }}'/>
 @include("types::layout_footer")
