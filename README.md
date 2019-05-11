@@ -188,7 +188,7 @@ Additional options available :
 | --- | --- |
 | <code>->options($array);</code> | The options of select |
 | <code>->optionsFromTable($table, $key_field, $display_field, $SQLCondition = null);</code> | The options of select with table source |
-| <code>->foreignKey($parent_select_name);</code> | To enable sub select|
+| <code>->foreignKey($parent_select_name);</code> | To enable sub select. The case example is for select a province, city and district|
 | <code>->optionsFromQuery($query);</code>| To set the source options by your own DB Query. Should be 2 response field "key" and "label"|
 
 Additional options example : 
