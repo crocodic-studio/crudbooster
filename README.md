@@ -168,6 +168,12 @@ Parameters available : <br/>
 | $name             | The input name (Optional)    |
 | $field_to_save    | The field name if not same with the name (Optional) |
 
+Additional options : 
+
+| Name | Description |
+| --- | --- |
+| <code>->encrypt(true);</code> | To encrypt the file name set false or true |
+| <code>->resize(150, 150);</code> | To resize the image param 1 for width, param 2 for height |
 
 ## TextArea
 **Example**
