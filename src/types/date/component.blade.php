@@ -3,7 +3,7 @@
         <input type='text' title="{{ $column->getLabel() }}"
                placeholder="{{ $column->getPlaceholder() }}"
                {{ $column->getRequired()?'required':''}}
-               {{ $column->getReadonly()?'readonly':''}}
+               readonly
                {{ $column->getDisabled()?'disabled':''}}
                class='form-control datepicker'
                name="{{ $column->getName() }}"

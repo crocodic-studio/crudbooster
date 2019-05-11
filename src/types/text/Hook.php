@@ -13,4 +13,18 @@ use crocodicstudio\crudbooster\types\TypesHook;
 class Hook extends TypesHook
 {
 
+    /**
+     * @param $row
+     * @param $column TextModel
+     * @return string
+     */
+    public function indexRender($row, $column)
+    {
+        $value = trim(strip_tags($row->{ $column->getField() }));
+        if($column->getLimit()) {
+            $value = Str::limit($value, $column->getLimit());
+        }
+        return $value;
+    }
+
 }

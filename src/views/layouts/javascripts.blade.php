@@ -29,6 +29,10 @@
 <!--MONEY FORMAT-->
 <script src="{{ cbAsset('js/jquery.price_format.2.0.min.js')}}"></script>
 
+<!--SELECT2-->
+<script src="{{ cbAsset("adminlte/plugins/select2/select2.min.js") }}"></script>
+<link rel="stylesheet" href="{{ cbAsset("adminlte/plugins/select2/select2.min.css") }}">
+
 <!--DATATABLE-->
 <link rel="stylesheet" href="{{ cbAsset('adminlte/plugins/datatables/dataTables.bootstrap.css')}}">
 <script src="{{ cbAsset('adminlte/plugins/datatables/jquery.dataTables.min.js')}}"></script>
@@ -36,6 +40,7 @@
 <script>
     $(function () {
         $(".datatable").dataTable();
+        $(".select2").select2();
     })
 </script>
 

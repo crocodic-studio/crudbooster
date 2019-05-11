@@ -15,6 +15,24 @@ class TextModel extends ColumnModel
 
     private $max_length;
     private $min_length;
+    private $limit;
+
+    /**
+     * @return mixed
+     */
+    public function getLimit()
+    {
+        return $this->limit;
+    }
+
+    /**
+     * @param mixed $limit
+     */
+    public function setLimit($limit): void
+    {
+        $this->limit = $limit;
+    }
+
 
     /**
      * @return mixed

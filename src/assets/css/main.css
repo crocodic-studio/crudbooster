@@ -1,3 +1,14 @@
+	#table-module thead tr th {
+		border: 1px solid #cccccc;
+	}
+	#table-module tbody tr td {
+		border: 1px solid #cccccc;
+	}
+	.select2-container--default .select2-selection--single {border-radius: 0px !important; border: 1px solid #dddddd !important;}
+	.select2-container .select2-selection--single {height: 35px !important;}
+	.select2 {
+		width: 100%;
+	}
 	.select2-dropdown {z-index: 9999 !important}
 
 	.bootstrap-timepicker-minute,.bootstrap-timepicker-hour,.bootstrap-timepicker-meridian,.bootstrap-timepicker-second {
@@ -19,66 +30,8 @@
 
 	.datepicker{z-index:1151 !important;}
 
-	.sidebar-menu .treeview-menu>li>a {
-		padding:5px 5px 5px 25px;
-	}
-	.form-tab li a:hover {
-		background: #eeeeee !important;
-	}
-	.form-tab li a.selected {
-		background: #3c8dbc !important;
-		color:#ffffff !important;
-	}
-	.alert_floating {
-		bottom:10px;
-		right:10px;
-		position: fixed;
-		z-index:1001;
-		background: rgba(255, 140, 127, 0.7);
-		color:#222222;
-		font-weight: bold;
-		padding:20px 50px 20px 50px;
-		border-radius: 10px;
-		box-shadow: 0px 0px 5px #aaaaaa;
-	}
-
-	#table_dashboard {
-		font-size: 12px;
-	}
-
-	.dropdown-menu-action {
-		left: -130%;
-	}
-
 	.btn-group-action .btn-action {
 		cursor: default
-	}
-
-	#box-header-module {
-		box-shadow: 10px 10px 10px #dddddd;
-	}
-
-	.sub-module-tab li {
-		background: #F9F9F9;
-		cursor: pointer;
-	}
-
-	.sub-module-tab li.active {
-		background: #ffffff;
-		box-shadow: 0px -5px 10px #cccccc
-	}
-
-	.nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
-		border: none;
-	}
-
-	.nav-tabs > li > a {
-		border: none;
-	}
-
-	.breadcrumb {
-		margin: 0 0 0 0;
-		padding: 0 0 0 0;
 	}
 
 	.form-group > label:first-child {

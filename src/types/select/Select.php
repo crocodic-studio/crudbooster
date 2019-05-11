@@ -10,6 +10,7 @@ namespace crocodicstudio\crudbooster\types;
 
 use crocodicstudio\crudbooster\controllers\scaffolding\traits\DefaultOption;
 use crocodicstudio\crudbooster\controllers\scaffolding\traits\Join;
+use crocodicstudio\crudbooster\models\ColumnModel;
 use crocodicstudio\crudbooster\types\select\SelectModel;
 use Illuminate\Support\Facades\DB;
 
@@ -18,10 +19,25 @@ class Select
     use DefaultOption, Join;
 
     /**
+     * @param string $field_name
+     * @return $this
+     */
+    public function foreignKey($field_name)
+    {
+        $data = columnSingleton()->getColumn($this->index);
+        /** @var SelectModel $data */
+        $data->setForeignKey($field_name);
+        columnSingleton()->setColumn($this->index, $data);
+
+        return $this;
+    }
+
+    /**
      * @param $table string
      * @param $key_field string
      * @param $display_field string
      * @param $SQLCondition string|callable
+     * @return $this
      */
     public function optionsFromTable($table, $key_field, $display_field, $SQLCondition = null) {
         $data = DB::table($table);
@@ -37,10 +53,12 @@ class Select
         }
         $data = columnSingleton()->getColumn($this->index);
         /** @var $data SelectModel */
-        $data->setOptionsFromTable(["table"=>$table,"key_field"=>$key_field,"display_field"=>$display_field]);
+        $data->setOptionsFromTable(["table"=>$table,"key_field"=>$key_field,"display_field"=>$display_field,"sql_condition"=>$SQLCondition]);
         columnSingleton()->setColumn($this->index, $data);
 
         $this->options($options);
+
+        return $this;
     }
 
     public function options($data_options) {

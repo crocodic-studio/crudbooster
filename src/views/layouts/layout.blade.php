@@ -18,15 +18,6 @@
 
     <link rel='stylesheet' href='{{cbAsset("css/main.css")}}'/>
 
-    <style>
-        #table-module thead tr th {
-            border: 1px solid #cccccc;
-        }
-        #table-module tbody tr td {
-            border: 1px solid #cccccc;
-        }
-    </style>
-
     @if(isset($head_html))
         {!! $head_html !!}
     @endif

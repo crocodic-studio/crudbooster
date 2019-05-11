@@ -15,6 +15,25 @@ class SelectModel extends ColumnModel
 
     private $options;
     private $options_from_table;
+    private $foreign_key;
+
+    /**
+     * @return mixed
+     */
+    public function getForeignKey()
+    {
+        return $this->foreign_key;
+    }
+
+    /**
+     * @param mixed $foreign_key
+     */
+    public function setForeignKey($foreign_key)
+    {
+        $this->foreign_key = $foreign_key;
+    }
+
+
 
     /**
      * @return mixed
@@ -45,7 +64,7 @@ class SelectModel extends ColumnModel
     /**
      * @param mixed $options
      */
-    public function setOptions($options): void
+    public function setOptions($options)
     {
         $this->options = $options;
     }

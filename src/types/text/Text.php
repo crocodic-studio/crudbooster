@@ -16,6 +16,16 @@ class Text
 {
     use DefaultOption, Join;
 
+    public function strLimit($length = 100) {
+        $data = columnSingleton()->getColumn($this->index);
+        /** @var WysiwygModel $data */
+        $data->setLimit($length);
+
+        columnSingleton()->setColumn($this->index, $data);
+
+        return $this;
+    }
+
     public function maxLength($length) {
         $model = columnSingleton()->getColumn($this->index);
         /**

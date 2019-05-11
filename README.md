@@ -76,6 +76,7 @@ Additional Options available : <br/>
 | ------------------ | ---------------- |
 | <code>->maxLength(100);</code> | Set max length limit
 | <code>->minLength(5);</code> | Set min length limit |
+| <code>->strLimit(100);</code>| Set character limit |
 
 Additional options example :
 ```php
@@ -160,6 +161,12 @@ Parameters available : <br/>
 | $name             | The input name (Optional)    |
 | $field_to_save    | The field name if not same with the name (Optional) |
 
+Additional options : 
+
+| Name | Description |
+| --- | --- |
+| <code>->strLimit($length);</code>|Set column limit characters|
+
 ## Select
 **Example**
 ```php
@@ -181,6 +188,7 @@ Additional options available :
 | --- | --- |
 | <code>->options($array);</code> | The options of select |
 | <code>->optionsFromTable($table, $key_field, $display_field, $SQLCondition = null);</code> | The options of select with table source |
+| <code>->foreignKey($parent_select_name);</code> | To enable sub select|
 
 Additional options example : 
 ```php
@@ -368,6 +376,11 @@ Parameters available : <br/>
 | $name             | The input name (Optional)    |
 | $field_to_save    | The field name if not same with the name (Optional) |
 
+Additional options : 
+
+| Name | Description |
+| --- | --- |
+| <code>->strLimit($length);</code>|Set column limit characters|
 
 # Additional Basic Options
 | Name | Description |
