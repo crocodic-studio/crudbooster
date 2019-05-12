@@ -1,5 +1,6 @@
 	#table-module thead tr th {
 		border: 1px solid #cccccc;
+		white-space: nowrap;
 	}
 	#table-module tbody tr td {
 		border: 1px solid #cccccc;
