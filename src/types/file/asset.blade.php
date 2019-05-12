@@ -15,6 +15,7 @@
                         if(is_required == 1) {
                             h.parents(".upload-wrapper").find("input[type=file]").prop("required", true);
                         }
+                        h.parents(".upload-wrapper").find("input[type=file]").val(null);
 
                         h.parents(".upload-wrapper").find("input[type=hidden]").val(null);
                         h.parents(".upload-preview").empty();
