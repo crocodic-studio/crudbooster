@@ -10,6 +10,7 @@ namespace crocodicstudio\crudbooster\helpers;
 
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class ModuleGenerator
 {
@@ -55,9 +56,15 @@ class ModuleGenerator
 
         //Replace scaffolding
         $fields = DB::getSchemaBuilder()->getColumnListing($this->table);
+        $primaryKey = cb()->findPrimaryKey($this->table);
+        $exceptions = [$primaryKey,'created_at','updated_at'];
         $scaffold = "";
         foreach($fields as $field) {
-            $scaffold .= '$this->addText("'.$field.'");'."\n\t\t";
+
+            if(in_array($field, $exceptions)) continue;
+
+            $fielLabel = ucwords(str_replace("_"," ",$field));
+            $scaffold .= '$this->addText("'.$fielLabel.'");'."\n\t\t";
         }
         $template = str_replace("{scaffolding}", $scaffold, $template);
 
