@@ -1,5 +1,6 @@
 <?php namespace crocodicstudio\crudbooster;
 
+use crocodicstudio\crudbooster\commands\DeveloperUser;
 use crocodicstudio\crudbooster\commands\Generate;
 use crocodicstudio\crudbooster\controllers\scaffolding\singletons\ColumnSingleton;
 use Illuminate\Support\Facades\Artisan;
@@ -60,7 +61,8 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 Install::class,
-                Generate::class
+                Generate::class,
+                DeveloperUser::class
             ]);
         }
 

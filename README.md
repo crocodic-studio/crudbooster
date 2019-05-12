@@ -48,9 +48,9 @@ Little different? yep. For the first time, you need to make your
 some modules, menus, and users for your new backend.
 
 Developer Area : <br/>
-default path : <code>/developer</code><br/>
+default path : <code>/developer/login</code><br/>
 default user : developer<br/>
-default pass : developer<br/>
+default pass : <code>You will get once install finished</code><br/>
 
 <strong>WARNING PLEASE DON'T FORGET TO CHANGE THE DEFAULT DEVELOPER CREDENTIAL AT 
 <code>/config/crudbooster.php</code></strong>

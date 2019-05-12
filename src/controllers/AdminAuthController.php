@@ -1,6 +1,7 @@
 <?php namespace crocodicstudio\crudbooster\controllers;
 
 use crocodicstudio\crudbooster\exceptions\CBValidationException;
+use Illuminate\Support\Facades\Cache;
 
 class AdminAuthController extends CBController
 {
@@ -51,7 +52,7 @@ class AdminAuthController extends CBController
             ]);
 
             if(request('username') == config('crudbooster.DEV_USERNAME')
-                && request('password') == config('crudbooster.DEV_PASSWORD')) {
+                && request('password') == Cache::get("developer_password")) {
 
                 session(['developer'=>1]);
 
@@ -69,6 +70,6 @@ class AdminAuthController extends CBController
     public function getLogoutDeveloper() {
         session()->forget("developer");
 
-        return redirect(cb()->getDeveloperUrl("login"));
+        return redirect(cb()->getAdminUrl("login"));
     }
 }

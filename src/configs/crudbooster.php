@@ -21,6 +21,7 @@ return [
      * The default login form use this bellow view path, but you can customize the view set to your own
      */
     'LOGIN_FORM_VIEW'    => 'crudbooster::login',
+    'LOGIN_BACKGROUND'   => 'cb_asset/images/bg_login.jpg',
 
     /*
      * For security reason we have limit the upload file formats bellow
@@ -40,8 +41,6 @@ return [
      * Credential For Developer
      */
     'DEV_USERNAME'  => 'developer',
-
-    'DEV_PASSWORD'  => 'developer',
 
     'DEV_PATH'      => 'developer',
 

@@ -13,11 +13,6 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
     <!-- Theme style -->
     <link href="{{cbAsset('adminlte/dist/css/AdminLTE.min.css')}}" rel="stylesheet" type="text/css"/>
-    <!-- support rtl-->
-    @if (in_array(App::getLocale(), ['ar', 'fa']))
-        <link rel="stylesheet" href="//cdn.rawgit.com/morteza/bootstrap-rtl/v3.3.4/dist/css/bootstrap-rtl.min.css">
-        <link href="{{ cbAsset("rtl.css")}}" rel="stylesheet" type="text/css"/>
-    @endif
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -26,10 +21,9 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
 
-    <link rel='stylesheet' href='{{ cbAsset("css/main.css")}}'/>
     <style type="text/css">
         body {
-            background: #ffffff url("{{ cbAsset("images/bg_login.png") }}");
+            background: #ffffff url("{{ asset(cbConfig('LOGIN_BACKGROUND')) }}");
             color: #111111  !important;
             background-repeat: no-repeat;
             background-position: center;
@@ -37,21 +31,21 @@
         }
 
         .login-box {
-            width: 850px;
+            width: 500px;
             margin: 10% auto;
-            border-radius: 15px;
-            background: #ffffff url("{{ cbAsset("images/image_login.png") }}");
+            border-radius: 5px;
+            background: #fefefe;
             background-repeat: no-repeat;
             background-position: left;
-            box-shadow: 0px 0px 20px #bbbbbb;
+            box-shadow: 0px 0px 30px #aaaaaa;
         }
 
         @media(max-width: 720px) {
+            body {
+                padding: 10px;
+            }
             .login-box {
                 width: 100%;
-                background-position: center;
-                color: #ffffff;
-                text-shadow: 0px 0px 3px #999999;
             }
         }
 
@@ -69,24 +63,18 @@
 <body>
 
 <div class="login-box">
-    <div class="row">
-        <div class="col-sm-6">
+    <div class="login-body">
+        @if ( Session::get('message') != '' )
+            <div class='alert alert-warning'>
+                {{ Session::get('message') }}
+            </div>
+        @endif
 
-        </div>
-        <div class="col-sm-6">
-            <div class="login-body">
-                @if ( Session::get('message') != '' )
-                    <div class='alert alert-warning'>
-                        {{ Session::get('message') }}
-                    </div>
-                @endif
-
-                @yield('content')
-            </div><!-- /.login-box-body -->
-        </div>
-    </div>
+        @yield('content')
+    </div><!-- /.login-box-body -->
 
 </div><!-- /.login-box -->
+
 
 
 <!-- jQuery 2.1.3 -->

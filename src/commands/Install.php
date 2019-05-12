@@ -4,6 +4,7 @@ use App;
 use Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 use Symfony\Component\Process\Process;
 
 class Install extends Command
@@ -168,7 +169,16 @@ class Install extends Command
 
     private function footer($success = true)
     {
+
+        $password = Str::random(16);
+        cache()->forever("developer_password",$password);
+
         $this->info('--');
+        $this->info("DEVELOPER AREA");
+        $this->info("/".cbConfig("DEV_PATH")."/login");
+        $this->info("username: ".cbConfig("DEV_USERNAME"));
+        $this->info("Your new developer password: ".$password);
+        $this->info("--");
         $this->info('Homepage : http://crudbooster.com');
         $this->info('Github : https://github.com/crocodic-studio/crudbooster');
         $this->info('====================================================================');
