@@ -38,7 +38,7 @@
                 success:function (data) {
                     $(t).parents('.upload-wrapper').find('.upload-preview').html("<a href='" + data.full_url + "' target='_blank' title='"+data.filename+"'>" +
                         "<i class='fa fa-download'></i> Download "+data.filename+"</a> " +
-                        "<a href='javascript:;' class='btn btn-xs btn-danger' onclick='deleteFile(this, \'"+is_required+"\')' title='Delete this file'><i class='fa fa-trash'></i></a>");
+                        "<a href='javascript:;' class='btn btn-xs btn-danger' onclick='deleteFile(this, "+is_required+")' title='Delete this file'><i class='fa fa-trash'></i></a>");
                     $('input[name=' + target_input_name + ']').val(data.url);
                 },
                 error:function (jqXHR, textStatus, errorThrown) {
