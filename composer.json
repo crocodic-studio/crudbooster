@@ -32,5 +32,12 @@
         "psr-4": {
           "crocodicstudio\\crudbooster\\": "src/"
         }
-      }
+      },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "crocodicstudio\\crudbooster\\CRUDBoosterServiceProvider"
+            ]
+        }
+    }
 }
