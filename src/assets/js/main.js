@@ -4,6 +4,22 @@
 		return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
 	};
 
+    function showConfirmation(t) {
+        swal({
+            title: "Are you sure?",
+            text: "Once delete, we can't recover the data",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    let href = $(t).data("href");
+                    location.href = href;
+                }
+            });
+    }
+
 	$(function() {
 
 		$.ajaxSetup({

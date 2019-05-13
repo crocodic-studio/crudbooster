@@ -40,7 +40,7 @@
 
 @if(module()->canDelete() && module()->getData("button_delete"))
     @if(isset($hide_button_delete) && call_user_func($hide_button_delete, $row)===false)
-    <a class='btn btn-xs btn-warning btn-delete' title='{{trans("crudbooster.action_delete_data")}}' href='{{ module()->deleteURL($row->primary_key) }}'
-       onclick='if(!confirm("Are you sure want to delete?")) return false'><i class='fa fa-trash'></i></a>
+    <a class='btn btn-xs btn-warning btn-delete confirmation' title='{{trans("crudbooster.action_delete_data")}}' href='{{ module()->deleteURL($row->primary_key) }}'
+       ><i class='fa fa-trash'></i></a>
     @endif
 @endif
