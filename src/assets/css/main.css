@@ -1,9 +1,11 @@
 	#table-module thead tr th {
 		border: 1px solid #cccccc;
 		white-space: nowrap;
+        font-size: 12px;
 	}
 	#table-module tbody tr td {
 		border: 1px solid #cccccc;
+        font-size: 12px;
 	}
 	.select2-container--default .select2-selection--single {border-radius: 0px !important; border: 1px solid #dddddd !important;}
 	.select2-container .select2-selection--single {height: 35px !important;}

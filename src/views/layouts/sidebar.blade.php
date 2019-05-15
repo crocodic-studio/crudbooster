@@ -20,12 +20,12 @@
         <div class='main-menu'>
 
             <!-- Sidebar Menu -->
-            <ul class="sidebar-menu">
+            <ul class="sidebar-menu" data-widget="tree">
                 <li class="header">{{trans("crudbooster.menu_navigation")}}</li>
                 <!-- Optionally, you can add icons to the links -->
 
                 <li class="{{ (request()->is(config('crudbooster.ADMIN_PATH'))) ? 'active' : '' }}">
-                    <a href='{{ cb()->getAdminUrl() }}'><i class='fa fa-dashboard'></i>
+                    <a href='{{ cb()->getAdminUrl() }}'><i class='fa fa-home'></i>
                         <span>{{trans("crudbooster.text_dashboard")}}</span>
                     </a>
                 </li>

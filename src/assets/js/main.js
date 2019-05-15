@@ -78,10 +78,10 @@
 
 		if($('a.confirmation').length > 0) {
 		    $("a.confirmation").each(function () {
-                let url = this.attr('href');
-                this.data('href', url);
-                this.attr('href','javascript:;');
-                this.attr('onclick',"showConfirm(this)");
+                let url = $(this).attr('href');
+                $(this).data('href', url);
+                $(this).attr('href','javascript:;');
+                $(this).attr('onclick',"showConfirmation(this)");
             })
         }
 

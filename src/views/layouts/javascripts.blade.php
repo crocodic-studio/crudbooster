@@ -4,12 +4,12 @@
 {{--<![endif]-->--}}
 <!-- REQUIRED JS SCRIPTS -->
 <!-- jQuery 2.1.3 -->
-<script src="{{ cbAsset('adminlte/plugins/jQuery/jQuery-2.1.4.min.js') }}"></script>
+<script src="{{ cbAsset('adminlte/bower_components/jquery/dist/jquery.min.js') }}"></script>
 
 <!-- Bootstrap 3.3.2 JS -->
-<script src="{{ cbAsset('adminlte/bootstrap/js/bootstrap.min.js') }}" type="text/javascript"></script>
+<script src="{{ cbAsset('adminlte/bower_components/bootstrap/dist/js/bootstrap.min.js') }}" type="text/javascript"></script>
 <!-- AdminLTE App -->
-<script src="{{ cbAsset('adminlte/dist/js/app.js') }}" type="text/javascript"></script>
+<script src="{{ cbAsset('adminlte/dist/js/adminlte.min.js') }}" type="text/javascript"></script>
 
 <!--DateRangePicker http://www.daterangepicker.com/-->
 <script src="{{ cbAsset('adminlte/plugins/daterangepicker/moment.min.js') }}"></script>
