@@ -31,6 +31,13 @@ return [
     'UPLOAD_IMAGE_EXTENSION_ALLOWED' => ['jpg','jpeg','png','gif'],
 
     /*
+     * Data Migration table additional
+     * You can define in this array what the tables you want to include in "php artisan crudbooster:data_migration"
+     * The default is all cb_ prefix will be include in data migration
+     */
+    'ADDITIONAL_DATA_MIGRATION'=>['users','migrations'],
+
+    /*
      * Google FCM Server Key is used to send a notification via FireBase cloud message
      * If you want to use FCM Helper you should set this setting
      */

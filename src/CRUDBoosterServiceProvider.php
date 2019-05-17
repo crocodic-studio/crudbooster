@@ -2,6 +2,8 @@
 
 use crocodicstudio\crudbooster\commands\DeveloperUser;
 use crocodicstudio\crudbooster\commands\Generate;
+use crocodicstudio\crudbooster\commands\MigrateData;
+use crocodicstudio\crudbooster\commands\MigrationData;
 use crocodicstudio\crudbooster\controllers\scaffolding\singletons\ColumnSingleton;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\ServiceProvider;
@@ -62,7 +64,9 @@ class CRUDBoosterServiceProvider extends ServiceProvider
             $this->commands([
                 Install::class,
                 Generate::class,
-                DeveloperUser::class
+                DeveloperUser::class,
+                MigrationData::class,
+                MigrateData::class
             ]);
         }
 
