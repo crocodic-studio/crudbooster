@@ -23,6 +23,8 @@
                 });
         }
         function uploadImage(t, target_input_name, is_required, encrypt, width, height) {
+            if(!t.files[0]) return false;
+
             $(t).parents('.upload-wrapper').find('.upload-preview').html("<p><i class='fa fa-spin fa-spinner'></i> Please wait uploading...</p>");
             var formData = new FormData();
             formData.append('userfile', t.files[0]);
