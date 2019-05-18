@@ -29,6 +29,9 @@ Do not use this master repository for production
 1. [Additional Index Head Buttons](#additional-index-head-buttons)
 1. [Additional Table Grid Action Buttons](#additional-table-grid-action-buttons)
 1. [Hide Buttons With Condition](#hide-buttons-with-condition)
+1. [Command Artisan Available](#command-artisan-available)
+1. [Module Helper Available](#module-helper-available)
+1. [FCM Google Push Notification](#fcm-google-push-notification)
 
 <h3>Installation</h3>
 Make sure you have installed newest laravel
@@ -580,3 +583,49 @@ Method available :
 | hideButtonDeleteWhen($callback) | To hide delete button | 
 | hideButtonEditWhen($callback) | To hide edit button |
 | hideButtonDetailWhen($callback) | To hide detail button |
+
+# Command Artisan Available
+
+| Name | Description |
+| --- | --- |
+| make:module {tableName} | To create a module by table name. Replace {tableName} with the table name |
+| crudbooster:install | To install the crudbooster for the first time |
+| crudbooster:data_migration | To backup the cb_* tables data and additional table see at the config/crudbooster.php. This useful if you doing collaboration that need sync the data also |
+| crudbooster:migrate | The command after crudbooster:data_migration, this command to extract the backup data |
+
+# Module Helper Available
+
+| Name | Description |
+| --- | --- |
+| module()->getData("key_name") | To get the properties variable at the module controller. Replace key name with the properties var name.
+| module()->getPageTitle() | To get the module page title |
+| module()->getTable() | To get the table name of module |
+| module()->getPageIcon() | To get the page icon of module |
+| module()->canBrowse() | To check the current user is can browse to the module ? | 
+| module()->canCreate() | To check the current user is can create to the module ? |
+| module()->canRead() | To check the current user is can read to the module ? |
+| module()->canUpdate() | To check the current user is can update to the module ? |
+| module()->canDelete() | To check the current user is can delete to the module ? |
+| module()->addUrl() | To get the add page url |
+| module()->editUrl() | To get the edit page url |
+| module()->detailUrl() | To get the detail page url |
+| module()->deleteUrl() | To get the delete page url |
+| module()->url("path/here") | To get the root module url. You can pass the parameter with additional path |
+ 
+# FCM Google Push Notification 
+To use this feature you have to set the Google FCM Key at <code>config/crudbooster.php</code>
+
+```php
+    use crocodicstudio\crudbooster\helpers\FCM;
+    
+    $fcm = new FCM();
+    $title = "Foo Bar Title";
+    $message = "The content notification message";
+    $data = [];
+    $data['foo_data'] = "Hello";
+    $data['bar_data'] = "New";
+    $fcm->sendToAndroid($reg_id_array, $title, $message, $data);
+    
+    // Or you can send to ios with this bellow 
+    $fcm->sendToIos($reg_id_array, $title, $message,$data);
+```
