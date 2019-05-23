@@ -176,7 +176,7 @@ class CBController extends Controller
             }
 
             if(isset($this->data['hook_before_insert']) && is_callable($this->data['hook_before_insert'])) {
-                call_user_func($this->data['hook_before_insert'], $data);
+                $data = call_user_func($this->data['hook_before_insert'], $data);
             }
 
             $id = DB::table($this->data['table'])->insertGetId($data);
@@ -228,7 +228,7 @@ class CBController extends Controller
             }
 
             if(isset($this->data['hook_before_update']) && is_callable($this->data['hook_before_update'])) {
-                call_user_func($this->data['hook_before_update'], $id);
+                $data = call_user_func($this->data['hook_before_update'], $id, $data);
             }
 
             DB::table($this->data['table'])
