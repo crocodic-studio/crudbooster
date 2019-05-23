@@ -175,6 +175,10 @@ class CBController extends Controller
                 $data['created_at'] = date('Y-m-d H:i:s');
             }
 
+            if(isset($this->data['hook_before_insert']) && is_callable($this->data['hook_before_insert'])) {
+                call_user_func($this->data['hook_before_insert'], $data);
+            }
+
             $id = DB::table($this->data['table'])->insertGetId($data);
 
             if(isset($this->data['hook_after_insert']) && is_callable($this->data['hook_after_insert'])) {

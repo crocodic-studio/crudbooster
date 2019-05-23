@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "267b49f4247121de7fc23ba235ff326a",
+    "content-hash": "5eae3f097d6a6ef818cbc1aa020179ec",
     "packages": [
         {
             "name": "composer/xdebug-handler",
@@ -49,6 +49,55 @@
                 "performance"
             ],
             "time": "2019-01-28T20:25:53+00:00"
+        },
+        {
+            "name": "crocodicstudio/cbmodel",
+            "version": "v1.13",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/crocodic-studio/cb-model.git",
+                "reference": "05c712dcf0446c1c5ee220a6e8c3c4fa114483f5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/crocodic-studio/cb-model/zipball/05c712dcf0446c1c5ee220a6e8c3c4fa114483f5",
+                "reference": "05c712dcf0446c1c5ee220a6e8c3c4fa114483f5",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/dbal": "~2.4",
+                "illuminate/database": ">=5.4",
+                "illuminate/support": ">=5.4",
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "illuminate/console": ">=5.4"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Crocodicstudio\\Cbmodel\\CBModelServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Crocodicstudio\\Cbmodel": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ferry Ariawan",
+                    "email": "ferry@crocodic.com"
+                }
+            ],
+            "description": "Boost your laravel database relation",
+            "time": "2019-05-10T04:22:14+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
