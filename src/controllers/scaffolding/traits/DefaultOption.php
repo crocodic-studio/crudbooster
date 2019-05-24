@@ -125,6 +125,69 @@ trait DefaultOption
         return $this;
     }
 
+    public function readonly($boolean = true)
+    {
+        /** @var ColumnModel $data */
+        $data = ColumnSingleton()->getColumn($this->index);
+        $data->setReadonly($boolean);
+
+        // Save back
+        columnSingleton()->setColumn($this->index, $data);
+
+        return $this;
+    }
+
+    public function disabled($boolean = true)
+    {
+        /** @var ColumnModel $data */
+        $data = ColumnSingleton()->getColumn($this->index);
+        $data->setDisabled($boolean);
+
+        // Save back
+        columnSingleton()->setColumn($this->index, $data);
+
+        return $this;
+    }
+
+    public function onClick($js_function_name, callable $js_function = null)
+    {
+        /** @var ColumnModel $data */
+        $data = ColumnSingleton()->getColumn($this->index);
+        $data->setOnclickJsFunctionName($js_function_name);
+        $data->setOnclickJsFunctionCallback($js);
+
+        // Save back
+        columnSingleton()->setColumn($this->index, $data);
+
+        return $this;
+    }
+
+    public function onBlur($js_function_name, callable $js_function = null)
+    {
+        /** @var ColumnModel $data */
+        $data = ColumnSingleton()->getColumn($this->index);
+        $data->setOnblurJsFunctionName($js_function_name);
+        $data->setOnblurJsFunctionCallback($js);
+
+        // Save back
+        columnSingleton()->setColumn($this->index, $data);
+
+        return $this;
+    }
+
+    public function onChange($js_function_name, callable $js_function = null)
+    {
+        /** @var ColumnModel $data */
+        $data = ColumnSingleton()->getColumn($this->index);
+        $data->setOnchangeJsFunctionName($js_function_name);
+        $data->setOnchangeJsFunctionCallback($js);
+
+        // Save back
+        columnSingleton()->setColumn($this->index, $data);
+
+        return $this;
+    }
+
     public function validation($rule = null, $custom_messages = [])
     {
         /** @var ColumnModel $data */

@@ -5,7 +5,9 @@
                {{ $column->getRequired()?'required':''}}
                {{ $column->getReadonly()?'readonly':''}}
                {{ $column->getDisabled()?'disabled':''}}
-
+               {{ $column->getOnchangeJsFunctionName()?"onChange='".$column->getOnchangeJsFunctionName()."'":"" }}
+               {{ $column->getOnclickJsFunctionName()?"onClick='".$column->getOnclickJsFunctionName()."'":"" }}
+               {{ $column->getOnblurJsFunctionName()?"onBlur='".$column->getOnblurJsFunctionName()."'":"" }}
                class='form-control input-money'
                name="{{ $column->getName() }}"
                id="money-{{ $column->getName() }}"

@@ -8,6 +8,9 @@
                {{ $column->getDisabled()?'disabled':''}}
                {{ $column->getMaxLength()?"maxlength=".$column->getMaxLength():""}}
                {{ $column->getMinLength()?"minlength=".$column->getMinLength():""}}
+               {{ $column->getOnchangeJsFunctionName()?"onChange='".$column->getOnchangeJsFunctionName()."'":"" }}
+               {{ $column->getOnclickJsFunctionName()?"onClick='".$column->getOnclickJsFunctionName()."'":"" }}
+               {{ $column->getOnblurJsFunctionName()?"onBlur='".$column->getOnblurJsFunctionName()."'":"" }}
                class='form-control'
                name="{{ $column->getName() }}"
                id="{{ $column->getName() }}"

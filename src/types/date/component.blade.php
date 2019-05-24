@@ -5,6 +5,9 @@
                {{ $column->getRequired()?'required':''}}
                readonly
                {{ $column->getDisabled()?'disabled':''}}
+               {{ $column->getOnchangeJsFunctionName()?"onChange='".$column->getOnchangeJsFunctionName()."'":"" }}
+               {{ $column->getOnclickJsFunctionName()?"onClick='".$column->getOnclickJsFunctionName()."'":"" }}
+               {{ $column->getOnblurJsFunctionName()?"onBlur='".$column->getOnblurJsFunctionName()."'":"" }}
                class='form-control datepicker'
                name="{{ $column->getName() }}"
                id="{{ $column->getName() }}"

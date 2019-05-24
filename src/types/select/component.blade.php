@@ -4,6 +4,9 @@
             {{ $column->getRequired()?'required':''}}
             {{ $column->getReadonly()?'readonly':''}}
             {{ $column->getDisabled()?'disabled':''}}
+            {{ $column->getOnchangeJsFunctionName()?"onChange='".$column->getOnchangeJsFunctionName()."'":"" }}
+            {{ $column->getOnclickJsFunctionName()?"onClick='".$column->getOnclickJsFunctionName()."'":"" }}
+            {{ $column->getOnblurJsFunctionName()?"onBlur='".$column->getOnblurJsFunctionName()."'":"" }}
             name="{{ $column->getName() }}" id="{{ $column->getName() }}">
         <option value="">** Select a {{ $column->getLabel() }}</option>
         @if(!$column->getForeignKey())

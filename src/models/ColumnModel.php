@@ -33,9 +33,117 @@ class ColumnModel
     private $value;
     private $default_value;
     private $style;
+    private $onchange_js_function_name;
+    private $onchange_js_function_callback;
+
+    private $onclick_js_function_name;
+    private $onclick_js_function_callback;
+
+    private $onblur_js_function_name;
+    private $onblur_js_function_callback;
 
     private $index_display_transform;
     private $detail_display_transform;
+
+    /**
+     * @return mixed
+     */
+    public function getOnclickJsFunctionName()
+    {
+        return $this->onclick_js_function_name;
+    }
+
+    /**
+     * @param mixed $onclick_js_function_name
+     */
+    public function setOnclickJsFunctionName($onclick_js_function_name): void
+    {
+        $this->onclick_js_function_name = $onclick_js_function_name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOnclickJsFunctionCallback()
+    {
+        return $this->onclick_js_function_callback;
+    }
+
+    /**
+     * @param mixed $onclick_js_function_callback
+     */
+    public function setOnclickJsFunctionCallback($onclick_js_function_callback): void
+    {
+        $this->onclick_js_function_callback = $onclick_js_function_callback;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOnblurJsFunctionName()
+    {
+        return $this->onblur_js_function_name;
+    }
+
+    /**
+     * @param mixed $onblur_js_function_name
+     */
+    public function setOnblurJsFunctionName($onblur_js_function_name): void
+    {
+        $this->onblur_js_function_name = $onblur_js_function_name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOnblurJsFunctionCallback()
+    {
+        return $this->onblur_js_function_callback;
+    }
+
+    /**
+     * @param mixed $onblur_js_function_callback
+     */
+    public function setOnblurJsFunctionCallback($onblur_js_function_callback): void
+    {
+        $this->onblur_js_function_callback = $onblur_js_function_callback;
+    }
+
+    
+
+    /**
+     * @return mixed
+     */
+    public function getOnchangeJsFunctionName()
+    {
+        return $this->onchange_js_function_name;
+    }
+
+    /**
+     * @param mixed $onchange_js_function_name
+     */
+    public function setOnchangeJsFunctionName($onchange_js_function_name): void
+    {
+        $this->onchange_js_function_name = $onchange_js_function_name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOnchangeJsFunctionCallback()
+    {
+        return $this->onchange_js_function_callback;
+    }
+
+    /**
+     * @param mixed $onchange_js_function_callback
+     */
+    public function setOnchangeJsFunctionCallback($onchange_js_function_callback): void
+    {
+        $this->onchange_js_function_callback = $onchange_js_function_callback;
+    }
+    
+    
 
     /**
      * @return mixed
