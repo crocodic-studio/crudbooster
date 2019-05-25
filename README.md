@@ -588,10 +588,9 @@ Method available :
 
 | Name | Description |
 | --- | --- |
-| make:module {tableName} | To create a module by table name. Replace {tableName} with the table name |
+| crudbooster:make --module={tableName} | To create a module by table name. Replace {tableName} with the table name |
 | crudbooster:install | To install the crudbooster for the first time |
-| crudbooster:data_migration | To backup the cb_* tables data and additional table see at the config/crudbooster.php. This useful if you doing collaboration that need sync the data also |
-| crudbooster:migrate | The command after crudbooster:data_migration, this command to extract the backup data |
+| crudbooster:seed {--generate}| To backup the cb_* tables data and additional table see at the config/crudbooster.php. This useful if you doing collaboration that need sync the data also. Set option --generate to generating the seeder, or without it to seeder the exisiting seeder file. |
 
 # Module Helper Available
 

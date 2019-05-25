@@ -14,7 +14,7 @@ class Generate extends Command
      *
      * @var string
      */
-    protected $signature = 'make:module {table : The table that want to generate the module}';
+    protected $signature = 'crudbooster:make {--module= : The table that want to generate the module}';
 
     /**
      * The console command description.
@@ -31,8 +31,8 @@ class Generate extends Command
     public function handle()
     {
         $this->info($this->description);
-        $table = $this->argument("table");
+        $table = $this->option("module");
         (new ModuleGenerator($table))->make();
-        $this->info("New module created!");
+        $this->info("New module from table ".$table." has been created!");
     }
 }
