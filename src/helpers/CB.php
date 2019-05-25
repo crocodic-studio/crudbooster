@@ -185,6 +185,11 @@ class CB
         }
     }
 
+    public function listAllTable()
+    {
+        return DB::connection()->getDoctrineSchemaManager()->listTableNames();
+    }
+
     public function findAll($table, $condition_array = [])
     {
         return DB::table($table)->where($condition_array)->get();

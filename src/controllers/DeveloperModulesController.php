@@ -31,7 +31,7 @@ class DeveloperModulesController extends Controller
 
     public function getAdd() {
         $data = [];
-        $data['tables'] = DB::connection()->getDoctrineSchemaManager()->listTableNames();
+        $data['tables'] = cb()->listAllTable();
         return view($this->view.'.add', $data);
     }
 
