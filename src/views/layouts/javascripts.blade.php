@@ -42,6 +42,10 @@
         $(".datatable").dataTable();
         $(".select2").select2();
     })
+
+    @if($javascript = module()->getData("javascript"))
+        {!! $javascript  !!}
+    @endif
 </script>
 
 <!-- Default CB Script -->

@@ -23,6 +23,12 @@
     @endif
 
     @stack('head')
+
+    @if($style = module()->getData("style"))
+        <style>
+            {!! $style !!}
+        </style>
+    @endif
 </head>
 <body class="skin-blue {{ cbConfig("ADMIN_LAYOUT") }}">
 <div id='app' class="wrapper">

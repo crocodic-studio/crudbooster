@@ -34,6 +34,13 @@ trait ControllerSetting
         $this->hideButtonEditWhen(function ($row) { return false; });
     }
 
+    public function style(callable $style) {
+        $this->data['style'] = $style;
+    }
+
+    public function javascript(callable $javascript) {
+        $this->data['javascript'] = $javascript;
+    }
 
     /**
      * @param callable $condition
