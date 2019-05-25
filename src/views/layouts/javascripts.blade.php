@@ -44,7 +44,7 @@
     })
 
     @if($javascript = module()->getData("javascript"))
-        {!! $javascript  !!}
+        {!! call_user_func($javascript)  !!}
     @endif
 </script>
 

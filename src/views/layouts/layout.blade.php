@@ -26,7 +26,7 @@
 
     @if($style = module()->getData("style"))
         <style>
-            {!! $style !!}
+            {!! call_user_func($style) !!}
         </style>
     @endif
 </head>
