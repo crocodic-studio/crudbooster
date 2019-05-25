@@ -27,7 +27,7 @@
         "laravel/framework":">=5.7",
         "doctrine/dbal": "~2.3",
         "intervention/imagecache":"2.3.3",
-        "crocodicstudio/cbmodel":"1.13"
+        "crocodicstudio/cbmodel":">=1.13"
     },
     "autoload": {
         "psr-4": {
