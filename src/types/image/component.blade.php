@@ -18,8 +18,9 @@
                    {{ (!$column->getValue() && $column->getRequired())?'required':''}}
                    {{ $column->getReadonly()?'readonly':''}}
                    {{ $column->getDisabled()?'disabled':''}}
-                   {{ $column->getOnclickJsFunctionName()?"onClick='".$column->getOnclickJsFunctionName()."'":"" }}
-                   {{ $column->getOnblurJsFunctionName()?"onBlur='".$column->getOnblurJsFunctionName()."'":"" }}
+                   {!! $column->getOnchangeJsFunctionName()?"onChange='".$column->getOnchangeJsFunctionName()."'":"" !!}
+                   {!! $column->getOnclickJsFunctionName()?"onClick='".$column->getOnclickJsFunctionName()."'":"" !!}
+                   {!! $column->getOnblurJsFunctionName()?"onBlur='".$column->getOnblurJsFunctionName()."'":"" !!}
                    class='form-control' onchange="uploadImage(this, '{{ $column->getName() }}', '{{ $column->getRequired()?1:0 }}','{{ $column->getEncrypt() }}', '{{ $column->getResizeWidth() }}','{{ $column->getResizeHeight() }}')"/>
             <input type="hidden" name="{{ $column->getName() }}" value="{{ $column->getValue() }}">
         </div>

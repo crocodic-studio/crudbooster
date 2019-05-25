@@ -9,9 +9,9 @@
                     <input type="radio"
                             {{ $column->getDisabled()?"disabled":"" }}
                             {{ $columnValue == $key?"checked":"" }}
-                            {{ $column->getOnchangeJsFunctionName()?"onChange='".$column->getOnchangeJsFunctionName()."'":"" }}
-                            {{ $column->getOnclickJsFunctionName()?"onClick='".$column->getOnclickJsFunctionName()."'":"" }}
-                            {{ $column->getOnblurJsFunctionName()?"onBlur='".$column->getOnblurJsFunctionName()."'":"" }}
+                            {!!  $column->getOnchangeJsFunctionName()?"onChange='".$column->getOnchangeJsFunctionName()."'":"" !!}
+                            {!! $column->getOnclickJsFunctionName()?"onClick='".$column->getOnclickJsFunctionName()."'":"" !!}
+                            {!! $column->getOnblurJsFunctionName()?"onBlur='".$column->getOnblurJsFunctionName()."'":"" !!}
                             name="{{ $column->getName() }}"
                            value="{{ $key }}"> {{ $value }}
                 </label>

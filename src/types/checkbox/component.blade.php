@@ -6,9 +6,9 @@
             <label class='checkbox-inline'>
                 <input type="checkbox"
                        {{ $column->getDisabled()?"disabled":"" }}
-                       {{ $column->getOnchangeJsFunctionName()?"onChange='".$column->getOnchangeJsFunctionName()."'":"" }}
-                       {{ $column->getOnclickJsFunctionName()?"onClick='".$column->getOnclickJsFunctionName()."'":"" }}
-                       {{ $column->getOnblurJsFunctionName()?"onBlur='".$column->getOnblurJsFunctionName()."'":"" }}
+                       {!!  $column->getOnchangeJsFunctionName()?"onChange='".$column->getOnchangeJsFunctionName()."'":"" !!}
+                       {!! $column->getOnclickJsFunctionName()?"onClick='".$column->getOnclickJsFunctionName()."'":"" !!}
+                       {!! $column->getOnblurJsFunctionName()?"onBlur='".$column->getOnblurJsFunctionName()."'":"" !!}
                        {{ $column->getValue() && in_array($value, \crocodicstudio\crudbooster\types\checkbox\CheckboxHelper::parseValuesToArray($column->getValue()))?"checked":"" }}
                        name="{{ $column->getName() }}[]"
                        value="{{ $key }}"> {{ $value }}

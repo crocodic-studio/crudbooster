@@ -6,9 +6,9 @@
                {{ $column->getReadonly()?'readonly':''}}
                {{ $column->getDisabled()?'disabled':''}}
                {{ $column->getMaxLength()?"maxlength=".$column->getMaxLength():""}}
-               {{ $column->getOnchangeJsFunctionName()?"onChange='".$column->getOnchangeJsFunctionName()."'":"" }}
-               {{ $column->getOnclickJsFunctionName()?"onClick='".$column->getOnclickJsFunctionName()."'":"" }}
-               {{ $column->getOnblurJsFunctionName()?"onBlur='".$column->getOnblurJsFunctionName()."'":"" }}
+               {!!  $column->getOnchangeJsFunctionName()?"onChange='".$column->getOnchangeJsFunctionName()."'":"" !!}
+               {!! $column->getOnclickJsFunctionName()?"onClick='".$column->getOnclickJsFunctionName()."'":"" !!}
+               {!! $column->getOnblurJsFunctionName()?"onBlur='".$column->getOnblurJsFunctionName()."'":"" !!}
                class='form-control'
                name="{{ $column->getName() }}"
                id="{{ $column->getName() }}"
