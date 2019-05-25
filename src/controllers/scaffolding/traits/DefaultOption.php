@@ -154,7 +154,7 @@ trait DefaultOption
         /** @var ColumnModel $data */
         $data = ColumnSingleton()->getColumn($this->index);
         $data->setOnclickJsFunctionName($js_function_name);
-        $data->setOnclickJsFunctionCallback($js);
+        $data->setOnclickJsFunctionCallback($js_function);
 
         // Save back
         columnSingleton()->setColumn($this->index, $data);
@@ -167,7 +167,7 @@ trait DefaultOption
         /** @var ColumnModel $data */
         $data = ColumnSingleton()->getColumn($this->index);
         $data->setOnblurJsFunctionName($js_function_name);
-        $data->setOnblurJsFunctionCallback($js);
+        $data->setOnblurJsFunctionCallback($js_function);
 
         // Save back
         columnSingleton()->setColumn($this->index, $data);
@@ -180,7 +180,7 @@ trait DefaultOption
         /** @var ColumnModel $data */
         $data = ColumnSingleton()->getColumn($this->index);
         $data->setOnchangeJsFunctionName($js_function_name);
-        $data->setOnchangeJsFunctionCallback($js);
+        $data->setOnchangeJsFunctionCallback($js_function);
 
         // Save back
         columnSingleton()->setColumn($this->index, $data);
