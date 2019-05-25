@@ -74,7 +74,7 @@ class CBController extends Controller
             /** @var ColumnModel $column */
             if($column->getType() != "custom") {
                 if(strpos($column->getField(),".") === false) {
-                    if(Schema::hasTable($this->data['table'], $column->getField())) {
+                    if(Schema::hasColumn($this->data['table'], $column->getField())) {
                         $query->addSelect($this->data['table'].'.'.$column->getField());
                     }
                 }else{
