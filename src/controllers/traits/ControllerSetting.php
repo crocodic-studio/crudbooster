@@ -32,6 +32,8 @@ trait ControllerSetting
         $this->hideButtonDeleteWhen(function ($row) { return false; });
         $this->hideButtonDetailWhen(function ($row) { return false; });
         $this->hideButtonEditWhen(function ($row) { return false; });
+        $this->style(function () { return null; });
+        $this->javascript(function () { return null; });
     }
 
     public function style(callable $style) {
