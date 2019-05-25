@@ -14,7 +14,7 @@ class Install extends Command
      *
      * @var string
      */
-    protected $name = 'crudbooster:install';
+    protected $signature = 'crudbooster:install';
 
     /**
      * The console command description.

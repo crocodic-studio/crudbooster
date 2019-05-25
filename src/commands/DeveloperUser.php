@@ -14,7 +14,7 @@ class DeveloperUser extends Command
      *
      * @var string
      */
-    protected $name = 'crudbooster:developer {--password=AUTO : To custom the password of developer}';
+    protected $signature = 'crudbooster:developer {--password=AUTO : To custom the password of developer}';
 
     /**
      * The console command description.

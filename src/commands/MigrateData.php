@@ -15,7 +15,7 @@ class MigrateData extends Command
      *
      * @var string
      */
-    protected $name = 'crudbooster:seed {--generate : Add this option to generate the seeder}';
+    protected $signature = 'crudbooster:seed {--generate : Add this option to generate the seeder}';
 
     /**
      * The console command description.
