@@ -14,7 +14,7 @@ class DeveloperUser extends Command
      *
      * @var string
      */
-    protected $name = 'crudbooster:developer';
+    protected $name = 'crudbooster:developer {--password=AUTO : To custom the password of developer}';
 
     /**
      * The console command description.
@@ -30,7 +30,12 @@ class DeveloperUser extends Command
      */
     public function handle()
     {
-        $password = Str::random(16);
+        if($this->option("password") == "AUTO") {
+            $password = Str::random(16);
+        }else{
+            $password = $this->option("password");
+        }
+
         cache()->forever("developer_password", $password);
         $this->info("Your new developer password: ".$password);
     }

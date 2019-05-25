@@ -14,7 +14,7 @@ class Generate extends Command
      *
      * @var string
      */
-    protected $signature = 'crudbooster:make {--module= : The table that want to generate the module}';
+    protected $signature = 'crudbooster:make {--module=ALL : The table that want to generate the module}';
 
     /**
      * The console command description.
@@ -31,7 +31,16 @@ class Generate extends Command
     public function handle()
     {
         $this->info($this->description);
-        $table = $this->option("module");
+        $option = $this->option("module");
+        if($option == "ALL") {
+            $tables = DB::connection()->getDoctrineSchemaManager()->listTableNames();
+            foreach($tables as $table) {
+                $this->generate($table);
+            }
+        }
+    }
+
+    private function generate($table) {
         (new ModuleGenerator($table))->make();
         $this->info("New module from table ".$table." has been created!");
     }
