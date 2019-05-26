@@ -370,12 +370,17 @@ class CB
 
         $prefix = trim($prefix, '/').'/';
 
-        $namespace = ($namespace) ?: 'App\Http\Controllers';
+        if(substr($controller,0,1) != "\\") {
+            $controller = "\App\Http\Controllers\\".$controller;
+        }
+
+        $exp = explode("\\", $controller);
+        $controller_name = end($exp);
 
         try {
-            Route::get($prefix, ['uses' => $controller.'@getIndex', 'as' => $controller.'GetIndex']);
+            Route::get($prefix, ['uses' => $controller.'@getIndex', 'as' => $controller_name.'GetIndex']);
 
-            $controller_class = new \ReflectionClass($namespace.'\\'.$controller);
+            $controller_class = new \ReflectionClass($controller);
             $controller_methods = $controller_class->getMethods(\ReflectionMethod::IS_PUBLIC);
             $wildcards = '/{one?}/{two?}/{three?}/{four?}/{five?}';
             foreach ($controller_methods as $method) {
@@ -386,13 +391,13 @@ class CB
                         $slug = array_filter(preg_split('/(?=[A-Z])/', $method_name));
                         $slug = strtolower(implode('-', $slug));
                         $slug = ($slug == 'index') ? '' : $slug;
-                        Route::get($prefix.$slug.$wildcards, ['uses' => $controller.'@'.$method->name, 'as' => $controller.'Get'.$method_name]);
+                        Route::get($prefix.$slug.$wildcards, ['uses' => $controller.'@'.$method->name, 'as' => $controller_name.'Get'.$method_name]);
                     } elseif (substr($method->name, 0, 4) == 'post') {
                         $method_name = substr($method->name, 4);
                         $slug = array_filter(preg_split('/(?=[A-Z])/', $method_name));
                         Route::post($prefix.strtolower(implode('-', $slug)).$wildcards, [
                             'uses' => $controller.'@'.$method->name,
-                            'as' => $controller.'Post'.$method_name,
+                            'as' => $controller_name.'Post'.$method_name,
                         ]);
                     }
                 }
