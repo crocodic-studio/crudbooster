@@ -53,7 +53,13 @@ class Module
     }
 
     public function getData($key) {
-        return ($this->controller_class)?$this->controller_class->getData($key)?:cb()->getAppName():null;
+        if($this->controller_class) {
+            $value = $this->controller_class->getData($key);
+            if(isset($value)) {
+                return $value;
+            }
+        }
+        return null;
     }
 
     /**
