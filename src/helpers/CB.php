@@ -362,10 +362,9 @@ class CB
     | --------------------------------------------------------------------------------------------------------------
     | $prefix       = path of route
     | $controller   = controller name
-    | $namespace    = namespace of controller (optional)
     |
     */
-    public function routeController($prefix, $controller, $namespace = null)
+    public function routeController($prefix, $controller)
     {
 
         $prefix = trim($prefix, '/').'/';
