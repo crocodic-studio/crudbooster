@@ -4,10 +4,10 @@
 Route::group(['middleware' => ['web',\crocodicstudio\crudbooster\middlewares\CBDeveloper::class],
     'prefix'=>cbConfig('DEV_PATH'),
     'namespace' => 'crocodicstudio\crudbooster\controllers'], function () {
-    cb()->routeController("modules", "DeveloperModulesController",'crocodicstudio\crudbooster\controllers');
-    cb()->routeController("menus", "DeveloperMenusController",'crocodicstudio\crudbooster\controllers');
-    cb()->routeController("roles","DeveloperRolesController",'crocodicstudio\crudbooster\controllers');
-    cb()->routeController("users","DeveloperUsersController",'crocodicstudio\crudbooster\controllers');
+    cb()->routeController("modules", "\crocodicstudio\crudbooster\controllers\DeveloperModulesController");
+    cb()->routeController("menus", "\crocodicstudio\crudbooster\controllers\DeveloperMenusController");
+    cb()->routeController("roles","\crocodicstudio\crudbooster\controllers\DeveloperRolesController");
+    cb()->routeController("users","\crocodicstudio\crudbooster\controllers\DeveloperUsersController");
     cb()->routeGet("/","DeveloperDashboardController@getIndex");
 });
 
@@ -34,7 +34,7 @@ Route::group(['middleware' => ['web'], 'prefix' => cbConfig('ADMIN_PATH'), 'name
 
 // Routing package controllers
 cb()->routeGroupBackend(function () {
-    cb()->routeController('profile', 'AdminProfileController','crocodicstudio\crudbooster\controllers');
+    cb()->routeController('profile', '\crocodicstudio\crudbooster\controllers\AdminProfileController');
 });
 
 // Auto Routing for App\Http\Controllers
