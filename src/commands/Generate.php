@@ -37,6 +37,8 @@ class Generate extends Command
             foreach($tables as $table) {
                 $this->generate($table);
             }
+        }else{
+            $this->generate($option);
         }
     }
 
