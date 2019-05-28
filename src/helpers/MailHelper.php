@@ -46,11 +46,11 @@ class MailHelper
             $message->to($this->to_email);
             $message->from($this->sender_email, $this->sender_name);
 
-            if ($this->cc_email) {
+            if (isset($this->cc_email)) {
                 $message->cc($this->cc_email);
             }
 
-            if (count($this->attachments)) {
+            if (isset($this->attachments) && count($this->attachments)) {
                 foreach ($this->attachments as $attachment) {
                     $message->attach($attachment);
                 }
