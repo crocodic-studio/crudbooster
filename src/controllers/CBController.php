@@ -129,7 +129,7 @@ class CBController extends Controller
         if(!module()->canBrowse()) return cb()->redirect(cb()->getAdminUrl(),"You do not have a privilege access to this area");
 
         $query = $this->repository();
-        $result = $query->paginate(20);
+        $result = $query->paginate( request("limit")?:10 );
         $data['result'] = $result;
 
         return view("crudbooster::module.index.index", array_merge($data, $this->data));
