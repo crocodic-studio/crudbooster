@@ -33,13 +33,19 @@ class Select
     }
 
     /**
-     * @param $table string
+     * @param $table string|Model
      * @param $key_field string
      * @param $display_field string
      * @param $SQLCondition string|callable
      * @return $this
      */
     public function optionsFromTable($table, $key_field, $display_field, $SQLCondition = null) {
+
+        if(strpos($table,"App\Models")!==false) {
+            $table = new $table();
+            $table = $table::$tableName;
+        }
+
         $data = DB::table($table);
         if($SQLCondition && is_callable($SQLCondition)) {
             $data = call_user_func($SQLCondition, $data);
