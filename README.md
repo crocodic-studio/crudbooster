@@ -23,6 +23,7 @@ Do not use this master repository for production
     1. [Radio Button](#radio-button)
     1. [WYSIWYG](#wysiwyg)
 1. [Additional Basic Options](#additional-basic-options)
+1. [Transform index cell value or detail cell value](#transform-index-cell-value-or-detail-cell-value)
 1. [Show Column To Specific Page](#show-column--input-to-specific-page)
 1. [Buttons Display Control](#buttons-display-control)
 1. [Additional View](#additional-view)
@@ -470,6 +471,12 @@ Additional options :
 | <code>->help("Help text");</code> | To set help text in the bellow of input | 
 | <code>->placeholder("Enter the text");</code> | To set the input placeholder |
 | <code>->validation("string");</code> | To set the input validation (laravel validation) |
+
+# Transform index cell value or detail cell value
+| Name | Description |
+| --- | --- |
+| <code>->indexDisplayTransform(function($value, $row) { return $value; });</code> | To transform the index value. $value is current value of cell, $row is collection of current record |
+| <code>->detailDisplayTransform(function($value, $row) { return $value; });</code> | To transform the detail value. $value is current value of cell, $row is collection of current record |
 
 **Example**
 ```php
