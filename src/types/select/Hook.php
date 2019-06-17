@@ -21,7 +21,7 @@ class Hook extends TypesHook
     {
         if($column->getOptionsFromTable()) {
             $option = $column->getOptionsFromTable();
-            $query->join($option["table"],$option["table"].'.'.$option["key_field"],"=", $column->getName());
+            $query->leftjoin($option["table"],$option["table"].'.'.$option["key_field"],"=", $column->getName());
             $query->addSelect($option['table'].'.'.$option['display_field'].' as '.$option['table'].'_'.$option['display_field']);
         }
         return $query;
