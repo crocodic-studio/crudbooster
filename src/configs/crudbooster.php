@@ -18,6 +18,11 @@ return [
     'DUMMY_PHOTO' => 'cb_asset/avatar.jpg',
 
     /*
+     * Default limit table data
+     */
+    'LIMIT_TABLE_DATA'=>10,
+
+    /*
      * The default login form use this bellow view path, but you can customize the view set to your own
      */
     'LOGIN_FORM_VIEW'    => 'crudbooster::login',
