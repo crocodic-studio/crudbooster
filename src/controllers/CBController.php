@@ -45,20 +45,13 @@ class CBController extends Controller
 
         $query = DB::table($this->data['table']);
 
-
         $query->addSelect($this->data['table'].'.'.cb()->pk($this->data['table']).' as primary_key');
-
-        if(isset($this->data['hook_query_index']) && is_callable($this->data['hook_query_index']))
-        {
-            $query = call_user_func($this->data['hook_query_index'], $query);
-        }
 
         $softDelete = isset($this->data['disable_soft_delete'])?$this->data['disable_soft_delete']:true;
         if($softDelete === true && Schema::hasColumn($this->data['table'],'deleted_at')) {
             $query->whereNull($this->data['table'].'.deleted_at');
         }
-
-
+        
         if(isset($joins)) {
             foreach($joins as $join)
             {
@@ -107,8 +100,8 @@ class CBController extends Controller
             }
         }
 
-        if(isset($this->data['hook_query_index']) && is_callable($this->data['hook_query_index'])) {
-            $query = call_user_func($this->data['hook_query_index'], $query);
+        if(isset($this->data['hook_index_query']) && is_callable($this->data['hook_index_query'])) {
+            $query = call_user_func($this->data['hook_index_query'], $query);
         }
 
 
