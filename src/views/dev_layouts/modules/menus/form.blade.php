@@ -42,11 +42,11 @@
             </div>
             <div class="form-group" id="path-value-wrapper" style="display: none;">
                 <label for="">Path Value</label>
-                <input type="text" class="form-control" name="path_value">
+                <input type="text" class="form-control" value="{{ (isset($row))?$row->path_value:null }}" name="path_value">
             </div>
             <div class="form-group" id="url-value-wrapper" style="display: none">
                 <label for="">URL Value</label>
-                <input type="url" class="form-control" name="url_value">
+                <input type="url" class="form-control" value="{{ (isset($row))?$row->url_value:null }}" name="url_value">
             </div>
             @push('bottom')
             <script>
