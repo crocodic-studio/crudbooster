@@ -71,6 +71,12 @@
                     @if(isset($row) && $row->type=="module")
                         $("#module-input-wrap").show();
                     @endif
+                    @if(isset($row) && $row->type=="path")
+                        $("#path-value-wrapper").show();
+                    @endif
+                    @if(isset($row) && $row->type=="url")
+                        $("#url-value-wrapper").show();
+                    @endif
                     @if(!isset($row))
                         $("#module-input-wrap").show();
                     @endif

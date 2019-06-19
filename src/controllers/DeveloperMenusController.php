@@ -71,7 +71,7 @@ class DeveloperMenusController extends Controller
 
     public function postEditSave($id) {
         try {
-            cb()->validation(["name", "icon", "type", "cb_modules_id"]);
+            cb()->validation(["name", "icon", "type"]);
 
             $menu = [];
             $menu['name'] = request('name');
