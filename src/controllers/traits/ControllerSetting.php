@@ -368,22 +368,22 @@ trait ControllerSetting
     }
 
     /**
-     * @param string $head_html
+     * @param string $head_script
      * @return ControllerSetting
      */
-    public function setHeadHtml($head_html)
+    public function setHeadScript($head_script)
     {
-        $this->data['head_html'] = $head_html;
+        $this->data['head_script'] = $head_script;
         return $this;
     }
 
     /**
-     * @param string $bottom_html
+     * @param string $bottom_view
      * @return ControllerSetting
      */
-    public function setBottomHtml($bottom_html)
+    public function setBottomView($bottom_view)
     {
-        $this->data['bottom_html'] = $bottom_html;
+        $this->data['bottom_view'] = $bottom_view;
         return $this;
     }
 

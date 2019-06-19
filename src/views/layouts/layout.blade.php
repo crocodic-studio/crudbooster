@@ -18,8 +18,8 @@
 
     <link rel='stylesheet' href='{{cbAsset("css/main.css")}}'/>
 
-    @if(isset($head_html))
-        {!! $head_html !!}
+    @if(isset($head_script))
+        {!! $head_script !!}
     @endif
 
     @stack('head')
@@ -89,8 +89,8 @@
 
 @include('crudbooster::layouts.javascripts')
 
-@if(isset($bottom_html))
-{!! $bottom_html !!}
+@if(isset($bottom_view))
+    @include($bottom_view)
 @endif
 
 @stack('bottom')
