@@ -1,7 +1,8 @@
 <h2>CRUDBOOSTER DEVELOPMENT</h2>
-Do not use this master repository for production
+Please be carefull this is beta version
 
 ## Table Of Index
+1. [What Is CRUDBOOSTER][#what-is-crudbooster]
 1. [Installation](#installation)
 1. [Quick Start](#quick-start)
 1. [Basic Code Knowledge](#basic-code-knowledge)
@@ -34,8 +35,38 @@ Do not use this master repository for production
 1. [Module Helper Available](#module-helper-available)
 1. [FCM Google Push Notification](#fcm-google-push-notification)
 
+#What Is CRUDBOOSTER
+Make a backend website is never been easy. Now you can create your web backend quickly and easily. 
+
+Why can I say quickly in this context? 
+We know that all the things that we should to develop a web with framework is you have to create Controller, Model, View right? but 
+with CRUDBooster you didn't need to create model and view manually, those things are created and managed by CRUDBooster. 
+
+Now what the mean I say easily in this context?
+Creating Controller, views, models is not easy. You have to define one by one the methods, routes, and HTMLs, but that thins not happend with CRUDBooster. 
+There is a new code style and simple that easy to understand and it will make it simple with same result. 
+
+Now I want to ask to you, how many lines that you have made to create 1 module? 200 lines? 500 lines ? 1000 lines? or more?, how many times that you have spent to create a single module ?
+an hour? 2 hours ? 4 hours ?
+
+What about this line ?
+```php
+    $this->setTable("books");
+    $this->setPageTitle("Book Data");
+    
+    $this->addText("Title");
+    $this->addTextArea("Description");
+    $this->addMoney("Price");
+```
+Voila now your Book data module has been created. Yes, you don't need to create your view manually. :) 
+
+
 <h3>Installation</h3>
 Make sure you have installed newest laravel
+
+<code>composer create-project laravel/laravel your_project</code>
+
+Then install the crudbooster with command bellow
 
 <code>composer require crocodicstudio/crudbooster=dev-master</code>
 
@@ -46,15 +77,21 @@ Then don't forget to run the crudbooster installation command :
 <h3>Quick Start</h3> 
 Whatever you want to use laravel artisan serve or xampp . 
 I assume you can go to the default crudbooster path 
-<code>/developer/login</code>
+<code>http://localhost/your-project/public/developer/login</code>
 
 Little different? yep. For the first time, you need to make your 
 some modules, menus, and users for your new backend.
 
 Developer Area : <br/>
-default path : <code>/developer/login</code><br/>
+default path : <code>http://localhost/your-project/public/developer/login</code><br/>
 default user : developer<br/>
 default pass : <code>You will get once the installation is finished</code><br/>
+
+or you can change developer random password with artisan : 
+
+<code>php artisan crudbooster:developer --password={yournewpassword}</code>
+
+Replace <code>{your_new_password}</code> with your own password
 
 <strong>WARNING PLEASE DON'T FORGET TO CHANGE THE DEFAULT DEVELOPER CREDENTIAL AT 
 <code>/config/crudbooster.php</code></strong>
@@ -63,10 +100,10 @@ default pass : <code>You will get once the installation is finished</code><br/>
 1. Create your roles
 1. Add new User
 
-Now you can log out, and try the admin panel by visiting <code>/admin/login</code>
+Now you can log out, and try the admin panel by visiting <code>http://localhost/your-project/public/admin/login</code>
 
 <quote>
-You can always change the admin login at /config/crudbooster.php
+You can always change the admin login path at /config/crudbooster.php
 </quote>
 
 <h3>Basic Code Knowledge</h3>
