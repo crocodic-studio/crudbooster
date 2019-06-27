@@ -35,7 +35,7 @@ Please be carefull this is beta version
 1. [Module Helper Available](#module-helper-available)
 1. [FCM Google Push Notification](#fcm-google-push-notification)
 
-#What Is CRUDBOOSTER
+# What Is CRUDBOOSTER
 
 Make a backend website is never been easy. Now you can create your web backend quickly and easily. 
 
@@ -44,7 +44,7 @@ We know that all the things that we should to develop a web with framework is yo
 with CRUDBooster you didn't need to create model and view manually, those things are created and managed by CRUDBooster. 
 
 Now what the mean I say easily in this context?
-Creating Controller, views, models is not easy. You have to define one by one the methods, routes, and HTMLs, but that thins not happend with CRUDBooster. 
+Creating Controller, views, models is not easy. You have to define one by one the methods, routes, and HTMLs, but that things not happend with CRUDBooster. 
 There is a new code style and simple that easy to understand and it will make it simple with same result. 
 
 Now I want to ask to you, how many lines that you have made to create 1 module? 200 lines? 500 lines ? 1000 lines? or more?, how many times that you have spent to create a single module ?
