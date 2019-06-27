@@ -71,6 +71,15 @@ Then install the crudbooster with command bellow
 
 <code>composer require crocodicstudio/crudbooster=dev-master</code>
 
+Setting the .env file for database connection : 
+```php
+APP_URL=http://localhost
+DB_HOST=localhost
+DB_DATABASE=homestead
+DB_USERNAME=homestead
+DB_PASSWORD=secret
+```
+
 Then don't forget to run the crudbooster installation command :
  
 <code>php artisan crudbooster:install</code>
