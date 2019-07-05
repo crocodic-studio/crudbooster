@@ -101,7 +101,7 @@
             @if($module)
                 <h1>
                     <!--Now you can define $page_icon alongside $page_tite for custom forms to follow CRUDBooster theme style -->
-                    <i class='{{($page_icon)?:$module->icon}}'></i> {{($page_title)?:$module->name}} &nbsp;&nbsp; 
+                    <i class='{!! ($page_icon)?:$module->icon !!}'></i> {!! ($page_title)?:$module->name !!} &nbsp;&nbsp; 
 
                     <!--START BUTTON -->
 
