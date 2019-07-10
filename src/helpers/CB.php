@@ -59,6 +59,10 @@ class CB
         return env("APP_NAME","CRUDBOOSTER");
     }
 
+    /**
+     * @param $value
+     * @return null|string
+     */
     public function uploadBase64($value)
     {
         $fileData = base64_decode($value);
@@ -80,12 +84,20 @@ class CB
         return null;
     }
 
+    /**
+     * @param $name
+     * @param bool $encrypt
+     * @param int $resize_width
+     * @param null $resize_height
+     * @return string
+     * @throws \Exception
+     */
     public function uploadFile($name, $encrypt = true, $resize_width = 1024, $resize_height = null)
     {
         if (request()->hasFile($name)) {
 
             $file = request()->file($name);
-            $ext = $file->getClientOriginalExtension();
+            $ext = strtolower($file->getClientOriginalExtension());
             if(in_array($ext,cbConfig("UPLOAD_FILE_EXTENSION_ALLOWED"))) {
                 $filename = slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
                 $file_path = 'uploads/'.date('Y-m');
