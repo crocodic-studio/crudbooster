@@ -104,7 +104,7 @@ class DeveloperMenusController extends Controller
                 if($menus) {
                     foreach($menus as $i=>$menu) {
                         $id = $menu['id'];
-                        cb()->update("cb_menus",$id,["sort_number"=>$i]);
+                        cb()->update("cb_menus",$id,["sort_number"=>$i,'parent_cb_menus_id'=>null]);
                         if($menu['children'][0]) {
                             foreach($menu['children'][0] as $ii=>$sub) {
                                 $id = $sub['id'];
