@@ -30,6 +30,7 @@ class Image
         /** @var ImageModel $data */
         $data->setResizeWidth($width);
         $data->setResizeHeight($height);
+        $data->setHelp("File format support jpg,png,gif. Image resolution $width x $height px");
         columnSingleton()->setColumn($this->index, $data);
         return $this;
     }
