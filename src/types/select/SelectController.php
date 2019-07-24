@@ -28,7 +28,7 @@ class SelectController extends BaseController
 
             $data = $data->get();
 
-            return response()->json(['status'=>true, 'data'=>$data]);
+            return response()->json(['status'=>true, 'data'=>$data], 200, ["X-Frame-Options"=>"SAMEORIGIN"]);
 
         }else{
             return response()->json(['status'=>false]);
