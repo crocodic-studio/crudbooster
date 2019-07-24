@@ -49,4 +49,4 @@
 </script>
 
 <!-- Default CB Script -->
-<script src="{{ cbAsset('js/main.js').'?r='.time()}}"></script>
+<script src="{{ cbAsset('js/main.js').'?v=1.0'}}"></script>
