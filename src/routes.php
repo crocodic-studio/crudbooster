@@ -8,6 +8,8 @@ Route::group(['middleware' => ['web',\crocodicstudio\crudbooster\middlewares\CBD
     cb()->routeController("menus", "\crocodicstudio\crudbooster\controllers\DeveloperMenusController");
     cb()->routeController("roles","\crocodicstudio\crudbooster\controllers\DeveloperRolesController");
     cb()->routeController("users","\crocodicstudio\crudbooster\controllers\DeveloperUsersController");
+    cb()->routeController("plugins","\crocodicstudio\crudbooster\controllers\DeveloperPluginStoreController");
+    cb()->routePost("skip-tutorial","DeveloperDashboardController@postSkipTutorial");
     cb()->routeGet("/","DeveloperDashboardController@getIndex");
 });
 

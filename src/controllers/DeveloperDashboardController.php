@@ -9,6 +9,9 @@
 namespace crocodicstudio\crudbooster\controllers;
 
 
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Session;
+
 class DeveloperDashboardController extends Controller
 {
 
@@ -18,5 +21,9 @@ class DeveloperDashboardController extends Controller
         return view('crudbooster::dev_layouts.modules.dashboard',$data);
     }
     
-
+    public function postSkipTutorial()
+    {
+        Cache::forever("skip_developer_tutorial", request("status"));
+        return response()->json(['status'=>true]);
+    }
 }

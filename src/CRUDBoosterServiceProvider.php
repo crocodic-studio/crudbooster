@@ -40,6 +40,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         require __DIR__.'/routes.php';
 
         $this->registerTypeRoutes();
+        $this->registerPlugin();
     }
 
     /**
@@ -77,6 +78,20 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $loader = AliasLoader::getInstance();
         $loader->alias('Image', 'Intervention\Image\Facades\Image');
         $loader->alias('CB', 'crocodicstudio\crudbooster\helpers\CB');
+    }
+
+    private function registerPlugin()
+    {
+        $views = scandir(app_path("CBPlugins"));
+        foreach($views as $view) {
+            if($view != "." && $view != "..") {
+                $basename = basename($view);
+                // register view
+                $this->loadViewsFrom(app_path("CBPlugins".DIRECTORY_SEPARATOR.$basename.DIRECTORY_SEPARATOR."Views"),$basename);
+                // register route
+                require app_path("CBPlugins".DIRECTORY_SEPARATOR.$basename.DIRECTORY_SEPARATOR."Routes".DIRECTORY_SEPARATOR."Route.php");
+            }
+        }
     }
 
     private function registerTypeRoutes() {

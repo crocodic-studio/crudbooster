@@ -3,7 +3,7 @@
 
 
     <p>
-        <a href="{{ route('DeveloperUsersControllerGetAdd') }}" class="btn btn-primary">Add New User</a>
+        <a href="{{ route('DeveloperUsersControllerGetAdd') }}" class="btn btn-primary"><i class="fa fa-plus"></i> {{ cbLang('add') }} New User</a>
     </p>
 
     <div class="box box-default">

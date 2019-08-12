@@ -191,7 +191,12 @@
                             $types = scandir($dirPath);
                             ?>
                             <tbody>
-                                <tr v-for="(item, idx) in listColumns">
+                                <tr v-if="!listColumns.length">
+                                    <td colspan="5" align="center">
+                                        {{ cbLang("there_is_no_data_yet") }} <a href="javascript:;" @click="addColumn">Click here</a> to add new
+                                    </td>
+                                </tr>
+                                <tr v-if="listColumns.length" v-for="(item, idx) in listColumns">
                                     <td align="center">
                                         @{{ idx+1 }}
                                     </td>
@@ -570,36 +575,41 @@
                     submitModuleGenerate: function(url, table, icon, name) {
                         if(table && icon && name) {
                             showLoading()
-                            axios.post(url, {
-                                _token: "{{ csrf_token() }}",
-                                rebuild: "{{ request("rebuild")?1:0 }}",
-                                table: table,
-                                icon: icon,
-                                name: name,
-                                columns: this.listColumns
-                            })
-                                .then(response=>{
-                                    hideLoading()
 
-                                    if(response.data.status) {
-                                        swal({
-                                            title:"Module Has Been Created!",
-                                            text: response.data.message,
-                                            icon:"success",
-                                            closeOnEsc: false,
-                                            closeOnClickOutside: false
-                                        }).then(value=>{
-                                            location.href = "{{ route("DeveloperModulesControllerGetIndex") }}";
-                                        })
+                            if( this.listColumns.length > 0) {
+                                axios.post(url, {
+                                    _token: "{{ csrf_token() }}",
+                                    rebuild: "{{ request("rebuild")?1:0 }}",
+                                    table: table,
+                                    icon: icon,
+                                    name: name,
+                                    columns: this.listColumns
+                                })
+                                    .then(response=>{
+                                        hideLoading()
 
-                                    }else{
-                                        swal("Oops", response.data.message ,"warning")
-                                    }
-                                })
-                                .catch(err=>{
-                                    hideLoading()
-                                    swal("Oops","Something went wrong while save module","warning")
-                                })
+                                        if(response.data.status) {
+                                            swal({
+                                                title:"Module Has Been Created!",
+                                                text: response.data.message,
+                                                icon:"success",
+                                                closeOnEsc: false,
+                                                closeOnClickOutside: false
+                                            }).then(value=>{
+                                                location.href = "{{ route("DeveloperModulesControllerGetIndex") }}";
+                                            })
+
+                                        }else{
+                                            swal("Oops", response.data.message ,"warning")
+                                        }
+                                    })
+                                    .catch(err=>{
+                                        hideLoading()
+                                        swal("Oops","Something went wrong while save module","warning")
+                                    })
+                            } else {
+                                swal("Oops","{{ cbLang("please_complete_the_form")  }}","warning")
+                            }
                         }else{
                             swal("Oops","{{ __("cb::cb.please_complete_the_form") }}","warning")
                         }

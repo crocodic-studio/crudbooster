@@ -276,25 +276,6 @@ class DeveloperModulesController extends Controller
         return response()->json(['status'=>true, 'message'=>'Please remember that you can still modify the structure by edit the controller file '.$module['controller'].' :)']);
     }
 
-    public function getEdit($id) {
-        $data = [];
-        $data['row'] = cb()->find("cb_modules", $id);
-        return view($this->view.".edit", $data);
-    }
-
-    public function postEditSave($id) {
-        try {
-            cb()->validation(['name', 'icon']);
-
-            cb()->updateCompact("cb_modules", $id, ['name','icon']);
-
-            return cb()->redirect(route("DeveloperModulesControllerGetIndex"),"Module has been updated!","success");
-
-        } catch (CBValidationException $e) {
-            return cb()->redirectBack($e->getMessage());
-        }
-    }
-
     public function getDelete($id) {
         $module = cb()->find("cb_modules",$id);
         @unlink(app_path("Http/Controllers/".$module->controller.".php"));

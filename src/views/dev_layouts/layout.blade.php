@@ -58,7 +58,7 @@
     </div><!-- /.content-wrapper -->
 
     <!-- Footer -->
-    @include('crudbooster::layouts.footer')
+    @include('crudbooster::dev_layouts.footer')
 
 </div><!-- ./wrapper -->
 

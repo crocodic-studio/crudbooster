@@ -2,6 +2,7 @@
 return [
     'please_login_to_start_your_session'=>'Please login to start your session',
     'password_and_username_is_wrong'=>'Your password and or username is wrong!',
+    'there_is_no_data_yet'=>'There is no data yet',
     'sign_in'=>'Sign in',
     'login_page'=>'Login Page',
     'developer'=>'Developer',
@@ -52,5 +53,6 @@ return [
     "the_data_has_been_updated"=>"The data has been updated",
     "you_dont_have_privilege_to_this_area"=>"You don't have a privilege to this area",
     "something_went_wrong"=>"Something went wrong, please try again later",
-    "do_you_want_to"=>"Do you want to :action"
+    "do_you_want_to"=>"Do you want to :action",
+    "installed_plugins"=>"Installed Plugins"
 ];

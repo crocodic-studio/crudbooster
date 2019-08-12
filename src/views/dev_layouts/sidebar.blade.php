@@ -27,10 +27,25 @@
                 </li>
 
                 <li>
-                    <a href='{{ cb()->getDeveloperUrl("plugin-store") }}'><i class='fa fa-star'></i>
+                    <a href='{{ cb()->getDeveloperUrl("plugins") }}'><i class='fa fa-star'></i>
                         <span>Plugin Store</span>
                     </a>
                 </li>
+
+                <?php
+                    $plugins = (new \crocodicstudio\crudbooster\helpers\Plugin())->getAll();
+                ?>
+                @if($plugins)
+                <li class="header">{{ cbLang("installed_plugins")}}</li>
+                @foreach($plugins as $plugin)
+                    <li>
+                        <a href="{{ $plugin['url'] }}" title="{{ $plugin['name'] }} v{{ $plugin['version'] }}">
+                            @if($plugin['icon'])<i class='{{ $plugin['icon'] }}'></i>@endif
+                            <span>{{ $plugin['name'] }}</span>
+                        </a>
+                    </li>
+                @endforeach
+                @endif
             </ul><!-- /.sidebar-menu -->
         </div>
     </section>
