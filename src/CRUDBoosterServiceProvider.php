@@ -5,6 +5,7 @@ use crocodicstudio\crudbooster\commands\Generate;
 use crocodicstudio\crudbooster\commands\MigrateData;
 use crocodicstudio\crudbooster\controllers\scaffolding\singletons\ColumnSingleton;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 use crocodicstudio\crudbooster\commands\Install;
 use Illuminate\Foundation\AliasLoader;
@@ -31,6 +32,9 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->publishes([__DIR__.'/database' => base_path('database')],'cb_migration');
         $this->publishes([__DIR__.'/templates/CBHook.stub'=> app_path('Http/CBHook.php')],'cb_hook');
         $this->publishes([__DIR__ . '/assets' =>public_path('cb_asset')],'cb_asset');
+
+        // Override Local FileSystem
+        Config::set("filesystems.disks.local.root", cbConfig("LOCAL_FILESYSTEM_PATH", public_path("storage")));
                     
         require __DIR__.'/validations/validation.php';        
         require __DIR__.'/routes.php';

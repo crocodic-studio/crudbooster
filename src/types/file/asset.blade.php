@@ -23,12 +23,13 @@
                 });
 
         }
-        function uploadFile(t, target_input_name, is_required) {
+        function uploadFile(t, target_input_name, is_required, encrypt) {
             if(!t.files[0]) return false;
 
             $(t).parents('.upload-wrapper').find('.upload-preview').html("<i class='fa fa-spin fa-spinner'></i> Please wait uploading...");
             var formData = new FormData();
             formData.append('userfile', t.files[0]);
+            formData.append("encrypt", encrypt);
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': "{{ csrf_token() }}"

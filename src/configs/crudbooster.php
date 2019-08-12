@@ -3,7 +3,7 @@
 return [
 
     /*
-     * You can customize the main path admin url
+     * You can customize the admin path
      */
     'ADMIN_PATH' => 'admin',
 
@@ -36,11 +36,18 @@ return [
     'UPLOAD_IMAGE_EXTENSION_ALLOWED' => ['jpg','jpeg','png','gif'],
 
     /*
-     * Data Migration table additional
-     * You can define in this array what the tables you want to include in "php artisan crudbooster:data_migration"
-     * The default is all cb_ prefix will be include in data migration
+     * You can set the upload path as you wish.
+     * {Y} will be replaced with a Year E.g : 2019
+     * {m} will be replaced with a Month E.g : 01
+     * {d} will be replaced with a Day E.g : 01
      */
-    'ADDITIONAL_DATA_MIGRATION'=>['users','migrations'],
+    'UPLOAD_PATH_FORMAT'=>'uploads/{Y}/{m}/{d}',
+
+    /*
+     * Override Local FileSystem
+     */
+    'LOCAL_FILESYSTEM_PATH'=> public_path('storage'),
+
 
     /*
      * Google FCM Server Key is used to send a notification via FireBase cloud message
@@ -48,13 +55,20 @@ return [
      */
     'GOOGLE_FCM_SERVER_KEY'=> null,
 
+    /*
+     * To prevent too high of width resolution, you can set the maximum of image width
+     * Please keep in mind this config's affect only when you do not set a resize() object
+     */
+    'DEFAULT_IMAGE_MAX_WIDTH_RES'=>1300,
+
 
     /*
-     * Credential For Developer
+     * Data Migration table additional
+     * You can define in this array what the tables you want to include in "php artisan crudbooster:data_migration"
+     * The default is all cb_ prefix will be include in data migration
      */
-    'DEV_USERNAME'  => 'developer',
+    'ADDITIONAL_DATA_MIGRATION'=>['users','migrations'],
 
-    'DEV_PATH'      => 'developer',
 
     /*
     * Layout for the Admin LTE backend theme

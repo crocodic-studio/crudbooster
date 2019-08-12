@@ -14,4 +14,23 @@ class FileModel extends ColumnModel
 {
 
 
+    private $encrypt;
+
+    /**
+     * @return mixed
+     */
+    public function getEncrypt()
+    {
+        return $this->encrypt;
+    }
+
+    /**
+     * @param boolean $encrypt
+     */
+    public function setEncrypt($encrypt): void
+    {
+        $this->encrypt = $encrypt;
+    }
+
+
 }

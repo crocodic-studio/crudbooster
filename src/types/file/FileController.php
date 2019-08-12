@@ -23,7 +23,7 @@ class FileController extends BaseController
                 'userfile' => 'required|mimes:' . implode(",",config('crudbooster.UPLOAD_FILE_EXTENSION_ALLOWED'))
             ]);
 
-            $file = cb()->uploadFile('userfile', true);
+            $file = cb()->uploadFile('userfile', request("encrypt"));
 
         } catch (CBValidationException $e) {
             return response()->json(['status'=>false,'message'=>$e->getMessage()]);

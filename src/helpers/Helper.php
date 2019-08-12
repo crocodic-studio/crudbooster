@@ -9,6 +9,18 @@
 |
 */
 
+if(!function_exists("cbLang")) {
+    /**
+     * @param string $key
+     * @param array $replace
+     * @return array|\Illuminate\Contracts\Translation\Translator|null|string
+     */
+    function cbLang($key, $replace = [])
+    {
+        return trans("cb::cb.".$key, $replace);
+    }
+}
+
 if(!function_exists('rglob')) {
     function rglob($pattern, $flags = 0) {
         $files = glob($pattern, $flags);

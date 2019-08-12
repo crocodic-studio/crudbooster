@@ -82,6 +82,9 @@ class DeveloperModulesController extends Controller
         foreach($columns as $column) {
             if($column != $pk) {
 
+                // Skip Column
+                if($column == 'deleted_at') continue;
+
                 // Check if any relation table candidate
                 $optionTable = "";
                 if(Str::substr(strtolower($column),-3,3) == "_id") {
@@ -122,22 +125,42 @@ class DeveloperModulesController extends Controller
                     $type = "select_table";
                 }
 
+                $columnAdd = "on";
+                $columnEdit = "on";
+                $columnMandatory = "on";
+                if(in_array($column,['created_at','updated_at'])) {
+                    $columnAdd = "";
+                    $columnEdit = "";
+                    $columnMandatory = "";
+                }
+
                 $result[] = [
                     'column_label'=>$label,
                     'column_field'=> $column,
                     'column_type'=>$type,
+                    'column_file_encrypt'=>"on",
+                    'column_image_width'=>'',
+                    'column_image_height'=>'',
                     'column_option_table'=>$optionTable,
+                    'column_date_format'=>'',
+                    'column_text_display_limit'=>150,
+                    'column_text_max'=>255,
+                    'column_text_min'=>0,
+                    'column_money_prefix'=>'',
+                    'column_money_precision'=>'',
+                    'column_money_thousand_separator'=>'',
+                    'column_money_decimal_separator'=>'',
                     'column_option_value'=> "",
                     'column_option_display'=> "",
                     'column_option_sql_condition'=> "",
                     'column_options'=> [],
                     'column_sql_query'=> "",
                     'column_help'=> "",
-                    'column_mandatory'=> "on",
+                    'column_mandatory'=> $columnMandatory,
                     'column_browse'=> "on",
                     'column_detail'=> "on",
-                    'column_edit'=> "on",
-                    'column_add'=> "on",
+                    'column_edit'=> $columnEdit,
+                    'column_add'=> $columnAdd,
                     'listTableColumns'=> []
                 ];
             }

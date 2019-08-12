@@ -2,16 +2,18 @@
 
 namespace crocodicstudio\crudbooster\helpers;
 
-use Cache;
+use Illuminate\Http\File;
+use Illuminate\Support\Facades\Cache;
 use crocodicstudio\crudbooster\exceptions\CBValidationException;
-use DB;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Validation\ValidationException;
 use Image;
 use Request;
 use Route;
-use Schema;
-use Session;
-use Storage;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Validator;
 
 class CB
@@ -60,28 +62,71 @@ class CB
     }
 
     /**
-     * @param $value
-     * @return null|string
+     * @param $filename
+     * @param $extension
+     * @param null $resize_width
+     * @param null $resize_height
+     * @return string
+     * @throws \Exception
      */
-    public function uploadBase64($value)
+    private function uploadFileProcess($filename, $extension, $encrypt = true, $resize_width = null, $resize_height = null)
     {
-        $fileData = base64_decode($value);
+        if(in_array($extension,cbConfig("UPLOAD_FILE_EXTENSION_ALLOWED"))) {
+            $filename = slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
+            $file_path = cbConfig("UPLOAD_PATH_FORMAT");
+            $file_path = str_replace("{Y}",date('Y'), $file_path);
+            $file_path = str_replace("{m}", date('m'), $file_path);
+            $file_path = str_replace("{d}", date("d"), $file_path);
+
+            //Create Directory Base On Template
+            Storage::makeDirectory($file_path);
+            Storage::put($file_path."/index.html","&nbsp;","public");
+            Storage::put($file_path."/.gitignore","!.gitignore","public");
+
+            if ($encrypt == true) {
+                $filename = md5(strRandom(5)).'.'.$extension;
+            } else {
+                $filename = slug($filename, '_').'.'.$extension;
+            }
+
+            if($resize_width || $resize_height) {
+                $this->resizeImage($file, $file_path.'/'.$filename, $resize_width, $resize_height);
+                return $file_path.'/'.$filename;
+            }else{
+                if (Storage::put($file_path.'/'.$filename, $file, 'public')) {
+                    return $file_path.'/'.$filename;
+                } else {
+                    throw new \Exception("Something went wrong, file can't upload!");
+                }
+            }
+        }else{
+            throw new \Exception("The file format is not allowed!");
+        }
+    }
+
+    /**
+     * @param $base64_value
+     * @param bool $encrypt
+     * @param null $resize_width
+     * @param null $resize_height
+     * @throws \Exception
+     */
+    public function uploadBase64($filename, $base64_value, $encrypt = true, $resize_width = null, $resize_height = null)
+    {
+        $fileData = base64_decode($base64_value);
         $mime_type = finfo_buffer(finfo_open(), $fileData, FILEINFO_MIME_TYPE);
         if($mime_type) {
             if($mime_type = explode('/', $mime_type)) {
                 $ext = $mime_type[1];
-                if($ext) {
-                    $filePath = 'uploads/'.date('Y-m');
-                    Storage::makeDirectory($filePath);
-                    $filename = sha1(strRandom(5)).'.'.$ext;
-                    if (Storage::put($filePath.'/'.$filename, $fileData)) {
-                        self::resizeImage($filePath.'/'.$filename);
-                        return $filePath.'/'.$filename;
-                    }
+                if($filename && $ext) {
+                    return $this->uploadFileProcess($filename, $ext, $encrypt, $resize_width, $resize_height);
                 }
+            }else {
+                throw new \Exception("Mime type not found");
             }
+        }else{
+            throw new \Exception("Mime type not found");
         }
-        return null;
     }
 
     /**
@@ -92,35 +137,15 @@ class CB
      * @return string
      * @throws \Exception
      */
-    public function uploadFile($name, $encrypt = true, $resize_width = 1024, $resize_height = null)
+    public function uploadFile($name, $encrypt = true, $resize_width = null, $resize_height = null)
     {
         if (request()->hasFile($name)) {
-
             $file = request()->file($name);
+            $filename = $file->getClientOriginalName();
             $ext = strtolower($file->getClientOriginalExtension());
-            if(in_array($ext,cbConfig("UPLOAD_FILE_EXTENSION_ALLOWED"))) {
-                $filename = slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
-                $file_path = 'uploads/'.date('Y-m');
 
-                //Create Directory Monthly
-                Storage::makeDirectory($file_path);
-
-                if ($encrypt == true) {
-                    $filename = sha1(strRandom(5)).'.'.$ext;
-                } else {
-                    $filename = slug($filename, '_').'.'.$ext;
-                }
-
-                if (Storage::putFileAs($file_path, $file, $filename)) {
-                    if($resize_width || $resize_height) {
-                        $this->resizeImage($file_path.'/'.$filename, $resize_width, $resize_height);
-                    }
-                    return $file_path.'/'.$filename;
-                } else {
-                    throw new \Exception("Something went wrong, file can't upload!");
-                }
-            }else{
-                throw new \Exception("The file format is not allowed!");
+            if($filename && $ext) {
+                return $this->uploadFileProcess($filename, $ext, $encrypt, $resize_width, $resize_height);
             }
 
         } else {
@@ -128,7 +153,16 @@ class CB
         }
     }
 
-    public function resizeImage($fullFilePath, $resize_width = null, $resize_height = null, $qty = 100, $thumbQty = 75)
+    /**
+     * @param $file
+     * @param $fullFilePath
+     * @param null $resize_width
+     * @param null $resize_height
+     * @param int $qty
+     * @param int $thumbQty
+     * @throws \Exception
+     */
+    public function resizeImage($file, $fullFilePath, $resize_width = null, $resize_height = null, $qty = 100, $thumbQty = 75)
     {
         $images_ext = cbConfig("UPLOAD_IMAGE_EXTENSION_ALLOWED");
 
@@ -138,31 +172,37 @@ class CB
 
         if (in_array(strtolower($ext), $images_ext)) {
 
+            // Upload file
+            $img = Image::make($file);
+            $img->encode($ext, $qty);
+
             if ($resize_width && $resize_height) {
-                $img = Image::make(storage_path('app/'.$file_path.'/'.$filename));
                 $img->fit($resize_width, $resize_height);
-                $img->save(storage_path('app/'.$file_path.'/'.$filename), $qty);
+
             } elseif ($resize_width && ! $resize_height) {
-                $img = Image::make(storage_path('app/'.$file_path.'/'.$filename));
+
                 $img->resize($resize_width, null, function ($constraint) {
                     $constraint->aspectRatio();
                 });
-                $img->save(storage_path('app/'.$file_path.'/'.$filename), $qty);
+
             } elseif (! $resize_width && $resize_height) {
-                $img = Image::make(storage_path('app/'.$file_path.'/'.$filename));
+
                 $img->resize(null, $resize_height, function ($constraint) {
                     $constraint->aspectRatio();
                 });
-                $img->save(storage_path('app/'.$file_path.'/'.$filename), $qty);
+
             } else {
-                $img = Image::make(storage_path('app/'.$file_path.'/'.$filename));
-                if ($img->width() > 1300) {
-                    $img->resize(1300, null, function ($constraint) {
+
+                if ($img->width() > cbConfig("DEFAULT_IMAGE_MAX_WIDTH_RES")) {
+                    $img->resize(cbConfig("DEFAULT_IMAGE_MAX_WIDTH_RES"), null, function ($constraint) {
                         $constraint->aspectRatio();
                     });
                 }
-                $img->save(storage_path('app/'.$file_path.'/'.$filename), $qty);
             }
+
+            Storage::put($fullFilePath, $img, 'public');
+        }else{
+            throw new \Exception("The file format is not allowed!");
         }
     }
 

@@ -18,7 +18,7 @@
                    {!!  $column->getOnchangeJsFunctionName()?"onChange='".$column->getOnchangeJsFunctionName()."'":"" !!}
                    {!! $column->getOnclickJsFunctionName()?"onClick='".$column->getOnclickJsFunctionName()."'":"" !!}
                    {!! $column->getOnblurJsFunctionName()?"onBlur='".$column->getOnblurJsFunctionName()."'":"" !!}
-                   class='form-control' onchange="uploadFile(this, '{{ $column->getName() }}', '{{ $column->getRequired()?1:0 }}')"/>
+                   class='form-control' onchange="uploadFile(this, '{{ $column->getName() }}', '{{ $column->getRequired()?1:0 }}', {{ $column->getEncrypt() }} )"/>
             <input type="hidden" name="{{ $column->getName() }}" value="{{ $column->getValue() }}">
         </div>
     </div>

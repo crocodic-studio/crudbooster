@@ -215,13 +215,87 @@
                                     <td>
                                         <div class="form-group">
                                             <label for="">Type</label>
-                                            <select v-model="item.column_type" class="column_type form-control">
+                                            <select v-model="item.column_type" @change="changeTypeColumn(idx)" class="column_type form-control">
                                                 @foreach($types as $type)
                                                     @if($type != "." && $type != ".." && is_dir($dirPath.'/'.$type))
                                                         <option value="{{ $type }}">{{ $type }}</option>
                                                     @endif
                                                 @endforeach
                                             </select>
+                                        </div>
+
+                                        <div v-if="item.column_type=='money'" class="text_configuration mt-10">
+                                            <table class="table table-bordered table-striped">
+                                                <tr>
+                                                    <td width="40%">Prefix</td>
+                                                    <td><input type="text" class="form-control" v-model="item.column_money_prefix">
+                                                        <small class="text-muted">The prefix will be shown on index <br>E.g: Rp</small>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Precision</td>
+                                                    <td><input type="number" v-model="item.column_money_precision" class="form-control"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Thousand Separator</td>
+                                                    <td><input type="text" v-model="item.column_money_thousand_separator" class="form-control"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Decimal Separator</td>
+                                                    <td><input type="text" v-model="item.column_money_decimal_separator" class="form-control"></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+
+                                        <div v-if="item.column_type=='text'||item.column_type=='text_area'||item.column_type=='wysiwyg'" class="text_configuration mt-10">
+                                            <table class="table table-bordered table-striped">
+                                                <tr>
+                                                    <td width="40%">Index Display Limit</td>
+                                                    <td><input type="number" class="form-control" v-model="item.column_text_display_limit">
+                                                        <small class="text-muted">To limit chars on index display</small>
+                                                    </td>
+                                                </tr>
+                                                <tr v-if="item.column_type!='wysiwyg'">
+                                                    <td>Max Character</td>
+                                                    <td><input type="number" class="form-control" v-model="item.column_text_max"></td>
+                                                </tr>
+                                                <tr v-if="item.column_type!='wysiwyg'">
+                                                    <td>Min Character</td>
+                                                    <td><input type="number" class="form-control" v-model="item.column_text_min"></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+
+                                        <div v-if="item.column_type=='date' || item.column_type=='datetime'" class="date_configuration mt-10">
+                                            <table class="table table-bordered table-striped">
+                                                <tr><td width="30%">Format</td><td><input type="text" class="form-control" v-model="item.column_date_format">
+                                                    <small v-if="item.column_type=='datetime'" class="text-muted">E.g: Y-m-d H:i:s. This format is following
+                                                        <a target="_blank" href="https://www.php.net/manual/en/function.date.php">PHP Date Format</a></small>
+                                                    <small v-if="item.column_type=='date'" class="text-muted">E.g: Y-m-d. This format is following
+                                                        <a target="_blank" href="https://www.php.net/manual/en/function.date.php">PHP Date Format</a></small>
+                                                    </td></tr>
+                                            </table>
+                                        </div>
+
+                                        <div v-if="item.column_type == 'image' || item.column_type == 'file'" class="image_configuration mt-10">
+                                            <table class="table table-bordered table-striped">
+                                                <tbody>
+                                                    <tr>
+                                                        <td width="40%">Encrypt Filename</td>
+                                                        <td><input type="checkbox" v-model="item.column_file_encrypt" class="big-checkbox checkbox"></td>
+                                                    </tr>
+                                                    <tr v-if="item.column_type == 'image'">
+                                                        <td>Resize Width</td>
+                                                        <td><input type="number" class="form-control" v-model="item.column_image_width" placeholder="Width in pixel"></td>
+                                                    </tr>
+                                                    <tr v-if="item.column_type == 'image'">
+                                                        <td>Resize Height</td>
+                                                        <td><input type="number" class="form-control" v-model="item.column_image_height" placeholder="Height in pixel">
+                                                            <small class="text-muted">Fill blank this box to auto resize of height</small>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
 
                                         <div v-if="item.column_type == 'select_table'" class="select_table_configuration mt-10">
@@ -374,6 +448,16 @@
 
                 },
                 methods: {
+                    changeTypeColumn: function(idx) {
+                        let type = this.listColumns[idx].column_type
+                        if(type == "wysiwyg" || type == "text_area") {
+                            this.listColumns[idx].column_text_max = ""
+                            this.listColumns[idx].column_text_min = ""
+                        }else if(type == "text") {
+                            this.listColumns[idx].column_text_min = 0;
+                            this.listColumns[idx].column_text_max = 255;
+                        }
+                    },
                     addColumnOption: function(idx) {
 
                         this.listColumns[idx].column_options.push({
@@ -454,6 +538,17 @@
                             column_label: "",
                             column_field: "",
                             column_type: "text",
+                            column_file_encrypt: "on",
+                            column_image_width: "",
+                            column_image_height: "",
+                            column_money_prefix: "",
+                            column_money_precision: "",
+                            column_money_thousand_separator: "",
+                            column_money_decimal_separator:"",
+                            column_text_display_limit: "",
+                            column_text_max: "",
+                            column_text_min:"",
+                            column_date_format: "",
                             column_option_table: "",
                             column_option_value: "",
                             column_option_display: "",

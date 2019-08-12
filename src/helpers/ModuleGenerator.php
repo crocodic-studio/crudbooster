@@ -69,6 +69,38 @@ class ModuleGenerator
             $optionSqlCondition = str_replace('"',"'", $optionSqlCondition);
             $sqlRawQuery = $field['column_sql_query'];
             $options = $field['column_options'];
+            $imageResizeWidth = $field['column_image_width'];
+            $imageResizeHeight = $field['column_image_height'];
+            $fileEncrypt = $field['column_file_encrypt'];
+            $dateFormat = $field['column_date_format'];
+            $textDisplayLimit = $field['column_text_display_limit'];
+            $maxCharacter = $field['column_text_max'];
+            $minCharacter = $field['column_text_min'];
+            $moneyPrefix = $field['column_money_prefix'];
+            $moneyPrecision = $field['column_money_precision'];
+            $moneyThousandSeparator = $field['column_money_thousand_separator'];
+            $moneyDecimalSeparator = $field['column_money_decimal_separator'];
+
+            // Additional Attributes
+            $additional = $required . $indexShow . $detailShow . $addShow . $editShow . $help ;
+
+            // Additional money
+            $additional .= ($moneyPrefix && $field['column_type']=='money')?"->prefix('".$moneyPrefix."')":"";
+            $additional .= ($moneyPrecision && $field['column_type']=='money')?"->precision('".$moneyPrecision."')":"";
+            $additional .= ($moneyThousandSeparator && $field['column_type']=='money')?"->thousandSeparator('".$moneyThousandSeparator."')":"";
+            $additional .= ($moneyDecimalSeparator && $field['column_type']=='money')?"->decimalSeparator('".$moneyDecimalSeparator."')":"";
+
+            // Additional for image & file type
+            $additional .= ($fileEncrypt && in_array($field['column_type'],['file','image']))?"->encrypt(true)":"";
+            $additional .= ($imageResizeWidth && in_array($field['column_type'],['file','image']))?"->resize(".$imageResizeWidth.",".$imageResizeHeight.")":"";
+
+            // Additional for date & datetime
+            $additional .= ($dateFormat && in_array($field['column_type'],['date','datetime']))?"->format('".$dateFormat."')":"";
+
+            // Additional for text
+            $additional .= ($textDisplayLimit!="" && in_array($field['column_type'],['text','text_area','wysiwyg']))?"->strLimit(".$textDisplayLimit.")":"";
+            $additional .= ($maxCharacter!="" && in_array($field['column_type'],['text','text_area']))?"->maxLength(".$maxCharacter.")":"";
+            $additional .= ($minCharacter!="" && in_array($field['column_type'],['text','text_area']))?"->minLength(".$minCharacter.")":"";
 
             $methodName = Str::studly($field['column_type']);
             if($label && $column) {
@@ -78,18 +110,18 @@ class ModuleGenerator
                         foreach($options as $opt) {
                             $optResult[$opt['key']] = $opt['label'];
                         }
-                        $scaffold .= '$this->add' . $methodName . '("' . $label . '","' . $column . '")->options('.min_var_export($optResult).')' . $required . $indexShow . $detailShow . $addShow . $editShow . $help . ';' . "\n\t\t";
+                        $scaffold .= '$this->add' . $methodName . '("' . $label . '","' . $column . '")->options('.min_var_export($optResult).')' . $additional . ';' . "\n\t\t";
                     }
                 }elseif (in_array($field['column_type'],['radio_table','select_table'])) {
                     if ($optionTable && $optionValue && $optionDisplay) {
-                        $scaffold .= '$this->add' . $methodName . '("' . $label . '","' . $column . '",["table"=>"' . $optionTable . '","value_option"=>"' . $optionValue . '","display_option"=>"' . $optionDisplay . '","sql_condition"=>"' . $optionSqlCondition . '"])' . $required . $indexShow . $detailShow . $addShow . $editShow . $help . ';' . "\n\t\t";
+                        $scaffold .= '$this->add' . $methodName . '("' . $label . '","' . $column . '",["table"=>"' . $optionTable . '","value_option"=>"' . $optionValue . '","display_option"=>"' . $optionDisplay . '","sql_condition"=>"' . $optionSqlCondition . '"])' . $additional . ';' . "\n\t\t";
                     }
                 }elseif ($field['column_type'] == "select_query") {
                     if($sqlRawQuery && Str::contains($sqlRawQuery,["as `key`","as `label`"])) {
-                        $scaffold .= '$this->add' . $methodName . '("' . $label . '","' . $column . '","'.$sqlRawQuery.'")' . $required . $indexShow . $detailShow . $addShow . $editShow . $help . ';' . "\n\t\t";
+                        $scaffold .= '$this->add' . $methodName . '("' . $label . '","' . $column . '","'.$sqlRawQuery.'")' . $additional . ';' . "\n\t\t";
                     }
                 }else{
-                    $scaffold .= '$this->add'.$methodName.'("'.$label.'","'.$column.'")'.$required.$indexShow.$detailShow.$addShow.$editShow.$help.';'."\n\t\t";
+                    $scaffold .= '$this->add'.$methodName.'("'.$label.'","'.$column.'")'.$additional.';'."\n\t\t";
                 }
             }
         }
