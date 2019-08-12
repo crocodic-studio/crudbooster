@@ -44,15 +44,16 @@ class DeveloperRolesController extends Controller
             $role['name'] = request('name');
             $roles_id = DB::table("cb_roles")->insertGetId($role);
 
-            foreach (request("menus") as $menus_id => $menu) {
+            foreach (request("menus") as $menus_id) {
+                @$access = request("access")[$menus_id];
                 $privilege = [];
                 $privilege["cb_roles_id"] = $roles_id;
                 $privilege["cb_menus_id"] = $menus_id;
-                $privilege["can_browse"]  = $menu['can_browse']?:0;
-                $privilege["can_create"] = $menu['can_create']?:0;
-                $privilege["can_read"] = $menu['can_read']?:0;
-                $privilege["can_update"] = $menu['can_update']?:0;
-                $privilege["can_delete"] = $menu['can_delete']?:0;
+                $privilege["can_browse"]  = @$access['can_browse']?:0;
+                $privilege["can_create"] = @$access['can_create']?:0;
+                $privilege["can_read"] = @$access['can_read']?:0;
+                $privilege["can_update"] = @$access['can_update']?:0;
+                $privilege["can_delete"] = @$access['can_delete']?:0;
                 DB::table("cb_role_privileges")->insert($privilege);
             }
 
@@ -98,15 +99,16 @@ class DeveloperRolesController extends Controller
 
             cb()->updateCompact("cb_roles",$id,['name']);
 
-            foreach (request("menus") as $menus_id => $menu) {
+            foreach (request("menus") as $menus_id) {
+                @$access = request("access")[$menus_id];
                 $privilege = [];
                 $privilege["cb_roles_id"] = $id;
                 $privilege["cb_menus_id"] = $menus_id;
-                $privilege["can_browse"]  = $menu['can_browse']?:0;
-                $privilege["can_create"] = $menu['can_create']?:0;
-                $privilege["can_read"] = $menu['can_read']?:0;
-                $privilege["can_update"] = $menu['can_update']?:0;
-                $privilege["can_delete"] = $menu['can_delete']?:0;
+                $privilege["can_browse"]  = @$access['can_browse']?:0;
+                $privilege["can_create"] = @$access['can_create']?:0;
+                $privilege["can_read"] = @$access['can_read']?:0;
+                $privilege["can_update"] = @$access['can_update']?:0;
+                $privilege["can_delete"] = @$access['can_delete']?:0;
                 if($privilege_id = $this->existsPrivilege($id, $menus_id)) {
                     DB::table("cb_role_privileges")->where("id", $privilege_id)->update($privilege);
                 }else{
@@ -126,7 +128,7 @@ class DeveloperRolesController extends Controller
         DB::table("cb_roles")->where("id", $id)->delete();
         DB::table("cb_role_privileges")->where("cb_roles_id",$id)->delete();
 
-        return cb()->redirectBack("The role has been deleted!","success");
+        return cb()->redirect(route("DeveloperRolesControllerGetIndex"), "The role has been deleted!","success");
     }
 
 }

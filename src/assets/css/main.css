@@ -38,3 +38,52 @@
 	.form-group > label:first-child {
 		display: block
 	}
+
+    /* Custom Alert Color */
+    .bg-aqua, .callout.callout-info, .alert-info, .label-info, .modal-info .modal-body {
+        background-color: #c2f3ff !important;
+    }
+    .bg-green, .callout.callout-success, .alert-success, .label-success, .modal-success .modal-body {
+        background-color: #b2f7b7 !important;
+    }
+
+    .callout.callout-info {
+        border-color: #a7dfff;
+        color: #0c76b3 !important;
+    }
+    .callout.callout-info a {
+        color: #0c76b3 !important;
+        font-weight: bold;
+    }
+
+    .callout.callout-success {
+        border-color: #aee0c9;
+        color: #236738 !important;
+    }
+
+    .callout.callout-success a {
+        font-weight: bold;
+        color: #236738 !important;
+    }
+
+    .mt-10 {
+        margin-top: 10px;
+    }
+    .mt-20 {
+        margin-top: 20px;
+    }
+    .mt-30 {
+        margin-top: 30px;
+    }
+    .mt-40 {
+        margin-top: 40px;
+    }
+
+    /* Background Gradient */
+    .gray-gradient {
+        background: #eeeeee;
+        background: -moz-linear-gradient(top,  #eeeeee 0%, #cccccc 100%);
+        background: -webkit-linear-gradient(top,  #eeeeee 0%,#cccccc 100%);
+        background: linear-gradient(to bottom,  #eeeeee 0%,#cccccc 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#cccccc',GradientType=0 );
+    }

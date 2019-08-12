@@ -25,7 +25,6 @@
             .draggable-menu li div {
                 padding: 5px;
                 border: 1px solid #cccccc;
-                background: #eeeeee;
                 cursor: move;
             }
 
@@ -85,48 +84,46 @@
         </script>
     @endpush
 
+    <div class="callout callout-info">{!! __("cb::cb.module_menu_how_to") !!}</div>
+
     <p>
-        <a href="{{ route('DeveloperMenusControllerGetAdd') }}" class="btn btn-primary">Add Menu</a>
+        <a href="{{ route('DeveloperMenusControllerGetAdd') }}" class="btn btn-primary"><i class="fa fa-plus"></i> {{ __("cb::cb.add") }} Menu</a>
     </p>
 
-    <div class="box box-default">
-        <div class="box-header">
-            <h1 class="box-title">Show Data</h1>
-        </div>
+    <div class="box">
         <div class="box-body">
+            @php $menus = cb()->sidebar()->all(false); @endphp
             <ul class='draggable-menu draggable-menu-active'>
-                @foreach(cb()->sidebar()->all(false) as $menu)
+                @foreach($menus as $menu)
                     <?php /** @var \crocodicstudio\crudbooster\models\SidebarModel $menu */?>
                     <li data-id="{{ $menu->getId() }}" data-name="{{ $menu->getName() }}">
-                        <div>
-                            <span>
-                                <a href="{{ route('DeveloperMenusControllerGetEdit',['id'=>$menu->getId()]) }}" class="btn btn-xs btn-success">Edit</a>
-                                <a onclick="if(!confirm('Are you sure want to delete?')) return false" href="{{ route('DeveloperMenusControllerGetDelete',['id'=>$menu->getId()]) }}" class="btn btn-xs btn-warning">Delete</a>
-                                &nbsp;&nbsp;{{$menu->getName()}}
+                        <div class="gray-gradient">
+                            <span>:::
+                                <a title="{{ __("cb::cb.click_to_edit") }}" href="{{ route('DeveloperMenusControllerGetEdit',['id'=>$menu->getId()]) }}" class="btn btn-xs btn-success"><i class="fa fa-pencil"></i></a>
+                                <a title="{{ __("cb::cb.click_to_delete") }}" onclick="deleteConfirmation('{{ route('DeveloperMenusControllerGetDelete',['id'=>$menu->getId()]) }}')" href="javascript:;" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+                                &nbsp;&nbsp;<i class="{{ $menu->getIcon() }}"></i> {{$menu->getName()}}
                             </span>
                         </div>
                         <ul>
                         @if($menu->getSub())
                            @foreach($menu->getSub() as $sub)
                                 <li data-id="{{ $sub->getId() }}" data-name="{{ $sub->getName() }}">
-                                    <div>
-
-                                        <span>
-                                            <a href="{{ route('DeveloperMenusControllerGetEdit',['id'=>$sub->getId()]) }}" class="btn btn-xs btn-success">Edit</a>
-                                            <a onclick="if(!confirm('Are you sure want to delete?')) return false" href="{{ route('DeveloperMenusControllerGetDelete',['id'=>$sub->getId()]) }}" class="btn btn-xs btn-warning">Delete</a>
-                                            &nbsp;&nbsp;{{$sub->getName()}}
+                                    <div class="gray-gradient">
+                                        <span>:::
+                                            <a title="{{ __("cb::cb.click_to_edit") }}" href="{{ route('DeveloperMenusControllerGetEdit',['id'=>$sub->getId()]) }}" class="btn btn-xs btn-success"><i class="fa fa-pencil"></i></a>
+                                            <a title="{{ __("cb::cb.click_to_delete") }}" onclick="deleteConfirmation('{{ route('DeveloperMenusControllerGetDelete',['id'=>$sub->getId()]) }}')" href="javascript:;" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;<i class="{{ $menu->getIcon() }}"></i> {{$sub->getName()}}
                                         </span>
                                     </div>
                                     <ul>
                                     @if($sub->getSub())
                                         @foreach($sub->getSub() as $sub2)
-                                        <li data-id="{{ $sub2->getId() }}" data-name="{{ $sub2->getName() }}">
-                                            <div>
-
-                                                <span>
-                                                    <a href="{{ route('DeveloperMenusControllerGetEdit',['id'=>$sub2->getId()]) }}" class="btn btn-xs btn-success">Edit</a>
-                                                    <a onclick="if(!confirm('Are you sure want to delete?')) return false" href="{{ route('DeveloperMenusControllerGetDelete',['id'=>$sub2->getId()]) }}" class="btn btn-xs btn-warning">Delete</a>
-                                                    &nbsp;&nbsp;{{$sub2->getName()}}
+                                        <li data-id="{{ $sub2->getId() }}" data-name="{{ $sub2->getName() }}" >
+                                            <div class="gray-gradient">
+                                                <span>:::
+                                                    <a title="{{ __("cb::cb.click_to_edit") }}" href="{{ route('DeveloperMenusControllerGetEdit',['id'=>$sub2->getId()]) }}" class="btn btn-xs btn-success"><i class="fa fa-pencil"></i></a>
+                                                    <a title="{{ __("cb::cb.click_to_delete") }}" onclick="deleteConfirmation('{{ route('DeveloperMenusControllerGetDelete',['id'=>$sub2->getId()]) }}')" href="javascript:;" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+                                                    <i class="{{ $menu->getIcon() }}"></i> {{$sub2->getName()}}
                                                 </span>
                                             </div>
                                         </li>
@@ -140,6 +137,9 @@
                     </li>
                 @endforeach
             </ul>
+            @if(!$menus)
+                <div align="center">{{ __("cb::cb.there_is_no_data_please_add_for_first") }}</div>
+            @endif
         </div>
     </div>
 

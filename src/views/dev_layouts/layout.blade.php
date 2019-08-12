@@ -14,13 +14,13 @@
 
     <!-- Theme style -->
     <link href="{{ cbAsset("adminlte/dist/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css"/>
-    <link href="{{ cbAsset("adminlte/dist/css/skins/_all-skins.min.css")}}" rel="stylesheet" type="text/css"/>
+    <link href="{{ cbAsset("adminlte/dist/css/skins/skin-blue.css")}}" rel="stylesheet" type="text/css"/>
 
     <link rel='stylesheet' href='{{cbAsset("css/main.css")}}'/>
 
     @stack('head')
 </head>
-<body class="skin-blue">
+<body class="hold-transition skin-blue sidebar-mini">
 <div id='app' class="wrapper">
 
     <!-- Header -->
@@ -35,9 +35,8 @@
             <h1>
                 {{ $page_title }}
             </h1>
-
             <ol class="breadcrumb">
-                <li><a href="{{ cb()->getDeveloperUrl() }}"><i class="fa fa-dashboard"></i> {{ __('crudbooster.home') }}</a></li>
+                <li><a href="{{ cb()->getDeveloperUrl() }}"><i class="fa fa-dashboard"></i> {{ __('cb::cb.home') }}</a></li>
                 <li class="active">{{ $page_title }}</li>
             </ol>
         </section>
@@ -47,10 +46,8 @@
         <section id='content_section' class="content">
 
             @if (session()->has('message'))
-                <div class='alert alert-{{ session('message_type') }}'>
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <h4><i class="icon fa fa-info"></i> {{ trans("crudbooster.alert_".Session::get("message_type")) }}</h4>
-                    {!! session('message') !!}
+                <div class='callout callout-{{ session('message_type') }}'>
+                   <strong>{{ ucwords(session('message_type'))  }}!</strong> {!! session('message') !!}
                 </div>
             @endif
 

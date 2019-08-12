@@ -11,10 +11,10 @@ namespace crocodicstudio\crudbooster\types;
 use crocodicstudio\crudbooster\controllers\scaffolding\traits\DefaultOption;
 use crocodicstudio\crudbooster\controllers\scaffolding\traits\Join;
 use crocodicstudio\crudbooster\models\ColumnModel;
-use crocodicstudio\crudbooster\types\select\SelectModel;
+use crocodicstudio\crudbooster\types\select_table\SelectTableModel;
 use Illuminate\Support\Facades\DB;
 
-class Select
+class SelectTable
 {
     use DefaultOption, Join;
 
@@ -25,7 +25,7 @@ class Select
     public function foreignKey($field_name)
     {
         $data = columnSingleton()->getColumn($this->index);
-        /** @var SelectModel $data */
+        /** @var SelectTableModel $data */
         $data->setForeignKey($field_name);
         columnSingleton()->setColumn($this->index, $data);
 
@@ -34,12 +34,12 @@ class Select
 
     /**
      * @param $table string|Model
-     * @param $key_field string
-     * @param $display_field string
-     * @param $SQLCondition string|callable
+     * @param $value_option string
+     * @param $display_option string
+     * @param $SQLCondition string|callable DB Query Builder|SQL Raw
      * @return $this
      */
-    public function optionsFromTable($table, $key_field, $display_field, $SQLCondition = null) {
+    public function optionsFromTable($table, $value_option, $display_option, $SQLCondition = null) {
 
         if(strpos($table,"App\Models")!==false) {
             $table = new $table();
@@ -55,11 +55,11 @@ class Select
         $data = $data->get();
         $options = [];
         foreach ($data as $d) {
-            $options[ $d->$key_field ] = $d->$display_field;
+            $options[ $d->$value_option ] = $d->$display_option;
         }
         $data = columnSingleton()->getColumn($this->index);
-        /** @var $data SelectModel */
-        $data->setOptionsFromTable(["table"=>$table,"key_field"=>$key_field,"display_field"=>$display_field,"sql_condition"=>$SQLCondition]);
+        /** @var $data SelectTableModel */
+        $data->setOptionsFromTable(["table"=>$table,"key_field"=>$value_option,"display_field"=>$display_option,"sql_condition"=>$SQLCondition]);
         columnSingleton()->setColumn($this->index, $data);
 
         $this->options($options);
@@ -67,28 +67,9 @@ class Select
         return $this;
     }
 
-    public function optionsFromQuery(callable $query) {
+    private function options($data_options) {
         $data = columnSingleton()->getColumn($this->index);
-        /** @var $data SelectModel */
-        $data->setOptionsFromQuery($query);
-
-        columnSingleton()->setColumn($this->index, $data);
-
-        $result = call_user_func($query);
-        if($result) {
-            $options = [];
-            foreach($result as $r) {
-                $options[ $r->key ] = $r->label;
-            }
-            $this->options($options);
-        }
-
-        return $this;
-    }
-
-    public function options($data_options) {
-        $data = columnSingleton()->getColumn($this->index);
-        /** @var $data SelectModel */
+        /** @var $data SelectTableModel */
         $data->setOptions($data_options);
 
         columnSingleton()->setColumn($this->index, $data);

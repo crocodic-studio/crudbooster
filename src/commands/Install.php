@@ -45,6 +45,7 @@ class Install extends Command
 
             $this->info('Publishing CRUDBooster needs file...');
             $this->call('vendor:publish', ['--provider' => 'crocodicstudio\crudbooster\CRUDBoosterServiceProvider']);
+            $this->call('vendor:publish', ['--tag' => 'cb_asset', '--force' => true]);
             $this->call('vendor:publish', ['--tag' => 'cb_migration', '--force' => true]);
             $this->call('vendor:publish', ['--tag' => 'cb_localization', '--force'=> true]);
 
@@ -170,14 +171,10 @@ class Install extends Command
     private function footer($success = true)
     {
 
-        $password = Str::random(16);
-        cache()->forever("developer_password",$password);
-
         $this->info('--');
-        $this->info("DEVELOPER AREA");
-        $this->info("/".cbConfig("DEV_PATH")."/login");
-        $this->info("username: ".cbConfig("DEV_USERNAME"));
-        $this->info("Your new developer password: ".$password);
+
+        (new DeveloperCommandService($this))->create();
+
         $this->info("--");
         $this->info('Homepage : http://crudbooster.com');
         $this->info('Github : https://github.com/crocodic-studio/crudbooster');

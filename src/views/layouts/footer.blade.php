@@ -1,8 +1,8 @@
 <footer class="main-footer">
     <!-- To the right -->
-    <div class="pull-{{ trans('crudbooster.right') }} hidden-xs">
-        {{ trans('crudbooster.powered_by') }} {{ cb()->getAppName() }}
+    <div class="pull-right hidden-xs">
+        {{ trans('cb::cb.powered_by') }} {{ cb()->getAppName() }}
     </div>
     <!-- Default to the left -->
-    <strong>{{ trans('crudbooster.copyright') }} &copy; <?php echo date('Y') ?>. {{ trans('crudbooster.all_rights_reserved') }} .</strong>
+    <strong>{!! trans('cb::cb.copyright',['year'=>date('Y')]) !!}.</strong>
 </footer>

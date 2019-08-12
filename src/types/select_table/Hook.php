@@ -6,7 +6,7 @@
  * Time: 5:43 PM
  */
 
-namespace crocodicstudio\crudbooster\types\select;
+namespace crocodicstudio\crudbooster\types\select_table;
 
 use crocodicstudio\crudbooster\types\TypesHook;
 
@@ -14,7 +14,7 @@ class Hook extends TypesHook
 {
     /**
      * @param \Illuminate\Database\Query\Builder $query
-     * @param SelectModel $column
+     * @param SelectTableModel $column
      * @return mixed|void
      */
     public function query($query, $column)

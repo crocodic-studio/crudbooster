@@ -1,7 +1,7 @@
 @extends('crudbooster::layouts.layout_login')
 @section('content')
-    <h1 style="text-align: center">Developer</h1>
-    <p class='login-box-msg'>{{trans("crudbooster.login_message")}}</p>
+    <h1 style="text-align: center">{{ __("cb::cb.developer") }}</h1>
+    <p class='login-box-msg' style="text-align: center">{{ __("cb::cb.please_login_to_start_your_session") }}</p>
     <form autocomplete='off' action="{{ cb()->getDeveloperUrl("login")  }}" method="post">
         {!! csrf_field() !!}
         <div class="form-group has-feedback">
@@ -14,7 +14,7 @@
         </div>
         <div style="margin-bottom:10px" class='row'>
             <div class='col-xs-12'>
-                <button type="submit" class="btn btn-primary btn-block btn-flat"><i class='fa fa-lock'></i> {{trans("crudbooster.button_sign_in")}}</button>
+                <button type="submit" class="btn btn-primary btn-block btn-flat">{{ __("cb::cb.sign_in") }}</button>
             </div>
         </div>
     </form>

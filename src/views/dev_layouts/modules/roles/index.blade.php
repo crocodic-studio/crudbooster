@@ -1,38 +1,59 @@
 @extends("crudbooster::dev_layouts.layout")
 @section("content")
 
-    <div class="callout callout-info">
+
+    @push("head")
+        <style>
+            .grid-wrapper {
+
+            }
+            .grid-wrapper .grid-item {
+                border-radius: 5px;
+                border: 1px solid #cccccc;
+                text-align: center;
+                margin-top: 30px;
+            }
+            .grid-wrapper .grid-item:hover {
+                box-shadow: 0px 0px 5px #cccccc;
+            }
+            .grid-wrapper .grid-item-dotted {
+                border: 2px dashed #cccccc;
+            }
+            .grid-wrapper .grid-item a {
+                display: block;
+                padding: 20px;
+                color: #555555;
+                font-size: 18px;
+            }
+            .grid-wrapper .grid-item-dotted a {
+                color: #9a9a9a !important;
+            }
+            .grid-wrapper .grid-item a i {
+                font-size: 35px;
+
+            }
+        </style>
+    @endpush
+    <div class="callout callout-info" style="margin-bottom: 0px">
         <strong>Tips</strong> You can find the role data by using <code>cb()->getRoleByName("Admin")</code> helper.
     </div>
 
-    <p>
-        <a href="{{ route('DeveloperRolesControllerGetAdd') }}" class="btn btn-primary">Add Role</a>
-    </p>
-
-    <div class="box box-default">
-        <div class="box-header">
-            <h1 class="box-title">Show Data</h1>
-        </div>
-        <div class="box-body">
-            <table class="table table-bordered datatable">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach($result as $row)
-                    <tr>
-                        <td>{{ $row->name }}</td>
-                        <td>
-                            <a href="{{ route('DeveloperRolesControllerGetEdit',['id'=>$row->id]) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <a href="{{ route('DeveloperRolesControllerGetDelete',['id'=>$row->id]) }}" onclick="if(!confirm('Are you sure want to delete?')) return false" class="btn btn-danger btn-sm">Delete</a>
-                        </td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
+    <div class="row grid-wrapper">
+        @foreach($result as $row)
+            <div class="col-sm-3">
+                <div class="grid-item gray-gradient">
+                    <a title="{{ __("cb::cb.click_to_edit") }}" href="{{ route('DeveloperRolesControllerGetEdit',['id'=>$row->id]) }}">
+                        <i class="fa fa-user"></i> <br> {{ $row->name }}
+                    </a>
+                </div>
+            </div>
+        @endforeach
+        <div class="col-sm-3">
+            <div class="grid-item grid-item-dotted">
+                <a title="{{ __("cb::cb.click_to_add") }}" href="{{ route('DeveloperRolesControllerGetAdd') }}">
+                    <i class="fa fa-plus"></i> <br> Add Role
+                </a>
+            </div>
         </div>
     </div>
 

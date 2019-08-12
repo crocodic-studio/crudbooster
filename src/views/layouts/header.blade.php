@@ -2,12 +2,15 @@
 <header class="main-header">
 
     <!-- Logo -->
-    <a href="{{ cb()->getAdminUrl() }}" title='{{ cb()->getAppName()  }}' class="logo">{{ cb()->getAppName() }}</a>
+    <a href="{{ cb()->getAdminUrl() }}" title='{{ cb()->getAppName()  }}' class="logo">
+        <span class="logo-mini">{{ substr(cb()->getAppName(),0,2) }}</span>
+        <span class="logo-lg">{{ cb()->getAppName() }}</span>
+    </a>
 
     <!-- Header Navbar -->
     <nav class="navbar navbar-static-top" role="navigation">
         <!-- Sidebar toggle button-->
-        <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
             <span class="sr-only">Toggle navigation</span>
         </a>
         <!-- Navbar Right Menu -->
@@ -36,12 +39,12 @@
 
                         <!-- Menu Footer-->
                         <li class="user-footer">
-                            <div class="pull-{{ trans('crudbooster.left') }}">
+                            <div class="pull-left">
                                 <a href="{{ cb()->getProfileUrl() }}" class="btn btn-default btn-flat"><i
-                                            class='fa fa-user'></i> {{trans("crudbooster.label_button_profile")}}</a>
+                                            class='fa fa-user'></i> {{ trans("cb::cb.profile")}}</a>
                             </div>
-                            <div class="pull-{{ trans('crudbooster.right') }}">
-                                <a href="{{ cb()->getLogoutUrl() }}" class="btn btn-danger btn-flat"><i class='fa fa-power-off'></i></a>
+                            <div class="pull-right">
+                                <a href="{{ cb()->getLogoutUrl() }}" title="{{ __("cb::cb.click_here_to_logout") }}" class="btn btn-danger btn-flat"><i class='fa fa-power-off'></i></a>
                             </div>
                         </li>
                     </ul>

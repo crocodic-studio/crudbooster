@@ -2,7 +2,7 @@
 @section('content')
 
     <h1 style="text-align: center">{{ cb()->getAppName() }}</h1>
-    <p class='login-box-msg'>{{trans("crudbooster.login_message")}}</p>
+    <p class='login-box-msg' style="text-align: center">{{ __("cb::cb.please_login_to_start_your_session")}}</p>
 
     <form autocomplete='off' action="{{ route('AdminAuthControllerPostLogin') }}" method="post">
         {!! csrf_field() !!}
@@ -16,7 +16,7 @@
         </div>
         <div style="margin-bottom:10px" class='row'>
             <div class='col-xs-12'>
-                <button type="submit" class="btn btn-primary btn-block btn-flat"><i class='fa fa-lock'></i> {{trans("crudbooster.button_sign_in")}}</button>
+                <button type="submit" class="btn btn-primary btn-block btn-flat">{{ __("cb::cb.sign_in")}}</button>
             </div>
         </div>
     </form>

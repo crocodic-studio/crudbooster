@@ -25,8 +25,8 @@
                             <td>{{ $row->name }}</td>
                             <td>{{ $row->controller }}</td>
                             <td>
-                                <a href="{{ route('DeveloperModulesControllerGetEdit',['id'=>$row->id]) }}" class="btn btn-warning btn-sm">Edit</a>
-                                <a href="{{ route('DeveloperModulesControllerGetDelete',['id'=>$row->id]) }}" onclick="if(!confirm('Are you sure want to delete?')) return false" class="btn btn-danger btn-sm">Delete</a>
+                                <a href="{{ route('DeveloperModulesControllerGetAdd') }}?rebuild={{ $row->table_name }}&modules_id={{$row->id}}" class="btn btn-primary btn-sm"><i class="fa fa-refresh"></i> Rebuild</a>
+                                <a onclick="deleteModule({{ $row->id }})" href="javascript:;" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Delete</a>
                             </td>
                         </tr>
                         @endforeach
@@ -35,5 +35,44 @@
         </div>
     </div>
 
+
+    <div class="modal" id="modal-delete">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h4 class="modal-title">Confirmation</h4>
+                </div>
+                <div class="modal-body">
+                    <div align="center">
+                        <h3>Are you sure want to delete this module?</h3>
+                        <p>We can't recovery this module once you delete it. If you choose <strong>Hard Delete</strong>, the system will be deleting your controller also the module data. If you choose <strong>Soft Delete</strong>, system will be deleting the module data only</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="deleteHard()" class="btn btn-danger">Hard Delete</button>
+                    <button type="button" onclick="deleteSoft()" class="btn btn-warning">Soft Delete</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Abort</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+    @push('bottom')
+        <script>
+            var last_module_id = null;
+            function deleteModule(id) {
+                $("#modal-delete").modal("show");
+                last_module_id = id;
+            }
+            function deleteHard() {
+                location.href='{{ route('DeveloperModulesControllerGetDelete') }}/'+last_module_id;
+            }
+            function deleteSoft() {
+                location.href='{{ route('DeveloperModulesControllerGetDeleteSoft') }}/'+last_module_id;
+            }
+        </script>
+    @endpush
 
 @endsection

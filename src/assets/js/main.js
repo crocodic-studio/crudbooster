@@ -4,21 +4,22 @@
 		return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
 	};
 
-    function showConfirmation(t) {
+    function showConfirmation(title, message, callback) {
         swal({
-            title: "Are you sure?",
-            text: "Once delete, we can't recover the data",
+            title: title,
+            text: message,
             icon: "warning",
             buttons: true,
             dangerMode: true,
         })
             .then((willDelete) => {
                 if (willDelete) {
-                    let href = $(t).data("href");
-                    location.href = href;
+                    callback()
                 }
             });
     }
+
+    function showConfirm(title, msg, callback) { showConfirmation(title, msg, callback) }
 
 	$(function() {
 
@@ -35,7 +36,7 @@
                 $(this).daterangepicker({
                     singleDatePicker: true,
                     showDropdowns: true,
-                    minDate: '1900-01-01',
+                    minDate: '1970-01-01',
                     format: $(this).data("format")
                 })
             });
@@ -44,7 +45,7 @@
 		if($(".datetimepicker").length > 0) {
 			$(".datetimepicker").each(function () {
                 $(this).daterangepicker({
-                    minDate: '1900-01-01',
+                    minDate: '1970-01-01',
                     singleDatePicker: true,
                     showDropdowns: true,
                     timePicker:true,
@@ -65,24 +66,5 @@
 			  showMeridian:false
 			});
 		}
-
-		function showConfirm(t) {
-            swal({
-                title: "Confirmation",
-                text: "Are you sure want to do this?",
-                function() {
-                    location.href = t.data('href');
-                }
-            })
-        }
-
-		if($('a.confirmation').length > 0) {
-		    $("a.confirmation").each(function () {
-                let url = $(this).attr('href');
-                $(this).data('href', url);
-                $(this).attr('href','javascript:;');
-                $(this).attr('onclick',"showConfirmation(this)");
-            })
-        }
 
 	});

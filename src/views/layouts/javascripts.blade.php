@@ -37,7 +37,16 @@
 <link rel="stylesheet" href="{{ cbAsset('adminlte/plugins/datatables/dataTables.bootstrap.css')}}">
 <script src="{{ cbAsset('adminlte/plugins/datatables/jquery.dataTables.min.js')}}"></script>
 <script src="{{ cbAsset('adminlte/plugins/datatables/dataTables.bootstrap.min.js')}}"></script>
+<script src="{{ cbAsset('js/main.js').'?v=1.1'}}"></script>
 <script>
+
+    function deleteConfirmation(url)
+    {
+        showConfirmation("{{ __("cb::cb.are_you_sure") }}", "{!! __("cb::cb.delete_the_data_can_not_be_undone") !!}", () => {
+            location.href = url
+        })
+    }
+
     $(function () {
         $(".datatable").dataTable();
         $(".select2").select2();
@@ -46,7 +55,6 @@
     @if($javascript = module()->getData("javascript"))
         {!! call_user_func($javascript)  !!}
     @endif
+
 </script>
 
-<!-- Default CB Script -->
-<script src="{{ cbAsset('js/main.js').'?v=1.0'}}"></script>

@@ -1,5 +1,5 @@
 @include("types::layout_header")
-    <?php /** @var \crocodicstudio\crudbooster\types\select\SelectModel $column */?>
+    <?php /** @var \crocodicstudio\crudbooster\types\select_table\SelectTableModel $column */?>
     <select style="width: 100%" id="select-{{ $column->getName() }}" class="form-control select2"
             {{ $column->getRequired()?'required':''}}
             {{ $column->getReadonly()?'readonly':''}}
@@ -26,7 +26,7 @@
                     let value = "{{ old($column->getName())?:($column->getDefaultValue())?:$column->getValue() }}";
                     $("#select-{{ $column->getForeignKey() }}").change(function () {
                         let foreign_value = $(this).val();
-                        $.post("{{ cb()->getAdminUrl("select-lookup") }}",{
+                        $.post("{{ cb()->getAdminUrl("select-table-lookup") }}",{
                             _token:"{{csrf_token()}}",
                             foreign_key:"{{ encrypt($column->getForeignKey()) }}",
                             foreign_value: foreign_value,

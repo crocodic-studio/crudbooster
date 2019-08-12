@@ -27,8 +27,12 @@ use crocodicstudio\crudbooster\types\Number;
 use crocodicstudio\crudbooster\types\number\NumberModel;
 use crocodicstudio\crudbooster\types\Radio;
 use crocodicstudio\crudbooster\types\radio\RadioModel;
-use crocodicstudio\crudbooster\types\Select;
-use crocodicstudio\crudbooster\types\select\SelectModel;
+use crocodicstudio\crudbooster\types\select_option\SelectOptionModel;
+use crocodicstudio\crudbooster\types\select_query\SelectQueryModel;
+use crocodicstudio\crudbooster\types\SelectOption;
+use crocodicstudio\crudbooster\types\SelectQuery;
+use crocodicstudio\crudbooster\types\SelectTable;
+use crocodicstudio\crudbooster\types\select_table\SelectTableModel;
 use crocodicstudio\crudbooster\types\Text;
 use crocodicstudio\crudbooster\types\Checkbox;
 use crocodicstudio\crudbooster\types\checkbox\CheckboxModel;
@@ -130,20 +134,76 @@ trait ColumnsRegister
         return (new TextArea($this->index));
     }
 
-    public function addSelect($label, $name = null, $field_to_save = null)
+    public function addSelectTable($label, $name = null, $selectConfig = null)
     {
         $this->index++;
 
-        $data = new SelectModel();
+        $data = new SelectTableModel();
         $data = $this->setDefaultModelValue($data);
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
-        $data->setField($field_to_save?:$this->name($label, $name));
-        $data->setType("select");
+        $data->setField($this->name($label, $name));
+        $data->setType("select_table");
 
         columnSingleton()->setColumn($this->index, $data);
 
-        return (new Select($this->index));
+        $selectTable = new SelectTable($this->index);
+
+        if($selectConfig) {
+            $selectTable->optionsFromTable($selectConfig['table'],$selectConfig['value_option'],$selectConfig['display_option'],@$selectConfig['sql_condition']);
+        }
+
+        return $selectTable;
+    }
+
+    public function addSelectOption($label, $name = null, $options = null)
+    {
+        $this->index++;
+
+        $data = new SelectOptionModel();
+        $data = $this->setDefaultModelValue($data);
+        $data->setLabel($label);
+        $data->setName($this->name($label,$name));
+        $data->setField($this->name($label, $name));
+        $data->setType("select_option");
+
+        columnSingleton()->setColumn($this->index, $data);
+
+        $selectOption = new SelectOption($this->index);
+
+        if($options) {
+            $selectOption->options($options);
+        }
+
+        return $selectOption;
+    }
+
+    /**
+     * @param string $label
+     * @param null|string $name
+     * @param callable|string|null $query DB Query Builder|SQL RAW
+     * @return SelectOption
+     */
+    public function addSelectQuery($label, $name = null, $query = null)
+    {
+        $this->index++;
+
+        $data = new SelectQueryModel();
+        $data = $this->setDefaultModelValue($data);
+        $data->setLabel($label);
+        $data->setName($this->name($label,$name));
+        $data->setField($this->name($label, $name));
+        $data->setType("select_query");
+
+        columnSingleton()->setColumn($this->index, $data);
+
+        $selectQuery =new SelectQuery($this->index);
+
+        if($query) {
+            $selectQuery->optionsFromQuery($query);
+        }
+
+        return $selectQuery;
     }
 
 

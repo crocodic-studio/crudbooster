@@ -7,14 +7,14 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 use Symfony\Component\Process\Process;
 
-class DeveloperUser extends Command
+class DeveloperCommand extends Command
 {
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $signature = 'crudbooster:developer {--password=AUTO : To custom the password of developer}';
+    protected $signature = 'crudbooster:developer {--username=AUTO : Create developer username} {--password=AUTO : To custom the password of developer}';
 
     /**
      * The console command description.
@@ -30,13 +30,6 @@ class DeveloperUser extends Command
      */
     public function handle()
     {
-        if($this->option("password") == "AUTO") {
-            $password = Str::random(16);
-        }else{
-            $password = $this->option("password");
-        }
-
-        cache()->forever("developer_password", $password);
-        $this->info("Your new developer password: ".$password);
+        (new DeveloperCommandService($this))->create();
     }
 }

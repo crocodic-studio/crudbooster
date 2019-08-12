@@ -1,6 +1,6 @@
 <?php namespace crocodicstudio\crudbooster;
 
-use crocodicstudio\crudbooster\commands\DeveloperUser;
+use crocodicstudio\crudbooster\commands\DeveloperCommand;
 use crocodicstudio\crudbooster\commands\Generate;
 use crocodicstudio\crudbooster\commands\MigrateData;
 use crocodicstudio\crudbooster\controllers\scaffolding\singletons\ColumnSingleton;
@@ -24,10 +24,10 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         // Register views
         $this->loadViewsFrom(__DIR__.'/views', 'crudbooster');
         $this->loadViewsFrom(__DIR__.'/types', 'types');
+        $this->loadTranslationsFrom(__DIR__."/localization","cb");
 
         // Publish the files
-        $this->publishes([__DIR__.'/configs/crudbooster.php' => config_path('crudbooster.php')],'cb_config');            
-        $this->publishes([__DIR__.'/localization' => resource_path('lang')], 'cb_localization');                 
+        $this->publishes([__DIR__.'/configs/crudbooster.php' => config_path('crudbooster.php')],'cb_config');
         $this->publishes([__DIR__.'/database' => base_path('database')],'cb_migration');
         $this->publishes([__DIR__.'/templates/CBHook.stub'=> app_path('Http/CBHook.php')],'cb_hook');
         $this->publishes([__DIR__ . '/assets' =>public_path('cb_asset')],'cb_asset');
@@ -63,7 +63,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
             $this->commands([
                 Install::class,
                 Generate::class,
-                DeveloperUser::class,
+                DeveloperCommand::class,
                 MigrateData::class
             ]);
         }

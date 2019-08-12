@@ -18,6 +18,7 @@ class TableModules extends Migration
             $table->string("icon");
             $table->string("table_name");
             $table->string("controller");
+            $table->longText("last_column_build")->nullable();
         });
     }
 

@@ -6,12 +6,12 @@
  * Time: 10:38 PM
  */
 
-namespace crocodicstudio\crudbooster\types\select;
+namespace crocodicstudio\crudbooster\types\select_table;
 
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\DB;
 
-class SelectController extends BaseController
+class SelectTableController extends BaseController
 {
     public function postLookup() {
         $foreignKey = decrypt(request('foreign_key'));

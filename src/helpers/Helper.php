@@ -221,6 +221,7 @@ if(!function_exists('putSetting')) {
     {
         if(file_exists(storage_path('.cbconfig'))) {
             $settings = file_get_contents(storage_path('.cbconfig'));
+            $settings = decrypt($settings);
             $settings = unserialize($settings);
         }else{
             $settings = [];
@@ -229,6 +230,7 @@ if(!function_exists('putSetting')) {
         $settings[$key] = $value;
 
         $settings = serialize($settings);
+        $settings = encrypt($settings);
         file_put_contents(storage_path('.cbconfig'), $settings);
     }
 }
@@ -238,6 +240,7 @@ if(!function_exists('getSetting')) {
     {
         if(file_exists(storage_path('.cbconfig'))) {
             $settings = file_get_contents(storage_path('.cbconfig'));
+            $settings = decrypt($settings);
             $settings = unserialize($settings);
         }else{
             $settings = [];

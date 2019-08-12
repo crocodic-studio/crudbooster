@@ -35,7 +35,7 @@ class CB
 
     public function getDeveloperUrl($path = null) {
         $path = ($path)?"/".trim($path,"/"):null;
-        return url(cbConfig("DEV_PATH")).$path;
+        return url("developer/".getSetting("developer_path")).$path;
     }
 
     public function getProfileUrl() {
@@ -200,6 +200,11 @@ class CB
     public function listAllTable()
     {
         return DB::connection()->getDoctrineSchemaManager()->listTableNames();
+    }
+
+    public function listAllColumns($table)
+    {
+        return Schema::getColumnListing($table);
     }
 
     public function findAll($table, $condition_array = [])

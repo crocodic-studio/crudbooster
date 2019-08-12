@@ -2,7 +2,7 @@
 
 // Developer Backend Middleware
 Route::group(['middleware' => ['web',\crocodicstudio\crudbooster\middlewares\CBDeveloper::class],
-    'prefix'=>cbConfig('DEV_PATH'),
+    'prefix'=>"developer/".getSetting('developer_path'),
     'namespace' => 'crocodicstudio\crudbooster\controllers'], function () {
     cb()->routeController("modules", "\crocodicstudio\crudbooster\controllers\DeveloperModulesController");
     cb()->routeController("menus", "\crocodicstudio\crudbooster\controllers\DeveloperMenusController");
@@ -13,7 +13,7 @@ Route::group(['middleware' => ['web',\crocodicstudio\crudbooster\middlewares\CBD
 
 // Developer Auth Middleware
 Route::group(['middleware' => ['web'],
-    'prefix'=>cbConfig('DEV_PATH'),
+    'prefix'=>"developer/".getSetting('developer_path'),
     'namespace' => 'crocodicstudio\crudbooster\controllers'], function () {
     cb()->routePost("login","AdminAuthController@postLoginDeveloper");
     cb()->routeGet("login","AdminAuthController@getLoginDeveloper");
