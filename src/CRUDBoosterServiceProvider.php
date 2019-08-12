@@ -58,9 +58,6 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         });
         $this->app->singleton('ColumnSingleton', ColumnSingleton::class);
 
-        // Merging configuration
-        $this->mergeConfigFrom(__DIR__.'/configs/crudbooster.php','crudbooster');
-
 
         // Register Commands
         if ($this->app->runningInConsole()) {
@@ -71,6 +68,9 @@ class CRUDBoosterServiceProvider extends ServiceProvider
                 MigrateData::class
             ]);
         }
+
+        // Merging configuration
+        $this->mergeConfigFrom(__DIR__.'/configs/crudbooster.php','crudbooster');
 
         // Register additional library
         $this->app->register('Intervention\Image\ImageServiceProvider');

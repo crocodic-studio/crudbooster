@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Schema;
 use crocodicstudio\crudbooster\controllers\scaffolding\traits\ColumnsRegister;
 use crocodicstudio\crudbooster\controllers\traits\ControllerSetting;
+use Illuminate\Support\Str;
 
 class CBController extends Controller
 {
@@ -119,7 +120,7 @@ class CBController extends Controller
 
     public function getIndex()
     {
-        if(!module()->canBrowse()) return cb()->redirect(cb()->getAdminUrl(),"You do not have a privilege access to this area");
+        if(!module()->canBrowse()) return cb()->redirect(cb()->getAdminUrl(),cbLang("you_dont_have_privilege_to_this_area"));
 
         $query = $this->repository();
         $result = $query->paginate( request("limit")?:cbConfig("LIMIT_TABLE_DATA") );
@@ -146,17 +147,17 @@ class CBController extends Controller
 
     public function getAdd()
     {
-        if(!module()->canCreate()) return cb()->redirect(cb()->getAdminUrl(),"You do not have a privilege access to this area");
+        if(!module()->canCreate()) return cb()->redirect(cb()->getAdminUrl(),cbLang("you_dont_have_privilege_to_this_area"));
 
         $data = [];
-        $data['page_title'] = $this->data['page_title'].' : Add';
+        $data['page_title'] = $this->data['page_title'].' : '.cbLang('add');
         $data['action_url'] = module()->addSaveURL();
         return view('crudbooster::module.form.form',array_merge($data, $this->data));
     }
 
     public function postAddSave()
     {
-        if(!module()->canCreate()) return cb()->redirect(cb()->getAdminUrl(),"You do not have a privilege access to this area");
+        if(!module()->canCreate()) return cb()->redirect(cb()->getAdminUrl(),cbLang("you_dont_have_privilege_to_this_area"));
 
         try {
             $this->validation();
@@ -168,6 +169,10 @@ class CBController extends Controller
 
             if(Schema::hasColumn($this->data['table'], 'created_at')) {
                 $data['created_at'] = date('Y-m-d H:i:s');
+            }
+
+            if(Schema::hasColumn($this->data['table'], 'updated_at')) {
+                $data['updated_at'] = date('Y-m-d H:i:s');
             }
 
             if(isset($this->data['hook_before_insert']) && is_callable($this->data['hook_before_insert'])) {
@@ -185,50 +190,50 @@ class CBController extends Controller
             return cb()->redirectBack($e->getMessage(),'info');
         } catch (\Exception $e) {
             Log::error($e);
-            return cb()->redirectBack($e->getMessage(),'warning');
+            return cb()->redirectBack(cbLang("something_went_wrong"),'warning');
         }
 
-        if (request('submit') == trans('crudbooster.button_save_more')) {
-            return cb()->redirect(module()->addURL(), trans("crudbooster.alert_add_data_success"), 'success');
+        if (Str::contains(request("submit"),cbLang("more"))) {
+            return cb()->redirect(module()->addURL(), cbLang("the_data_has_been_added"), 'success');
         } else {
-            return cb()->redirect(module()->url(), trans("crudbooster.alert_add_data_success"), 'success');
+            return cb()->redirect(module()->url(), cbLang("the_data_has_been_added"), 'success');
         }
     }
 
     public function getEdit($id)
     {
-        if(!module()->canUpdate()) return cb()->redirect(cb()->getAdminUrl(),"You do not have a privilege access to this area");
+        if(!module()->canUpdate()) return cb()->redirect(cb()->getAdminUrl(),cbLang("you_dont_have_privilege_to_this_area"));
 
         $data = [];
         $data['row'] = $this->repository()->where($this->data['table'].'.'.getPrimaryKey($this->data['table']), $id)->first();
-        $data['page_title'] = $this->data['page_title'].' : Edit';
+        $data['page_title'] = $this->data['page_title'].' : '.cbLang('edit');
         $data['action_url'] = module()->editSaveURL($id);
         return view('crudbooster::module.form.form', array_merge($data, $this->data));
     }
 
     public function postEditSave($id)
     {
-        if(!module()->canUpdate()) return cb()->redirect(cb()->getAdminUrl(),"You do not have a privilege access to this area");
+        if(!module()->canUpdate()) return cb()->redirect(cb()->getAdminUrl(),cbLang("you_dont_have_privilege_to_this_area"));
 
         try {
             $this->validation();
             columnSingleton()->valueAssignment();
             $data = columnSingleton()->getAssignmentData();
 
-            //Clear data from Primary Key
+            // Make sure the Primary Key is not included
             unset($data[ cb()->pk($this->data['table']) ]);
 
             if(Schema::hasColumn($this->data['table'], 'updated_at')) {
                 $data['updated_at'] = date('Y-m-d H:i:s');
             }
 
+            unset($data['created_at']);
+
             if(isset($this->data['hook_before_update']) && is_callable($this->data['hook_before_update'])) {
                 $data = call_user_func($this->data['hook_before_update'], $id, $data);
             }
 
-            DB::table($this->data['table'])
-                ->where(cb()->pk($this->data['table']), $id)
-                ->update($data);
+            cb()->update($this->data['table'], $id, $data);
 
             if(isset($this->data['hook_after_update']) && is_callable($this->data['hook_after_update'])) {
                 call_user_func($this->data['hook_after_update'], $id);
@@ -239,20 +244,20 @@ class CBController extends Controller
             return cb()->redirectBack($e->getMessage(),'info');
         } catch (\Exception $e) {
             Log::error($e);
-            return cb()->redirectBack($e->getMessage(),'warning');
+            return cb()->redirectBack(cbLang("something_went_wrong"),'warning');
         }
 
 
-        if (request('submit') == trans('crudbooster.button_save_more')) {
-            return cb()->redirectBack(trans("crudbooster.alert_update_data_success"), 'success');
+        if (Str::contains(request("submit"), cbLang("more"))) {
+            return cb()->redirectBack( cbLang("the_data_has_been_updated"), 'success');
         } else {
-            return cb()->redirect(module()->url(), trans("crudbooster.alert_update_data_success"), 'success');
+            return cb()->redirect(module()->url(),  cbLang("the_data_has_been_updated"), 'success');
         }
     }
 
     public function getDelete($id)
     {
-        if(!module()->canDelete()) return cb()->redirect(cb()->getAdminUrl(),"You do not have a privilege access to this area");
+        if(!module()->canDelete()) return cb()->redirect(cb()->getAdminUrl(),cbLang("you_dont_have_privilege_to_this_area"));
 
         if(isset($this->data['hook_before_delete']) && is_callable($this->data['hook_before_delete'])) {
             call_user_func($this->data['hook_before_delete'], $id);
@@ -274,16 +279,16 @@ class CBController extends Controller
             call_user_func($this->data['hook_after_delete'], $id);
         }
 
-        return cb()->redirectBack(trans("crudbooster.alert_delete_data_success"), 'success');
+        return cb()->redirectBack( cbLang("the_data_has_been_deleted"), 'success');
     }
 
     public function getDetail($id)
     {
-        if(!module()->canRead()) return cb()->redirect(cb()->getAdminUrl(),"You do not have a privilege access to this area");
+        if(!module()->canRead()) return cb()->redirect(cb()->getAdminUrl(),cbLang("you_dont_have_privilege_to_this_area"));
 
         $data = [];
-        $data['row'] = $this->repository()->where($this->data['table'].'.'.getPrimaryKey($this->data['table']), $id)->first();
-        $data['page_title'] = $this->data['page_title'].' : Detail';
+        $data['row'] = $this->repository()->where($this->data['table'].'.'.cb()->findPrimaryKey($this->data['table']), $id)->first();
+        $data['page_title'] = $this->data['page_title'].' : '.cbLang('detail');
         return view('crudbooster::module.form.form_detail', array_merge($data, $this->data));
     }
 

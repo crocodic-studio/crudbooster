@@ -9,6 +9,7 @@
 namespace crocodicstudio\crudbooster\types\text;
 
 use crocodicstudio\crudbooster\types\TypesHook;
+use Illuminate\Support\Str;
 
 class Hook extends TypesHook
 {

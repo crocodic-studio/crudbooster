@@ -32,6 +32,7 @@ class AdminProfileController extends BaseController {
             if(request()->hasFile('photo')) {
                 $data['photo'] = cb()->uploadFile('photo', true, 200, 200);
             }
+
             DB::table("users")->where("id", auth()->id())->update($data);
         }catch (\Exception $e) {
             Log::error($e);

@@ -64,15 +64,15 @@ class CB
     /**
      * @param $filename
      * @param $extension
+     * @param $file
      * @param null $resize_width
      * @param null $resize_height
      * @return string
      * @throws \Exception
      */
-    private function uploadFileProcess($filename, $extension, $encrypt = true, $resize_width = null, $resize_height = null)
+    private function uploadFileProcess($filename, $extension, $file, $encrypt = true, $resize_width = null, $resize_height = null)
     {
         if(in_array($extension,cbConfig("UPLOAD_FILE_EXTENSION_ALLOWED"))) {
-            $filename = slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
             $file_path = cbConfig("UPLOAD_PATH_FORMAT");
             $file_path = str_replace("{Y}",date('Y'), $file_path);
             $file_path = str_replace("{m}", date('m'), $file_path);
@@ -119,7 +119,7 @@ class CB
             if($mime_type = explode('/', $mime_type)) {
                 $ext = $mime_type[1];
                 if($filename && $ext) {
-                    return $this->uploadFileProcess($filename, $ext, $encrypt, $resize_width, $resize_height);
+                    return $this->uploadFileProcess($filename, $ext, $fileData, $encrypt, $resize_width, $resize_height);
                 }
             }else {
                 throw new \Exception("Mime type not found");
@@ -145,7 +145,7 @@ class CB
             $ext = strtolower($file->getClientOriginalExtension());
 
             if($filename && $ext) {
-                return $this->uploadFileProcess($filename, $ext, $encrypt, $resize_width, $resize_height);
+                return $this->uploadFileProcess($filename, $ext, $file, $encrypt, $resize_width, $resize_height);
             }
 
         } else {

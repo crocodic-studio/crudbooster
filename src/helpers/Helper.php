@@ -170,7 +170,7 @@ if(!function_exists('getAdminLoginURL')) {
 if(!function_exists('dummyPhoto')) {
     function dummyPhoto()
     {
-        return config('crudbooster.DUMMY_PHOTO');
+        return cbConfig("DUMMY_PHOTO");
     }
 }
 
@@ -241,6 +241,8 @@ if(!function_exists('putSetting')) {
 
         $settings[$key] = $value;
 
+        \Illuminate\Support\Facades\Cache::forget("setting_".$key);
+
         $settings = serialize($settings);
         $settings = encrypt($settings);
         file_put_contents(storage_path('.cbconfig'), $settings);
@@ -250,6 +252,10 @@ if(!function_exists('putSetting')) {
 if(!function_exists('getSetting')) {
     function getSetting($key, $default = null)
     {
+        if($cache = \Illuminate\Support\Facades\Cache::get("setting_".$key)) {
+            return $cache;
+        }
+
         if(file_exists(storage_path('.cbconfig'))) {
             $settings = file_get_contents(storage_path('.cbconfig'));
             $settings = decrypt($settings);
@@ -259,6 +265,7 @@ if(!function_exists('getSetting')) {
         }
 
         if(isset($settings[$key])) {
+            \Illuminate\Support\Facades\Cache::put("setting_".$key, $settings[$key], 180);
             return $settings[$key]?:$default;
         }else{
             return $default;

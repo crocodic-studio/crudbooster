@@ -2,8 +2,8 @@
 @if(cb()->getCurrentMethod() == 'getIndex' && module()->getController())
     @if(module()->getData("button_add") && module()->canCreate())
         <a href="{{ module()->addURL()  }}"
-           id='btn_add_new_data' class="btn btn-sm btn-success" title="{{trans('crudbooster.action_add_data')}}">
-            <i class="fa fa-plus-circle"></i> {{trans('crudbooster.action_add_data')}}
+           id='btn_add_new_data' class="btn btn-sm btn-success" title="{{ cbLang("add").' '.cbLang('data') }}">
+            <i class="fa fa-plus-circle"></i> {{ cbLang("add").' '.cbLang('data') }}
         </a>
     @endif
 @endif

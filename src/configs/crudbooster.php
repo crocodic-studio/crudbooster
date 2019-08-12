@@ -15,7 +15,7 @@ return [
     /*
      * Some setting use this dummy photo setting, you can edit the dummy photo url that you want
      */
-    'DUMMY_PHOTO' => 'cb_asset/avatar.jpg',
+    'DUMMY_PHOTO' => 'cb_asset/adminlte/dist/img/user8-128x128.jpg',
 
     /*
      * Default limit table data
@@ -36,17 +36,19 @@ return [
     'UPLOAD_IMAGE_EXTENSION_ALLOWED' => ['jpg','jpeg','png','gif'],
 
     /*
+     * Override Local FileSystem From Storage To Another
+     * Default : public_path()
+     * It means the upload path will be changed to public path of your laravel
+     */
+    'LOCAL_FILESYSTEM_PATH'=> public_path(),
+
+    /*
      * You can set the upload path as you wish.
      * {Y} will be replaced with a Year E.g : 2019
      * {m} will be replaced with a Month E.g : 01
      * {d} will be replaced with a Day E.g : 01
      */
-    'UPLOAD_PATH_FORMAT'=>'uploads/{Y}/{m}/{d}',
-
-    /*
-     * Override Local FileSystem
-     */
-    'LOCAL_FILESYSTEM_PATH'=> public_path('storage'),
+    'UPLOAD_PATH_FORMAT'=>'storage/files/{Y}/{m}/{d}',
 
 
     /*

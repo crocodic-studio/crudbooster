@@ -2,7 +2,7 @@
 @section('content')
 
         <p>
-            <a href="{{ module()->url() }}"><i class="fa fa-arrow-left"></i> &nbsp; Back to list</a>
+            <a href="{{ module()->url() }}"><i class="fa fa-arrow-left"></i> &nbsp; {{cbLang('back_to_list')}}</a>
         </p>
 
         <div class="box box-default">
@@ -24,22 +24,22 @@
 
                     <div style="text-align: right">
                         @if(module()->canCreate() && module()->getData("button_add_more") && cb()->getCurrentMethod()=="getAdd")
-                            <input type="submit" name="submit" value='{{trans("crudbooster.button_save_more")}}' class='btn btn-default'>
+                            <input type="submit" name="submit" value='{{ cbLang("save")." & ".cbLang("add")." ".cbLang("more") }}' class='btn btn-default'>
                         @endif
 
                         @if(cb()->getCurrentMethod()=="getEdit")
-                        <button type="button" class="btn btn-default" onclick="location.href='{{ module()->url() }}'">Cancel</button>
+                        <button type="button" class="btn btn-default" onclick="location.href='{{ module()->url() }}'">{{ cbLang("cancel") }}</button>
                         @endif
 
                         @if(cb()->getCurrentMethod()=="getAdd")
                             @if(module()->canCreate() && module()->getData("button_save"))
-                                <input type="submit" name="submit" value='{{trans("crudbooster.button_save")}}' class='btn btn-success'>
+                                <input type="submit" name="submit" value='{{ cbLang("add")." ".cbLang("data") }}' class='btn btn-success'>
                             @endif
                         @endif
 
                         @if(cb()->getCurrentMethod()=="getEdit")
                             @if(module()->canUpdate() && module()->getData("button_save"))
-                                <input type="submit" name="submit" value='{{trans("crudbooster.button_save")}}' class='btn btn-success'>
+                                <input type="submit" name="submit" value='{{ cbLang("update")." ".cbLang("data") }}' class='btn btn-success'>
                             @endif
                         @endif
                     </div>

@@ -43,11 +43,11 @@ class Install extends Command
                 mkdir(public_path('vendor'));
             }
 
-            $this->info('Publishing CRUDBooster needs file...');
-            $this->call('vendor:publish', ['--provider' => 'crocodicstudio\crudbooster\CRUDBoosterServiceProvider']);
+            $this->info('Please wait CRUDBooster publish assets...');
+            $this->call('vendor:publish', ['--tag' => 'cb_config']);
+            $this->call('vendor:publish', ['--tag' => 'cb_hook']);
             $this->call('vendor:publish', ['--tag' => 'cb_asset', '--force' => true]);
             $this->call('vendor:publish', ['--tag' => 'cb_migration', '--force' => true]);
-            $this->call('vendor:publish', ['--tag' => 'cb_localization', '--force'=> true]);
 
             /*
              * Create storage dir on public

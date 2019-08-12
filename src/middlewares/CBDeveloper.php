@@ -18,7 +18,7 @@ class CBDeveloper
     public function handle($request, Closure $next)
     {
 
-        if(!session()->has("developer")) {
+        if(session()->get("developer") != getSetting('developer_username')) {
             return cb()->redirect(cb()->getDeveloperUrl("login"),"Please login for first");
         }
 

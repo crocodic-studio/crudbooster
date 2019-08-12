@@ -23,17 +23,22 @@ class DeveloperCommandService
 
     public function create()
     {
-        if($this->command->)
-        if($this->command->option("password") == "AUTO") {
-            $password = Str::random(16);
-        }else{
-            $password = $this->command->option("password");
-        }
 
-        if($this->command->option("username") == "AUTO") {
+        try {
+            if(@$this->command->option("password") == "AUTO" || !@$this->command->option("password")) {
+                $password = Str::random(16);
+            }else{
+                $password = $this->command->option("password");
+            }
+
+            if(@$this->command->option("username") == "AUTO" || !@$this->command->option("username")) {
+                $username = Str::random(5);
+            }else{
+                $username = $this->command->option("username");
+            }
+        } catch (\Exception $e) {
+            $password = Str::random(16);
             $username = Str::random(5);
-        }else{
-            $username = $this->command->option("username");
         }
 
         $developerPath = Str::random();

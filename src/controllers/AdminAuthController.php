@@ -12,7 +12,7 @@ class AdminAuthController extends CBController
 
         cbHook()->hookGetLogin();
 
-        return view(config('crudbooster.LOGIN_FORM_VIEW'));
+        return view(cbConfig('LOGIN_FORM_VIEW'));
     }
 
     public function postLogin()
@@ -27,7 +27,7 @@ class AdminAuthController extends CBController
                 cbHook()->hookPostLogin();
                 return redirect(cb()->getAdminUrl());
             } else {
-                return redirect(cb()->getLoginUrl())->with(['message'=>__('crudbooster.password_and_username_is_wrong'),'message_type'=>'warning']);
+                return redirect(cb()->getLoginUrl())->with(['message'=>cbLang('password_and_username_is_wrong'),'message_type'=>'warning']);
             }
         }catch (CBValidationException $e) {
             return cb()->redirect(cb()->getAdminUrl("login"),$e->getMessage(),'warning');
@@ -37,7 +37,7 @@ class AdminAuthController extends CBController
     public function getLogout()
     {
         auth()->logout();
-        return cb()->redirect(cb()->getAdminUrl("login"), __('crudbooster.you_have_been_log_out'), 'success');
+        return cb()->redirect(cb()->getAdminUrl("login"), cbLang('you_have_been_logged_out'), 'success');
     }
 
     public function getLoginDeveloper() {
@@ -54,12 +54,12 @@ class AdminAuthController extends CBController
             if(request('username') == getSetting('developer_username')
                 && request('password') == getSetting("developer_password")) {
 
-                session(['developer'=>1]);
+                session(['developer'=>getSetting('developer_username')]);
 
                 return redirect(cb()->getDeveloperUrl());
 
             }else{
-                return cb()->redirectBack(__("crudbooster.password_and_username_is_wrong"));
+                return cb()->redirectBack( cbLang("password_and_username_is_wrong"));
             }
 
         }catch (CBValidationException $e) {

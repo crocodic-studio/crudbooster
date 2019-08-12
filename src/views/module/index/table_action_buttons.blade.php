@@ -12,12 +12,21 @@
     @endphp
 
     @if($isShown)
-        <a href="{{ $a->getUrl() }}" title="{{ $a->getLabel() }}" class="btn btn-xs btn-{{$a->getColor()}} {{ $a->getConfirmation()?"confirmation":"" }}">
-            @if($a->getIcon())
-                <i class="{{ $a->getIcon() }}"></i>
-            @endif
-            {{ $a->getLabel() }}
-        </a>
+        @if($a->getConfirmation())
+            <a href="javascript:;" onclick="goToUrlWithConfirmation('{{$a->getUrl()}}','{{ cbLang("do_you_want_to",["action"=>$a->getLabel()]) }}')" title="{{ $a->getLabel() }}" class="btn btn-xs btn-{{$a->getColor()}}">
+                @if($a->getIcon())
+                    <i class="{{ $a->getIcon() }}"></i>
+                @endif
+                {{ $a->getLabel() }}
+            </a>
+        @else
+            <a href="{{ $a->getUrl() }}" title="{{ $a->getLabel() }}" class="btn btn-xs btn-{{$a->getColor()}}">
+                @if($a->getIcon())
+                    <i class="{{ $a->getIcon() }}"></i>
+                @endif
+                {{ $a->getLabel() }}
+            </a>
+        @endif
     @endif
 @endforeach
 @endif
@@ -25,14 +34,14 @@
 
 @if(module()->canRead() && module()->getData("button_detail"))
     @if(isset($hide_button_detail) && call_user_func($hide_button_detail, $row)===false)
-    <a class='btn btn-xs btn-primary btn-detail' title='{{trans("crudbooster.action_detail_data")}}'
+    <a class='btn btn-xs btn-primary btn-detail' title='{{ cbLang("detail")." ".cbLang("data") }}'
        href='{{ module()->detailURL($row->primary_key) }}'><i class='fa fa-eye'></i></a>
     @endif
 @endif
 
 @if(module()->canUpdate() && module()->getData("button_edit"))
     @if(isset($hide_button_edit) && call_user_func($hide_button_edit, $row)===false)
-    <a class='btn btn-xs btn-success btn-edit' title='{{trans("crudbooster.action_edit_data")}}'
+    <a class='btn btn-xs btn-success btn-edit' title='{{ cbLang("edit")." ".cbLang("data") }}'
        href='{{ module()->editURL($row->primary_key) }}'><i
                 class='fa fa-pencil'></i></a>
     @endif
@@ -40,7 +49,7 @@
 
 @if(module()->canDelete() && module()->getData("button_delete"))
     @if(isset($hide_button_delete) && call_user_func($hide_button_delete, $row)===false)
-    <a class='btn btn-xs btn-warning btn-delete confirmation' title='{{trans("crudbooster.action_delete_data")}}' href='{{ module()->deleteURL($row->primary_key) }}'
+    <a class='btn btn-xs btn-danger btn-delete' title='{{ cbLang("delete")." ".cbLang("data") }}' onclick="deleteConfirmation('{{ module()->deleteURL($row->primary_key) }}')" href='javascript:;'
        ><i class='fa fa-trash'></i></a>
     @endif
 @endif

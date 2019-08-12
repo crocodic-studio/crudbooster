@@ -9,15 +9,15 @@
     <div class="box">
         <div class="box-header">
 
-            <h1 class="box-title" style="font-size: 20px;margin-top:5px">Table Data</h1>
+            <h1 class="box-title" style="font-size: 20px;margin-top:5px">{{cbLang('browse')}} {{cbLang("data")}}</h1>
 
-            <div class="box-tools pull-{{ trans('crudbooster.right') }}" style="position: relative;margin-top: -5px;margin-right: -10px">
+            <div class="box-tools pull-right" style="position: relative;margin-top: -5px;margin-right: -10px">
 
                 @if(isset($search_form) && $search_form===true)
                 <form method='get' style="display:inline-block;width: 260px;" action='{{ request()->url() }}'>
                     <div class="input-group">
                         <input type="text" name="q" value="{{ request('q') }}" class="form-control input-sm pull-{{ trans('crudbooster.right') }}"
-                               placeholder="{{trans('crudbooster.filter_search')}}"/>
+                               placeholder="{{ cbLang('search')}}"/>
                         <div class="input-group-btn">
                             <button type='submit' class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
                         </div>
@@ -57,8 +57,13 @@
             $total = $result->total();
             ?>
             <div class="col-md-4" style="margin:15px 0;">
-                <span class="pull-right">{{ trans("crudbooster.filter_rows_total") }}
-                : {{ $from }} {{ trans("crudbooster.filter_rows_to") }} {{ $to }} {{ trans("crudbooster.filter_rows_of") }} {{ $total }}</span>
+                <span class="pull-right">
+                    {{ cbLang("pagination_footer_total_data",[
+                        "from"=>$from,
+                        "to"=>$to,
+                        "total"=>$total
+                        ]) }}
+                </span>
             </div>
         </div>
     </div>
