@@ -31,6 +31,22 @@ class DeveloperPluginStoreController extends Controller
         return view($this->view.'.index',$data);
     }
 
+    public function getUninstall($key)
+    {
+        $pluginData = $this->fetchPluginData();
+
+        if(isset($pluginData[$key])) {
+            if(file_exists(app_path("CBPlugins/".$key))) {
+                rrmdir(app_path("CBPlugins/".$key));
+                return cb()->redirectBack('Plugin has been uninstalled!','success');
+            }else{
+                return cb()->redirectBack('Failed to uninstall, plugin is not found');
+            }
+        }else {
+            return cb()->redirectBack('Failed to uninstall, plugin key is not found');
+        }
+    }
+
     public function getInstall($key)
     {
         $pluginData = $this->fetchPluginData();

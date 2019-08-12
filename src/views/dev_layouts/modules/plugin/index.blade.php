@@ -39,7 +39,7 @@
                                         <a href="javascript:;" class="btn disabled btn-xs btn-default"><i class="fa fa-check"></i> Latest</a>
                                     @endif
 
-                                        <a href="javascript:;" onclick="goToUrlWithConfirmation('#','Uninstall plugin {{$row['name']}}')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i> Uninstall</a>
+                                        <a href="javascript:;" onclick="goToUrlWithConfirmation('{{ route("DeveloperPluginStoreControllerGetUninstall",["key"=>$row['key']]) }}','Uninstall plugin {{$row['name']}}')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i> Uninstall</a>
                                 @else
                                     <a href="javascript:;" onclick="goToUrlWithConfirmation('{{ route("DeveloperPluginStoreControllerGetInstall",["key"=>$row['key']]) }}','Install {{$row['name']}} plugin v{{ $row['version'] }}')" class="btn btn-xs btn-success">Install</a>
                                 @endif
