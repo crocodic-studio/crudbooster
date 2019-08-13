@@ -26,11 +26,13 @@ Route::group(['middleware' => ['web'],
 
 // Routing without any middleware
 Route::group(['middleware' => ['web'], 'namespace' => '\crocodicstudio\crudbooster\controllers'], function () {
-    cb()->routeGet('uploads/{one?}/{two?}/{three?}/{four?}/{five?}', "FileController@getPreview");
+    if(env("CB_AUTO_REDIRECT_TO_LOGIN")) {
+        cb()->routeGet("/","AdminAuthController@getRedirectToLogin");
+    }
 });
 
 // Routing without any middleware with admin prefix
-Route::group(['middleware' => ['web'], 'prefix' => cbConfig('ADMIN_PATH'), 'namespace' => 'crocodicstudio\crudbooster\controllers'], function () {
+Route::group(['middleware' => ['web'], 'prefix' => env('CB_ADMIN_PATH'), 'namespace' => 'crocodicstudio\crudbooster\controllers'], function () {
     cb()->routeGet('logout', "AdminAuthController@getLogout");
 
     if(!env("CB_DISABLE_LOGIN")) {
@@ -47,11 +49,11 @@ cb()->routeGroupBackend(function () {
 // Auto Routing for App\Http\Controllers
 Route::group([
     'middleware' => ['web', \crocodicstudio\crudbooster\middlewares\CBBackend::class],
-    'prefix' => cbConfig('ADMIN_PATH'),
+    'prefix' => env('CB_ADMIN_PATH'),
     'namespace' => 'App\Http\Controllers',
 ], function () {
 
-    if (Request::is(cbConfig('ADMIN_PATH'))) {
+    if (Request::is(env('CB_ADMIN_PATH'))) {
         if($dashboard = cbConfig("ADMIN_DASHBOARD_CONTROLLER")) {
             cb()->routeGet("/", $dashboard);
         }else{

@@ -1,12 +1,6 @@
 <?php
 
 return [
-
-    /*
-     * You can customize the admin path
-     */
-    'ADMIN_PATH' => 'admin',
-
     /*
      * To customize the dashboard controller, you can set the value bellow
      */

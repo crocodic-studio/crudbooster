@@ -31,6 +31,10 @@ class AdminAuthController extends CBController
         return false;
     }
 
+    public function getRedirectToLogin() {
+        return redirect(cb()->getAdminUrl("login"));
+    }
+
     public function getLogin()
     {
         if(!auth()->guest()) return redirect(cb()->getAdminUrl());

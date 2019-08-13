@@ -45,7 +45,7 @@
         <section class="content-header">
 
             <h1>
-                @if(request()->is(cbConfig("ADMIN_PATH")))
+                @if(request()->is(env("CB_ADMIN_PATH")))
                     <i class="fa fa-dashboard"></i> {{ cbLang("dashboard") }}
                 @else
                     @if(module()->getPageIcon())

@@ -54,7 +54,7 @@ class CB
 
     public function getAdminUrl($path = null) {
         $path = ($path)?"/".trim($path,"/"):null;
-        return url(cbConfig("ADMIN_PATH")).$path;
+        return url(env("CB_ADMIN_PATH")).$path;
     }
 
     public function getAppName() {
@@ -408,7 +408,7 @@ class CB
     public function routeGroupBackend(callable $callback, $namespace = 'crocodicstudio\crudbooster\controllers') {
         Route::group([
             'middleware' => ['web', \crocodicstudio\crudbooster\middlewares\CBBackend::class],
-            'prefix' => cbConfig('ADMIN_PATH'),
+            'prefix' => env('CB_ADMIN_PATH'),
             'namespace' => $namespace,
         ], $callback);
     }
