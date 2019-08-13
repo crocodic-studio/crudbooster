@@ -50,6 +50,13 @@ class Install extends Command
             $this->call('vendor:publish', ['--tag' => 'cb_migration', '--force' => true]);
 
             /*
+             * Create CBPlugins
+             */
+            if(!file_exists(app_path("CBPlugins"))) {
+                mkdir(app_path("CBPlugins"));
+            }
+
+            /*
              * Create storage dir on public
              * We need it to change default laravel local filesystem from storage to public
              * We won't use symlink because of a security issue in many server
