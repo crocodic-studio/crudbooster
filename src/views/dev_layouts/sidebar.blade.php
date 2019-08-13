@@ -32,6 +32,24 @@
                     </a>
                 </li>
 
+                <li>
+                    <a href='{{ cb()->getDeveloperUrl("appearance") }}'><i class='fa fa-image'></i>
+                        <span>Appearance</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href='{{ cb()->getDeveloperUrl("security") }}'><i class='fa fa-key'></i>
+                        <span>Security</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href='{{ cb()->getDeveloperUrl("mail") }}'><i class='fa fa-mail-forward'></i>
+                        <span>Mail Configuration</span>
+                    </a>
+                </li>
+
                 <?php
                     $plugins = (new \crocodicstudio\crudbooster\helpers\Plugin())->getAll();
                 ?>

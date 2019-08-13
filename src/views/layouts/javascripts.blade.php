@@ -29,7 +29,7 @@
 <script src="{{ cbAsset('adminlte/plugins/datatables/jquery.dataTables.min.js')}}"></script>
 <script src="{{ cbAsset('adminlte/plugins/datatables/dataTables.bootstrap.min.js')}}"></script>
 <!--Main CB JS-->
-<script src="{{ cbAsset('js/main.js').'?v=1.2'}}"></script>
+<script src="{{ cbAsset('js/main.js').'?v=1.5'}}"></script>
 <script>
     function deleteConfirmation(url)
     {

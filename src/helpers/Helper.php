@@ -1,13 +1,58 @@
-<?php 
-/* 
-| ---------------------------------------------------------------------------------------------------------------
-| Main Helper of CRUDBooster
-| Do not edit or modify this helper unless your modification will be replace if any update from CRUDBooster.
-| 
-| Homepage : http://crudbooster.com
-| ---------------------------------------------------------------------------------------------------------------
-|
-*/
+<?php
+
+if(!function_exists("putHtaccess")) {
+    function putHtaccess($stringToPut)
+    {
+        file_put_contents(base_path(".htaccess"), "\n".$stringToPut, FILE_APPEND);
+        file_put_contents(public_path(".htaccess"), "\n".$stringToPut, FILE_APPEND);
+    }
+}
+
+if(!function_exists("checkHtaccess")) {
+    function checkHtaccess($stringToCheck)
+    {
+        if(file_exists(base_path(".htaccess")) && file_exists(public_path(".htaccess"))) {
+            $htaccess = file_get_contents(base_path(".htaccess"));
+            $htaccess2= file_get_contents(public_path(".htaccess"));
+            if(\Illuminate\Support\Str::contains($htaccess, $stringToCheck) && \Illuminate\Support\Str::contains($htaccess2, $stringToCheck)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
+
+if(!function_exists("setEnvironmentValue")) {
+    function setEnvironmentValue(array $values)
+    {
+        $envFile = app()->environmentFilePath();
+        $str = file_get_contents($envFile);
+
+        if (count($values) > 0) {
+            foreach ($values as $envKey => $envValue) {
+
+                $str .= "\n"; // In case the searched variable is in the last line without \n
+                $keyPosition = strpos($str, "{$envKey}=");
+                $endOfLinePosition = strpos($str, "\n", $keyPosition);
+                $oldLine = substr($str, $keyPosition, $endOfLinePosition - $keyPosition);
+
+                // If key does not exist, add it
+                if (!$keyPosition || !$endOfLinePosition || !$oldLine) {
+                    $str .= "{$envKey}={$envValue}\n";
+                } else {
+                    $str = str_replace($oldLine, "{$envKey}={$envValue}", $str);
+                }
+
+            }
+        }
+
+        $str = substr($str, 0, -1);
+        if (!file_put_contents($envFile, $str)) return false;
+        return true;
+    }
+}
+
 
 if(!function_exists("cbLang")) {
     /**
@@ -135,14 +180,14 @@ if(!function_exists('cb'))
 }
 
 if(!function_exists('cbAsset')) {
-    function cbAsset($path) {
-        return asset("cb_asset/".$path);
+    function cbAsset($path, $secure = null) {
+        return asset("cb_asset/".$path, $secure);
     }
 }
 
 if(!function_exists("cbConfig")) {
-    function cbConfig($name) {
-        return config("crudbooster.".$name);
+    function cbConfig($name, $default = null) {
+        return config("crudbooster.".$name, $default);
     }
 }
 
@@ -163,7 +208,7 @@ if(!function_exists('module')) {
 if(!function_exists('getAdminLoginURL')) {
     function getAdminLoginURL()
     {
-        return url(config('crudbooster.ADMIN_LOGIN_PATH'));
+        return cb()->getAdminUrl("login");
     }
 }
 
@@ -172,28 +217,6 @@ if(!function_exists('dummyPhoto')) {
     {
         return cbConfig("DUMMY_PHOTO");
     }
-}
-
-if(!function_exists('assetThumbnail')) {
-	function assetThumbnail($path) {
-		$path = str_replace('uploads/','uploads_thumbnail/',$path);
-		return asset($path);
-	}
-}
-
-if(!function_exists('assetResize')) {
-	function assetResize($path,$width,$height=null,$quality=70) {
-		$basename = basename($path);
-	    $pathWithoutName = str_replace($basename, '', $path);
-	    $newLocation = $pathWithoutName.'/w_'.$width.'_h_'.$height.'_'.$basename;
-	    if(Storage::exists($newLocation)) {
-	        return asset($newLocation);
-	    }else{
-	        $img = Image::make(storage_path($path))->fit($width,$height);
-	        $img->save(storage_path($newLocation),$quality);
-	        return asset($newLocation);
-	    }
-	}
 }
 
 if(!function_exists('extract_unit')) {	
@@ -210,13 +233,6 @@ if(!function_exists('extract_unit')) {
 	$str_three = substr($str_two, 0, $second_pos);
 	$unit = trim($str_three); // remove whitespaces
 	return $unit;
-	}
-}
-
-
-if(!function_exists('now')) {
-	function now() {		
-		return date('Y-m-d H:i:s');
 	}
 }
 
@@ -265,7 +281,7 @@ if(!function_exists('getSetting')) {
         }
 
         if(isset($settings[$key])) {
-            \Illuminate\Support\Facades\Cache::put("setting_".$key, $settings[$key], 180);
+            \Illuminate\Support\Facades\Cache::forever("setting_".$key, $settings[$key]);
             return $settings[$key]?:$default;
         }else{
             return $default;

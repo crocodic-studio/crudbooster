@@ -410,31 +410,11 @@
     </div><!--end app-->
 
 
-    <div class="modal" id="modal-loading">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div align="center">
-                        <h3><i class="fa fa-spin fa-spinner"></i></h3>
-                        <p>Please wait while loading...</p>
-                    </div>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
     @push('bottom')
         <script src="{{ cbAsset("adminlte/bower_components/bootstrap-toggle/bootstrap-toggle.min.js") }}"></script>
         <script src="{{ cbAsset("js/vue.min.js") }}"></script>
         <script src="{{ cbAsset("js/axios.min.js") }}"></script>
         <script>
-            function showLoading() {
-                $("#modal-loading").modal("show")
-            }
-            function hideLoading() {
-                $("#modal-loading").modal("hide")
-            }
-
             const app = new Vue({
                 el: '#app',
                 data: {

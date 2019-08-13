@@ -9,6 +9,8 @@ Route::group(['middleware' => ['web',\crocodicstudio\crudbooster\middlewares\CBD
     cb()->routeController("roles","\crocodicstudio\crudbooster\controllers\DeveloperRolesController");
     cb()->routeController("users","\crocodicstudio\crudbooster\controllers\DeveloperUsersController");
     cb()->routeController("plugins","\crocodicstudio\crudbooster\controllers\DeveloperPluginStoreController");
+    cb()->routeController("mail","\crocodicstudio\crudbooster\controllers\DeveloperMailController");
+    cb()->routeController("security","\crocodicstudio\crudbooster\controllers\DeveloperSecurityController");
     cb()->routePost("skip-tutorial","DeveloperDashboardController@postSkipTutorial");
     cb()->routeGet("/","DeveloperDashboardController@getIndex");
 });
@@ -30,8 +32,11 @@ Route::group(['middleware' => ['web'], 'namespace' => '\crocodicstudio\crudboost
 // Routing without any middleware with admin prefix
 Route::group(['middleware' => ['web'], 'prefix' => cbConfig('ADMIN_PATH'), 'namespace' => 'crocodicstudio\crudbooster\controllers'], function () {
     cb()->routeGet('logout', "AdminAuthController@getLogout");
-    cb()->routePost('login', "AdminAuthController@postLogin");
-    cb()->routeGet('login', "AdminAuthController@getLogin");
+
+    if(!env("CB_DISABLE_LOGIN")) {
+        cb()->routePost('login', "AdminAuthController@postLogin");
+        cb()->routeGet('login', "AdminAuthController@getLogin");
+    }
 });
 
 // Routing package controllers

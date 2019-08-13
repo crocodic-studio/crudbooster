@@ -10,7 +10,7 @@ class AdminProfileController extends BaseController {
 
     public function getIndex() {
         $data = [];
-        $data['page_title'] = 'Profile';
+        $data['page_title'] = cbLang("profile");
         return view('crudbooster::profile',$data);
     }
 
@@ -36,7 +36,7 @@ class AdminProfileController extends BaseController {
             DB::table("users")->where("id", auth()->id())->update($data);
         }catch (\Exception $e) {
             Log::error($e);
-            return cb()->redirectBack("Something went wrong!","warning");
+            return cb()->redirectBack(cbLang("something_went_wrong"),"warning");
         }
 
         return cb()->redirectBack("The profile data has been updated!","success");

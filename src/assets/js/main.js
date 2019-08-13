@@ -67,6 +67,10 @@
 			});
 		}
 
-        $(".datatable").dataTable();
+        $(".datatable").dataTable({
+            initComplete: function() {
+                $(this.api().table().container()).find('input').parent().wrap('<form>').parent().attr('autocomplete', 'off');
+            }
+        });
         $(".select2").select2();
 	});

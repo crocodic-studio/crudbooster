@@ -54,5 +54,6 @@ return [
     "you_dont_have_privilege_to_this_area"=>"You don't have a privilege to this area",
     "something_went_wrong"=>"Something went wrong, please try again later",
     "do_you_want_to"=>"Do you want to :action",
-    "installed_plugins"=>"Installed Plugins"
+    "installed_plugins"=>"Installed Plugins",
+    "you_have_been_suspended"=>"You have been suspended, please wait for 30 minutes and try again"
 ];

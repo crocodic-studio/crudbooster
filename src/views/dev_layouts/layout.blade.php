@@ -2,7 +2,11 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>{{ cb()->getAppName() }}</title>
+    @if(isset($page_title))
+        <title>{{ $page_title }} - {{ cb()->getAppName() }}</title>
+    @else
+        <title>{{ cb()->getAppName() }}</title>
+    @endif
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
     <meta name='generator' content='CRUDBooster'/>
     <meta name='robots' content='noindex,nofollow'/>
@@ -65,5 +69,33 @@
 @include('crudbooster::layouts.javascripts')
 
 @stack('bottom')
+
+<script>
+    function showLoading() {
+        $("#modal-loading").modal({
+            show: true,
+            backdrop: 'static',
+            keyboard: false
+        })
+    }
+    function hideLoading() {
+        $("#modal-loading").modal("hide")
+    }
+</script>
+<div class="modal" id="modal-loading">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div align="center">
+                    <h1 align="center"><i class="fa fa-spin fa-spinner"></i></h1>
+                    <p>
+                        Please wait while loading...
+                    </p>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 </body>
 </html>
