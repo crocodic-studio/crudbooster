@@ -87,22 +87,29 @@ class DeveloperPluginStoreController extends Controller
             return $data;
         }
 
-        $data = file_get_contents(base64_decode("aHR0cDovL2NydWRib29zdGVyLmNvbS9hcGkvcGx1Z2luP2FjY2Vzc190b2tlbj1iVmMvWm5wWU5TWnJNVlpZT0hFNVUydHFjU1U9"));
         $result = [];
-        if($data) {
-            $data = json_decode($data, true);
-            if($data['status']==true) {
 
-                foreach($data['data'] as $item) {
-                    $key = $item['key'];
-                    $result[ $key ] = $item;
+        try {
+            $data = file_get_contents(base64_decode("aHR0cDovL2NydWRib29zdGVyLmNvbS9hcGkvcGx1Z2luP2FjY2Vzc190b2tlbj1iVmMvWm5wWU5TWnJNVlpZT0hFNVUydHFjU1U9"));
+
+            if($data) {
+                $data = json_decode($data, true);
+                if($data['status']==true) {
+
+                    foreach($data['data'] as $item) {
+                        $key = $item['key'];
+                        $result[ $key ] = $item;
+                    }
+
+                    $result = collect($result)->sortBy("name")->all();
+
+                    Cache::put("plugin_store_data", $result, now()->addDays(3));
                 }
-
-                $result = collect($result)->sortBy("name")->all();
-
-                Cache::put("plugin_store_data", $result, now()->addDays(3));
             }
+        } catch (\Exception $e) {
+
         }
+
         return $result;
     }
 }
