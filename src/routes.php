@@ -11,6 +11,8 @@ Route::group(['middleware' => ['web',\crocodicstudio\crudbooster\middlewares\CBD
     cb()->routeController("plugins","\crocodicstudio\crudbooster\controllers\DeveloperPluginStoreController");
     cb()->routeController("mail","\crocodicstudio\crudbooster\controllers\DeveloperMailController");
     cb()->routeController("security","\crocodicstudio\crudbooster\controllers\DeveloperSecurityController");
+    cb()->routeController("appearance","\crocodicstudio\crudbooster\controllers\DeveloperAppearanceController");
+    cb()->routeController("miscellaneous","\crocodicstudio\crudbooster\controllers\DeveloperMiscellaneousController");
     cb()->routePost("skip-tutorial","DeveloperDashboardController@postSkipTutorial");
     cb()->routeGet("/","DeveloperDashboardController@getIndex");
 });
@@ -26,16 +28,16 @@ Route::group(['middleware' => ['web'],
 
 // Routing without any middleware
 Route::group(['middleware' => ['web'], 'namespace' => '\crocodicstudio\crudbooster\controllers'], function () {
-    if(env("CB_AUTO_REDIRECT_TO_LOGIN")) {
+    if(getSetting("AUTO_REDIRECT_TO_LOGIN")) {
         cb()->routeGet("/","AdminAuthController@getRedirectToLogin");
     }
 });
 
 // Routing without any middleware with admin prefix
-Route::group(['middleware' => ['web'], 'prefix' => env('CB_ADMIN_PATH'), 'namespace' => 'crocodicstudio\crudbooster\controllers'], function () {
+Route::group(['middleware' => ['web'], 'prefix' => cb()->getAdminPath(), 'namespace' => 'crocodicstudio\crudbooster\controllers'], function () {
     cb()->routeGet('logout', "AdminAuthController@getLogout");
 
-    if(!env("CB_DISABLE_LOGIN")) {
+    if(!getSetting("DISABLE_LOGIN")) {
         cb()->routePost('login', "AdminAuthController@postLogin");
         cb()->routeGet('login', "AdminAuthController@getLogin");
     }
@@ -49,11 +51,11 @@ cb()->routeGroupBackend(function () {
 // Auto Routing for App\Http\Controllers
 Route::group([
     'middleware' => ['web', \crocodicstudio\crudbooster\middlewares\CBBackend::class],
-    'prefix' => env('CB_ADMIN_PATH'),
+    'prefix' => cb()->getAdminPath(),
     'namespace' => 'App\Http\Controllers',
 ], function () {
 
-    if (Request::is(env('CB_ADMIN_PATH'))) {
+    if (Request::is(cb()->getAdminPath())) {
         if($dashboard = cbConfig("ADMIN_DASHBOARD_CONTROLLER")) {
             cb()->routeGet("/", $dashboard);
         }else{

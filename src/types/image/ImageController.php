@@ -14,8 +14,6 @@ class ImageController extends BaseController
 {
     public function postUploadImage()
     {
-        if(auth()->guest()) return redirect(cb()->getLoginUrl());
-
         $file = null;
         try {
 

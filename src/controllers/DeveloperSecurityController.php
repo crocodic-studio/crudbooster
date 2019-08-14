@@ -30,13 +30,13 @@ class DeveloperSecurityController extends Controller
     public function postSave()
     {
         setEnvironmentValue([
-            "APP_DEBUG"=>request("APP_DEBUG"),
-            "CB_ADMIN_PATH"=>request("CB_ADMIN_PATH"),
-            "CB_DISABLE_LOGIN"=>request("CB_DISABLE_LOGIN"),
-            "CB_AUTO_SUSPEND_LOGIN"=>request("CB_AUTO_SUSPEND_LOGIN"),
-            "CB_MAINTENANCE_MODE"=>request("CB_MAINTENANCE_MODE"),
-            "CB_AUTO_REDIRECT_TO_LOGIN"=>request("CB_AUTO_REDIRECT_TO_LOGIN")
+            "APP_DEBUG"=>request("APP_DEBUG")
         ]);
+
+        putSetting("ADMIN_PATH", request("ADMIN_PATH"));
+        putSetting("DISABLE_LOGIN", request("DISABLE_LOGIN"));
+        putSetting("AUTO_SUSPEND_LOGIN", request("AUTO_SUSPEND_LOGIN"));
+        putSetting("AUTO_REDIRECT_TO_LOGIN", request("AUTO_REDIRECT_TO_LOGIN"));
 
         if(request("htaccess_ServerSignature")) {
             putHtaccess("ServerSignature Off");

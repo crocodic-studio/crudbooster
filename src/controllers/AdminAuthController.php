@@ -22,7 +22,7 @@ class AdminAuthController extends CBController
             return true;
         }
 
-        if(env("CB_AUTO_SUSPEND_LOGIN") && Cache::get("loginFailed".$key) >= env("CB_AUTO_SUSPEND_LOGIN")) {
+        if(getSetting("AUTO_SUSPEND_LOGIN") && Cache::get("loginFailed".$key) >= getSetting("AUTO_SUSPEND_LOGIN")) {
             Cache::put("loginSuspended".$key, true, 30);
             Cache::forget("loginFailed".$key);
             return true;
@@ -41,7 +41,7 @@ class AdminAuthController extends CBController
 
         cbHook()->hookGetLogin();
 
-        return view(cbConfig('LOGIN_FORM_VIEW'));
+        return view( str_replace(".blade.php", "", getSetting('login_page_view','crudbooster::login')) );
     }
 
     public function postLogin()

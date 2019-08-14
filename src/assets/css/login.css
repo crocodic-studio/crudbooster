@@ -1,14 +1,16 @@
 body {
 	background: #eeeeee;
 	color: #111111  !important;
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: cover;
+}
+
+.login-wrapper {
+    margin-top: 7%;
+    padding-bottom: 100px;
 }
 
 .login-box {
 	width: 500px;
-	margin: 10% auto;
+	margin: 0 auto;
 	border-radius: 5px;
 	background: #fefefe;
 	background-repeat: no-repeat;
@@ -27,8 +29,4 @@ body {
 
 .login-body {
 	padding: 40px;
-}
-
-html, body {
-	overflow: hidden;
 }

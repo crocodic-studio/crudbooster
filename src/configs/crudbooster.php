@@ -17,12 +17,6 @@ return [
     'LIMIT_TABLE_DATA'=>10,
 
     /*
-     * The default login form use this bellow view path, but you can customize the view set to your own
-     */
-    'LOGIN_FORM_VIEW'    => 'crudbooster::login',
-    'LOGIN_BACKGROUND'   => 'cb_asset/images/bg_login.jpg',
-
-    /*
      * For security reason we have limit the upload file formats bellow
      */
     'UPLOAD_FILE_EXTENSION_ALLOWED' => ['jpg','jpeg','png','gif','pdf','xls','xlsx','doc','docx','txt','zip','rar','rtf'],

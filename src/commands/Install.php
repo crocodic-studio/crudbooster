@@ -50,6 +50,13 @@ class Install extends Command
             $this->call('vendor:publish', ['--tag' => 'cb_migration', '--force' => true]);
 
             /*
+             * Add some env for CB
+             */
+            setEnvironmentValue([
+                "APP_DEBUG"=> false
+            ]);
+
+            /*
              * Create CBPlugins
              */
             if(!file_exists(app_path("CBPlugins"))) {

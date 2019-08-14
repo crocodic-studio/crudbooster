@@ -24,7 +24,7 @@
                 <li class="header">{{ cbLang("menu_navigation")}}</li>
                 <!-- Optionally, you can add icons to the links -->
 
-                <li class="{{ (request()->is(env('CB_ADMIN_PATH'))) ? 'active' : '' }}">
+                <li class="{{ (request()->is(cb()->getAdminPath())) ? 'active' : '' }}">
                     <a href='{{ cb()->getAdminUrl() }}'><i class='fa fa-home'></i>
                         <span>{{ cbLang("dashboard")}}</span>
                     </a>

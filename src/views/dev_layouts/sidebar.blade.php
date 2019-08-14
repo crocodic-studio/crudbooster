@@ -50,6 +50,12 @@
                     </a>
                 </li>
 
+                <li>
+                    <a href='{{ cb()->getDeveloperUrl("miscellaneous") }}'><i class='fa fa-cog'></i>
+                        <span>Miscellaneous</span>
+                    </a>
+                </li>
+
                 <?php
                     $plugins = (new \crocodicstudio\crudbooster\helpers\Plugin())->getAll();
                 ?>

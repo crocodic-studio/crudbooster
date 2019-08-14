@@ -18,13 +18,15 @@
 
     <!-- Theme style -->
     <link href="{{ cbAsset("adminlte/dist/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css"/>
-    <link href="{{ cbAsset("adminlte/dist/css/skins/skin-blue.css")}}" rel="stylesheet" type="text/css"/>
+    <link href="{{ cbAsset("adminlte/dist/css/skins/".getSetting("cms_theme_color","skin-blue").".css")}}" rel="stylesheet" type="text/css"/>
 
     <link rel='stylesheet' href='{{cbAsset("css/main.css")}}'/>
 
     @stack('head')
+
+    @include("crudbooster::layouts.layout_appearance_custom")
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition {{getSetting("cms_theme_color","skin-blue")}} sidebar-mini">
 <div id='app' class="wrapper">
 
     <!-- Header -->

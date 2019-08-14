@@ -14,7 +14,6 @@ class FileController extends BaseController
 {
     public function postUploadFile()
     {
-        if(auth()->guest()) return redirect(cb()->getLoginUrl());
 
         $file = null;
         try {

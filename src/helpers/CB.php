@@ -19,6 +19,10 @@ use Validator;
 class CB
 {
 
+    public function htmlHelper() {
+        return (new HTMLHelper());
+    }
+
     public function getRoleByName($roleName) {
         return $this->find("cb_roles",['name'=>$roleName]);
     }
@@ -52,13 +56,17 @@ class CB
         return $this->getAdminUrl("login");
     }
 
+    public function getAdminPath() {
+        return getSetting("ADMIN_PATH","admin");
+    }
+
     public function getAdminUrl($path = null) {
         $path = ($path)?"/".trim($path,"/"):null;
-        return url(env("CB_ADMIN_PATH")).$path;
+        return url($this->getAdminPath()).$path;
     }
 
     public function getAppName() {
-        return env("APP_NAME","CRUDBOOSTER");
+        return getSetting("APP_NAME", env("APP_NAME","CRUDBOOSTER"));
     }
 
     /**
@@ -93,7 +101,7 @@ class CB
                 $this->resizeImage($file, $file_path.'/'.$filename, $resize_width, $resize_height);
                 return $file_path.'/'.$filename;
             }else{
-                if (Storage::put($file_path.'/'.$filename, $file, 'public')) {
+                if (Storage::putFileAs($file_path, $file, $filename, 'public')) {
                     return $file_path.'/'.$filename;
                 } else {
                     throw new \Exception("Something went wrong, file can't upload!");
@@ -408,7 +416,15 @@ class CB
     public function routeGroupBackend(callable $callback, $namespace = 'crocodicstudio\crudbooster\controllers') {
         Route::group([
             'middleware' => ['web', \crocodicstudio\crudbooster\middlewares\CBBackend::class],
-            'prefix' => env('CB_ADMIN_PATH'),
+            'prefix' => cb()->getAdminPath(),
+            'namespace' => $namespace,
+        ], $callback);
+    }
+
+    public function routeGroupDeveloper(callable $callback, $namespace = 'crocodicstudio\crudbooster\controllers') {
+        Route::group([
+            'middleware' => ['web', \crocodicstudio\crudbooster\middlewares\CBDeveloper::class],
+            'prefix' => "developer/".getSetting('developer_path'),
             'namespace' => $namespace,
         ], $callback);
     }

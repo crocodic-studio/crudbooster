@@ -14,7 +14,7 @@
 
     <!-- Theme style -->
     <link href="{{ cbAsset("adminlte/dist/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css"/>
-    <link href="{{ cbAsset("adminlte/dist/css/skins/skin-blue.css")}}" rel="stylesheet" type="text/css"/>
+    <link href="{{ cbAsset("adminlte/dist/css/skins/".getSetting("cms_theme_color","skin-blue").".css")}}" rel="stylesheet" type="text/css"/>
 
     <link rel='stylesheet' href='{{cbAsset("css/main.css")}}?v=1.2'/>
 
@@ -24,13 +24,15 @@
 
     @stack('head')
 
+    @include("crudbooster::layouts.layout_appearance_custom")
+
     @if($style = module()->getData("style"))
         <style>
             {!! call_user_func($style) !!}
         </style>
     @endif
 </head>
-<body class="skin-blue {{ cbConfig("ADMIN_LAYOUT") }}">
+<body class="hold-transition {{getSetting("cms_theme_color","skin-blue")}} sidebar-mini">
 <div id='app' class="wrapper">
 
     <!-- Header -->
@@ -45,7 +47,7 @@
         <section class="content-header">
 
             <h1>
-                @if(request()->is(env("CB_ADMIN_PATH")))
+                @if(request()->is(cb()->getAdminPath()))
                     <i class="fa fa-dashboard"></i> {{ cbLang("dashboard") }}
                 @else
                     @if(module()->getPageIcon())

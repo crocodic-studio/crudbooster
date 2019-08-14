@@ -42,7 +42,7 @@
                 data:formData,
                 success:function (data) {
 
-                    $(t).parents('.upload-wrapper').find('.upload-preview').html("<a href='" + data.full_url + "' data-lighbox='preview-image' title='"+data.filename+"'>" +
+                    $(t).parents('.upload-wrapper').find('.upload-preview').html("<a href='" + data.full_url + "' data-lightbox='preview-image' title='"+data.filename+"'>" +
                         "<img class='img-thumbnail' style='max-width:250px' src='"+data.full_url+"' title='Preview Image'/></a>" +
                         "<a href='javascript:;' class='btn btn-danger' onclick='deleteImage(this, "+is_required+")' title='Delete this image'><i class='fa fa-trash'></i></a>");
                     $('input[name=' + target_input_name + ']').val(data.url);

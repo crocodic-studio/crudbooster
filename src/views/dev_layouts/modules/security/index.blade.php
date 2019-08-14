@@ -26,25 +26,25 @@
 
                             <div class="form-group">
                                 <label for="">App Path</label>
-                                <input type="text" class="form-control" required name="CB_ADMIN_PATH" value="{{ env("CB_ADMIN_PATH","admin")?:"admin" }}">
+                                <input type="text" class="form-control" required name="ADMIN_PATH" value="{{ cb()->getAdminPath() }}">
                                 <div class="help-block">App Path is main path of this app to entry</div>
                             </div>
 
                             <div class="form-group">
                                 <label for="">Disable Login</label>
-                                <input type="checkbox" name="CB_DISABLE_LOGIN" {{ env("CB_DISABLE_LOGIN")===true?"checked":"" }} data-toggle="toggle" value="true">
+                                <input type="checkbox" name="DISABLE_LOGIN" {{ getSetting("DISABLE_LOGIN")===true?"checked":"" }} data-toggle="toggle" value="true">
                                 <div class="help-block">To prevent any one login at your App, you can disable it</div>
                             </div>
 
                             <div class="form-group">
                                 <label for="">Auto Suspend On Login Failed</label>
-                                <input type="number" class="form-control" name="CB_AUTO_SUSPEND_LOGIN" value="{{ env("CB_AUTO_SUSPEND_LOGIN")?:0 }}">
+                                <input type="number" class="form-control" name="AUTO_SUSPEND_LOGIN" value="{{ getSetting("AUTO_SUSPEND_LOGIN")?:0 }}">
                                 <div class="help-block">Fill this box with number value. Indicate how many times login failed before suspended for 30 minutes</div>
                             </div>
 
                             <div class="form-group">
                                 <label for="">Auto Redirect To App Login</label>
-                                <input type="checkbox" name="CB_AUTO_REDIRECT_TO_LOGIN" {{ env("CB_AUTO_REDIRECT_TO_LOGIN")===true?"checked":"" }} data-toggle="toggle" value="true">
+                                <input type="checkbox" name="AUTO_REDIRECT_TO_LOGIN" {{ getSetting("AUTO_REDIRECT_TO_LOGIN")===true?"checked":"" }} data-toggle="toggle" value="true">
                                 <div class="help-block">Click On this toggle if you want to force auto redirect from homepage to app login page</div>
                             </div>
                         </div>
