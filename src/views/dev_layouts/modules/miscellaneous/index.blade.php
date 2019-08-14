@@ -12,7 +12,7 @@
                 <div class="box-header with-border">
                     <h1 class="box-title"><i class="fa fa-user"></i> Register Feature</h1>
                 </div>
-                <form method="post" action="{{ route("DeveloperAppearanceControllerPostSave") }}">
+                <form method="post" action="{{ route("DeveloperMiscellaneousControllerPostSave") }}">
                     {!! csrf_field() !!}
                     <div class="box-body">
                         <div class="form-group">
@@ -25,7 +25,9 @@
                             <input type="checkbox" {{ getSetting("register_mail_verification")=="on"?"checked":"" }} name="register_mail_verification" data-toggle="toggle">
                             <p></p>
                             <input type="email" name="register_mail_verification_sender" value="{{ getSetting("register_mail_verification_sender","noreply@".$_SERVER['SERVER_NAME']) }}" class="form-control">
-                            <dib class="help-block">Fill the email verification sender</dib>
+                            <div class="help-block">System will send a confirmation email to user email. Then they have to click the link verification inside the email. Please make sure that you have setting the
+                                <a href="{{ cb()->getDeveloperUrl("mail") }}"><strong>Mail Configuration</strong></a></div>
+
                         </div>
 
                         <div class="form-group">

@@ -1,5 +1,5 @@
 body {
-	background: #eeeeee;
+	background: #35C1FF;
 	color: #111111  !important;
 }
 
@@ -15,7 +15,8 @@ body {
 	background: #fefefe;
 	background-repeat: no-repeat;
 	background-position: left;
-	box-shadow: 0px 0px 30px #aaaaaa;
+	box-shadow: 0px 0px 10px #777777;
+    opacity: 0.9;
 }
 
 @media(max-width: 720px) {

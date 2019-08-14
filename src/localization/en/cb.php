@@ -1,5 +1,7 @@
 <?php
 return [
+    'register'=>'Register',
+    'submit'=>'Submit',
     'please_login_to_start_your_session'=>'Please login to start your session',
     'password_and_username_is_wrong'=>'Your password and or username is wrong!',
     'there_is_no_data_yet'=>'There is no data yet',

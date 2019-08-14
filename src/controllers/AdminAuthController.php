@@ -1,35 +1,18 @@
 <?php namespace crocodicstudio\crudbooster\controllers;
 
 use crocodicstudio\crudbooster\exceptions\CBValidationException;
+use crocodicstudio\crudbooster\helpers\MailHelper;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
 
 class AdminAuthController extends CBController
 {
-    use DeveloperAuthController;
+    use DeveloperAuthController, AuthSuspend, ForgetController, RegisterController;
 
-    private function incrementFailedLogin()
-    {
-        $key = md5(request()->ip().request()->userAgent());
-        Cache::increment("loginFailed".$key, 1);
-    }
-
-    private function isSuspendedLogin()
-    {
-        $key = md5(request()->ip().request()->userAgent());
-
-        if(Cache::has("loginSuspended".$key)) {
-            return true;
-        }
-
-        if(getSetting("AUTO_SUSPEND_LOGIN") && Cache::get("loginFailed".$key) >= getSetting("AUTO_SUSPEND_LOGIN")) {
-            Cache::put("loginSuspended".$key, true, 30);
-            Cache::forget("loginFailed".$key);
-            return true;
-        }
-
-        return false;
-    }
 
     public function getRedirectToLogin() {
         return redirect(cb()->getAdminUrl("login"));
@@ -41,7 +24,12 @@ class AdminAuthController extends CBController
 
         cbHook()->hookGetLogin();
 
-        return view( str_replace(".blade.php", "", getSetting('login_page_view','crudbooster::login')) );
+        $data = [];
+        $data['no1'] = rand(1,10);
+        $data['no2'] = rand(1,10);
+        Session::put("captcha_result", $data['no1']+$data['no2']);
+
+        return view( str_replace(".blade.php", "", getSetting('login_page_view','crudbooster::login')), $data );
     }
 
     public function postLogin()
@@ -56,7 +44,12 @@ class AdminAuthController extends CBController
 
             $credential = request()->only(['email','password']);
             if (auth()->attempt($credential)) {
+
+                // When login user success, clear suspend attempt
+                $this->clearSuspendAttempt();
+
                 cbHook()->hookPostLogin();
+
                 return redirect(cb()->getAdminUrl());
             } else {
                 $this->incrementFailedLogin();
@@ -72,6 +65,5 @@ class AdminAuthController extends CBController
         auth()->logout();
         return cb()->redirect(cb()->getAdminUrl("login"), cbLang('you_have_been_logged_out'), 'success');
     }
-
 
 }

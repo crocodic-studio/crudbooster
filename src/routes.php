@@ -41,6 +41,14 @@ Route::group(['middleware' => ['web'], 'prefix' => cb()->getAdminPath(), 'namesp
         cb()->routePost('login', "AdminAuthController@postLogin");
         cb()->routeGet('login', "AdminAuthController@getLogin");
     }
+
+    if(getSetting("enable_forget")) {
+        cb()->routePost("forget","AdminAuthController@postForget");
+    }
+
+    if(getSetting("enable_register")) {
+        cb()->routePost("register","AdminAuthController@postRegister");
+    }
 });
 
 // Routing package controllers

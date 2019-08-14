@@ -33,6 +33,10 @@ class DeveloperMiscellaneousController extends Controller
             putSetting( $key,  $val);
         }
 
+        putSetting("enable_register",request("enable_register"));
+        putSetting("enable_forget", request("enable_forget"));
+        putSetting("register_mail_verification", request("register_mail_verification"));
+
         return cb()->redirectBack("Setting has been updated!","success");
     }
 }

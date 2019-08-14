@@ -37,6 +37,7 @@ class DeveloperSecurityController extends Controller
         putSetting("DISABLE_LOGIN", request("DISABLE_LOGIN"));
         putSetting("AUTO_SUSPEND_LOGIN", request("AUTO_SUSPEND_LOGIN"));
         putSetting("AUTO_REDIRECT_TO_LOGIN", request("AUTO_REDIRECT_TO_LOGIN"));
+        putSetting("LOGIN_NOTIFICATION", request("LOGIN_NOTIFICATION"));
 
         if(request("htaccess_ServerSignature")) {
             putHtaccess("ServerSignature Off");
