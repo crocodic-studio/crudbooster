@@ -13,7 +13,7 @@
                 </th>
             @endforeach
             <th width="150px" style="text-align: center">
-                Action
+                {{ cbLang('action') }}
             </th>
         </tr>
     </thead>
@@ -22,7 +22,7 @@
     @if(!empty($result) && count($result)==0)
         <tr class='warning'>
             <td colspan="{{ count(module()->getColumnSingleton()->getIndexColumns())+1 }}" style="text-align: center">
-                <i class='fa fa-table'></i> {{trans("crudbooster.table_data_not_found")}}
+                <i class='fa fa-table'></i> {{cbLang("table_data_not_found")}}
             </td>
         </tr>
     @endif

@@ -130,6 +130,7 @@ class DeveloperMenusController extends Controller
 
     public function getDelete($id) {
         DB::table("cb_menus")->where("id",$id)->delete();
+        DB::table("cb_role_privileges")->where("cb_menus_id", $id)->delete();
 
         return cb()->redirectBack("The menu has been deleted!","success");
     }

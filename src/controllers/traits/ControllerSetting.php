@@ -186,6 +186,27 @@ trait ControllerSetting
         return $this;
     }
 
+    /**
+     * @param string $label
+     * @param string $controllerName
+     * @param string $foreignKey
+     * @param callable|null $additionalInfo
+     * @param callable|null $condition
+     * @param string|null $font
+     * @param ButtonColor|string $color
+     */
+    public function addSubModule($label, $controllerName, $foreignKey, callable $additionalInfo = null, callable $condition = null, $font = null, $color = null) {
+        $parentPath = $this->getData("permalink");
+        $parentTitle = $this->getData("page_title");
+        $this->addActionButton($label,function($row) use ($controllerName, $foreignKey, $additionalInfo, $parentPath, $parentTitle) {
+           return action(class_basename($controllerName)."@getFilterBy",[
+              "field"=>$foreignKey,
+              "value"=>$row->primary_key,
+              "parentPath"=>$parentPath
+           ])."?ref=".makeReferalUrl($parentTitle, (isset($additionalInfo)&&is_callable($additionalInfo))?call_user_func($additionalInfo,$row):[] );
+        }, $condition, $font, $color);
+    }
+
 
     /**
      * @param $label

@@ -9,9 +9,15 @@
         </style>
     @endpush
 
-    <p>
-        <a href="{{ module()->url() }}"><i class="fa fa-arrow-left"></i> &nbsp; Back to list</a>
-    </p>
+    @if(verifyReferalUrl())
+        <p>
+            <a href="{{ getReferalUrl("url") }}"><i class="fa fa-arrow-left"></i> Back To {{ getReferalUrl("name")?:cbLang("data") }} List</a>
+        </p>
+    @else
+        <p>
+            <a href="{{ module()->url() }}"><i class="fa fa-arrow-left"></i> &nbsp; {{cbLang('back_to_list')}}</a>
+        </p>
+    @endif
 
 
 
@@ -31,26 +37,12 @@
     ?>
     @if($detailColumns)
     <div class="box box-default">
-        <div class="box-header">
-            <h1 class="box-title">Form Detail</h1>
+        <div class="box-header with-border">
+            <h1 class="box-title"><i class="fa fa-eye"></i> {{ cbLang("detail") }}</h1>
         </div>
         <div class="box-body">
             <div class='table-responsive'>
-                <table id='table-detail' class='table table-striped'>
-                    @foreach($detailColumns as $column)
-                        <tr>
-                            <th width="25%">{{ $column->getLabel() }}</th>
-                            <td>
-                                <?php
-                                    /** @var \crocodicstudio\crudbooster\models\ColumnModel $column */
-                                    $value = getTypeHook($column->getType())->detailRender($row, $column);
-                                    $value = call_user_func($column->getDetailDisplayTransform(), $value, $row);
-                                    echo $value;
-                                ?>
-                            </td>
-                        </tr>
-                    @endforeach
-                </table>
+                @include("crudbooster::module.form.form_detail_table")
             </div>
         </div>
     </div>

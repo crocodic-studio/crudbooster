@@ -1,7 +1,7 @@
 
 @if(cb()->getCurrentMethod() == 'getIndex' && module()->getController())
     @if(module()->getData("button_add") && module()->canCreate())
-        <a href="{{ module()->addURL()  }}"
+        <a href="{{ module()->addURL()."?ref=".makeReferalUrl()  }}"
            id='btn_add_new_data' class="btn btn-sm btn-success" title="{{ cbLang("add").' '.cbLang('data') }}">
             <i class="fa fa-plus-circle"></i> {{ cbLang("add").' '.cbLang('data') }}
         </a>

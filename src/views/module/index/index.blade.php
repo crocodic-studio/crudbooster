@@ -2,6 +2,32 @@
 
 @section('content')
 
+    @if(verifyReferalUrl())
+        <p>
+            <a href="{{ getReferalUrl("url") }}"><i class="fa fa-arrow-left"></i> Back To {{ getReferalUrl("name")?:cbLang("data") }} List</a>
+        </p>
+    @endif
+
+    @if(isset($additionalView))
+        <div class="box box-default">
+            <div class="box-header">
+                <h1 class="box-title with-border">{{ getReferalUrl("name") }}</h1>
+            </div>
+            <div class="box-body">
+                <table class="table table-striped table-boredered">
+                    <tbody>
+                        @foreach($additionalView as $label => $value)
+                        <tr>
+                            <th width="20%">{{ $label }}</th>
+                            <td>: &nbsp; {!! $value !!}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    @endif
+
     @if(isset($before_index_table))
         {!! $before_index_table !!}
     @endif
@@ -15,8 +41,9 @@
 
                 @if(isset($search_form) && $search_form===true)
                 <form method='get' style="display:inline-block;width: 260px;" action='{{ request()->url() }}'>
+                    {!! cb()->getUrlParameters(['limit','page']) !!}
                     <div class="input-group">
-                        <input type="text" name="q" value="{{ request('q') }}" class="form-control input-sm pull-{{ trans('crudbooster.right') }}"
+                        <input type="text" name="q" value="{{ sanitizeXSS(request('q')) }}" class="form-control input-sm pull-right"
                                placeholder="{{ cbLang('search')}}"/>
                         <div class="input-group-btn">
                             <button type='submit' class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>

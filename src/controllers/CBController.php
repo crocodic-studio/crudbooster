@@ -39,7 +39,7 @@ class CBController extends Controller
         }
     }
 
-    private function repository()
+    private function repository($callback = null)
     {
         $joins = columnSingleton()->getJoin();
         $columns = columnSingleton()->getColumns();
@@ -101,6 +101,12 @@ class CBController extends Controller
             }
         }
 
+
+        // Callback From this Method
+        if(isset($callback) && is_callable($callback)) {
+            $query = call_user_func($callback, $query);
+        }
+
         if(isset($this->data['hook_index_query']) && is_callable($this->data['hook_index_query'])) {
             $query = call_user_func($this->data['hook_index_query'], $query);
         }
@@ -125,6 +131,26 @@ class CBController extends Controller
         $query = $this->repository();
         $result = $query->paginate( request("limit")?:cbConfig("LIMIT_TABLE_DATA") );
         $data['result'] = $result;
+
+        return view("crudbooster::module.index.index", array_merge($data, $this->data));
+    }
+
+    public function getFilterBy($field, $value, $parentPath) {
+        if(!module()->canBrowse()) return cb()->redirect(cb()->getAdminUrl(),cbLang("you_dont_have_privilege_to_this_area"));
+
+        if(!verifyReferalUrl()) return cb()->redirect(cb()->getAdminUrl($parentPath),"The url you are trying visit is incorrect");
+
+        $query = $this->repository();
+
+        $query->where($field, $value);
+
+        $result = $query->paginate( request("limit")?:cbConfig("LIMIT_TABLE_DATA") );
+        $data['result'] = $result;
+
+        $additionalView = getReferalUrl("additional");
+        if($additionalView) {
+            $data['additionalView'] = $additionalView;
+        }
 
         return view("crudbooster::module.index.index", array_merge($data, $this->data));
     }
@@ -196,7 +222,11 @@ class CBController extends Controller
         if (Str::contains(request("submit"),cbLang("more"))) {
             return cb()->redirect(module()->addURL(), cbLang("the_data_has_been_added"), 'success');
         } else {
-            return cb()->redirect(module()->url(), cbLang("the_data_has_been_added"), 'success');
+            if(verifyReferalUrl()) {
+                return cb()->redirect(getReferalUrl("url"), cbLang("the_data_has_been_added"), 'success');
+            } else {
+                return cb()->redirect(module()->url(), cbLang("the_data_has_been_added"), 'success');
+            }
         }
     }
 
@@ -251,7 +281,12 @@ class CBController extends Controller
         if (Str::contains(request("submit"), cbLang("more"))) {
             return cb()->redirectBack( cbLang("the_data_has_been_updated"), 'success');
         } else {
-            return cb()->redirect(module()->url(),  cbLang("the_data_has_been_updated"), 'success');
+            if(verifyReferalUrl()) {
+                return cb()->redirect(getReferalUrl("url"),  cbLang("the_data_has_been_updated"), 'success');
+            } else {
+                return cb()->redirect(module()->url(),  cbLang("the_data_has_been_updated"), 'success');
+            }
+
         }
     }
 

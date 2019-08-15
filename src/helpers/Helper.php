@@ -1,5 +1,81 @@
 <?php
 
+if(!function_exists("makeReferalUrl")) {
+    function makeReferalUrl($name = null, $additionalVariables = []) {
+        $ref = [];
+        $ref['url'] = request()->fullUrl();
+        $ref['name'] = $name;
+        $ref['additional'] = $additionalVariables;
+        $md5Hash = md5(serialize($ref));
+
+        if($exist = \Illuminate\Support\Facades\Cache::get("refurl_".$md5Hash)) {
+            return $exist['id'];
+        }
+
+        $ref['id'] = $newID = \Illuminate\Support\Str::random(7);
+
+        \Illuminate\Support\Facades\Cache::forever("refurl_token_".$newID, $md5Hash);
+        \Illuminate\Support\Facades\Cache::forever("refurl_".$md5Hash, $ref);
+        return $newID;
+    }
+}
+
+if(!function_exists("getReferalUrl")) {
+    function getReferalUrl($key = null) {
+        if(verifyReferalUrl()) {
+            $md5hash = \Illuminate\Support\Facades\Cache::get("refurl_token_".request("ref"));
+            $ref = \Illuminate\Support\Facades\Cache::get("refurl_".$md5hash);
+            if($key) {
+                return $ref[$key];
+            } else {
+                return $ref;
+            }
+        }
+        return null;
+    }
+}
+
+if(!function_exists("verifyReferalUrl")) {
+    function verifyReferalUrl()
+    {
+        if(request("ref")) {
+            if($md5hash = \Illuminate\Support\Facades\Cache::get("refurl_token_".request("ref"))) {
+                $ref = \Illuminate\Support\Facades\Cache::get("refurl_".$md5hash);
+                if(filter_var($ref['url'], FILTER_VALIDATE_URL)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+}
+
+if(!function_exists("findModuleByPermalink")) {
+    /**
+     * @param string $permalink
+     * @return \crocodicstudio\crudbooster\controllers\CBController|null
+     */
+    function findControllerByPermalink($permalink) {
+        try {
+            $controllers = glob(app_path('Http/Controllers/Admin*Controller.php'));
+            foreach($controllers as $controller) {
+                $controllerName = basename($controller);
+                $controllerName = rtrim($controllerName,".php");
+                $className = '\App\Http\Controllers\\'.$controllerName;
+                $controllerClass = new $className();
+                if(method_exists($controllerClass, 'cbInit')) {
+                    if($permalink == $controllerClass->getData('permalink')) {
+                        return $controllerClass;
+                    }
+                }
+            }
+        }catch (\Exception $e) {
+
+        }
+        return null;
+    }
+}
+
 if(!function_exists("putHtaccess")) {
     function putHtaccess($stringToPut)
     {

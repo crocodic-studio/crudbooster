@@ -1,9 +1,16 @@
 @extends('crudbooster::layouts.layout')
 @section('content')
 
-        <p>
-            <a href="{{ module()->url() }}"><i class="fa fa-arrow-left"></i> &nbsp; {{cbLang('back_to_list')}}</a>
-        </p>
+        @if(verifyReferalUrl())
+            <p>
+                <a href="{{ getReferalUrl("url") }}"><i class="fa fa-arrow-left"></i> Back To {{ getReferalUrl("name")?:cbLang("data") }} List</a>
+            </p>
+            @else
+            <p>
+                <a href="{{ module()->url() }}"><i class="fa fa-arrow-left"></i> &nbsp; {{cbLang('back_to_list')}}</a>
+            </p>
+        @endif
+
 
         <div class="box box-default">
             <div class="box-header">
@@ -12,6 +19,8 @@
 
             <form method='post' id="form" enctype="multipart/form-data" action='{{ $action_url }}'>
                 {!! csrf_field() !!}
+                <input type="hidden" name="ref" value="{{ verifyReferalUrl()?request("ref"):null }}">
+
                 <div class="box-body" id="parent-form-area">
                     @if(cb()->getCurrentMethod() == "getEdit")
                         @include('crudbooster::module.form.form_body')
@@ -28,7 +37,7 @@
                         @endif
 
                         @if(cb()->getCurrentMethod()=="getEdit")
-                        <button type="button" class="btn btn-default" onclick="location.href='{{ module()->url() }}'">{{ cbLang("cancel") }}</button>
+                        <button type="button" class="btn btn-default" onclick="location.href='{{ verifyReferalUrl()?getReferalUrl("url"):module()->url() }}'">{{ cbLang("cancel") }}</button>
                         @endif
 
                         @if(cb()->getCurrentMethod()=="getAdd")
