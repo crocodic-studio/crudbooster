@@ -67,6 +67,7 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($field_to_save?:$this->name($label, $name));
+        $data->setOrderByColumn($data->getField());
         $data->setType("text");
 
         columnSingleton()->setColumn($this->index, $data);
@@ -83,6 +84,7 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($field_to_save?:$this->name($label, $name));
+        $data->setOrderByColumn($data->getField());
         $data->setType("checkbox");
 
         columnSingleton()->setColumn($this->index, $data);
@@ -99,6 +101,7 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($field_to_save?:$this->name($label, $name));
+        $data->setOrderByColumn($data->getField());
         $data->setType("password");
         $data->setShowDetail(false);
         $data->setShowIndex(false);
@@ -117,6 +120,7 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($field_to_save?:$this->name($label, $name));
+        $data->setOrderByColumn($data->getField());
         $data->setType("image");
 
         columnSingleton()->setColumn($this->index, $data);
@@ -133,6 +137,7 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($field_to_save?:$this->name($label, $name));
+        $data->setOrderByColumn($data->getField());
         $data->setType("text_area");
 
         columnSingleton()->setColumn($this->index, $data);
@@ -140,26 +145,27 @@ trait ColumnsRegister
         return (new TextArea($this->index));
     }
 
-    public function addSelectTable($label, $name = null, $selectConfig = null)
+    public function addSelectTable($label, $name = null, $selectConfig)
     {
-        $this->index++;
+        if(isset($selectConfig['table']) && isset($selectConfig['value_option']) && isset($selectConfig['display_option'])) {
+            $this->index++;
 
-        $data = new SelectTableModel();
-        $data = $this->setDefaultModelValue($data);
-        $data->setLabel($label);
-        $data->setName($this->name($label,$name));
-        $data->setField($this->name($label, $name));
-        $data->setType("select_table");
+            $data = new SelectTableModel();
+            $data = $this->setDefaultModelValue($data);
+            $data->setLabel($label);
+            $data->setName($this->name($label,$name));
+            $data->setField($this->name($label, $name));
+            $data->setType("select_table");
+            $data->setOrderByColumn($selectConfig['table'].".".$selectConfig["display_option"]);
+            columnSingleton()->setColumn($this->index, $data);
 
-        columnSingleton()->setColumn($this->index, $data);
-
-        $selectTable = new SelectTable($this->index);
-
-        if($selectConfig) {
+            $selectTable = new SelectTable($this->index);
             $selectTable->optionsFromTable($selectConfig['table'],$selectConfig['value_option'],$selectConfig['display_option'],@$selectConfig['sql_condition']);
-        }
 
-        return $selectTable;
+            return $selectTable;
+        } else {
+            throw new \Exception("addSelectTable `$label`: argument 3 needs table, value_option,display_option");
+        }
     }
 
     public function addSelectOption($label, $name = null, $options = null)
@@ -171,6 +177,7 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($this->name($label, $name));
+        $data->setOrderByColumn($data->getField());
         $data->setType("select_option");
 
         columnSingleton()->setColumn($this->index, $data);
@@ -199,6 +206,7 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($this->name($label, $name));
+        $data->setOrderByColumn($data->getField());
         $data->setType("select_query");
 
         columnSingleton()->setColumn($this->index, $data);
@@ -222,6 +230,7 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($field_to_save?:$this->name($label, $name));
+        $data->setOrderByColumn($data->getField());
         $data->setType("custom");
 
         columnSingleton()->setColumn($this->index, $data);
@@ -238,6 +247,7 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($field_to_save?:$this->name($label, $name));
+        $data->setOrderByColumn($data->getField());
         $data->setType("date");
 
         columnSingleton()->setColumn($this->index, $data);
@@ -254,6 +264,7 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($field_to_save?:$this->name($label, $name));
+        $data->setOrderByColumn($data->getField());
         $data->setType("datetime");
 
         columnSingleton()->setColumn($this->index, $data);
@@ -270,6 +281,7 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($field_to_save?:$this->name($label, $name));
+        $data->setOrderByColumn($data->getField());
         $data->setType("email");
 
         columnSingleton()->setColumn($this->index, $data);
@@ -286,6 +298,7 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($field_to_save?:$this->name($label, $name));
+        $data->setOrderByColumn($data->getField());
         $data->setType("file");
 
         columnSingleton()->setColumn($this->index, $data);
@@ -303,6 +316,7 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($field_to_save?:$this->name($label, $name));
+        $data->setOrderByColumn($data->getField());
         $data->setType("hidden");
 
         columnSingleton()->setColumn($this->index, $data);
@@ -319,6 +333,7 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($field_to_save?:$this->name($label, $name));
+        $data->setOrderByColumn($data->getField());
         $data->setType("number");
 
         columnSingleton()->setColumn($this->index, $data);
@@ -335,6 +350,7 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($field_to_save?:$this->name($label, $name));
+        $data->setOrderByColumn($data->getField());
         $data->setType("money");
 
         columnSingleton()->setColumn($this->index, $data);
@@ -351,6 +367,7 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($field_to_save?:$this->name($label, $name));
+        $data->setOrderByColumn($data->getField());
         $data->setType("radio");
 
         columnSingleton()->setColumn($this->index, $data);
@@ -367,6 +384,7 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($field_to_save?:$this->name($label, $name));
+        $data->setOrderByColumn($data->getField());
         $data->setType("wysiwyg");
 
         columnSingleton()->setColumn($this->index, $data);

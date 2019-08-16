@@ -23,7 +23,7 @@ class ColumnSingleton
 
     public function addJoin($data)
     {
-        $this->joins[] = $data;
+        $this->joins[md5(serialize($data))] = $data;
     }
 
     public function getJoin()

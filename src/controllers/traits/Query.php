@@ -57,10 +57,11 @@ trait Query
 
         if(request()->has('q'))
         {
+            $keyword = sanitizeXSS(request("q"));
             if(isset($this->data['hook_search_query'])) {
                 $query = call_user_func($this->data['hook_search_query'], $query);
             }else{
-                $query->where(function ($where) use ($columns) {
+                $query->where(function ($where) use ($columns, $keyword) {
                     /**
                      * @var $where Builder
                      */
@@ -71,14 +72,16 @@ trait Query
                         }else{
                             $field = $column->getField();
                         }
-                        $where->orWhere($field, 'like', '%'.request('q').'%');
+                        $where->orWhere($field, 'like', '%'.$keyword.'%');
                     }
                 });
             }
         }
 
 
-        // Callback From this Method
+        /*
+         * This script to hanlde the callback inputed on this query method
+         */
         if(isset($callback) && is_callable($callback)) {
             $query = call_user_func($callback, $query);
         }
@@ -90,10 +93,28 @@ trait Query
 
         if(request()->has(['order_by','order_sort']))
         {
-            if(in_array(request('order_by'),columnSingleton()->getColumnNameOnly())) {
-                $query->orderBy(request('order_by'), request('order_sort'));
+            $sort = (request("order_sort")=="asc")?"asc":"desc";
+            /*
+             * Check if order by contain "." it means {table}.{column} we have to parsing that
+             */
+            if(strpos(request("order_by"), ".")!==false) {
+                $orderByTable = explode(".",request("order_by"))[0];
+                $orderByColumn = explode(".",request("order_by"))[1];
+                if(SchemaHelper::hasColumn($orderByTable, $orderByColumn)) {
+                    $query->orderBy($orderByTable.".".$orderByColumn, $sort);
+                }
+            } else {
+                /*
+                 * Check if order_by column in registered columns
+                 */
+                if(in_array(request('order_by'),columnSingleton()->getColumnNameOnly())) {
+                    $query->orderBy(request('order_by'), request('order_sort'));
+                }
             }
         }else{
+            /*
+             * For default, query will be order by primary key as descending
+             */
             $query->orderBy($this->data['table'].'.'.cb()->findPrimaryKey($this->data['table']), "desc");
         }
 

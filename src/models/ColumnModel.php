@@ -15,6 +15,7 @@ class ColumnModel
     private $label;
     private $name;
     private $field;
+    private $orderByColumn;
     private $type;
     private $show_detail;
     private $show_index;
@@ -44,6 +45,23 @@ class ColumnModel
 
     private $index_display_transform;
     private $detail_display_transform;
+
+    /**
+     * @return mixed
+     */
+    public function getOrderByColumn()
+    {
+        return $this->orderByColumn;
+    }
+
+    /**
+     * @param mixed $orderByColumn
+     */
+    public function setOrderByColumn($orderByColumn): void
+    {
+        $this->orderByColumn = $orderByColumn;
+    }
+
 
     /**
      * @return mixed
