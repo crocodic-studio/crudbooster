@@ -46,13 +46,8 @@ class SelectTable
             $table = $table::$tableName;
         }
 
-        $data = DB::table($table);
-        if($SQLCondition && is_callable($SQLCondition)) {
-            $data = call_user_func($SQLCondition, $data);
-        }elseif ($SQLCondition && is_string($SQLCondition)) {
-            $data->whereRaw($SQLCondition);
-        }
-        $data = $data->get();
+        $data = cb()->findAll($table, $SQLCondition);
+
         $options = [];
         foreach ($data as $d) {
             $options[ $d->$value_option ] = $d->$display_option;

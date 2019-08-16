@@ -4,6 +4,7 @@ use crocodicstudio\crudbooster\commands\DeveloperCommand;
 use crocodicstudio\crudbooster\commands\Generate;
 use crocodicstudio\crudbooster\commands\MigrateData;
 use crocodicstudio\crudbooster\controllers\scaffolding\singletons\ColumnSingleton;
+use crocodicstudio\crudbooster\helpers\MiscellanousSingleton;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
@@ -57,7 +58,12 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         {
             return true;
         });
+
+        // Column register singleton
         $this->app->singleton('ColumnSingleton', ColumnSingleton::class);
+
+        // Miscellanous Singleton
+        $this->app->singleton("MiscellanousSingleton", MiscellanousSingleton::class);
 
 
         // Register Commands

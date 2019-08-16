@@ -6,14 +6,15 @@
     @push('bottom')
         <script src="{{ cbAsset("adminlte/bower_components/bootstrap-toggle/bootstrap-toggle.min.js") }}"></script>
     @endpush
-    <div class="row">
+    <form method="post" action="{{ route("DeveloperMiscellaneousControllerPostSave") }}">
+        {!! csrf_field() !!}
+        <div class="row">
         <div class="col-sm-6">
             <div class="box box-default">
                 <div class="box-header with-border">
                     <h1 class="box-title"><i class="fa fa-user"></i> Register Feature</h1>
                 </div>
-                <form method="post" action="{{ route("DeveloperMiscellaneousControllerPostSave") }}">
-                    {!! csrf_field() !!}
+
                     <div class="box-body">
                         <div class="form-group">
                             <label for="">Enable</label>
@@ -44,7 +45,7 @@
                     <div class="box-footer">
                         <input type="submit" class="btn btn-success" value="Save Setting">
                     </div>
-                </form>
+
             </div><!--end register-->
         </div>
         <div class="col-sm-6">
@@ -53,8 +54,7 @@
                 <div class="box-header with-border">
                     <h1 class="box-title"><i class="fa fa-user"></i> Forget Password Feature</h1>
                 </div>
-                <form method="post" action="{{ route("DeveloperMiscellaneousControllerPostSave") }}">
-                    {!! csrf_field() !!}
+
                     <div class="box-body">
                         <div class="form-group">
                             <label for="">Enable</label>
@@ -71,9 +71,9 @@
                     <div class="box-footer">
                         <input type="submit" class="btn btn-success" value="Save Setting">
                     </div>
-                </form>
             </div><!--end forget-->
 
         </div>
     </div>
+    </form>
 @endsection

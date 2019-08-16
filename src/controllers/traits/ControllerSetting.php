@@ -11,12 +11,15 @@ namespace crocodicstudio\crudbooster\controllers\traits;
 use Closure;
 use crocodicstudio\crudbooster\controllers\partials\ButtonColor;
 use crocodicstudio\crudbooster\controllers\partials\SidebarStyle;
+use crocodicstudio\crudbooster\controllers\scaffolding\traits\ColumnsRegister;
 use crocodicstudio\crudbooster\models\AddActionButtonModel;
 use crocodicstudio\crudbooster\models\IndexActionButtonModel;
+use crocodicstudio\crudbooster\types\Hidden;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 trait ControllerSetting
 {
-
     private $data = [];
 
     private function defaultData() {
@@ -198,13 +201,33 @@ trait ControllerSetting
     public function addSubModule($label, $controllerName, $foreignKey, callable $additionalInfo = null, callable $condition = null, $font = null, $color = null) {
         $parentPath = $this->getData("permalink");
         $parentTitle = $this->getData("page_title");
-        $this->addActionButton($label,function($row) use ($controllerName, $foreignKey, $additionalInfo, $parentPath, $parentTitle) {
-           return action(class_basename($controllerName)."@getFilterBy",[
-              "field"=>$foreignKey,
-              "value"=>$row->primary_key,
-              "parentPath"=>$parentPath
-           ])."?ref=".makeReferalUrl($parentTitle, (isset($additionalInfo)&&is_callable($additionalInfo))?call_user_func($additionalInfo,$row):[] );
+        $this->addActionButton($label,function($row) use ($label, $controllerName, $foreignKey, $additionalInfo, $parentPath, $parentTitle) {
+           $actionParameters = [
+               "label"=>$label,
+               "foreignKey"=>$foreignKey,
+               "foreignValue"=>$row->primary_key,
+               "parentPath"=>$parentPath,
+               "parentTitle"=>$parentTitle
+           ];
+
+            if(isset($additionalInfo) && is_callable($additionalInfo)) {
+                $additionalInfo = call_user_func($additionalInfo, $row);
+                if(is_array($additionalInfo)) {
+                    $actionParameters['info'] = $additionalInfo;
+                }
+            }
+
+           $actionHash = md5(serialize($actionParameters));
+           $actionHashToken = Cache::get("subModule".$actionHash);
+           if(!$actionHashToken) {
+               $actionHashToken = Str::random(5);
+               Cache::forever("subModule".$actionHash, $actionHashToken);
+               Cache::forever("subModule".$actionHashToken, $actionParameters);
+           }
+
+           return action(class_basename($controllerName)."@getSubModule",['subModuleKey'=>$actionHashToken])."?ref=".makeReferalUrl($parentTitle);
         }, $condition, $font, $color);
+
     }
 
 

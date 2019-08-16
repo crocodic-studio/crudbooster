@@ -30,6 +30,7 @@
                     </a>
                 </li>
 
+                <!-- Sidebar Menu Has Been Cached -->
                 @foreach(cb()->sidebar()->all() as $menu)
                     <?php /** @var \crocodicstudio\crudbooster\models\SidebarModel $menu */?>
                     <li class='{{($menu->getSub())?"treeview":""}} {{ ($menu->getisActive() || $menu->getSubActive())?"active":""}}'>

@@ -1,20 +1,24 @@
 <?php namespace crocodicstudio\crudbooster\controllers;
 
 use crocodicstudio\crudbooster\controllers\scaffolding\traits\Join;
+use crocodicstudio\crudbooster\controllers\traits\ColumnIntervention;
+use crocodicstudio\crudbooster\controllers\traits\Query;
+use crocodicstudio\crudbooster\controllers\traits\Validation;
+use crocodicstudio\crudbooster\controllers\scaffolding\traits\ColumnsRegister;
+use crocodicstudio\crudbooster\controllers\traits\ControllerSetting;
 use crocodicstudio\crudbooster\exceptions\CBValidationException;
 use crocodicstudio\crudbooster\models\ColumnModel;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Schema;
-use crocodicstudio\crudbooster\controllers\scaffolding\traits\ColumnsRegister;
-use crocodicstudio\crudbooster\controllers\traits\ControllerSetting;
 use Illuminate\Support\Str;
 
 class CBController extends Controller
 {
-    use ColumnsRegister, Join, ControllerSetting;
+    use ColumnsRegister, Join, ControllerSetting, Validation, Query, SubModuleController, ColumnIntervention;
 
     private $assignmentData;
 
@@ -23,105 +27,7 @@ class CBController extends Controller
         columnSingleton()->newColumns();
         $this->defaultData();
         $this->cbInit();
-    }
-
-    public function __call($method, $parameters)
-    {
-        if($method == "getData") {
-            $key = $parameters[0];
-            if(isset($this->data[$key])) {
-                return $this->data[$key];
-            }else{
-                return null;
-            }
-        }else{
-            return null;
-        }
-    }
-
-    private function repository($callback = null)
-    {
-        $joins = columnSingleton()->getJoin();
-        $columns = columnSingleton()->getColumns();
-
-        $query = DB::table($this->data['table']);
-
-        $query->addSelect($this->data['table'].'.'.cb()->pk($this->data['table']).' as primary_key');
-
-        $softDelete = isset($this->data['disable_soft_delete'])?$this->data['disable_soft_delete']:true;
-        if($softDelete === true && Schema::hasColumn($this->data['table'],'deleted_at')) {
-            $query->whereNull($this->data['table'].'.deleted_at');
-        }
-        
-        if(isset($joins)) {
-            foreach($joins as $join)
-            {
-                $query->join($join['target_table'],
-                        $join['target_table_primary'],
-                    $join['operator'],
-                    $join['source_table_foreign'],
-                    $join['type']);
-            }
-        }
-
-        foreach($columns as $column) {
-            /** @var ColumnModel $column */
-            if($column->getType() != "custom") {
-                if(strpos($column->getField(),".") === false) {
-                    if(Schema::hasColumn($this->data['table'], $column->getField())) {
-                        $query->addSelect($this->data['table'].'.'.$column->getField());
-                    }
-                }else{
-                    $query->addSelect($column->getField());
-                }
-            }
-
-            $query = getTypeHook($column->getType())->query($query, $column);
-        }
-
-        if(request()->has('q'))
-        {
-            if(isset($this->data['hook_search_query'])) {
-                $query = call_user_func($this->data['hook_search_query'], $query);
-            }else{
-                $query->where(function ($where) use ($columns) {
-                    /**
-                     * @var $where Builder
-                     */
-                    foreach($columns as $column)
-                    {
-                        if(strpos($column->getField(),".") === false) {
-                            $field = $this->data['table'].'.'.$column->getField();
-                        }else{
-                            $field = $column->getField();
-                        }
-                        $where->orWhere($field, 'like', '%'.request('q').'%');
-                    }
-                });
-            }
-        }
-
-
-        // Callback From this Method
-        if(isset($callback) && is_callable($callback)) {
-            $query = call_user_func($callback, $query);
-        }
-
-        if(isset($this->data['hook_index_query']) && is_callable($this->data['hook_index_query'])) {
-            $query = call_user_func($this->data['hook_index_query'], $query);
-        }
-
-
-        if(request()->has(['order_by','order_sort']))
-        {
-            if(in_array(request('order_by'),columnSingleton()->getColumnNameOnly())) {
-                $query->orderBy(request('order_by'), request('order_sort'));
-            }
-        }else{
-            $query->orderBy($this->data['table'].'.'.cb()->findPrimaryKey($this->data['table']), "desc");
-        }
-
-        return $query;
+        $this->columnIntervention();
     }
 
     public function getIndex()
@@ -133,42 +39,6 @@ class CBController extends Controller
         $data['result'] = $result;
 
         return view("crudbooster::module.index.index", array_merge($data, $this->data));
-    }
-
-    public function getFilterBy($field, $value, $parentPath) {
-        if(!module()->canBrowse()) return cb()->redirect(cb()->getAdminUrl(),cbLang("you_dont_have_privilege_to_this_area"));
-
-        if(!verifyReferalUrl()) return cb()->redirect(cb()->getAdminUrl($parentPath),"The url you are trying visit is incorrect");
-
-        $query = $this->repository();
-
-        $query->where($field, $value);
-
-        $result = $query->paginate( request("limit")?:cbConfig("LIMIT_TABLE_DATA") );
-        $data['result'] = $result;
-
-        $additionalView = getReferalUrl("additional");
-        if($additionalView) {
-            $data['additionalView'] = $additionalView;
-        }
-
-        return view("crudbooster::module.index.index", array_merge($data, $this->data));
-    }
-
-
-    /**
-     * @throws CBValidationException
-     */
-    private function validation()
-    {
-        if(isset($this->data['validation'])) {
-            $validator = Validator::make(request()->all(), @$this->data['validation'], @$this->data['validation_messages']);
-            if ($validator->fails()) {
-                $message = $validator->messages();
-                $message_all = $message->all();
-                throw new CBValidationException(implode(', ',$message_all));
-            }
-        }
     }
 
     public function getAdd()
@@ -220,7 +90,7 @@ class CBController extends Controller
         }
 
         if (Str::contains(request("submit"),cbLang("more"))) {
-            return cb()->redirect(module()->addURL(), cbLang("the_data_has_been_added"), 'success');
+            return cb()->redirectBack(cbLang("the_data_has_been_added"), 'success');
         } else {
             if(verifyReferalUrl()) {
                 return cb()->redirect(getReferalUrl("url"), cbLang("the_data_has_been_added"), 'success');
@@ -327,4 +197,26 @@ class CBController extends Controller
         return view('crudbooster::module.form.form_detail', array_merge($data, $this->data));
     }
 
+
+
+    /**
+     * @param string $method
+     * @param array $parameters
+     * @return mixed|null
+     *
+     * This method is to get the data columns and retrieve the value from this class
+     */
+    public function __call($method, $parameters)
+    {
+        if($method == "getData") {
+            $key = $parameters[0];
+            if(isset($this->data[$key])) {
+                return $this->data[$key];
+            }else{
+                return null;
+            }
+        }else{
+            return null;
+        }
+    }
 }

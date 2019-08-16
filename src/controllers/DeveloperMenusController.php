@@ -10,6 +10,7 @@ namespace crocodicstudio\crudbooster\controllers;
 
 
 use crocodicstudio\crudbooster\exceptions\CBValidationException;
+use crocodicstudio\crudbooster\helpers\CacheHelper;
 use Illuminate\Support\Facades\DB;
 
 class DeveloperMenusController extends Controller
@@ -62,6 +63,8 @@ class DeveloperMenusController extends Controller
 
             DB::table("cb_menus")->insert($menu);
 
+            CacheHelper::forgetGroup("sidebar_menu");
+
             return cb()->redirect(route("DeveloperMenusControllerGetIndex"),"The menu has been added!","success");
 
         } catch (CBValidationException $e) {
@@ -85,6 +88,8 @@ class DeveloperMenusController extends Controller
                 $menu['path'] = request('path_value');
             }
             DB::table("cb_menus")->where("id",$id)->update($menu);
+
+            CacheHelper::forgetGroup("sidebar_menu");
 
             return cb()->redirect(route("DeveloperMenusControllerGetIndex"),"The menu has been saved!","success");
 
@@ -121,6 +126,8 @@ class DeveloperMenusController extends Controller
                 }
             }
 
+            CacheHelper::forgetGroup("sidebar_menu");
+
             return response()->json(['api_status'=>1,'api_message'=>'success']);
 
         } catch (CBValidationException $e) {
@@ -131,6 +138,8 @@ class DeveloperMenusController extends Controller
     public function getDelete($id) {
         DB::table("cb_menus")->where("id",$id)->delete();
         DB::table("cb_role_privileges")->where("cb_menus_id", $id)->delete();
+
+        CacheHelper::forgetGroup("sidebar_menu");
 
         return cb()->redirectBack("The menu has been deleted!","success");
     }

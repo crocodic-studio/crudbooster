@@ -11,6 +11,7 @@ namespace crocodicstudio\crudbooster\helpers;
 
 use crocodicstudio\crudbooster\controllers\CBController;
 use crocodicstudio\crudbooster\models\SidebarModel;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class SidebarMenus
@@ -79,6 +80,9 @@ class SidebarMenus
 
     public function all($withPrivilege = true) {
         $roles_id = ($withPrivilege)?cb()->session()->roleId():null;
+        $idHash = "menuUser".$roles_id.auth()->id();
+        if($menu = CacheHelper::getItemInGroup($idHash,"sidebar_menu")) return $menu;
+
         $menus = $this->loadData();
         $result = [];
         $menus_active = false;
@@ -123,6 +127,8 @@ class SidebarMenus
             }
             $result[] = $sidebarModel;
         }
+
+        CacheHelper::putInGroup($idHash, $result,"sidebar_menu", 3600);
         return $result;
     }
 

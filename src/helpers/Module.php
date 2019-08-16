@@ -36,10 +36,10 @@ class Module
                     $this->menu = cb()->find("cb_menus",["cb_modules_id"=>$this->module->id]);
                     $this->menu = (!$this->menu)?cb()->find("cb_menus",["type"=>"path","path"=>request()->segment(2)]):$this->menu;
                     if($this->menu) {
-                        $this->privilege = DB::table("cb_role_privileges")
-                            ->where("cb_menus_id", $this->menu->id)
-                            ->where("cb_roles_id", cb()->session()->roleId())
-                            ->first();
+                        $this->privilege = cb()->find("cb_role_privileges",[
+                           "cb_menus_id"=>$this->menu->id,
+                           "cb_roles_id"=>cb()->session()->roleId()
+                        ]);
                     }
                 }
             }

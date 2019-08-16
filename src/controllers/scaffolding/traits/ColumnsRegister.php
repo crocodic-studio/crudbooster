@@ -52,6 +52,12 @@ trait ColumnsRegister
 {
     use ColumnsBasic;
 
+    public function removeColumn($name)
+    {
+        columnSingleton()->removeColumn($name);
+        return $this;
+    }
+
     public function addText($label, $name = null, $field_to_save = null)
     {
         $this->index++;

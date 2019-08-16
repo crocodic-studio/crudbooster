@@ -232,32 +232,84 @@ class CB
     public function find($table, $id)
     {
         if (is_array($id)) {
+            $idHash = md5("find".$table.serialize($id));
+            if(miscellanousSingleton()->hasData($idHash)) return miscellanousSingleton()->getData($idHash);
+
             $first = DB::table($table);
             foreach ($id as $k => $v) {
                 $first->where($k, $v);
             }
 
-            return $first->first();
+            $data = $first->first();
+            miscellanousSingleton()->setData($idHash,$data);
+            return $data;
         } else {
-            $pk = $this->pk($table);
+            $idHash = md5("find".$table.$id);
+            if(miscellanousSingleton()->hasData($idHash)) return miscellanousSingleton()->getData($idHash);
 
-            return DB::table($table)->where($pk, $id)->first();
+            $pk = $this->pk($table);
+            $data = DB::table($table)->where($pk, $id)->first();
+            miscellanousSingleton()->setData($idHash,$data);
+            return $data;
         }
+    }
+
+    /**
+     * @param $table
+     * @param callable|string|null $conditionOrCallback
+     * @return \Illuminate\Support\Collection|mixed
+     */
+    public function findAll($table, $conditionOrCallback = null)
+    {
+        $data = [];
+        $idHash = null;
+
+        if(is_array($conditionOrCallback)) {
+            $idHash = md5("findAll".$table.serialize($conditionOrCallback));
+            if(miscellanousSingleton()->hasData($idHash)) return miscellanousSingleton()->getData($idHash);
+
+            $data = DB::table($table)->where($conditionOrCallback)->get();
+        } elseif (is_callable($conditionOrCallback)) {
+            $idHash = "findAll".$table.spl_object_hash($conditionOrCallback);
+            if(miscellanousSingleton()->hasData($idHash)) return miscellanousSingleton()->getData($idHash);
+
+            $data = DB::table($table);
+            $data = call_user_func($conditionOrCallback, $data);
+            $data = $data->get();
+        } else {
+            $idHash = md5("findAll".$table.$conditionOrCallback);
+            if(miscellanousSingleton()->hasData($idHash)) return miscellanousSingleton()->getData($idHash);
+
+            $data = DB::table($table);
+            if($conditionOrCallback) {
+                $data = $data->whereRaw($conditionOrCallback);
+            }
+            $data = $data->get();
+        }
+
+        if($idHash && $data) {
+            miscellanousSingleton()->setData($idHash, $data);
+        }
+
+        return $data;
     }
 
     public function listAllTable()
     {
-        return DB::connection()->getDoctrineSchemaManager()->listTableNames();
+        $idHash = md5("listAllTable");
+        if(miscellanousSingleton()->hasData($idHash)) return miscellanousSingleton()->getData($idHash);
+        $data = DB::connection()->getDoctrineSchemaManager()->listTableNames();
+        miscellanousSingleton()->setData($idHash, $data);
+        return $data;
     }
 
     public function listAllColumns($table)
     {
-        return Schema::getColumnListing($table);
-    }
-
-    public function findAll($table, $condition_array = [])
-    {
-        return DB::table($table)->where($condition_array)->get();
+        $idHash = md5("listAllColumns".$table);
+        if(miscellanousSingleton()->hasData($idHash)) return miscellanousSingleton()->getData($idHash);
+        $data = Schema::getColumnListing($table);
+        miscellanousSingleton()->setData($idHash, $data);
+        return $data;
     }
 
     public function redirectBack($message, $type = 'warning')

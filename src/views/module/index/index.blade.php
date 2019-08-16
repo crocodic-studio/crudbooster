@@ -1,22 +1,23 @@
 @extends('crudbooster::layouts.layout')
-
 @section('content')
 
+    {{-- Check if there is a "ref" parameter --}}
     @if(verifyReferalUrl())
         <p>
             <a href="{{ getReferalUrl("url") }}"><i class="fa fa-arrow-left"></i> Back To {{ getReferalUrl("name")?:cbLang("data") }} List</a>
         </p>
     @endif
 
-    @if(isset($additionalView))
+    {{-- This additional view is for sub module --}}
+    @if(isset($additionalHeaderContent) && $additionalHeaderTitle && is_array($additionalHeaderContent))
         <div class="box box-default">
             <div class="box-header">
-                <h1 class="box-title with-border">{{ getReferalUrl("name") }}</h1>
+                <h1 class="box-title with-border">{{ $additionalHeaderTitle }}</h1>
             </div>
             <div class="box-body">
                 <table class="table table-striped table-boredered">
                     <tbody>
-                        @foreach($additionalView as $label => $value)
+                        @foreach($additionalHeaderContent as $label => $value)
                         <tr>
                             <th width="20%">{{ $label }}</th>
                             <td>: &nbsp; {!! $value !!}</td>
@@ -41,7 +42,7 @@
 
                 @if(isset($search_form) && $search_form===true)
                 <form method='get' style="display:inline-block;width: 260px;" action='{{ request()->url() }}'>
-                    {!! cb()->getUrlParameters(['limit','page']) !!}
+                    {!! cb()->getUrlParameters(['limit','page','q']) !!}
                     <div class="input-group">
                         <input type="text" name="q" value="{{ sanitizeXSS(request('q')) }}" class="form-control input-sm pull-right"
                                placeholder="{{ cbLang('search')}}"/>

@@ -1,11 +1,19 @@
 <?php
 
+if(!function_exists("miscellanousSingleton")) {
+    /**
+     * @return \crocodicstudio\crudbooster\helpers\MiscellanousSingleton
+     */
+    function miscellanousSingleton() {
+        return app("MiscellanousSingleton");
+    }
+}
+
 if(!function_exists("makeReferalUrl")) {
-    function makeReferalUrl($name = null, $additionalVariables = []) {
+    function makeReferalUrl($name = null) {
         $ref = [];
         $ref['url'] = request()->fullUrl();
         $ref['name'] = $name;
-        $ref['additional'] = $additionalVariables;
         $md5Hash = md5(serialize($ref));
 
         if($exist = \Illuminate\Support\Facades\Cache::get("refurl_".$md5Hash)) {
@@ -26,7 +34,7 @@ if(!function_exists("getReferalUrl")) {
             $md5hash = \Illuminate\Support\Facades\Cache::get("refurl_token_".request("ref"));
             $ref = \Illuminate\Support\Facades\Cache::get("refurl_".$md5hash);
             if($key) {
-                return $ref[$key];
+                return @$ref[$key];
             } else {
                 return $ref;
             }
@@ -47,32 +55,6 @@ if(!function_exists("verifyReferalUrl")) {
             }
         }
         return false;
-    }
-}
-
-if(!function_exists("findModuleByPermalink")) {
-    /**
-     * @param string $permalink
-     * @return \crocodicstudio\crudbooster\controllers\CBController|null
-     */
-    function findControllerByPermalink($permalink) {
-        try {
-            $controllers = glob(app_path('Http/Controllers/Admin*Controller.php'));
-            foreach($controllers as $controller) {
-                $controllerName = basename($controller);
-                $controllerName = rtrim($controllerName,".php");
-                $className = '\App\Http\Controllers\\'.$controllerName;
-                $controllerClass = new $className();
-                if(method_exists($controllerClass, 'cbInit')) {
-                    if($permalink == $controllerClass->getData('permalink')) {
-                        return $controllerClass;
-                    }
-                }
-            }
-        }catch (\Exception $e) {
-
-        }
-        return null;
     }
 }
 

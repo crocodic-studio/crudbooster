@@ -106,7 +106,7 @@
                     </div>
                 </div>
                 <div class="box-footer">
-                    <input type="submit" class="btn btn-success" value="Save Setting">
+                    <input type="submit" class="btn btn-block btn-success" value="Save">
                 </div>
                 </form>
             </div><!--end register-->
