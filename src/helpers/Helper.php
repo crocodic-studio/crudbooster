@@ -1,4 +1,11 @@
 <?php
+if(!function_exists("isConfigCached")) {
+    function isConfigCached()
+    {
+        if(env("APP_NAME")=="" || env("APP_NAME")==null) return true;
+        else return false;
+    }
+}
 
 if(!function_exists("miscellanousSingleton")) {
     /**

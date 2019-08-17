@@ -15,10 +15,10 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label for="">Debug Mode</label>
-                                <select name="APP_DEBUG" required class="form-control">
-                                    <option {{ env("APP_DEBUG")===true?"selected":"" }} value="true">TRUE</option>
-                                    <option {{ env("APP_DEBUG")===false?"selected":"" }} value="false">FALSE</option>
+                                <label for="">Debug Mode {!! isConfigCached()?"<sup class='text-muted'>Cached Mode</sup>":"" !!}</label>
+                                <select name="APP_DEBUG" {{ isConfigCached()?"disabled":"" }} required class="form-control">
+                                    <option {{ config("app.debug")===true?"selected":"" }} value="true">TRUE</option>
+                                    <option {{ config("app.debug")===false?"selected":"" }} value="false">FALSE</option>
                                 </select>
                                 <div class="help-block">If Debug Mode set TRUE, error log will be shown directly on the page.
                                     <br><span class="text-danger">Warning: Showing error directly may give attacker information.</span></div>

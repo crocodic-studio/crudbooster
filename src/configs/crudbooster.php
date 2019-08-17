@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     /*
      * To customize the dashboard controller, you can set the value bellow
      */

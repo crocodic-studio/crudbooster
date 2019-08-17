@@ -29,9 +29,11 @@ class DeveloperSecurityController extends Controller
 
     public function postSave()
     {
-        setEnvironmentValue([
-            "APP_DEBUG"=>request("APP_DEBUG")
-        ]);
+        if(!isConfigCached()) {
+            setEnvironmentValue([
+                "APP_DEBUG"=>request("APP_DEBUG")
+            ]);
+        }
 
         putSetting("ADMIN_PATH", request("ADMIN_PATH"));
         putSetting("DISABLE_LOGIN", request("DISABLE_LOGIN"));
