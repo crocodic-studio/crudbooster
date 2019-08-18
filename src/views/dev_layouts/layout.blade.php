@@ -73,12 +73,17 @@
 @stack('bottom')
 
 <script>
-    function showLoading() {
+    function showLoading(message) {
         $("#modal-loading").modal({
             show: true,
             backdrop: 'static',
             keyboard: false
         })
+        if(message) {
+            $("#modal-loading .modal-body p").html(message)
+        } else {
+            $("#modal-loading .modal-body p").html("Please wait while loading...")
+        }
     }
     function hideLoading() {
         $("#modal-loading").modal("hide")
@@ -90,9 +95,7 @@
             <div class="modal-body">
                 <div align="center">
                     <h1 align="center"><i class="fa fa-spin fa-spinner"></i></h1>
-                    <p>
-                        Please wait while loading...
-                    </p>
+                    <p> </p>
                 </div>
             </div>
         </div><!-- /.modal-content -->

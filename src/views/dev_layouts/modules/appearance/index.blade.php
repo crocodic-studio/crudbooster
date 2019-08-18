@@ -18,7 +18,15 @@
                     <div class="box-body">
                         <div class="form-group">
                             <label for="">Application Name</label>
-                            <input type="text" required name="APP_NAME" value="{{ getSetting("APP_NAME")}}" class="form-control">
+                            <input type="text" required name="APP_NAME" value="{{ getSetting("APP_NAME","CRUDBOOSTER")}}" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="">Theme</label>
+                            <select name="cms_theme" class="form-control">
+                                <option {{ getSetting("cms_theme","adminlte")=="adminlte"?"selected":"" }} value="adminlte">AdminLTE</option>
+                            </select>
+                            <div class="help-block">This theme is only for your app login not for developer mode</div>
                         </div>
 
                         <div class="form-group">

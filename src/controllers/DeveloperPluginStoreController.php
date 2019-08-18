@@ -101,38 +101,75 @@ class DeveloperPluginStoreController extends Controller
         }
     }
 
+    private function recursiveCopy($src,$dst) {
+        $dir = opendir($src);
+        @mkdir($dst);
+        while(false !== ( $file = readdir($dir)) ) {
+            if (( $file != '.' ) && ( $file != '..' )) {
+                if ( is_dir($src . '/' . $file) ) {
+                    $this->recursiveCopy($src . '/' . $file,$dst . '/' . $file);
+                }
+                else {
+                    copy($src . '/' . $file,$dst . '/' . $file);
+                }
+            }
+        }
+        closedir($dir);
+    }
+
     public function getInstall($key)
     {
         $pluginData = $this->fetchPluginData();
 
-        if(isset($pluginData[$key])) {
-            $plugin = $pluginData[$key];
+        try {
+            if(isset($pluginData[$key])) {
+                $plugin = $pluginData[$key];
 
-            // Create temp file of zip plugin
-            $temp = tmpfile();
-            fwrite($temp, file_get_contents($plugin['url_download']));
-            $filename = stream_get_meta_data($temp)['uri'];
+                // Create temp file of zip plugin
+                $temp = tmpfile();
+                fwrite($temp, file_get_contents($plugin['url_download']));
+                $filename = stream_get_meta_data($temp)['uri'];
 
-            // Extract zip plugin
-            $zip = new \ZipArchive;
-            $res = $zip->open($filename);
-            if ($res === TRUE) {
-                $zip->extractTo(app_path('CBPlugins'));
-                $dirName = $zip->getNameIndex(0);
-                $zip->close();
-                fclose($temp);
+                // Extract zip plugin
+                $zip = new \ZipArchive;
+                $res = $zip->open($filename);
+                if ($res === TRUE) {
+                    $zip->extractTo(app_path('CBPlugins'));
+                    $dirName = $zip->getNameIndex(0);
+                    $zip->close();
+                    fclose($temp);
 
-                // Rename
-                if(file_exists(app_path("CBPlugins/".$key))) rrmdir(app_path("CBPlugins/".$key));
-                rename(app_path("CBPlugins/".$dirName), app_path("CBPlugins/".$key));
+                    // Rename
+                    if(file_exists(app_path("CBPlugins/".$key))) rrmdir(app_path("CBPlugins/".$key));
+                    rename(app_path("CBPlugins/".$dirName), app_path("CBPlugins/".$key));
 
-                return response()->json(['status'=>true,'message'=>'Install / update plugin has been succesfull!']);
+                    // Read Plugin JSON
+                    $pluginJson = json_decode(file_get_contents(app_path("CBPlugins/".$key."/plugin.json")), true);
 
-            } else {
-                return response()->json(['status'=>false,'message'=>"Failed to install/update, can't open the plugin archive"]);
+                    // Check if has asset
+                    if($pluginJson && $pluginJson['asset']) {
+                        // Check destination folder is ready
+                        if(file_exists(public_path("cb_asset/".$key))) {
+                            rrmdir(public_path("cb_asset/".$key));
+                        }
+
+                        // Create directory empty
+                        mkdir(public_path("cb_asset/".$key));
+
+                        // Copy asset
+                        $this->recursiveCopy(app_path("CBPlugins/".$key."/".$pluginJson['asset']), public_path("cb_asset/".$key));
+                    }
+
+                    return response()->json(['status'=>true,'message'=>'Install / update plugin has been succesfull!']);
+
+                } else {
+                    return response()->json(['status'=>false,'message'=>"Failed to install/update, can't open the plugin archive"]);
+                }
+            }else{
+                return response()->json(['status'=>false,'message'=>'Failed to install/update, plugin key is not found']);
             }
-        }else{
-            return response()->json(['status'=>false,'message'=>'Failed to install/update, plugin key is not found']);
+        } catch (\Exception $e) {
+            return response()->json(['status'=>false,'message'=>'Something went wrong!']);
         }
     }
 

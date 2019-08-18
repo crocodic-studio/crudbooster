@@ -145,7 +145,7 @@
 
             function installPlugin(url, message) {
                 showConfirmation("{{ cbLang("are_you_sure") }}", message, ()=>{
-                    showLoading()
+                    showLoading("Please wait installing...")
                     $.get(url,resp=>{
                         if(resp.status) {
                             swal("Success", resp.message, "success")
