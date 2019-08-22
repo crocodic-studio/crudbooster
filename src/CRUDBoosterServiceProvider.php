@@ -88,15 +88,19 @@ class CRUDBoosterServiceProvider extends ServiceProvider
 
     private function registerPlugin()
     {
-        $views = scandir(app_path("CBPlugins"));
-        foreach($views as $view) {
-            if($view != "." && $view != "..") {
-                $basename = basename($view);
-                // register view
-                $this->loadViewsFrom(app_path("CBPlugins".DIRECTORY_SEPARATOR.$basename.DIRECTORY_SEPARATOR."Views"),$basename);
-                // register route
-                require app_path("CBPlugins".DIRECTORY_SEPARATOR.$basename.DIRECTORY_SEPARATOR."Routes".DIRECTORY_SEPARATOR."Route.php");
+        if(file_exists(app_path("CBPlugins"))) {
+            $views = scandir(app_path("CBPlugins"));
+            foreach($views as $view) {
+                if($view != "." && $view != "..") {
+                    $basename = basename($view);
+                    // register view
+                    $this->loadViewsFrom(app_path("CBPlugins".DIRECTORY_SEPARATOR.$basename.DIRECTORY_SEPARATOR."Views"),$basename);
+                    // register route
+                    require app_path("CBPlugins".DIRECTORY_SEPARATOR.$basename.DIRECTORY_SEPARATOR."Routes".DIRECTORY_SEPARATOR."Route.php");
+                }
             }
+        } else {
+            mkdir(app_path("CBPlugins"));
         }
     }
 
