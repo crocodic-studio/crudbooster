@@ -39,7 +39,7 @@
 
             <ol class="breadcrumb">
                 <li><a href="{{ cb()->getAdminUrl() }}"><i class="fa fa-dashboard"></i> {{ cbLang("home") }}</a></li>
-                <li class="active">{{ themeTitle($page_title) }}</li>
+                <li class="active">{{ isset($page_title)?$page_title:null  }}</li>
             </ol>
         </section>
 
