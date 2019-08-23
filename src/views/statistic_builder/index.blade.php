@@ -241,12 +241,12 @@
             $('.connectedSortable').each(function () {
                 var areaname = $(this).attr('id');
 
-                $.get("{{CRUDBooster::mainpath('list-component')}}/" + id_cms_statistics + "/" + areaname, function (response) {
+                $.get("{{CRUDBooster::adminpath('statistic_builder/list-component')}}/" + id_cms_statistics + "/" + areaname, function (response) {
                     if (response.components) {
 
                         $.each(response.components, function (i, obj) {
                             $('#' + areaname).append("<div id='area-loading-" + obj.componentID + "' class='area-loading'><i class='fa fa-spin fa-spinner'></i></div>");
-                            $.get("{{CRUDBooster::mainpath('view-component')}}/" + obj.componentID, function (view) {
+                            $.get("{{CRUDBooster::adminpath('statistic_builder/view-component')}}/" + obj.componentID, function (view) {
                                 console.log('View For CID ' + view.componentID);
                                 $('#area-loading-' + obj.componentID).remove();
                                 $('#' + areaname).append(view.layout);

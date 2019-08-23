@@ -374,14 +374,17 @@ class CRUDBooster
 
     public static function getCurrentModule()
     {
-        $modulepath = self::getModulePath();
-        if (Cache::has('moduls_'.$modulepath)) {
-            return Cache::get('moduls_'.$modulepath);
-        } else {
-            $module = DB::table('cms_moduls')->where('path', self::getModulePath())->first();
+	$modulepath = self::getModulePath();
 
-            return $module;
-        }
+	if (Cache::has('moduls_'.$modulepath)) {
+	    return Cache::get('moduls_'.$modulepath);
+	} else {
+
+	    $module = DB::table('cms_moduls')->where('path', self::getModulePath())->first();
+	    
+	    //supply modulpath instead of $module incase where user decides to create form and custom url that does not exist in cms_moduls table.
+	    return ($module)?:$modulepath; 
+	}
     }
 
     public static function getCurrentDashboardId()
@@ -522,11 +525,13 @@ class CRUDBooster
     }
 
     private static function getModulePath()
-    {
-        $adminPathSegments = count(explode('/', config('crudbooster.ADMIN_PATH')));
-
-        return Request::segment(1 + $adminPathSegments);
-    }
+    {   
+          //use Request::path instead of default admin_path to allow flexibility for users to define their own admin_path under
+	  // app/config/crudbooster.php
+	  $adminPathSegments = count(explode('/', Request::path()));
+	  		
+          return Request::segment($adminPathSegments);
+    }	
 
     public static function mainpath($path = null)
     {
@@ -1045,15 +1050,17 @@ class CRUDBooster
 
     public static function insertLog($description, $details = '')
     {
-        $a = [];
-        $a['created_at'] = date('Y-m-d H:i:s');
-        $a['ipaddress'] = $_SERVER['REMOTE_ADDR'];
-        $a['useragent'] = $_SERVER['HTTP_USER_AGENT'];
-        $a['url'] = Request::url();
-        $a['description'] = $description;
-        $a['details'] = $details;
-        $a['id_cms_users'] = self::myId();
-        DB::table('cms_logs')->insert($a);
+        if (CRUDBooster::getSetting('api_debug_mode')) {
+            $a = [];
+            $a['created_at'] = date('Y-m-d H:i:s');
+            $a['ipaddress'] = $_SERVER['REMOTE_ADDR'];
+            $a['useragent'] = $_SERVER['HTTP_USER_AGENT'];
+            $a['url'] = Request::url();
+            $a['description'] = $description;
+            $a['details'] = $details;
+            $a['id_cms_users'] = self::myId();
+            DB::table('cms_logs')->insert($a);
+        }
     }
 
     public static function referer()

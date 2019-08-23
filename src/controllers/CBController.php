@@ -2,6 +2,7 @@
 
 error_reporting(E_ALL ^ E_NOTICE);
 
+
 use CB;
 use CRUDBooster;
 use Illuminate\Support\Facades\App;
@@ -1151,7 +1152,11 @@ class CBController extends Controller
 
 //         $this->arr[$this->primary_key] = $id = CRUDBooster::newId($this->table); //error on sql server
         $lastInsertId = $id = DB::table($this->table)->insertGetId($this->arr);
-
+        
+        //fix bug if primary key is uuid
+        if($this->arr[$this->primary_key]!=$id)
+            $id = $this->arr[$this->primary_key];
+        
         //Looping Data Input Again After Insert
         foreach ($this->data_inputan as $ro) {
             $name = $ro['name'];
@@ -1208,16 +1213,19 @@ class CBController extends Controller
                 $getColName = Request::get($name.'-'.$columns[0]['name']);
                 $count_input_data = ($getColName)?(count($getColName) - 1):0;
                 $child_array = [];
+                $fk = $ro['foreign_key'];
 
                 for ($i = 0; $i <= $count_input_data; $i++) {
-                    $fk = $ro['foreign_key'];
                     $column_data = [];
-                    $column_data[$fk] = $id;
                     foreach ($columns as $col) {
                         $colname = $col['name'];
-                        $column_data[$colname] = Request::get($name.'-'.$colname)[$i];
+                        $colvalue = Request::get($name.'-'.$colname)[$i];
+                        if(!empty($colvalue)) $column_data[$colname] = $colvalue;
                     }
-                    $child_array[] = $column_data;
+                    if(!empty($column_data)){
+                        $column_data[$fk] = $id;
+                        $child_array[] = $column_data;
+                    }
                 }
 
                 $childtable = CRUDBooster::parseSqlTable($ro['table'])['table'];
@@ -1359,21 +1367,20 @@ class CBController extends Controller
                 $childtablePK = CB::pk($childtable);
 
                 for ($i = 0; $i <= $count_input_data; $i++) {
-
                     $column_data = [];
-                    $column_data[$childtablePK] = $lastId;
-                    $column_data[$fk] = $id;
                     foreach ($columns as $col) {
                         $colname = $col['name'];
-                        $column_data[$colname] = Request::get($name.'-'.$colname)[$i];
+                        $colvalue = Request::get($name.'-'.$colname)[$i];
+                        if(!empty($colvalue)) $column_data[$colname] = $colvalue;
                     }
-                    $child_array[] = $column_data;
-
-                    $lastId++;
+                    if(!empty($column_data)){
+                        $column_data[$childtablePK] = $lastId;
+                        $column_data[$fk] = $id;
+                        $child_array[] = $column_data;
+                        $lastId++;
+                    }
                 }
-
                 $child_array = array_reverse($child_array);
-
                 DB::table($childtable)->insert($child_array);
             }
         }

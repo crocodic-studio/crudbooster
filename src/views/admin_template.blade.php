@@ -9,7 +9,7 @@
     <link rel="shortcut icon"
           href="{{ CRUDBooster::getSetting('favicon')?asset(CRUDBooster::getSetting('favicon')):asset('vendor/crudbooster/assets/logo_crudbooster.png') }}">
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-    <!-- Bootstrap 3.3.2 -->
+    <!-- Bootstrap 3.4.1 -->
     <link href="{{ asset("vendor/crudbooster/assets/adminlte/bootstrap/css/bootstrap.min.css") }}" rel="stylesheet" type="text/css"/>
     <!-- Font Awesome Icons -->
     <link href="{{asset("vendor/crudbooster/assets/adminlte/font-awesome/css")}}/font-awesome.min.css" rel="stylesheet" type="text/css"/>
@@ -100,7 +100,8 @@
             ?>
             @if($module)
                 <h1>
-                    <i class='{{$module->icon}}'></i> {{($page_title)?:$module->name}} &nbsp;&nbsp;
+                    <!--Now you can define $page_icon alongside $page_tite for custom forms to follow CRUDBooster theme style -->
+                    <i class='{!! ($page_icon)?:$module->icon !!}'></i> {!! ($page_title)?:$module->name !!} &nbsp;&nbsp; 
 
                     <!--START BUTTON -->
 
@@ -160,7 +161,7 @@
                 </ol>
             @else
                 <h1>{{Session::get('appname')}}
-                    <small>Information</small>
+                    <small> {{ trans('crudbooster.text_dashboard') }} </small>
                 </h1>
             @endif
         </section>

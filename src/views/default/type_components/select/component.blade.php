@@ -106,6 +106,7 @@
                 if (@$form['datatable']):
                     $raw = explode(",", $form['datatable']);
                     $format = $form['datatable_format'];
+                    $datatable_order = explode(',', $form['datatable_order']);
                     $table1 = $raw[0];
                     $column1 = $raw[1];
 
@@ -145,7 +146,10 @@
                     if ($format) {
                         $format = str_replace('&#039;', "'", $format);
                         $selects_data->addselect(DB::raw("CONCAT($format) as label"));
-                        $selects_data = $selects_data->orderby(DB::raw("CONCAT($format)"), "asc")->get();
+                        $selects_data = $selects_data->orderby(
+                            empty($datatable_order[0]) ? DB::raw("CONCAT($format)") : $datatable_order[0],
+                            $datatable_order[1] ?? "asc"
+                        )->get();
                     } else {
                         $selects_data->addselect($orderby_table.'.'.$orderby_column.' as label');
                         $selects_data = $selects_data->orderby($orderby_table.'.'.$orderby_column, "asc")->get();
