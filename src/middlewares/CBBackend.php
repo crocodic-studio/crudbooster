@@ -4,7 +4,7 @@ namespace crocodicstudio\crudbooster\middlewares;
 
 use Closure;
 use CRUDBooster;
-
+use DB;
 class CBBackend
 {
     /**
@@ -30,6 +30,9 @@ class CBBackend
         }
         if($request->url()==CRUDBooster::adminPath('')){
             $menus=DB::table('cms_menus')->whereRaw("cms_menus.id IN (select id_cms_menus from cms_menus_privileges where id_cms_privileges = '".CRUDBooster::myPrivilegeId()."')")->where('is_dashboard', 1)->where('is_active', 1)->first();
+            if(!count($menus)){
+                $menus=DB::table('cms_menus')->where('is_dashboard', 1)->where('is_active', 1)->first();
+            }
             if ($menus) {
                 if ($menus->type == 'Statistic') {
                     return redirect()->action('\crocodicstudio\crudbooster\controllers\StatisticBuilderController@getDashboard');
