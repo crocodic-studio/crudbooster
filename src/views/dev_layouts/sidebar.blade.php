@@ -69,12 +69,14 @@
                 @if($plugins)
                 <li class="header">{{ cbLang("installed_plugins")}}</li>
                 @foreach($plugins as $plugin)
+                    @if($plugin['url'])
                     <li>
                         <a href="{{ $plugin['url'] }}" title="{{ $plugin['name'] }} v{{ $plugin['version'] }}">
                             @if($plugin['icon'])<i class='{{ $plugin['icon'] }}'></i>@endif
                             <span>{{ $plugin['name'] }}</span>
                         </a>
                     </li>
+                    @endif
                 @endforeach
                 @endif
             </ul><!-- /.sidebar-menu -->

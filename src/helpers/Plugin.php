@@ -38,22 +38,36 @@ class Plugin
         });
     }
 
-    public function getAll()
+    public function getAllThemes() {
+        $plugins_from_user = $this->getAll();
+        $plugins_from_master = $this->getAll(__DIR__."/../views/themes");
+        $result = [];
+        $plugins = array_merge($plugins_from_master, $plugins_from_user);
+        foreach($plugins as $plugin) {
+            if($plugin['type'] == "theme") {
+                $result[] = $plugin;
+            }
+        }
+        return $result;
+    }
+
+    public function getAll($path = null)
     {
-        $plugins = scandir(app_path("CBPlugins"));
+        $path = ($path)?:app_path("CBPlugins");
+        $plugins = scandir($path);
 
         $result = [];
         foreach($plugins as $plugin) {
             if($plugin != "." && $plugin != "..") {
                 $basename = basename($plugin);
-                $row = json_decode(file_get_contents(app_path("CBPlugins".DIRECTORY_SEPARATOR.$plugin.DIRECTORY_SEPARATOR."plugin.json")), true);
+                $row = json_decode(file_get_contents($path.DIRECTORY_SEPARATOR.$plugin.DIRECTORY_SEPARATOR."plugin.json"), true);
                 if($row) {
-                    $result[] = [
-                        "name"=>$row['name'],
-                        "version"=>$row['version'],
-                        "icon"=>$row['icon'],
-                        "url"=>route($basename."ControllerGetIndex")
-                    ];
+                    try {
+                        $row['url'] = route($basename."ControllerGetIndex");
+                    } catch (\Exception $e) {
+                        $row['url'] = null;
+                    }
+                    $result[] = $row;
                 }
             }
         }

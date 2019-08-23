@@ -11,6 +11,7 @@ Route::group(['middleware' => ['web',\crocodicstudio\crudbooster\middlewares\CBD
     cb()->routeController("plugins","\crocodicstudio\crudbooster\controllers\DeveloperPluginStoreController");
     cb()->routeController("mail","\crocodicstudio\crudbooster\controllers\DeveloperMailController");
     cb()->routeController("security","\crocodicstudio\crudbooster\controllers\DeveloperSecurityController");
+    cb()->routeController("themes","\crocodicstudio\crudbooster\controllers\DeveloperThemesController");
     cb()->routeController("appearance","\crocodicstudio\crudbooster\controllers\DeveloperAppearanceController");
     cb()->routeController("miscellaneous","\crocodicstudio\crudbooster\controllers\DeveloperMiscellaneousController");
     cb()->routePost("skip-tutorial","DeveloperDashboardController@postSkipTutorial");

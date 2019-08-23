@@ -1,0 +1,13 @@
+{
+  "name": "AdminLTE",
+  "description": "Best open source admin dashboard & control panel theme. Built on top of Bootstrap, AdminLTE provides a range of responsive, reusable, and commonly used components.",
+  "version": "1.0.0",
+  "icon": "fa fa-image",
+  "changelog": "init",
+  "author": "ColorLib",
+  "author_homepage": "http://adminlte.io",
+  "asset": "Asset",
+  "type": "theme",
+  "theme_path": "crudbooster::themes.adminlte",
+  "thumbnail": "cb_asset/images/themes/adminlte.jpg"
+}

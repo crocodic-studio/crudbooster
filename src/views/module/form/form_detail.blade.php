@@ -1,4 +1,4 @@
-@extends('crudbooster::layouts.layout')
+@extends(getThemePath('layout.layout'))
 @section('content')
     @push('head')
         <style type="text/css">

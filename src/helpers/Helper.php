@@ -8,6 +8,12 @@ if(!function_exists("themeLoginBackground")) {
         return "crudbooster::layouts.login_background_css";
     }
 }
+if(!function_exists("themeFlashMessageAlert")) {
+    function themeFlashMessageAlert() {
+        return "crudbooster::layouts.flash_message_alert";
+    }
+}
+
 if(!function_exists("themeFlashMessage")) {
     function themeFlashMessage() {
         return "crudbooster::layouts.flash_message";
@@ -291,9 +297,14 @@ if(!function_exists('cb'))
     }
 }
 
+if(!function_exists("cbAssetPath")) {
+    function cbAssetPath($path = null) {
+        return "cb_asset".(($path)?"/".$path:null);
+    }
+}
 if(!function_exists('cbAsset')) {
     function cbAsset($path, $secure = null) {
-        return asset("cb_asset/".$path, $secure);
+        return asset(cbAssetPath()."/".$path, $secure);
     }
 }
 

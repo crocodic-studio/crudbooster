@@ -7,7 +7,7 @@
 
     <p class='login-box-msg text-muted' style="text-align: center">{{ cbLang("please_login_to_start_your_session")}}</p>
 
-    @include(themeFlashMessage())
+    @include(themeFlashMessageAlert())
 
     <form id="form-login" style="display: none;" autocomplete='off' action="{{ route('AdminAuthControllerPostLogin') }}" method="post">
         {!! csrf_field() !!}

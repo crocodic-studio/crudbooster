@@ -1,4 +1,4 @@
-@extends(getThemePath('layout'))
+@extends(getThemePath('layout.layout'))
 @section('content')
 
     {{-- Check if there is a "ref" parameter --}}

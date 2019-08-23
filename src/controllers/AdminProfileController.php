@@ -11,7 +11,7 @@ class AdminProfileController extends BaseController {
     public function getIndex() {
         $data = [];
         $data['page_title'] = cbLang("profile");
-        return view('crudbooster::profile',$data);
+        return view(getThemePath('profile'),$data);
     }
 
     public function postUpdate() {

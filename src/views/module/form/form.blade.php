@@ -1,4 +1,4 @@
-@extends('crudbooster::layouts.layout')
+@extends(getThemePath('layout.layout'))
 @section('content')
 
         @if(verifyReferalUrl())

@@ -11,12 +11,17 @@
 
     <!-- Theme style -->
     <link href="{{ cbAsset("adminlte/dist/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css"/>
-    <link href="{{ cbAsset("adminlte/dist/css/skins/".getSetting("cms_theme_color","skin-blue").".css")}}" rel="stylesheet" type="text/css"/>
+    <link href="{{ cbAsset("adminlte/dist/css/skins/".getSetting("adminlte_theme_skin","skin-green").".css")}}" rel="stylesheet" type="text/css"/>
 
     @include(themeLayoutHead())
 
+    @if($additional_css = getSetting("adminlte_additional_css"))
+        <style>
+            {!! $additional_css !!}
+        </style>
+    @endif
 </head>
-<body class="hold-transition {{getSetting("cms_theme_color","skin-blue")}} sidebar-mini">
+<body class="hold-transition {{getSetting("adminlte_theme_skin","skin-green")}} sidebar-mini">
 <div id='app' class="wrapper">
 
     <!-- Header -->
