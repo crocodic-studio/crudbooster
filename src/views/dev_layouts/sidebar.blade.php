@@ -4,14 +4,15 @@
         <div class='main-menu mt-10'>
             <!-- Sidebar Menu -->
             <ul class="sidebar-menu" data-widget="tree">
+
                 <li>
-                    <a href='{{ cb()->getDeveloperUrl("menus") }}'><i class='fa fa-bars'></i>
-                        <span>Manage Menus</span>
+                    <a href='{{ cb()->getDeveloperUrl("modules") }}'><i class='fa fa-cog'></i>
+                        <span>Module Generator</span>
                     </a>
                 </li>
                 <li>
-                    <a href='{{ cb()->getDeveloperUrl("modules") }}'><i class='fa fa-cubes'></i>
-                        <span>Manage Modules</span>
+                    <a href='{{ cb()->getDeveloperUrl("menus") }}'><i class='fa fa-bars'></i>
+                        <span>Manage Menus</span>
                     </a>
                 </li>
                 <li>
@@ -29,6 +30,12 @@
                 <li>
                     <a href='{{ cb()->getDeveloperUrl("plugins") }}'><i class='fa fa-star'></i>
                         <span>Plugin Store</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href='{{ cb()->getDeveloperUrl("themes") }}'><i class='fa fa-image'></i>
+                        <span>Themes</span>
                     </a>
                 </li>
 

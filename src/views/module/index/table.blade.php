@@ -1,4 +1,3 @@
-
 <table id='table-module' class="table table-hover table-striped table-bordered">
     <thead>
         <tr>
@@ -44,6 +43,5 @@
             </td>
         </tr>
     @endforeach
-
     </tbody>
 </table>

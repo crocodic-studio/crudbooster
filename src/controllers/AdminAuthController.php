@@ -29,7 +29,9 @@ class AdminAuthController extends CBController
         $data['no2'] = rand(1,10);
         Session::put("captcha_result", $data['no1']+$data['no2']);
 
-        return view( str_replace(".blade.php", "", getSetting('login_page_view','crudbooster::login')), $data );
+        $themeView = getThemePath("login");
+        $loginView = str_replace(".blade.php", "", getSetting('login_page_view',$themeView));
+        return view($loginView, $data );
     }
 
     public function postLogin()

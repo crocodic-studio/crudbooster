@@ -1,4 +1,4 @@
-@extends('crudbooster::layouts.layout')
+@extends(getThemePath('layout'))
 @section('content')
 
     {{-- Check if there is a "ref" parameter --}}

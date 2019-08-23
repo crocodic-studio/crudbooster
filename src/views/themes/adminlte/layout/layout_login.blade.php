@@ -15,18 +15,7 @@
     <![endif]-->
     <link rel="stylesheet" href="{{ cbAsset("css/login.css") }}?v=1.0.1">
 
-    @if($loginBackground = getSetting("login_background"))
-        <style>
-            body {
-                background: #ffffff url('{{ asset($loginBackground) }}');
-                @if($cover = getSetting("login_background_cover"))
-                background-position: center;
-                background-size: cover;
-                background-repeat: no-repeat;
-                @endif
-            }
-        </style>
-    @endif
+    @include(themeLoginBackground())
 </head>
 <body>
 

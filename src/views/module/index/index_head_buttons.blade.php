@@ -1,3 +1,19 @@
+@if(request()->is(cb()->getAdminPath()))
+    <i class="fa fa-dashboard"></i> {{ cbLang("dashboard") }}
+@else
+    @if(module()->getPageIcon())
+        <i class="{{ module()->getPageIcon() }}"></i>
+    @elseif(!module()->getPageIcon() && isset($pageIcon))
+        <i class="{{ $pageIcon }}"></i>
+    @endif
+
+    @if(module()->getPageTitle())
+        {{ module()->getPageTitle() }}
+    @elseif(!module()->getPageTitle() && isset($page_title))
+        {{ $page_title }}
+    @endif
+@endif
+
 
 @if((cb()->getCurrentMethod() == 'getIndex' || cb()->getCurrentMethod()=="getSubModule") && module()->getController())
     @if(module()->getData("button_add") && module()->canCreate())

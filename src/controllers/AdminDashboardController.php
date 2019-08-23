@@ -10,6 +10,6 @@ class AdminDashboardController extends BaseController {
     public function getIndex() {
         $data = [];
         $data['page_title'] = "Dashboard ".cb()->getAppName();
-        return view('crudbooster::dashboard', $data);
+        return view(getThemePath('dashboard'), $data);
     }
 }

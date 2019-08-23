@@ -41,10 +41,10 @@
                         <li class="user-footer">
                             <div class="pull-left">
                                 <a href="{{ cb()->getProfileUrl() }}" class="btn btn-default btn-flat"><i
-                                            class='fa fa-user'></i> {{ trans("cb::cb.profile")}}</a>
+                                            class='fa fa-user'></i> {{ cbLang("profile")}}</a>
                             </div>
                             <div class="pull-right">
-                                <a href="{{ cb()->getLogoutUrl() }}" title="{{ __("cb::cb.click_here_to_logout") }}" class="btn btn-danger btn-flat"><i class='fa fa-power-off'></i></a>
+                                <a href="{{ cb()->getLogoutUrl() }}" title="{{ cbLang("click_here_to_logout") }}" class="btn btn-danger btn-flat"><i class='fa fa-power-off'></i></a>
                             </div>
                         </li>
                     </ul>

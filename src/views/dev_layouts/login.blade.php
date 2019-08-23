@@ -1,4 +1,4 @@
-@extends('crudbooster::layouts.layout_login')
+@extends(getThemePath("layout.layout_login"))
 @section('content')
     <h1 style="text-align: center">{{ __("cb::cb.developer") }}</h1>
     <p class='login-box-msg' style="text-align: center">{{ __("cb::cb.please_login_to_start_your_session") }}</p>

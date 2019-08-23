@@ -1,4 +1,51 @@
 <?php
+
+/*
+ * Theme Helper
+ */
+if(!function_exists("themeLoginBackground")) {
+    function themeLoginBackground() {
+        return "crudbooster::layouts.login_background_css";
+    }
+}
+if(!function_exists("themeFlashMessage")) {
+    function themeFlashMessage() {
+        return "crudbooster::layouts.flash_message";
+    }
+}
+
+if(!function_exists("themeAlertMessage")) {
+    function themeAlertMessage() {
+        return "crudbooster::layouts.alert_message";
+    }
+}
+
+if(!function_exists("themeLayoutPageTitleAndButton")) {
+    function themeLayoutPageTitleAndButton() {
+        return 'crudbooster::module.index.index_head_buttons';
+    }
+}
+
+if(!function_exists("themeLayoutHead")) {
+    function themeLayoutHead() {
+        return "crudbooster::layouts.head";
+    }
+}
+if(!function_exists("themeTitle")) {
+    function themeTitle($page_title) {
+        $page_title = isset($page_title)?$page_title:module()->getPageTitle();
+        return (isset($page_title))?cb()->getAppName().': '.strip_tags($page_title):"Admin Area";
+    }
+}
+
+if(!function_exists("getThemePath")) {
+    function getThemePath($path = null) {
+        return getSetting("theme_path", "crudbooster::themes.adminlte").(($path)?".".$path:null);
+    }
+}
+
+// End Theme Helper
+
 if(!function_exists("isConfigCached")) {
     function isConfigCached()
     {
