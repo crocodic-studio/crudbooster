@@ -65,7 +65,7 @@ class StatisticBuilderController extends CBController
     {
         $this->cbLoader();
 
-        $menus = DB::table('cms_menus')->where('is_dashboard', 1)->where('type', 'Statistic')->first();
+        $menus= DB::table('cms_menus')->whereRaw("cms_menus.id IN (select id_cms_menus from cms_menus_privileges where id_cms_privileges = '".CRUDBooster::myPrivilegeId()."')")->where('is_dashboard', 1)->where('is_active', 1)->first();
 
         $slug = str_replace("statistic_builder/show/", "", $menus->path);
 
