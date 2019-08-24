@@ -9,7 +9,7 @@
 
     @include(themeFlashMessageAlert())
 
-    <form id="form-login" style="display: none;" autocomplete='off' action="{{ route('AdminAuthControllerPostLogin') }}" method="post">
+    <form id="form-login" autocomplete='off' action="{{ route('AdminAuthControllerPostLogin') }}" method="post">
         {!! csrf_field() !!}
         <div class="form-group has-feedback">
             <label for="">Email</label>
@@ -109,9 +109,7 @@
 
     @push('bottom')
         <script>
-            $(function() {
-                $("#form-login").slideDown();
-            })
+
             function showLogin() {
                 $("form").hide()
                 $("#form-login").fadeIn();
