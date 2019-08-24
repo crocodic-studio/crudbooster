@@ -14,11 +14,30 @@ class SidebarModel
     private $id;
     private $name;
     private $url;
+    private $permalink;
     private $sub;
     private $sub_active;
     private $icon;
     private $basepath;
     private $is_active;
+
+    /**
+     * @return mixed
+     */
+    public function getPermalink()
+    {
+        return $this->permalink;
+    }
+
+    /**
+     * @param mixed $permalink
+     */
+    public function setPermalink($permalink): void
+    {
+        $this->permalink = $permalink;
+    }
+
+
 
     /**
      * @return mixed

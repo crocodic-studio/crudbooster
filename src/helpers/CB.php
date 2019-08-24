@@ -39,9 +39,13 @@ class CB
         return new UserSession();
     }
 
-    public function getDeveloperUrl($path = null) {
+    public function getDeveloperPath($path = null) {
         $path = ($path)?"/".trim($path,"/"):null;
-        return url("developer/".getSetting("developer_path")).$path;
+        return "developer/".getSetting("developer_path").$path;
+    }
+
+    public function getDeveloperUrl($path = null) {
+        return url($this->getDeveloperPath($path));
     }
 
     public function getProfileUrl() {

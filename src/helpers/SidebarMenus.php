@@ -34,11 +34,13 @@ class SidebarMenus
             $controllerClass = new $className();
             /** @var CBController $controllerClass */
             $model->setUrl(cb()->getAdminUrl($controllerClass->getData("permalink")));
+            $model->setPermalink($controllerClass->getData("permalink"));
             $model->setIcon($module->icon);
             $model->setName($module->name);
             $model->setBasepath(config('crudbooster.ADMIN_PATH').'/'.basename($model->getUrl()));
         }elseif ($menu->type == "path") {
             $model->setUrl(cb()->getAdminUrl($menu->path));
+            $model->setPermalink($menu->path);
             $model->setIcon($menu->icon);
             $model->setName($menu->name);
             $model->setBasepath(config('crudbooster.ADMIN_PATH').'/'.basename($model->getUrl()));
@@ -85,45 +87,34 @@ class SidebarMenus
 
         $menus = $this->loadData();
         $result = [];
-        $menus_active = false;
         foreach($menus as $menu) {
 
             if($withPrivilege && !$this->checkPrivilege($roles_id, $menu)) continue;
 
             $sidebarModel = $this->assignToModel($menu);
-            if($sidebarModel->getisActive()) $menus_active = true;
             if($menus2 = $this->loadData($menu->id)) {
                 $sub1 = [];
-                $menus2_active = false;
                 foreach ($menus2 as $menu2) {
 
                     if($withPrivilege && !$this->checkPrivilege($roles_id, $menu2)) continue;
 
                     $sidebarModel2 = $this->assignToModel($menu2);
-                    if($sidebarModel2->getisActive()) $menus2_active = true;
 
                     if($menus3 = $this->loadData($menu2->id)) {
                         $sub2 = [];
-                        $menus3_active = false;
                         foreach ($menus3 as $menu3) {
 
                             if($withPrivilege && !$this->checkPrivilege($roles_id, $menu3)) continue;
 
                             $sidebarModel3 = $this->assignToModel($menu3);
 
-                            if($sidebarModel3->getisActive()) {
-                                $menus3_active = true;
-                            }
-
                             $sub2[] = $sidebarModel3;
                         }
                         $sidebarModel2->setSub($sub2);
-                        $sidebarModel2->setSubActive($menus3_active);
                     }
                     $sub1[] = $sidebarModel2;
                 }
                 $sidebarModel->setSub($sub1);
-                $sidebarModel->setSubActive($menus2_active);
             }
             $result[] = $sidebarModel;
         }
