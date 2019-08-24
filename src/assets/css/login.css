@@ -1,6 +1,10 @@
 body {
 	background: #35C1FF;
 	color: #111111  !important;
+    background: #ffffff url('../bg_login.jpg');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .login-wrapper {
