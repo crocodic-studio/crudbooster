@@ -5,7 +5,7 @@
                 @php /** @var $column \crocodicstudio\crudbooster\models\ColumnModel */ @endphp
                 <th width="{{ $column->getColumnWidth()?:"auto" }}">
                     <a title="Click to sorting {{ (request('order_sort')=='asc')?'asc':'desc' }} by {{ $column->getLabel() }}" href="{{ request()->fullUrlWithQuery(['order_by'=>$column->getOrderByColumn(),'order_sort'=>((request('order_sort')=='desc')?'asc':'desc') ]) }}">{{ $column->getLabel() }}
-                        @if(request('order_by')==$column->getField())
+                        @if(request('order_by')==$column->getOrderByColumn())
                             <i class="pull-right fa fa-arrow-circle-{{ (request('order_sort')=='asc')?'down':'up' }}"></i>
                         @endif
                     </a>
