@@ -8,7 +8,7 @@ use crocodicstudio\crudbooster\exceptions\CBValidationException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Validation\ValidationException;
-use Image;
+use Intervention\Image\Facades\Image;
 use Request;
 use Route;
 use Illuminate\Support\Facades\Schema;

@@ -65,8 +65,8 @@ Route::group([
 ], function () {
 
     if (Request::is(cb()->getAdminPath())) {
-        if($dashboard = cbConfig("ADMIN_DASHBOARD_CONTROLLER")) {
-            cb()->routeGet("/", $dashboard);
+        if($dashboard = getSetting("dashboard_controller")) {
+            cb()->routeGet("/", $dashboard."@getIndex");
         }else{
             cb()->routeGet("/", "\crocodicstudio\crudbooster\controllers\AdminDashboardController@getIndex");
         }

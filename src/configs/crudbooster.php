@@ -3,21 +3,6 @@
 return [
 
     /*
-     * To customize the dashboard controller, you can set the value bellow
-     */
-    'ADMIN_DASHBOARD_CONTROLLER'=> null,
-
-    /*
-     * Some setting use this dummy photo setting, you can edit the dummy photo url that you want
-     */
-    'DUMMY_PHOTO' => 'cb_asset/images/user8-128x128.jpg',
-
-    /*
-     * Default limit table data
-     */
-    'LIMIT_TABLE_DATA'=>10,
-
-    /*
      * For security reason we have limit the upload file formats bellow
      */
     'UPLOAD_FILE_EXTENSION_ALLOWED' => ['jpg','jpeg','png','gif','pdf','xls','xlsx','doc','docx','txt','zip','rar','rtf'],

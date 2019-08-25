@@ -35,7 +35,7 @@ class CBController extends Controller
         if(!module()->canBrowse()) return cb()->redirect(cb()->getAdminUrl(),cbLang("you_dont_have_privilege_to_this_area"));
 
         $query = $this->repository();
-        $result = $query->paginate( request("limit")?:cbConfig("LIMIT_TABLE_DATA") );
+        $result = $query->paginate( request("limit")?:$this->data['limit'] );
         $data['result'] = $result;
 
         return view("crudbooster::module.index.index", array_merge($data, $this->data));
@@ -130,7 +130,7 @@ class CBController extends Controller
             unset($data['created_at']);
 
             if(isset($this->data['hook_before_update']) && is_callable($this->data['hook_before_update'])) {
-                $data = call_user_func($this->data['hook_before_update'], $id, $data);
+                $data = call_user_func($this->data['hook_before_update'], $data, $id);
             }
 
             cb()->update($this->data['table'], $id, $data);

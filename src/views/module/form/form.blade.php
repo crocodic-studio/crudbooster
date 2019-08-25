@@ -13,8 +13,8 @@
 
 
         <div class="box box-default">
-            <div class="box-header">
-                <h1 class="box-title">Form Data</h1>
+            <div class="box-header with-border">
+                <h1 class="box-title"><i class="fa fa-file"></i> {{ (cb()->getCurrentMethod()=="getAdd")?cbLang("add")." ".cbLang("data"):cbLang("edit")." ".cbLang("data") }}</h1>
             </div>
 
             <form method='post' id="form" enctype="multipart/form-data" action='{{ $action_url }}'>
@@ -23,9 +23,29 @@
 
                 <div class="box-body" id="parent-form-area">
                     @if(cb()->getCurrentMethod() == "getEdit")
+
+                        @if(isset($prepend_edit_form) && is_callable($prepend_edit_form))
+                            {!! call_user_func($prepend_edit_form, $row) !!}
+                        @endif
+
                         @include('crudbooster::module.form.form_body')
+
+                        @if(isset($append_edit_form) && is_callable($append_edit_form))
+                            {!! call_user_func($append_edit_form, $row) !!}
+                        @endif
+
                     @elseif(cb()->getCurrentMethod() == "getAdd")
+
+                        @if(isset($prepend_add_form) && is_callable($prepend_add_form))
+                            {!! call_user_func($prepend_add_form) !!}
+                        @endif
+
                         @include('crudbooster::module.form.form_body')
+
+                        @if(isset($append_add_form) && is_callable($append_add_form))
+                            {!! call_user_func($append_add_form) !!}
+                        @endif
+
                     @endif
                 </div><!-- /.box-body -->
 

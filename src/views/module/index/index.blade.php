@@ -81,7 +81,7 @@
         <div class="box-body table-responsive">
             @include("crudbooster::module.index.table")
 
-            <div class="col-md-8">{!! $result->appends(request()->all())->links() !!}</div>
+            <div class="col-md-8">{!! $result->appends(requestAll())->links() !!}</div>
 
             <?php
             $from = $result->count() ? ($result->perPage() * $result->currentPage() - $result->perPage() + 1) : 0;

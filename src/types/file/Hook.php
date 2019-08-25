@@ -21,7 +21,10 @@ class Hook extends TypesHook
      */
     public function assignment($value, $column)
     {
-        return $value;
+        $ext = strtolower(pathinfo($value, PATHINFO_EXTENSION));
+        if(in_array($ext, cbConfig("UPLOAD_FILE_EXTENSION_ALLOWED"))) {
+            return $value;
+        }
     }
 
     public function detailRender($row, $column)

@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 use crocodicstudio\crudbooster\commands\Install;
-use Illuminate\Foundation\AliasLoader;
 use App;
 
 class CRUDBoosterServiceProvider extends ServiceProvider
@@ -81,9 +80,6 @@ class CRUDBoosterServiceProvider extends ServiceProvider
 
         // Register additional library
         $this->app->register('Intervention\Image\ImageServiceProvider');
-        $loader = AliasLoader::getInstance();
-        $loader->alias('Image', 'Intervention\Image\Facades\Image');
-        $loader->alias('CB', 'crocodicstudio\crudbooster\helpers\CB');
     }
 
     private function registerPlugin()

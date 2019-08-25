@@ -338,7 +338,7 @@ if(!function_exists('getAdminLoginURL')) {
 if(!function_exists('dummyPhoto')) {
     function dummyPhoto()
     {
-        return cbConfig("DUMMY_PHOTO");
+        return getSetting("dummy_photo","cb_asset/images/user8-128x128.jpg");
     }
 }
 

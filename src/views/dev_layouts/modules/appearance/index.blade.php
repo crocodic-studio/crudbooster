@@ -52,6 +52,20 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
+
+                            <div class="form-group">
+                                <label>Dashboard Controller</label>
+                                <select name="dashboard_controller" class="form-control">
+                                    <option value="">** Default CB</option>
+                                    <?php $controllers = glob(app_path("Http/Controllers/*Controller.php"));?>
+                                    @foreach($controllers as $controller)
+                                        @if(basename($controller) != "Controller.php")
+                                        <option {{ getSetting("dashboard_controller")==rtrim(basename($controller),".php")?"selected":"" }} value="{{ rtrim(basename($controller),".php") }}">{{ rtrim(basename($controller),".php") }}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </div>
+
                             <div class="form-group">
                                 <label>Module Table Wordwrap</label>
                                 <select name="table_module_wordwrap" class="form-control">
@@ -66,6 +80,11 @@
                                 <input type="radio" {{ getSetting("table_module_action_button_position","right")=="left"?"checked":"" }} name="table_module_action_button_position" value="left"> Left
                                 <input type="radio" {{ getSetting("table_module_action_button_position","right")=="right"?"checked":"" }} name="table_module_action_button_position" value="right"> Right
                                 <div class="help-block">Change the position of action button on table module</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Dummy Photo</label>
+                                {!! cb()->htmlHelper()->makeImageUpload("Dummy Photo","dummy_photo", getSetting("dummy_photo"), false) !!}
                             </div>
                         </div>
                     </div>

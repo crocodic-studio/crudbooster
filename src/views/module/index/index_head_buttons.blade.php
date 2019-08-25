@@ -26,7 +26,7 @@
 
 
 <!--ADD ACTION-->
-@if(isset($index_action_button))
+@if(isset($index_action_button) && cb()->getCurrentMethod()=="getIndex")
     @foreach($index_action_button as $button)
         <?php /** @var \crocodicstudio\crudbooster\models\IndexActionButtonModel $button */ ?>
         <a href='{{$button->getUrl()}}'

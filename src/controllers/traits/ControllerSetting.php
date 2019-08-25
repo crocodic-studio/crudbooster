@@ -23,6 +23,7 @@ trait ControllerSetting
     private $data = [];
 
     private function defaultData() {
+        $this->setLimit(10);
         $this->setSearchForm(true);
         $this->setButtonDelete(true);
         $this->setButtonEdit(true);
@@ -37,6 +38,22 @@ trait ControllerSetting
         $this->hideButtonEditWhen(function ($row) { return false; });
         $this->style(function () { return null; });
         $this->javascript(function () { return null; });
+    }
+
+    public function appendAddForm(callable $html) {
+        $this->data['append_add_form'] = $html;
+    }
+
+    public function prependAddForm(callable $html) {
+        $this->data['prepend_add_form'] = $html;
+    }
+
+    public function appendEditForm(callable $html) {
+        $this->data['append_edit_form'] = $html;
+    }
+
+    public function prependEditForm(callable $html) {
+        $this->data['prepend_edit_form'] = $html;
     }
 
     public function style(callable $style) {
@@ -251,37 +268,31 @@ trait ControllerSetting
     }
     /**
      * @param mixed $button_edit
-     * @param null $condition_callback
      * @return ControllerSetting
      */
-    public function setButtonEdit($button_edit, $condition_callback = null)
+    public function setButtonEdit(bool $button_edit)
     {
         $this->data['button_edit'] = $button_edit;
-        $this->data['button_edit_callback'] = $condition_callback;
         return $this;
     }
 
     /**
      * @param mixed $button_detail
-     * @param null $condition_callback
      * @return ControllerSetting
      */
-    public function setButtonDetail($button_detail, $condition_callback = null)
+    public function setButtonDetail(bool $button_detail)
     {
         $this->data['button_detail'] = $button_detail;
-        $this->data['button_detail_callback'] = $condition_callback;
         return $this;
     }
 
     /**
      * @param mixed $button_delete
-     * @param null $condition_callback
      * @return ControllerSetting
      */
-    public function setButtonDelete($button_delete, $condition_callback = null)
+    public function setButtonDelete(bool $button_delete)
     {
         $this->data['button_delete'] = $button_delete;
-        $this->data['button_delete_callback'] = $condition_callback;
         return $this;
     }
 
@@ -381,28 +392,17 @@ trait ControllerSetting
      * @param int $limit
      * @return ControllerSetting
      */
-    public function setLimit($limit)
+    public function setLimit($limit = 20)
     {
         $this->data['limit'] = $limit;
         return $this;
     }
 
     /**
-     * @param bool $button_filter
-     * @return ControllerSetting
-     */
-    public function setButtonFilter($button_filter)
-    {
-        $this->data['button_filter'] = $button_filter;
-        return $this;
-    }
-
-
-    /**
      * @param bool $button_add_more
      * @return ControllerSetting
      */
-    public function setButtonAddMore($button_add_more)
+    public function setButtonAddMore(bool $button_add_more)
     {
         $this->data['button_add_more'] = $button_add_more;
         return $this;
@@ -412,7 +412,7 @@ trait ControllerSetting
      * @param bool $button_add
      * @return ControllerSetting
      */
-    public function setButtonAdd($button_add)
+    public function setButtonAdd(bool $button_add)
     {
         $this->data['button_add'] = $button_add;
         return $this;
