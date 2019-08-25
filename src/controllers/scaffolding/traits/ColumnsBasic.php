@@ -34,6 +34,7 @@ trait ColumnsBasic
         $model->setRequired(true);
         $model->setStyle(null);
         $model->setHelp(null);
+        $model->setFilterable(false);
         $model->setInputWidth(12);
         $model->setShowIndex(true);
         $model->setShowAdd(true);

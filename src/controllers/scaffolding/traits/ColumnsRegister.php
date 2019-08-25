@@ -28,7 +28,6 @@ use crocodicstudio\crudbooster\types\number\NumberModel;
 use crocodicstudio\crudbooster\types\Radio;
 use crocodicstudio\crudbooster\types\radio\RadioModel;
 use crocodicstudio\crudbooster\types\select_option\SelectOptionModel;
-use crocodicstudio\crudbooster\types\select_query\SelectQueryModel;
 use crocodicstudio\crudbooster\types\SelectOption;
 use crocodicstudio\crudbooster\types\SelectQuery;
 use crocodicstudio\crudbooster\types\SelectTable;
@@ -43,6 +42,7 @@ use crocodicstudio\crudbooster\types\password\PasswordModel;
 use crocodicstudio\crudbooster\types\text\TextModel;
 use crocodicstudio\crudbooster\types\text_area\TextAreaModel;
 use crocodicstudio\crudbooster\types\TextArea;
+use crocodicstudio\crudbooster\types\time\TimeModel;
 use crocodicstudio\crudbooster\types\UploadImage;
 use crocodicstudio\crudbooster\types\Wysiwyg;
 use crocodicstudio\crudbooster\types\wysiwyg\WysiwygModel;
@@ -67,7 +67,8 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($field_to_save?:$this->name($label, $name));
-        $data->setOrderByColumn($data->getField());
+        $data->setOrderByColumn($this->table().".".$data->getField());
+        $data->setFilterColumn($this->table().".".$data->getField());
         $data->setType("text");
 
         columnSingleton()->setColumn($this->index, $data);
@@ -84,7 +85,8 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($field_to_save?:$this->name($label, $name));
-        $data->setOrderByColumn($data->getField());
+        $data->setOrderByColumn($this->table().".".$data->getField());
+        $data->setFilterColumn($this->table().".".$data->getField());
         $data->setType("checkbox");
 
         columnSingleton()->setColumn($this->index, $data);
@@ -101,7 +103,8 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($field_to_save?:$this->name($label, $name));
-        $data->setOrderByColumn($data->getField());
+        $data->setOrderByColumn($this->table().".".$data->getField());
+        $data->setFilterColumn($this->table().".".$data->getField());
         $data->setType("password");
         $data->setShowDetail(false);
         $data->setShowIndex(false);
@@ -120,7 +123,8 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($field_to_save?:$this->name($label, $name));
-        $data->setOrderByColumn($data->getField());
+        $data->setOrderByColumn($this->table().".".$data->getField());
+        $data->setFilterColumn($this->table().".".$data->getField());
         $data->setType("image");
 
         columnSingleton()->setColumn($this->index, $data);
@@ -137,7 +141,8 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($field_to_save?:$this->name($label, $name));
-        $data->setOrderByColumn($data->getField());
+        $data->setOrderByColumn($this->table().".".$data->getField());
+        $data->setFilterColumn($this->table().".".$data->getField());
         $data->setType("text_area");
 
         columnSingleton()->setColumn($this->index, $data);
@@ -145,9 +150,24 @@ trait ColumnsRegister
         return (new TextArea($this->index));
     }
 
+    /**
+     * @param string $label
+     * @param string|null $name
+     * @param array $selectConfig (See bellow)
+     *      $selectConfig = [
+     *          'table'             => (string) the table name. Required.
+     *          'value_option'      => (string) the column for value of option. Required.
+     *          'display_option'    => (string) the column for display of option. Required.
+     *          'sql_condition'     => (string) raw sql condition
+     *      ]
+     * @return SelectTable
+     * @throws \Exception
+     */
     public function addSelectTable($label, $name = null, $selectConfig)
     {
-        if(isset($selectConfig['table']) && isset($selectConfig['value_option']) && isset($selectConfig['display_option'])) {
+        if(isset($selectConfig['table']) &&
+            isset($selectConfig['value_option']) &&
+            isset($selectConfig['display_option'])) {
             $this->index++;
 
             $data = new SelectTableModel();
@@ -157,6 +177,7 @@ trait ColumnsRegister
             $data->setField($this->name($label, $name));
             $data->setType("select_table");
             $data->setOrderByColumn($selectConfig['table'].".".$selectConfig["display_option"]);
+            $data->setFilterColumn($this->table().".".$data->getField());
             columnSingleton()->setColumn($this->index, $data);
 
             $selectTable = new SelectTable($this->index);
@@ -177,7 +198,8 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($this->name($label, $name));
-        $data->setOrderByColumn($data->getField());
+        $data->setOrderByColumn($this->table().".".$data->getField());
+        $data->setFilterColumn($this->table().".".$data->getField());
         $data->setType("select_option");
 
         columnSingleton()->setColumn($this->index, $data);
@@ -191,35 +213,6 @@ trait ColumnsRegister
         return $selectOption;
     }
 
-    /**
-     * @param string $label
-     * @param null|string $name
-     * @param callable|string|null $query DB Query Builder|SQL RAW
-     * @return SelectOption
-     */
-    public function addSelectQuery($label, $name = null, $query = null)
-    {
-        $this->index++;
-
-        $data = new SelectQueryModel();
-        $data = $this->setDefaultModelValue($data);
-        $data->setLabel($label);
-        $data->setName($this->name($label,$name));
-        $data->setField($this->name($label, $name));
-        $data->setOrderByColumn($data->getField());
-        $data->setType("select_query");
-
-        columnSingleton()->setColumn($this->index, $data);
-
-        $selectQuery =new SelectQuery($this->index);
-
-        if($query) {
-            $selectQuery->optionsFromQuery($query);
-        }
-
-        return $selectQuery;
-    }
-
 
     public function addCustom($label, $name = null, $field_to_save = null)
     {
@@ -230,7 +223,8 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($field_to_save?:$this->name($label, $name));
-        $data->setOrderByColumn($data->getField());
+        $data->setOrderByColumn($this->table().".".$data->getField());
+        $data->setFilterColumn($this->table().".".$data->getField());
         $data->setType("custom");
 
         columnSingleton()->setColumn($this->index, $data);
@@ -247,8 +241,27 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($field_to_save?:$this->name($label, $name));
-        $data->setOrderByColumn($data->getField());
+        $data->setOrderByColumn($this->table().".".$data->getField());
+        $data->setFilterColumn($this->table().".".$data->getField());
         $data->setType("date");
+
+        columnSingleton()->setColumn($this->index, $data);
+
+        return (new Date($this->index));
+    }
+
+    public function addTime($label, $name = null, $field_to_save = null)
+    {
+        $this->index++;
+
+        $data = new TimeModel();
+        $data = $this->setDefaultModelValue($data);
+        $data->setLabel($label);
+        $data->setName($this->name($label,$name));
+        $data->setField($field_to_save?:$this->name($label, $name));
+        $data->setOrderByColumn($this->table().".".$data->getField());
+        $data->setFilterColumn($this->table().".".$data->getField());
+        $data->setType("time");
 
         columnSingleton()->setColumn($this->index, $data);
 
@@ -264,7 +277,8 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($field_to_save?:$this->name($label, $name));
-        $data->setOrderByColumn($data->getField());
+        $data->setOrderByColumn($this->table().".".$data->getField());
+        $data->setFilterColumn($this->table().".".$data->getField());
         $data->setType("datetime");
 
         columnSingleton()->setColumn($this->index, $data);
@@ -281,7 +295,8 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($field_to_save?:$this->name($label, $name));
-        $data->setOrderByColumn($data->getField());
+        $data->setOrderByColumn($this->table().".".$data->getField());
+        $data->setFilterColumn($this->table().".".$data->getField());
         $data->setType("email");
 
         columnSingleton()->setColumn($this->index, $data);
@@ -298,7 +313,8 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($field_to_save?:$this->name($label, $name));
-        $data->setOrderByColumn($data->getField());
+        $data->setOrderByColumn($this->table().".".$data->getField());
+        $data->setFilterColumn($this->table().".".$data->getField());
         $data->setType("file");
 
         columnSingleton()->setColumn($this->index, $data);
@@ -316,7 +332,8 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($field_to_save?:$this->name($label, $name));
-        $data->setOrderByColumn($data->getField());
+        $data->setOrderByColumn($this->table().".".$data->getField());
+        $data->setFilterColumn($this->table().".".$data->getField());
         $data->setType("hidden");
 
         columnSingleton()->setColumn($this->index, $data);
@@ -333,7 +350,8 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($field_to_save?:$this->name($label, $name));
-        $data->setOrderByColumn($data->getField());
+        $data->setOrderByColumn($this->table().".".$data->getField());
+        $data->setFilterColumn($this->table().".".$data->getField());
         $data->setType("number");
 
         columnSingleton()->setColumn($this->index, $data);
@@ -350,7 +368,8 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($field_to_save?:$this->name($label, $name));
-        $data->setOrderByColumn($data->getField());
+        $data->setOrderByColumn($this->table().".".$data->getField());
+        $data->setFilterColumn($this->table().".".$data->getField());
         $data->setType("money");
 
         columnSingleton()->setColumn($this->index, $data);
@@ -367,7 +386,8 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($field_to_save?:$this->name($label, $name));
-        $data->setOrderByColumn($data->getField());
+        $data->setOrderByColumn($this->table().".".$data->getField());
+        $data->setFilterColumn($this->table().".".$data->getField());
         $data->setType("radio");
 
         columnSingleton()->setColumn($this->index, $data);
@@ -384,7 +404,8 @@ trait ColumnsRegister
         $data->setLabel($label);
         $data->setName($this->name($label,$name));
         $data->setField($field_to_save?:$this->name($label, $name));
-        $data->setOrderByColumn($data->getField());
+        $data->setOrderByColumn($this->table().".".$data->getField());
+        $data->setFilterColumn($this->table().".".$data->getField());
         $data->setType("wysiwyg");
 
         columnSingleton()->setColumn($this->index, $data);

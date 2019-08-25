@@ -6,7 +6,7 @@
     <meta name='generator' content='CRUDBooster'/>
     <meta name='robots' content='noindex,nofollow'/>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-    <link href="{{cbAsset('adminlte/bower_components/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{cbAsset('js/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -37,7 +37,7 @@
 </div>
 
 {{--<!-- jQuery 2.1.3 -->--}}
-<script src="{{cbAsset('adminlte/bower_components/jquery/dist/jquery.min.js')}}"></script>
+<script src="{{cbAsset('js/jquery/dist/jquery.min.js')}}"></script>
 {{--<!-- Bootstrap 3.3.2 JS -->--}}
 {{--<script src="{{cbAsset('adminlte/bower_components/bootstrap/dist/js/bootstrap.min.js')}}" type="text/javascript"></script>--}}
 @stack("bottom")

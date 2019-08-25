@@ -8,6 +8,7 @@
 
 namespace crocodicstudio\crudbooster\controllers\scaffolding\traits;
 
+use crocodicstudio\crudbooster\controllers\scaffolding\singletons\ColumnSingleton;
 use crocodicstudio\crudbooster\models\ColumnModel;
 
 trait DefaultOption
@@ -17,6 +18,17 @@ trait DefaultOption
     public function __construct($index = null)
     {
         $this->index = $index;
+    }
+
+    public function filterable($boolean = false, $help_info = null, $placeholder = null) {
+        $data = ColumnSingleton()->getColumn($this->index);
+        $data->setFilterable($boolean);
+        $data->setFilterHelp($help_info);
+        $data->setFilterPlaceholder($placeholder?:"Filter by ".$data->getLabel());
+        // Save back
+        columnSingleton()->setColumn($this->index, $data);
+
+        return $this;
     }
 
     public function visible($boolean = true)

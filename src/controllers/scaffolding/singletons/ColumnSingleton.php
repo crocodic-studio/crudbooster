@@ -116,6 +116,19 @@ class ColumnSingleton
         return $newData;
     }
 
+    public function getFilterableColumns()
+    {
+        $data = $this->columns;
+        $newData = [];
+        foreach($data as $i=>$item) {
+            /** @var ColumnModel $item */
+            if($item->getFilterable()) {
+                $newData[] = $item;
+            }
+        }
+        return $newData;
+    }
+
     public function getDetailColumns()
     {
         $data = $this->columns;

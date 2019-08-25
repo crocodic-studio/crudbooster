@@ -12,6 +12,7 @@ use crocodicstudio\crudbooster\controllers\scaffolding\traits\DefaultOption;
 use crocodicstudio\crudbooster\controllers\scaffolding\traits\Join;
 use crocodicstudio\crudbooster\models\ColumnModel;
 use crocodicstudio\crudbooster\types\select_table\SelectTableModel;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 
 class SelectTable
@@ -36,17 +37,19 @@ class SelectTable
      * @param $table string|Model
      * @param $value_option string
      * @param $display_option string
-     * @param $SQLCondition string|callable DB Query Builder|SQL Raw
+     * @param string $sql_condition
      * @return $this
      */
-    public function optionsFromTable($table, $value_option, $display_option, $SQLCondition = null) {
+    public function optionsFromTable($table, $value_option, $display_option, $sql_condition = null) {
 
         if(strpos($table,"App\Models")!==false) {
             $table = new $table();
             $table = $table::$tableName;
         }
 
-        $data = cb()->findAll($table, $SQLCondition);
+        $table_primary_key = cb()->findPrimaryKey($table);
+
+        $data = cb()->findAll($table, $sql_condition);
 
         $options = [];
         foreach ($data as $d) {
@@ -54,7 +57,13 @@ class SelectTable
         }
         $data = columnSingleton()->getColumn($this->index);
         /** @var $data SelectTableModel */
-        $data->setOptionsFromTable(["table"=>$table,"key_field"=>$value_option,"display_field"=>$display_option,"sql_condition"=>$SQLCondition]);
+        $data->setOptionsFromTable([
+            "table"=>$table,
+            "primary_key"=>$table_primary_key,
+            "key_field"=>$value_option,
+            "display_field"=>$display_option,
+            "sql_condition"=>$sql_condition
+        ]);
         columnSingleton()->setColumn($this->index, $data);
 
         $this->options($options);

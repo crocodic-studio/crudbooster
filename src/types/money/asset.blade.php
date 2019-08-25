@@ -1,3 +1,3 @@
 @push('bottom')
-    <script src="{{ cbAsset("adminlte/plugins/maskmoney/jquery.maskMoney.min.js") }}"></script>
+    <script src="{{ cbAsset("js/maskmoney/jquery.maskMoney.min.js") }}"></script>
 @endpush

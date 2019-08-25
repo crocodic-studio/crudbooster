@@ -31,4 +31,16 @@ class Hook extends TypesHook
         return $this->indexRender($row, $column);
     }
 
+    public function filterQuery($query, $column, $value)
+    {
+        $start = sanitizeXSS($value['start']);
+        $end = sanitizeXSS($value['end']);
+        if($start && $end) {
+            $start = date("Y-m-d", strtotime($start));
+            $end = date("Y-m-d", strtotime($end));
+            $query->whereBetween($column->getFilterColumn(), [$start, $end]);
+        }
+        return $query;
+    }
+
 }

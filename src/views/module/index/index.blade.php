@@ -33,6 +33,10 @@
         {!! $before_index_table !!}
     @endif
 
+    <!-- Filter Component -->
+    @include("crudbooster::module.index.filters")
+    <!-- End Filter Component-->
+
     <div class="box">
         <div class="box-header">
 
@@ -98,6 +102,18 @@
 
     @if(isset($after_index_table))
         {!! $after_index_table !!}
+    @endif
+
+    @if($nowrap = getSetting("table_module_wordwrap"))
+        @if($nowrap == "nowrap")
+            @push("head")
+            <style>
+                #table-module tbody tr td {
+                    white-space: nowrap;
+                }
+            </style>
+            @endpush
+        @endif
     @endif
 
 @endsection

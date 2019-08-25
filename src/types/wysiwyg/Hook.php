@@ -29,4 +29,10 @@ class Hook extends TypesHook
     }
 
 
+    public function filterQuery($query, $column, $value)
+    {
+        $query->where($column->getFilterColumn(),"like","%".$value."%");
+        return $query;
+    }
+
 }

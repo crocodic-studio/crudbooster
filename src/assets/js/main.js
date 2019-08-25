@@ -33,10 +33,8 @@
 
 		if($(".datepicker").length > 0) {
 		    $(".datepicker").each(function () {
-                $(this).daterangepicker({
-                    singleDatePicker: true,
-                    showDropdowns: true,
-                    minDate: '1970-01-01',
+                $(this).datetimepicker({
+                    timepicker: false,
                     format: $(this).data("format")
                 })
             });
@@ -44,15 +42,7 @@
 
 		if($(".datetimepicker").length > 0) {
 			$(".datetimepicker").each(function () {
-                $(this).daterangepicker({
-                    minDate: '1970-01-01',
-                    singleDatePicker: true,
-                    showDropdowns: true,
-                    timePicker:true,
-                    timePicker12Hour: false,
-                    timePickerIncrement: 5,
-                    timePickerSeconds: true,
-                    autoApply: true,
+                $(this).datetimepicker({
                     format: $(this).data("format")
                 })
             });
@@ -60,10 +50,8 @@
 
 		//Timepicker
 		if($(".timepicker").length > 0) {
-			$(".timepicker").timepicker({
-			  showInputs: true,
-			  showSeconds: true,
-			  showMeridian:false
+			$(".timepicker").datetimepicker({
+			  datepicker: false
 			});
 		}
 

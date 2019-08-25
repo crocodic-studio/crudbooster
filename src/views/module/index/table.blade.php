@@ -1,6 +1,14 @@
 <table id='table-module' class="table table-hover table-striped table-bordered">
     <thead>
         <tr>
+            @if($position = getSetting("table_module_action_button_position"))
+                @if($position == "left")
+                    <th width="150px" style="text-align: center">
+                        {{ cbLang('action') }}
+                    </th>
+                @endif
+            @endif
+
             @foreach(module()->getColumnSingleton()->getIndexColumns() as $column)
                 @php /** @var $column \crocodicstudio\crudbooster\models\ColumnModel */ @endphp
                 <th width="{{ $column->getColumnWidth()?:"auto" }}">
@@ -11,9 +19,15 @@
                     </a>
                 </th>
             @endforeach
-            <th width="150px" style="text-align: center">
-                {{ cbLang('action') }}
-            </th>
+
+            @if($position = getSetting("table_module_action_button_position","right"))
+                @if($position == "right")
+                    <th width="150px" style="text-align: center">
+                        {{ cbLang('action') }}
+                    </th>
+                @endif
+            @endif
+
         </tr>
     </thead>
     <tbody>
@@ -28,6 +42,14 @@
 
     @foreach($result as $row)
         <tr>
+            @if($position = getSetting("table_module_action_button_position"))
+                @if($position == "left")
+                    <td style="text-align: center; white-space: nowrap">
+                        @include("crudbooster::module.index.table_action_buttons")
+                    </td>
+                @endif
+            @endif
+
             @foreach(module()->getColumnSingleton()->getIndexColumns() as $column)
                 <td>
                     <?php
@@ -38,9 +60,13 @@
                     ?>
                 </td>
             @endforeach
-            <td style="text-align: center; white-space: nowrap">
-                @include("crudbooster::module.index.table_action_buttons")
-            </td>
+            @if($position = getSetting("table_module_action_button_position","right"))
+                @if($position == "right")
+                    <td style="text-align: center; white-space: nowrap">
+                        @include("crudbooster::module.index.table_action_buttons")
+                    </td>
+                @endif
+            @endif
         </tr>
     @endforeach
     </tbody>

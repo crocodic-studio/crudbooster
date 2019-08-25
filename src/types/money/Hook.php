@@ -33,6 +33,16 @@ class Hook extends TypesHook
         return $prefix.number_format($value, $column->getPrecision()?:0, $column->getDecimal()?:".", $column->getThousands()?:",");
     }
 
+    public function filterQuery($query, $column, $value)
+    {
+        $start = sanitizeXSS($value['start']);
+        $end = sanitizeXSS($value['end']);
+        if($start && $end) {
+            $query->whereBetween($column->getFilterColumn(), [$start, $end]);
+        }
+        return $query;
+    }
+
     public function detailRender($row, $column)
     {
         return $this->indexRender($row, $column);

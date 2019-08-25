@@ -6,7 +6,7 @@
  * Time: 5:43 PM
  */
 
-namespace crocodicstudio\crudbooster\types\datetime;
+namespace crocodicstudio\crudbooster\types\time;
 
 use crocodicstudio\crudbooster\types\TypesHook;
 
@@ -37,8 +37,8 @@ class Hook extends TypesHook
         $start = sanitizeXSS($value['start']);
         $end = sanitizeXSS($value['end']);
         if($start && $end) {
-            $start = date("Y-m-d H:i:s", strtotime($start));
-            $end = date("Y-m-d H:i:s", strtotime($end));
+            $start = date("H:i:s", strtotime($start));
+            $end = date("H:i:s", strtotime($end));
             $query->whereBetween($column->getFilterColumn(), [$start, $end]);
         }
         return $query;

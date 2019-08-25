@@ -17,6 +17,12 @@ class ColumnModel
     private $field;
     private $orderByColumn;
     private $type;
+
+    private $filterable;
+    private $filter_help;
+    private $filter_placeholder;
+    private $filter_column;
+
     private $show_detail;
     private $show_index;
     private $show_edit;
@@ -45,6 +51,76 @@ class ColumnModel
 
     private $index_display_transform;
     private $detail_display_transform;
+
+    /**
+     * @return mixed
+     */
+    public function getFilterColumn()
+    {
+        return $this->filter_column;
+    }
+
+    /**
+     * @param mixed $filter_column
+     */
+    public function setFilterColumn($filter_column): void
+    {
+        $this->filter_column = $filter_column;
+    }
+
+
+
+    /**
+     * @return mixed
+     */
+    public function getFilterHelp()
+    {
+        return $this->filter_help;
+    }
+
+    /**
+     * @param mixed $filter_help
+     */
+    public function setFilterHelp($filter_help): void
+    {
+        $this->filter_help = $filter_help;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFilterPlaceholder()
+    {
+        return $this->filter_placeholder;
+    }
+
+    /**
+     * @param mixed $filter_placeholder
+     */
+    public function setFilterPlaceholder($filter_placeholder): void
+    {
+        $this->filter_placeholder = $filter_placeholder;
+    }
+
+
+
+    /**
+     * @return mixed
+     */
+    public function getFilterable()
+    {
+        return $this->filterable;
+    }
+
+    /**
+     * @param bool $filterable
+     */
+    public function setFilterable(bool $filterable): void
+    {
+        $this->filterable = $filterable;
+    }
+
+
 
     /**
      * @return mixed

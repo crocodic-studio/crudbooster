@@ -371,6 +371,13 @@ trait ControllerSetting
     }
 
     /**
+     * To retrive current table name
+     */
+    public function table() {
+        return $this->data['table'];
+    }
+
+    /**
      * @param int $limit
      * @return ControllerSetting
      */

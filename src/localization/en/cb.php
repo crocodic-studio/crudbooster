@@ -1,6 +1,7 @@
 <?php
 return [
     'register'=>'Register',
+    "filter"=>"Filter",
     'submit'=>'Submit',
     'table_data_not_found'=>'There is no data yet',
     'action'=>'Action',

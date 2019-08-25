@@ -11,6 +11,7 @@ namespace crocodicstudio\crudbooster\controllers\traits;
 use crocodicstudio\crudbooster\helpers\SchemaHelper;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use crocodicstudio\crudbooster\models\ColumnModel;
 
 trait Query
 {
@@ -52,7 +53,14 @@ trait Query
                 }
             }
 
+            // Query From Type
             $query = getTypeHook($column->getType())->query($query, $column);
+
+            // Filter Query From Type
+            $filterValue = request("filter_".slug($column->getFilterColumn(),"_"));
+            if(is_array($filterValue) || sanitizeXSS($filterValue)) {
+                $query = getTypeHook($column->getType())->filterQuery($query, $column, $filterValue);
+            }
         }
 
         if(request()->has('q'))

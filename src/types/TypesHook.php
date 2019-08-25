@@ -43,4 +43,15 @@ class TypesHook implements TypesHookInterface
     {
         return $query;
     }
+
+    /**
+     * @param \Illuminate\Database\Query\Builder $query
+     * @param mixed|ColumnModel $column
+     * @param string $value
+     * @return mixed|void
+     */
+    public function filterQuery($query, $column, $value) {
+        $query->where($column->getFilterColumn(), $value);
+        return $query;
+    }
 }
