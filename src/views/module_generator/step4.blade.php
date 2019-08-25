@@ -26,6 +26,16 @@
                         </div>
                     </div>
 
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label for="">Table Type</label>
+                            <select name="table_type" class="form-control">
+                                <option value="html" {{ ($cb_table_type == "html") ? "selected" : "" }}>Classic HTML table</option>
+                                <option value="datatables" {{($cb_table_type == "datatables") ? "selected" : ""}}>Ajax Datatable</option>
+                            </select>
+                        </div>
+                    </div>
+
                     <div class="col-sm-5">
                         <div class="form-group">
                             <label>Limit Data</label>
