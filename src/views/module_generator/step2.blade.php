@@ -294,6 +294,14 @@
                 <input type="hidden" name="_token" value="{{csrf_token()}}">
                 <input type="hidden" name="id" value="{{$id}}">
 
+                <div class="form-group">
+                    <label for="">Table Type</label>
+                    <select name="table_type" class="form-control">
+                        <option value="html" {{ ($table_type == "html") ? "selected" : "" }}>Classic HTML table</option>
+                        <option value="datatables" {{($table_type == "datatables") ? "selected" : ""}}>Ajax Datatable</option>
+                    </select>
+                </div>
+
                 <table class="table-display table table-striped">
                     <thead>
                     <tr>

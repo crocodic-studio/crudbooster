@@ -294,6 +294,7 @@ class ModulsController extends CBController
         $data['columns'] = $columns;
         $data['table_list'] = $table_list;
         $data['cb_col'] = $cb_col;
+        $data['table_type'] = $cb_table_type;
 
         return view('crudbooster::module_generator.step2', $data);
     }
@@ -402,6 +403,7 @@ class ModulsController extends CBController
         $callbackphp = Request::input('callbackphp');
         $id = Request::input('id');
         $width = Request::input('width');
+        $table_type = Request::input('table_type');
 
         $row = DB::table('cms_moduls')->where('id', $id)->first();
 
@@ -448,6 +450,7 @@ class ModulsController extends CBController
 
         $file_controller = trim($raw[0])."\n\n";
         $file_controller .= "\t\t\t# START COLUMNS DO NOT REMOVE THIS LINE\n";
+        $file_controller .= "\t\t\t".'$this->table_type = "'.$table_type.'";'."\n";
         $file_controller .= "\t\t\t".'$this->col = [];'."\n";
         $file_controller .= $scripts."\n";
         $file_controller .= "\t\t\t# END COLUMNS DO NOT REMOVE THIS LINE\n\n";
