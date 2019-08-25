@@ -80,9 +80,11 @@ class ModuleGenerator
             $moneyPrecision = $field['column_money_precision'];
             $moneyThousandSeparator = $field['column_money_thousand_separator'];
             $moneyDecimalSeparator = $field['column_money_decimal_separator'];
+            $filterable = ($field['column_filterable']=="on")?"->filterable(true)":"";
+            $foreign_key = (isset($field['column_foreign']))?"->foreignKey('".$field['column_foreign']."')":"";
 
             // Additional Attributes
-            $additional = $required . $indexShow . $detailShow . $addShow . $editShow . $help ;
+            $additional = $required . $indexShow . $detailShow . $addShow . $editShow . $help . $filterable . $foreign_key ;
 
             // Additional money
             $additional .= ($moneyPrefix && $field['column_type']=='money')?"->prefix('".$moneyPrefix."')":"";

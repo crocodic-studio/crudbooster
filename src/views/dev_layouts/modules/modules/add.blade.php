@@ -220,10 +220,11 @@
                                     <td>
                                         <div class="form-group">
                                             <label for="">Type</label>
-                                            <select v-model="item.column_type" @change="changeTypeColumn(idx)" class="column_type form-control">
+                                            <select v-model="item.column_type" @change="changeTypeColumn($event, idx)" class="column_type form-control">
                                                 @foreach($types as $type)
                                                     @if($type != "." && $type != ".." && is_dir($dirPath.'/'.$type))
-                                                        <option value="{{ $type }}">{{ $type }}</option>
+                                                        <?php $filterable = (file_exists($dirPath."/filter.blade.php"))?1:0; ?>
+                                                        <option data-filterable="{{ $filterable }}" value="{{ $type }}">{{ $type }}</option>
                                                     @endif
                                                 @endforeach
                                             </select>
@@ -329,17 +330,18 @@
                                             </div>
 
                                             <div class="form-group">
+                                                <label for="">Foreign <sup title="Required" class="text-primary">(Optional)</sup></label>
+                                                <select class="form-control" @change="setForeignSelect($event, idx)">
+                                                    <option value="" >** Select a column</option>
+                                                    <option v-for="column in listTableColumns" :selected="item.column_foreign == column.column" :value="column.column" >@{{ column.column }}</option>
+                                                </select>
+                                                <div class="help-block">If you need to set this combo auto filtered, select the foreign key / parent select_table. Study Case: Province->City</div>
+                                            </div>
+
+                                            <div class="form-group">
                                                 <label for="">SQL RAW Condition <sup class="text-primary">(optional)</sup></label>
                                                 <input type="text" class="form-control" v-model="item.column_option_sql_condition">
                                                 <div class="help-block">You may enter query condition in here. <br> E.g : <code>status = 'Active'</code></div>
-                                            </div>
-                                        </div>
-
-                                        <div v-if="item.column_type == 'select_query'" class="mt-10 select_query_configuration">
-                                            <div class="form-group">
-                                                <label for="">SQL Raw Query <sup class="text-danger">(required)</sup></label>
-                                                <textarea v-model="item.column_sql_query" placeholder="E.g: select id as key, name as label from category..." class="form-control" rows="3"></textarea>
-                                                <div class="help-block">Select query should contain key and label. <br> Eg: <code>select id <strong>as `key`</strong>, name <strong>as `label`</strong> from categories</code>. Make sure the single quote also.</div>
                                             </div>
                                         </div>
 
@@ -385,6 +387,9 @@
                                             <input type="checkbox" v-model="item.column_edit" class="big-checkbox column_edit"> Display On Edit
                                             <p></p>
                                             <input type="checkbox" v-model="item.column_detail" class="big-checkbox column_detail"> Display On Detail
+                                            <p></p>
+                                            <input type="checkbox" v-model="item.column_filterable" class="big-checkbox column_filterable"> Filter
+                                            <a href="javascript:;" title="Show the filter feature on the table module&#013;*Note: not all types have a filter"><i class="fa fa-question-circle"></i></a>
                                         </div>
                                     </td>
                                     <td>
@@ -421,6 +426,7 @@
                     listStructure:[],
                     listTable: [],
                     listColumns: [],
+                    listTableColumns: [],
                     currentTable:""
                 },
                 mounted() {
@@ -433,7 +439,10 @@
 
                 },
                 methods: {
-                    changeTypeColumn: function(idx) {
+                    setForeignSelect: function(event, idx) {
+                        this.listColumns[idx].column_foreign = event.target.value
+                    },
+                    changeTypeColumn: function(event, idx) {
                         let type = this.listColumns[idx].column_type
                         if(type == "wysiwyg" || type == "text_area") {
                             this.listColumns[idx].column_text_max = ""
@@ -465,6 +474,15 @@
                         if(table) {
                             this.getListTableColumn(table, idx)
                         }
+                    },
+                    getListTableColumnCurrentTable: function(table) {
+                        axios.get("{{ route("DeveloperModulesControllerGetAllColumn") }}/"+table)
+                            .then(response=>{
+                                this.listTableColumns = response.data
+                            })
+                            .catch(err=>{
+                                swal("Oops","Something went wrong while load list table column","warning")
+                            })
                     },
                     getListTableColumn: function(table, idx) {
                         axios.get("{{ route("DeveloperModulesControllerGetAllColumn") }}/"+table)
@@ -514,6 +532,8 @@
                                 swal("Oops","Something went wrong while get columns","warning")
                                 hideLoading()
                             })
+
+                        this.getListTableColumnCurrentTable(table)
                     },
                     removeColumn: function(idx) {
                       this.listColumns.splice(idx,1)
@@ -546,6 +566,8 @@
                             column_detail: "on",
                             column_edit: "on",
                             column_add: "on",
+                            column_filterable: "",
+                            column_foreign: "",
                             listTableColumns: []
                         })
 

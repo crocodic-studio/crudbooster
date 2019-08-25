@@ -161,6 +161,8 @@ class DeveloperModulesController extends Controller
                     'column_detail'=> "on",
                     'column_edit'=> $columnEdit,
                     'column_add'=> $columnAdd,
+                    "column_filterable"=>"",
+                    "column_foreign"=>"",
                     'listTableColumns'=> []
                 ];
             }
