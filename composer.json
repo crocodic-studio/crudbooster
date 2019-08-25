@@ -26,7 +26,8 @@
         "maatwebsite/excel": "~2.1.0",
         "unisharp/laravel-filemanager": "1.7.7",
         "intervention/imagecache":"2.3.3",
-        "imanghafoori/laravel-widgetize": "1.8.*"
+        "imanghafoori/laravel-widgetize": "1.8.*",
+        "yajra/laravel-datatables-html": "^4.0"
     },
     "autoload": {
         "psr-4": {

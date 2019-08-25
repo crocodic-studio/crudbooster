@@ -28,6 +28,8 @@ class CBController extends Controller
 
     public $table;
 
+    public $table_type = 'html';
+
     public $title_field;
 
     public $primary_key = 'id';
@@ -170,6 +172,7 @@ class CBController extends Controller
         $this->data['sub_module'] = $this->sub_module;
         $this->data['parent_field'] = (g('parent_field')) ?: $this->parent_field;
         $this->data['parent_id'] = (g('parent_id')) ?: $this->parent_id;
+        $this->data['table_type']            = $this->table_type;
 
         if ($this->sidebar_mode == 'mini') {
             $this->data['sidebar_mode'] = 'sidebar-mini';
@@ -372,6 +375,46 @@ class CBController extends Controller
                 
                 $columns_table[$index]['field_with'] = $table.'.'.$field;
             }
+
+            if($this->table_type == 'datatables') {
+				$orderby_col = $this->table.'.'.$this->primary_key;
+				$orderby_field = $this->primary_key;
+				$orderby_sort = 'desc';
+				$order_by_columns = array();
+				if($this->orderby) {
+					if(is_array($this->orderby)) {
+						foreach($this->orderby as $k=>$v) {
+							if(strpos($k, '.')!==FALSE) {
+								$orderby_table = explode(".",$k)[0];
+								$k = explode(".",$k)[1];
+							}else{
+								$orderby_table = $table;
+							}
+							$orderby_col = $orderby_table.'.'.$k;
+							$orderby_field = $k;
+							$orderby_sort = $v;
+							$order_by_columns[] = array('col' => $orderby_col, 'sort' => $v);
+						}
+					}else{
+						$temp_order_by = explode(";",$this->orderby);
+						foreach($temp_order_by as $o) {
+							$o = explode(",",$o);
+							$k = $o[0];
+							$v = $o[1];
+							if(strpos($k, '.')!==FALSE) {
+								$orderby_table = explode(".",$k)[0];
+							}else{
+								$orderby_table = $table;
+							}
+							$orderby_col = $orderby_table.'.'.$k;
+							$orderby_field = $k;
+							$orderby_sort = $v;
+							$order_by_columns[] = array('col' => $orderby_col, 'sort' => $v);
+						}
+					}
+					
+				}
+			}
         }
 
         if (Request::get('q')) {
@@ -443,6 +486,7 @@ class CBController extends Controller
                 }
             });
 
+            $filter_column_datatable = array();
             foreach ($filter_column as $key => $fc) {
                 $value = @$fc['value'];
                 $type = @$fc['type'];
@@ -450,7 +494,10 @@ class CBController extends Controller
 
                 if ($sorting != '') {
                     if ($key) {
-                        $result->orderby($key, $sorting);
+                        if(!Request::ajax()){
+							$result->orderby($key,$sorting);
+						}
+						$filter_column_datatable[] = array('col' => $key, 'sort' => $sorting);
                         $filter_is_orderby = true;
                     }
                 }
@@ -463,6 +510,237 @@ class CBController extends Controller
                     continue;
                 }
             }
+            if(count($filter_column_datatable)){
+				$order_by_columns = $filter_column_datatable;
+			}
+		}
+		$data['order_by_columns'] = $order_by_columns;
+		//ie();
+		//dd($result->columns);
+		if($this->table_type == 'datatables') {
+			//dd($result->toSql());
+			//return datatables()->of($result)->toJson();
+			$datatables = datatables()->of($result);
+			$datatables_builder = datatables()->getHtmlBuilder();
+			$col_pad = 0;
+			if($this->button_bulk_action) {	
+				$datatables_builder->addCheckbox();
+				$datatables->editColumn('checkbox', function($row){
+					return '<input type="checkbox" class="checkbox" name="checkbox[]" value="'.$row->{$this->primary_key}.'" />';
+				});
+				$col_pad++;
+			}
+			if($this->show_numbering) {
+				$datatables_builder->addIndex(['title' => 'No.']);
+				$datatables->addIndexColumn();
+				$col_pad++;
+			}
+			/* set row class */
+			$table_row_color = $this->table_row_color;
+			$datatables->setRowClass(function ($row) use ($table_row_color, $html_contents) {
+        	//dd($html_contents);
+				if($table_row_color){        
+					$tr_color = NULL;              
+					foreach($table_row_color as $trc){
+						$query = $trc['condition'];
+						$color = $trc['color'];
+						foreach($row as $key=>$val) {
+							$query = str_replace("[".$key."]",'"'.$val.'"',$query);
+						}
+						@eval("if($query) {
+							\$tr_color = \$color;
+						}");
+					}
+					$row_class = $tr_color;
+					return $tr_color;
+				}
+			});
+			/*column callback*/
+			$listed_column = array();
+			$sort_index_dt = 0;
+			$sort_default_index = $col_pad;
+			foreach($columns_table as $index => $col) {
+				// if($this->button_bulk_action) {
+				// 	$sort_index = $index + 1;
+				// 	$sort_default_index = 1;
+				// }
+				if($col['field_with'] == $orderby_col){
+					$sort_index_dt = $index + $col_pad;
+				}
+				
+				//dd($index);
+				$listed_column[$col['field']]['title'] = $col['label'];
+				$col_name = $col['field_with'];
+				$searchable = true;
+				$orderable = true;
+				if(@$col['is_subquery']){
+					$col_name = addslashes($col['name']);
+					$searchable = false;
+					$orderable = true;
+				}
+				if(isset($col['image'])){
+					$searchable = false;
+					$orderable = false;
+				}
+				$datatables_builder->addColumn(['name' => $col_name, 'data' => $col['field_with'], 'title' => $col['label'], 'footer' => $col['label'], 'width' => ($col['width'])?:"auto", 'searchable' =>  $searchable, 'orderable' => 
+				$orderable]);
+					
+				$datatables->editColumn($col_name, function ($row) use ($col, $table) {
+					$value = e(@$row->{$col['field']});
+					
+					$title = @$row->{$this->title_field};
+					$label = $col['label'];
+					//$value = 'test ' . $row->{$col['field']};
+					if(isset($col['image'])) {
+						if($value=='') {			              
+							$value = "<a  data-lightbox='roadtrip' rel='group_{{$table}}' title='$label: $title' href='".asset('vendor/crudbooster/avatar.jpg')."'><img width='40px' height='40px' src='".asset('vendor/crudbooster/avatar.jpg')."'/></a>";
+						}else{
+							$pic = (strpos($value,'http://')!==FALSE)?$value:asset($value);				            
+							$value = "<a data-lightbox='roadtrip'  rel='group_{{$table}}' title='$label: $title' href='".$pic."'><img width='40px' height='40px' src='".$pic."'/></a>";
+						}			            
+					}
+					if(@$col['download']) {
+						$url = (strpos($value,'http://')!==FALSE)?$value:asset($value).'?download=1';
+						if($value) {
+							$value = "<a class='btn btn-xs btn-primary' href='$url' target='_blank' title='Download File'><i class='fa fa-download'></i> Download</a>";
+						}else{
+							$value = " - ";
+						}
+					}
+					if($col['str_limit']) {
+						$value = trim(strip_tags($value));
+						$value = str_limit($value,$col['str_limit']);
+					}
+					if($col['nl2br']) {
+						$value = nl2br($value);
+					}
+					if($col['callback_php']) {
+						foreach($row as $k=>$v) {
+							$col['callback_php'] = str_replace("[".$k."]",$v,$col['callback_php']);
+						}
+						@eval("\$value = ".$col['callback_php'].";");
+					}
+					
+			            //New method for callback
+					if(isset($col['callback'])) {
+						$value = call_user_func($col['callback'],$row);
+					}
+					$datavalue = @unserialize($value);
+					if ($datavalue !== false) {
+						if($datavalue) {
+							$prevalue = [];
+							foreach($datavalue as $d) {
+								if($d['label']) {
+									$prevalue[] = $d['label'];
+								}
+							}
+							if(count($prevalue)) {
+								$value = implode(", ",$prevalue);
+							}
+						}
+					}
+					return $value;
+				});
+				//$datatables->removeColumn($col['field']);
+			}
+			//dd($sort_index_dt, $orderby_sort);
+			//$listed_column = collect($columns_table);
+			//dd($columns_table);
+			if($this->button_table_action):
+			    $datatables_builder->addAction();
+		      	$button_action_style = $this->button_action_style;
+		      	//LISTING INDEX HTML
+				$addaction     = $this->data['addaction'];
+				if($this->sub_module) {
+					foreach($this->sub_module as $s) {
+						$table_parent = CRUDBooster::parseSqlTable($this->table)['table'];
+						$addaction[] = [
+							'label'=>$s['label'],
+							'icon'=>$s['button_icon'],
+							'url'=>CRUDBooster::adminPath($s['path']).'?parent_table='.$table_parent.'&parent_columns='.$s['parent_columns'].'&parent_columns_alias='.$s['parent_columns_alias'].'&parent_id=['.(!isset($s['custom_parent_id']) ? "id": $s['custom_parent_id']).']&return_url='.urlencode(Request::fullUrl()).'&foreign_key='.$s['foreign_key'].'&label='.urlencode($s['label']),
+							'color'=>$s['button_color'],
+		                                        'showIf'=>$s['showIf']
+						];
+					}
+				}
+		      	
+		      	$datatables->addColumn('action', function($row) use ($button_action_style, $addaction, $parent_field) {
+		      		$button_html = "<div class='button_action' style='text-align:right'>".view('crudbooster::components.action',compact('addaction','row','button_action_style','parent_field'))->render()."</div>";
+		      		return $button_html;
+		      	});
+          	endif;//button_table_action
+          	if(!$sort_index_dt){
+          		$datatables->addColumn($orderby_field, '{{$'.$orderby_field.'}}', 0);
+          		$datatables_builder->addColumnBefore(['name' =>$orderby_col, 'data' => $orderby_field, 'visible' =>false]);
+          	}
+			if (datatables()->getRequest()->ajax()) {
+				// echo($result->toSql());
+				// die();
+				$datatables->escapeColumns([]);
+		        return $datatables->make(true);
+		    }
+		    $data_columns_arr = $datatables_builder->getColumns()->toArray();
+		    $order_by_columns = collect($order_by_columns);
+		    //dd($order_by_columns);
+		    $orders = array();
+		    foreach($data_columns_arr as $key => $data_columns){
+		    	$find = $order_by_columns->where('col', $data_columns['name'])->first();
+		    	
+		    	if($find)
+		    		$orders[] = array($key, $find['sort']);
+		    }
+		    
+		    //echo json_encode($orders);
+		    //die();
+		    /*state_key = window.location.pathname + "-" + USER_UID
+ 
+			"stateSaveCallback": function(settings,data) {
+			  localStorage.setItem( 'DataTables-'+settings.sInstance+state_key, JSON.stringify(data) )
+			},
+			"stateLoadCallback": function(settings) {
+			  return JSON.parse( localStorage.getItem( 'DataTables-'+settings.sInstance+state_key ) )}*/
+			$data['datatables_html'] = 	$datatables_builder
+										->parameters([
+					                        'stateSave'	   => true,
+					                        'lengthMenu'=> [[5, 10, 20, 25, 50, 100, 200, -1], [5, 10, 20, 25, 50, 100, 200, 'All']],
+					                        'pageLength' =>  $this->limit,
+					                        'order'	=> $orders,
+					                        'stateSaveCallback' => "function(settings,data){
+												localStorage.setItem( 'DataTables_'+settings.sInstance+'_'+(location.pathname+location.search).substr(1), JSON.stringify(data) );
+					                        }",
+					                        "stateLoadCallback" => "function(settings) {
+												 return JSON.parse( localStorage.getItem( 'DataTables_'+settings.sInstance+'_'+(location.pathname+location.search).substr(1) ) );
+					                        }",
+					                        'initComplete' => "function () {
+					                        	var i = 0;
+					                        	var _table = this;
+					                            this.api().columns().every(function () {
+					                                var column = this;
+					                                var header = column.header().outerHTML;
+					                                $(\"#dataTableBuilder #dataTablesCheckbox\").click(function() {
+										                var is_checked = $(this).is(\":checked\");
+										                $(\"#dataTableBuilder .checkbox\").prop(\"checked\",!is_checked).trigger(\"click\");
+										            });
+										
+													//console.log(column.settings()[0].aoColumns[i].bSearchable);
+													if(!column.settings()[0].aoColumns[i].bSearchable){
+														i++;
+														return;
+													}
+					                                var input = document.createElement(\"input\");
+					                                input.style = \"width:90%\";
+					                                input.value = column.search();
+					                                $(input).appendTo($(column.footer()).empty())
+					                                .on('change', function () {
+					                                    column.search($(this).val(), false, false, true).draw();
+					                                });
+					                                i++;
+					                            });
+					                        
+					                        }"
+					                    ])->ajax(['type' => 'POST', 'data' => 'function(d){
+						                    d._method = "GET"; 
+						                }']);
         }
 
         if ($filter_is_orderby == true) {

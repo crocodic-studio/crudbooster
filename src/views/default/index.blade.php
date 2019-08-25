@@ -79,17 +79,21 @@
 
                         </ul><!--end-dropdown-menu-->
                     </div><!--end-selected-action-->
+                    @if($table_type == 'datatables')
+                        <button class="btn btn-danger" onclick="localStorage.removeItem('DataTables_{{ config('datatables-html.table.id') }}_' + (location.pathname+location.search).substr(1) );location.reload();">{{trans('crudbooster.button_reset')}}</button>
+                    @endif 
                 </div><!--end-pull-left-->
             @endif
             <div class="box-tools pull-{{ trans('crudbooster.right') }}" style="position: relative;margin-top: -5px;margin-right: -10px">
 
                 @if($button_filter)
-                    <a style="margin-top:-23px" href="javascript:void(0)" id='btn_advanced_filter' data-url-parameter='{{$build_query}}'
+                    <a style="margin-top:{{ ($table_type == 'datatables') ? "0px" : "-23px"  }}" href="javascript:void(0)" id='btn_advanced_filter' data-url-parameter='{{$build_query}}'
                        title='{{trans('crudbooster.filter_dialog_title')}}' class="btn btn-sm btn-default {{(Request::get('filter_column'))?'active':''}}">
                         <i class="fa fa-filter"></i> {{trans("crudbooster.button_filter")}}
                     </a>
                 @endif
 
+                @if($table_type != 'datatables')
                 <form method='get' style="display:inline-block;width: 260px;" action='{{Request::url()}}'>
                     <div class="input-group">
                         <input type="text" name="q" value="{{ Request::get('q') }}" class="form-control input-sm pull-{{ trans('crudbooster.right') }}"
@@ -127,19 +131,25 @@
                         </select>
                     </div>
                 </form>
-
+                @endif
             </div>
 
             <br style="clear:both"/>
 
         </div>
-        <div class="box-body table-responsive no-padding">
+        <div class="box-body table-responsive {{ ($table_type != 'datatables') ? 'no-padding' : '' }}">
             @include("crudbooster::default.table")
         </div>
     </div>
 
     @if(!is_null($post_index_html) && !empty($post_index_html))
         {!! $post_index_html !!}
+    @endif
+
+    @if($table_type == 'datatables')
+        @push('bottom')
+            {!! $datatables_html->scripts() !!}
+        @endpush
     @endif
 
 @endsection

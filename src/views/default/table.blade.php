@@ -48,6 +48,9 @@
 <form id='form-table' method='post' action='{{CRUDBooster::mainpath("action-selected")}}'>
     <input type='hidden' name='button_name' value=''/>
     <input type='hidden' name='_token' value='{{csrf_token()}}'/>
+    @if($table_type == 'datatables')
+    {!! $datatables_html->table(['class' => 'table table-bordered table-striped table-hover', 'style' => 'width:100%'] , true) !!}
+    @else
     <table id='table_dashboard' class="table table-hover table-striped table-bordered">
         <thead>
         <tr class="active">
@@ -175,7 +178,7 @@
         </tr>
         </tfoot>
     </table>
-
+    @endif
 </form><!--END FORM TABLE-->
 
 <div class="col-md-8">{!! urldecode(str_replace("/?","?",$result->appends(Request::all())->render())) !!}</div>
@@ -411,8 +414,7 @@ $total = $result->total();
                         </div>
                         <div class="modal-footer" align="right">
                             <button class="btn btn-default" type="button" data-dismiss="modal">{{trans("crudbooster.button_close")}}</button>
-                            <button class="btn btn-default btn-reset" type="reset"
-                                    onclick='location.href="{{Request::get("lasturl")}}"'>{{trans("crudbooster.button_reset")}}</button>
+                            <button class="btn btn-default btn-reset" type="reset" onclick="localStorage.removeItem('DataTables_{{ config('datatables-html.table.id') }}_' + window.location.pathname );localStorage.removeItem('DataTables_{{ config('datatables-html.table.id') }}_' + (location.pathname+location.search).substr(1) );location.href='{{Request::get("lasturl")}}'" >{{trans("crudbooster.button_reset")}}</button>
                             <button class="btn btn-primary btn-submit" type="submit">{{trans("crudbooster.button_submit")}}</button>
                         </div>
                         {!! CRUDBooster::getUrlParameters(['filter_column','lasturl']) !!}
