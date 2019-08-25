@@ -361,7 +361,7 @@ class CBController extends Controller
                 }
             } else {
 
-                if(isset($field_array[1])) {                    
+                if(isset($field_array[1])) {
                     $result->addselect($table.'.'.$field.' as '.$table.'_'.$field);
                     $columns_table[$index]['type_data'] = CRUDBooster::getFieldType($table, $field);
                     $columns_table[$index]['field'] = $table.'_'.$field;
@@ -372,7 +372,7 @@ class CBController extends Controller
                     $columns_table[$index]['field'] = $field;
                     $columns_table[$index]['field_raw'] = $field;
                 }
-                
+
                 $columns_table[$index]['field_with'] = $table.'.'.$field;
             }
 
@@ -412,7 +412,7 @@ class CBController extends Controller
 							$order_by_columns[] = array('col' => $orderby_col, 'sort' => $v);
 						}
 					}
-					
+
 				}
 			}
         }
@@ -515,15 +515,12 @@ class CBController extends Controller
 			}
 		}
 		$data['order_by_columns'] = $order_by_columns;
-		//ie();
-		//dd($result->columns);
+
 		if($this->table_type == 'datatables') {
-			//dd($result->toSql());
-			//return datatables()->of($result)->toJson();
 			$datatables = datatables()->of($result);
 			$datatables_builder = datatables()->getHtmlBuilder();
 			$col_pad = 0;
-			if($this->button_bulk_action) {	
+			if($this->button_bulk_action) {
 				$datatables_builder->addCheckbox();
 				$datatables->editColumn('checkbox', function($row){
 					return '<input type="checkbox" class="checkbox" name="checkbox[]" value="'.$row->{$this->primary_key}.'" />';
@@ -538,9 +535,8 @@ class CBController extends Controller
 			/* set row class */
 			$table_row_color = $this->table_row_color;
 			$datatables->setRowClass(function ($row) use ($table_row_color, $html_contents) {
-        	//dd($html_contents);
-				if($table_row_color){        
-					$tr_color = NULL;              
+				if($table_row_color){
+					$tr_color = NULL;
 					foreach($table_row_color as $trc){
 						$query = $trc['condition'];
 						$color = $trc['color'];
@@ -560,15 +556,10 @@ class CBController extends Controller
 			$sort_index_dt = 0;
 			$sort_default_index = $col_pad;
 			foreach($columns_table as $index => $col) {
-				// if($this->button_bulk_action) {
-				// 	$sort_index = $index + 1;
-				// 	$sort_default_index = 1;
-				// }
 				if($col['field_with'] == $orderby_col){
 					$sort_index_dt = $index + $col_pad;
-				}
-				
-				//dd($index);
+                }
+
 				$listed_column[$col['field']]['title'] = $col['label'];
 				$col_name = $col['field_with'];
 				$searchable = true;
@@ -582,22 +573,22 @@ class CBController extends Controller
 					$searchable = false;
 					$orderable = false;
 				}
-				$datatables_builder->addColumn(['name' => $col_name, 'data' => $col['field_with'], 'title' => $col['label'], 'footer' => $col['label'], 'width' => ($col['width'])?:"auto", 'searchable' =>  $searchable, 'orderable' => 
+				$datatables_builder->addColumn(['name' => $col_name, 'data' => $col['field_with'], 'title' => $col['label'], 'footer' => $col['label'], 'width' => ($col['width'])?:"auto", 'searchable' =>  $searchable, 'orderable' =>
 				$orderable]);
-					
+
 				$datatables->editColumn($col_name, function ($row) use ($col, $table) {
 					$value = e(@$row->{$col['field']});
-					
+
 					$title = @$row->{$this->title_field};
 					$label = $col['label'];
-					//$value = 'test ' . $row->{$col['field']};
+
 					if(isset($col['image'])) {
-						if($value=='') {			              
+						if($value=='') {
 							$value = "<a  data-lightbox='roadtrip' rel='group_{{$table}}' title='$label: $title' href='".asset('vendor/crudbooster/avatar.jpg')."'><img width='40px' height='40px' src='".asset('vendor/crudbooster/avatar.jpg')."'/></a>";
 						}else{
-							$pic = (strpos($value,'http://')!==FALSE)?$value:asset($value);				            
+							$pic = (strpos($value,'http://')!==FALSE)?$value:asset($value);
 							$value = "<a data-lightbox='roadtrip'  rel='group_{{$table}}' title='$label: $title' href='".$pic."'><img width='40px' height='40px' src='".$pic."'/></a>";
-						}			            
+						}
 					}
 					if(@$col['download']) {
 						$url = (strpos($value,'http://')!==FALSE)?$value:asset($value).'?download=1';
@@ -620,7 +611,7 @@ class CBController extends Controller
 						}
 						@eval("\$value = ".$col['callback_php'].";");
 					}
-					
+
 			            //New method for callback
 					if(isset($col['callback'])) {
 						$value = call_user_func($col['callback'],$row);
@@ -641,11 +632,8 @@ class CBController extends Controller
 					}
 					return $value;
 				});
-				//$datatables->removeColumn($col['field']);
 			}
-			//dd($sort_index_dt, $orderby_sort);
-			//$listed_column = collect($columns_table);
-			//dd($columns_table);
+
 			if($this->button_table_action):
 			    $datatables_builder->addAction();
 		      	$button_action_style = $this->button_action_style;
@@ -663,7 +651,7 @@ class CBController extends Controller
 						];
 					}
 				}
-		      	
+
 		      	$datatables->addColumn('action', function($row) use ($button_action_style, $addaction, $parent_field) {
 		      		$button_html = "<div class='button_action' style='text-align:right'>".view('crudbooster::components.action',compact('addaction','row','button_action_style','parent_field'))->render()."</div>";
 		      		return $button_html;
@@ -674,31 +662,19 @@ class CBController extends Controller
           		$datatables_builder->addColumnBefore(['name' =>$orderby_col, 'data' => $orderby_field, 'visible' =>false]);
           	}
 			if (datatables()->getRequest()->ajax()) {
-				// echo($result->toSql());
-				// die();
 				$datatables->escapeColumns([]);
 		        return $datatables->make(true);
 		    }
 		    $data_columns_arr = $datatables_builder->getColumns()->toArray();
 		    $order_by_columns = collect($order_by_columns);
-		    //dd($order_by_columns);
 		    $orders = array();
 		    foreach($data_columns_arr as $key => $data_columns){
 		    	$find = $order_by_columns->where('col', $data_columns['name'])->first();
-		    	
+
 		    	if($find)
 		    		$orders[] = array($key, $find['sort']);
 		    }
-		    
-		    //echo json_encode($orders);
-		    //die();
-		    /*state_key = window.location.pathname + "-" + USER_UID
- 
-			"stateSaveCallback": function(settings,data) {
-			  localStorage.setItem( 'DataTables-'+settings.sInstance+state_key, JSON.stringify(data) )
-			},
-			"stateLoadCallback": function(settings) {
-			  return JSON.parse( localStorage.getItem( 'DataTables-'+settings.sInstance+state_key ) )}*/
+
 			$data['datatables_html'] = 	$datatables_builder
 										->parameters([
 					                        'stateSave'	   => true,
@@ -721,7 +697,7 @@ class CBController extends Controller
 										                var is_checked = $(this).is(\":checked\");
 										                $(\"#dataTableBuilder .checkbox\").prop(\"checked\",!is_checked).trigger(\"click\");
 										            });
-										
+
 													//console.log(column.settings()[0].aoColumns[i].bSearchable);
 													if(!column.settings()[0].aoColumns[i].bSearchable){
 														i++;
@@ -736,10 +712,10 @@ class CBController extends Controller
 					                                });
 					                                i++;
 					                            });
-					                        
+
 					                        }"
 					                    ])->ajax(['type' => 'POST', 'data' => 'function(d){
-						                    d._method = "GET"; 
+						                    d._method = "GET";
 						                }']);
         }
 
@@ -1430,11 +1406,11 @@ class CBController extends Controller
 
 //         $this->arr[$this->primary_key] = $id = CRUDBooster::newId($this->table); //error on sql server
         $lastInsertId = $id = DB::table($this->table)->insertGetId($this->arr);
-        
+
         //fix bug if primary key is uuid
         if($this->arr[$this->primary_key]!=$id)
             $id = $this->arr[$this->primary_key];
-        
+
         //Looping Data Input Again After Insert
         foreach ($this->data_inputan as $ro) {
             $name = $ro['name'];
@@ -1751,9 +1727,9 @@ class CBController extends Controller
             $file = storage_path('app/'.$file);
             $rows = Excel::load($file, function ($reader) {
             })->get();
-            
+
             $countRows = ($rows)?count($rows):0;
-            
+
             Session::put('total_data_import', $countRows);
 
             $data_import_column = [];
