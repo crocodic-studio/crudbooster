@@ -48,7 +48,7 @@
                             <td>
                                 @if(\crocodicstudio\crudbooster\helpers\Plugin::has($row['key']))
                                     @if(\crocodicstudio\crudbooster\helpers\Plugin::isNeedUpgrade($row['key'], $row['version']))
-                                        <a href="javascrip:;" onclick="installPlugin('{{ route("DeveloperPluginStoreControllerGetInstall",["key"=>$row['key']]) }}','Upgrade {{$row['name']}} plugin to {{ $row['version'] }} version')" class="btn btn-xs btn-info"><i class="fa fa-download"></i> Upgrade</a>
+                                        <a href="javascrip:;" onclick="installPlugin('{{ route("DeveloperPluginStoreControllerGetInstall",["key"=>$row['key']]) }}','<strong>Upgrade {{$row['name']}} plugin v{{ $row['version'] }}.</strong><br/><br/>You can upgrade it manual by run:<br/><code>composer require {{ $row['package'] }} && php artisan vendor:publish</code>')" class="btn btn-xs btn-info"><i class="fa fa-download"></i> Upgrade</a>
                                     @else
                                         <a href="javascript:;" class="btn disabled btn-xs btn-default"><i class="fa fa-check"></i> Installed</a>
                                     @endif
@@ -56,7 +56,11 @@
                                         <a href="javascript:;" onclick="uninstallPlugin('{{ route("DeveloperPluginStoreControllerGetUninstall",["key"=>$row['key']]) }}','Uninstall plugin {{$row['name']}}')" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                                 @else
                                     @if($row['price']==0)
-                                    <a href="javascript:;" onclick="installPlugin('{{ route("DeveloperPluginStoreControllerGetInstall",["key"=>$row['key']]) }}','Install {{$row['name']}} plugin v{{ $row['version'] }}')" class="btn btn-xs btn-success">Install</a>
+                                        @if($row['source'] == 'composer')
+                                            <a href="javascript:;" onclick="installPlugin('{{ route("DeveloperPluginStoreControllerGetInstall",["key"=>$row['key']]) }}','<strong>Install {{$row['name']}} plugin v{{ $row['version'] }}.</strong><br/><br/>You can install it manual by run:<br/><code>composer require {{ $row['package'] }} && php artisan vendor:publish</code>')" class="btn btn-xs btn-success" title="Auto installing plugin via composer usually needs a few minutes">via Composer</a>
+                                        @else
+                                            <a href="javascript:;" onclick="installPlugin('{{ route("DeveloperPluginStoreControllerGetInstall",["key"=>$row['key']]) }}','Install {{$row['name']}} plugin v{{ $row['version'] }}')" class="btn btn-xs btn-success">Install</a>
+                                        @endif
                                     @else
                                         <a href="javascript:;" onclick="buyPlugin(this)" data-key="{{ $row['key'] }}" data-name="{{ $row['name'] }}" data-price="{{ $row['price'] }}" data-version="{{ $row['version'] }}" data-description="{{ $row['description'] }}" data-author="{{ $row['author'] }}" class="btn btn-xs btn-success">Install</a>
                                     @endif
@@ -138,24 +142,46 @@
     </div>
 
     @push("bottom")
+
+        <div class="modal" id="modal-installation">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Plugin Installation</h4>
+                    </div>
+                    <div class="modal-body" style="text-align: center">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" onclick="doInstall()" class="btn btn-primary">Install Now</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
         <script src="{{ cbAsset("js/vue.min.js") }}"></script>
         <script src="{{ cbAsset("js/axios.min.js") }}"></script>
         <script>
             var currentPluginKey = null
+            var current_install_url = null
+            function doInstall() {
+                showLoading("Please wait installing...")
+                $.get(current_install_url,resp=>{
+                    if(resp.status) {
+                        swal("Success", resp.message, "success")
+                    } else {
+                        swal("Oops", resp.message, "warning")
+                    }
+                    hideLoading()
+                    location.href = "{{ request()->url() }}"
+                })
+            }
 
             function installPlugin(url, message) {
-                showConfirmation("{{ cbLang("are_you_sure") }}", message, ()=>{
-                    showLoading("Please wait installing...")
-                    $.get(url,resp=>{
-                        if(resp.status) {
-                            swal("Success", resp.message, "success")
-                        } else {
-                            swal("Oops", resp.message, "warning")
-                        }
-                        hideLoading()
-                        location.href = "{{ request()->url() }}"
-                    })
-                })
+                $("#modal-installation").modal("show")
+                $("#modal-installation .modal-body").html( message )
+                current_install_url = url
             }
 
             function uninstallPlugin(url, message) {
