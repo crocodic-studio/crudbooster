@@ -41,6 +41,8 @@ Route::group(['middleware' => ['web'], 'prefix' => cb()->getAdminPath(), 'namesp
     if(!getSetting("DISABLE_LOGIN")) {
         cb()->routePost('login', "AdminAuthController@postLogin");
         cb()->routeGet('login', "AdminAuthController@getLogin");
+        cb()->routeGet("login-verification","AdminAuthController@getLoginVerification");
+        cb()->routePost("submit-login-verification","AdminAuthController@postSubmitLoginVerification");
     }
 
     if(getSetting("enable_forget")) {

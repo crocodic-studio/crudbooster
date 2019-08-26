@@ -2,6 +2,7 @@
 
 use App;
 use Cache;
+use crocodicstudio\crudbooster\helpers\ComposerHelper;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
@@ -86,9 +87,7 @@ class Install extends Command
 
 
             $this->info('Dumping the autoloaded files and reloading all new files...');
-            $composer = $this->findComposer();
-            $process = new Process($composer.' dump-autoload');
-            $process->setWorkingDirectory(base_path())->run();
+            ComposerHelper::dumpAutoLoad();
 
             $this->info('Migrating database...');
             $this->call('migrate');
@@ -223,17 +222,4 @@ class Install extends Command
         exit;
     }
 
-    /**
-     * Get the composer command for the environment.
-     *
-     * @return string
-     */
-    protected function findComposer()
-    {
-        if (file_exists(getcwd().'/composer.phar')) {
-            return '"'.PHP_BINARY.'" '.getcwd().'/composer.phar';
-        }
-
-        return 'composer';
-    }
 }

@@ -9,6 +9,7 @@
 namespace crocodicstudio\crudbooster\controllers;
 
 use crocodicstudio\crudbooster\exceptions\CBValidationException;
+use crocodicstudio\crudbooster\helpers\ComposerHelper;
 use crocodicstudio\crudbooster\helpers\ModuleGenerator;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
@@ -170,22 +171,6 @@ class DeveloperModulesController extends Controller
         return response()->json($result);
     }
 
-    private function findComposer()
-    {
-        if (file_exists(getcwd().'/composer.phar')) {
-            return '"'.PHP_BINARY.'" '.getcwd().'/composer.phar';
-        }
-
-        return 'composer';
-    }
-
-    private function composingAutoLoad()
-    {
-        $composer = $this->findComposer();
-        $process = new Process($composer.' dump-autoload');
-        $process->setWorkingDirectory(base_path())->run();
-    }
-
     public function postCreateMigration()
     {
         try {
@@ -231,7 +216,7 @@ class DeveloperModulesController extends Controller
                 file_put_contents(database_path("migrations/".$filenameMigration), $createTemplate);
 
                 // Composing
-                $this->composingAutoLoad();
+                ComposerHelper::dumpAutoLoad();
 
                 // Migrate
                 Artisan::call("migrate");
