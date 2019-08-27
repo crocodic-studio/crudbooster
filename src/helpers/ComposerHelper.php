@@ -39,6 +39,7 @@ class ComposerHelper
         $composer = self::findComposer();
 
         // Composer require
+        Log::debug($composer.' remove '.$package);
         $process = new Process($composer.' remove '.$package);
         $process->setTimeout(0);
         $process->setWorkingDirectory(base_path())->run();

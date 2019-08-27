@@ -59,6 +59,8 @@ class DeveloperMenusController extends Controller
                 $menu['path'] = request('url_value');
             }elseif (request('type') == 'path') {
                 $menu['path'] = request('path_value');
+            } elseif (request("type") == "empty") {
+                $menu['path'] = "javascript:void(0);";
             }
 
             DB::table("cb_menus")->insert($menu);
@@ -86,6 +88,8 @@ class DeveloperMenusController extends Controller
                 $menu['path'] = request('url_value');
             }elseif (request('type') == 'path') {
                 $menu['path'] = request('path_value');
+            } elseif (request("type") == "empty") {
+                $menu['path'] = "javascript:void(0);";
             }
             DB::table("cb_menus")->where("id",$id)->update($menu);
 

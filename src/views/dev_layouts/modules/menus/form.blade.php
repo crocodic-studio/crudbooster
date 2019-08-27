@@ -34,10 +34,12 @@
                         <div class="form-group">
                             <label for="">Type</label>
                             <select required name="type" id="type" onchange="if($(this).val()=='module') { $('#module-input-wrap').show(); } else { $('#module-input-wrap').hide(); }" class="form-control">
+                                <option {{ (isset($row) && $row->type=="empty")?"selected":""  }} value="empty">Empty</option>
                                 <option {{ (isset($row) && $row->type=="module")?"selected":"" }} value="module">Module</option>
                                 <option {{ (isset($row) && $row->type=="url")?"selected":"" }} value="url">URL</option>
                                 <option {{ (isset($row) && $row->type=="path")?"selected":"" }} value="path">Path (Prefix Admin URL)</option>
                             </select>
+                            <div class="help-block"></div>
                         </div>
                         <div class="form-group" id="path-value-wrapper" style="display: none;">
                             <label for="">Path Value</label>
@@ -64,6 +66,10 @@
                                             $("#module-input-wrap select").prop('required', false).parent().hide();
                                             $("#path-value-wrapper input").prop("required", true).parent().show();
                                             $("#url-value-wrapper input").prop("required", false).parent().hide();
+                                        } else {
+                                            $("#module-input-wrap select").prop('required', false).parent().hide();
+                                            $("#path-value-wrapper input").prop("required", false).parent().hide();
+                                            $("#url-value-wrapper input").prop("required", false).parent().hide();
                                         }
                                     })
 
@@ -75,9 +81,6 @@
                                     @endif
                                     @if(isset($row) && $row->type=="url")
                                     $("#url-value-wrapper").show();
-                                    @endif
-                                    @if(!isset($row))
-                                    $("#module-input-wrap").show();
                                     @endif
                                 })
                             </script>
