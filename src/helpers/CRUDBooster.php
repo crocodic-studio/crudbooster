@@ -15,7 +15,7 @@ use Validator;
 class CRUDBooster
 {
     /**
-    	Comma-delimited data output from the child table
+    *	Comma-delimited data output from the child table
     */
     public static function echoSelect2Mult($values, $table, $id, $name) {
         $values = explode(",", $values);
@@ -524,13 +524,24 @@ class CRUDBooster
 				function(){  location.href=\"$redirectTo\" });";
     }
 
-    private static function getModulePath()
-    {   
-          //use Request::path instead of default admin_path to allow flexibility for users to define their own admin_path under
-	  // app/config/crudbooster.php
-	  $adminPathSegments = count(explode('/', Request::path()));
-	  		
-          return Request::segment($adminPathSegments);
+    public static function getModulePath()
+    {
+          // Check to position of admin_path
+          if(config("crudbooster.ADMIN_PATH")) {
+              $adminPathSegments = explode('/', Request::path());
+              $no = 1;
+              foreach($adminPathSegments as $path) {
+                  if($path == config("crudbooster.ADMIN_PATH")) {
+                      $segment = $no+1;
+                      break;
+                  }
+                  $no++;
+              }
+          } else {
+              $segment = 1;
+          }
+
+          return Request::segment($segment);
     }	
 
     public static function mainpath($path = null)
