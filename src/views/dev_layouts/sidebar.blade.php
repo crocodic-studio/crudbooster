@@ -27,7 +27,7 @@
                     </a>
                 </li>
 
-                <li class="{{ request()->is(cb()->getDeveloperPath("plugins")."*")?"active":"" }}">
+                <li class="{{ request()->is(cb()->getDeveloperPath("plugins"))?"active":"" }}">
                     <a href='{{ cb()->getDeveloperUrl("plugins") }}'><i class='fa fa-star'></i>
                         <span>Plugin Store</span>
                     </a>

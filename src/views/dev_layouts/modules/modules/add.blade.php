@@ -416,7 +416,7 @@
 
 
     @push('bottom')
-        <script src="{{ cbAsset("adminlte/bower_components/bootstrap-toggle/bootstrap-toggle.min.js") }}"></script>
+        <script src="{{ cbAsset("js/bootstrap-toggle/bootstrap-toggle.min.js") }}"></script>
         <script src="{{ cbAsset("js/vue.min.js") }}"></script>
         <script src="{{ cbAsset("js/axios.min.js") }}"></script>
         <script>
@@ -744,7 +744,7 @@
         </script>
     @endpush
     @push('head')
-        <link rel="stylesheet" href="{{ cbAsset("adminlte/bower_components/bootstrap-toggle/bootstrap-toggle.min.css") }}">
+        <link rel="stylesheet" href="{{ cbAsset("js/bootstrap-toggle/bootstrap-toggle.min.css") }}">
         <style>
             .font-wrap {
                 color: #000000;

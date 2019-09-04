@@ -12,6 +12,7 @@ use crocodicstudio\crudbooster\exceptions\CBValidationException;
 use crocodicstudio\crudbooster\helpers\ComposerHelper;
 use crocodicstudio\crudbooster\helpers\CurlHelper;
 use crocodicstudio\crudbooster\helpers\ModuleGenerator;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -144,6 +145,8 @@ class DeveloperPluginStoreController extends Controller
                         // Make a composer
                         $output = ComposerHelper::composerRequire($plugin['package'], $plugin['service_provider']);
 
+                        Artisan::call("migrate");
+
                         return response()->json(['status'=>true,'message'=>$output]);
                     } else {
                         return response()->json(['status'=>true,'message'=>'Installation is failed, there is no package and or service provider']);
@@ -184,6 +187,9 @@ class DeveloperPluginStoreController extends Controller
                             // Copy asset
                             $this->recursiveCopy(app_path("CBPlugins/".$key."/".$pluginJson['asset']), public_path("cb_asset/".$key));
                         }
+
+                        //Migrate
+                        Artisan::call("migrate");
 
                         return response()->json(['status'=>true,'message'=>'Install / update plugin has been succesfull!']);
 

@@ -89,8 +89,13 @@ class CRUDBoosterServiceProvider extends ServiceProvider
             foreach($views as $view) {
                 if($view != "." && $view != "..") {
                     $basename = basename($view);
+
+                    // register migrations
+                    $this->loadMigrationsFrom(app_path("CBPlugins".DIRECTORY_SEPARATOR.$basename.DIRECTORY_SEPARATOR."Migrations"));
+
                     // register view
                     $this->loadViewsFrom(app_path("CBPlugins".DIRECTORY_SEPARATOR.$basename.DIRECTORY_SEPARATOR."Views"),$basename);
+
                     // register route
                     require app_path("CBPlugins".DIRECTORY_SEPARATOR.$basename.DIRECTORY_SEPARATOR."Routes".DIRECTORY_SEPARATOR."Route.php");
                 }

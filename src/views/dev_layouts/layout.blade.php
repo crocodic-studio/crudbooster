@@ -24,7 +24,7 @@
 
     @stack('head')
 </head>
-<body class="hold-transition skin-green sidebar-mini">
+<body class="hold-transition {{ isset($sidebar_collapse)?"sidebar-collapse":"" }} skin-green sidebar-mini">
 <div id='app' class="wrapper">
 
     <!-- Header -->
