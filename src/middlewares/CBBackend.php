@@ -5,6 +5,7 @@ namespace crocodicstudio\crudbooster\middlewares;
 use Closure;
 use CRUDBooster;
 use DB;
+
 class CBBackend
 {
     /**
