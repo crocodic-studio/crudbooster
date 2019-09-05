@@ -31,12 +31,16 @@ class MenusController extends CBController
         $this->button_import = false;
 
         $id = CRUDBooster::getCurrentId();
-        if (Request::segment(3) == 'edit') {
-            $id = Request::segment(4);
+	
+	$id_segment = count(explode('/', Request::path()));
+        $edit_segment = $id_segment-1;
+	    
+        if (Request::segment($edit_segment) == 'edit') {
+            $id = Request::segment($id_segment);
             Session::put('current_row_id', $id);
         }
         $row = CRUDBooster::first($this->table, $id);
-        $row = (Request::segment(3) == 'edit') ? $row : null;
+        $row = (Request::segment($edit_segment) == 'edit') ? $row : null;
 
         $id_module = $id_statistic = 0;
 
