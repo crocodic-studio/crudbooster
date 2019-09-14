@@ -1150,13 +1150,12 @@ class CBController extends Controller
 
         $this->hook_before_add($this->arr);
 
-//         $this->arr[$this->primary_key] = $id = CRUDBooster::newId($this->table); //error on sql server
-        $lastInsertId = $id = DB::table($this->table)->insertGetId($this->arr);
-        
+        //$this->arr[$this->primary_key] = $id = CRUDBooster::newId($this->table); //error on sql server
+        $lastInsertId= $id = DB::table($this->table)->insertGetId($this->arr);
         //fix bug if primary key is uuid
-        if($this->arr[$this->primary_key]!=$id)
+        if($this->arr[$this->primary_key]!=$id && isset($this->arr[$this->primary_key])){
             $id = $this->arr[$this->primary_key];
-        
+        }
         //Looping Data Input Again After Insert
         foreach ($this->data_inputan as $ro) {
             $name = $ro['name'];
@@ -1178,7 +1177,7 @@ class CBController extends Controller
                         $relationship_table_pk = CB::pk($ro['relationship_table']);
                         foreach ($inputdata as $input_id) {
                             DB::table($ro['relationship_table'])->insert([
-//                                 $relationship_table_pk => CRUDBooster::newId($ro['relationship_table']),
+                                //$relationship_table_pk => CRUDBooster::newId($ro['relationship_table']),
                                 $foreignKey => $id,
                                 $foreignKey2 => $input_id,
                             ]);
