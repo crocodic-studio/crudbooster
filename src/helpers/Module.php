@@ -37,8 +37,8 @@ class Module
                     $this->menu = (!$this->menu)?cb()->find("cb_menus",["type"=>"path","path"=>request()->segment(2)]):$this->menu;
                     if($this->menu) {
                         $this->privilege = cb()->find("cb_role_privileges",[
-                           "cb_menus_id"=>$this->menu->id,
-                           "cb_roles_id"=>cb()->session()->roleId()
+                            "cb_menus_id"=>$this->menu->id,
+                            "cb_roles_id"=>cb()->session()->roleId()
                         ]);
                     }
                 }
@@ -154,7 +154,7 @@ class Module
     public function editURL($id = null)
     {
         if($this->controller_class && method_exists($this->controller_class, 'getEdit')) {
-            return action($this->controller.'@getEdit',['id'=>$id]);
+            return action($this->controller.'@getEdit')."/".$id;
         }else{
             return null;
         }
@@ -163,7 +163,7 @@ class Module
     public function editSaveURL($id = null)
     {
         if(method_exists($this->controller_class, 'postEditSave')) {
-            return action($this->controller.'@postEditSave',['id'=>$id]);
+            return action($this->controller.'@postEditSave')."/".$id;
         }else{
             return null;
         }
@@ -172,7 +172,7 @@ class Module
     public function detailURL($id=null)
     {
         if($this->controller_class && method_exists($this->controller_class, 'getDetail')) {
-            return action($this->controller.'@getDetail',['id'=>$id]);
+            return action($this->controller.'@getDetail')."/".$id;
         }else{
             return null;
         }
@@ -181,7 +181,7 @@ class Module
     public function deleteURL($id=null)
     {
         if($this->controller_class && method_exists($this->controller_class, 'getDelete')) {
-            return action($this->controller.'@getDelete',['id'=>$id]);
+            return action($this->controller.'@getDelete')."/".$id;
         }else{
             return null;
         }
