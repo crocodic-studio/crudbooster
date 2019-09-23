@@ -1,10 +1,10 @@
 @extends("crudbooster::dev_layouts.layout")
 @section("content")
     @push('head')
-        <link rel="stylesheet" href="{{ cbAsset("adminlte/bower_components/bootstrap-toggle/bootstrap-toggle.min.css") }}">
+        <link rel="stylesheet" href="{{ cbAsset("js/bootstrap-toggle/bootstrap-toggle.min.css") }}">
     @endpush
     @push('bottom')
-        <script src="{{ cbAsset("adminlte/bower_components/bootstrap-toggle/bootstrap-toggle.min.js") }}"></script>
+        <script src="{{ cbAsset("js/bootstrap-toggle/bootstrap-toggle.min.js") }}"></script>
     @endpush
     <form method="post" action="{{ route("DeveloperMiscellaneousControllerPostSave") }}">
         {!! csrf_field() !!}
