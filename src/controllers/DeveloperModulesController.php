@@ -185,6 +185,8 @@ class DeveloperModulesController extends Controller
                 $createTemplate = str_replace("DummyClass", $className, $createTemplate);
                 $createTemplate = str_replace("DummyTable", $tableName, $createTemplate);
                 $createTemplate = str_replace("\$table->increments('id');","",$createTemplate);
+                $createTemplate = str_replace("\$table->bigIncrements('id');","",$createTemplate);
+                $createTemplate = str_replace("\$table->timestamps();","{structure}",$createTemplate);
 
                 $structureItems = "";
 
@@ -210,7 +212,7 @@ class DeveloperModulesController extends Controller
                         $structureItems .= "\$table->".$item['type_data']."('".$item['field_name']."')$nullable;\n\t\t\t";
                     }
                 }
-                $createTemplate = str_replace("\$table->timestamps();", $structureItems, $createTemplate);
+                $createTemplate = str_replace("{structure}", $structureItems, $createTemplate);
 
                 // Put File onto the migration folders
                 file_put_contents(database_path("migrations/".$filenameMigration), $createTemplate);
