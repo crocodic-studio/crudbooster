@@ -5,9 +5,9 @@
     <title>{{ themeTitle($page_title) }}</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <!-- Bootstrap 3.3.2 -->
-    <link href="{{cbAsset('adminlte/bower_components/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{cbAsset('js/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
     <!-- Font Awesome Icons -->
-    <link href="{{cbAsset("adminlte/bower_components/font-awesome/css/font-awesome.min.css")}}" rel="stylesheet" type="text/css"/>
+    <link href="{{cbAsset("js/font-awesome/css/font-awesome.min.css")}}" rel="stylesheet" type="text/css"/>
 
     <!-- Theme style -->
     <link href="{{ cbAsset("adminlte/dist/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css"/>
