@@ -91,12 +91,7 @@ class Install extends Command
 
             $this->info('Migrating database...');
             $this->call('migrate');
-
             $this->call('config:clear');
-            if (app()->version() < 5.6) {
-                $this->call('optimize');
-            }
-
             $this->info('Installing CRUDBooster Is Completed ! Thank You :)');
         } else {
             $this->info('Setup Aborted !');
@@ -126,17 +121,17 @@ class Install extends Command
         $system_failed = 0;
         $laravel = app();
 
-        if ($laravel::VERSION >= 5.6) {
-            $this->info('Laravel Version (>= 5.6): [Good]');
+        if ($laravel::VERSION >= 5.7) {
+            $this->info('Laravel Version (>= 5.7): [Good]');
         } else {
-            $this->warn('Laravel Version (>= 5.6): [Bad]');
+            $this->warn('Laravel Version (>= 5.7): [Bad]');
             $system_failed++;
         }
 
-        if (version_compare(phpversion(), '7.1.3', '>=')) {
-            $this->info('PHP Version (>= 7.*): [Good]');
+        if (version_compare(phpversion(), '7.2.0', '>=')) {
+            $this->info('PHP Version (>= 7.2.0): [Good]');
         } else {
-            $this->warn('PHP Version (>= 7.*): [Bad] Yours: '.phpversion());
+            $this->warn('PHP Version (>= 7.2.0): [Bad] Yours: '.phpversion());
             $system_failed++;
         }
 
