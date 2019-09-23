@@ -817,14 +817,14 @@
                     @foreach($fontData as $f)
                         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                             <div class="panel panel-default">
-                                <div class="panel-heading" role="tab" id="heading{{str_slug($f['label'])}}">
+                                <div class="panel-heading" role="tab" id="heading{{ slug($f['label'])}}">
                                     <h4 class="panel-title">
-                                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#{{ str_slug($f['label']) }}" aria-expanded="true">
+                                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#{{ slug($f['label']) }}" aria-expanded="true">
                                             {{$f['label']}}
                                         </a>
                                     </h4>
                                 </div>
-                                <div id="{{ str_slug($f['label']) }}" class="panel-collapse collapse" role="tabpanel" >
+                                <div id="{{ slug($f['label']) }}" class="panel-collapse collapse" role="tabpanel" >
                                     <div class="panel-body">
                                         <div class="row">
                                             @foreach($f['data'] as $icon)
