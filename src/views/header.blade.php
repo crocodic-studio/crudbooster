@@ -2,7 +2,10 @@
 <header class="main-header">
 
     <!-- Logo -->
-    <a href="{{url(config('crudbooster.ADMIN_PATH'))}}" title='{{Session::get('appname')}}' class="logo">{{CRUDBooster::getSetting('appname')}}</a>
+    <a href="{{url(config('crudbooster.ADMIN_PATH'))}}" title='{{Session::get('appname')}}' class="logo">
+        <span class="logo-lg"><img src="{{asset(CRUDBooster::getSetting('logo'))}}" class="brandlogo-image"></span>
+        <span class="logo-mini"><img src="{{asset(CRUDBooster::getSetting('logo'))}}" class="brandlogo-image"></span>
+    </a>
 
     <!-- Header Navbar -->
     <nav class="navbar navbar-static-top" role="navigation">

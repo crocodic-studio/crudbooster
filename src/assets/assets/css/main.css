@@ -1,3 +1,14 @@
+.brandlogo-image {
+  line-height: .8;
+  margin-left: .8rem;
+  margin-right: .5rem;
+  margin-top: 10px;
+  max-height: 34px;
+  width: auto;
+}
+.main-header .logo .logo-lg{
+  margin-left: -1.5em;
+}
 .select2-dropdown {z-index: 9999 !important}
 
 .bootstrap-timepicker-minute,.bootstrap-timepicker-hour,.bootstrap-timepicker-meridian,.bootstrap-timepicker-second {
