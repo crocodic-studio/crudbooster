@@ -218,6 +218,11 @@ class CB
         }
     }
 
+    /**
+     * @param $table
+     * @param $id
+     * @param $data
+     */
     public function update($table, $id, $data)
     {
         DB::table($table)
@@ -225,6 +230,11 @@ class CB
             ->update($data);
     }
 
+    /**
+     * @param $table
+     * @param $id
+     * @param $params
+     */
     public function updateCompact($table, $id, $params) {
         $data = [];
         foreach ($params as $param) {
@@ -233,6 +243,20 @@ class CB
         $this->update($table, $id, $data);
     }
 
+    /**
+     * @param $table
+     * @param $id
+     */
+    public function delete($table, $id)
+    {
+        DB::table($table)->where($this->pk($table), $id)->delete();
+    }
+
+    /**
+     * @param $table
+     * @param $id
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|mixed|null|object
+     */
     public function find($table, $id)
     {
         if (is_array($id)) {
