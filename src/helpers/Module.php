@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: User
- * Date: 2/4/2019
- * Time: 3:44 PM
- */
 
 namespace crocodicstudio\crudbooster\helpers;
 

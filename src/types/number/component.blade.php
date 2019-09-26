@@ -10,6 +10,7 @@
                {!! $column->getOnblurJsFunctionName()?"onBlur='".$column->getOnblurJsFunctionName()."'":"" !!}
                max="{{ $column->getMax() }}"
                min="{{ $column->getMin() }}"
+               @if($column->getStep()) step="{{ $column->getStep() }}" @endif
                class='form-control'
                name="{{ $column->getName() }}"
                id="{{ $column->getName() }}"

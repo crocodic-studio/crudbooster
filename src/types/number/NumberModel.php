@@ -15,7 +15,24 @@ class NumberModel extends ColumnModel
 
     private $max;
     private $min;
+    private $step;
 
+    /**
+     * @return mixed
+     */
+    public function getStep()
+    {
+        return $this->step;
+    }
+
+    /**
+     * @param mixed $step
+     */
+    public function setStep($step): void
+    {
+        $this->step = $step;
+    }
+    
     /**
      * @return mixed
      */
