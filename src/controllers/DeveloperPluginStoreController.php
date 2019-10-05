@@ -41,53 +41,6 @@ class DeveloperPluginStoreController extends Controller
         return view($this->view.'.index',$data);
     }
 
-    public function postLoginAccount() {
-        $curl = new CurlHelper("http://crudbooster.com/api/login_member");
-        $curl->headers([
-            "Access-Token"=>"bVc/ZnpYNSZrMVZYOHE5U2tqcSU=",
-            "User-Agent"=>"CRUDBooster-Bot-Client"
-        ]);
-        $curl->data([
-            "email"=>request("email"),
-            "password"=>request("password")
-        ]);
-        $response = $curl->send();
-
-        if($respArray = json_decode($response, true)) {
-            if($respArray['status'] && isset($respArray['token'])) {
-                session(['account_token'=>$respArray['token']]);
-            }
-            return response()->make($response,200,["Content-Type"=>"application/json"]);
-        } else {
-            return response()->json(['status'=>false,'message'=>'failed']);
-        }
-    }
-
-    public function postRequestBuyPlugin() {
-        $curl = new CurlHelper("http://crudbooster.com/api/request_buy_plugin");
-        $curl->headers([
-            "Access-Token"=>"bVc/ZnpYNSZrMVZYOHE5U2tqcSU=",
-            "User-Agent"=>"CRUDBooster-Bot-Client"
-        ]);
-        $curl->data([
-            "key"=>base64_encode(request("key")),
-            "token"=>base64_encode(request("token")),
-            "ref"=>base64_encode(cb()->getDeveloperUrl("plugins"))
-        ]);
-        $response = $curl->send();
-
-        if($respArray = json_decode($response, true)) {
-            if($respArray['status']) {
-                $form = base64_decode($respArray['payment']);
-                return response()->json(['status'=>true,'form'=>$form]);
-            } else {
-                return response()->json($respArray);
-            }
-        } else {
-            return response()->json(['status'=>false,'message'=>'failed','raw'=>$response]);
-        }
-    }
-
     public function getUninstall($key)
     {
         $pluginData = $this->fetchPluginData();
@@ -224,10 +177,10 @@ class DeveloperPluginStoreController extends Controller
                                 "No-Cache: ".$no_cache
                 ]
             ];
-            Log::debug("Headers: ".print_r($opts,true));
+
             $context = stream_context_create($opts);
             $data = file_get_contents(base64_decode("aHR0cDovL2NydWRib29zdGVyLmNvbS9hcGkvcGx1Z2luP2FjY2Vzc190b2tlbj1iVmMvWm5wWU5TWnJNVlpZT0hFNVUydHFjU1U9"), false, $context);
-            Log::debug("Plugin API : ".$data);
+            
             if($data) {
                 $data = json_decode($data, true);
                 if($data['status']==true) {
