@@ -67,7 +67,7 @@ trait Query
         {
             $keyword = sanitizeXSS(request("q"));
             if(isset($this->data['hook_search_query'])) {
-                $query = call_user_func($this->data['hook_search_query'], $query);
+                $query = call_user_func($this->data['hook_search_query'], $query, $keyword);
             }else{
                 $query->where(function ($where) use ($columns, $keyword) {
                     /**
