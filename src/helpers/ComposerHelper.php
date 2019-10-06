@@ -50,7 +50,6 @@ class ComposerHelper
         $php = self::findPHP();
 
         // Composer require
-        Log::debug($composer." require ".$package);
         $process = new Process($composer.' require '.$package);
         $process->setTimeout(0);
         $process->setInput("Y");
