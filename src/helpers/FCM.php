@@ -11,68 +11,77 @@ namespace crocodicstudio\crudbooster\helpers;
 
 class FCM
 {
+    private static $title;
+    private $message;
+    private $data;
+    private $fields;
 
-    /**
-     * @param array $registration_ids
-     * @param string $title
-     * @param string $message
-     * @param array $data
-     * @return string
-     */
-    public function sendToIOS($registration_ids, $title, $message, $data) {
-        $data['title'] = $title;
-        $data['message'] = $message;
-        $fields = [
-            'registration_ids' => $registration_ids,
-            'data' => $data,
+    public static function title($title) {
+        static::$title = $title;
+        return new static;
+    }
+
+    public function message($message) {
+        $this->message = $message;
+        return $this;
+    }
+
+    public function data(array $data) {
+        $this->data = $data;
+        return $this;
+    }
+
+    public function tokenIOS(array $tokens) {
+        $data['title'] = static::$title;
+        $data['message'] = $this->message;
+        $this->fields = [
+            'registration_ids' => $tokens,
+            'data' => $this->data,
             'content_available' => true,
             'notification' => [
                 'sound' => 'default',
                 'badge' => 0,
-                'title' => trim(strip_tags($title)),
-                'body' => trim(strip_tags($message)),
+                'title' => trim(strip_tags(static::$title)),
+                'body' => trim(strip_tags($this->message)),
             ],
             'priority' => 'high',
         ];
-        return $this->run($fields);
+        return $this;
     }
 
-    /**
-     * @param array $registration_ids
-     * @param string $title
-     * @param string $message
-     * @param array $data
-     * @return string
-     */
-    public function sendToAndroid($registration_ids, $title, $message, $data) {
-        $data['title'] = $title;
-        $data['message'] = $message;
-        $fields = [
-            'registration_ids' => $registration_ids,
-            'data' => $data,
+    public function tokenAndroid(array $tokens) {
+        $data['title'] = static::$title;
+        $data['message'] = $this->message;
+        $this->fields = [
+            'registration_ids' => $tokens,
+            'data' => $this->data,
             'content_available' => true,
             'priority' => 'high',
         ];
-        return $this->run($fields);
+        return $this;
     }
 
-    private function run($fields) {
+    public function send() {
         $url = 'https://fcm.googleapis.com/fcm/send';
         $headers = [
             'Authorization:key='.cbConfig('GOOGLE_FCM_SERVER_KEY'),
             'Content-Type:application/json',
         ];
 
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $result = curl_exec($ch);
-        curl_close($ch);
-        return $result;
+        if(static::$title && $this->message) {
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($this->fields));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $result = curl_exec($ch);
+            curl_close($ch);
+            return $result;
+        }
+        
+        return null;
     }
 
 }

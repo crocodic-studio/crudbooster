@@ -26,8 +26,11 @@ class MailHelper
         $this->sender_name = $name;
     }
 
-    public function content($subject, $content) {
+    public function subject($subject) {
         $this->subject = $subject;
+    }
+
+    public function content($content) {
         $this->content = $content;
     }
 
