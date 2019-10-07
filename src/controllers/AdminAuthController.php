@@ -45,7 +45,8 @@ class AdminAuthController extends CBController
                     $mail = new MailHelper();
                     $mail->to($user->email);
                     $mail->sender("noreply@".$_SERVER['SERVER_NAME'],cb()->getAppName());
-                    $mail->content("Please verify that it's you?","
+                    $mail->subject("Please verify that it's you?");
+                    $mail->content("
                     Hi $user->name,<br/><br>
                     
                     Your sign in attempt seems a little different than usual. This could be because you are signing in from a different device or a different location.<br/>
