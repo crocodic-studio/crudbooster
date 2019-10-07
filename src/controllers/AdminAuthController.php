@@ -41,7 +41,7 @@ class AdminAuthController extends CBController
 
                 if( request()->ip() != $user->ip_address || request()->userAgent() != $user->user_agent) {
                     $code = Str::random(5);
-                    session(["login_verification_code"=>$code]);
+                    session(["login_verification_code"=>$code,"last_id_attempt"=>auth()->id()]);
                     $mail = new MailHelper();
                     $mail->to($user->email);
                     $mail->sender("noreply@".$_SERVER['SERVER_NAME'],cb()->getAppName());
@@ -89,7 +89,10 @@ class AdminAuthController extends CBController
 
             if(session()->has("login_verification_code")) {
                 $sessCode = session("login_verification_code");
-                if(request("code") == $sessCode) {
+                if(request("code") == $sessCode && session("last_id_attempt")) {
+                    // Login
+                    auth()->loginUsingId(session("last_id_attempt"));
+
                     // Update Login At
                     cb()->update("users", auth()->id(), [
                         "login_at"=>now()->format("Y-m-d H:i:s"),
@@ -99,6 +102,9 @@ class AdminAuthController extends CBController
 
                     // When login user success, clear suspend attempt
                     $this->clearSuspendAttempt();
+
+                    // Clear verification session
+                    session()->forget(["last_id_attempt","login_verification_code"]);
 
                     cbHook()->hookPostLogin();
 
