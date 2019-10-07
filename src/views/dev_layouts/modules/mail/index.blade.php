@@ -60,7 +60,8 @@
                         $mail = new MailHelper();
                         $mail->sender($sender_email, $sender_name);
                         $mail->to($target_email);
-                        $mail->content($subject, $content);
+                        $mail->subject($subject);
+                        $mail->content($content);
                         $mail->send();
                         '));
                     ?>
