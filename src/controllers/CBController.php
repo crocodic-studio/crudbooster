@@ -33,7 +33,7 @@ class CBController extends Controller
     public function getIndex()
     {
         if(!module()->canBrowse()) return cb()->redirect(cb()->getAdminUrl(),cbLang("you_dont_have_privilege_to_this_area"));
-
+        
         $query = $this->repository();
         $result = $query->paginate( request("limit")?:$this->data['limit'] );
         $data['result'] = $result;

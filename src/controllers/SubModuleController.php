@@ -23,7 +23,7 @@ trait SubModuleController
 
             $query = $this->repository();
             $query->where($foreignKey, $foreignValue);
-            $result = $query->paginate( request("limit")?:cbConfig("LIMIT_TABLE_DATA") );
+            $result = $query->paginate( request("limit")?:$this->data["limit"] );
             $data['result'] = $result;
 
             $data['additionalHeaderTitle'] = $subModule['parentTitle'];
