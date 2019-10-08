@@ -10,7 +10,7 @@
         <div class="box-header">
             <h1 class="box-title">Add User</h1>
         </div>
-        <form method="post" action="{{ cb()->getDeveloperUrl("users/add-save/".$row->id) }}">
+        <form method="post" action="{{ cb()->getDeveloperUrl("users/add-save") }}">
             {!! csrf_field() !!}
         <div class="box-body">
             <div class="form-group">
