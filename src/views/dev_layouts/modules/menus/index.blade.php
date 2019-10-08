@@ -99,8 +99,8 @@
                     <li data-id="{{ $menu->getId() }}" data-name="{{ $menu->getName() }}">
                         <div class="gray-gradient">
                             <span>:::
-                                <a title="{{ __("cb::cb.click_to_edit") }}" href="{{ route('DeveloperMenusControllerGetEdit',['id'=>$menu->getId()]) }}" class="btn btn-xs btn-success"><i class="fa fa-pencil"></i></a>
-                                <a title="{{ __("cb::cb.click_to_delete") }}" onclick="deleteConfirmation('{{ route('DeveloperMenusControllerGetDelete',['id'=>$menu->getId()]) }}')" href="javascript:;" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+                                <a title="{{ __("cb::cb.click_to_edit") }}" href="{{ cb()->getDeveloperUrl("menus/edit/".$menu->getId()) }}" class="btn btn-xs btn-success"><i class="fa fa-pencil"></i></a>
+                                <a title="{{ __("cb::cb.click_to_delete") }}" onclick="deleteConfirmation('{{ cb()->getDeveloperUrl("menus/delete/".$menu->getId()) }}')" href="javascript:;" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                                 &nbsp;&nbsp;&nbsp;&nbsp;<i class="{{ $menu->getIcon() }}"></i> {{$menu->getName()}}
                             </span>
                         </div>
@@ -110,8 +110,8 @@
                                 <li data-id="{{ $sub->getId() }}" data-name="{{ $sub->getName() }}">
                                     <div class="gray-gradient">
                                         <span>:::
-                                            <a title="{{ __("cb::cb.click_to_edit") }}" href="{{ route('DeveloperMenusControllerGetEdit',['id'=>$sub->getId()]) }}" class="btn btn-xs btn-success"><i class="fa fa-pencil"></i></a>
-                                            <a title="{{ __("cb::cb.click_to_delete") }}" onclick="deleteConfirmation('{{ route('DeveloperMenusControllerGetDelete',['id'=>$sub->getId()]) }}')" href="javascript:;" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+                                            <a title="{{ __("cb::cb.click_to_edit") }}" href="{{ cb()->getDeveloperUrl("menus/edit/".$sub->getId()) }}" class="btn btn-xs btn-success"><i class="fa fa-pencil"></i></a>
+                                            <a title="{{ __("cb::cb.click_to_delete") }}" onclick="deleteConfirmation('{{ cb()->getDeveloperUrl("menus/delete/".$sub->getId()) }}')" href="javascript:;" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                                             &nbsp;&nbsp;&nbsp;&nbsp;<i class="{{ $sub->getIcon() }}"></i> {{$sub->getName()}}
                                         </span>
                                     </div>
@@ -121,8 +121,8 @@
                                         <li data-id="{{ $sub2->getId() }}" data-name="{{ $sub2->getName() }}" >
                                             <div class="gray-gradient">
                                                 <span>:::
-                                                    <a title="{{ __("cb::cb.click_to_edit") }}" href="{{ route('DeveloperMenusControllerGetEdit',['id'=>$sub2->getId()]) }}" class="btn btn-xs btn-success"><i class="fa fa-pencil"></i></a>
-                                                    <a title="{{ __("cb::cb.click_to_delete") }}" onclick="deleteConfirmation('{{ route('DeveloperMenusControllerGetDelete',['id'=>$sub2->getId()]) }}')" href="javascript:;" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+                                                    <a title="{{ __("cb::cb.click_to_edit") }}" href="{{ cb()->getDeveloperUrl("menus/edit/".$sub2->getId()) }}" class="btn btn-xs btn-success"><i class="fa fa-pencil"></i></a>
+                                                    <a title="{{ __("cb::cb.click_to_delete") }}" onclick="deleteConfirmation('{{ cb()->getDeveloperUrl("menus/delete/".$sub2->getId()) }}')" href="javascript:;" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                                                     &nbsp;&nbsp;&nbsp;&nbsp;<i class="{{ $sub2->getIcon() }}"></i> {{$sub2->getName()}}
                                                 </span>
                                             </div>

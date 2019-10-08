@@ -27,8 +27,8 @@
                         <td>{{ $row->email }}</td>
                         <td>{{ $row->cb_roles_name }}</td>
                         <td>
-                            <a href="{{ route('DeveloperUsersControllerGetEdit',['id'=>$row->id]) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <a href="{{ route('DeveloperUsersControllerGetDelete',['id'=>$row->id]) }}" onclick="if(!confirm('Are you sure want to delete?')) return false" class="btn btn-danger btn-sm">Delete</a>
+                            <a href="{{ cb()->getDeveloperUrl("users/edit/".$row->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="{{ cb()->getDeveloperUrl("users/delete/".$row->id)}}" onclick="if(!confirm('Are you sure want to delete?')) return false" class="btn btn-danger btn-sm">Delete</a>
                         </td>
                     </tr>
                     @endforeach

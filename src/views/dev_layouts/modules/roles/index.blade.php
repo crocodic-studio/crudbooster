@@ -42,7 +42,7 @@
         @foreach($result as $row)
             <div class="col-sm-3">
                 <div class="grid-item gray-gradient">
-                    <a title="{{ __("cb::cb.click_to_edit") }}" href="{{ route('DeveloperRolesControllerGetEdit',['id'=>$row->id]) }}">
+                    <a title="{{ __("cb::cb.click_to_edit") }}" href="{{ cb()->getDeveloperUrl("roles/edit/".$row->id) }}">
                         <i class="fa fa-user"></i> <br> {{ $row->name }}
                     </a>
                 </div>
@@ -50,7 +50,7 @@
         @endforeach
         <div class="col-sm-3">
             <div class="grid-item grid-item-dotted">
-                <a title="{{ __("cb::cb.click_to_add") }}" href="{{ route('DeveloperRolesControllerGetAdd') }}">
+                <a title="{{ __("cb::cb.click_to_add") }}" href="{{ cb()->getDeveloperUrl("roles/edit/".$row->id) }}">
                     <i class="fa fa-plus"></i> <br> Add Role
                 </a>
             </div>

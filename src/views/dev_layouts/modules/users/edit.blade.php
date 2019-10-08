@@ -10,7 +10,7 @@
         <div class="box-header">
             <h1 class="box-title">Edit User</h1>
         </div>
-        <form method="post" action="{{ route('DeveloperUsersControllerPostEditSave',['id'=>$row->id]) }}">
+        <form method="post" action="{{ cb()->getDeveloperUrl("users/edit-save/".$row->id) }}">
             {!! csrf_field() !!}
         <div class="box-body">
             <div class="form-group">

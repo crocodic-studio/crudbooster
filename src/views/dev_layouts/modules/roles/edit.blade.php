@@ -40,7 +40,7 @@
         </div>
         <div class="col-sm-6">
             <div style="text-align: right">
-                <a href="javascript:deleteConfirmation('{{ route('DeveloperRolesControllerGetDelete',['id'=>$row->id]) }}')" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</a>
+                <a href="javascript:deleteConfirmation('{{  cb()->getDeveloperUrl("roles/delete/".$row->id) }}')" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</a>
             </div>
         </div>
     </div>
@@ -49,7 +49,7 @@
         <div class="box-header with-border">
             <h1 class="box-title">Edit Role</h1>
         </div>
-        <form method="post" action="{{ route('DeveloperRolesControllerPostEditSave',['id'=>$row->id]) }}">
+        <form method="post" action="{{ cb()->getDeveloperUrl("roles/edit-save/".$row->id) }}">
             {!! csrf_field() !!}
         <div class="box-body">
             <div class="form-group">
