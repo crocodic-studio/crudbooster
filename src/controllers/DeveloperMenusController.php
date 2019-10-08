@@ -39,7 +39,7 @@ class DeveloperMenusController extends Controller
     public function getEdit($id) {
         $data = [];
         $data['form_title'] = "Edit Menu";
-        $data['form_url'] = route('DeveloperMenusControllerPostEditSave',['id'=>$id]);
+        $data['form_url'] = cb()->getDeveloperUrl("menus/edit-save/".$id);
         $data['modules'] = DB::table("cb_modules")->orderBy("name","asc")->get();
         $data['row'] = cb()->find("cb_menus", $id);
         return view($this->view.".form", $data);
