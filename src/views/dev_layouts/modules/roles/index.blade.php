@@ -50,7 +50,7 @@
         @endforeach
         <div class="col-sm-3">
             <div class="grid-item grid-item-dotted">
-                <a title="{{ __("cb::cb.click_to_add") }}" href="{{ cb()->getDeveloperUrl("roles/edit/".$row->id) }}">
+                <a title="{{ __("cb::cb.click_to_add") }}" href="{{ cb()->getDeveloperUrl("roles/add") }}">
                     <i class="fa fa-plus"></i> <br> Add Role
                 </a>
             </div>
