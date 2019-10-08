@@ -342,6 +342,12 @@ if(!function_exists('dummyPhoto')) {
     }
 }
 
+if(!function_exists("str_limit")) {
+    function str_limit($string, $limit = 100, $end = "...") {
+        return \Illuminate\Support\Str::limit($string, $limit, $end);
+    }
+}
+
 if(!function_exists('extract_unit')) {	
 	/*
 	Credits: Bit Repository
