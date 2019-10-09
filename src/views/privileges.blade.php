@@ -60,7 +60,7 @@
                                 'skin-red-light',
                                 'skin-black',
                                 'skin-black-light',
-                                'custom-skin'
+                                'custom-skin',
                             );
                             foreach($skins as $skin):
                             ?>
