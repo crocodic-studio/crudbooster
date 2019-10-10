@@ -8,7 +8,7 @@
 
 [<img src="http://crudbooster.com/CrudBooster_Banner.png"/>](http://crudbooster.com) 
 
-# WHAT IS CRUDBOOSTER?
+# About CRUDBooster
 CRUDBooster is a Laravel CRUD Generator. With a new concept of scaffolding, very easy for the beginner and professional. It's easy to use, easy to custom, and very flexible. Don't limit your mind, CRUDBooster gives us a true flexibility to develop an app. You can utilize its built in CRUD Generator or even you just need for your master data only.
 
 ## Support
