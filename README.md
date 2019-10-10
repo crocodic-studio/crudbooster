@@ -11,6 +11,10 @@
 # About CRUDBooster
 CRUDBooster is a Laravel CRUD Generator. With a new concept of scaffolding, very easy for the beginner and professional. It's easy to use, easy to custom, and very flexible. Don't limit your mind, CRUDBooster gives us a true flexibility to develop an app. You can utilize its built in CRUD Generator or even you just need for your master data only.
 
+## Become Sponsors
+We are very grateful to the following sponsors. If you are interested in becoming a sponsor, please visit the [CRUDBooster Patreon page](https://www.patreon.com/crudbooster).
+- [PT Taman Media Indonesia](http://tamanmedia.co.id/)
+
 ## Support
 All issues, bugs or help are in one place, in [CRUDBoster Issues](https://github.com/crocodic-studio/crudbooster/issues). To request help or report a problem, centralize everything in the [CRUDBoster Issues](https://github.com/crocodic-studio/crudbooster/issues). Follow the guidelines in the "Using CRUDBooster Issues Page" session.
 
