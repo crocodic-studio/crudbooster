@@ -1,44 +1,15 @@
-<p align="center">:rocket: <strong>CRUDBOOSTER<sup>v6</sup></strong>:new: will be available soon, stay tuned :revolving_hearts: :rocket:</p>
-<hr>
-
 # :rocket: CRUDBOOSTER - Laravel CRUD Generator
 <a href="https://scrutinizer-ci.com/g/crocodic-studio/crudbooster"><img src="https://img.shields.io/scrutinizer/g/crocodic-studio/crudbooster.svg?style=flat-square" alt="Quality Score"></img></a>
 [![Latest Stable Version](https://poser.pugx.org/crocodicstudio/crudbooster/v/stable)](https://packagist.org/packages/crocodicstudio/crudbooster)
 [![Total Downloads](https://poser.pugx.org/crocodicstudio/crudbooster/downloads)](https://packagist.org/packages/crocodicstudio/crudbooster)
-[![Latest Unstable Version](https://poser.pugx.org/crocodicstudio/crudbooster/v/unstable)](https://packagist.org/packages/crocodicstudio/crudbooster)
 [![License](https://poser.pugx.org/crocodicstudio/crudbooster/license)](https://packagist.org/packages/crocodicstudio/crudbooster)
 
 > Laravel CRUD Generator, Make a Web Application Just In Minutes, Even With Less Code and fewer Steps !
 
 [<img src="http://crudbooster.com/CrudBooster_Banner.png"/>](http://crudbooster.com) 
 
-# WHAT IS CRUDBOOSTER?
-CRUDBooster is a Laravel CRUD Generator. With a new concept of scaffolding, very easy for the beginner and professional. It's easy to use, easy to custom, and very flexible. Don't limit your mind, CRUDBooster gives us a true flexibility to develop an app. You can utilize its built in CRUD Generator or even you just need for your master data only. (LARAVEL KNOWLEDGE IS A MUST)
-
-## Features 
-- CRUD Generator With GUI
-- Rich HTML input types
-- API Generator
-- API Documentation Generator
-- Export & Import Data In Each Module
-- Advanced Filter & Sorter
-- Graphic / Statistic Designer
-- Multiple Privileges
-- Responsive Template By AdminLTE
-- Many more...
-
-## Flow Diagram Of CRUDBooster
-![image](https://cloud.githubusercontent.com/assets/6733315/24070665/78aba9ee-0bf4-11e7-82dd-96dde90e8c67.png)
-
-## Documentation
-[Documentation in English](./docs/en/index.md)
-
-## Follow Our Social Media
-- Youtube Channel: https://www.youtube.com/channel/UCgOJR3khWEykIBBR8vAGtcA
-- Facebook: https://www.facebook.com/crudbooster
-- Instagram: "crudbooster"
-- Twitter: https://twitter.com/boostercrud
-- Website: http://crudbooster.com
+# About CRUDBooster
+CRUDBooster is a Laravel CRUD Generator. With a new concept of scaffolding, very easy for the beginner and professional. It's easy to use, easy to custom, and very flexible. Don't limit your mind, CRUDBooster gives us a true flexibility to develop an app. You can utilize its built in CRUD Generator or even you just need for your master data only.
 
 ## Support
 All issues, bugs or help are in one place, in [CRUDBoster Issues](https://github.com/crocodic-studio/crudbooster/issues). To request help or report a problem, centralize everything in the [CRUDBoster Issues](https://github.com/crocodic-studio/crudbooster/issues). Follow the guidelines in the "Using CRUDBooster Issues Page" session.
