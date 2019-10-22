@@ -20,7 +20,7 @@ use Illuminate\Support\Str;
 
 trait ControllerSetting
 {
-    private $data = [];
+    public $data = [];
 
     private function defaultData() {
         $this->setLimit(10);
