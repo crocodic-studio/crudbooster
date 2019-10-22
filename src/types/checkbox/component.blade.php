@@ -9,7 +9,7 @@
                        {!!  $column->getOnchangeJsFunctionName()?"onChange='".$column->getOnchangeJsFunctionName()."'":"" !!}
                        {!! $column->getOnclickJsFunctionName()?"onClick='".$column->getOnclickJsFunctionName()."'":"" !!}
                        {!! $column->getOnblurJsFunctionName()?"onBlur='".$column->getOnblurJsFunctionName()."'":"" !!}
-                       {{ $column->getValue() && in_array($value, \crocodicstudio\crudbooster\types\checkbox\CheckboxHelper::parseValuesToArray($column->getValue()))?"checked":"" }}
+                       {{ $column->getValue() && in_array($key, \crocodicstudio\crudbooster\types\checkbox\CheckboxHelper::parseValuesToArray($column->getValue()))?"checked":"" }}
                        name="{{ $column->getName() }}[]"
                        value="{{ $key }}"> {{ $value }}
             </label>
