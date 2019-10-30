@@ -35,7 +35,7 @@ class Money
     public function thousandSeparator($separator) {
         $data = columnSingleton()->getColumn($this->index);
         /** @var $data MoneyModel */
-        $data->setThousands($precision);
+        $data->setThousands($separator);
         columnSingleton()->setColumn($this->index, $data);
         return $this;
     }
