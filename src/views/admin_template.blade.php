@@ -21,6 +21,11 @@
     @if(Session::get('theme_color')=='custom-skin')
         <link href="{{ asset("css/custom-skin.css")}}" rel="stylesheet" type="text/css"/>
     @endif
+    @if(CRUDBooster::getSetting('google_fcm_key'))
+        <link rel="manifest" href="{{asset("/manifest.json")}}"/>
+        <script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-messaging.js"></script>
+    @endif
     <!-- support rtl-->
     @if (in_array(App::getLocale(), ['ar', 'fa']))
         <link rel="stylesheet" href="//cdn.rawgit.com/morteza/bootstrap-rtl/v3.3.4/dist/css/bootstrap-rtl.min.css">
