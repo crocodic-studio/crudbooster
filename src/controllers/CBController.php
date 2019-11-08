@@ -1208,6 +1208,7 @@ class CBController extends Controller
             }
 
             if ($ro['type'] == 'child') {
+                $childtable = CRUDBooster::parseSqlTable($ro['table'])['table'];
                 $name = str_slug($ro['label'], '');
                 $columns = $ro['columns'];
                 $getColName = Request::get($name.'-'.$columns[0]['name']);
@@ -1226,12 +1227,9 @@ class CBController extends Controller
                     }
                     if(isset($column_data) === TRUE) {
                         $column_data[$fk] = (!empty($id) ? $id : $lastInsertId);
-                        $child_array[] = $column_data;
+                        DB::table($childtable)->insert($column_data);
                     }
                 }
-
-                $childtable = CRUDBooster::parseSqlTable($ro['table'])['table'];
-                DB::table($childtable)->insert($child_array);
             }
         }
 
@@ -1360,6 +1358,7 @@ class CBController extends Controller
                 $columns = $ro['columns'];
                 $getColName = Request::get($name.'-'.$columns[0]['name']);
                 $count_input_data = ($getColName)?(count($getColName) - 1):0;
+
                 $child_array = [];
                 $childtable = CRUDBooster::parseSqlTable($ro['table'])['table'];
                 $fk = $ro['foreign_key'];
@@ -1377,15 +1376,21 @@ class CBController extends Controller
                             $column_data[$colname] = $colvalue;
                         }
                     }
-                    if(isset($column_data) === TRUE){
-                        $column_data[$childtablePK] = $lastId;
-                        $column_data[$fk] = $id;
-                        $child_array[] = $column_data;
-                        $lastId++;
+                    if(isset($column_data) === TRUE) {
+                        $col_count = count($column_data);
+                        if($col_count < 1) {
+                            // Delete the record.
+                            DB::table($childtable)->where($fk, $id)->delete();
+                        } else {
+                            // Update or create it.
+                            DB::table($childtable)
+                                ->updateOrInsert(
+                                    [$childtablePK => $lastId, $fk => $id],
+                                    $column_data);
+                            $lastId++;
+                        }
                     }
                 }
-                $child_array = array_reverse($child_array);
-                DB::table($childtable)->insert($child_array);
             }
         }
 
