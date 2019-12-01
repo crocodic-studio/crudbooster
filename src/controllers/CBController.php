@@ -1419,9 +1419,6 @@ class CBController extends Controller
             CRUDBooster::redirect(CRUDBooster::adminPath(), trans('crudbooster.denied_access'));
         }
 
-        //insert log
-        CRUDBooster::insertLog(trans("crudbooster.log_delete", ['name' => $row->{$this->title_field}, 'module' => CRUDBooster::getCurrentModule()->name]));
-
         $this->hook_before_delete($id);
 
         if (CRUDBooster::isColumnExists($this->table, 'deleted_at')) {
@@ -1430,6 +1427,8 @@ class CBController extends Controller
             DB::table($this->table)->where($this->primary_key, $id)->delete();
         }
 
+        //insert log
+        CRUDBooster::insertLog(trans("crudbooster.log_delete", ['name' => $row->{$this->title_field}, 'module' => CRUDBooster::getCurrentModule()->name]));
         $this->hook_after_delete($id);
 
         $url = g('return_url') ?: CRUDBooster::referer();
