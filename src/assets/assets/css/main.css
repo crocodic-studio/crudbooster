@@ -1,13 +1,13 @@
 .brandlogo-image {
-  line-height: .8;
-  margin-left: .8rem;
-  margin-right: .5rem;
-  margin-top: 10px;
-  max-height: 34px;
-  width: auto;
+	line-height: .8;
+	margin:auto;
+	margin-top: 7px;
+	max-height: 45px;
+	width: auto;
 }
+
 .main-header .logo .logo-lg{
-  margin-left: -1.5em;
+	margin-left: -3em;
 }
 .select2-dropdown {z-index: 9999 !important}
 
