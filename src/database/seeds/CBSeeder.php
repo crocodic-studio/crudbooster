@@ -213,6 +213,16 @@ class Cms_settingsSeeder extends Seeder
                 'dataenum' => null,
                 'helper' => null,
             ],
+            [
+                'created_at' => date('Y-m-d H:i:s'),
+                'name' => 'google_adsense_key',
+                'label' => 'Google Adsense Key',
+                'content' => '',
+                'content_input_type' => 'text',
+                'group_setting' => trans('crudbooster.application_setting'),
+                'dataenum' => null,
+                'helper' => null,
+            ],
         ];
 
         foreach ($data as $row) {

@@ -26,6 +26,9 @@
         <script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-messaging.js"></script>
     @endif
+    @if(CRUDBooster::getSetting('google_adsense_key'))
+            <script data-ad-client="{{ CRUDBooster::getSetting('google_adsense_key') }}" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    @endif
     <!-- support rtl-->
     @if (in_array(App::getLocale(), ['ar', 'fa']))
         <link rel="stylesheet" href="//cdn.rawgit.com/morteza/bootstrap-rtl/v3.3.4/dist/css/bootstrap-rtl.min.css">
