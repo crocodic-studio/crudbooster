@@ -1,3 +1,6 @@
+.table-responsive .table {
+	max-width: none !important;
+}
 .brandlogo-image {
 	line-height: .8;
 	margin:auto;

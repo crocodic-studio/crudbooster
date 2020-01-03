@@ -7,7 +7,7 @@
 <!-- Theme style -->
 <link href="{{ asset("vendor/crudbooster/assets/adminlte/dist/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset("vendor/crudbooster/assets/adminlte/dist/css/skins/_all-skins.min.css")}}" rel="stylesheet" type="text/css"/>
-
+<link href='{{asset("vendor/crudbooster/assets/css/main.css").'?r='.time()}}' rel='stylesheet' type="text/css"/>
 @include('crudbooster::admin_template_plugins')
 
 <?php
