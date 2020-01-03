@@ -22,7 +22,7 @@ if (count($coloms_alias) < 2) {
     <input type="text" placeholder="{{trans('crudbooster.datamodal_search_and_enter')}}" name="q" title="{{trans('crudbooster.datamodal_enter_to_search')}}"
            value="{{Request::get('q')}}" class="form-control">
 </form>
-
+<div class="table-responsive">
 <table id='table_dashboard' class='table table-striped table-bordered table-condensed' style="margin-bottom: 0px">
     <thead>
     @foreach($coloms_alias as $col)
@@ -67,4 +67,5 @@ if (count($coloms_alias) < 2) {
     @endforeach
     </tbody>
 </table>
+</div>
 <div align="center">{!! str_replace("/?","?",$result->appends(Request::all())->render()) !!}</div>
