@@ -1219,10 +1219,12 @@ class CBController extends Controller
                     foreach ($columns as $col) {
                         $colname = $col['name'];
                         $colvalue = Request::get($name.'-'.$colname)[$i];
-                        if(!empty($colvalue)) $column_data[$colname] = $colvalue;
+                        if(isset($colvalue) === TRUE) {
+                            $column_data[$colname] = $colvalue;
+                        }
                     }
-                    if(!empty($column_data)){
-                        $column_data[$fk] = $id;
+                    if(isset($column_data) === TRUE) {
+                        $column_data[$fk] = (!empty($id) ? $id : $lastInsertId);
                         $child_array[] = $column_data;
                     }
                 }
@@ -1370,9 +1372,11 @@ class CBController extends Controller
                     foreach ($columns as $col) {
                         $colname = $col['name'];
                         $colvalue = Request::get($name.'-'.$colname)[$i];
-                        if(!empty($colvalue)) $column_data[$colname] = $colvalue;
+                        if(isset($colvalue) === TRUE) {
+                            $column_data[$colname] = $colvalue;
+                        }
                     }
-                    if(!empty($column_data)){
+                    if(isset($column_data) === TRUE){
                         $column_data[$childtablePK] = $lastId;
                         $column_data[$fk] = $id;
                         $child_array[] = $column_data;
