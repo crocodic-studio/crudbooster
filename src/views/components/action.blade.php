@@ -37,6 +37,8 @@
     $color = $a['color'] ?: 'primary';
     $confirmation = $a['confirmation'];
     $target = $a['target'] ?: '_self';
+    $type=$a['type'] ?: 'default';
+    $extra=$a['extra'];
 
     $url = $a['url'];
     if (isset($confirmation) && ! empty($confirmation)) {
@@ -49,13 +51,26 @@
 
         foreach ($row as $key => $val) {
             $query = str_replace("[".$key."]", '"'.$val.'"', $query);
+            $extra=str_replace("[".$key."]", '"'.$val.'"', $extra);
         }
 
         @eval("if($query) {
-          echo \"<a class='btn btn-xs btn-\$color' title='\$title' onclick='\$confirm_box' href='\$url' target='\$target'><i class='\$icon'></i> $label</a>&nbsp;\";
+            if($type=='modal'){
+                echo \"<a class='btn btn-xs btn-\$color' title='\$title' onclick='\$confirm_box' href='\$url' target='\$target' data-toggle='modal' \$extra><i class='\$icon'></i> $label</a>&nbsp;\";
+            }else{
+                echo \"<a class='btn btn-xs btn-\$color' title='\$title' onclick='\$confirm_box' href='\$url' target='\$target' \$extra><i class='\$icon'></i> $label</a>&nbsp;\";
+            }
       }");
     } else {
-        echo "<a class='btn btn-xs btn-$color' title='$title' onclick='$confirm_box' href='$url' target='$target'><i class='$icon'></i> $label</a>&nbsp;";
+        foreach ($row as $key => $val) {
+            $extra=str_replace("[".$key."]", '"'.$val.'"', $extra);
+        }
+
+        if($type=='modal'){
+            echo "<a class='btn btn-xs btn-$color' title='$title' onclick='$confirm_box' href='$url' target='$target' data-toggle='modal' $extra><i class='$icon'></i> $label</a>&nbsp;";
+        }else{
+            echo "<a class='btn btn-xs btn-$color' title='$title' onclick='$confirm_box' href='$url' target='$target' $extra><i class='$icon'></i> $label</a>&nbsp;";
+        }
     }
     ?>
 @endforeach
