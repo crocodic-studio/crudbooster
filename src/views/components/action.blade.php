@@ -62,8 +62,10 @@
             }
       }");
     } else {
-        foreach ($row as $key => $val) {
-            $extra=str_replace("[".$key."]", '"'.$val.'"', $extra);
+        if(isset($extra)){
+            foreach ($row as $key => $val) {
+                $extra=str_replace("[".$key."]", '"'.$val.'"', $extra);
+            }
         }
 
         if($type=='modal'){
