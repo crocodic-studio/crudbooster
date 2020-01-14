@@ -29,6 +29,7 @@
             function(){  location.href="'.$a['url'].'"});        
 
         ';
+        $confirm_box="onclick='$confirm_box'"; 
     }
 
     $label = $a['label'];
@@ -37,14 +38,16 @@
     $color = $a['color'] ?: 'primary';
     $confirmation = $a['confirmation'];
     $target = $a['target'] ?: '_self';
-    $type=$a['type'] ?: 'default';
+    $type=$a['type'];
     $extra=$a['extra'];
 
     $url = $a['url'];
     if (isset($confirmation) && ! empty($confirmation)) {
         $url = "javascript:;";
     }
-
+    if($type=='modal'){
+        $type="data-toggle='modal'";
+    }
     if (isset($a['showIf'])) {
 
         $query = $a['showIf'];
@@ -55,24 +58,15 @@
         }
 
         @eval("if($query) {
-            if($type=='modal'){
-                echo \"<a class='btn btn-xs btn-\$color' title='\$title' onclick='\$confirm_box' href='\$url' target='\$target' data-toggle='modal' \$extra><i class='\$icon'></i> $label</a>&nbsp;\";
-            }else{
-                echo \"<a class='btn btn-xs btn-\$color' title='\$title' onclick='\$confirm_box' href='\$url' target='\$target' \$extra><i class='\$icon'></i> $label</a>&nbsp;\";
-            }
-      }");
+                echo \"<a class='btn btn-xs btn-\$color' title='\$title' \$confirm_box href='\$url' target='\$target' \$type \$extra><i class='\$icon'></i> $label</a>&nbsp;\";
+        }");
     } else {
         if(isset($extra)){
             foreach ($row as $key => $val) {
                 $extra=str_replace("[".$key."]", '"'.$val.'"', $extra);
             }
         }
-
-        if($type=='modal'){
-            echo "<a class='btn btn-xs btn-$color' title='$title' onclick='$confirm_box' href='$url' target='$target' data-toggle='modal' $extra><i class='$icon'></i> $label</a>&nbsp;";
-        }else{
-            echo "<a class='btn btn-xs btn-$color' title='$title' onclick='$confirm_box' href='$url' target='$target' $extra><i class='$icon'></i> $label</a>&nbsp;";
-        }
+        echo "<a class='btn btn-xs btn-$color' title='$title' $confirm_box href='$url' target='$target' $type $extra><i class='$icon'></i> $label</a>&nbsp;";
     }
     ?>
 @endforeach
