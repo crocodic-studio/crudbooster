@@ -25,7 +25,7 @@
         "doctrine/dbal": "~2.3",
         "maatwebsite/excel": "~2.1.0",
         "unisharp/laravel-filemanager": "1.7.7",
-        "intervention/imagecache":"2.3.3",
+        "intervention/imagecache":"~2.3.3|^2.4",
         "imanghafoori/laravel-widgetize": "1.8.*"
     },
     "autoload": {
