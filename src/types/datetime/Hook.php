@@ -21,7 +21,8 @@ class Hook extends TypesHook
     public function indexRender($row, $column)
     {
         if($column->getFormat()) {
-            return date($column->getFormat(), strtotime($row->{$column->getField()}));
+		$datetime = date_create_from_format($column->getFormat(), $value);
+		return $datetime ? $datetime->format('Y-m-d H:i:s') : $value;
         }else{
             return $row->{$column->getField()};
         }
