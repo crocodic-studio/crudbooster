@@ -11,6 +11,6 @@
                class='form-control datepicker'
                name="{{ $column->getName() }}"
                id="{{ $column->getName() }}"
-               data-format="{{ $column->getFormat()?convertPHPToMomentFormat($column->getFormat()):"YYYY-MM-DD" }}"
+               data-format="{{ $column->getFormat()?$column->getFormat():"Y-m-d" }}"
                value='{{ old($column->getName())?:($column->getDefaultValue())?:$column->getValue() }}'/>
 @include("types::layout_footer")
