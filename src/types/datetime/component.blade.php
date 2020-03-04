@@ -11,6 +11,6 @@
                class='form-control datetimepicker'
                name="{{ $column->getName() }}"
                id="{{ $column->getName() }}"
-               data-format="{{ $column->getFormat()?convertPHPToMomentFormat($column->getFormat()):"YYYY-MM-DD HH:mm:ss" }}"
+               data-format="{{ $column->getFormat()?$column->getFormat():"Y-m-d H:i:s" }}"
                value='{{ old($column->getName())?:($column->getDefaultValue())?:$column->getValue() }}'/>
 @include("types::layout_footer")
