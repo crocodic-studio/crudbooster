@@ -22,11 +22,7 @@ class SelectOption
         $data = columnSingleton()->getColumn($this->index);
 
         foreach($data_options as $key=>$option) {
-            if(is_int($key)) {
-                $data_options[$option] = $option;
-            }else{
-                $data_options[$key] = $option;
-            }
+            $data_options[$key] = $option;
         }
 
         /** @var $data SelectOptionModel */
