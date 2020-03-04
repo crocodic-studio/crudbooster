@@ -88,7 +88,7 @@
 
                         <div class="form-group" id="module-input-wrap" style="display: none">
                             <label for="">Module</label>
-                            <select {{ !isset($row)?"required":"" }} name="cb_modules_id" id="cb_modules_id" class="form-control">
+                            <select {{ isset($row)?"required":"" }} name="cb_modules_id" id="cb_modules_id" class="form-control">
                                 <option value="">** Select a Module</option>
                                 @foreach($modules as $module)
                                     <option {{ (isset($row) && $row->cb_modules_id==$module->id)?"selected":"" }} value="{{ $module->id }}">{{ $module->name }}</option>
