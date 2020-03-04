@@ -70,7 +70,7 @@ class ModuleGenerator
             $sqlRawQuery = $field['column_sql_query'];
             $options = $field['column_options'];
             $imageResizeWidth = $field['column_image_width'];
-            $imageResizeHeight = $field['column_image_height'];
+            $imageResizeHeight = empty($field['column_image_height']) ? 'null' : $field['column_image_height'];
             $fileEncrypt = $field['column_file_encrypt'];
             $dateFormat = $field['column_date_format'];
             $textDisplayLimit = $field['column_text_display_limit'];
