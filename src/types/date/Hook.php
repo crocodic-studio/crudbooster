@@ -28,11 +28,12 @@ class Hook extends TypesHook
 
     public function assignment($value, $column)
     {
-		if($column->getFormat()) {
-			return date_create_from_format($column->getFormat(), $value)->format('Y-m-d');
-		} else {
-			return $value;
-		}
+	if($column->getFormat()) {
+		$date = date_create_from_format($column->getFormat(), $value);
+		return $date ? $date->format('Y-m-d') : $value;
+	} else {
+		return $value;
+	}
     }
     
     public function detailRender($row, $column)
