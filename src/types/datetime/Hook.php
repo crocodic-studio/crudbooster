@@ -27,6 +27,15 @@ class Hook extends TypesHook
         }
     }
 
+    public function assignment($value, $column)
+    {
+		if($column->getFormat()) {
+			return date_create_from_format($column->getFormat(), $value)->format('Y-m-d H:i:s');
+		} else {
+			return $value;
+		}
+    }
+    
     public function detailRender($row, $column)
     {
         return $this->indexRender($row, $column);
