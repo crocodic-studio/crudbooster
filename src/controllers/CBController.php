@@ -903,7 +903,7 @@ class CBController extends Controller
                 $request_all[$name] = preg_replace('/[^\d-]+/', '', $request_all[$name]);
             }
 
-            if ($di['type'] == 'child') {
+            if ($di['type'] == 'child' || $di['type'] == 'child2') {
                 $slug_name = str_slug($di['label'], '');
                 foreach ($di['columns'] as $child_col) {
                     if (isset($child_col['validation'])) {
@@ -1029,7 +1029,7 @@ class CBController extends Controller
                 $inputdata = preg_replace('/[^\d-]+/', '', $inputdata);
             }
 
-            if ($ro['type'] == 'child') {
+            if ($ro['type'] == 'child' || $ro['type'] == 'child2') {
                 continue;
             }
 
@@ -1207,7 +1207,7 @@ class CBController extends Controller
                 }
             }
 
-            if ($ro['type'] == 'child') {
+            if ($ro['type'] == 'child' || $ro['type'] == 'child2') {
                 $name = str_slug($ro['label'], '');
                 $columns = $ro['columns'];
                 $getColName = Request::get($name.'-'.$columns[0]['name']);
@@ -1353,7 +1353,7 @@ class CBController extends Controller
                 }
             }
 
-            if ($ro['type'] == 'child') {
+            if ($ro['type'] == 'child' || $ro['type'] == 'child2') {
                 $name = str_slug($ro['label'], '');
                 $columns = $ro['columns'];
                 $getColName = Request::get($name.'-'.$columns[0]['name']);
