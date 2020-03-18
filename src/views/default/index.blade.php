@@ -26,7 +26,7 @@
 
     @if(!empty($pre_index_blade))
         @foreach($pre_index_blade as $view)
-            @include($view['location'],$view['data'])
+            @include($view['location'],$view['data'] ? : [])
         @endforeach
     @endif
 
@@ -149,7 +149,7 @@
 
     @if(!empty($post_index_blade))
         @foreach($post_index_blade as $view)
-            @include($view['location'],$view['data'])
+            @include($view['location'],$view['data'] ? : [])
         @endforeach
     @endif
 
