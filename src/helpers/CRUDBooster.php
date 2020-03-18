@@ -1665,7 +1665,9 @@ class CRUDBooster
 	        | @icon        = Font awesome class icon. e.g : fa fa-bars
 	        | @color 	   = Default is primary. (primary, warning, succecss, info)     
 	        | @showIf 	   = If condition when action show. Use field alias. e.g : [id] == 1
-	        | 
+	        | @type        = Optionally set button type. ( modal) 
+            | @extra       = Set extra attributes . Also can use field alias. e.g : data-id=[id]
+            |
 	        */
 	        $this->addaction = array();
 
