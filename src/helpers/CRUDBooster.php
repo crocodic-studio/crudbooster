@@ -1751,9 +1751,9 @@ class CRUDBooster
 	        */
 	        $this->pre_index_html = null;
 	        
-	        
-	        
-	        /*
+            
+            
+            /*
 	        | ---------------------------------------------------------------------- 
 	        | Include HTML Code after index table 
 	        | ---------------------------------------------------------------------- 
@@ -1765,6 +1765,28 @@ class CRUDBooster
 	        
 	        
 	        
+	        /*
+	        | ---------------------------------------------------------------------- 
+	        | Include Blade View before index table 
+	        | ---------------------------------------------------------------------- 
+	        | Blade view to include before index table
+	        | $this->pre_index_blade[] = "my.view.location";
+	        |
+	        */
+	        $this->pre_index_blade = array();	        
+	        
+	        
+	        /*
+	        | ---------------------------------------------------------------------- 
+	        | Include Blade View after index table 
+	        | ---------------------------------------------------------------------- 
+	        | Blade view to include after index table
+	        | $this->post_index_blade[] = "my.view.location";
+	        |
+	        */
+	        $this->post_index_blade = array();            
+
+
 	        /*
 	        | ---------------------------------------------------------------------- 
 	        | Include Javascript File 

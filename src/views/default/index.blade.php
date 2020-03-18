@@ -24,6 +24,11 @@
         {!! $pre_index_html !!}
     @endif
 
+    @if(!empty($pre_index_blade))
+        @foreach($pre_index_blade as $view)
+            @include($view)
+        @endforeach
+    @endif
 
     @if(g('return_url'))
         <p><a href='{{g("return_url")}}'><i class='fa fa-chevron-circle-{{ trans('crudbooster.left') }}'></i>
@@ -140,6 +145,12 @@
 
     @if(!is_null($post_index_html) && !empty($post_index_html))
         {!! $post_index_html !!}
+    @endif
+
+    @if(!empty($post_index_blade))
+        @foreach($post_index_blade as $view)
+            @include($view)
+        @endforeach
     @endif
 
 @endsection

@@ -96,6 +96,10 @@ class CBController extends Controller
 
     public $post_index_html = null;
 
+    public $pre_index_blade = [];
+
+    public $post_index_blade = [];
+
     public $load_js = [];
 
     public $load_css = [];
@@ -163,6 +167,8 @@ class CBController extends Controller
         $this->data['table_row_color'] = $this->table_row_color;
         $this->data['pre_index_html'] = $this->pre_index_html;
         $this->data['post_index_html'] = $this->post_index_html;
+        $this->data['pre_index_blade'] = $this->pre_index_blade;
+        $this->data['post_index_blade'] = $this->post_index_blade;
         $this->data['load_js'] = $this->load_js;
         $this->data['load_css'] = $this->load_css;
         $this->data['script_js'] = $this->script_js;
