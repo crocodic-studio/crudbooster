@@ -1770,7 +1770,7 @@ class CRUDBooster
 	        | Include Blade View before index table 
 	        | ---------------------------------------------------------------------- 
 	        | Blade view to include before index table
-	        | $this->pre_index_blade[] = "my.view.location";
+	        | $this->pre_index_blade[] = [ "location" => "my.view.location", "data" => $data ];
 	        |
 	        */
 	        $this->pre_index_blade = array();	        
@@ -1781,7 +1781,7 @@ class CRUDBooster
 	        | Include Blade View after index table 
 	        | ---------------------------------------------------------------------- 
 	        | Blade view to include after index table
-	        | $this->post_index_blade[] = "my.view.location";
+	        | $this->post_index_blade[] = [ "location" => "my.view.location", "data" => $data ];
 	        |
 	        */
 	        $this->post_index_blade = array();            
