@@ -592,6 +592,9 @@ class CBController extends Controller
                 //New method for callback
                 if (isset($col['callback'])) {
                     $value = call_user_func($col['callback'], $row);
+                    if (isset($col['callback_name'])) {
+                        $row->{$col['callback_name']}=$value;
+                    }
                 }
 
                 $datavalue = @unserialize($value);
