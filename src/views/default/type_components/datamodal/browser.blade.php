@@ -19,7 +19,7 @@ if (count($coloms_alias) < 2) {
 ?>
 <form method='get' action="">
     {!! CRUDBooster::getUrlParameters(['q']) !!}
-    <input type="text" placeholder="{{trans('crudbooster.datamodal_search_and_enter')}}" name="q" title="{{trans('crudbooster.datamodal_enter_to_search')}}"
+    <input type="text" placeholder="{{trans('crudbooster.datamodal_search_and_enter')." ".Request::get('search_in')}}" name="q" title="{{trans('crudbooster.datamodal_enter_to_search')}}"
            value="{{Request::get('q')}}" class="form-control">
 </form>
 <div class="table-responsive">
