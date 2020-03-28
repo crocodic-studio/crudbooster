@@ -1,76 +1,3 @@
-@foreach($addaction as $a)
-    <?php
-    foreach ($row as $key => $val) {
-        $a['url'] = str_replace("[".$key."]", $val, $a['url']);
-    }
-
-    $confirm_box = '';
-    if (isset($a['confirmation']) && ! empty($a['confirmation']) && $a['confirmation']) {
-
-        $a['confirmation_title'] = ! empty($a['confirmation_title']) ? $a['confirmation_title'] : trans('crudbooster.confirmation_title');
-        $a['confirmation_text'] = ! empty($a['confirmation_text']) ? $a['confirmation_text'] : trans('crudbooster.confirmation_text');
-        $a['confirmation_type'] = ! empty($a['confirmation_type']) ? $a['confirmation_type'] : 'warning';
-        $a['confirmation_showCancelButton'] = empty($a['confirmation_showCancelButton']) ? 'true' : 'false';
-        $a['confirmation_confirmButtonColor'] = ! empty($a['confirmation_confirmButtonColor']) ? $a['confirmation_confirmButtonColor'] : '#DD6B55';
-        $a['confirmation_confirmButtonText'] = ! empty($a['confirmation_confirmButtonText']) ? $a['confirmation_confirmButtonText'] : trans('crudbooster.confirmation_yes');;
-        $a['confirmation_cancelButtonText'] = ! empty($a['confirmation_cancelButtonText']) ? $a['confirmation_cancelButtonText'] : trans('crudbooster.confirmation_no');;
-        $a['confirmation_closeOnConfirm'] = empty($a['confirmation_closeOnConfirm']) ? 'true' : 'false';
-
-        $confirm_box = '
-        swal({   
-            title: "'.$a['confirmation_title'].'",
-            text: "'.$a['confirmation_text'].'",
-            type: "'.$a['confirmation_type'].'",
-            showCancelButton: '.$a['confirmation_showCancelButton'].',
-            confirmButtonColor: "'.$a['confirmation_confirmButtonColor'].'",
-            confirmButtonText: "'.$a['confirmation_confirmButtonText'].'",
-            cancelButtonText: "'.$a['confirmation_cancelButtonText'].'",
-            closeOnConfirm: '.$a['confirmation_closeOnConfirm'].', }, 
-            function(){  location.href="'.$a['url'].'"});        
-
-        ';
-        $confirm_box="onclick='$confirm_box'"; 
-    }
-
-    $label = $a['label'];
-    $title = ($a['title']) ?: $a['label'];
-    $icon = $a['icon'];
-    $color = $a['color'] ?: 'primary';
-    $confirmation = $a['confirmation'];
-    $target = $a['target'] ?: '_self';
-    $type=$a['type'];
-    $extra=$a['extra'];
-
-    $url = $a['url'];
-    if (isset($confirmation) && ! empty($confirmation)) {
-        $url = "javascript:;";
-    }
-    if($type=='modal'){
-        $type="data-toggle='modal'";
-    }
-    if (isset($a['showIf'])) {
-
-        $query = $a['showIf'];
-
-        foreach ($row as $key => $val) {
-            $query = str_replace("[".$key."]", '"'.$val.'"', $query);
-            $extra=str_replace("[".$key."]", '"'.$val.'"', $extra);
-        }
-
-        @eval("if($query) {
-                echo \"<a class='btn btn-xs btn-\$color' title='\$title' \$confirm_box href='\$url' target='\$target' \$type \$extra><i class='\$icon'></i> $label</a>&nbsp;\";
-        }");
-    } else {
-        if(isset($extra)){
-            foreach ($row as $key => $val) {
-                $extra=str_replace("[".$key."]", '"'.$val.'"', $extra);
-            }
-        }
-        echo "<a class='btn btn-xs btn-$color' title='$title' $confirm_box href='$url' target='$target' $type $extra><i class='$icon'></i> $label</a>&nbsp;";
-    }
-    ?>
-@endforeach
-
 @if($button_action_style == 'button_text')
 
     @if(CRUDBooster::isRead() && $button_detail)
@@ -125,23 +52,34 @@
                 }
 
                 $label = $a['label'];
-                $url = $a['url']."?return_url=".urlencode(Request::fullUrl());
+                $url = $a['url'];
                 $icon = $a['icon'];
                 $color = $a['color'] ?: 'primary';
-
+                $type=$a['type'];
+                $extra=$a['extra'];
+                $target = $a['target'] ?: '_self';
+                if($type=='modal'){
+                    $type="data-toggle='modal'";
+                }
                 if (isset($a['showIf'])) {
 
                     $query = $a['showIf'];
 
                     foreach ($row as $key => $val) {
                         $query = str_replace("[".$key."]", '"'.$val.'"', $query);
+                        $extra=str_replace("[".$key."]", '"'.$val.'"', $extra);
                     }
 
                     @eval("if($query) {
-                        echo \"<li><a title='\$label' href='\$url'><i class='\$icon'></i> \$label</a></li>\";
+                        echo \"<li><a title='\$label' href='\$url' target='\$target' $type $extra><i class='\$icon'></i> \$label</a></li>\";
                     }");
                 } else {
-                    echo "<li><a title='$label' href='$url'><i class='$icon'></i> $label</a></li>";
+                    if(isset($extra)){
+                        foreach ($row as $key => $val) {
+                            $extra=str_replace("[".$key."]", '"'.$val.'"', $extra);
+                        }
+                    }
+                    echo "<li><a title='$label' href='$url' target='$target' $type $extra><i class='$icon'></i> $label</a></li>";
                 }
                 ?>
             @endforeach
@@ -167,7 +105,78 @@
     </div>
 
 @else
+    @foreach($addaction as $a)
+        <?php
+        foreach ($row as $key => $val) {
+            $a['url'] = str_replace("[".$key."]", $val, $a['url']);
+        }
 
+        $confirm_box = '';
+        if (isset($a['confirmation']) && ! empty($a['confirmation']) && $a['confirmation']) {
+
+            $a['confirmation_title'] = ! empty($a['confirmation_title']) ? $a['confirmation_title'] : trans('crudbooster.confirmation_title');
+            $a['confirmation_text'] = ! empty($a['confirmation_text']) ? $a['confirmation_text'] : trans('crudbooster.confirmation_text');
+            $a['confirmation_type'] = ! empty($a['confirmation_type']) ? $a['confirmation_type'] : 'warning';
+            $a['confirmation_showCancelButton'] = empty($a['confirmation_showCancelButton']) ? 'true' : 'false';
+            $a['confirmation_confirmButtonColor'] = ! empty($a['confirmation_confirmButtonColor']) ? $a['confirmation_confirmButtonColor'] : '#DD6B55';
+            $a['confirmation_confirmButtonText'] = ! empty($a['confirmation_confirmButtonText']) ? $a['confirmation_confirmButtonText'] : trans('crudbooster.confirmation_yes');;
+            $a['confirmation_cancelButtonText'] = ! empty($a['confirmation_cancelButtonText']) ? $a['confirmation_cancelButtonText'] : trans('crudbooster.confirmation_no');;
+            $a['confirmation_closeOnConfirm'] = empty($a['confirmation_closeOnConfirm']) ? 'true' : 'false';
+
+            $confirm_box = '
+        swal({
+            title: "'.$a['confirmation_title'].'",
+            text: "'.$a['confirmation_text'].'",
+            type: "'.$a['confirmation_type'].'",
+            showCancelButton: '.$a['confirmation_showCancelButton'].',
+            confirmButtonColor: "'.$a['confirmation_confirmButtonColor'].'",
+            confirmButtonText: "'.$a['confirmation_confirmButtonText'].'",
+            cancelButtonText: "'.$a['confirmation_cancelButtonText'].'",
+            closeOnConfirm: '.$a['confirmation_closeOnConfirm'].', },
+            function(){  location.href="'.$a['url'].'"});
+
+        ';
+            $confirm_box="onclick='$confirm_box'";
+        }
+
+        $label = $a['label'];
+        $title = ($a['title']) ?: $a['label'];
+        $icon = $a['icon'];
+        $color = $a['color'] ?: 'primary';
+        $confirmation = $a['confirmation'];
+        $target = $a['target'] ?: '_self';
+        $type=$a['type'];
+        $extra=$a['extra'];
+
+        $url = $a['url'];
+        if (isset($confirmation) && ! empty($confirmation)) {
+            $url = "javascript:;";
+        }
+        if($type=='modal'){
+            $type="data-toggle='modal'";
+        }
+        if (isset($a['showIf'])) {
+
+            $query = $a['showIf'];
+
+            foreach ($row as $key => $val) {
+                $query = str_replace("[".$key."]", '"'.$val.'"', $query);
+                $extra=str_replace("[".$key."]", '"'.$val.'"', $extra);
+            }
+
+            @eval("if($query) {
+                echo \"<a class='btn btn-xs btn-\$color' title='\$title' \$confirm_box href='\$url' target='\$target' \$type \$extra><i class='\$icon'></i> $label</a>&nbsp;\";
+        }");
+        } else {
+            if(isset($extra)){
+                foreach ($row as $key => $val) {
+                    $extra=str_replace("[".$key."]", '"'.$val.'"', $extra);
+                }
+            }
+            echo "<a class='btn btn-xs btn-$color' title='$title' $confirm_box href='$url' target='$target' $type $extra><i class='$icon'></i> $label</a>&nbsp;";
+        }
+        ?>
+    @endforeach
     @if(CRUDBooster::isRead() && $button_detail)
         <a class='btn btn-xs btn-primary btn-detail' title='{{trans("crudbooster.action_detail_data")}}'
            href='{{CRUDBooster::mainpath("detail/".$row->$pk)."?return_url=".urlencode(Request::fullUrl())}}'><i class='fa fa-eye'></i></a>
