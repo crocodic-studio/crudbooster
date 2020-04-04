@@ -1,0 +1,12 @@
+{
+  "title": "Upload Input",
+  "type": "upload",
+  "attribute": {
+    "optional": {
+      "style": "string inline stylesheet",
+      "help": "string help-block",
+      "readonly": "boolean",
+      "disabled": "boolean"
+    }
+  }
+}

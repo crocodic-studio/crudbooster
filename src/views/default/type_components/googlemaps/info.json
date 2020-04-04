@@ -1,0 +1,12 @@
+{
+  "title": "Google Maps",
+  "type": "googlemaps",
+  "attribute": {
+    "required": {
+    },
+    "optional": {
+      "latitude": "latitude field",
+      "longitude": "longitude field"
+    }
+  }
+}

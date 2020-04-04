@@ -1,0 +1,15 @@
+{
+  "title": "Filemanager Input",
+  "type": "filemanager",
+  "attribute": {
+    "optional": {
+      "style": "string inline stylesheet",
+      "help": "string help-block",
+      "readonly": "boolean",
+      "disabled": "boolean"
+    },
+    "required": {
+      "filemanager_type": "file or image"
+    }
+  }
+}

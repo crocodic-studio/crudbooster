@@ -1,0 +1,19 @@
+{
+  "title": "Checkbox",
+  "type": "checkbox",
+  "attribute": {
+    "optional": {
+      "style": "string inline stylesheet",
+      "help": "string help-block",
+      "datatable_where": "string where condition",
+      "relationship_table": "A many to many relationship table. (datatable is needed)"
+    },
+    "requiredOne": {
+      "dataenum": "value1;value2",
+      "datatable": "table_name,column_name",
+      "dataquery": "string sql query. Response should label & value"
+    },
+    "required": {
+    }
+  }
+}

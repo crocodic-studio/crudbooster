@@ -1,0 +1,12 @@
+{
+  "title": "Wysiwyg Input",
+  "type": "wysiwyg",
+  "attribute": {
+    "optional": {
+      "style": "string inline stylesheet",
+      "help": "string help-block",
+      "readonly": "boolean",
+      "disabled": "boolean"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+    "name": "crocodicstudio/crudbooster",
+    "description": "CRUDBooster Is CRUD Generator Based On Laravel Easy To Make An Advanced Backend",
+    "type": "project",
+    "license": "MIT",
+    "keywords":[
+        "laravel",
+        "admin-panel",
+        "backend",
+        "crud-generator",
+        "crudbooster",
+        "crud",
+        "generator"
+    ],
+    "authors": [
+        {
+            "name": "Ferry",
+            "email": "ferry@crocodic.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "laravel/framework": "^5.7",
+        "barryvdh/laravel-dompdf": "^0.8.0",
+        "doctrine/dbal": "~2.3",
+        "maatwebsite/excel": "^3.1",
+        "unisharp/laravel-filemanager": "^1.7",
+        "intervention/imagecache":"^2.3",
+        "crocodicstudio/cbmodel":"^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+          "crocodicstudio\\crudbooster\\": "src/"
+        }
+      }
+}

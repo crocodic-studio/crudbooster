@@ -1,0 +1,14 @@
+{
+  "title": "Text Input",
+  "type": "text",
+  "attribute": {
+    "optional": {
+      "style": "string inline stylesheet",
+      "help": "string help-block",
+      "placeholder": "string placeholder",
+      "readonly": "boolean",
+      "disabled": "boolean",
+      "value": "string"
+    }
+  }
+}

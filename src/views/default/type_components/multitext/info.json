@@ -1,0 +1,15 @@
+{
+  "title": "Text Input",
+  "type": "multitext",
+  "attribute": {
+    "optional": {
+      "style": "string inline stylesheet",
+      "help": "string help-block",
+      "placeholder": "string placeholder",
+      "readonly": "boolean",
+      "disabled": "boolean",
+      "value": "string",
+      "max_fields": "string"
+    }
+  }
+}

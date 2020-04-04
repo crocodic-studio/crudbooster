@@ -1,0 +1,13 @@
+{
+  "title": "Email Input",
+  "type": "email",
+  "attribute": {
+    "optional": {
+      "style": "string inline stylesheet",
+      "help": "string help-block",
+      "placeholder": "string placeholder",
+      "readonly": "boolean",
+      "disabled": "boolean"
+    }
+  }
+}
