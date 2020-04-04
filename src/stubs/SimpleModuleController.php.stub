@@ -1,0 +1,109 @@
+<?php namespace App\Http\Controllers;
+
+use Illuminate\Support\Facades\DB;
+use crocodicstudio\crudbooster\controllers\CBController;
+
+class AdminFooBarController extends CBController {
+
+    # module_name
+    # table
+    # title_field
+    # limit
+    # orderby
+    # show_numbering
+    # global_privilege
+    # button_table_action
+    # button_action_style
+    # button_add
+    # button_delete
+    # button_edit
+    # button_detail
+    # button_show
+    # button_filter
+    # button_export
+    # button_import
+    # button_bulk_action
+
+    /**
+     * Setting the sidebar mode
+     * Value available: normal,mini,collapse,collapse-mini
+     */
+    # sidebar_mode
+
+    public function cbInit() {
+
+        # columns
+
+        # forms
+
+    }
+
+
+    /**
+     * This method is to add additional query
+     * @param \Illuminate\Database\Query\Builder $query
+     */
+    public function hook_query_index(&$query) {
+
+    }
+
+    /**
+     * This method is to customize the user input data from a New Data Submission
+     * @param array $post_data
+     * E.g:
+     * $post_data['name'] = strtoupper($post_data['name']);
+     */
+    public function hook_before_add(&$post_data) {
+
+    }
+
+    /**
+     * This method is to you make an additional process after the data has been inserted
+     * @param int $id This variabel is a last_insert_id value.
+     *
+     */
+    public function hook_after_add($id) {
+
+    }
+
+    /**
+     * This method is to customize the user input data from an Update Data Submission
+     * @param array $post_data
+     * @param int $id
+     * E.g:
+     * $post_data['name'] = strtoupper($post_data['name']);
+     */
+    public function hook_before_edit(&$post_data,$id) {
+
+    }
+
+    /**
+     * This method is to you make an additional process after the data has been saved
+     * @param int $id This variabel is current ID record of data
+     *
+     */
+    public function hook_after_edit($id) {
+
+    }
+
+    /**
+     * This method is to you make an additional process before the delete executed
+     * @param int $id
+     */
+    public function hook_before_delete($id) {
+
+    }
+
+    /**
+     * This method is to you make an additional process after the delete executed
+     * @param int $id
+     */
+    public function hook_after_delete($id) {
+
+    }
+
+
+    /**
+     * Nevermind to create your own method in here
+     */
+}

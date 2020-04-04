@@ -60,6 +60,14 @@ class Auth
         return false;
     }
 
+    public function roleId() {
+        return session('admin_privileges');
+    }
+
+    public function roleName() {
+        return session('admin_privileges_name');
+    }
+
     public function logout() {
         session()->forget('admin_id');
         session()->forget('admin_is_superadmin');

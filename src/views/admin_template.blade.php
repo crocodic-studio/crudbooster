@@ -172,7 +172,7 @@
 
             <ol class="breadcrumb">
                 <li><a href="{{cb()->adminPath()}}"><i class="fa fa-dashboard"></i> {{ trans('crudbooster.home') }}</a></li>
-                <li class="active">{{$module->name}}</li>
+                <li class="active">{{ isset($module)?$module->name:$page_title }}</li>
             </ol>
         </section>
 

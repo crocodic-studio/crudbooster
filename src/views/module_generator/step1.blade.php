@@ -102,18 +102,30 @@
                     <?php $roles = DB::table("cms_privileges")->get();?>
                     @foreach($roles as $role)
                         <label for="" class="checkbox-inline">
-                            <input type="checkbox" name="id_cms_privileges[]" value="{{ $role->id }}"> {{ $role->name }}
+                            <input type="checkbox" {{ cb()->auth()->roleId()==$role->id?"checked":"" }} name="id_cms_privileges[]" value="{{ $role->id }}"> {{ $role->name }}
                         </label>
                     @endforeach
                     </p>
                     <div class="help-block">What roles that can access this module?</div>
                 </div>
+
+                <div class="form-group">
+                    <label for="">Generate Type</label>
+                    <p>
+                        <label for="" class="radio-inline"><input type="radio" name="include_controller_doc" value="1"> Advanced</label>
+                        <label for="" class="radio-inline"><input type="radio" checked name="include_controller_doc" value="0"> Simple</label>
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label for="">Create menu for this module ?</label>
+                    <p>
+                        <label for="" class="radio-inline"><input type="radio" checked name="create_menu" value="1"> Yes</label>
+                        <label for="" class="radio-inline"><input type="radio" name="create_menu" value="0"> No</label>
+                    </p>
+                </div>
         </div>
         <div class="box-footer">
-
-            <input checked type='checkbox' name='create_menu' value='1'/> Also create menu for this module <a href='#'
-                                                                                                              title='If you check this, we will create the menu for this module'>(?)</a>
-
             <div class='pull-right'>
                 <a class='btn btn-default' href='{{cb()->adminPath('modules')}}'> {{trans('crudbooster.button_back')}}</a>
                 <input type="submit" class="btn btn-primary" value="Step 2 &raquo;">

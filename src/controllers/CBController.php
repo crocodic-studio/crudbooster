@@ -31,7 +31,7 @@ abstract class CBController extends Controller
     public $form = [];
     public $data = [];
     public $addaction = [];
-    public $orderby = null;
+    public $order_by = null;
     public $password_candidate = null;
     public $date_candidate = null;
     public $limit = 20;
@@ -78,6 +78,30 @@ abstract class CBController extends Controller
         header("Content-Type: text/html");
         $this->cbLoader();
         echo view($template, $data);
+    }
+
+    public function onIndex(callable $callback) {
+        if(cb()->getCurrentMethod() == 'getIndex') {
+            call_user_func($callback);
+        }
+    }
+
+    public function onAdd(callable $callback) {
+        if(cb()->getCurrentMethod() == 'getAdd' || cb()->getCurrentMethod() == 'postAddSave') {
+            call_user_func($callback);
+        }
+    }
+
+    public function onEdit(callable $callback) {
+        if(cb()->getCurrentMethod() == 'getEdit' || cb()->getCurrentMethod() == 'postEditSave') {
+            call_user_func($callback);
+        }
+    }
+
+    public function onDetail(callable $callback) {
+        if(cb()->getCurrentMethod() == 'getDetail') {
+            call_user_func($callback);
+        }
     }
 
     public function cbLoader()
@@ -468,9 +492,9 @@ abstract class CBController extends Controller
         if ($filter_is_orderby == true) {
             $data['result'] = $result->paginate($limit);
         } else {
-            if ($this->orderby) {
-                if (is_array($this->orderby)) {
-                    foreach ($this->orderby as $k => $v) {
+            if ($this->order_by) {
+                if (is_array($this->order_by)) {
+                    foreach ($this->order_by as $k => $v) {
                         if (strpos($k, '.') !== false) {
                             $orderby_table = explode(".", $k)[0];
                             $k = explode(".", $k)[1];
@@ -480,8 +504,8 @@ abstract class CBController extends Controller
                         $result->orderby($orderby_table.'.'.$k, $v);
                     }
                 } else {
-                    $this->orderby = explode(";", $this->orderby);
-                    foreach ($this->orderby as $o) {
+                    $this->order_by = explode(";", $this->order_by);
+                    foreach ($this->order_by as $o) {
                         $o = explode(",", $o);
                         $k = $o[0];
                         $v = $o[1];

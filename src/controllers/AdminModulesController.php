@@ -1,5 +1,6 @@
 <?php namespace crocodicstudio\crudbooster\controllers;
 
+use crocodicstudio\crudbooster\helpers\ModuleControllerGenerator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Excel;
 use Illuminate\Support\Facades\PDF;
@@ -9,177 +10,49 @@ use crocodicstudio\crudbooster\fonts\Fontawesome;
 
 class AdminModulesController extends CBController
 {
+    public $module_name = "Module Generator";
+    public $page_icon = "fa fa-cubes";
+    public $table = 'cms_moduls';
+    public $primary_key = 'id';
+    public $title_field = "name";
+    public $limit = 20;
+    public $button_add = false;
+    public $button_export = false;
+    public $button_import = false;
+    public $button_filter = false;
+    public $button_detail = false;
+    public $button_bulk_action   = false;
+    public $button_action_style = 'button_icon';
+    public $orderby = ['id'=>'desc'];
+
     public function cbInit()
     {
-        $this->module_name = "Module Generator";
-        $this->page_icon = "fa fa-cubes";
-        $this->table = 'cms_moduls';
-        $this->primary_key = 'id';
-        $this->title_field = "name";
-        $this->limit = 100;
-        $this->button_add = false;
-        $this->button_export = false;
-        $this->button_import = false;
-        $this->button_filter = false;
-        $this->button_detail = false;
-        $this->button_bulk_action = false;
-        $this->button_action_style = 'button_icon';
-        $this->orderby = ['is_protected' => 'asc', 'name' => 'asc'];
-
-        $this->col = [];
+        $this->col   = [];
         $this->col[] = ["label" => "Name", "name" => "name"];
         $this->col[] = ["label" => "Table", "name" => "table_name"];
         $this->col[] = ["label" => "Path", "name" => "path"];
         $this->col[] = ["label" => "Controller", "name" => "controller"];
-        $this->col[] = ["label" => "Protected", "name" => "is_protected", "visible" => false];
 
         $this->form = [];
         $this->form[] = ["label" => "Name", "name" => "name", "placeholder" => "Module name here", 'required' => true];
-
-        $tables = cb()->listTables();
-        $tables_list = [];
-        foreach ($tables as $tab) {
-            foreach ($tab as $key => $value) {
-                $label = $value;
-
-                if (substr($value, 0, 4) == 'cms_') {
-                    continue;
-                }
-
-                $tables_list[] = $value."|".$label;
-            }
-        }
-        foreach ($tables as $tab) {
-            foreach ($tab as $key => $value) {
-                $label = "[Default] ".$value;
-                if (substr($value, 0, 4) == 'cms_') {
-                    $tables_list[] = $value."|".$label;
-                }
-            }
-        }
-
-        $this->form[] = ["label" => "Table Name", "name" => "table_name", "type" => "select2", "dataenum" => $tables_list, 'required' => true];
 
         $fontawesome = Fontawesome::getIcons();
 
         $row = cb()->first($this->table, cb()->getCurrentId());
         $custom = view('crudbooster::components.list_icon', compact('fontawesome', 'row'))->render();
         $this->form[] = ['label' => 'Icon', 'name' => 'icon', 'type' => 'custom', 'html' => $custom, 'required' => true];
-
-        $this->script_js = "
- 			$(function() {
- 				$('#table_name').change(function() {
-					var v = $(this).val();
-					$('#path').val(v);
-				})	
- 			})
- 			";
-
         $this->form[] = ["label" => "Path", "name" => "path", "required" => true, 'placeholder' => 'Optional'];
-        $this->form[] = ["label" => "Controller", "name" => "controller", "type" => "text", "placeholder" => "(Optional) Auto Generated"];
-
-        if (cb()->getCurrentMethod() == 'getAdd' || cb()->getCurrentMethod() == 'postAddSave') {
-
-            $this->form[] = [
-                "label" => "Global Privilege",
-                "name" => "global_privilege",
-                "type" => "radio",
-                "dataenum" => ['0|No', '1|Yes'],
-                'value' => 0,
-                'help' => 'Global Privilege allows you to make the module to be accessible by all privileges',
-                'exception' => true,
-            ];
-
-            $this->form[] = [
-                "label" => "Button Action Style",
-                "name" => "button_action_style",
-                "type" => "radio",
-                "dataenum" => ['button_icon', 'button_icon_text', 'button_text', 'dropdown'],
-                'value' => 'button_icon',
-                'exception' => true,
-            ];
-            $this->form[] = [
-                "label" => "Button Table Action",
-                "name" => "button_table_action",
-                "type" => "radio",
-                "dataenum" => ['Yes', 'No'],
-                'value' => 'Yes',
-                'exception' => true,
-            ];
-            $this->form[] = [
-                "label" => "Button Add",
-                "name" => "button_add",
-                "type" => "radio",
-                "dataenum" => ['Yes', 'No'],
-                'value' => 'Yes',
-                'exception' => true,
-            ];
-            $this->form[] = [
-                "label" => "Button Delete",
-                "name" => "button_delete",
-                "type" => "radio",
-                "dataenum" => ['Yes', 'No'],
-                'value' => 'Yes',
-                'exception' => true,
-            ];
-            $this->form[] = [
-                "label" => "Button Edit",
-                "name" => "button_edit",
-                "type" => "radio",
-                "dataenum" => ['Yes', 'No'],
-                'value' => 'Yes',
-                'exception' => true,
-            ];
-            $this->form[] = [
-                "label" => "Button Detail",
-                "name" => "button_detail",
-                "type" => "radio",
-                "dataenum" => ['Yes', 'No'],
-                'value' => 'Yes',
-                'exception' => true,
-            ];
-            $this->form[] = [
-                "label" => "Button Show",
-                "name" => "button_show",
-                "type" => "radio",
-                "dataenum" => ['Yes', 'No'],
-                'value' => 'Yes',
-                'exception' => true,
-            ];
-            $this->form[] = [
-                "label" => "Button Filter",
-                "name" => "button_filter",
-                "type" => "radio",
-                "dataenum" => ['Yes', 'No'],
-                'value' => 'Yes',
-                'exception' => true,
-            ];
-            $this->form[] = [
-                "label" => "Button Export",
-                "name" => "button_export",
-                "type" => "radio",
-                "dataenum" => ['Yes', 'No'],
-                'value' => 'No',
-                'exception' => true,
-            ];
-            $this->form[] = [
-                "label" => "Button Import",
-                "name" => "button_import",
-                "type" => "radio",
-                "dataenum" => ['Yes', 'No'],
-                'value' => 'No',
-                'exception' => true,
-            ];
-        }
 
         $this->addaction[] = [
-            'label' => 'Module Wizard',
-            'icon' => 'fa fa-wrench',
-            'url' => cb()->mainpath('step1').'/[id]',
-            "showIf" => "[is_protected] == 0",
+            'label' => 'Regenerate Module',
+            'icon' => 'fa fa-refresh',
+            'url' => cb()->mainpath('step1').'/[id]'
         ];
 
-        $this->index_button[] = ['label' => 'Generate New Module', 'icon' => 'fa fa-plus', 'url' => cb()->mainpath('step1'), 'color' => 'success'];
+        $this->onIndex(function() {
+            $this->index_button[] = ['label' => 'Generate New Module', 'icon' => 'fa fa-plus', 'url' => cb()->mainpath('step1'), 'color' => 'success'];
+        });
+
     }
 
     function hook_query_index(&$query)
@@ -210,21 +83,72 @@ class AdminModulesController extends CBController
         return response()->json(['total' => $check, 'lastid' => $lastId]);
     }
 
+    private function createMenu($name, $icon, $path, $id_cms_privileges = []) {
+
+        // Clear existing menu
+        DB::table('cms_menus')->where('path', $path)->delete();
+
+        $parent_menu_sort = DB::table('cms_menus')
+                ->where('parent_id', 0)
+                ->max('sorting') + 1;
+
+        $id_cms_menus = DB::table('cms_menus')->insertGetId([
+            'created_at' => date('Y-m-d H:i:s'),
+            'name' => $name,
+            'icon' => $icon,
+            'path' => $path,
+            'type' => 'URL',
+            'is_active' => 1,
+            'id_cms_privileges' => cb()->auth()->roleId(),
+            'sorting' => $parent_menu_sort,
+            'parent_id' => 0,
+        ]);
+
+        if($id_cms_privileges) {
+            foreach($id_cms_privileges as $id_cms_privilege) {
+                DB::table('cms_menus_privileges')
+                    ->insert(['id_cms_menus' => $id_cms_menus, 'id_cms_privileges' => $id_cms_privilege]);
+            }
+        } else {
+            DB::table('cms_menus_privileges')
+                ->insert(['id_cms_menus' => $id_cms_menus, 'id_cms_privileges' => cb()->myPrivilegeId()]);
+        }
+    }
+
+    private function createRolePermission($modules_id, $id_cms_privileges = []) {
+        if($id_cms_privileges) {
+            foreach($id_cms_privileges as $role_id) {
+                DB::table('cms_privileges_roles')->insert([
+                    'id_cms_moduls' => $id,
+                    'id_cms_privileges' => $role_id,
+                    'is_visible' => 1,
+                    'is_create' => 1,
+                    'is_read' => 1,
+                    'is_edit' => 1,
+                    'is_delete' => 1,
+                ]);
+            }
+        } else {
+            $user_id_privileges = cb()->myPrivilegeId();
+            DB::table('cms_privileges_roles')->insert([
+                'id_cms_moduls' => $id,
+                'id_cms_privileges' => $user_id_privileges,
+                'is_visible' => 1,
+                'is_create' => 1,
+                'is_read' => 1,
+                'is_edit' => 1,
+                'is_delete' => 1,
+            ]);
+        }
+    }
+
     public function getStep1($id = 0)
     {
-        $this->cbLoader();
-
-        $module = cb()->getCurrentModule();
-
-        if (! cb()->isView() && $this->global_privilege == false) {
-            cb()->insertLog(trans('crudbooster.log_try_view', ['module' => $module->name]));
-            cb()->redirect(cb()->adminPath(), trans('crudbooster.denied_access'));
-        }
 
         $tables = cb()->listTables();
         $tables_list = [];
-        foreach ($tables as $tab) {
-            foreach ($tab as $key => $value) {
+        foreach ($tables as $table_name) {
+            foreach ($table_name as $key => $value) {
                 $label = $value;
 
                 if (substr($label, 0, 4) == 'cms_' && $label != config('crudbooster.USER_TABLE')) {
@@ -242,20 +166,18 @@ class AdminModulesController extends CBController
 
         $row = cb()->first($this->table, ['id' => $id]);
 
-        return view("crudbooster::module_generator.step1", compact("tables_list", "fontawesome", "row", "id"));
+        $data = [];
+        $data['page_title'] = "Module Generator";
+        $data['tables_list'] = $tables_list;
+        $data['fontawesome'] = $fontawesome;
+        $data['row'] = $row;
+        $data['id'] = $id;
+
+        return view("crudbooster::module_generator.step1", $data);
     }
 
     public function getStep2($id)
     {
-        $this->cbLoader();
-
-        $module = cb()->getCurrentModule();
-
-        if (! cb()->isView() && $this->global_privilege == false) {
-            cb()->insertLog(trans('crudbooster.log_try_view', ['module' => $module->name]));
-            cb()->redirect(cb()->adminPath(), trans('crudbooster.denied_access'));
-        }
-
         $row = DB::table('cms_moduls')->where('id', $id)->first();
 
         $columns = cb()->getTableColumns($row->table_name);
@@ -287,117 +209,51 @@ class AdminModulesController extends CBController
 
     public function postStep2()
     {
-        $this->cbLoader();
+        $name = request('name');
+        $table_name = request('table');
+        $icon = request('icon');
+        $path = request('path');
+        $id = request('id');
 
-        $module = cb()->getCurrentModule();
-
-        if (! cb()->isView() && $this->global_privilege == false) {
-            cb()->insertLog(trans('crudbooster.log_try_view', ['module' => $this->module_name]));
-            cb()->redirect(cb()->adminPath(), trans('crudbooster.denied_access'));
+        if (!request('id') && DB::table('cms_moduls')->where('path', $path)->where('deleted_at', null)->count()) {
+            return redirect()->back()->with(['message' => 'Sorry the slug has already exists, please choose another !', 'type' => 'warning']);
         }
 
-        $name = Request::get('name');
-        $table_name = Request::get('table');
-        $icon = Request::get('icon');
-        $path = Request::get('path');
+        $created_at = date_now();
 
-        if (! Request::get('id')) {
+        // Generate a Module Controller
+        $generate_controller = new ModuleControllerGenerator();
+        $generate_controller->table = $table_name;
+        $generate_controller->module_name = $name;
+        $generate_controller->generate_type = \request('include_controller_doc')?"Advanced":"Simple";
+        $controller = $generate_controller->generate();
 
-            if (DB::table('cms_moduls')->where('path', $path)->where('deleted_at', null)->count()) {
-                return redirect()->back()->with(['message' => 'Sorry the slug has already exists, please choose another !', 'type' => 'warning']);
-            }
+        if(\request('id')) {
 
-            $created_at = date_now();
+            // Create new menu
+            if ($controller && request('create_menu')) $this->createMenu($name, $icon, $path, \request('id_cms_privileges'));
 
-            $controller = cb()->generateController($table_name, $path);
-            $id = DB::table($this->table)->insertGetId(compact("controller", "name", "table_name", "icon", "path", "created_at", "id"));
-
-            //Insert Menu
-            if ($controller && Request::get('create_menu')) {
-                $parent_menu_sort = DB::table('cms_menus')->where('parent_id', 0)->max('sorting') + 1;
-
-                $id_cms_menus = DB::table('cms_menus')->insertGetId([
-
-                    'created_at' => date('Y-m-d H:i:s'),
-                    'name' => $name,
-                    'icon' => $icon,
-                    'path' => $path,
-                    'type' => 'URL',
-                    'is_active' => 1,
-                    'id_cms_privileges' => cb()->myPrivilegeId(),
-                    'sorting' => $parent_menu_sort,
-                    'parent_id' => 0,
-                ]);
-
-                if(request('id_cms_privileges')) {
-                    foreach(\request('id_cms_privileges') as $id_cms_privilege) {
-                        DB::table('cms_menus_privileges')
-                            ->insert(['id_cms_menus' => $id_cms_menus, 'id_cms_privileges' => $id_cms_privilege]);
-                    }
-                } else {
-                    DB::table('cms_menus_privileges')
-                        ->insert(['id_cms_menus' => $id_cms_menus, 'id_cms_privileges' => cb()->myPrivilegeId()]);
-                }
-
-            }
-            if(request('id_cms_privileges')) {
-                foreach(request('id_cms_privileges') as $role_id) {
-                    DB::table('cms_privileges_roles')->insert([
-                        'id' => DB::table('cms_privileges_roles')->max('id') + 1,
-                        'id_cms_moduls' => $id,
-                        'id_cms_privileges' => $role_id,
-                        'is_visible' => 1,
-                        'is_create' => 1,
-                        'is_read' => 1,
-                        'is_edit' => 1,
-                        'is_delete' => 1,
-                    ]);
-                }
-            } else {
-                $user_id_privileges = cb()->myPrivilegeId();
-                DB::table('cms_privileges_roles')->insert([
-                    'id' => DB::table('cms_privileges_roles')->max('id') + 1,
-                    'id_cms_moduls' => $id,
-                    'id_cms_privileges' => $user_id_privileges,
-                    'is_visible' => 1,
-                    'is_create' => 1,
-                    'is_read' => 1,
-                    'is_edit' => 1,
-                    'is_delete' => 1,
-                ]);
-            }
-
-            // Refresh Session Roles
-            cb()->auth()->refreshRole();
-
-            return redirect(cb()->adminPath('modules/step2/'.$id));
+            // Update module data
+            DB::table($this->table)->where("id", \request('id'))
+                ->update(compact("controller", "name", "table_name", "icon", "path"));
         } else {
-            $id = Request::get('id');
-            DB::table($this->table)->where('id', $id)->update(compact("name", "table_name", "icon", "path"));
 
-            $row = DB::table('cms_moduls')->where('id', $id)->first();
-
-            if (file_exists(app_path('Http/Controllers/'.$row->controller.'.php'))) {
-                $response = file_get_contents(app_path('Http/Controllers/'.str_replace('.', '', $row->controller).'.php'));
-            } else {
-                $response = file_get_contents(__DIR__.'/'.str_replace('.', '', $row->controller).'.php');
-            }
-
-            return redirect(cb()->adminPath('modules/step2/'.$id));
+            // Create module data
+            $id = DB::table($this->table)
+                ->insertGetId(compact("controller", "name", "table_name", "icon", "path", "created_at"));
         }
+
+        // Create role permission
+        $this->createRolePermission($id, \request('id_cms_privileges'));
+
+        // Refresh Session Roles
+        cb()->auth()->refreshRole();
+
+        return redirect(cb()->adminPath('modules/step2/'.$id));
     }
 
     public function postStep3()
     {
-        $this->cbLoader();
-
-        $module = cb()->getCurrentModule();
-
-        if (! cb()->isView() && $this->global_privilege == false) {
-            cb()->insertLog(trans('crudbooster.log_try_view', ['module' => $module->name]));
-            cb()->redirect(cb()->adminPath(), trans('crudbooster.denied_access'));
-        }
-
         $column = Request::input('column');
         $name = Request::input('name');
         $join_table = Request::input('join_table');
