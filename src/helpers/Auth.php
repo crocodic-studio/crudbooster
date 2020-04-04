@@ -23,6 +23,15 @@ class Auth
         session()->forget('admin_lock');
     }
 
+    public function refreshRole() {
+        $roles = DB::table('cms_privileges_roles')
+            ->where('id_cms_privileges', cb()->myPrivilegeId())
+            ->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')
+            ->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')
+            ->get();
+        session()->put('admin_privileges_roles', $roles);
+    }
+
     public function attempt($email, $password) {
         $password_column = config('crudbooster.LOGIN_PASS_COLUMN.column','password');
         $users = DB::table(config('crudbooster.USER_TABLE'))->where(config('crudbooster.LOGIN_ID_COLUMN.column','email'), $email)->first();

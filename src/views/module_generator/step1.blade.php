@@ -58,8 +58,9 @@
         <div class="box-header with-border">
             <h3 class="box-title">Module Information</h3>
         </div>
+        <form method="post" action="{{cb()->adminPath('modules/step2')}}">
         <div class="box-body">
-            <form method="post" action="{{cb()->adminPath('modules/step2')}}">
+
                 <input type="hidden" name="_token" value="{{csrf_token()}}">
                 <input type="hidden" name="id" value="{{$row->id}}">
                 <div class="form-group">
@@ -93,6 +94,19 @@
                     <label for="">Module Slug</label>
                     <input type="text" class="form-control" required name="path" value="{{$row->path}}">
                     <div class="help-block">Please alpha numeric only, without space instead _ and or special character</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="">Module Roles</label>
+                    <p>
+                    <?php $roles = DB::table("cms_privileges")->get();?>
+                    @foreach($roles as $role)
+                        <label for="" class="checkbox-inline">
+                            <input type="checkbox" name="id_cms_privileges[]" value="{{ $role->id }}"> {{ $role->name }}
+                        </label>
+                    @endforeach
+                    </p>
+                    <div class="help-block">What roles that can access this module?</div>
                 </div>
         </div>
         <div class="box-footer">
