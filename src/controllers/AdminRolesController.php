@@ -13,6 +13,7 @@ class AdminRolesController extends CBController
     public function cbInit()
     {
         $this->module_name = "Roles";
+        $this->page_icon = "fa fa-key";
         $this->table = 'cms_privileges';
         $this->primary_key = 'id';
         $this->title_field = "name";

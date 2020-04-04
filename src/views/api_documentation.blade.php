@@ -5,7 +5,7 @@
     <ul class="nav nav-tabs">
         <li class="active"><a href="{{ cb()->mainpath() }}"><i class='fa fa-file'></i> API Documentation</a></li>
         <li><a href="{{ cb()->mainpath('screet-key') }}"><i class='fa fa-key'></i> API Secret Key</a></li>
-        <li><a href="{{ cb()->mainpath('generator') }}"><i class='fa fa-cog'></i> API Generator</a></li>
+        <li><a href="{{ cb()->mainpath('new') }}"><i class='fa fa-cog'></i> API Generator</a></li>
     </ul>
 
     <div class='box'>
@@ -65,11 +65,7 @@
             </div>
             <div class='form-group'>
                 <label>How To Use</label><br/>
-                SCREETKEY : ABCDEF123456 <br/>
-                TIME : UNIX CURRENT TIME <br/>
-                <label>Header :</label><br/>
-                X-Authorization-Token : md5( SCREETKEY + TIME + USER_AGENT )<br/>
-                X-Authorization-Time : TIME
+
             </div>
             <table class='table table-striped table-api table-bordered'>
                 <thead>

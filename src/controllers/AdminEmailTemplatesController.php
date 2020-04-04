@@ -8,6 +8,7 @@ class AdminEmailTemplatesController extends \crocodicstudio\crudbooster\controll
 {
     public function cbInit()
     {
+        $this->module_name = "Email Templates";
         $this->table = "cms_email_templates";
         $this->primary_key = "id";
         $this->title_field = "name";

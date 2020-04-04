@@ -10,6 +10,8 @@ class AdminStatisticBuilderController extends CBController
 {
     public function cbInit()
     {
+        $this->module_name = "Statistic Builder";
+        $this->page_icon = "fa fa-table";
         $this->table = "cms_statistics";
         $this->primary_key = "id";
         $this->title_field = "name";
@@ -42,18 +44,18 @@ class AdminStatisticBuilderController extends CBController
         ];
 
         $this->addaction = [];
-        $this->addaction[] = ['label' => 'Builder', 'url' => CRUDBooster::mainpath('builder').'/[id]', 'icon' => 'fa fa-wrench'];
+        $this->addaction[] = ['label' => 'Builder', 'url' => cb()->mainpath('builder').'/[id]', 'icon' => 'fa fa-wrench'];
     }
 
     public function getShowDashboard()
     {
         $this->cbLoader();
-        $m = CRUDBooster::sidebarDashboard();
+        $m = cb()->sidebarDashboard();
         $m->path = str_replace("statistic_builder/show/", "", $m->path);
         if ($m->type != 'Statistic') {
             redirect('/');
         }
-        $row = CRUDBooster::first($this->table, ['slug' => $m->path]);
+        $row = cb()->first($this->table, ['slug' => $m->path]);
 
         $id_cms_statistics = $row->id;
         $page_title = $row->name;
@@ -65,11 +67,11 @@ class AdminStatisticBuilderController extends CBController
     {
         $this->cbLoader();
 
-        $menus= DB::table('cms_menus')->whereRaw("cms_menus.id IN (select id_cms_menus from cms_menus_privileges where id_cms_privileges = '".CRUDBooster::myPrivilegeId()."')")->where('is_dashboard', 1)->where('is_active', 1)->first();
+        $menus= DB::table('cms_menus')->whereRaw("cms_menus.id IN (select id_cms_menus from cms_menus_privileges where id_cms_privileges = '".cb()->myPrivilegeId()."')")->where('is_dashboard', 1)->where('is_active', 1)->first();
 
         $slug = str_replace("statistic_builder/show/", "", $menus->path);
 
-        $row = CRUDBooster::first($this->table, ['slug' => $slug]);
+        $row = cb()->first($this->table, ['slug' => $slug]);
         $id_cms_statistics = $row->id;
         $page_title = $row->name;
 
@@ -79,7 +81,7 @@ class AdminStatisticBuilderController extends CBController
     public function getShow($slug)
     {
         $this->cbLoader();
-        $row = CRUDBooster::first($this->table, ['slug' => $slug]);
+        $row = cb()->first($this->table, ['slug' => $slug]);
         $id_cms_statistics = $row->id;
         $page_title = $row->name;
 
@@ -90,9 +92,9 @@ class AdminStatisticBuilderController extends CBController
     {
         $this->cbLoader();
 
-        if (! CRUDBooster::isSuperadmin()) {
-            CRUDBooster::insertLog(trans("crudbooster.log_try_view", ['name' => 'Builder', 'module' => 'Statistic']));
-            CRUDBooster::redirect(CRUDBooster::adminPath(), trans('crudbooster.denied_access'));
+        if (! cb()->isSuperadmin()) {
+            cb()->insertLog(trans("crudbooster.log_try_view", ['name' => 'Builder', 'module' => 'Statistic']));
+            cb()->redirect(cb()->adminPath(), trans('crudbooster.denied_access'));
         }
 
         $page_title = 'Statistic Builder';
@@ -151,7 +153,7 @@ class AdminStatisticBuilderController extends CBController
             'sorting' => $sorting,
             'name' => 'Untitled',
         ];
-        CRUDBooster::insert('cms_statistic_components', $data);
+        cb()->insert('cms_statistic_components', $data);
 
         return response()->json(compact('layout', 'componentID'));
     }
@@ -170,12 +172,12 @@ class AdminStatisticBuilderController extends CBController
     {
         $this->cbLoader();
 
-        if (! CRUDBooster::isSuperadmin()) {
-            CRUDBooster::insertLog(trans("crudbooster.log_try_view", ['name' => 'Edit Component', 'module' => 'Statistic']));
-            CRUDBooster::redirect(CRUDBooster::adminPath(), trans('crudbooster.denied_access'));
+        if (! cb()->isSuperadmin()) {
+            cb()->insertLog(trans("crudbooster.log_try_view", ['name' => 'Edit Component', 'module' => 'Statistic']));
+            cb()->redirect(cb()->adminPath(), trans('crudbooster.denied_access'));
         }
 
-        $component_row = CRUDBooster::first('cms_statistic_components', ['componentID' => $componentID]);
+        $component_row = cb()->first('cms_statistic_components', ['componentID' => $componentID]);
 
         $config = json_decode($component_row->config);
 
@@ -196,9 +198,9 @@ class AdminStatisticBuilderController extends CBController
 
     public function getDeleteComponent($id)
     {
-        if (! CRUDBooster::isSuperadmin()) {
-            CRUDBooster::insertLog(trans("crudbooster.log_try_view", ['name' => 'Delete Component', 'module' => 'Statistic']));
-            CRUDBooster::redirect(CRUDBooster::adminPath(), trans('crudbooster.denied_access'));
+        if (! cb()->isSuperadmin()) {
+            cb()->insertLog(trans("crudbooster.log_try_view", ['name' => 'Delete Component', 'module' => 'Statistic']));
+            cb()->redirect(cb()->adminPath(), trans('crudbooster.denied_access'));
         }
 
         DB::table('cms_statistic_components')->where('componentID', $id)->delete();

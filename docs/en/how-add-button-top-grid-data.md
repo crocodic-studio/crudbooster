@@ -5,7 +5,7 @@ Some cases you need to add extra button at top of grid data. For example you nee
 Open the module controller, and find `$this->index_button` . 
 
 ```php
-$this->index_button[] = ['label'=>'Advanced Print','url'=>CRUDBooster::mainpath("print"),"icon"=>"fa fa-print"];
+$this->index_button[] = ['label'=>'Advanced Print','url'=>cb()->mainpath("print"),"icon"=>"fa fa-print"];
 ```
 ## What's Next
 - [How To Create A Message Info At Top Of Grid Data (Bootstrap Alert)](./how-create-message-top-grid-data.md)

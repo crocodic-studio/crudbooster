@@ -78,7 +78,7 @@
         var is_init_map_{{$name}} = false;
 
         function showMapModal{{$name}}() {
-            var api_key = "{{CRUDBooster::getSetting('google_api_key')}}";
+            var api_key = "{{cb()->getSetting('google_api_key')}}";
 
             if (api_key == '') {
                 alert('GOOGLE_API_KEY is missing, please set at setting !');

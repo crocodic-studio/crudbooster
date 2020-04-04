@@ -5,7 +5,7 @@
     <ul class="nav nav-tabs">
         <li><a href="{{ cb()->mainpath() }}"><i class='fa fa-file'></i> API Documentation</a></li>
         <li class="active"><a href="{{ cb()->mainpath('screet-key') }}"><i class='fa fa-key'></i> API Secret Key</a></li>
-        <li><a href="{{ cb()->mainpath('generator') }}"><i class='fa fa-cog'></i> API Generator</a></li>
+        <li><a href="{{ cb()->mainpath('new') }}"><i class='fa fa-cog'></i> API Generator</a></li>
     </ul>
 
     <div class='box'>
@@ -59,7 +59,7 @@
                     var lastno = <?=$no?>;
 
                     function generate_screet_key() {
-                        $.get("<?php echo route('ApiCustomControllerGetGenerateScreetKey')?>", function (resp) {
+                        $.get("{{ cb()->adminPath('api-generator/generate-screet-key')  }}", function (resp) {
                             lastno += 1;
                             $('#table-apikey').append("<tr><td>" + lastno + "</td><td>" + resp.key + "</td><td>0</td><td><span class='label label-success'>Active</span></td><td>" +
                                 "<a class='btn btn-xs btn-default' href='{{cb()->mainpath("status-apikey")}}?id=" + resp.id + "&status=0'>Non Active</a> <a class='btn btn-xs btn-danger' href='javascript:void(0)' onclick='deleteApi(" + resp.id + ")'>Delete</a> </td></tr>"

@@ -17,7 +17,7 @@
     <ul class="nav nav-tabs">
         <li><a href="{{ cb()->mainpath() }}"><i class='fa fa-file'></i> API Documentation</a></li>
         <li><a href="{{ cb()->mainpath('screet-key') }}"><i class='fa fa-key'></i> API Secret Key</a></li>
-        <li class='active'><a href="{{ cb()->mainpath('generator') }}"><i class='fa fa-cog'></i> API Generator</a></li>
+        <li class='active'><a href="{{ cb()->mainpath('new') }}"><i class='fa fa-cog'></i> API Generator</a></li>
     </ul>
 
     <div class='box'>
@@ -118,7 +118,7 @@
                         }
 
                         no_params = 0;
-                        $.get('{{url(config("crudbooster.ADMIN_PATH"))."/api_generator/column-table"}}/' + t + '/' + type, function (resp) {
+                        $.get('{{url(config("crudbooster.ADMIN_PATH"))."/api-generator/column-table"}}/' + t + '/' + type, function (resp) {
                             $.each(resp, function (i, obj) {
 
                                 switch (obj.type) {
@@ -179,7 +179,7 @@
                             $('textarea[name=sub_query_1]').prop('readonly', true);
                         }
 
-                        $.get('{{url(config("crudbooster.ADMIN_PATH"))."/api_generator/column-table"}}/' + t + '/' + type, function (resp) {
+                        $.get('{{url(config("crudbooster.ADMIN_PATH"))."/api-generator/column-table"}}/' + t + '/' + type, function (resp) {
                             var no_params = 0;
                             $('#table-parameters tbody').empty();
                             $.each(resp, function (i, obj) {
@@ -582,7 +582,7 @@
             @endpush
 
 
-            <form method='post' action='{{ route("ApiCustomControllerPostSaveApiCustom")}}'>
+            <form method='post' action='{{ cb()->adminPath('api-generator/save-api-custom') }}'>
                 <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
                 <input type="hidden" name="id" value="{{$row->id}}">
                 <div class='row'>

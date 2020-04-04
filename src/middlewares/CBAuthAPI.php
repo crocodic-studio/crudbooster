@@ -18,7 +18,7 @@ class CBAuthAPI
     {
 
 
-        CRUDBooster::authAPI();
+        cb()->authAPI();
 
         return $next($request);
     }

@@ -32,7 +32,7 @@
 
     @if($parent_table)
         <div class="box box-default">
-            <div class="box-body table-responsive no-padding">
+            <div class="box-body table-responsive">
                 <table class='table table-bordered'>
                     <tbody>
                     <tr class='active'>
@@ -57,7 +57,7 @@
     @endif
 
     <div class="box">
-        <div class="box-header">
+        <div style="padding-bottom: 0px" class="box-header">
             @if($button_bulk_action && ( ($button_delete && cb()->isDelete()) || $button_selected) )
                 <div class="pull-{{ trans('crudbooster.left') }}">
                     <div class="selected-action" style="display:inline-block;position:relative;">
@@ -133,8 +133,20 @@
             <br style="clear:both"/>
 
         </div>
-        <div class="box-body table-responsive no-padding">
+        <div class="box-body table-responsive">
             @include("crudbooster::default.table")
+        </div>
+        <div class="box-footer">
+            <div class="row">
+                <div class="col-md-8">{!! urldecode(str_replace("/?","?",$result->appends(Request::all())->render())) !!}</div>
+                <?php
+                $from = $result->count() ? ($result->perPage() * $result->currentPage() - $result->perPage() + 1) : 0;
+                $to = $result->perPage() * $result->currentPage() - $result->perPage() + $result->count();
+                $total = $result->total();
+                ?>
+                <div class="col-md-4"><div class="text-right">{{ trans("crudbooster.filter_rows_total") }}
+                        : {{ $from }} {{ trans("crudbooster.filter_rows_to") }} {{ $to }} {{ trans("crudbooster.filter_rows_of") }} {{ $total }}</div></div>
+            </div>
         </div>
     </div>
 

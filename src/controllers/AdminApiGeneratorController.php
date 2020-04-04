@@ -26,9 +26,9 @@ class AdminApiGeneratorController extends CBController
     {
         $this->cbLoader();
 
-        if (! CRUDBooster::isSuperadmin()) {
-            CRUDBooster::insertLog(trans("crudbooster.log_try_view", ['name' => 'API Index', 'module' => 'API']));
-            CRUDBooster::redirect(CRUDBooster::adminPath(), trans('crudbooster.denied_access'));
+        if (! cb()->isSuperadmin()) {
+            cb()->insertLog(trans("crudbooster.log_try_view", ['name' => 'API Index', 'module' => 'API']));
+            cb()->redirect(cb()->adminPath(), trans('crudbooster.denied_access'));
         }
 
         $data = [];
@@ -56,7 +56,7 @@ class AdminApiGeneratorController extends CBController
         $data = [];
         $data['variables'] = [];
         $data['info'] = [
-            'name' => CRUDBooster::getSetting('appname').' - API',
+            'name' => cb()->getSetting('appname').' - API',
             '_postman_id' => "1765dd11-73d1-2978-ae11-36921dc6263d",
             'description' => '',
             'schema' => 'https://schema.getpostman.com/json/collection/v2.0.0/collection.json',
@@ -109,7 +109,7 @@ class AdminApiGeneratorController extends CBController
 
         return \Response::make($json, 200, [
             'Content-Type' => 'application/json',
-            'Content-Disposition' => 'attachment; filename='.CRUDBooster::getSetting('appname').' - API For POSTMAN.json',
+            'Content-Disposition' => 'attachment; filename='.cb()->getSetting('appname').' - API For POSTMAN.json',
         ]);
     }
 
@@ -123,19 +123,19 @@ class AdminApiGeneratorController extends CBController
         return view('crudbooster::api_key', $data);
     }
 
-    public function getGenerator()
+    public function getNew()
     {
         $this->cbLoader();
 
-        if (! CRUDBooster::isSuperadmin()) {
-            CRUDBooster::insertLog(trans("crudbooster.log_try_view", ['name' => 'API Index', 'module' => 'API']));
-            CRUDBooster::redirect(CRUDBooster::adminPath(), trans('crudbooster.denied_access'));
+        if (! cb()->isSuperadmin()) {
+            cb()->insertLog(trans("crudbooster.log_try_view", ['name' => 'API Index', 'module' => 'API']));
+            cb()->redirect(cb()->adminPath(), trans('crudbooster.denied_access'));
         }
 
         $data['page_title'] = 'API Generator';
         $data['page_menu'] = Route::getCurrentRoute()->getActionName();
 
-        $tables = CRUDBooster::listTables();
+        $tables = cb()->listTables();
         $tables_list = [];
         foreach ($tables as $tab) {
             foreach ($tab as $key => $value) {
@@ -152,9 +152,9 @@ class AdminApiGeneratorController extends CBController
     {
         $this->cbLoader();
 
-        if (! CRUDBooster::isSuperadmin()) {
-            CRUDBooster::insertLog(trans("crudbooster.log_try_view", ['name' => 'API Edit', 'module' => 'API']));
-            CRUDBooster::redirect(CRUDBooster::adminPath(), trans('crudbooster.denied_access'));
+        if (! cb()->isSuperadmin()) {
+            cb()->insertLog(trans("crudbooster.log_try_view", ['name' => 'API Edit', 'module' => 'API']));
+            cb()->redirect(cb()->adminPath(), trans('crudbooster.denied_access'));
         }
 
         $row = DB::table('cms_apicustom')->where('id', $id)->first();
@@ -165,7 +165,7 @@ class AdminApiGeneratorController extends CBController
         $data['page_title'] = 'API Generator';
         $data['page_menu'] = Route::getCurrentRoute()->getActionName();
 
-        $tables = CRUDBooster::listTables();
+        $tables = cb()->listTables();
         $tables_list = [];
         foreach ($tables as $tab) {
             foreach ($tab as $key => $value) {
@@ -203,14 +203,14 @@ class AdminApiGeneratorController extends CBController
 
     public function getStatusApikey()
     {
-        CRUDBooster::valid(['id', 'status'], 'view');
+        cb()->valid(['id', 'status'], 'view');
 
         $id = Request::get('id');
         $status = (Request::get('status') == 1) ? "active" : "non active";
 
         DB::table('cms_apikey')->where('id', $id)->update(['status' => $status]);
 
-        return redirect()->back()->with(['message' => 'You have been update api key status !', 'message_type' => 'success']);
+        return redirect()->back()->with(['message' => 'You have been update api key status !', 'type' => 'success']);
     }
 
     public function getDeleteApiKey()
@@ -229,7 +229,7 @@ class AdminApiGeneratorController extends CBController
         $this->cbLoader();
         $result = [];
 
-        $cols = CRUDBooster::getTableColumns($table);
+        $cols = cb()->getTableColumns($table);
 
         $except = ['created_at', 'deleted_at', 'updated_at'];
 
@@ -241,7 +241,7 @@ class AdminApiGeneratorController extends CBController
                 continue;
             }
 
-            $type_field = CRUDBooster::getFieldType($table, $ro);
+            $type_field = cb()->getFieldType($table, $ro);
 
             $type_field = (array_search($ro, explode(',', config('crudbooster.EMAIL_FIELDS_CANDIDATE'))) !== false) ? "email" : $type_field;
             $type_field = (array_search($ro, explode(',', config('crudbooster.IMAGE_FIELDS_CANDIDATE'))) !== false) ? "image" : $type_field;
@@ -263,7 +263,7 @@ class AdminApiGeneratorController extends CBController
                                 continue;
                             }
 
-                            $type_field = CRUDBooster::getFieldType($table2, $t);
+                            $type_field = cb()->getFieldType($table2, $t);
                             $t = str_replace("_$table2", "", $t);
                             $new_result[] = ['name' => $table2.'_'.$t, 'type' => $type_field];
                         }
@@ -338,12 +338,12 @@ class AdminApiGeneratorController extends CBController
 
             $controllerName = ucwords(str_replace('_', ' ', $a['permalink']));
             $controllerName = str_replace(' ', '', $controllerName);
-            CRUDBooster::generateAPI($controllerName, $a['tabel'], $a['permalink'], $a['method_type']);
+            cb()->generateAPI($controllerName, $a['tabel'], $a['permalink'], $a['method_type']);
 
             DB::table('cms_apicustom')->insert($a);
         }
 
-        return redirect(CRUDBooster::mainpath())->with(['message' => 'Yeay, your api has been saved successfully !', 'message_type' => 'success']);
+        return redirect(cb()->mainpath())->with(['message' => 'Yeay, your api has been saved successfully !', 'type' => 'success']);
     }
 
     function getDeleteApi($id)

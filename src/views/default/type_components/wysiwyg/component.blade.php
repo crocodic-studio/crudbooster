@@ -14,7 +14,7 @@
                 var data = new FormData();
                 data.append("userfile", image);
                 $.ajax({
-                    url: '{{CRUDBooster::mainpath("upload-summernote")}}',
+                    url: '{{cb()->mainpath("upload-summernote")}}',
                     cache: false,
                     contentType: false,
                     processData: false,

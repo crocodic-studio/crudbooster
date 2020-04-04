@@ -1,6 +1,7 @@
 <?php namespace crocodicstudio\crudbooster\controllers;
 
 use App\Http\Controllers\CBHook;
+use crocodicstudio\crudbooster\exceptions\CBValidationException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
@@ -58,7 +59,7 @@ class AdminAuthController extends BaseController
                 return redirect_back(trans('crudbooster.alert_password_wrong'),'warning');
             }
 
-        } catch (\CBValidationException $e) {
+        } catch (CBValidationException $e) {
             return redirect_back($e->getMessage(),'warning');
         }
     }
@@ -81,7 +82,7 @@ class AdminAuthController extends BaseController
             DB::table(config('crudbooster.USER_TABLE'))->where('email', Request::input('email'))->update(['password' => $password]);
 
             $appname = cb()->getSetting('appname');
-            $user = CRUDBooster::first(config('crudbooster.USER_TABLE'), ['email' => g('email')]);
+            $user = cb()->first(config('crudbooster.USER_TABLE'), ['email' => g('email')]);
             $user->password = $rand_string;
             cb()->sendEmail(['to' => $user->email, 'data' => $user, 'template' => 'forgot_password_backend']);
 

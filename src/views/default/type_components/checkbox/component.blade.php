@@ -60,8 +60,8 @@
             $selects_data = $selects_data->orderby($datatable_field, "asc")->get();
 
             if ($form['relationship_table']) {
-                $foreignKey = CRUDBooster::getForeignKey($table, $form['relationship_table']);
-                $foreignKey2 = CRUDBooster::getForeignKey($datatable_tab, $form['relationship_table']);
+                $foreignKey = cb()->getForeignKey($table, $form['relationship_table']);
+                $foreignKey2 = cb()->getForeignKey($datatable_tab, $form['relationship_table']);
 
                 $value = DB::table($form['relationship_table'])->where($form['relationship_table'].'.'.$foreignKey, $id);
                 $value = $value->pluck($foreignKey2)->toArray();

@@ -66,7 +66,7 @@ abstract class ApiController extends Controller
 
         $action_type = $row_api->aksi;
         $table = $row_api->tabel;
-        $pk = CRUDBooster::pk($table);
+        $pk = cb()->pk($table);
 
         $debug_mode_message = 'You are in debug mode !';
 
@@ -145,14 +145,14 @@ abstract class ApiController extends Controller
                 if ($type == 'exists') {
                     $config = explode(',', $config);
                     $table_exist = $config[0];
-                    $table_exist = CRUDBooster::parseSqlTable($table_exist)['table'];
+                    $table_exist = cb()->parseSqlTable($table_exist)['table'];
                     $field_exist = $config[1];
                     $config = ($field_exist) ? $table_exist.','.$field_exist : $table_exist;
                     $format_validation[] = 'exists:'.$config;
                 } elseif ($type == 'unique') {
                     $config = explode(',', $config);
                     $table_exist = $config[0];
-                    $table_exist = CRUDBooster::parseSqlTable($table_exist)['table'];
+                    $table_exist = cb()->parseSqlTable($table_exist)['table'];
                     $field_exist = $config[1];
                     $config = ($field_exist) ? $table_exist.','.$field_exist : $table_exist;
                     $format_validation[] = 'unique:'.$config;
@@ -183,8 +183,8 @@ abstract class ApiController extends Controller
                 }
 
                 if ($name == 'id') {
-                    $table_exist = CRUDBooster::parseSqlTable($table)['table'];
-                    $table_exist_pk = CRUDBooster::pk($table_exist);
+                    $table_exist = cb()->parseSqlTable($table)['table'];
+                    $table_exist_pk = cb()->pk($table_exist);
                     $format_validation[] = 'exists:'.$table_exist.','.$table_exist_pk;
                 }
                 
@@ -244,7 +244,7 @@ abstract class ApiController extends Controller
                 $subquery = $resp['subquery'];
                 $used = intval($resp['used']);
 
-                if ($used == 0 && ! CRUDBooster::isForeignKey($name)) {
+                if ($used == 0 && ! cb()->isForeignKey($name)) {
                     continue;
                 }
 
@@ -271,10 +271,10 @@ abstract class ApiController extends Controller
                 }
 
                 $name_tmp[] = $name;
-                if (CRUDBooster::isForeignKey($name)) {
-                    $jointable = CRUDBooster::getTableForeignKey($name);
-                    $jointable_field = CRUDBooster::getTableColumns($jointable);
-                    $jointablePK = CRUDBooster::pk($jointable);
+                if (cb()->isForeignKey($name)) {
+                    $jointable = cb()->getTableForeignKey($name);
+                    $jointable_field = cb()->getTableColumns($jointable);
+                    $jointablePK = cb()->pk($jointable);
                     $data->leftjoin($jointable, $jointable.'.'.$jointablePK, '=', $table.'.'.$name);
                     foreach ($jointable_field as $jf) {
                         $jf_alias = $jointable.'_'.$jf;
@@ -329,7 +329,7 @@ abstract class ApiController extends Controller
                 }
             }
 
-            if (CRUDBooster::isColumnExists($table, 'deleted_at')) {
+            if (cb()->isColumnExists($table, 'deleted_at')) {
                 $data->where($table.'.deleted_at', null);
             }
 
@@ -346,7 +346,7 @@ abstract class ApiController extends Controller
                     }
 
                     if ($required == '1') {
-                        if (CRUDBooster::isColumnExists($table, $name)) {
+                        if (cb()->isColumnExists($table, $name)) {
                             $w->where($table.'.'.$name, $value);
                         } else {
                             $w->having($name, '=', $value);
@@ -354,7 +354,7 @@ abstract class ApiController extends Controller
                     } else {
                         if ($used) {
                             if ($value) {
-                                if (CRUDBooster::isColumnExists($table, $name)) {
+                                if (cb()->isColumnExists($table, $name)) {
                                     $w->where($table.'.'.$name, $value);
                                 } else {
                                     $w->having($name, '=', $value);
@@ -428,14 +428,14 @@ abstract class ApiController extends Controller
 
                     $result['api_status'] = 1;
                     $result['api_message'] = 'success';
-                    if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
+                    if (cb()->getSetting('api_debug_mode') == 'true') {
                         $result['api_authorization'] = $debug_mode_message;
                     }
                     $result['data'] = $rows;
                 } else {
                     $result['api_status'] = 0;
                     $result['api_message'] = 'There is no data found !';
-                    if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
+                    if (cb()->getSetting('api_debug_mode') == 'true') {
                         $result['api_authorization'] = $debug_mode_message;
                     }
                     $result['data'] = [];
@@ -459,7 +459,7 @@ abstract class ApiController extends Controller
                                     $result['api_status'] = 0;
                                     $result['api_message'] = 'Invalid credentials. Check your username and password.';
                                     
-                                    if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
+                                    if (cb()->getSetting('api_debug_mode') == 'true') {
                                         $result['api_authorization'] = $debug_mode_message;
                                     }
                                     goto show;
@@ -472,7 +472,7 @@ abstract class ApiController extends Controller
                                         $result['api_status'] = 0;
                                         $result['api_message'] = 'Invalid credentials. Check your username and password.';
                                         
-                                        if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
+                                        if (cb()->getSetting('api_debug_mode') == 'true') {
                                             $result['api_authorization'] = $debug_mode_message;
                                         }
                                         goto show;
@@ -496,7 +496,7 @@ abstract class ApiController extends Controller
                     $result['api_status'] = 1;
                     $result['api_message'] = 'success';
                     $result['api_response_fields'] = $responses_fields;
-                    if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
+                    if (cb()->getSetting('api_debug_mode') == 'true') {
                         $result['api_authorization'] = $debug_mode_message;
                     }
                     $rows = (array) $rows;
@@ -504,13 +504,13 @@ abstract class ApiController extends Controller
                 } else {
                     $result['api_status'] = 0;
                     $result['api_message'] = 'There is no data found !';
-                    if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
+                    if (cb()->getSetting('api_debug_mode') == 'true') {
                         $result['api_authorization'] = $debug_mode_message;
                     }
                 }
             } elseif ($action_type == 'delete') {
 
-                if (CRUDBooster::isColumnExists($table, 'deleted_at')) {
+                if (cb()->isColumnExists($table, 'deleted_at')) {
                     $delete = $data->update(['deleted_at' => date('Y-m-d H:i:s')]);
                 } else {
                     $delete = $data->delete();
@@ -518,7 +518,7 @@ abstract class ApiController extends Controller
 
                 $result['api_status'] = ($delete) ? 1 : 0;
                 $result['api_message'] = ($delete) ? "success" : "failed";
-                if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
+                if (cb()->getSetting('api_debug_mode') == 'true') {
                     $result['api_authorization'] = $debug_mode_message;
                 }
             }
@@ -526,7 +526,7 @@ abstract class ApiController extends Controller
 
             $row_assign = [];
             foreach ($input_validator as $k => $v) {
-                if (CRUDBooster::isColumnExists($table, $k)) {
+                if (cb()->isColumnExists($table, $k)) {
                     $row_assign[$k] = $v;
                 }
             }
@@ -541,13 +541,13 @@ abstract class ApiController extends Controller
             }
 
             if ($action_type == 'save_add') {
-                if (CRUDBooster::isColumnExists($table, 'created_at')) {
+                if (cb()->isColumnExists($table, 'created_at')) {
                     $row_assign['created_at'] = date('Y-m-d H:i:s');
                 }
             }
 
             if ($action_type == 'save_edit') {
-                if (CRUDBooster::isColumnExists($table, 'updated_at')) {
+                if (cb()->isColumnExists($table, 'updated_at')) {
                     $row_assign['updated_at'] = date('Y-m-d H:i:s');
                 }
             }
@@ -568,9 +568,9 @@ abstract class ApiController extends Controller
                 }
 
                 if ($type == 'file' || $type == 'image') {
-                    $row_assign[$name] = CRUDBooster::uploadFile($name, true);
+                    $row_assign[$name] = cb()->uploadFile($name, true);
                 } elseif ($type == 'base64_file') {
-                    $row_assign[$name] = CRUDBooster::uploadBase64($value);
+                    $row_assign[$name] = cb()->uploadBase64($value);
                 } elseif ($type == 'password') {
                     $row_assign[$name] = Hash::make(g($name));
                 }
@@ -598,7 +598,7 @@ abstract class ApiController extends Controller
 
                 $result['api_status'] = ($id) ? 1 : 0;
                 $result['api_message'] = ($id) ? 'success' : 'failed';
-                if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
+                if (cb()->getSetting('api_debug_mode') == 'true') {
 
                     $result['api_authorization'] = $debug_mode_message;
                 }
@@ -606,7 +606,7 @@ abstract class ApiController extends Controller
             } else {
 
                 try {
-                    $pk = CRUDBooster::pk($table);
+                    $pk = cb()->pk($table);
                     $update = DB::table($table);
                     $update->where($table.'.'.$pk, $row_assign['id']);
 
@@ -619,14 +619,14 @@ abstract class ApiController extends Controller
                     $update = $update->update($row_assign);
                     $result['api_status'] = 1;
                     $result['api_message'] = 'success';
-                    if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
+                    if (cb()->getSetting('api_debug_mode') == 'true') {
                         $result['api_authorization'] = $debug_mode_message;
                     }
                 } catch (\Exception $e) {
                     $result['api_status'] = 0;
                     $result['api_message'] = 'failed, '.$e;
                     
-                    if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
+                    if (cb()->getSetting('api_debug_mode') == 'true') {
                         $result['api_authorization'] = $debug_mode_message;
                     }
                 }
@@ -639,9 +639,9 @@ abstract class ApiController extends Controller
                 $config = $param['config'];
                 $type = $param['type'];
                 if ($type == 'ref') {
-                    if (CRUDBooster::isColumnExists($config, 'id_'.$table)) {
+                    if (cb()->isColumnExists($config, 'id_'.$table)) {
                         DB::table($config)->where($name, $value)->update(['id_'.$table => $lastId]);
-                    } elseif (CRUDBooster::isColumnExists($config, $table.'_id')) {
+                    } elseif (cb()->isColumnExists($config, $table.'_id')) {
                         DB::table($config)->where($name, $value)->update([$table.'_id' => $lastId]);
                     }
                 }
@@ -652,7 +652,7 @@ abstract class ApiController extends Controller
         $result['api_status'] = $this->hook_api_status ?: $result['api_status'];
         $result['api_message'] = $this->hook_api_message ?: $result['api_message'];
 
-        if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
+        if (cb()->getSetting('api_debug_mode') == 'true') {
             $result['api_authorization'] = $debug_mode_message;
         }
 

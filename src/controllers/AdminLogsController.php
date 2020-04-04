@@ -7,6 +7,8 @@ class AdminLogsController extends CBController
 {
     public function cbInit()
     {
+        $this->module_name = "Logs";
+        $this->page_icon = "fa fa-file-archive-o";
         $this->table = 'cms_logs';
         $this->primary_key = 'id';
         $this->title_field = "ipaddress";
@@ -16,6 +18,7 @@ class AdminLogsController extends CBController
         $this->button_add = false;
         $this->button_edit = false;
         $this->button_delete = true;
+        $this->button_filter = false;
 
         $this->col = [];
         $this->col[] = ["label" => "Time Access", "name" => "created_at"];

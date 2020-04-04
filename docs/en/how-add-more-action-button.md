@@ -12,8 +12,8 @@
 Open your module controller. Find `$this->addaction` in `cbInit()` method.
 
 ```php
-$this->addaction[] = ['label'=>'Set Active','url'=>CRUDBooster::mainpath('set-status/active/[id]'),'icon'=>'fa fa-check','color'=>'success','showIf'=>"[status] == 'pending'"];
-$this->addaction[] = ['label'=>'Set Pending','url'=>CRUDBooster::mainpath('set-status/pending/[id]'),'icon'=>'fa fa-ban','color'=>'warning','showIf'=>"[status] == 'active'", 'confirmation' => true];
+$this->addaction[] = ['label'=>'Set Active','url'=>cb()->mainpath('set-status/active/[id]'),'icon'=>'fa fa-check','color'=>'success','showIf'=>"[status] == 'pending'"];
+$this->addaction[] = ['label'=>'Set Pending','url'=>cb()->mainpath('set-status/pending/[id]'),'icon'=>'fa fa-ban','color'=>'warning','showIf'=>"[status] == 'active'", 'confirmation' => true];
 ```
 It will add **Set Active** button if a row has status 'pending', and the opposite, it will add **Set Pending** if a row has status 'active'
 
@@ -27,7 +27,7 @@ public function getSetStatus($status,$id) {
    DB::table('products')->where('id',$id)->update(['status'=>$status]);
    
    //This will redirect back and gives a message
-   CRUDBooster::redirect($_SERVER['HTTP_REFERER'],"The status product has been updated !","info");
+   cb()->redirect($_SERVER['HTTP_REFERER'],"The status product has been updated !","info");
 }
 ```
 

@@ -22,11 +22,12 @@
     @endpush
 
     <ul class="nav nav-tabs">
-        <li role="presentation"><a href="{{Route('ModulsControllerGetStep1',['id'=>$id])}}"><i class='fa fa-info'></i> Step 1 - Module Information</a></li>
-        <li role="presentation"><a href="{{Route('ModulsControllerGetStep2',['id'=>$id])}}"><i class='fa fa-table'></i> Step 2 - Table Display</a></li>
-        <li role="presentation" class="active"><a href="{{Route('ModulsControllerGetStep3',['id'=>$id])}}"><i class='fa fa-plus-square-o'></i> Step 3 - Form
-                Display</a></li>
-        <li role="presentation"><a href="{{Route('ModulsControllerGetStep4',['id'=>$id])}}"><i class='fa fa-wrench'></i> Step 4 - Configuration</a></li>
+        <li role="presentation"><a href="{{ cb()->adminPath('modules/step1/'.$id) }}"><i class='fa fa-info'></i> Step 1 - Module
+                Information</a></li>
+        <li role="presentation"><a href="{{cb()->adminPath('modules/step2/'.$id)}}"><i class='fa fa-table'></i> Step 2 - Table Display</a></li>
+        <li role="presentation" class="active"><a href="{{cb()->adminPath('modules/step3/'.$id)}}"><i class='fa fa-plus-square-o'></i> Step 3 - Form Display</a>
+        </li>
+        <li role="presentation"><a href="{{cb()->adminPath('modules/step4/'.$id)}}"><i class='fa fa-wrench'></i> Step 4 - Configuration</a></li>
     </ul>
     @push('head')
         <style>
@@ -430,7 +431,7 @@
             <h3 class="box-title">Form Display</h3>
         </div>
         <div class="box-body">
-            <form method="post" autocomplete="off" action="{{Route('ModulsControllerPostStep4')}}">
+            <form method="post" autocomplete="off" action="{{ cb()->adminPath('modules/step4') }}">
                 <input type="hidden" name="_token" value="{{csrf_token()}}">
                 <input type="hidden" name="id" value="{{$id}}">
 

@@ -89,16 +89,17 @@
 
         table.table-bordered{
             border:1px solid #AAAAAA;
-            margin-top:20px;
         }
         table.table-bordered > thead > tr > th{
             border:1px solid #AAAAAA;
+            white-space: nowrap;
         }
         table.table-bordered > tbody > tr > td{
             border:1px solid #AAAAAA;
         }
         table.table-bordered > foot > tr > th {
             border:1px solid #AAAAAA;
+            white-space: nowrap;
         }
     </style>
 

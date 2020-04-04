@@ -42,7 +42,7 @@
 
             @if(!$readonly || !$disabled)
                 <p><a class='btn btn-danger btn-delete btn-sm'
-                      onclick='swal({   title: "{{trans("crudbooster.delete_title_confirm")}}",   text: "{{trans("crudbooster.delete_description_confirm")}}",   type: "warning",   showCancelButton: true,   confirmButtonColor: "#DD6B55",   confirmButtonText: "{{trans("crudbooster.confirmation_yes")}}", cancelButtonText: "{{trans('crudbooster.button_cancel')}}",   closeOnConfirm: false }, function(){  location.href="{{url(CRUDBooster::mainpath("update-single?table=$table&column=$name&value=&id=$id"))}}" });'><i
+                      onclick='swal({   title: "{{trans("crudbooster.delete_title_confirm")}}",   text: "{{trans("crudbooster.delete_description_confirm")}}",   type: "warning",   showCancelButton: true,   confirmButtonColor: "#DD6B55",   confirmButtonText: "{{trans("crudbooster.confirmation_yes")}}", cancelButtonText: "{{trans('crudbooster.button_cancel')}}",   closeOnConfirm: false }, function(){  location.href="{{url(cb()->mainpath("update-single?table=$table&column=$name&value=&id=$id"))}}" });'><i
                                 class='fa fa-ban'></i> {{trans('crudbooster.text_delete')}} </a></p>
             @endif
         @endif

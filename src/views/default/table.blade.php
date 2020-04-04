@@ -48,7 +48,7 @@
 <form id='form-table' method='post' action='{{cb()->mainpath("action-selected")}}'>
     <input type='hidden' name='button_name' value=''/>
     <input type='hidden' name='_token' value='{{csrf_token()}}'/>
-    <table id='table_dashboard' class="table table-hover table-striped table-bordered">
+    <table id='table_dashboard' class="table table-hover table-striped table-bordered" style="margin-bottom: 0px">
         <thead>
         <tr class="active">
             <?php if($button_bulk_action):?>
@@ -178,14 +178,6 @@
 
 </form><!--END FORM TABLE-->
 
-<div class="col-md-8">{!! urldecode(str_replace("/?","?",$result->appends(Request::all())->render())) !!}</div>
-<?php
-$from = $result->count() ? ($result->perPage() * $result->currentPage() - $result->perPage() + 1) : 0;
-$to = $result->perPage() * $result->currentPage() - $result->perPage() + $result->count();
-$total = $result->total();
-?>
-<div class="col-md-4" style="margin:30px 0;"><span class="pull-right">{{ trans("crudbooster.filter_rows_total") }}
-        : {{ $from }} {{ trans("crudbooster.filter_rows_to") }} {{ $to }} {{ trans("crudbooster.filter_rows_of") }} {{ $total }}</span></div>
 
 @if($columns)
     @push('bottom')

@@ -5,8 +5,8 @@ A way to make a custom view of add method is override it. This is a best way if 
 ```php
 public function getAdd() {
   //Create an Auth
-  if(!CRUDBooster::isCreate() && $this->global_privilege==FALSE || $this->button_add==FALSE) {    
-    CRUDBooster::redirect(CRUDBooster::adminPath(),trans("crudbooster.denied_access"));
+  if(!cb()->isCreate() && $this->global_privilege==FALSE || $this->button_add==FALSE) {    
+    cb()->redirect(cb()->adminPath(),trans("crudbooster.denied_access"));
   }
   
   $data = [];
@@ -27,7 +27,7 @@ Then, create your own `add view`
   <div class='panel panel-default'>
     <div class='panel-heading'>Add Form</div>
     <div class='panel-body'>
-      <form method='post' action='{{CRUDBooster::mainpath('add-save')}}'>
+      <form method='post' action='{{cb()->mainpath('add-save')}}'>
         <div class='form-group'>
           <label>Label 1</label>
           <input type='text' name='label1' required class='form-control'/>

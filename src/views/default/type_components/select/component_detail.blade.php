@@ -3,7 +3,7 @@ if ($form['datatable']) {
     $datatable = explode(',', $form['datatable']);
     $table = $datatable[0];
     $field = $datatable[1];
-    echo CRUDBooster::first($table, ['id' => $value])->$field;
+    echo cb()->first($table, ['id' => $value])->$field;
 }
 if ($form['dataquery']) {
     $dataquery = $form['dataquery'];
