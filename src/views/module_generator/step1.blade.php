@@ -60,6 +60,11 @@
         </div>
         <form method="post" action="{{cb()->adminPath('modules/step2')}}">
         <div class="box-body">
+                @if(isset($row))
+                    <div class="alert alert-info">
+                        <strong>Info</strong>. This module will regenerate automatically, please backup your old controller before saving this form.
+                    </div>
+                @endif
 
                 <input type="hidden" name="_token" value="{{csrf_token()}}">
                 <input type="hidden" name="id" value="{{$row->id}}">
@@ -112,8 +117,8 @@
                 <div class="form-group">
                     <label for="">Generate Type</label>
                     <p>
-                        <label for="" class="radio-inline"><input type="radio" name="include_controller_doc" value="1"> Advanced</label>
-                        <label for="" class="radio-inline"><input type="radio" checked name="include_controller_doc" value="0"> Simple</label>
+                        <label for="" class="radio-inline"><input {{ $row->generate_type=='Advanced'?"checked":"" }} type="radio" name="include_controller_doc" value="1"> Advanced</label>
+                        <label for="" class="radio-inline"><input {{ $row->generate_type=='Simple'?"checked":"" }} type="radio" checked name="include_controller_doc" value="0"> Simple</label>
                     </p>
                 </div>
 

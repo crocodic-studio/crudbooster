@@ -9,7 +9,7 @@ class AdminFooBarController extends CBController {
     # table
     # title_field
     # limit
-    # orderby
+    # order_by
     # show_numbering
     # global_privilege
     # button_table_action

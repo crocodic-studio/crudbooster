@@ -23,7 +23,12 @@ class AdminModulesController extends CBController
     public $button_detail = false;
     public $button_bulk_action   = false;
     public $button_action_style = 'button_icon';
-    public $orderby = ['id'=>'desc'];
+    public $order_by = ['id'=>'desc'];
+
+    public function __construct()
+    {
+        view()->share(['page_title'=>$this->module_name]);
+    }
 
     public function cbInit()
     {
@@ -144,7 +149,6 @@ class AdminModulesController extends CBController
 
     public function getStep1($id = 0)
     {
-
         $tables = cb()->listTables();
         $tables_list = [];
         foreach ($tables as $table_name) {
@@ -176,33 +180,27 @@ class AdminModulesController extends CBController
         return view("crudbooster::module_generator.step1", $data);
     }
 
-    public function getStep2($id)
-    {
-        $row = DB::table('cms_moduls')->where('id', $id)->first();
-
-        $columns = cb()->getTableColumns($row->table_name);
-
+    private function listTable() {
         $tables = cb()->listTables();
         $table_list = [];
         foreach ($tables as $tab) {
             foreach ($tab as $key => $value) {
-                $label = $value;
                 $table_list[] = $value;
             }
         }
+        return $table_list;
+    }
 
-        if (file_exists(app_path('Http/Controllers/'.str_replace('.', '', $row->controller).'.php'))) {
-            $response = file_get_contents(app_path('Http/Controllers/'.$row->controller.'.php'));
-            $column_datas = extract_unit($response, "# START COLUMNS DO NOT REMOVE THIS LINE", "# END COLUMNS DO NOT REMOVE THIS LINE");
-            $column_datas = str_replace('$this->', '$cb_', $column_datas);
-            eval($column_datas);
-        }
+    public function getStep2($id)
+    {
+        $row = DB::table('cms_moduls')->where('id', $id)->first();
 
         $data = [];
         $data['id'] = $id;
-        $data['columns'] = $columns;
-        $data['table_list'] = $table_list;
-        $data['cb_col'] = $cb_col;
+        $data['columns'] = cb()->getTableColumns($row->table_name);
+        $data['table_list'] = $this->listTable();
+        $data['controller_columns'] = json_decode($row->columns, true);
+
 
         return view('crudbooster::module_generator.step2', $data);
     }
@@ -214,6 +212,7 @@ class AdminModulesController extends CBController
         $icon = request('icon');
         $path = request('path');
         $id = request('id');
+        $generate_type = \request('include_controller_doc')?"Advanced":"Simple";
 
         if (!request('id') && DB::table('cms_moduls')->where('path', $path)->where('deleted_at', null)->count()) {
             return redirect()->back()->with(['message' => 'Sorry the slug has already exists, please choose another !', 'type' => 'warning']);
@@ -221,12 +220,23 @@ class AdminModulesController extends CBController
 
         $created_at = date_now();
 
+        $row = cb()->first('cms_moduls', $id);
+
         // Generate a Module Controller
         $generate_controller = new ModuleControllerGenerator();
         $generate_controller->table = $table_name;
         $generate_controller->module_name = $name;
         $generate_controller->generate_type = \request('include_controller_doc')?"Advanced":"Simple";
-        $controller = $generate_controller->generate();
+        if($row) {
+            $generate_controller->setProperties(json_decode($row->properties,true));
+            $generate_controller->setColumns(json_decode($row->columns, true));
+            $generate_controller->setForms(json_decode($row->forms, true));
+        }
+        $controller         = $generate_controller->generate();
+        $columns            = json_encode($generate_controller->getColumns());
+        $forms              = json_encode($generate_controller->getForms());
+        $properties         = json_encode($generate_controller->getProperties());
+
 
         if(\request('id')) {
 
@@ -235,12 +245,12 @@ class AdminModulesController extends CBController
 
             // Update module data
             DB::table($this->table)->where("id", \request('id'))
-                ->update(compact("controller", "name", "table_name", "icon", "path"));
+                ->update(compact("controller", "name", "table_name", "icon", "path","columns","forms","generate_type","properties"));
         } else {
 
             // Create module data
             $id = DB::table($this->table)
-                ->insertGetId(compact("controller", "name", "table_name", "icon", "path", "created_at"));
+                ->insertGetId(compact("controller", "name", "table_name", "icon", "path", "created_at","columns","forms","generate_type","properties"));
         }
 
         // Create role permission
@@ -267,7 +277,7 @@ class AdminModulesController extends CBController
         $row = DB::table('cms_moduls')->where('id', $id)->first();
 
         $i = 0;
-        $script_cols = [];
+        $table_columns = [];
         foreach ($column as $col) {
 
             if (! $name[$i]) {
@@ -275,78 +285,70 @@ class AdminModulesController extends CBController
                 continue;
             }
 
-            $script_cols[$i] = "\t\t\t".'$this->col[] = ["label"=>"'.$col.'","name"=>"'.$name[$i].'"';
+            $table_column = [];
+            $table_column['label'] = $col;
+            $table_column['name'] = $name[$i];
 
             if ($join_table[$i] && $join_field[$i]) {
-                $script_cols[$i] .= ',"join"=>"'.$join_table[$i].','.$join_field[$i].'"';
+                $table_column['join'] = $join_table[$i].','.$join_field[$i];
             }
 
             if ($is_image[$i]) {
-                $script_cols[$i] .= ',"image"=>true';
+                $table_column['image'] = true;
             }
 
             if ($id_download[$i]) {
-                $script_cols[$i] .= ',"download"=>true';
+                $table_column['download'] = true;
             }
 
             if ($width[$i]) {
-                $script_cols[$i] .= ',"width"=>"'.$width[$i].'"';
+                $table_column['width'] = $width[$i];
             }
 
             if ($callbackphp[$i]) {
-                $script_cols[$i] .= ',"callback_php"=>\''.$callbackphp[$i].'\'';
+                $table_column['callback_php'] = $callbackphp[$i];
             }
 
-            $script_cols[$i] .= "];";
+            $table_columns[] = $table_column;
 
             $i++;
         }
 
-        $scripts = implode("\n", $script_cols);
-        $raw = file_get_contents(app_path('Http/Controllers/'.$row->controller.'.php'));
-        $raw = explode("# START COLUMNS DO NOT REMOVE THIS LINE", $raw);
-        $rraw = explode("# END COLUMNS DO NOT REMOVE THIS LINE", $raw[1]);
+        DB::table($this->table)->where('id', $id)->update(['columns'=>json_encode($table_columns)]);
 
-        $file_controller = trim($raw[0])."\n\n";
-        $file_controller .= "\t\t\t# START COLUMNS DO NOT REMOVE THIS LINE\n";
-        $file_controller .= "\t\t\t".'$this->col = [];'."\n";
-        $file_controller .= $scripts."\n";
-        $file_controller .= "\t\t\t# END COLUMNS DO NOT REMOVE THIS LINE\n\n";
-        $file_controller .= "\t\t\t".trim($rraw[1]);
-
-        file_put_contents(app_path('Http/Controllers/'.$row->controller.'.php'), $file_controller);
+        // Generate a Module Controller
+        $generate_controller = new ModuleControllerGenerator();
+        $generate_controller->table = $row->table_name;
+        $generate_controller->module_name = $row->name;
+        $generate_controller->generate_type = $row->generate_type?:"Simple";
+        $generate_controller->setColumns($table_columns);
+        $generate_controller->setForms(json_decode($row->forms, true));
+        $generate_controller->setProperties(json_decode($row->properties, true));
+        $generate_controller->generate();
 
         return redirect(cb()->adminPath('modules/step3/'.$id));
     }
 
+    private function listFormType() {
+        $types = [];
+        foreach (glob(base_path('vendor/crocodicstudio/crudbooster/src/views/default/type_components').'/*', GLOB_ONLYDIR) as $dir) {
+            $types[] = basename($dir);
+        }
+        return $types;
+    }
+
     public function getStep3($id)
     {
-        $this->cbLoader();
-
-        $module = cb()->getCurrentModule();
-
-        if (! cb()->isView() && $this->global_privilege == false) {
-            cb()->insertLog(trans('crudbooster.log_try_view', ['module' => $module->name]));
-            cb()->redirect(cb()->adminPath(), trans('crudbooster.denied_access'));
-        }
 
         $row = DB::table('cms_moduls')->where('id', $id)->first();
 
         $columns = cb()->getTableColumns($row->table_name);
 
-        if (file_exists(app_path('Http/Controllers/'.$row->controller.'.php'))) {
-            $response = file_get_contents(app_path('Http/Controllers/'.$row->controller.'.php'));
-            $column_datas = extract_unit($response, "# START FORM DO NOT REMOVE THIS LINE", "# END FORM DO NOT REMOVE THIS LINE");
-            $column_datas = str_replace('$this->', '$cb_', $column_datas);
-            eval($column_datas);
-        }
+        $types = $this->listFormType();
 
-        $types = [];
-        foreach (glob(base_path('vendor/crocodicstudio/crudbooster/src/views/default/type_components').'/*', GLOB_ONLYDIR) as $dir) {
-            $types[] = basename($dir);
-        }
+        $forms = json_decode($row->forms, true);
 
-        return view('crudbooster::module_generator.step3', compact('columns', 'cb_form', 'types', 'id'));
+        return view('crudbooster::module_generator.step3', compact('columns', 'forms','types', 'id'));
     }
 
     public function getTypeInfo($type = 'text')
@@ -357,9 +359,7 @@ class AdminModulesController extends CBController
 
     public function postStep4()
     {
-        $this->cbLoader();
-
-        $post = Request::all();
+        $post = \request()->all();
         $id = $post['id'];
 
         $label = $post['label'];
@@ -372,7 +372,7 @@ class AdminModulesController extends CBController
         $row = DB::table('cms_moduls')->where('id', $id)->first();
 
         $i = 0;
-        $script_form = [];
+        $forms = [];
         foreach ($label as $l) {
 
             if ($l != '') {
@@ -393,54 +393,23 @@ class AdminModulesController extends CBController
                     }
                 }
 
-                $script_form[$i] = "\t\t\t".'$this->form[] = '.min_var_export($form).";";
+                $forms[] = $form;
             }
 
             $i++;
         }
 
-        $scripts = implode("\n", $script_form);
-        $raw = file_get_contents(app_path('Http/Controllers/'.$row->controller.'.php'));
-        $raw = explode("# START FORM DO NOT REMOVE THIS LINE", $raw);
-        $rraw = explode("# END FORM DO NOT REMOVE THIS LINE", $raw[1]);
+        DB::table($this->table)->where("id", $id)->update(['forms'=>json_encode($forms)]);
 
-        $top_script = trim($raw[0]);
-        $current_scaffolding_form = trim($rraw[0]);
-        $bottom_script = trim($rraw[1]);
-
-        //IF FOUND OLD, THEN CLEAR IT
-        if (strpos($bottom_script, '# OLD START FORM') !== false) {
-            $line_end_count = strlen('# OLD END FORM');
-            $line_start_old = strpos($bottom_script, '# OLD START FORM');
-            $line_end_old = strpos($bottom_script, '# OLD END FORM') + $line_end_count;
-            $get_string = substr($bottom_script, $line_start_old, $line_end_old);
-            $bottom_script = str_replace($get_string, '', $bottom_script);
-        }
-
-        //ARRANGE THE FULL SCRIPT
-        $file_controller = $top_script."\n\n";
-        $file_controller .= "\t\t\t# START FORM DO NOT REMOVE THIS LINE\n";
-        $file_controller .= "\t\t\t".'$this->form = [];'."\n";
-        $file_controller .= $scripts."\n";
-        $file_controller .= "\t\t\t# END FORM DO NOT REMOVE THIS LINE\n\n";
-
-        //CREATE A BACKUP SCAFFOLDING TO OLD TAG
-        if ($current_scaffolding_form) {
-            $current_scaffolding_form = preg_split("/\\r\\n|\\r|\\n/", $current_scaffolding_form);
-            foreach ($current_scaffolding_form as &$c) {
-                $c = "\t\t\t//".trim($c);
-            }
-            $current_scaffolding_form = implode("\n", $current_scaffolding_form);
-
-            $file_controller .= "\t\t\t# OLD START FORM\n";
-            $file_controller .= $current_scaffolding_form."\n";
-            $file_controller .= "\t\t\t# OLD END FORM\n\n";
-        }
-
-        $file_controller .= "\t\t\t".trim($bottom_script);
-
-        //CREATE FILE CONTROLLER
-        file_put_contents(app_path('Http/Controllers/'.$row->controller.'.php'), $file_controller);
+        // Generate a Module Controller
+        $generate_controller = new ModuleControllerGenerator();
+        $generate_controller->table = $row->table_name;
+        $generate_controller->module_name = $row->name;
+        $generate_controller->generate_type = $row->generate_type?:"Simple";
+        $generate_controller->setColumns(json_decode($row->columns, true));
+        $generate_controller->setForms($forms);
+        $generate_controller->setProperties(json_decode($row->properties, true));
+        $generate_controller->generate();
 
         return redirect(cb()->adminPath('modules/step4/'.$id));
 
@@ -448,27 +417,11 @@ class AdminModulesController extends CBController
 
     public function getStep4($id)
     {
-        $this->cbLoader();
-
-        $module = cb()->getCurrentModule();
-
-        if (! cb()->isView() && $this->global_privilege == false) {
-            cb()->insertLog(trans('crudbooster.log_try_view', ['module' => $module->name]));
-            cb()->redirect(cb()->adminPath(), trans('crudbooster.denied_access'));
-        }
-
         $row = DB::table('cms_moduls')->where('id', $id)->first();
 
         $data = [];
         $data['id'] = $id;
-        if (file_exists(app_path('Http/Controllers/'.$row->controller.'.php'))) {
-            $response = file_get_contents(app_path('Http/Controllers/'.$row->controller.'.php'));
-            $column_datas = extract_unit($response, "# START CONFIGURATION DO NOT REMOVE THIS LINE", "# END CONFIGURATION DO NOT REMOVE THIS LINE");
-            $column_datas = str_replace('$this->', '$data[\'cb_', $column_datas);
-            $column_datas = str_replace(' = ', '\'] = ', $column_datas);
-            $column_datas = str_replace([' ', "\t"], '', $column_datas);
-            eval($column_datas);
-        }
+        $data['properties'] = json_decode($row->properties, true);
 
         return view('crudbooster::module_generator.step4', $data);
     }
@@ -479,69 +432,52 @@ class AdminModulesController extends CBController
         $id = Request::input('id');
         $row = DB::table('cms_moduls')->where('id', $id)->first();
 
-        $post = Request::all();
+        $post = \request()->except(['_token','id','submit']);
 
         $post['table'] = $row->table_name;
 
         $script_config = [];
-        $exception = ['_token', 'id', 'submit'];
+        $properties = json_decode($row->properties, true);
         $i = 0;
         foreach ($post as $key => $val) {
-            if (in_array($key, $exception)) {
-                continue;
-            }
-
-            if ($val != 'true' && $val != 'false') {
-                $value = '"'.$val.'"';
+            if($val == 'true' || $val == 'false') {
+                $value = ($val=='true')?true:false;
             } else {
                 $value = $val;
             }
 
-            $script_config[$i] = "\t\t\t".'$this->'.$key.' = '.$value.';';
+            $properties[$key] = $value;
             $i++;
         }
 
-        $scripts = implode("\n", $script_config);
-        $raw = file_get_contents(app_path('Http/Controllers/'.$row->controller.'.php'));
-        $raw = explode("# START CONFIGURATION DO NOT REMOVE THIS LINE", $raw);
-        $rraw = explode("# END CONFIGURATION DO NOT REMOVE THIS LINE", $raw[1]);
+        DB::table($this->table)->where("id", $id)->update(['properties'=>json_encode($properties)]);
 
-        $file_controller = trim($raw[0])."\n\n";
-        $file_controller .= "\t\t\t# START CONFIGURATION DO NOT REMOVE THIS LINE\n";
-        $file_controller .= $scripts."\n";
-        $file_controller .= "\t\t\t# END CONFIGURATION DO NOT REMOVE THIS LINE\n\n";
-        $file_controller .= "\t\t\t".trim($rraw[1]);
-
-        file_put_contents(app_path('Http/Controllers/'.$row->controller.'.php'), $file_controller);
+        // Generate a Module Controller
+        $generate_controller = new ModuleControllerGenerator();
+        $generate_controller->table = $row->table_name;
+        $generate_controller->module_name = $row->name;
+        $generate_controller->generate_type = $row->generate_type?:"Simple";
+        $generate_controller->setColumns(json_decode($row->columns, true));
+        $generate_controller->setForms(json_decode($row->forms, true));
+        $generate_controller->setProperties($properties);
+        $generate_controller->generate();
 
         return redirect_to(cb()->adminPath('modules'),trans('crudbooster.alert_update_data_success'),'success');
     }
 
     public function postEditSave($id)
     {
-        $this->cbLoader();
 
-        $row = DB::table($this->table)->where($this->primary_key, $id)->first();
-
-        if (! cb()->isUpdate() && $this->global_privilege == false) {
-            cb()->insertLog(trans("crudbooster.log_try_add", ['name' => $row->{$this->title_field}, 'module' => cb()->getCurrentModule()->name]));
-            cb()->redirect(cb()->adminPath(), trans('crudbooster.denied_access'));
-        }
-
-        $this->validation();
-        $this->input_assignment();
-
-        //Generate Controller
-        $route_basename = basename(Request::get('path'));
-        if ($this->arr['controller'] == '') {
-            $this->arr['controller'] = cb()->generateController(Request::get('table_name'), $route_basename);
-        }
-
-        DB::table($this->table)->where($this->primary_key, $id)->update($this->arr);
+        DB::table($this->table)
+            ->where($this->primary_key, $id)
+            ->update([
+                'name'=> \request('name'),
+                'icon'=> \request('icon'),
+                'path'=> \request('path')
+            ]);
 
         //Refresh Session Roles
-        $roles = DB::table('cms_privileges_roles')->where('id_cms_privileges', cb()->myPrivilegeId())->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')->get();
-        Session::put('admin_privileges_roles', $roles);
+        cb()->auth()->refreshRole();
 
         cb()->redirect(Request::server('HTTP_REFERER'), trans('crudbooster.alert_update_data_success'), 'success');
     }

@@ -22,34 +22,36 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="form-group">
-                            <label>Title Field Candidate</label>
-                            <input type="text" name="title_field" value="{{$cb_title_field}}" class='form-control'>
+                            <label>Title</label>
+                            <input type="text" name="title_field" value="{{ $properties['title_field'] }}" class='form-control'>
+                            <div class="help-block">Choose a "title" similarity column in the table</div>
                         </div>
                     </div>
 
                     <div class="col-sm-5">
                         <div class="form-group">
                             <label>Limit Data</label>
-                            <input type="number" name="limit" value="{{$cb_limit}}" class='form-control'>
+                            <input type="number" name="limit" value="{{$properties['limit']}}" class='form-control'>
                         </div>
                     </div>
 
                     <div class="col-sm-7">
                         <div class="form-group">
                             <label>Order By</label>
-                            <?php
-                            if (is_array($cb_orderby)) {
-                                $orderby = [];
-                                foreach ($cb_orderby as $k => $v) {
-                                    $orderby[] = $k.','.$v;
-                                }
-                                $orderby = implode(";", $orderby);
-                            } else {
-                                $orderby = $cb_orderby;
-                            }
-                            ?>
-                            <input type="text" name="orderby" value="{{$orderby}}" class='form-control'>
+                            <input type="text" name="order_by" value="{{$properties['order_by']}}" class='form-control'>
                             <div class="help-block">E.g : column_name,desc</div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-5">
+                        <div class="form-group">
+                            <label>Sidebar Mode</label>
+                            <select name="sidebar_mode" class="form-control">
+                                <option {{ $properties['sidebar_mode']=='normal'?'selected':"" }} value="normal">Normal</option>
+                                <option {{ $properties['sidebar_mode']=='mini'?'selected':"" }} value="mini">Mini</option>
+                                <option {{ $properties['sidebar_mode']=='collapse'?'selected':"" }} value="collapse">Collapse</option>
+                                <option {{ $properties['sidebar_mode']=='collapse-mini'?'selected':"" }} value="collapse-mini">Collapse Mini</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -62,10 +64,10 @@
                                 <div class="form-group">
                                     <label>Global Privilege</label>
                                     <label class='radio-inline'>
-                                        <input type='radio' name='global_privilege' {{($cb_global_privilege)?"checked":""}} value='true'/> TRUE
+                                        <input type='radio' name='global_privilege' {{($properties['global_privilege'])?"checked":""}} value='true'/> TRUE
                                     </label>
                                     <label class='radio-inline'>
-                                        <input {{(!$cb_global_privilege)?"checked":""}} type='radio' name='global_privilege' value='false'/> FALSE
+                                        <input {{(!$properties['global_privilege'])?"checked":""}} type='radio' name='global_privilege' value='false'/> FALSE
                                     </label>
                                 </div>
                             </div>
@@ -74,10 +76,10 @@
                                 <div class="form-group">
                                     <label>Show Button Table Action</label>
                                     <label class='radio-inline'>
-                                        <input {{($cb_button_table_action)?"checked":""}} type='radio' name='button_table_action' value='true'/> TRUE
+                                        <input {{($properties['button_table_action'])?"checked":""}} type='radio' name='button_table_action' value='true'/> TRUE
                                     </label>
                                     <label class='radio-inline'>
-                                        <input {{(!$cb_button_table_action)?"checked":""}} type='radio' name='button_table_action' value='false'/> FALSE
+                                        <input {{(!$properties['button_table_action'])?"checked":""}} type='radio' name='button_table_action' value='false'/> FALSE
                                     </label>
                                 </div>
                             </div>
@@ -86,10 +88,10 @@
                                 <div class="form-group">
                                     <label>Show Bulk Action Button</label>
                                     <label class='radio-inline'>
-                                        <input {{($cb_button_bulk_action)?"checked":""}} type='radio' name='button_bulk_action' value='true'/> TRUE
+                                        <input {{($properties['button_bulk_action'])?"checked":""}} type='radio' name='button_bulk_action' value='true'/> TRUE
                                     </label>
                                     <label class='radio-inline'>
-                                        <input {{(!$cb_button_bulk_action)?"checked":""}} type='radio' name='button_bulk_action' value='false'/> FALSE
+                                        <input {{(!$properties['button_bulk_action'])?"checked":""}} type='radio' name='button_bulk_action' value='false'/> FALSE
                                     </label>
                                 </div>
                             </div>
@@ -97,25 +99,27 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label>Button Action Style</label>
-                                    <label class='radio-inline'>
-                                        <input {{($cb_button_action_style=='button_icon')?"checked":""}} type='radio' name='button_action_style'
-                                               value='button_icon'/> Icon
-                                    </label>
-                                    <label class='radio-inline'>
-                                        <input {{($cb_button_action_style=='button_icon_text')?"checked":""}} type='radio' name='button_action_style'
-                                               value='button_icon_text'/> Icon & Text
-                                    </label>
-                                    <label class='radio-inline'>
-                                        <input {{($cb_button_action_style=='button_text')?"checked":""}} type='radio' name='button_action_style'
-                                               value='button_text'/> Button Text
-                                    </label>
-                                    <label class='radio-inline'>
-                                        <input {{($cb_button_action_style=='button_dropdown')?"checked":""}} type='radio' name='button_action_style'
-                                               value='button_dropdown'/> Dropdown
-                                    </label>
+                                    <select name="button_action_style" class="form-control">
+                                        <option value="">** Choose a button style</option>
+                                        <option {{$properties['button_action_style']=='button_icon'?'selected':''}} value="button_icon">Icon Only</option>
+                                        <option {{$properties['button_action_style']=='button_icon_text'?'selected':''}} value="button_icon_text">Icon & Text</option>
+                                        <option {{$properties['button_action_style']=='button_text'?'selected':''}} value="button_text">Button & Text</option>
+                                        <option {{$properties['button_action_style']=='button_dropdown'?'selected':''}} value="button_dropdown">Dropdown</option>
+                                    </select>
                                 </div>
                             </div>
 
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Show Grid Numbering</label>
+                                    <label class='radio-inline'>
+                                        <input {{($properties['show_numbering'])?"checked":""}} type='radio' name='show_numbering' value='true'/> TRUE
+                                    </label>
+                                    <label class='radio-inline'>
+                                        <input {{(!$properties['show_numbering'])?"checked":""}} type='radio' name='show_numbering' value='false'/> FALSE
+                                    </label>
+                                </div>
+                            </div>
 
                         </div>
                     </div>
@@ -127,10 +131,10 @@
                                 <div class="form-group">
                                     <label>Show Button Add</label>
                                     <label class='radio-inline'>
-                                        <input {{($cb_button_add)?"checked":""}} type='radio' name='button_add' value='true'/> TRUE
+                                        <input {{($properties['button_add'])?"checked":""}} type='radio' name='button_add' value='true'/> TRUE
                                     </label>
                                     <label class='radio-inline'>
-                                        <input {{(!$cb_button_add)?"checked":""}} type='radio' name='button_add' value='false'/> FALSE
+                                        <input {{(!$properties['button_add'])?"checked":""}} type='radio' name='button_add' value='false'/> FALSE
                                     </label>
                                 </div>
                             </div>
@@ -139,10 +143,10 @@
                                 <div class="form-group">
                                     <label>Show Button Edit</label>
                                     <label class='radio-inline'>
-                                        <input {{($cb_button_edit)?"checked":""}} type='radio' name='button_edit' value='true'/> TRUE
+                                        <input {{($properties['button_edit'])?"checked":""}} type='radio' name='button_edit' value='true'/> TRUE
                                     </label>
                                     <label class='radio-inline'>
-                                        <input {{(!$cb_button_edit)?"checked":""}} type='radio' name='button_edit' value='false'/> FALSE
+                                        <input {{(!$properties['button_edit'])?"checked":""}} type='radio' name='button_edit' value='false'/> FALSE
                                     </label>
                                 </div>
                             </div>
@@ -151,10 +155,10 @@
                                 <div class="form-group">
                                     <label>Show Button Delete</label>
                                     <label class='radio-inline'>
-                                        <input {{($cb_button_delete)?"checked":""}} type='radio' name='button_delete' value='true'/> TRUE
+                                        <input {{($properties['button_delete'])?"checked":""}} type='radio' name='button_delete' value='true'/> TRUE
                                     </label>
                                     <label class='radio-inline'>
-                                        <input {{(!$cb_button_delete)?"checked":""}} type='radio' name='button_delete' value='false'/> FALSE
+                                        <input {{(!$properties['button_delete'])?"checked":""}} type='radio' name='button_delete' value='false'/> FALSE
                                     </label>
                                 </div>
                             </div>
@@ -164,10 +168,10 @@
                                 <div class="form-group">
                                     <label>Show Button Detail</label>
                                     <label class='radio-inline'>
-                                        <input {{($cb_button_detail)?"checked":""}} type='radio' name='button_detail' value='true'/> TRUE
+                                        <input {{($properties['button_detail'])?"checked":""}} type='radio' name='button_detail' value='true'/> TRUE
                                     </label>
                                     <label class='radio-inline'>
-                                        <input {{(!$cb_button_detail)?"checked":""}} type='radio' name='button_detail' value='false'/> FALSE
+                                        <input {{(!$properties['button_detail'])?"checked":""}} type='radio' name='button_detail' value='false'/> FALSE
                                     </label>
                                 </div>
                             </div>
@@ -185,10 +189,10 @@
                                 <div class="form-group">
                                     <label>Show Button Show Data</label>
                                     <label class='radio-inline'>
-                                        <input {{($cb_button_show)?"checked":""}} type='radio' name='button_show' value='true'/> TRUE
+                                        <input {{($properties['button_show'])?"checked":""}} type='radio' name='button_show' value='true'/> TRUE
                                     </label>
                                     <label class='radio-inline'>
-                                        <input {{(!$cb_button_show)?"checked":""}} type='radio' name='button_show' value='false'/> FALSE
+                                        <input {{(!$properties['button_show'])?"checked":""}} type='radio' name='button_show' value='false'/> FALSE
                                     </label>
                                 </div>
                             </div>
@@ -197,10 +201,10 @@
                                 <div class="form-group">
                                     <label>Show Button Filter & Sorting</label>
                                     <label class='radio-inline'>
-                                        <input {{($cb_button_filter)?"checked":""}} type='radio' name='button_filter' value='true'/> TRUE
+                                        <input {{($properties['button_filter'])?"checked":""}} type='radio' name='button_filter' value='true'/> TRUE
                                     </label>
                                     <label class='radio-inline'>
-                                        <input {{(!$cb_button_filter)?"checked":""}} type='radio' name='button_filter' value='false'/> FALSE
+                                        <input {{(!$properties['button_filter'])?"checked":""}} type='radio' name='button_filter' value='false'/> FALSE
                                     </label>
                                 </div>
                             </div>
@@ -209,10 +213,10 @@
                                 <div class="form-group">
                                     <label>Show Button Import</label>
                                     <label class='radio-inline'>
-                                        <input {{($cb_button_import)?"checked":""}} type='radio' name='button_import' value='true'/> TRUE
+                                        <input {{($properties['button_import'])?"checked":""}} type='radio' name='button_import' value='true'/> TRUE
                                     </label>
                                     <label class='radio-inline'>
-                                        <input {{(!$cb_button_import)?"checked":""}} type='radio' name='button_import' value='false'/> FALSE
+                                        <input {{(!$properties['button_import'])?"checked":""}} type='radio' name='button_import' value='false'/> FALSE
                                     </label>
                                 </div>
                             </div>
@@ -221,10 +225,10 @@
                                 <div class="form-group">
                                     <label>Show Button Export</label>
                                     <label class='radio-inline'>
-                                        <input {{($cb_button_export)?"checked":""}} type='radio' name='button_export' value='true'/> TRUE
+                                        <input {{($properties['button_export'])?"checked":""}} type='radio' name='button_export' value='true'/> TRUE
                                     </label>
                                     <label class='radio-inline'>
-                                        <input {{(!$cb_button_export)?"checked":""}} type='radio' name='button_export' value='false'/> FALSE
+                                        <input {{(!$properties['button_export'])?"checked":""}} type='radio' name='button_export' value='false'/> FALSE
                                     </label>
                                 </div>
                             </div>

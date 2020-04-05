@@ -449,7 +449,7 @@
                     </thead>
                     <tbody>
                     <?php $index = 0;?>
-                    @foreach($cb_form as $form)
+                    @foreach($forms as $form)
                         <tr>
                             <td><input type='text' value='{{$form["label"]}}' placeholder="Input field label" onclick='showColumnSuggest(this)'
                                        onkeyup="showColumnSuggestLike(this)" class='form-control labels' name='label[]'/></td>
@@ -457,8 +457,8 @@
                                        onkeyup="showNameSuggestLike(this)" class='form-control name' name='name[]'/></td>
                             <td><input type='text' value='{{$form["type"]?:"text"}}' placeholder="Input field type" onclick='showTypeSuggest(this)'
                                        onkeyup="showTypeSuggestLike(this)" class='form-control type' name='type[]'/></td>
-                            <td><input type='text' value='{{$form["validation"]}}' class='form-control validation' onclick="showValidationSuggest(this)"
-                                       onkeyup="showValidationSuggestLike(this)" name='validation[]' value='required' placeholder='Enter Laravel Validation'/>
+                            <td><input type='text' value='{{$form["validation"]?:"required"}}' class='form-control validation' onclick="showValidationSuggest(this)"
+                                       onkeyup="showValidationSuggestLike(this)" name='validation[]' placeholder='Enter Laravel Validation'/>
                             </td>
                             <td>
                                 <select class='form-control width' name='width[]'>

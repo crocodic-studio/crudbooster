@@ -285,11 +285,6 @@
         </div>
         <div class="box-body">
 
-            <div class="alert alert-info">
-                <strong>Warning</strong>. Make sure that your column format are normally, unless using this Tool maybe make your current configuration broken,
-                because this Tool will replace your configuration.
-            </div>
-
             <form method="post" action="{{ cb()->adminPath('modules/step3') }}">
                 <input type="hidden" name="_token" value="{{csrf_token()}}">
                 <input type="hidden" name="id" value="{{$id}}">
@@ -308,17 +303,17 @@
                         </tr>
                     </thead>
                     <tbody>
-                    @if($cb_col)
-                        @foreach($cb_col as $c)
+                    @if($controller_columns)
+                        @foreach($controller_columns as $c)
                             <tr>
                                 <td><input value='{{$c["label"]}}' type='text' name='column[]' onclick='showColumnSuggest(this)'
-                                           onKeyUp='showColumnSuggestLike(this)' placeholder='Column Name' class='column form-control notfocus' value=''/></td>
+                                           onKeyUp='showColumnSuggestLike(this)' placeholder='Column Name' class='column form-control notfocus'/></td>
                                 <td><input value='{{$c["name"]}}' type='text' name='name[]' onclick='showNameSuggest(this)' onKeyUp='showNameSuggestLike(this)'
-                                           placeholder='Field Name' class='name form-control notfocus' value=''/></td>
+                                           placeholder='Field Name' class='name form-control notfocus'/></td>
                                 <td><input value='{{ @explode(",",$c["join"])[0] }}' type='text' name='join_table[]' onclick='showTable(this)'
-                                           onKeyUp='showTableLike(this)' placeholder='Table Name' class='join_table form-control notfocus' value=''/></td>
+                                           onKeyUp='showTableLike(this)' placeholder='Table Name' class='join_table form-control notfocus'/></td>
                                 <td><input value='{{ @explode(",",$c["join"])[1] }}' type='text' name='join_field[]' onclick='showTableField(this)'
-                                           onKeyUp='showTableFieldLike(this)' placeholder='Field Name Shown' class='join_field form-control notfocus' value=''/>
+                                           onKeyUp='showTableFieldLike(this)' placeholder='Field Name Shown' class='join_field form-control notfocus'/>
                                 </td>
                                 <td><input type='text' name='callbackphp[]' class='form-control callbackphp notfocus' value='{{$c["callback_php"]}}'
                                            placeholder="Optional"/></td>
