@@ -27,19 +27,15 @@ class CRUDBoosterServiceProvider extends ServiceProvider
             $this->publishes([__DIR__.'/localization' => resource_path('lang')], 'cb_localization');
 
             if(!file_exists(app_path('Http/Controllers/CBHook.php'))) {
-                $this->publishes([__DIR__.'/userfiles/controllers/CBHook.php' => app_path('Http/Controllers/CBHook.php')],'CBHook');
-            }
-
-            if(!file_exists(app_path('Http/Controllers/AdminCmsUsersController.php'))) {
-                $this->publishes([__DIR__.'/userfiles/controllers/AdminCmsUsersController.php' => app_path('Http/Controllers/AdminCmsUsersController.php')],'cb_user_controller');
+                $this->publishes([__DIR__.'/stubs/controllers/CBHook.php.stub' => app_path('Http/Controllers/CBHook.php')],'CBHook');
             }
 
             if(!file_exists(app_path('Http/Controllers/AdminDashboardController.php'))) {
-                $this->publishes([__DIR__.'/userfiles/controllers/AdminDashboardController.php' => app_path('Http/Controllers/AdminDashboardController.php')],'cb_dashboard_controller');
+                $this->publishes([__DIR__.'/stubs/controllers/AdminDashboardController.php.stub' => app_path('Http/Controllers/AdminDashboardController.php')],'cb_dashboard_controller');
             }
 
             if(!file_exists(app_path('Http/Controllers/AdminProfileController.php'))) {
-                $this->publishes([__DIR__.'/userfiles/controllers/AdminProfileController.php' => app_path('Http/Controllers/AdminProfileController.php')],'cb_profile_controller');
+                $this->publishes([__DIR__.'/stubs/controllers/AdminProfileController.php.stub' => app_path('Http/Controllers/AdminProfileController.php')],'cb_profile_controller');
             }
 
             $this->publishes([__DIR__.'/assets'=>public_path('vendor/crudbooster')],'cb_asset');

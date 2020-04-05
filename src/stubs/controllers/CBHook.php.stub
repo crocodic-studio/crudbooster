@@ -1,7 +1,4 @@
-<?php 
-namespace App\Http\Controllers;
-
-use Illuminate\Support\Facades\DB;
+<?php namespace App\Http\Controllers;
 
 class CBHook extends Controller {
 
