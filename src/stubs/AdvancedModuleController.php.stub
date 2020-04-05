@@ -282,6 +282,6 @@ class AdminFooBarController extends CBController {
 
 
     /**
-     * Nevermind to create your own method in here
+     * Never mind to create your own method in here
      */
 }
