@@ -283,23 +283,10 @@ class AdminMenusController extends CBController
 
         unset($postdata['module_slug']);
         unset($postdata['statistic_slug']);
-
-        if ($postdata['is_dashboard'] == 1) {
-            //If set dashboard, so unset for first all dashboard
-            //DB::table('cms_menus')->where('id_cms_privileges', $postdata['id_cms_privileges'])->where('is_dashboard', 1)->update(['is_dashboard' => 0]);
-            Cache::forget('sidebarDashboard'.cb()->myPrivilegeId());
-        }
     }
 
     public function hook_before_edit(&$postdata, $id)
     {
-
-        if ($postdata['is_dashboard'] == 1) {
-            //If set dashboard, so unset for first all dashboard
-            //DB::table('cms_menus')->where('id_cms_privileges', $postdata['id_cms_privileges'])->where('is_dashboard', 1)->update(['is_dashboard' => 0]);
-            Cache::forget('sidebarDashboard'.cb()->myPrivilegeId());
-        }
-
         if ($postdata['type'] == 'Statistic') {
             $stat = cb()->first('cms_statistics', ['id' => $postdata['statistic_slug']]);
             $postdata['path'] = 'statistic_builder/show/'.$stat->slug;

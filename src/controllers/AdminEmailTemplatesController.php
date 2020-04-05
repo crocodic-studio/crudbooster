@@ -72,6 +72,4 @@ class AdminEmailTemplatesController extends \crocodicstudio\crudbooster\controll
             'placeholder' => 'Optional',
         ];
     }
-    //By the way, you can still create your own method in here... :)
-
 }
