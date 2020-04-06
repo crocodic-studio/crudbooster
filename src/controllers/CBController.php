@@ -1232,24 +1232,25 @@ class CBController extends Controller
                 $count_input_data = ($getColName)?(count($getColName) - 1):0;
                 $child_array = [];
                 $fk = $ro['foreign_key'];
-
-                for ($i = 0; $i <= $count_input_data; $i++) {
-                    $column_data = [];
-                    foreach ($columns as $col) {
-                        $colname = $col['name'];
-                        $colvalue = Request::get($name.'-'.$colname)[$i];
-                        if(isset($colvalue) === TRUE) {
-                            $column_data[$colname] = $colvalue;
+                if($count_input_data >1) {
+                    for ($i = 0; $i <= $count_input_data; $i++) {
+                        $column_data = [];
+                        foreach ($columns as $col) {
+                            $colname = $col['name'];
+                            $colvalue = Request::get($name . '-' . $colname)[$i];
+                            if (isset($colvalue) === TRUE) {
+                                $column_data[$colname] = $colvalue;
+                            }
+                        }
+                        if (isset($column_data) === TRUE) {
+                            $column_data[$fk] = (!empty($id) ? $id : $lastInsertId);
+                            $child_array[] = $column_data;
                         }
                     }
-                    if(isset($column_data) === TRUE) {
-                        $column_data[$fk] = (!empty($id) ? $id : $lastInsertId);
-                        $child_array[] = $column_data;
-                    }
-                }
 
-                $childtable = CRUDBooster::parseSqlTable($ro['table'])['table'];
-                DB::table($childtable)->insert($child_array);
+                    $childtable = CRUDBooster::parseSqlTable($ro['table'])['table'];
+                    DB::table($childtable)->insert($child_array);
+                }
             }
         }
 
@@ -1385,25 +1386,26 @@ class CBController extends Controller
                 DB::table($childtable)->where($fk, $id)->delete();
                 $lastId = CRUDBooster::newId($childtable);
                 $childtablePK = CB::pk($childtable);
-
-                for ($i = 0; $i <= $count_input_data; $i++) {
-                    $column_data = [];
-                    foreach ($columns as $col) {
-                        $colname = $col['name'];
-                        $colvalue = Request::get($name.'-'.$colname)[$i];
-                        if(isset($colvalue) === TRUE) {
-                            $column_data[$colname] = $colvalue;
+                if($count_input_data >1) {
+                    for ($i = 0; $i <= $count_input_data; $i++) {
+                        $column_data = [];
+                        foreach ($columns as $col) {
+                            $colname = $col['name'];
+                            $colvalue = Request::get($name . '-' . $colname)[$i];
+                            if (isset($colvalue) === TRUE) {
+                                $column_data[$colname] = $colvalue;
+                            }
+                        }
+                        if (isset($column_data) === TRUE) {
+                            $column_data[$childtablePK] = $lastId;
+                            $column_data[$fk] = $id;
+                            $child_array[] = $column_data;
+                            $lastId++;
                         }
                     }
-                    if(isset($column_data) === TRUE){
-                        $column_data[$childtablePK] = $lastId;
-                        $column_data[$fk] = $id;
-                        $child_array[] = $column_data;
-                        $lastId++;
-                    }
+                    $child_array = array_reverse($child_array);
+                    DB::table($childtable)->insert($child_array);
                 }
-                $child_array = array_reverse($child_array);
-                DB::table($childtable)->insert($child_array);
             }
         }
 
