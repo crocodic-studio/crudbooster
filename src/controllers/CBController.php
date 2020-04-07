@@ -156,6 +156,8 @@ abstract class CBController extends Controller
 
         $this->hook_query_index($result);
 
+        $this->hookQueryIndex($result);
+
         if (in_array('deleted_at', $table_columns)) {
             $result->where($this->table.'.deleted_at', null);
         }
@@ -516,6 +518,7 @@ abstract class CBController extends Controller
 
             foreach ($html_content as $i => $v) {
                 $this->hook_row_index($i, $v);
+                $this->hookRowIndex($i, $v);
                 $html_content[$i] = $v;
             }
 
@@ -564,6 +567,8 @@ abstract class CBController extends Controller
         $this->afterSavingDataProcess($id);
 
         $this->hook_after_add($lastInsertId);
+
+        $this->hookAfterAdd($lastInsertId);
 
         $this->return_url = ($this->return_url) ? $this->return_url : request()->get('return_url');
 
@@ -614,12 +619,16 @@ abstract class CBController extends Controller
 
         $this->hook_before_edit($this->arr, $id);
 
+        $this->hookBeforeEdit($this->arr, $id);
+
         // Update data
         DB::table($this->table)->where($this->primary_key, $id)->update($this->arr);
 
         $this->afterSavingDataProcess($id);
 
         $this->hook_after_edit($id);
+
+        $this->hookAfterEdit($id);
 
         $this->return_url = ($this->return_url) ? $this->return_url : request()->get('return_url');
 
@@ -649,6 +658,8 @@ abstract class CBController extends Controller
 
         $this->hook_before_delete($id);
 
+        $this->hookBeforeDelete($id);
+
         if (cb()->isColumnExists($this->table, 'deleted_at')) {
             DB::table($this->table)->where($this->primary_key, $id)->update(['deleted_at' => date('Y-m-d H:i:s')]);
         } else {
@@ -659,6 +670,8 @@ abstract class CBController extends Controller
         cb()->insertLog(trans("crudbooster.log_delete", ['name' => $row->{$this->title_field}, 'module' => cb()->getCurrentModule()->name]));
 
         $this->hook_after_delete($id);
+
+        $this->hookAfterDelete($id);
 
         $url = g('return_url') ?: cb()->referer();
 

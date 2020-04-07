@@ -43,7 +43,7 @@ class AdminFooBarController extends CBController {
      * This method is to add additional query
      * @param \Illuminate\Database\Query\Builder $query
      */
-    public function hook_query_index(&$query) {
+    public function hookQueryIndex(&$query) {
 
     }
 
@@ -53,7 +53,7 @@ class AdminFooBarController extends CBController {
      * E.g:
      * $post_data['name'] = strtoupper($post_data['name']);
      */
-    public function hook_before_add(&$post_data) {
+    public function hookBeforeAdd(&$post_data) {
 
     }
 
@@ -62,7 +62,7 @@ class AdminFooBarController extends CBController {
      * @param int $id This variabel is a last_insert_id value.
      *
      */
-    public function hook_after_add($id) {
+    public function hookAfterAdd($id) {
 
     }
 
@@ -73,7 +73,7 @@ class AdminFooBarController extends CBController {
      * E.g:
      * $post_data['name'] = strtoupper($post_data['name']);
      */
-    public function hook_before_edit(&$post_data,$id) {
+    public function hookBeforeEdit(&$post_data,$id) {
 
     }
 
@@ -82,7 +82,7 @@ class AdminFooBarController extends CBController {
      * @param int $id This variabel is current ID record of data
      *
      */
-    public function hook_after_edit($id) {
+    public function hookAfterEdit($id) {
 
     }
 
@@ -90,7 +90,7 @@ class AdminFooBarController extends CBController {
      * This method is to you make an additional process before the delete executed
      * @param int $id
      */
-    public function hook_before_delete($id) {
+    public function hookBeforeDelete($id) {
 
     }
 
@@ -98,7 +98,7 @@ class AdminFooBarController extends CBController {
      * This method is to you make an additional process after the delete executed
      * @param int $id
      */
-    public function hook_after_delete($id) {
+    public function hookAfterDelete($id) {
 
     }
 

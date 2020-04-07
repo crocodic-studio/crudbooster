@@ -78,34 +78,68 @@ trait CBControllerHooks
     {
     }
 
+    /**
+     * @deprecated No longer used on version v5.6
+     * @param $arr
+     */
     public function hook_before_add(&$arr)
     {
     }
 
+    /**
+     * @deprecated No longer used on version v5.6
+     * @param $id
+     */
     public function hook_after_add($id)
     {
     }
 
+    /**
+     * @deprecated No longer used on version v5.6
+     * @param $query
+     */
     public function hook_query_index(&$query)
     {
     }
 
+    /**
+     * @deprecated No longer used on version v5.6
+     * @param $index
+     * @param $value
+     */
     public function hook_row_index($index, &$value)
     {
     }
 
+    /**
+     * @deprecated No longer used on version v5.6
+     * @param $arr
+     * @param $id
+     */
     public function hook_before_edit(&$arr, $id)
     {
     }
 
+    /**
+     * @deprecated No longer used on version v5.6
+     * @param $id
+     */
     public function hook_after_edit($id)
     {
     }
 
+    /**
+     * @deprecated No longer used on version v5.6
+     * @param $id
+     */
     public function hook_before_delete($id)
     {
     }
 
+    /**
+     * @deprecated No longer used on version v5.6
+     * @param $id
+     */
     public function hook_after_delete($id)
     {
     }
