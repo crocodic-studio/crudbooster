@@ -553,6 +553,8 @@ abstract class CBController extends Controller
 
         $this->hook_before_add($this->arr);
 
+        $this->hookBeforeAdd($this->arr);
+
         $lastInsertId = $id = DB::table($this->table)->insertGetId($this->arr);
 
         //fix bug if primary key is uuid

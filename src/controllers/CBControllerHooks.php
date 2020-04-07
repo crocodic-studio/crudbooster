@@ -74,15 +74,15 @@ trait CBControllerHooks
         return redirect()->back()->with(['type' => $type, 'message' => $message]);
     }
 
+    public function actionButtonSelected($id_selected, $button_name)
+    {
+    }
+
     public function hook_before_add(&$arr)
     {
     }
 
     public function hook_after_add($id)
-    {
-    }
-
-    public function actionButtonSelected($id_selected, $button_name)
     {
     }
 
@@ -107,6 +107,38 @@ trait CBControllerHooks
     }
 
     public function hook_after_delete($id)
+    {
+    }
+
+    public function hookBeforeAdd(&$arr)
+    {
+    }
+
+    public function hookAfterAdd($id)
+    {
+    }
+
+    public function hookQueryIndex(&$query)
+    {
+    }
+
+    public function hookRowIndex($index, &$value)
+    {
+    }
+
+    public function hookBeforeEdit(&$arr, $id)
+    {
+    }
+
+    public function hookAfterEdit($id)
+    {
+    }
+
+    public function hookBeforeDelete($id)
+    {
+    }
+
+    public function hookAfterDelete($id)
     {
     }
 
