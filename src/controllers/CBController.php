@@ -468,20 +468,20 @@ class CBController extends Controller
                 if ($type == 'between') {
                     if ($key && isset($value[0]) && isset($value[1])) {
                         if (strpos($key, 'created_at')) {
-                            $value[0] =Carbon::parse($value[0])->subDay();
-                            $value[1] =Carbon::parse($value[1])->addDay();
+                            $value[0] =Carbon::parse($value[0]);
+                            $value[1] =Carbon::parse($value[1]);
                         }
                         $result->whereBetween($key, $value);
                     }elseif(isset($value[0]) && empty($value[1])){
                         if (strpos($key, 'created_at')) {
-                            $value[0] = Carbon::parse($value[0])->subDay();
+                            $value[0] = Carbon::parse($value[0]);
                         }
-                        $result->where($key,'>', $value[0]);
+                        $result->where($key,'>=', $value[0]);
                     }elseif(empty($value[0]) && isset($value[1])){
                         if (strpos($key, 'created_at')) {
-                            $value[1] = Carbon::parse($value[1])->addDay();
+                            $value[1] = Carbon::parse($value[1]);
                         }
-                        $result->where($key,'<', $value[1]);
+                        $result->where($key,'<=', $value[1]);
                     }
                 } else {
                     continue;
