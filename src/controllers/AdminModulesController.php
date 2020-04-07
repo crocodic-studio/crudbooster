@@ -237,11 +237,10 @@ class AdminModulesController extends CBController
         $forms              = json_encode($generate_controller->getForms());
         $properties         = json_encode($generate_controller->getProperties());
 
+        // Create new menu
+        if ($controller && request('create_menu')) $this->createMenu($name, $icon, $path, \request('id_cms_privileges'));
 
         if(\request('id')) {
-
-            // Create new menu
-            if ($controller && request('create_menu')) $this->createMenu($name, $icon, $path, \request('id_cms_privileges'));
 
             // Update module data
             DB::table($this->table)->where("id", \request('id'))
@@ -391,6 +390,7 @@ class AdminModulesController extends CBController
                     if ($f == '') {
                         unset($form[$k]);
                     }
+                    $form[$k] = trim(trim($f, '"'));
                 }
 
                 $forms[] = $form;

@@ -118,11 +118,11 @@ class ModuleControllerGenerator
                     $joinname = cb()->getNameTable($joincols);
                     $this->columns[] = ['label'=>$label,'name'=>$field,'join'=>$jointable.",".$joinname];
                 } else {
-                    $image = '';
                     if (in_array($field, $image_candidate)) {
-                        $image = ',"image"=>true';
+                        $this->columns[] = ['label'=>$label,'name'=>$field,'image'=>true];
+                    } else {
+                        $this->columns[] = ['label'=>$label,'name'=>$field];
                     }
-                    $this->columns[] = ['label'=>$label,'name'=>$field,'image'=>true];
                 }
             }
         }
