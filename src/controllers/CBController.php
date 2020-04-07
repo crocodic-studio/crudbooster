@@ -1250,7 +1250,7 @@ class CBController extends Controller
                 $count_input_data = ($getColName)?(count($getColName) - 1):0;
                 $child_array = [];
                 $fk = $ro['foreign_key'];
-                if($count_input_data >1) {
+                if(!empty($getColName)) {
                     for ($i = 0; $i <= $count_input_data; $i++) {
                         $column_data = [];
                         foreach ($columns as $col) {
