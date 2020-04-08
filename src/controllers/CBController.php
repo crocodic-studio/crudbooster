@@ -21,7 +21,6 @@ abstract class CBController extends Controller
         CBControllerValidator, CBControllerHelper, CBControllerHooks,
         CBControllerAdditionalRequests, CBControllerGuard;
 
-    public $data_inputan;
     public $columns_table;
     public $module_name;
     public $page_icon;
@@ -79,13 +78,13 @@ abstract class CBController extends Controller
     {
         $this->cbInit();
         $this->checkHideForm();
+        $this->verifyInputInterface();
 
         $this->primary_key = cb()->pk($this->table);
         $this->columns_table = $this->col;
-        $this->data_inputan = $this->form;
         $this->data['module'] = cb()->getCurrentModule();
         $this->data['pk'] = $this->primary_key;
-        $this->data['forms'] = $this->data_inputan;
+        $this->data['forms'] = $this->form;
         $this->data['hide_form'] = $this->hide_form;
         $this->data['addaction'] = ($this->show_addaction) ? $this->addaction : null;
         $this->data['table'] = $this->table;
@@ -558,13 +557,13 @@ abstract class CBController extends Controller
 
         $this->hookBeforeAdd($this->arr);
 
-        $lastInsertId = $id = DB::table($this->table)->insertGetId($this->arr);
+        $lastInsertId = DB::table($this->table)->insertGetId($this->arr);
 
         //fix bug if primary key is uuid
-        if($this->arr[$this->primary_key]!=$id)
-            $id = $this->arr[$this->primary_key];
+        if(isset($this->arr[$this->primary_key]))
+            $lastInsertId = $this->arr[$this->primary_key];
 
-        $this->afterSavingDataProcess($id);
+        $this->afterSavingDataProcess($lastInsertId);
 
         $this->hook_after_add($lastInsertId);
 

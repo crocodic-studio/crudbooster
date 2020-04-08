@@ -16,10 +16,12 @@ trait CBControllerValidator
 {
     private function checkHideForm()
     {
-        if ($this->hide_form && count($this->hide_form)) {
-            foreach ($this->form as $i => $f) {
-                if (in_array($f['name'], $this->hide_form)) {
-                    unset($this->form[$i]);
+        if(cb()->currentMethodIs(['getAdd','getEdit','postAddSave','postEditSave'])) {
+            if ($this->hide_form && count($this->hide_form)) {
+                foreach ($this->form as $i => $f) {
+                    if (in_array($f['name'], $this->hide_form)) {
+                        unset($this->form[$i]);
+                    }
                 }
             }
         }
@@ -29,7 +31,7 @@ trait CBControllerValidator
     {
         $request_all = request()->all();
         $array_input = [];
-        foreach ($this->data_inputan as $di) {
+        foreach ($this->form as $di) {
             $ai = [];
             $name = $di['name'];
 
@@ -164,7 +166,7 @@ trait CBControllerValidator
 
         $hide_form = (request()->get('hide_form')) ? unserialize(request()->get('hide_form')) : [];
 
-        foreach ($this->data_inputan as $ro) {
+        foreach ($this->form as $ro) {
             $name = $ro['name'];
 
             if (! $name) {

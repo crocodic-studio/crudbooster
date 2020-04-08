@@ -15,7 +15,7 @@ trait CBControllerHooks
 {
     private function afterSavingDataProcess($id) {
         //Looping Data Input Again After Insert
-        foreach ($this->data_inputan as $ro) {
+        foreach ($this->form as $ro) {
             if (! $ro['name']) continue;
 
             // Checkbox processing after edit

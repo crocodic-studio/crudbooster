@@ -8,12 +8,23 @@
 
 namespace crocodicstudio\crudbooster\controllers;
 
+use crocodicstudio\crudbooster\inputs\InputContainer;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 trait CBControllerHelper
 {
+    private function verifyInputInterface() {
+        if(cb()->currentMethodIs(['getAdd','getEdit','postAddSave','postEditSave','getDetail'])) {
+            foreach ($this->form as $i=>$form) {
+                if($form instanceof InputContainer) {
+                    $this->form[$i] = $form->toArray();
+                }
+            }
+        }
+    }
+
     private function sidebarModeTrans($sidebar_mode) {
         if ($sidebar_mode == 'mini') {
             $sidebar_mode = 'sidebar-mini';

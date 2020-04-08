@@ -8,6 +8,7 @@
 
 namespace crocodicstudio\crudbooster\helpers;
 
+use Illuminate\Support\Facades\DB;
 
 class TypeComponentHelper
 {

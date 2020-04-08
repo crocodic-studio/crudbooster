@@ -57,7 +57,13 @@
 
             $selects_data->addselect($datatable_field);
 
-            $selects_data = $selects_data->orderby($datatable_field, "asc")->get();
+            if($form['sort_by_column'] && $form['sort_by_dir']) {
+                $selects_data->orderBy($form['sort_by_column'], $form['sort_by_dir']);
+            } else {
+                $selects_data->orderBy($datatable_field,"asc");
+            }
+
+            $selects_data = $selects_data->get();
 
             if ($form['relationship_table']) {
                 $foreignKey = cb()->getForeignKey($table, $form['relationship_table']);

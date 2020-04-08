@@ -1,5 +1,6 @@
 <?php namespace crocodicstudio\crudbooster;
 
+use crocodicstudio\crudbooster\singleton\CRUDBooster;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\ServiceProvider;
 use crocodicstudio\crudbooster\commands\CrudboosterInstallationCommand;
@@ -55,7 +56,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
 
         $this->mergeConfigFrom(__DIR__.'/configs/crudbooster.php','crudbooster');        
         
-        $this->app->singleton('crudbooster', function () { return true; });
+        $this->app->singleton('crudbooster', function () { return new CRUDBooster; });
 
         if($this->app->runningInConsole()) {
             $this->registerCommands();

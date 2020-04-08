@@ -498,6 +498,10 @@ class CB  {
         return $method;
     }
 
+    public function currentMethodIs($method_array) {
+        return in_array($this->getCurrentMethod(), $method_array);
+    }
+
     public function clearCache($name)
     {
         if (Cache::forget($name)) {
