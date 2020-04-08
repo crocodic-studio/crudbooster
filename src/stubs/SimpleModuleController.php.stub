@@ -80,7 +80,7 @@ class AdminFooBarController extends CBController {
 
     /**
      * This method is to you make an additional process after the data has been saved
-     * @param int $id This variabel is current ID record of data
+     * @param int $id this variable is current ID record of data
      *
      */
     public function hookAfterEdit($id) {
