@@ -28,6 +28,8 @@ class AdminModulesController extends CBController
     public function __construct()
     {
         view()->share(['page_title'=>$this->module_name]);
+
+        parent::__construct();
     }
 
     public function cbInit()
@@ -102,7 +104,7 @@ class AdminModulesController extends CBController
             'name' => $name,
             'icon' => $icon,
             'path' => $path,
-            'type' => 'URL',
+            'type' => 'Module',
             'is_active' => 1,
             'id_cms_privileges' => cb()->auth()->roleId(),
             'sorting' => $parent_menu_sort,

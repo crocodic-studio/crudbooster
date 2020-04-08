@@ -9,6 +9,8 @@
 namespace crocodicstudio\crudbooster\helpers;
 
 
+use Illuminate\Support\Facades\Schema;
+
 class ModuleControllerGenerator
 {
     public $module_name;
@@ -109,14 +111,23 @@ class ModuleControllerGenerator
 
                 if (substr($field, 0, 3) == 'id_') {
                     $jointable = str_replace('id_', '', $field);
-                    $joincols = cb()->getTableColumns($jointable);
-                    $joinname = cb()->getNameTable($joincols);
-                    $this->columns[] = ['label'=>$label,'name'=>$field,'join'=>$jointable.",".$joinname];
+                    if(Schema::hasTable($jointable)) {
+                        $joincols = cb()->getTableColumns($jointable);
+                        $joinname = cb()->getNameTable($joincols);
+                        $this->columns[] = ['label'=>$label,'name'=>$field,'join'=>$jointable.",".$joinname];
+                    } else {
+                        $this->columns[] = ['label'=>$label,'name'=>$field];
+                    }
+
                 } elseif (substr($field, -3) == '_id') {
                     $jointable = substr($field, 0, (strlen($field) - 3));
-                    $joincols = cb()->getTableColumns($jointable);
-                    $joinname = cb()->getNameTable($joincols);
-                    $this->columns[] = ['label'=>$label,'name'=>$field,'join'=>$jointable.",".$joinname];
+                    if(Schema::hasTable($jointable)) {
+                        $joincols = cb()->getTableColumns($jointable);
+                        $joinname = cb()->getNameTable($joincols);
+                        $this->columns[] = ['label'=>$label,'name'=>$field,'join'=>$jointable.",".$joinname];
+                    } else {
+                        $this->columns[] = ['label'=>$label,'name'=>$field];
+                    }
                 } else {
                     if (in_array($field, $image_candidate)) {
                         $this->columns[] = ['label'=>$label,'name'=>$field,'image'=>true];
@@ -200,18 +211,23 @@ class ModuleControllerGenerator
 
                 if (substr($field, 0, 3) == 'id_') {
                     $jointable = str_replace('id_', '', $field);
-                    $joincols = cb()->getTableColumns($jointable);
-                    $joinname = cb()->getNameTable($joincols);
-                    $attribute['datatable'] = $jointable.','.$joinname;
-                    $type = 'select2';
+
+                    if(Schema::hasTable($jointable)) {
+                        $joincols = cb()->getTableColumns($jointable);
+                        $joinname = cb()->getNameTable($joincols);
+                        $attribute['datatable'] = $jointable.','.$joinname;
+                        $type = 'select2';
+                    }
                 }
 
                 if (substr($field, -3) == '_id') {
                     $jointable = str_replace('_id', '', $field);
-                    $joincols = cb()->getTableColumns($jointable);
-                    $joinname = cb()->getNameTable($joincols);
-                    $attribute['datatable'] = $jointable.','.$joinname;
-                    $type = 'select2';
+                    if(Schema::hasTable($jointable)) {
+                        $joincols = cb()->getTableColumns($jointable);
+                        $joinname = cb()->getNameTable($joincols);
+                        $attribute['datatable'] = $jointable.','.$joinname;
+                        $type = 'select2';
+                    }
                 }
 
                 if (substr($field, 0, 3) == 'is_') {

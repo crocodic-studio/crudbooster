@@ -11,6 +11,8 @@ use crocodicstudio\crudbooster\fonts\Fontawesome;
 
 class AdminMenusController extends CBController
 {
+    use CBControllerGuard;
+
     public function cbInit()
     {
         $this->table = "cms_menus";
@@ -228,13 +230,7 @@ class AdminMenusController extends CBController
 
     public function getIndex()
     {
-        $this->cbLoader();
-
-        $module = cb()->getCurrentModule();
-        if (! cb()->isView() && $this->global_privilege == false) {
-            cb()->insertLog(trans('crudbooster.log_try_view', ['module' => $module->name]));
-            cb()->redirect(cb()->adminPath(), trans('crudbooster.denied_access'));
-        }
+        $this->guardIndex();
 
         $privileges = DB::table('cms_privileges')->get();
 
