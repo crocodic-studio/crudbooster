@@ -180,104 +180,102 @@ class CB  {
 
     public function isView()
     {
-        if (self::isSuperadmin()) {
+        if(config('crudbooster.GUARD')) {
+            if (self::isSuperadmin()) {
+                return true;
+            }
+
+            $session = Session::get('admin_privileges_roles');
+            foreach ($session as $v) {
+                if ($v->path == self::getModulePath()) {
+                    return (bool) $v->is_visible;
+                }
+            }
+        } else {
             return true;
         }
 
-        $session = Session::get('admin_privileges_roles');
-        foreach ($session as $v) {
-            if ($v->path == self::getModulePath()) {
-                return (bool) $v->is_visible;
-            }
-        }
     }
 
     public function isUpdate()
     {
-        if (self::isSuperadmin()) {
+        if(config('crudbooster.GUARD')) {
+            if (self::isSuperadmin()) {
+                return true;
+            }
+
+            $session = Session::get('admin_privileges_roles');
+            foreach ($session as $v) {
+                if ($v->path == self::getModulePath()) {
+                    return (bool) $v->is_edit;
+                }
+            }
+        } else {
             return true;
         }
 
-        $session = Session::get('admin_privileges_roles');
-        foreach ($session as $v) {
-            if ($v->path == self::getModulePath()) {
-                return (bool) $v->is_edit;
-            }
-        }
     }
 
     public function isCreate()
     {
-        if (self::isSuperadmin()) {
-            return true;
-        }
-
-        $session = Session::get('admin_privileges_roles');
-        foreach ($session as $v) {
-            if ($v->path == self::getModulePath()) {
-                return (bool) $v->is_create;
+        if(config('crudbooster.GUARD')) {
+            if (self::isSuperadmin()) {
+                return true;
             }
+
+            $session = Session::get('admin_privileges_roles');
+            foreach ($session as $v) {
+                if ($v->path == self::getModulePath()) {
+                    return (bool) $v->is_create;
+                }
+            }
+        } else {
+            return true;
         }
     }
 
     public function isRead()
     {
-        if (self::isSuperadmin()) {
+        if(config('crudbooster.GUARD')) {
+            if (self::isSuperadmin()) {
+                return true;
+            }
+
+            $session = Session::get('admin_privileges_roles');
+            foreach ($session as $v) {
+                if ($v->path == self::getModulePath()) {
+                    return (bool) $v->is_read;
+                }
+            }
+        } else {
             return true;
         }
 
-        $session = Session::get('admin_privileges_roles');
-        foreach ($session as $v) {
-            if ($v->path == self::getModulePath()) {
-                return (bool) $v->is_read;
-            }
-        }
     }
 
     public function isDelete()
     {
-        if (self::isSuperadmin()) {
-            return true;
-        }
-
-        $session = Session::get('admin_privileges_roles');
-        foreach ($session as $v) {
-            if ($v->path == self::getModulePath()) {
-                return (bool) $v->is_delete;
+        if(config('crudbooster.GUARD')) {
+            if (self::isSuperadmin()) {
+                return true;
             }
-        }
-    }
 
-    public function isCRUD()
-    {
-        if (self::isSuperadmin()) {
-            return true;
-        }
-
-        $session = Session::get('admin_privileges_roles');
-        foreach ($session as $v) {
-            if ($v->path == self::getModulePath()) {
-                if ($v->is_visible && $v->is_create && $v->is_read && $v->is_edit && $v->is_delete) {
-                    return true;
-                } else {
-                    return false;
+            $session = Session::get('admin_privileges_roles');
+            foreach ($session as $v) {
+                if ($v->path == self::getModulePath()) {
+                    return (bool) $v->is_delete;
                 }
             }
+        } else {
+            return true;
         }
     }
 
     public function getCurrentModule()
     {
         $modulepath = self::getModulePath();
-
-        if (Cache::has('moduls_'.$modulepath)) {
-            return Cache::get('moduls_'.$modulepath);
-        } else {
-
-            $module = DB::table('cms_moduls')->where('path', self::getModulePath())->first();
-
-            return ($module)?:$modulepath;
-        }
+        $module = DB::table('cms_moduls')->where('path', self::getModulePath())->first();
+        return $module;
     }
 
     public function getCurrentDashboardId()

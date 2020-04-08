@@ -17,6 +17,12 @@ return [
     'WEB_NOTIFICATION' => true,
 
     /**
+     * This bellow setting is to disable the CB role guard access
+     * Set it to `false` then you can make a role guard access with your own
+     */
+    'GUARD' => true,
+
+    /**
      * This bellow setting is to limit the user agent when hit your API
      * E.g value:['Android','OkHttp','Mozilla','Mac']
      *
