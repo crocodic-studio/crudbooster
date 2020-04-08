@@ -469,6 +469,10 @@ abstract class CBController extends Controller
                     }
                 }
 
+                if(isset($col['date_format'])) {
+                    $value = date($col['date_format'], strtotime($value));
+                }
+
                 if ($col['str_limit']) {
                     $value = trim(strip_tags($value));
                     $value = str_limit($value, $col['str_limit']);
