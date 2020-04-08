@@ -11,12 +11,24 @@ namespace crocodicstudio\crudbooster\inputs;
 
 trait InputTrait
 {
+    private $validation;
+
     public function __construct($label, $column)
     {
         $this->label = $label;
         $this->name = $column;
     }
-    
+
+    /**
+     * Laravel validation rules
+     * @param array $rules
+     * @return $this
+     */
+    public function validation(array $rules) {
+        $this->validation = implode("|", $rules);
+        return $this;
+    }
+
     public function toArray() {
         $result = [];
         foreach($this as $key => $val) {
