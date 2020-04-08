@@ -1404,7 +1404,7 @@ class CBController extends Controller
                 DB::table($childtable)->where($fk, $id)->delete();
                 $lastId = CRUDBooster::newId($childtable);
                 $childtablePK = CB::pk($childtable);
-                if($count_input_data >1) {
+                if(!empty($getColName)) {
                     for ($i = 0; $i <= $count_input_data; $i++) {
                         $column_data = [];
                         foreach ($columns as $col) {
