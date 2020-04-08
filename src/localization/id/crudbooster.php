@@ -1,5 +1,6 @@
 <?php
 return [
+    'supported_only_image'=> 'Tipe file yang didukung: JPG, JPEG, PNG, GIF',
     'email_footer' => 'Jangan membalas email ke alamat email ini. Email ini dikirim secara otomatis oleh sistem kami.',
     'login_message' => 'Silahkan login untuk masuk',
     'text_forgot_password' => 'Lupa Password ?',
@@ -18,7 +19,7 @@ return [
     'text_default_add_new_module' => 'Tambah :module',
     'text_default_list_module' => 'Daftar :module',
     'text_default_help_password' => 'Minimal 5 karakter. Tinggalkan jika anda tidak mengubahnya',
-    'text_default_help_upload' => 'Tipe file yang didukung: JPG, JPEG, PNG, GIF, BMP',
+    'text_default_help_upload' => 'Tipe file yang didukung: JPG, JPEG, PNG, GIF',
     'text_default_help_number' => 'Anda hanya dapat memasukkan angka saja',
     'text_default_help_email' => 'Mohon input alamat email dengan benar',
     'text_default_help_text' => 'Anda hanya dapat memasukkan huruf saja',
