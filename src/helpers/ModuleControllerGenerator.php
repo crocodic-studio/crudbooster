@@ -284,12 +284,11 @@ class ModuleControllerGenerator
                     $form = ['label'=>$label,'name'=>$field,'type'=>$type,'required'=>true,'validation'=>$validation];
                     $attribute_array = [];
                     foreach ($attribute as $key => $val) {
+
                         if (is_bool($val)) {
                             $val = ($val) ? "TRUE" : "FALSE";
-                        } else {
-                            $val = '"'.$val.'"';
                         }
-                        $php .= ',"'.$key.'"=>'.$val;
+
                         $attribute_array[$key] = $val;
                     }
 

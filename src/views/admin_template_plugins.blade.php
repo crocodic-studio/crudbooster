@@ -61,6 +61,6 @@
         $('.datatables-simple').DataTable();
     })
 </script>
-<script src="{{asset('vendor/crudbooster/assets/js/main.js').'?v=1.0.2}}"></script>
+<script src="{{asset('vendor/crudbooster/assets/js/main.js') }}?v=1.0.2"></script>
 
 	

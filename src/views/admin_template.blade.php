@@ -7,8 +7,13 @@
     <meta name='generator' content='CRUDBooster 5.5.0'/>
     <meta name='robots' content='noindex,nofollow'/>
 
+    <!-- maxcdn -->
     <link rel="dns-prefetch" href="https://oss.maxcdn.com/">
     <link rel="preconnect" href="https://oss.maxcdn.com/" crossorigin>
+
+    <!-- rawgit -->
+    <link rel="dns-prefetch" href="https://cdn.rawgit.com/">
+    <link rel="preconnect" href="https://cdn.rawgit.com/" crossorigin>
 
     <link rel="shortcut icon"
           href="{{ cb()->getSetting('favicon')?asset(cb()->getSetting('favicon')):asset('vendor/crudbooster/assets/logo_crudbooster.png') }}">
@@ -29,7 +34,7 @@
         <link href="{{ asset("vendor/crudbooster/assets/rtl.css")}}" rel="stylesheet" type="text/css"/>
     @endif
 
-    <link rel='stylesheet' href='{{asset("vendor/crudbooster/assets/css/main.css").'?r='.time()}}'/>
+    <link rel='stylesheet' href='{{asset("vendor/crudbooster/assets/css/main.css").'?v=1.0.2'}}'/>
 
     <!-- load css -->
     <style type="text/css">
@@ -42,70 +47,6 @@
             <link href="{{$css}}" rel="stylesheet" type="text/css"/>
         @endforeach
     @endif
-
-    <style type="text/css">
-
-        .rounded-image {
-            width: 80px;
-            height: 80px;
-            object-fit:cover;
-            border-radius:50%;
-        }
-
-        .dropdown-menu-action {
-            left: -130%;
-        }
-
-        .btn-group-action .btn-action {
-            cursor: default
-        }
-
-        #box-header-module {
-            box-shadow: 10px 10px 10px #dddddd;
-        }
-
-        .sub-module-tab li {
-            background: #F9F9F9;
-            cursor: pointer;
-        }
-
-        .sub-module-tab li.active {
-            background: #ffffff;
-            box-shadow: 0px -5px 10px #cccccc
-        }
-
-        .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
-            border: none;
-        }
-
-        .nav-tabs > li > a {
-            border: none;
-        }
-
-        .breadcrumb {
-            margin: 0 0 0 0;
-            padding: 0 0 0 0;
-        }
-
-        .form-group > label:first-child {
-            display: block
-        }
-
-        table.table-bordered{
-            border:1px solid #AAAAAA;
-        }
-        table.table-bordered > thead > tr > th{
-            border:1px solid #AAAAAA;
-            white-space: nowrap;
-        }
-        table.table-bordered > tbody > tr > td{
-            border:1px solid #AAAAAA;
-        }
-        table.table-bordered > foot > tr > th {
-            border:1px solid #AAAAAA;
-            white-space: nowrap;
-        }
-    </style>
 
     @stack('head')
 </head>
