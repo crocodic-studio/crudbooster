@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>{{ ($page_title)?Session::get('appname').': '.strip_tags($page_title):"Admin Area" }}</title>
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
-    <meta name='generator' content='CRUDBooster 5.4.6'/>
+    <meta name='generator' content='CRUDBooster 5.5.0'/>
     <meta name='robots' content='noindex,nofollow'/>
 
     <link rel="dns-prefetch" href="https://oss.maxcdn.com/">
