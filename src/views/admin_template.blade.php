@@ -6,6 +6,10 @@
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
     <meta name='generator' content='CRUDBooster 5.4.6'/>
     <meta name='robots' content='noindex,nofollow'/>
+
+    <link rel="dns-prefetch" href="https://oss.maxcdn.com/">
+    <link rel="preconnect" href="https://oss.maxcdn.com/" crossorigin>
+
     <link rel="shortcut icon"
           href="{{ cb()->getSetting('favicon')?asset(cb()->getSetting('favicon')):asset('vendor/crudbooster/assets/logo_crudbooster.png') }}">
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
@@ -109,12 +113,38 @@
 <div id='app' class="wrapper">
 
     <!-- Header -->
-@include('crudbooster::header')
+    @include('crudbooster::header')
 
-<!-- Sidebar -->
-@include('crudbooster::sidebar')
+    <!-- Sidebar -->
+    <!-- Left side column. contains the sidebar -->
+    <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <!-- Sidebar user panel (optional) -->
+            <div class="user-panel">
+                <div class="pull-{{ trans('crudbooster.left') }} image">
+                    <img src="{{ cb()->myPhoto() }}" class="rounded-image" alt="{{ trans('crudbooster.user_image') }}"/>
+                </div>
+                <div class="pull-{{ trans('crudbooster.left') }} info">
+                    <p>{{ cb()->myName() }}</p>
+                    <!-- Status -->
+                    <a href="#"><i class="fa fa-circle text-success"></i> {{ trans('crudbooster.online') }}</a>
+                </div>
+            </div>
 
-<!-- Content Wrapper. Contains page content -->
+            <div class='main-menu'>
+                <!-- Sidebar Menu -->
+                <ul class="sidebar-menu">
+                    <li class="header">{{trans("crudbooster.menu_navigation")}}</li>
+                    <!-- Optionally, you can add icons to the links -->
+                    @include(config('crudbooster.SIDEBAR_VIEW','crudbooster::sidebar'))
+                </ul><!-- /.sidebar-menu -->
+            </div>
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+
+    <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
 
         <section class="content-header">

@@ -7,6 +7,16 @@ return [
     'USER_TABLE' => 'cms_users',
 
     /**
+     * This bellow setting is to custom sidebar view with your own sidebar view's file.
+     */
+    'SIDEBAR_VIEW' => "crudbooster::sidebar",
+
+    /**
+     * This bellow setting is to enable or disable notification feature
+     */
+    'WEB_NOTIFICATION' => true,
+
+    /**
      * This bellow setting is to limit the user agent when hit your API
      * E.g value:['Android','OkHttp','Mozilla','Mac']
      *

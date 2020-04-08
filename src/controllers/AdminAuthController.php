@@ -99,6 +99,8 @@ class AdminAuthController extends BaseController
     {
         cb()->auth()->logout();
 
+        CBHook::afterLogout();
+
         cb()->insertLog(trans("crudbooster.log_logout", ['email' => cb()->auth()->email()]));
 
         return redirect_to(cb()->adminPath('login'),trans("crudbooster.message_after_logout"));

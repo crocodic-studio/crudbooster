@@ -5,4 +5,8 @@ class CBHook extends Controller {
 	public static function afterLogin() {
 		
 	}
+
+	public static function afterLogout() {
+	    
+    }
 }

@@ -1,28 +1,4 @@
-<!-- Left side column. contains the sidebar -->
-<aside class="main-sidebar">
 
-    <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar">
-
-        <!-- Sidebar user panel (optional) -->
-        <div class="user-panel">
-            <div class="pull-{{ trans('crudbooster.left') }} image">
-                <img src="{{ cb()->myPhoto() }}" class="rounded-image" alt="{{ trans('crudbooster.user_image') }}"/>
-            </div>
-            <div class="pull-{{ trans('crudbooster.left') }} info">
-                <p>{{ cb()->myName() }}</p>
-                <!-- Status -->
-                <a href="#"><i class="fa fa-circle text-success"></i> {{ trans('crudbooster.online') }}</a>
-            </div>
-        </div>
-
-
-        <div class='main-menu'>
-
-            <!-- Sidebar Menu -->
-            <ul class="sidebar-menu">
-                <li class="header">{{trans("crudbooster.menu_navigation")}}</li>
-                <!-- Optionally, you can add icons to the links -->
 
                 <li class="{{ (Request::is(config('crudbooster.ADMIN_PATH'))) ? 'active' : '' }}"><a href='{{cb()->adminPath()}}'><i class='fa fa-dashboard'></i>
                         <span>{{trans("crudbooster.text_dashboard")}}</span> </a></li>
@@ -113,11 +89,3 @@
                     <li class="{{ (Request::is(config('crudbooster.ADMIN_PATH').'/logs*')) ? 'active' : '' }}"><a href='{{ cb()->adminPath('logs') }}'><i
                                     class='fa fa-flag'></i> <span>{{ trans('crudbooster.Log_User_Access') }}</span></a></li>
                 @endif
-
-            </ul><!-- /.sidebar-menu -->
-
-        </div>
-
-    </section>
-    <!-- /.sidebar -->
-</aside>

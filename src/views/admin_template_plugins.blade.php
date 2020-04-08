@@ -45,9 +45,14 @@
     var ASSET_URL = "{{asset('/')}}";
     var APP_NAME = "{{Session::get('appname')}}";
     var ADMIN_PATH = '{{url(config("crudbooster.ADMIN_PATH")) }}';
+
+    @if(config('crudbooster.WEB_NOTIFICATION'))
+    var NOTIFICATION_FEATURE = true;
+    @else
+    var NOTIFICATION_FEATURE = false;
+    @endif
     var NOTIFICATION_JSON = "{{ cb()->adminPath('notification/list') }}";
     var NOTIFICATION_INDEX = "{{ cb()->adminPath('notifications') }}";
-
     var NOTIFICATION_YOU_HAVE = "{{trans('crudbooster.notification_you_have')}}";
     var NOTIFICATION_NOTIFICATIONS = "{{trans('crudbooster.notification_notification')}}";
     var NOTIFICATION_NEW = "{{trans('crudbooster.notification_new')}}";
@@ -56,6 +61,6 @@
         $('.datatables-simple').DataTable();
     })
 </script>
-<script src="{{asset('vendor/crudbooster/assets/js/main.js').'?r='.time()}}"></script>
+<script src="{{asset('vendor/crudbooster/assets/js/main.js').'?v=1.0.2}}"></script>
 
 	

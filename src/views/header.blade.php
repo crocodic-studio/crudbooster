@@ -14,6 +14,7 @@
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
 
+                @if(config('crudbooster.WEB_NOTIFICATION', true))
                 <li class="dropdown notifications-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" title='Notifications' aria-expanded="false">
                         <i id='icon_notification' class="fa fa-bell-o"></i>
@@ -41,6 +42,7 @@
                         <li class="footer"><a href="{{ cb()->adminPath('notification/list') }}">{{trans("crudbooster.text_view_all_notification")}}</a></li>
                     </ul>
                 </li>
+                @endif
 
                 <!-- User Account Menu -->
                 <li class="dropdown user user-menu">
