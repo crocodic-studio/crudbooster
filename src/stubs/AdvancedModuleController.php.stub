@@ -229,6 +229,7 @@ class AdminFooBarController extends CBController {
      * @param array $post_data
      * E.g:
      * $post_data['name'] = strtoupper($post_data['name']);
+     * $post_data['cms_users_id'] = cb()->auth()->id();
      */
     public function hookBeforeAdd(&$post_data) {
 
@@ -236,7 +237,7 @@ class AdminFooBarController extends CBController {
 
     /**
      * This method is to you make an additional process after the data has been inserted
-     * @param int $id This variabel is a last_insert_id value.
+     * @param int $id this variable is a last_insert_id value from the sql data.
      *
      */
     public function hookAfterAdd($id) {
