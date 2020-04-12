@@ -72,6 +72,8 @@ abstract class CBController extends Controller
     public $parent_id = null;
     public $hide_form = [];
     public $index_return = false; //for export
+    private $hide_button_delete_when = null;
+    private $hide_button_edit_when = null;
     public $sidebar_mode = 'normal';
 
     public function __construct()
@@ -515,7 +517,9 @@ abstract class CBController extends Controller
             if ($this->button_table_action):
 
                 $button_action_style = $this->button_action_style;
-                $html_content[] = "<div class='button_action' style='text-align:right'>".view('crudbooster::components.action', compact('addaction', 'row', 'button_action_style', 'parent_field'))->render()."</div>";
+                $hide_button_edit_when = (is_callable($this->hide_button_edit_when))?call_user_func($this->hide_button_edit_when, $row):false;
+                $hide_button_delete_when = (is_callable($this->hide_button_delete_when))?call_user_func($this->hide_button_delete_when, $row):false;
+                $html_content[] = "<div class='button_action' style='text-align:right'>".view('crudbooster::components.action', compact('addaction', 'row', 'button_action_style', 'parent_field','hide_button_edit_when', 'hide_button_delete_when'))->render()."</div>";
 
             endif;//button_table_action
 

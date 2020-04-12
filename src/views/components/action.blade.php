@@ -162,13 +162,13 @@
            href='{{cb()->mainpath("detail/".$row->$pk)."?return_url=".urlencode(Request::fullUrl())}}'><i class='fa fa-eye'></i></a>
     @endif
 
-    @if(cb()->isUpdate() && $button_edit)
+    @if(cb()->isUpdate() && $button_edit && !$hide_button_edit_when)
         <a class='btn btn-xs btn-success btn-edit' title='{{trans("crudbooster.action_edit_data")}}'
            href='{{cb()->mainpath("edit/".$row->$pk)."?return_url=".urlencode(Request::fullUrl())."&parent_id=".g("parent_id")."&parent_field=".$parent_field}}'><i
                     class='fa fa-pencil'></i></a>
     @endif
 
-    @if(cb()->isDelete() && $button_delete)
+    @if(cb()->isDelete() && $button_delete && !$hide_button_delete_when)
         <?php $url = cb()->mainpath("delete/".$row->$pk);?>
         <a class='btn btn-xs btn-warning btn-delete' title='{{trans("crudbooster.action_delete_data")}}' href='javascript:;'
            onclick='{{cb()->deleteConfirm($url)}}'><i class='fa fa-trash'></i></a>

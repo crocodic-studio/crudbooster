@@ -13,6 +13,15 @@ use crocodicstudio\crudbooster\helpers\TypeComponentHelper;
 
 trait CBControllerHooks
 {
+
+    public function hideButtonEditWhen($callable) {
+        $this->hide_button_edit_when = $callable;
+    }
+
+    public function hideButtonDeleteWhen($callable) {
+        $this->hide_button_delete_when = $callable;
+    }
+
     private function afterSavingDataProcess($id) {
         //Looping Data Input Again After Insert
         foreach ($this->form as $ro) {

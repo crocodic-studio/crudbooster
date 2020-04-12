@@ -731,9 +731,10 @@ class CB  {
     /**
      * @param array $rules
      * @param array $input
+     * @param array $messages
      * @throws CBValidationException
      */
-    public function validation($rules = [], $input = [])
+    public function validation($rules = [], $input = [], $messages = [])
     {
         $inputs = $input?:request()->all();
 
@@ -745,7 +746,7 @@ class CB  {
             }
         }
 
-        $validator = Validator::make($inputs, $rules);
+        $validator = Validator::make($inputs, $rules, $messages);
         if ($validator->fails()) {
             $message = $validator->errors()->all();
             throw new CBValidationException(implode(', ', $message));
