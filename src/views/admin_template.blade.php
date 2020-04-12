@@ -112,14 +112,14 @@
 
                 @if($button_export && cb()->getCurrentMethod() == 'getIndex')
                     <a href="javascript:void(0)" id='btn_export_data' data-url-parameter='{{$build_query}}' title='Export Data'
-                       class="btn btn-sm btn-primary btn-export-data">
+                       class="btn btn-sm btn-default btn-export-data">
                         <i class="fa fa-upload"></i> {{trans("crudbooster.button_export")}}
                     </a>
                 @endif
 
                 @if($button_import && cb()->getCurrentMethod() == 'getIndex')
                     <a href="{{ cb()->mainpath('import-data') }}" id='btn_import_data' data-url-parameter='{{$build_query}}' title='Import Data'
-                       class="btn btn-sm btn-primary btn-import-data">
+                       class="btn btn-sm btn-default btn-import-data">
                         <i class="fa fa-download"></i> {{trans("crudbooster.button_import")}}
                     </a>
                 @endif
