@@ -1,7 +1,7 @@
 @foreach($addaction as $a)
     <?php
     foreach ($row as $key => $val) {
-        $a['url'] = str_replace("[".$key."]", $val, $a['url']);
+        $a['url'] = str_replace(["[".$key."]","{".$key."}"], $val, $a['url']);
     }
 
     $confirm_box = '';
@@ -47,13 +47,28 @@
 
         $query = $a['showIf'];
 
-        foreach ($row as $key => $val) {
-            $query = str_replace("[".$key."]", '"'.$val.'"', $query);
+        if(is_string($query)) {
+            foreach ($row as $key => $val) {
+                $query = str_replace("[".$key."]", '"'.$val.'"', $query);
+            }
+
+            @eval("if($query) {
+              echo \"<a class='btn btn-xs btn-\$color' title='\$title' onclick='\$confirm_box' href='\$url' target='\$target'><i class='\$icon'></i> $label</a>&nbsp;\";
+          }");
+        } elseif (is_callable($query)) {
+            $query = call_user_func($query, $row);
+            if($query === true) {
+                echo "<a class='btn btn-xs btn-$color' title='$title' onclick='$confirm_box' href='$url' target='$target'><i class='$icon'></i> $label</a>&nbsp;";
+            }
         }
 
-        @eval("if($query) {
-          echo \"<a class='btn btn-xs btn-\$color' title='\$title' onclick='\$confirm_box' href='\$url' target='\$target'><i class='\$icon'></i> $label</a>&nbsp;\";
-      }");
+    } elseif (isset($a['hide_when'])) {
+        if(is_callable($a['hide_when'])) {
+            $a['hide_when'] = call_user_func($a['hide_when'], $row);
+            if($a['hide_when'] !== true) {
+                echo "<a class='btn btn-xs btn-$color' title='$title' onclick='$confirm_box' href='$url' target='$target'><i class='$icon'></i> $label</a>&nbsp;";
+            }
+        }
     } else {
         echo "<a class='btn btn-xs btn-$color' title='$title' onclick='$confirm_box' href='$url' target='$target'><i class='$icon'></i> $label</a>&nbsp;";
     }

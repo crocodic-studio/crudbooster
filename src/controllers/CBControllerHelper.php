@@ -8,6 +8,7 @@
 
 namespace crocodicstudio\crudbooster\controllers;
 
+use crocodicstudio\crudbooster\helpers\addActionButton;
 use crocodicstudio\crudbooster\inputs\InputContainer;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +16,11 @@ use Illuminate\Support\Facades\Hash;
 
 trait CBControllerHelper
 {
+
+    public function addActionButton($label, $url, $icon = "fa fa-bars", $color = "primary") {
+        return (new addActionButton($label, $url, $icon, $color));
+    }
+
     private function verifyInputInterface() {
         if(cb()->currentMethodIs(['getAdd','getEdit','postAddSave','postEditSave','getDetail'])) {
             foreach ($this->form as $i=>$form) {
