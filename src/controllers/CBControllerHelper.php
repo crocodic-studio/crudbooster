@@ -18,7 +18,7 @@ trait CBControllerHelper
 {
 
     public function addActionButton($label, $url, $icon = "fa fa-bars", $color = "primary") {
-        return (new addActionButton($label, $url, $icon, $color));
+        return (new AddActionButton($label, $url, $icon, $color));
     }
 
     private function verifyInputInterface() {
@@ -27,6 +27,12 @@ trait CBControllerHelper
                 if($form instanceof InputContainer) {
                     $this->form[$i] = $form->toArray();
                 }
+            }
+        }
+
+        foreach($this->addaction as $i=>$addaction) {
+            if(is_object($addaction) && method_exists($addaction,"toArray")) {
+                $this->addaction[$i] = $addaction->toArray();
             }
         }
     }

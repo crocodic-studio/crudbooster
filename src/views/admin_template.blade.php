@@ -34,7 +34,7 @@
         <link href="{{ asset("vendor/crudbooster/assets/rtl.css")}}" rel="stylesheet" type="text/css"/>
     @endif
 
-    <link rel='stylesheet' href='{{asset("vendor/crudbooster/assets/css/main.css").'?v=1.0.2'}}'/>
+    <link rel='stylesheet' href='{{asset("vendor/crudbooster/assets/css/main.css").'?v=1.0.3'}}'/>
 
     <!-- load css -->
     <style type="text/css">

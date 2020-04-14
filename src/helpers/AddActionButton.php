@@ -9,8 +9,10 @@
 namespace crocodicstudio\crudbooster\helpers;
 
 
-class addActionButton
+class AddActionButton
 {
+    use ClassExtractor;
+
     private $label;
     private $url;
     private $icon;
@@ -36,19 +38,12 @@ class addActionButton
         $this->color = $color;
     }
 
-    public function toArray() {
-        $result = [];
-        foreach ($this as $key=>$val) {
-            $result[$key] = $val;
-        }
-        return $result;
-    }
-
     /**
      * @param callable $condition
      */
     public function showIf(callable $condition) {
         $this->show_if = $condition;
+        return $this;
     }
 
     /**
@@ -56,14 +51,17 @@ class addActionButton
      */
     public function hideWhen(callable $condition) {
         $this->hide_when = $condition;
+        return $this;
     }
 
     public function targetSelf() {
         $this->target = "_self";
+        return $this;
     }
 
     public function targetBlank() {
         $this->target = "_blank";
+        return $this;
     }
 
     public function confirmation($title, $text, $type = "info") {
@@ -71,22 +69,27 @@ class addActionButton
         $this->confirmation_title = $title;
         $this->confirmation_text = $text;
         $this->confirmation_type = $type;
+        return $this;
     }
 
     public function confirmShowCancel() {
         $this->confirmation_showCancelButton = true;
+        return $this;
     }
 
     public function confirmButton($text, $hex_color) {
         $this->confirmation_confirmButtonColor = $hex_color;
         $this->confirmation_confirmButtonText = $text;
+        return $this;
     }
 
     public function confirmCancelText($text) {
         $this->confirmation_cancelButtonText = $text;
+        return $this;
     }
 
     public function confirmCloseOnConfirm() {
         $this->confirmation_closeOnConfirm = true;
+        return $this;
     }
 }
