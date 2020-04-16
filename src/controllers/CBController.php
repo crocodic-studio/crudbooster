@@ -78,54 +78,58 @@ abstract class CBController extends Controller
 
     public function __construct()
     {
-        $this->cbInit();
-        $this->checkHideForm();
-        $this->verifyInputInterface();
+        // We need to use middleware callback, to get the session feature.
+        $this->middleware(function($request, $next) {
+            $this->cbInit();
+            $this->checkHideForm();
+            $this->verifyInputInterface();
 
-        $this->primary_key = cb()->pk($this->table);
-        $this->columns_table = $this->col;
-        $this->data['module'] = cb()->getCurrentModule();
-        $this->data['pk'] = $this->primary_key;
-        $this->data['forms'] = $this->form;
-        $this->data['hide_form'] = $this->hide_form;
-        $this->data['addaction'] = ($this->show_addaction) ? $this->addaction : null;
-        $this->data['table'] = $this->table;
-        $this->data['title_field'] = $this->title_field;
-        $this->data['appname'] = cb()->getSetting('appname');
-        $this->data['alerts'] = $this->alert;
-        $this->data['index_button'] = $this->index_button;
-        $this->data['show_numbering'] = $this->show_numbering;
-        $this->data['page_icon'] = $this->page_icon?:$this->data['module']->icon;
-        $this->data['page_title'] = $this->module_name?:$this->data['module']->name;
-        $this->data['button_detail'] = $this->button_detail;
-        $this->data['button_edit'] = $this->button_edit;
-        $this->data['button_show'] = $this->button_show;
-        $this->data['button_add'] = $this->button_add;
-        $this->data['button_delete'] = $this->button_delete;
-        $this->data['button_filter'] = $this->button_filter;
-        $this->data['button_export'] = $this->button_export;
-        $this->data['button_addmore'] = $this->button_addmore;
-        $this->data['button_cancel'] = $this->button_cancel;
-        $this->data['button_save'] = $this->button_save;
-        $this->data['button_table_action'] = $this->button_table_action;
-        $this->data['button_bulk_action'] = $this->button_bulk_action;
-        $this->data['button_import'] = $this->button_import;
-        $this->data['button_action_width'] = $this->button_action_width;
-        $this->data['button_selected'] = $this->button_selected;
-        $this->data['index_statistic'] = $this->index_statistic;
-        $this->data['index_additional_view'] = $this->index_additional_view;
-        $this->data['table_row_color'] = $this->table_row_color;
-        $this->data['pre_index_html'] = $this->pre_index_html;
-        $this->data['post_index_html'] = $this->post_index_html;
-        $this->data['load_js'] = $this->load_js;
-        $this->data['load_css'] = $this->load_css;
-        $this->data['script_js'] = $this->script_js;
-        $this->data['style_css'] = $this->style_css;
-        $this->data['sub_module'] = $this->sub_module;
-        $this->data['parent_field'] = (g('parent_field')) ?: $this->parent_field;
-        $this->data['parent_id'] = (g('parent_id')) ?: $this->parent_id;
-        $this->data['sidebar_mode'] = $this->sidebarModeTrans($this->sidebar_mode);
-        view()->share($this->data);
+            $this->primary_key = cb()->pk($this->table);
+            $this->columns_table = $this->col;
+            $this->data['module'] = cb()->getCurrentModule();
+            $this->data['pk'] = $this->primary_key;
+            $this->data['forms'] = $this->form;
+            $this->data['hide_form'] = $this->hide_form;
+            $this->data['addaction'] = ($this->show_addaction) ? $this->addaction : null;
+            $this->data['table'] = $this->table;
+            $this->data['title_field'] = $this->title_field;
+            $this->data['appname'] = cb()->getSetting('appname');
+            $this->data['alerts'] = $this->alert;
+            $this->data['index_button'] = $this->index_button;
+            $this->data['show_numbering'] = $this->show_numbering;
+            $this->data['page_icon'] = $this->page_icon?:$this->data['module']->icon;
+            $this->data['page_title'] = $this->module_name?:$this->data['module']->name;
+            $this->data['button_detail'] = $this->button_detail;
+            $this->data['button_edit'] = $this->button_edit;
+            $this->data['button_show'] = $this->button_show;
+            $this->data['button_add'] = $this->button_add;
+            $this->data['button_delete'] = $this->button_delete;
+            $this->data['button_filter'] = $this->button_filter;
+            $this->data['button_export'] = $this->button_export;
+            $this->data['button_addmore'] = $this->button_addmore;
+            $this->data['button_cancel'] = $this->button_cancel;
+            $this->data['button_save'] = $this->button_save;
+            $this->data['button_table_action'] = $this->button_table_action;
+            $this->data['button_bulk_action'] = $this->button_bulk_action;
+            $this->data['button_import'] = $this->button_import;
+            $this->data['button_action_width'] = $this->button_action_width;
+            $this->data['button_selected'] = $this->button_selected;
+            $this->data['index_statistic'] = $this->index_statistic;
+            $this->data['index_additional_view'] = $this->index_additional_view;
+            $this->data['table_row_color'] = $this->table_row_color;
+            $this->data['pre_index_html'] = $this->pre_index_html;
+            $this->data['post_index_html'] = $this->post_index_html;
+            $this->data['load_js'] = $this->load_js;
+            $this->data['load_css'] = $this->load_css;
+            $this->data['script_js'] = $this->script_js;
+            $this->data['style_css'] = $this->style_css;
+            $this->data['sub_module'] = $this->sub_module;
+            $this->data['parent_field'] = (g('parent_field')) ?: $this->parent_field;
+            $this->data['parent_id'] = (g('parent_id')) ?: $this->parent_id;
+            $this->data['sidebar_mode'] = $this->sidebarModeTrans($this->sidebar_mode);
+            view()->share($this->data);
+            return $next($request);
+        });
     }
 
     public function getIndex()

@@ -17,8 +17,24 @@ use Illuminate\Support\Facades\Hash;
 trait CBControllerHelper
 {
 
+    /**
+     * To include the css file
+     * @param $url
+     */
+    public function addCSS($url) {
+        $this->load_css[] = asset($url);
+    }
+
+    /**
+     * To add additional action button on the grid
+     * @param $label
+     * @param $url
+     * @param string $icon
+     * @param string $color
+     * @return addActionButton
+     */
     public function addActionButton($label, $url, $icon = "fa fa-bars", $color = "primary") {
-        return (new AddActionButton($label, $url, $icon, $color));
+        return $this->addaction[] = (new AddActionButton($label, $url, $icon, $color));
     }
 
     private function verifyInputInterface() {
