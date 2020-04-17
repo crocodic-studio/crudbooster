@@ -1,4 +1,4 @@
-<footer class="main-footer">
+<footer class="main-footer no-print">
     <!-- To the right -->
     <div class="pull-{{ trans('crudbooster.right') }} hidden-xs">
         {{ trans('crudbooster.powered_by') }} {{Session::get('appname')}}

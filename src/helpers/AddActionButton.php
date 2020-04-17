@@ -18,7 +18,7 @@ class AddActionButton
     private $icon;
     private $color;
     private $target = "_self";
-    private $show_if = null;
+    private $showIf = null;
     private $hide_when = null;
     private $confirmation = false;
     private $confirmation_title;
@@ -42,7 +42,7 @@ class AddActionButton
      * @param callable $condition
      */
     public function showIf(callable $condition) {
-        $this->show_if = $condition;
+        $this->showIf = $condition;
         return $this;
     }
 
