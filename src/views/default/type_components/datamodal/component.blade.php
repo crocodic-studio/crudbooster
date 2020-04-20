@@ -48,10 +48,10 @@
             $.each(select_to_json, function (key, val) {
                 console.log('#' + key + ' = ' + val);
                 if (key == 'datamodal_id') {
-                    $('#{{$name}} .input-id').val(val);
+                    $('#{{$name}} .input-id').val(val).trigger('change');
                 }
                 if (key == 'datamodal_label') {
-                    $('#{{$name}} .input-label').val(val);
+                    $('#{{$name}} .input-label').val(val).trigger('change');
                 }
                 $('#' + key).val(val).trigger('change');
             })
