@@ -67,8 +67,6 @@ class AdminSettingsController extends CBController
 
     function getShow()
     {
-        $this->cbLoader();
-
         if (! cb()->isSuperadmin()) {
             cb()->insertLog(trans("crudbooster.log_try_view", ['name' => 'Setting', 'module' => 'Setting']));
             cb()->redirect(cb()->adminPath(), trans('crudbooster.denied_access'));
