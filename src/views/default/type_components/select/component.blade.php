@@ -148,7 +148,7 @@
                         $selects_data->addselect(DB::raw("CONCAT($format) as label"));
                         $selects_data = $selects_data->orderby(
                             empty($datatable_order[0]) ? DB::raw("CONCAT($format)") : $datatable_order[0],
-                            $datatable_order[1] ?? "asc"
+                            isset($datatable_order[1]) ? $datatable_order[1] : "asc"
                         )->get();
                     } else {
                         $selects_data->addselect($orderby_table.'.'.$orderby_column.' as label');
