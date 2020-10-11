@@ -9,6 +9,16 @@
 |
 */
 
+if(!function_exists('db')) {
+    /**
+     * @param string $table
+     * @return \Illuminate\Database\Query\Builder
+     */
+    function db(string $table) {
+        return \Illuminate\Support\Facades\DB::table($table);
+    }
+}
+
 if(!function_exists('assetThumbnail')) {
 	function assetThumbnail($path) {
 		$path = str_replace('uploads/','uploads_thumbnail/',$path);
@@ -63,8 +73,8 @@ if(!function_exists('now')) {
 |
 */
 if(!function_exists('g')) {
-function g($name) {
-    return Request::get($name);
+function g($key, $default) {
+    return request($key, $default);
 }
 }
 

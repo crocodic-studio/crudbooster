@@ -99,6 +99,7 @@ class CRUDBooster
         $images_ext = explode(',', $images_ext);
 
         $filename = basename($fullFilePath);
+        $ext = pathinfo($filename, PATHINFO_EXTENSION);
         $file_path = trim(str_replace($filename, '', $fullFilePath), '/');
 
         $file_path_thumbnail = 'uploads_thumbnail/'.date('Y-m');

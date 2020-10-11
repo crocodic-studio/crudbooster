@@ -1,6 +1,11 @@
 <?php
 
 /* ROUTER FOR API GENERATOR */
+
+use crocodicstudio\crudbooster\helpers\CBRouter;
+use crocodicstudio\crudbooster\helpers\CRUDBooster;
+use Illuminate\Support\Facades\Log;
+
 $namespace = '\crocodicstudio\crudbooster\controllers';
 
 Route::group(['middleware' => ['api', '\crocodicstudio\crudbooster\middlewares\CBAuthAPI'], 'namespace' => 'App\Http\Controllers'], function () {
@@ -68,8 +73,8 @@ Route::group([
 ], function () {
 
     /* DO NOT EDIT THESE BELLOW LINES */
-    if (Request::is(config('crudbooster.ADMIN_PATH'))) {
-        $menus = DB::table('cms_menus')->where('is_dashboard', 1)->first();
+    if (request()->is(config('crudbooster.ADMIN_PATH'))) {
+        $menus = db('cms_menus')->where('is_dashboard', 1)->first();
         if (! $menus) {
             CRUDBooster::routeController('/', 'AdminController', $namespace = '\crocodicstudio\crudbooster\controllers');
         }
@@ -77,21 +82,14 @@ Route::group([
 
     CRUDBooster::routeController('api_generator', 'ApiCustomController', $namespace = '\crocodicstudio\crudbooster\controllers');
 
-    try {
-
-        $master_controller = glob(__DIR__.'/controllers/*.php');
-        foreach ($master_controller as &$m) {
-            $m = str_replace('.php', '', basename($m));
-        }
-
-        $moduls = DB::table('cms_moduls')->whereIn('controller', $master_controller)->get();
-
-        foreach ($moduls as $v) {
-            if (@$v->path && @$v->controller) {
+    $modules = db('cms_moduls')->whereIn('controller', CBRouter::getCBControllerFiles())->get();
+    foreach ($modules as $v) {
+        if (@$v->path && @$v->controller) {
+            try {
                 CRUDBooster::routeController($v->path, $v->controller, $namespace = '\crocodicstudio\crudbooster\controllers');
+            } catch (Exception $e) {
+                Log::error("Path = ".$v->path."\nController = ".$v->controller."\nError = ".$e->getMessage());
             }
         }
-    } catch (Exception $e) {
-
     }
 });
