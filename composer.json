@@ -20,10 +20,10 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "php":">=7.1.3",
-        "barryvdh/laravel-dompdf": "~0.8.0",
+        "php":"^7.2",
+        "barryvdh/laravel-dompdf": "0.8.*",
         "doctrine/dbal": "~2.3",
-        "maatwebsite/excel": "~2.1.0",
+        "maatwebsite/excel": "^3.1",
         "unisharp/laravel-filemanager": "^2.0",
         "intervention/imagecache":"^2.3"
     },
