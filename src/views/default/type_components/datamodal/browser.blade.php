@@ -19,7 +19,7 @@ if (count($coloms_alias) < 2) {
 ?>
 <form method='get' action="">
     {!! CRUDBooster::getUrlParameters(['q']) !!}
-    <input type="text" placeholder="{{trans('crudbooster.datamodal_search_and_enter')}}" name="q" title="{{trans('crudbooster.datamodal_enter_to_search')}}"
+    <input type="text" placeholder="{{cbLang('datamodal_search_and_enter')}}" name="q" title="{{cbLang('datamodal_enter_to_search')}}"
            value="{{Request::get('q')}}" class="form-control">
 </form>
 
@@ -28,7 +28,7 @@ if (count($coloms_alias) < 2) {
     @foreach($coloms_alias as $col)
         <th>{{ $col }}</th>
     @endforeach
-    <th width="5%">{{trans('crudbooster.datamodal_select')}}</th>
+    <th width="5%">{{cbLang('datamodal_select')}}</th>
     </thead>
     <tbody>
     @foreach($result as $row)
@@ -62,7 +62,7 @@ if (count($coloms_alias) < 2) {
             }
             ?>
             <td><a class='btn btn-primary' href='javascript:void(0)' onclick='parent.selectAdditionalData{{$name}}({!! json_encode($select_data_result) !!})'><i
-                            class='fa fa-check-circle'></i> {{trans('crudbooster.datamodal_select')}}</a></td>
+                            class='fa fa-check-circle'></i> {{cbLang('datamodal_select')}}</a></td>
         </tr>
     @endforeach
     </tbody>

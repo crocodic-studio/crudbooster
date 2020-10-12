@@ -40,12 +40,11 @@
 
     <ul class="nav nav-tabs">
         @if($id)
-            <li role="presentation" class="active"><a href="{{Route('ModulsControllerGetStep1',['id'=>$id])}}"><i class='fa fa-info'></i> Step 1 - Module
+            <li role="presentation" class="active"><a href="{{Route('ModulsControllerGetStep1')."/".$id}}"><i class='fa fa-info'></i> Step 1 - Module
                     Information</a></li>
-            <li role="presentation"><a href="{{Route('ModulsControllerGetStep2',['id'=>$id])}}"><i class='fa fa-table'></i> Step 2 - Table Display</a></li>
-            <li role="presentation"><a href="{{Route('ModulsControllerGetStep3',['id'=>$id])}}"><i class='fa fa-plus-square-o'></i> Step 3 - Form Display</a>
-            </li>
-            <li role="presentation"><a href="{{Route('ModulsControllerGetStep4',['id'=>$id])}}"><i class='fa fa-wrench'></i> Step 4 - Configuration</a></li>
+            <li role="presentation"><a href="{{Route('ModulsControllerGetStep2')."/".$id}}"><i class='fa fa-table'></i> Step 2 - Table Display</a></li>
+            <li role="presentation"><a href="{{Route('ModulsControllerGetStep3')."/".$id}}"><i class='fa fa-plus-square-o'></i> Step 3 - Form Display</a></li>
+            <li role="presentation"><a href="{{Route('ModulsControllerGetStep4')."/".$id}}"><i class='fa fa-wrench'></i> Step 4 - Configuration</a></li>
         @else
             <li role="presentation" class="active"><a href="#"><i class='fa fa-info'></i> Step 1 - Module Information</a></li>
             <li role="presentation"><a href="#"><i class='fa fa-table'></i> Step 2 - Table Display</a></li>
@@ -65,7 +64,7 @@
                 <div class="form-group">
                     <label for="">Table</label>
                     <select name="table" id="table" required class="select2 form-control" value="{{$row->table_name}}">
-                        <option value="">{{trans('crudbooster.text_prefix_option')}} Table</option>
+                        <option value="">{{cbLang('text_prefix_option')}} Table</option>
                         @foreach($tables_list as $table)
 
                             <option {{($table == $row->table_name)?"selected":""}} value="{{$table}}">{{$table}}</option>
@@ -101,7 +100,7 @@
                                                                                                               title='If you check this, we will create the menu for this module'>(?)</a>
 
             <div class='pull-right'>
-                <a class='btn btn-default' href='{{Route("ModulsControllerGetIndex")}}'> {{trans('crudbooster.button_back')}}</a>
+                <a class='btn btn-default' href='{{Route("ModulsControllerGetIndex")}}'> {{cbLang('button_back')}}</a>
                 <input type="submit" class="btn btn-primary" value="Step 2 &raquo;">
             </div>
         </div>

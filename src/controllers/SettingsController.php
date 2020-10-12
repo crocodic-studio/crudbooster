@@ -69,8 +69,8 @@ class SettingsController extends CBController
         $this->cbLoader();
 
         if (! CRUDBooster::isSuperadmin()) {
-            CRUDBooster::insertLog(trans("crudbooster.log_try_view", ['name' => 'Setting', 'module' => 'Setting']));
-            CRUDBooster::redirect(CRUDBooster::adminPath(), trans('crudbooster.denied_access'));
+            CRUDBooster::insertLog(cbLang("log_try_view", ['name' => 'Setting', 'module' => 'Setting']));
+            CRUDBooster::redirect(CRUDBooster::adminPath(), cbLang('denied_access'));
         }
 
         $data['page_title'] = urldecode(Request::get('group'));
@@ -92,15 +92,15 @@ class SettingsController extends CBController
             Storage::delete($row->content);
         }
         DB::table('cms_settings')->where('id', $id)->update(['content' => null]);
-        CRUDBooster::redirect(Request::server('HTTP_REFERER'), trans('alert_delete_data_success'), 'success');
+        CRUDBooster::redirect(Request::server('HTTP_REFERER'), cbLang('alert_delete_data_success'), 'success');
     }
 
     function postSaveSetting()
     {
 
         if (! CRUDBooster::isSuperadmin()) {
-            CRUDBooster::insertLog(trans("crudbooster.log_try_view", ['name' => 'Setting', 'module' => 'Setting']));
-            CRUDBooster::redirect(CRUDBooster::adminPath(), trans('crudbooster.denied_access'));
+            CRUDBooster::insertLog(cbLang("log_try_view", ['name' => 'Setting', 'module' => 'Setting']));
+            CRUDBooster::redirect(CRUDBooster::adminPath(), cbLang('denied_access'));
         }
 
         $group = Request::get('group_setting');

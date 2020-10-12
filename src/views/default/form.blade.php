@@ -6,10 +6,10 @@
         @if(CRUDBooster::getCurrentMethod() != 'getProfile' && $button_cancel)
             @if(g('return_url'))
                 <p><a title='Return' href='{{g("return_url")}}'><i class='fa fa-chevron-circle-left '></i>
-                        &nbsp; {{trans("crudbooster.form_back_to_list",['module'=>CRUDBooster::getCurrentModule()->name])}}</a></p>
+                        &nbsp; {{cbLang("form_back_to_list",['module'=>CRUDBooster::getCurrentModule()->name])}}</a></p>
             @else
                 <p><a title='Main Module' href='{{CRUDBooster::mainpath()}}'><i class='fa fa-chevron-circle-left '></i>
-                        &nbsp; {{trans("crudbooster.form_back_to_list",['module'=>CRUDBooster::getCurrentModule()->name])}}</a></p>
+                        &nbsp; {{cbLang("form_back_to_list",['module'=>CRUDBooster::getCurrentModule()->name])}}</a></p>
             @endif
         @endif
 
@@ -48,20 +48,20 @@
                                 @if($button_cancel && CRUDBooster::getCurrentMethod() != 'getDetail')
                                     @if(g('return_url'))
                                         <a href='{{g("return_url")}}' class='btn btn-default'><i
-                                                    class='fa fa-chevron-circle-left'></i> {{trans("crudbooster.button_back")}}</a>
+                                                    class='fa fa-chevron-circle-left'></i> {{cbLang("button_back")}}</a>
                                     @else
                                         <a href='{{CRUDBooster::mainpath("?".http_build_query(@$_GET)) }}' class='btn btn-default'><i
-                                                    class='fa fa-chevron-circle-left'></i> {{trans("crudbooster.button_back")}}</a>
+                                                    class='fa fa-chevron-circle-left'></i> {{cbLang("button_back")}}</a>
                                     @endif
                                 @endif
                                 @if(CRUDBooster::isCreate() || CRUDBooster::isUpdate())
 
                                     @if(CRUDBooster::isCreate() && $button_addmore==TRUE && $command == 'add')
-                                        <input type="submit" name="submit" value='{{trans("crudbooster.button_save_more")}}' class='btn btn-success'>
+                                        <input type="submit" name="submit" value='{{cbLang("button_save_more")}}' class='btn btn-success'>
                                     @endif
 
                                     @if($button_save && $command != 'detail')
-                                        <input type="submit" name="submit" value='{{trans("crudbooster.button_save")}}' class='btn btn-success'>
+                                        <input type="submit" name="submit" value='{{cbLang("button_save")}}' class='btn btn-success'>
                                     @endif
 
                                 @endif

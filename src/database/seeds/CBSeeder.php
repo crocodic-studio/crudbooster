@@ -55,7 +55,7 @@ class Cms_settingsSeeder extends Seeder
                 'label' => 'Login Background Color',
                 'content' => null,
                 'content_input_type' => 'text',
-                'group_setting' => trans('crudbooster.login_register_style'),
+                'group_setting' => cbLang('login_register_style'),
                 'dataenum' => null,
                 'helper' => 'Input hexacode',
             ],
@@ -65,7 +65,7 @@ class Cms_settingsSeeder extends Seeder
                 'label' => 'Login Font Color',
                 'content' => null,
                 'content_input_type' => 'text',
-                'group_setting' => trans('crudbooster.login_register_style'),
+                'group_setting' => cbLang('login_register_style'),
                 'dataenum' => null,
                 'helper' => 'Input hexacode',
             ],
@@ -75,7 +75,7 @@ class Cms_settingsSeeder extends Seeder
                 'label' => 'Login Background Image',
                 'content' => null,
                 'content_input_type' => 'upload_image',
-                'group_setting' => trans('crudbooster.login_register_style'),
+                'group_setting' => cbLang('login_register_style'),
                 'dataenum' => null,
                 'helper' => null,
             ],
@@ -87,7 +87,7 @@ class Cms_settingsSeeder extends Seeder
                 'label' => 'Email Sender',
                 'content' => 'support@crudbooster.com',
                 'content_input_type' => 'text',
-                'group_setting' => trans('crudbooster.email_setting'),
+                'group_setting' => cbLang('email_setting'),
                 'dataenum' => null,
                 'helper' => null,
             ],
@@ -97,7 +97,7 @@ class Cms_settingsSeeder extends Seeder
                 'label' => 'Mail Driver',
                 'content' => 'mail',
                 'content_input_type' => 'select',
-                'group_setting' => trans('crudbooster.email_setting'),
+                'group_setting' => cbLang('email_setting'),
                 'dataenum' => 'smtp,mail,sendmail',
                 'helper' => null,
             ],
@@ -107,7 +107,7 @@ class Cms_settingsSeeder extends Seeder
                 'label' => 'SMTP Host',
                 'content' => '',
                 'content_input_type' => 'text',
-                'group_setting' => trans('crudbooster.email_setting'),
+                'group_setting' => cbLang('email_setting'),
                 'dataenum' => null,
                 'helper' => null,
             ],
@@ -117,7 +117,7 @@ class Cms_settingsSeeder extends Seeder
                 'label' => 'SMTP Port',
                 'content' => '25',
                 'content_input_type' => 'text',
-                'group_setting' => trans('crudbooster.email_setting'),
+                'group_setting' => cbLang('email_setting'),
                 'dataenum' => null,
                 'helper' => 'default 25',
             ],
@@ -127,7 +127,7 @@ class Cms_settingsSeeder extends Seeder
                 'label' => 'SMTP Username',
                 'content' => '',
                 'content_input_type' => 'text',
-                'group_setting' => trans('crudbooster.email_setting'),
+                'group_setting' => cbLang('email_setting'),
                 'dataenum' => null,
                 'helper' => null,
             ],
@@ -137,7 +137,7 @@ class Cms_settingsSeeder extends Seeder
                 'label' => 'SMTP Password',
                 'content' => '',
                 'content_input_type' => 'text',
-                'group_setting' => trans('crudbooster.email_setting'),
+                'group_setting' => cbLang('email_setting'),
                 'dataenum' => null,
                 'helper' => null,
             ],
@@ -147,7 +147,7 @@ class Cms_settingsSeeder extends Seeder
                 'created_at' => date('Y-m-d H:i:s'),
                 'name' => 'appname',
                 'label' => 'Application Name',
-                'group_setting' => trans('crudbooster.application_setting'),
+                'group_setting' => cbLang('application_setting'),
                 'content' => 'CRUDBooster',
                 'content_input_type' => 'text',
                 'dataenum' => null,
@@ -157,7 +157,7 @@ class Cms_settingsSeeder extends Seeder
                 'created_at' => date('Y-m-d H:i:s'),
                 'name' => 'default_paper_size',
                 'label' => 'Default Paper Print Size',
-                'group_setting' => trans('crudbooster.application_setting'),
+                'group_setting' => cbLang('application_setting'),
                 'content' => 'Legal',
                 'content_input_type' => 'text',
                 'dataenum' => null,
@@ -169,7 +169,7 @@ class Cms_settingsSeeder extends Seeder
                 'label' => 'Logo',
                 'content' => '',
                 'content_input_type' => 'upload_image',
-                'group_setting' => trans('crudbooster.application_setting'),
+                'group_setting' => cbLang('application_setting'),
                 'dataenum' => null,
                 'helper' => null,
             ],
@@ -179,7 +179,7 @@ class Cms_settingsSeeder extends Seeder
                 'label' => 'Favicon',
                 'content' => '',
                 'content_input_type' => 'upload_image',
-                'group_setting' => trans('crudbooster.application_setting'),
+                'group_setting' => cbLang('application_setting'),
                 'dataenum' => null,
                 'helper' => null,
             ],
@@ -189,7 +189,7 @@ class Cms_settingsSeeder extends Seeder
                 'label' => 'API Debug Mode',
                 'content' => 'true',
                 'content_input_type' => 'select',
-                'group_setting' => trans('crudbooster.application_setting'),
+                'group_setting' => cbLang('application_setting'),
                 'dataenum' => 'true,false',
                 'helper' => null,
             ],
@@ -199,7 +199,7 @@ class Cms_settingsSeeder extends Seeder
                 'label' => 'Google API Key',
                 'content' => '',
                 'content_input_type' => 'text',
-                'group_setting' => trans('crudbooster.application_setting'),
+                'group_setting' => cbLang('application_setting'),
                 'dataenum' => null,
                 'helper' => null,
             ],
@@ -209,7 +209,7 @@ class Cms_settingsSeeder extends Seeder
                 'label' => 'Google FCM Key',
                 'content' => '',
                 'content_input_type' => 'text',
-                'group_setting' => trans('crudbooster.application_setting'),
+                'group_setting' => cbLang('application_setting'),
                 'dataenum' => null,
                 'helper' => null,
             ],
@@ -307,7 +307,7 @@ class Cms_modulsSeeder extends Seeder
             [
 
                 'created_at' => date('Y-m-d H:i:s'),
-                'name' => trans('crudbooster.Notifications'),
+                'name' => cbLang('Notifications'),
                 'icon' => 'fa fa-cog',
                 'path' => 'notifications',
                 'table_name' => 'cms_notifications',
@@ -318,7 +318,7 @@ class Cms_modulsSeeder extends Seeder
             [
 
                 'created_at' => date('Y-m-d H:i:s'),
-                'name' => trans('crudbooster.Privileges'),
+                'name' => cbLang('Privileges'),
                 'icon' => 'fa fa-cog',
                 'path' => 'privileges',
                 'table_name' => 'cms_privileges',
@@ -329,7 +329,7 @@ class Cms_modulsSeeder extends Seeder
             [
 
                 'created_at' => date('Y-m-d H:i:s'),
-                'name' => trans('crudbooster.Privileges_Roles'),
+                'name' => cbLang('Privileges_Roles'),
                 'icon' => 'fa fa-cog',
                 'path' => 'privileges_roles',
                 'table_name' => 'cms_privileges_roles',
@@ -340,7 +340,7 @@ class Cms_modulsSeeder extends Seeder
             [
 
                 'created_at' => date('Y-m-d H:i:s'),
-                'name' => trans('crudbooster.Users_Management'),
+                'name' => cbLang('Users_Management'),
                 'icon' => 'fa fa-users',
                 'path' => 'users',
                 'table_name' => 'cms_users',
@@ -351,7 +351,7 @@ class Cms_modulsSeeder extends Seeder
             [
 
                 'created_at' => date('Y-m-d H:i:s'),
-                'name' => trans('crudbooster.settings'),
+                'name' => cbLang('settings'),
                 'icon' => 'fa fa-cog',
                 'path' => 'settings',
                 'table_name' => 'cms_settings',
@@ -362,7 +362,7 @@ class Cms_modulsSeeder extends Seeder
             [
 
                 'created_at' => date('Y-m-d H:i:s'),
-                'name' => trans('crudbooster.Module_Generator'),
+                'name' => cbLang('Module_Generator'),
                 'icon' => 'fa fa-database',
                 'path' => 'module_generator',
                 'table_name' => 'cms_moduls',
@@ -373,7 +373,7 @@ class Cms_modulsSeeder extends Seeder
             [
 
                 'created_at' => date('Y-m-d H:i:s'),
-                'name' => trans('crudbooster.Menu_Management'),
+                'name' => cbLang('Menu_Management'),
                 'icon' => 'fa fa-bars',
                 'path' => 'menu_management',
                 'table_name' => 'cms_menus',
@@ -384,7 +384,7 @@ class Cms_modulsSeeder extends Seeder
             [
 
                 'created_at' => date('Y-m-d H:i:s'),
-                'name' => trans('crudbooster.Email_Templates'),
+                'name' => cbLang('Email_Templates'),
                 'icon' => 'fa fa-envelope-o',
                 'path' => 'email_templates',
                 'table_name' => 'cms_email_templates',
@@ -395,7 +395,7 @@ class Cms_modulsSeeder extends Seeder
             [
 
                 'created_at' => date('Y-m-d H:i:s'),
-                'name' => trans('crudbooster.Statistic_Builder'),
+                'name' => cbLang('Statistic_Builder'),
                 'icon' => 'fa fa-dashboard',
                 'path' => 'statistic_builder',
                 'table_name' => 'cms_statistics',
@@ -406,7 +406,7 @@ class Cms_modulsSeeder extends Seeder
             [
 
                 'created_at' => date('Y-m-d H:i:s'),
-                'name' => trans('crudbooster.API_Generator'),
+                'name' => cbLang('API_Generator'),
                 'icon' => 'fa fa-cloud-download',
                 'path' => 'api_generator',
                 'table_name' => '',
@@ -417,7 +417,7 @@ class Cms_modulsSeeder extends Seeder
             [
 
                 'created_at' => date('Y-m-d H:i:s'),
-                'name' => trans('crudbooster.Log_User_Access'),
+                'name' => cbLang('Log_User_Access'),
                 'icon' => 'fa fa-flag-o',
                 'path' => 'logs',
                 'table_name' => 'cms_logs',

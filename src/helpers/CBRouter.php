@@ -66,15 +66,22 @@ class CBRouter
         ], function () {
 
             Route::get('/',function () {});
-            // Todo: change table
-            $modules = db('cms_moduls')
-                ->where('path', '!=', '')
-                ->where('controller', '!=', '')
-                ->whereNotNull("path")
-                ->whereNotNull("controller")
-                ->where('is_protected', 0)
-                ->where('deleted_at', null)
-                ->get();
+
+            $modules = [];
+            try {
+                // Todo: change table
+                $modules = db('cms_moduls')
+                    ->where('path', '!=', '')
+                    ->where('controller', '!=', '')
+                    ->whereNotNull("path")
+                    ->whereNotNull("controller")
+                    ->where('is_protected', 0)
+                    ->where('deleted_at', null)
+                    ->get();
+            } catch (\Exception $e) {
+                Log::error("Load cms moduls is failed. Caused = " . $e->getMessage());
+            }
+
             foreach ($modules as $v) {
                 if (@$v->path && @$v->controller) {
                     try {
@@ -105,7 +112,13 @@ class CBRouter
             CRUDBooster::routeController('api_generator', 'ApiCustomController', static::$cb_namespace);
 
             // Todo: change table
-            $modules = db('cms_moduls')->whereIn('controller', CBRouter::getCBControllerFiles())->get();
+            $modules = [];
+            try {
+                $modules = db('cms_moduls')->whereIn('controller', CBRouter::getCBControllerFiles())->get();
+            } catch (\Exception $e) {
+                Log::error("Load cms moduls is failed. Caused = " . $e->getMessage());
+            }
+
             foreach ($modules as $v) {
                 if (@$v->path && @$v->controller) {
                     try {

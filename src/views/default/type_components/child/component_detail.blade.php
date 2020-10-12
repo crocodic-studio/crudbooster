@@ -92,7 +92,7 @@
 
                     @if(count($data_child)==0)
                         <tr class="trNull">
-                            <td colspan="{{count($form['columns'])+1}}" align="center">{{trans('crudbooster.table_data_not_found')}}</td>
+                            <td colspan="{{count($form['columns'])+1}}" align="center">{{cbLang('table_data_not_found')}}</td>
                         </tr>
                     @endif
                     </tbody>

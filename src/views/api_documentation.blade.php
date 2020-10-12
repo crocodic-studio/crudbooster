@@ -194,7 +194,7 @@
                                                             <tr>
                                                                 <td>{{$i++}}</td>
                                                                 <td width="5%"><em>{{$resp['type']}}</em></td>
-                                                                <td>{{ ($api->aksi=='list')?'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- ':'' }} {{$resp['name']}}</td>
+                                                                <td>{{ ($api->aksi=='list')?'- ':'' }} {{$resp['name']}}</td>
                                                             </tr>
                                                         @endif
                                                     @endforeach

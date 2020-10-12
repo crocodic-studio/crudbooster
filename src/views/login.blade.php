@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>{{trans("crudbooster.page_title_login")}} : {{Session::get('appname')}}</title>
+    <title>{{cbLang("page_title_login")}} : {{Session::get('appname')}}</title>
     <meta name='generator' content='CRUDBooster'/>
     <meta name='robots' content='noindex,nofollow'/>
     <link rel="shortcut icon"
@@ -73,7 +73,7 @@
             </div>
         @endif
 
-        <p class='login-box-msg'>{{trans("crudbooster.login_message")}}</p>
+        <p class='login-box-msg'>{{cbLang("login_message")}}</p>
         <form autocomplete='off' action="{{ route('postLogin') }}" method="post">
             <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
             
@@ -100,13 +100,13 @@
             </div>
             <div style="margin-bottom:10px" class='row'>
                 <div class='col-xs-12'>
-                    <button type="submit" class="btn btn-primary btn-block btn-flat"><i class='fa fa-lock'></i> {{trans("crudbooster.button_sign_in")}}</button>
+                    <button type="submit" class="btn btn-primary btn-block btn-flat"><i class='fa fa-lock'></i> {{cbLang("button_sign_in")}}</button>
                 </div>
             </div>
 
             <div class='row'>
-                <div class='col-xs-12' align="center"><p style="padding:10px 0px 10px 0px">{{trans("crudbooster.text_forgot_password")}} <a
-                                href='{{route("getForgot")}}'>{{trans("crudbooster.click_here")}}</a></p></div>
+                <div class='col-xs-12' align="center"><p style="padding:10px 0px 10px 0px">{{cbLang("text_forgot_password")}} <a
+                                href='{{route("getForgot")}}'>{{cbLang("click_here")}}</a></p></div>
             </div>
         </form>
 

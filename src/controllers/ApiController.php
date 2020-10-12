@@ -111,8 +111,10 @@ class ApiController extends Controller
         | ----------------------------------------------
         |
         */
+
+        $type_except = ['password', 'ref', 'base64_file', 'custom', 'search'];
+
         if ($parameters) {
-            $type_except = ['password', 'ref', 'base64_file', 'custom', 'search'];
             $input_validator = [];
             $data_validation = [];
             foreach ($parameters as $param) {
@@ -342,7 +344,7 @@ class ApiController extends Controller
                     $used = $param['used'];
                     $required = $param['required'];
 
-                    if (in_array($type, $type_except)) {
+                    if ($type_except && in_array($type, $type_except)) {
                         continue;
                     }
 
@@ -469,7 +471,7 @@ class ApiController extends Controller
                         } else {
                             if ($used) {
                                 if ($value) {
-                                    if (! Hash::check($value, $row->{$name})) {
+                                    if (! Hash::check($value, $rows->{$name})) {
                                         $result['api_status'] = 0;
                                         $result['api_message'] = 'Invalid credentials. Check your username and password.';
                                         
@@ -585,6 +587,8 @@ class ApiController extends Controller
                 }
             }
 
+            $lastId = null;
+
             if ($action_type == 'save_add') {
 
                 DB::beginTransaction();
@@ -604,12 +608,16 @@ class ApiController extends Controller
                     $result['api_authorization'] = $debug_mode_message;
                 }
                 $result['id'] = $id;
+                $lastId = $id;
             } else {
 
                 try {
                     $pk = CRUDBooster::pk($table);
+
+                    $lastId = $row_assign[$pk];
+
                     $update = DB::table($table);
-                    $update->where($table.'.'.$pk, $row_assign['id']);
+                    $update->where($table.'.'.$pk, $row_assign[$pk]);
 
                     if ($row_api->sql_where) {
                         $update->whereraw($row_api->sql_where);

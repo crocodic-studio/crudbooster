@@ -48,9 +48,9 @@
     var NOTIFICATION_JSON = "{{route('NotificationsControllerGetLatestJson')}}";
     var NOTIFICATION_INDEX = "{{route('NotificationsControllerGetIndex')}}";
 
-    var NOTIFICATION_YOU_HAVE = "{{trans('crudbooster.notification_you_have')}}";
-    var NOTIFICATION_NOTIFICATIONS = "{{trans('crudbooster.notification_notification')}}";
-    var NOTIFICATION_NEW = "{{trans('crudbooster.notification_new')}}";
+    var NOTIFICATION_YOU_HAVE = "{{cbLang('notification_you_have')}}";
+    var NOTIFICATION_NOTIFICATIONS = "{{cbLang('notification_notification')}}";
+    var NOTIFICATION_NEW = "{{cbLang('notification_new')}}";
 
     $(function () {
         $('.datatables-simple').DataTable();

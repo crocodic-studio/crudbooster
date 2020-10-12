@@ -1,4 +1,4 @@
-<?php $default = ! empty($form['default']) ? $form['default'] : trans('crudbooster.text_prefix_option')." ".$form['label'];?>
+<?php $default = ! empty($form['default']) ? $form['default'] : cbLang('text_prefix_option')." ".$form['label'];?>
 @if($form['parent_select'])
     <?php
     $parent_select = (count(explode(",", $form['parent_select'])) > 1) ? explode(",", $form['parent_select']) : $form['parent_select'];
@@ -34,7 +34,7 @@
                     var value = "{{$value}}";
 
                     if (fk_value != '') {
-                        $current.html("<option value=''>{{trans('crudbooster.text_loading')}} {{$form['label']}}");
+                        $current.html("<option value=''>{{cbLang('text_loading')}} {{$form['label']}}");
                         $.get("{{CRUDBooster::mainpath('data-table')}}?table=" + table + "&label=" + label + "&fk_name=" + fk_name + "&fk_value=" + fk_value + "&datatable_where=" + encodeURI(datatableWhere), function (response) {
                             if (response) {
                                 $current.html("<option value=''>{{$default}}");
@@ -61,7 +61,7 @@
 <div class='form-group {{$header_group_class}} {{ ($errors->first($name))?"has-error":"" }}' id='form-group-{{$name}}' style="{{@$form['style']}}">
     <label class='control-label col-sm-2'>{{$form['label']}}
         @if($required)
-            <span class='text-danger' title='{!! trans('crudbooster.this_field_is_required') !!}'>*</span>
+            <span class='text-danger' title='{!! cbLang('this_field_is_required') !!}'>*</span>
         @endif
     </label>
 

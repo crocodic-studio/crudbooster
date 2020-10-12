@@ -13,6 +13,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
+     * Call when after all packages has been loaded
      *
      * @return void
      */
@@ -22,13 +23,11 @@ class CRUDBoosterServiceProvider extends ServiceProvider
                                 
         $this->loadViewsFrom(__DIR__.'/views', 'crudbooster');
         $this->loadMigrationsFrom(__DIR__.'/database/migrations');
-        $this->loadTranslationsFrom(__DIR__.'/localization','cblang');
+        $this->loadTranslationsFrom(__DIR__.'/localization','crudbooster');
         $this->loadRoutesFrom(__DIR__.'/routes.php');
 
         if($this->app->runningInConsole()) {
             $this->publishes([__DIR__.'/configs/crudbooster.php' => config_path('crudbooster.php')],'cb_config');
-            $this->publishes([__DIR__.'/localization' => resource_path('lang')], 'cb_localization');
-            $this->publishes([__DIR__.'/database' => base_path('database')],'cb_migration');
             $this->publishes([__DIR__.'/userfiles/controllers/CBHook.php' => app_path('Http/Controllers/CBHook.php')],'CBHook');
             $this->publishes([__DIR__.'/userfiles/controllers/AdminCmsUsersController.php' => app_path('Http/Controllers/AdminCmsUsersController.php')],'cb_user_controller');
             $this->publishes([__DIR__.'/assets'=>public_path('vendor/crudbooster')],'cb_asset');
@@ -39,6 +38,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
 
     /**
      * Register the application services.
+     * Call when this package is first time loaded
      *
      * @return void
      */
@@ -54,11 +54,6 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->commands('crudboosterupdate');
         $this->commands('crudboosterVersionCommand');
         $this->commands('crudboosterMailQueue');
-
-        $this->app->register('Barryvdh\DomPDF\ServiceProvider');
-        $this->app->register('Maatwebsite\Excel\ExcelServiceProvider');
-        $this->app->register('Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider');
-        $this->app->register('Intervention\Image\ImageServiceProvider');
 
         $loader = AliasLoader::getInstance();
         $loader->alias('PDF', 'Barryvdh\DomPDF\Facade');

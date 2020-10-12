@@ -15,15 +15,15 @@ use Validator;
 class CRUDBooster
 {
     /**
-    *	Comma-delimited data output from the child table
-    */
+     *	Comma-delimited data output from the child table
+     */
     public static function echoSelect2Mult($values, $table, $id, $name) {
         $values = explode(",", $values);
         return implode(", ", DB::table($table)->whereIn($id, $values)->pluck($name)->toArray());
         //implode(", ", DB::table("syudo_list_pokemons_types")->whereIn("id", explode(",", $row->type))->pluck("name")->toArray())
-        
+
     }
-    
+
     public static function uploadBase64($value, $id = null)
     {
         if (! self::myId()) {
@@ -43,13 +43,13 @@ class CRUDBooster
         @$mime_type = $mime_type[1];
         if ($mime_type) {
             $filePath = 'uploads/'.$userID.'/'.date('Y-m');
-		Storage::makeDirectory($filePath);
-		$filename = md5(str_random(5)).'.'.$mime_type;
-		if (Storage::put($filePath.'/'.$filename, $filedata)) {
-		    self::resizeImage($filePath.'/'.$filename);
+            Storage::makeDirectory($filePath);
+            $filename = md5(str_random(5)).'.'.$mime_type;
+            if (Storage::put($filePath.'/'.$filename, $filedata)) {
+                self::resizeImage($filePath.'/'.$filename);
 
-		    return $filePath.'/'.$filename;
-		}
+                return $filePath.'/'.$filename;
+            }
         }
     }
 
@@ -375,17 +375,17 @@ class CRUDBooster
 
     public static function getCurrentModule()
     {
-	$modulepath = self::getModulePath();
+        $modulepath = self::getModulePath();
 
-	if (Cache::has('moduls_'.$modulepath)) {
-	    return Cache::get('moduls_'.$modulepath);
-	} else {
+        if (Cache::has('moduls_'.$modulepath)) {
+            return Cache::get('moduls_'.$modulepath);
+        } else {
 
-	    $module = DB::table('cms_moduls')->where('path', self::getModulePath())->first();
-	    
-	    //supply modulpath instead of $module incase where user decides to create form and custom url that does not exist in cms_moduls table.
-	    return ($module)?:$modulepath; 
-	}
+            $module = DB::table('cms_moduls')->where('path', self::getModulePath())->first();
+
+            //supply modulpath instead of $module incase where user decides to create form and custom url that does not exist in cms_moduls table.
+            return ($module)?:$modulepath;
+        }
     }
 
     public static function getCurrentDashboardId()
@@ -514,36 +514,36 @@ class CRUDBooster
     public static function deleteConfirm($redirectTo)
     {
         echo "swal({   
-				title: \"".trans('crudbooster.delete_title_confirm')."\",   
-				text: \"".trans('crudbooster.delete_description_confirm')."\",   
+				title: \"".cbLang('delete_title_confirm')."\",   
+				text: \"".cbLang('delete_description_confirm')."\",   
 				type: \"warning\",   
 				showCancelButton: true,   
 				confirmButtonColor: \"#ff0000\",   
-				confirmButtonText: \"".trans('crudbooster.confirmation_yes')."\",  
-				cancelButtonText: \"".trans('crudbooster.confirmation_no')."\",  
+				confirmButtonText: \"".cbLang('confirmation_yes')."\",  
+				cancelButtonText: \"".cbLang('confirmation_no')."\",  
 				closeOnConfirm: false }, 
 				function(){  location.href=\"$redirectTo\" });";
     }
 
     public static function getModulePath()
     {
-          // Check to position of admin_path
-          if(config("crudbooster.ADMIN_PATH")) {
-              $adminPathSegments = explode('/', Request::path());
-              $no = 1;
-              foreach($adminPathSegments as $path) {
-                  if($path == config("crudbooster.ADMIN_PATH")) {
-                      $segment = $no+1;
-                      break;
-                  }
-                  $no++;
-              }
-          } else {
-              $segment = 1;
-          }
+        // Check to position of admin_path
+        if(config("crudbooster.ADMIN_PATH")) {
+            $adminPathSegments = explode('/', Request::path());
+            $no = 1;
+            foreach($adminPathSegments as $path) {
+                if($path == config("crudbooster.ADMIN_PATH")) {
+                    $segment = $no+1;
+                    break;
+                }
+                $no++;
+            }
+        } else {
+            $segment = 1;
+        }
 
-          return Request::segment($segment);
-    }	
+        return Request::segment($segment);
+    }
 
     public static function mainpath($path = null)
     {
@@ -938,19 +938,19 @@ class CRUDBooster
 //         }
 //     }
 
-	public static function findPrimaryKey($table)
-	{
-		if(!$table)
-		{
-			return 'id';
-		}
-		
-		$pk = DB::getDoctrineSchemaManager()->listTableDetails($table)->getPrimaryKey();
-		if(!$pk) {
-		    return null;
-		}
-		return $pk->getColumns()[0];	
-	}
+    public static function findPrimaryKey($table)
+    {
+        if(!$table)
+        {
+            return 'id';
+        }
+
+        $pk = DB::getDoctrineSchemaManager()->listTableDetails($table)->getPrimaryKey();
+        if(!$pk) {
+            return null;
+        }
+        return $pk->getColumns()[0];
+    }
 
     public static function newId($table)
     {
@@ -1168,10 +1168,10 @@ class CRUDBooster
                 'useragent' => Request::header('User-Agent'),
             ], [
 
-                    'X-Authorization-Token' => 'required',
-                    'X-Authorization-Time' => 'required',
-                    'useragent' => 'required',
-                ]);
+                'X-Authorization-Token' => 'required',
+                'X-Authorization-Time' => 'required',
+                'useragent' => 'required',
+            ]);
 
             if ($validator->fails()) {
                 $message = $validator->errors()->all();
@@ -1577,12 +1577,12 @@ class CRUDBooster
             if (in_array($field, $password_candidate)) {
                 $type = 'password';
                 $validation = ['min:3', 'max:32'];
-                $attribute['help'] = trans("crudbooster.text_default_help_password");
+                $attribute['help'] = cbLang("text_default_help_password");
             }
 
             if (in_array($field, $image_candidate)) {
                 $type = 'upload';
-                $attribute['help'] = trans('crudbooster.text_default_help_upload');
+                $attribute['help'] = cbLang('text_default_help_upload');
                 $validation = ['required|image|max:3000'];
             }
 
@@ -1596,23 +1596,23 @@ class CRUDBooster
             if (in_array($field, $phone_candidate)) {
                 $type = 'number';
                 $validation = ['required', 'numeric'];
-                $attribute['placeholder'] = trans('crudbooster.text_default_help_number');
+                $attribute['placeholder'] = cbLang('text_default_help_number');
             }
 
             if (in_array($field, $email_candidate)) {
                 $type = 'email';
                 $validation[] = 'email|unique:'.$table;
-                $attribute['placeholder'] = trans('crudbooster.text_default_help_email');
+                $attribute['placeholder'] = cbLang('text_default_help_email');
             }
 
             if ($type == 'text' && in_array($field, $name_candidate)) {
-                $attribute['placeholder'] = trans('crudbooster.text_default_help_text');
+                $attribute['placeholder'] = cbLang('text_default_help_text');
                 $validation = ['required', 'string', 'min:3', 'max:70'];
             }
 
             if ($type == 'text' && in_array($field, $url_candidate)) {
                 $validation = ['required', 'url'];
-                $attribute['placeholder'] = trans('crudbooster.text_default_help_url');
+                $attribute['placeholder'] = cbLang('text_default_help_url');
             }
 
             $validation = implode('|', $validation);

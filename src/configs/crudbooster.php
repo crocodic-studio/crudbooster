@@ -30,7 +30,7 @@ return [
 
     'DEFAULT_THUMBNAIL_WIDTH' => 0,
 
-    'DEFEAULT_UPLOAD_MAX_SIZE' => 1000, //in KB
+    'DEFAULT_UPLOAD_MAX_SIZE' => 1000, //in KB
 
     'IMAGE_EXTENSIONS' => 'jpg,png,jpeg,gif,bmp',
 

@@ -91,8 +91,8 @@ class StatisticBuilderController extends CBController
         $this->cbLoader();
 
         if (! CRUDBooster::isSuperadmin()) {
-            CRUDBooster::insertLog(trans("crudbooster.log_try_view", ['name' => 'Builder', 'module' => 'Statistic']));
-            CRUDBooster::redirect(CRUDBooster::adminPath(), trans('crudbooster.denied_access'));
+            CRUDBooster::insertLog(cbLang("log_try_view", ['name' => 'Builder', 'module' => 'Statistic']));
+            CRUDBooster::redirect(CRUDBooster::adminPath(), cbLang('denied_access'));
         }
 
         $page_title = 'Statistic Builder';
@@ -171,8 +171,8 @@ class StatisticBuilderController extends CBController
         $this->cbLoader();
 
         if (! CRUDBooster::isSuperadmin()) {
-            CRUDBooster::insertLog(trans("crudbooster.log_try_view", ['name' => 'Edit Component', 'module' => 'Statistic']));
-            CRUDBooster::redirect(CRUDBooster::adminPath(), trans('crudbooster.denied_access'));
+            CRUDBooster::insertLog(cbLang("log_try_view", ['name' => 'Edit Component', 'module' => 'Statistic']));
+            CRUDBooster::redirect(CRUDBooster::adminPath(), cbLang('denied_access'));
         }
 
         $component_row = CRUDBooster::first('cms_statistic_components', ['componentID' => $componentID]);
@@ -197,8 +197,8 @@ class StatisticBuilderController extends CBController
     public function getDeleteComponent($id)
     {
         if (! CRUDBooster::isSuperadmin()) {
-            CRUDBooster::insertLog(trans("crudbooster.log_try_view", ['name' => 'Delete Component', 'module' => 'Statistic']));
-            CRUDBooster::redirect(CRUDBooster::adminPath(), trans('crudbooster.denied_access'));
+            CRUDBooster::insertLog(cbLang("log_try_view", ['name' => 'Delete Component', 'module' => 'Statistic']));
+            CRUDBooster::redirect(CRUDBooster::adminPath(), cbLang('denied_access'));
         }
 
         DB::table('cms_statistic_components')->where('componentID', $id)->delete();

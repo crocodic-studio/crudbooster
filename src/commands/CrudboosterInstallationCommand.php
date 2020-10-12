@@ -37,14 +37,6 @@ class CrudboosterInstallationCommand extends Command
         $this->checkRequirements();
 
         $this->info('Installing: ');
-        /* Removing the default user and password reset, it makes you ambigous when using CRUDBooster */
-        $this->info('I remove some default migration files from laravel...');
-        if (file_exists(base_path('database/migrations/2014_10_12_000000_create_users_table.php'))) {
-            @unlink(base_path('database/migrations/2014_10_12_000000_create_users_table.php'));
-        }
-        if (file_exists(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'))) {
-            @unlink(base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php'));
-        }
 
         if ($this->confirm('Do you have setting the database configuration at .env ?')) {
 
@@ -52,24 +44,8 @@ class CrudboosterInstallationCommand extends Command
                 mkdir(public_path('vendor'), 0777);
             }
 
-            $this->info('Publishing CRUDBooster needs file...');
+            $this->info('Publishing crudbooster assets...');
             $this->call('vendor:publish', ['--provider' => 'crocodicstudio\crudbooster\CRUDBoosterServiceProvider']);
-            $this->call('vendor:publish', ['--provider' => 'Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider']);
-            $this->call('vendor:publish', ['--tag' => 'cb_migration', '--force' => true]);
-            $this->call('vendor:publish', ['--tag' => 'cb_localization', '--force' => true]);
-
-            $configLFM = config_path('lfm.php');
-            $configLFM = file_get_contents($configLFM);
-            $configLFMModified = str_replace("['web','auth']", "['web','\crocodicstudio\crudbooster\middlewares\CBBackend']", $configLFM);
-            $configLFMModified = str_replace('Unisharp\Laravelfilemanager\Handlers\ConfigHandler::class', 'function() {return Session::get("admin_id");}', $configLFMModified);
-            $configLFMModified = str_replace('auth()->user()->id', 'Session::get("admin_id")', $configLFMModified);
-            $configLFMModified = str_replace("'alphanumeric_filename' => false", "'alphanumeric_filename' => true", $configLFMModified);
-            $configLFMModified = str_replace("'alphanumeric_directory' => false", "'alphanumeric_directory' => true", $configLFMModified);
-            $configLFMModified = str_replace("'alphanumeric_directory' => false", "'alphanumeric_directory' => true", $configLFMModified);
-            $configLFMModified = str_replace("'base_directory' => 'public'", "'base_directory' => 'storage/app'", $configLFMModified);
-            $configLFMModified = str_replace("'images_folder_name' => 'photos'", "'images_folder_name' => 'uploads'", $configLFMModified);
-            $configLFMModified = str_replace("'files_folder_name'  => 'files'", "'files_folder_name'  => 'uploads'", $configLFMModified);
-            file_put_contents(config_path('lfm.php'), $configLFMModified);
 
             $this->info('Dumping the autoloaded files and reloading all new files...');
             $composer = $this->findComposer();
@@ -117,17 +93,17 @@ class CrudboosterInstallationCommand extends Command
         $system_failed = 0;
         $laravel = app();
 
-        if ($laravel::VERSION >= 5.3) {
-            $this->info('Laravel Version (>= 5.3.*): [Good]');
+        if ($laravel::VERSION >= 5.5) {
+            $this->info('Laravel Version (>= 5.5): [Good]');
         } else {
-            $this->info('Laravel Version (>= 5.3.*): [Bad]');
+            $this->info('Laravel Version (>= 5.5): [Bad]');
             $system_failed++;
         }
 
-        if (version_compare(phpversion(), '5.6.0', '>=')) {
-            $this->info('PHP Version (>= 5.6.*): [Good]');
+        if (version_compare(phpversion(), '7.2.0', '>=')) {
+            $this->info('PHP Version (>= 7.2.*): [Good]');
         } else {
-            $this->info('PHP Version (>= 5.6.*): [Bad] Yours: '.phpversion());
+            $this->info('PHP Version (>= 7.2.*): [Bad] Yours: '.phpversion());
             $system_failed++;
         }
 

@@ -6,7 +6,7 @@
 
 
         @if(CRUDBooster::getCurrentMethod() != 'getProfile')
-            <p><a href='{{CRUDBooster::mainpath()}}'>{{trans("crudbooster.form_back_to_list",['module'=>CRUDBooster::getCurrentModule()->name])}}</a></p>
+            <p><a href='{{CRUDBooster::mainpath()}}'>{{cbLang("form_back_to_list",['module'=>CRUDBooster::getCurrentModule()->name])}}</a></p>
     @endif
 
 
@@ -26,26 +26,26 @@
                         <strong>Note:</strong> To show the menu you have to create a menu at Menu Management
                     </div>
                     <div class='form-group'>
-                        <label>{{trans('crudbooster.privileges_name')}}</label>
+                        <label>{{cbLang('privileges_name')}}</label>
                         <input type='text' class='form-control' name='name' required value='{{ @$row->name }}'/>
                         <div class="text-danger">{{ $errors->first('name') }}</div>
                     </div>
 
                     <div class='form-group'>
-                        <label>{{trans('crudbooster.set_as_superadmin')}}</label>
+                        <label>{{cbLang('set_as_superadmin')}}</label>
                         <div id='set_as_superadmin' class='radio'>
                             <label><input required {{ (@$row->is_superadmin==1)?'checked':'' }} type='radio' name='is_superadmin'
-                                          value='1'/> {{trans('crudbooster.confirmation_yes')}}</label> &nbsp;&nbsp;
+                                          value='1'/> {{cbLang('confirmation_yes')}}</label> &nbsp;&nbsp;
                             <label><input {{ (@$row->is_superadmin==0)?'checked':'' }} type='radio' name='is_superadmin'
-                                          value='0'/> {{trans('crudbooster.confirmation_no')}}</label>
+                                          value='0'/> {{cbLang('confirmation_no')}}</label>
                         </div>
                         <div class="text-danger">{{ $errors->first('is_superadmin') }}</div>
                     </div>
 
                     <div class='form-group'>
-                        <label>{{trans('crudbooster.chose_theme_color')}}</label>
+                        <label>{{cbLang('chose_theme_color')}}</label>
                         <select name='theme_color' class='form-control' required>
-                            <option value=''>{{trans('crudbooster.chose_theme_color_select')}}</option>
+                            <option value=''>{{cbLang('chose_theme_color_select')}}</option>
                             <?php
                             $skins = array(
                                 'skin-blue',
@@ -91,7 +91,7 @@
                     </div>
 
                     <div id='privileges_configuration' class='form-group'>
-                        <label>{{trans('crudbooster.privileges_configuration')}}</label>
+                        <label>{{cbLang('privileges_configuration')}}</label>
                         @push('bottom')
                             <script>
                                 $(function () {
@@ -130,14 +130,14 @@
                         <table class='table table-striped table-hover table-bordered'>
                             <thead>
                             <tr class='active'>
-                                <th width='3%'>{{trans('crudbooster.privileges_module_list_no')}}</th>
-                                <th width='60%'>{{trans('crudbooster.privileges_module_list_mod_names')}}</th>
+                                <th width='3%'>{{cbLang('privileges_module_list_no')}}</th>
+                                <th width='60%'>{{cbLang('privileges_module_list_mod_names')}}</th>
                                 <th>&nbsp;</th>
-                                <th>{{trans('crudbooster.privileges_module_list_view')}}</th>
-                                <th>{{trans('crudbooster.privileges_module_list_create')}}</th>
-                                <th>{{trans('crudbooster.privileges_module_list_read')}}</th>
-                                <th>{{trans('crudbooster.privileges_module_list_update')}}</th>
-                                <th>{{trans('crudbooster.privileges_module_list_delete')}}</th>
+                                <th>{{cbLang('privileges_module_list_view')}}</th>
+                                <th>{{cbLang('privileges_module_list_create')}}</th>
+                                <th>{{cbLang('privileges_module_list_read')}}</th>
+                                <th>{{cbLang('privileges_module_list_update')}}</th>
+                                <th>{{cbLang('privileges_module_list_delete')}}</th>
                             </tr>
                             <tr class='info'>
                                 <th>&nbsp;</th>
@@ -182,8 +182,8 @@
                 </div><!-- /.box-body -->
                 <div class="box-footer" align="right">
                     <button type='button' onclick="location.href='{{CRUDBooster::mainpath()}}'"
-                            class='btn btn-default'>{{trans("crudbooster.button_cancel")}}</button>
-                    <button type='submit' class='btn btn-primary'><i class='fa fa-save'></i> {{trans("crudbooster.button_save")}}</button>
+                            class='btn btn-default'>{{cbLang("button_cancel")}}</button>
+                    <button type='submit' class='btn btn-primary'><i class='fa fa-save'></i> {{cbLang("button_save")}}</button>
                 </div><!-- /.box-footer-->
         </div><!-- /.box -->
 
