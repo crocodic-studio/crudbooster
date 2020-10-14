@@ -93,7 +93,8 @@ if(!function_exists('get_setting')) {
      */
     function get_setting($key, $default = null) {
         $setting = \crocodicstudio\crudbooster\helpers\CB::getSetting($key);
-        return $setting || $default;
+        $setting = ($setting)?:$default;
+        return $setting;
     }
 }
 

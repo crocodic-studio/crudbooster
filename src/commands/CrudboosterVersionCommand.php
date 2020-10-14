@@ -24,8 +24,11 @@ class CrudboosterVersionCommand extends Command
      *
      * @return mixed
      */
+
+    public static $version = "5.5.0";
+
     public function handle()
     {
-        $this->info("Version : 5.5.0");
+        $this->info(static::$version);
     }
 }

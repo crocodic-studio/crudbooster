@@ -3,7 +3,7 @@
 namespace crocodicstudio\crudbooster\middlewares;
 
 use Closure;
-use CRUDBooster;
+use crocodicstudio\crudbooster\helpers\CRUDBooster;
 
 class CBAuthAPI
 {

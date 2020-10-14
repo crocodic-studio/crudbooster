@@ -69,8 +69,6 @@ class ApiController extends Controller
         $table = $row_api->tabel;
         $pk = CRUDBooster::pk($table);
 
-        $debug_mode_message = 'You are in debug mode !';
-
         /*
         | ----------------------------------------------
         | Method Type validation
@@ -431,16 +429,10 @@ class ApiController extends Controller
 
                     $result['api_status'] = 1;
                     $result['api_message'] = 'success';
-                    if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
-                        $result['api_authorization'] = $debug_mode_message;
-                    }
                     $result['data'] = $rows;
                 } else {
                     $result['api_status'] = 0;
                     $result['api_message'] = 'There is no data found !';
-                    if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
-                        $result['api_authorization'] = $debug_mode_message;
-                    }
                     $result['data'] = [];
                 }
             } elseif ($action_type == 'detail') {
@@ -461,10 +453,7 @@ class ApiController extends Controller
                                 if (! Hash::check($value, $rows->{$name})) {
                                     $result['api_status'] = 0;
                                     $result['api_message'] = 'Invalid credentials. Check your username and password.';
-                                    
-                                    if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
-                                        $result['api_authorization'] = $debug_mode_message;
-                                    }
+
                                     goto show;
                                 }
                             }
@@ -474,10 +463,7 @@ class ApiController extends Controller
                                     if (! Hash::check($value, $rows->{$name})) {
                                         $result['api_status'] = 0;
                                         $result['api_message'] = 'Invalid credentials. Check your username and password.';
-                                        
-                                        if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
-                                            $result['api_authorization'] = $debug_mode_message;
-                                        }
+
                                         goto show;
                                     }
                                 }
@@ -498,18 +484,13 @@ class ApiController extends Controller
 
                     $result['api_status'] = 1;
                     $result['api_message'] = 'success';
-                    $result['api_response_fields'] = $responses_fields;
-                    if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
-                        $result['api_authorization'] = $debug_mode_message;
-                    }
+
                     $rows = (array) $rows;
                     $result = array_merge($result, $rows);
                 } else {
                     $result['api_status'] = 0;
                     $result['api_message'] = 'There is no data found !';
-                    if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
-                        $result['api_authorization'] = $debug_mode_message;
-                    }
+
                 }
             } elseif ($action_type == 'delete') {
 
@@ -521,9 +502,7 @@ class ApiController extends Controller
 
                 $result['api_status'] = ($delete) ? 1 : 0;
                 $result['api_message'] = ($delete) ? "success" : "failed";
-                if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
-                    $result['api_authorization'] = $debug_mode_message;
-                }
+
             }
         } elseif ($action_type == 'save_add' || $action_type == 'save_edit') {
 
@@ -603,10 +582,7 @@ class ApiController extends Controller
 
                 $result['api_status'] = ($id) ? 1 : 0;
                 $result['api_message'] = ($id) ? 'success' : 'failed';
-                if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
 
-                    $result['api_authorization'] = $debug_mode_message;
-                }
                 $result['id'] = $id;
                 $lastId = $id;
             } else {
@@ -628,16 +604,12 @@ class ApiController extends Controller
                     $update = $update->update($row_assign);
                     $result['api_status'] = 1;
                     $result['api_message'] = 'success';
-                    if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
-                        $result['api_authorization'] = $debug_mode_message;
-                    }
+
                 } catch (\Exception $e) {
                     $result['api_status'] = 0;
                     $result['api_message'] = 'failed, '.$e;
                     
-                    if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
-                        $result['api_authorization'] = $debug_mode_message;
-                    }
+
                 }
             }
 
@@ -661,9 +633,6 @@ class ApiController extends Controller
         $result['api_status'] = $this->hook_api_status ?: $result['api_status'];
         $result['api_message'] = $this->hook_api_message ?: $result['api_message'];
 
-        if (CRUDBooster::getSetting('api_debug_mode') == 'true') {
-            $result['api_authorization'] = $debug_mode_message;
-        }
 
         $this->hook_after($posts, $result);
         if($this->output) return response()->json($this->output);

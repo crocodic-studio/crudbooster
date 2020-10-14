@@ -2,9 +2,9 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>{{ ($page_title)?Session::get('appname').': '.strip_tags($page_title):"Admin Area" }}</title>
+    <title>{{ ($page_title)?get_setting('appname').': '.strip_tags($page_title):"Admin Area" }}</title>
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
-    <meta name='generator' content='CRUDBooster 5.4.6'/>
+    <meta name='generator' content='CRUDBooster {{ \crocodicstudio\crudbooster\commands\CrudboosterVersionCommand::$version }}'/>
     <meta name='robots' content='noindex,nofollow'/>
     <link rel="shortcut icon"
           href="{{ CRUDBooster::getSetting('favicon')?asset(CRUDBooster::getSetting('favicon')):asset('vendor/crudbooster/assets/logo_crudbooster.png') }}">
@@ -25,7 +25,7 @@
         <link href="{{ asset("vendor/crudbooster/assets/rtl.css")}}" rel="stylesheet" type="text/css"/>
     @endif
 
-    <link rel='stylesheet' href='{{asset("vendor/crudbooster/assets/css/main.css").'?r='.time()}}'/>
+    <link rel='stylesheet' href='{{asset("vendor/crudbooster/assets/css/main.css") }}'/>
 
     <!-- load css -->
     <style type="text/css">

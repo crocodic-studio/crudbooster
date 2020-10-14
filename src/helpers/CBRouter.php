@@ -3,6 +3,7 @@
 namespace crocodicstudio\crudbooster\helpers;
 
 
+use crocodicstudio\crudbooster\middlewares\CBAuthAPI;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
@@ -20,7 +21,13 @@ class CBRouter
     }
 
     private static function apiRoute() {
-        Route::group(['middleware' => ['api', '\crocodicstudio\crudbooster\middlewares\CBAuthAPI'], 'namespace' => 'App\Http\Controllers'], function () {
+        // API Authentication
+        Route::group(['middleware'=>['api'],'namespace'=>static::$cb_namespace], function() {
+            Route::post("api/get-token","ApiAuthorizationController@postGetToken");
+        });
+
+        Route::group(['middleware' => ['api', CBAuthAPI::class], 'namespace' => 'App\Http\Controllers'], function () {
+
             $dir = scandir(base_path("app/Http/Controllers"));
             foreach ($dir as $v) {
                 $v = str_replace('.php', '', $v);
@@ -32,6 +39,7 @@ class CBRouter
                     Route::any('api/'.$names, $v.'@execute_api');
                 }
             }
+
         });
     }
 

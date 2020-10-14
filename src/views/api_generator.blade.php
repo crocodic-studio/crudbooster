@@ -67,6 +67,11 @@
 
                         $('#tipe_action').change(function () {
                             var v = $(this).val();
+
+                            if(v == "save_edit" || v == "delete") {
+                                $("#response-wrapper").hide();
+                            }
+
                             $('.method_type').prop('checked', false);
                             switch (v) {
                                 case 'list':
@@ -80,6 +85,7 @@
                                     break;
                             }
                         })
+
 
                         $(document).on('click', '.tr-response', function () {
                             console.log('tr response clicked');
@@ -731,67 +737,61 @@
                     </div>
                 </div>
 
-                <div class='form-group'>
-                    <label>SQL Where Query (Optional)</label>
-                    <textarea name='sql_where' rows='3' class='form-control' placeholder="status = [paramStatus]">{{$row->sql_where}}</textarea>
-                    <div class='help-block'>Use [paramName] to get the parameter value. e.g : [id] or [email]. Do not use quotes or HTML entities.<br>Password
-                        parameters <strong>cannot</strong> be used.
-                    </div>
-                </div>
-
-                <div class='form-group'>
-                    <div class='clearfix'>
-                        <label><i class='fa fa-cog'></i> Response</label>
-                        <a class='pull-right btn btn-xs btn-primary' href='javascript:void(0)' onclick='load_response()'><i class='fa fa-refresh'></i> Reset</a>
-                    </div>
-                    <div id='response'>
-                        <table id='table-response' class='table table-striped table-bordered'>
-                            <thead>
-                            <tr>
-                                <th width="3%">No</th>
-                                <th>Name</th>
-                                <th>Type</th>
-                                <th>Sub Query</th>
-                                <th width="8%">Enable</th>
-                                <th width="3%">-</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr class='row-no-data'>
-                                <td colspan='7'>There is no data</td>
-                            </tr>
-                            </tbody>
-                            <tfoot style="display:none">
-                            <tr class='tr-additional'>
-                                <td>#</td>
-                                <td width="20%"><input placeholder='E.g : grand_total' name='responses_name[]' class='form-control' type='text'/>
-                                    <small>Enter alias name</small>
-                                </td>
-                                <td>
-                                    <select class='form-control' name='responses_type[]'>
-                                        <option value='integer'>Integer</option>
-                                        <option value='boolean'>Boolean</option>
-                                        <option value='string'>String</option>
-                                        <option value='file'>File</option>
-                                        <option value='date'>Date</option>
-                                        <option value='datetime'>DateTime</option>
-                                        <option value='double'>Double</option>
-                                        <option value='custom'>Custom (Not in Table)</option>
-                                    </select>
-                                </td>
-                                <td><input placeholder="E.g : select sum(total) from order_detail where id_order = order.id" name='responses_subquery[]'
-                                           class='form-control' type='text'>
-                                    <small>Enter sub query without alias name</small>
-                                </td>
-                                <td><select class='form-control responses_used' name='responses_used[]'>
-                                        <option value='1'>YES</option>
-                                        <option value='0'>NO</option>
-                                    </select></td>
-                                <td class='col-delete'><a class='btn btn-primary' href='javascript:void(0)' onclick='addResponse()'><i
-                                                class='fa fa-plus'></i></a></td>
-                            </tr>
-                            </tfoot>
-                        </table>
+                <div id="response-wrapper" style="display: {{ isset($row)&&in_array($row->aksi,['save_edit','delete'])?"none":"block" }}">
+                    <div class='form-group'>
+                        <div class='clearfix'>
+                            <label><i class='fa fa-cog'></i> Response</label>
+                            <a class='pull-right btn btn-xs btn-primary' href='javascript:void(0)' onclick='load_response()'><i class='fa fa-refresh'></i> Reset</a>
+                        </div>
+                        <div id='response'>
+                            <table id='table-response' class='table table-striped table-bordered'>
+                                <thead>
+                                <tr>
+                                    <th width="3%">No</th>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Sub Query</th>
+                                    <th width="8%">Enable</th>
+                                    <th width="3%">-</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class='row-no-data'>
+                                    <td colspan='7'>There is no data</td>
+                                </tr>
+                                </tbody>
+                                <tfoot style="display:none">
+                                <tr class='tr-additional'>
+                                    <td>#</td>
+                                    <td width="20%"><input placeholder='E.g : grand_total' name='responses_name[]' class='form-control' type='text'/>
+                                        <small>Enter alias name</small>
+                                    </td>
+                                    <td>
+                                        <select class='form-control' name='responses_type[]'>
+                                            <option value='integer'>Integer</option>
+                                            <option value='boolean'>Boolean</option>
+                                            <option value='string'>String</option>
+                                            <option value='file'>File</option>
+                                            <option value='date'>Date</option>
+                                            <option value='datetime'>DateTime</option>
+                                            <option value='double'>Double</option>
+                                            <option value='custom'>Custom (Not in Table)</option>
+                                        </select>
+                                    </td>
+                                    <td><input placeholder="E.g : select sum(total) from order_detail where id_order = order.id" name='responses_subquery[]'
+                                               class='form-control' type='text'>
+                                        <small>Enter sub query without alias name</small>
+                                    </td>
+                                    <td><select class='form-control responses_used' name='responses_used[]'>
+                                            <option value='1'>YES</option>
+                                            <option value='0'>NO</option>
+                                        </select></td>
+                                    <td class='col-delete'><a class='btn btn-primary' href='javascript:void(0)' onclick='addResponse()'><i
+                                                    class='fa fa-plus'></i></a></td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
