@@ -85,6 +85,18 @@ if(!function_exists('now')) {
 |
 */
 
+if(!function_exists('get_setting')) {
+    /**
+     * @param $key
+     * @param null $default
+     * @return bool
+     */
+    function get_setting($key, $default = null) {
+        $setting = \crocodicstudio\crudbooster\helpers\CB::getSetting($key);
+        return $setting || $default;
+    }
+}
+
 if(!function_exists('str_random')) {
     function str_random($length = 16) {
         return \Illuminate\Support\Str::random($length);

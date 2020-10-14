@@ -33,7 +33,7 @@ class AdminController extends CBController
     public function postUnlockScreen()
     {
         $id = CRUDBooster::myId();
-        $password = Request::input('password');
+        $password = request('password');
         $users = DB::table(config('crudbooster.USER_TABLE'))->where('id', $id)->first();
 
         if (\Hash::check($password, $users->password)) {
@@ -88,7 +88,7 @@ class AdminController extends CBController
             Session::put('admin_privileges_name', $priv->name);
             Session::put('admin_lock', 0);
             Session::put('theme_color', $priv->theme_color);
-            Session::put("appname", CRUDBooster::getSetting('appname'));
+            Session::put("appname", get_setting('appname'));
 
             CRUDBooster::insertLog(cbLang("log_login", ['email' => $users->email, 'ip' => Request::server('REMOTE_ADDR')]));
 

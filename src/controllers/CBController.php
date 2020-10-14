@@ -4,6 +4,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 
 
 use CB;
+use crocodicstudio\crudbooster\export\DefaultExportXls;
 use CRUDBooster;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
@@ -660,22 +661,11 @@ class CBController extends Controller
                 return $pdf->stream($filename.'.pdf');
                 break;
             case 'xls':
-                Excel::create($filename, function ($excel) use ($response, $filename, $paperorientation) {
-                    $excel->setTitle($filename)->setCreator("crudbooster.com")->setCompany(CRUDBooster::getSetting('appname'));
-                    $excel->sheet($filename, function ($sheet) use ($response, $paperorientation) {
-                        $sheet->setOrientation($paperorientation);
-                        $sheet->loadview('crudbooster::export', $response);
-                    });
-                })->export('xls');
+                return Excel::download(new DefaultExportXls($response),$filename.".xls");
                 break;
             case 'csv':
-                Excel::create($filename, function ($excel) use ($response, $filename, $paperorientation) {
-                    $excel->setTitle($filename)->setCreator("crudbooster.com")->setCompany(CRUDBooster::getSetting('appname'));
-                    $excel->sheet($filename, function ($sheet) use ($response, $paperorientation) {
-                        $sheet->setOrientation($paperorientation);
-                        $sheet->loadview('crudbooster::export', $response);
-                    });
-                })->export('csv');
+
+                return Excel::download(new DefaultExportXls($response),$filename.".csv");
                 break;
         }
     }

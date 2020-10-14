@@ -26,6 +26,6 @@ class CrudboosterVersionCommand extends Command
      */
     public function handle()
     {
-        $this->info("Version : 5.4.15");
+        $this->info("Version : 5.5.0");
     }
 }
