@@ -49,11 +49,6 @@ $ composer require crocodicstudio/crudbooster=^5.5
 $ php artisan crudbooster:update
 ```
 
-## If you have an issue about broken file upload then you need to run:
-```php
-$ php artisan crudbooster:update
-```
-
 ## Backend URL
 ```php
 /admin/login
