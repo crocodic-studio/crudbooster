@@ -1142,13 +1142,13 @@ class CBController extends Controller
 
         $this->hook_before_add($this->arr);
 
-//         $this->arr[$this->primary_key] = $id = CRUDBooster::newId($this->table); //error on sql server
         $lastInsertId = $id = DB::table($this->table)->insertGetId($this->arr);
         
         //fix bug if primary key is uuid
-        if($this->arr[$this->primary_key]!=$id)
+        if(isset($this->arr[$this->primary_key]) && $this->arr[$this->primary_key]!=$id) {
             $id = $this->arr[$this->primary_key];
-        
+        }
+
         //Looping Data Input Again After Insert
         foreach ($this->data_inputan as $ro) {
             $name = $ro['name'];
