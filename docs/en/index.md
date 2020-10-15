@@ -1,7 +1,6 @@
 # CRUDBooster Documentation 
 ## Table Of Contents
 - [How To Install/Update](./installation.md)
-- [How To Fix File Upload Broken](./installation.md)
 - [How To Create A Module (CRUD)](./how-to-create-module.md)
 - **Grid Data Column Section**
   - [How To Add Column In Grid Data](./how-to-add-column.md)
@@ -25,7 +24,6 @@
     - [date](./form-date.md)
     - [datetime](./form-datetime.md)
     - [email](./form-email.md)
-    - [filemanager](./form-filemanager.md)
     - [googlemaps](./form-googlemaps.md)
     - [hidden](./form-hidden.md)
     - [money](./form-money.md)
