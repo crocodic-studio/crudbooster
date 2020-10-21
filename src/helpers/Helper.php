@@ -9,6 +9,19 @@
 |
 */
 
+
+if(!function_exists('ends_with')) {
+    /**
+     * Laravel ends_with alternative
+     * @param $text
+     * @param $need
+     * @return bool
+     */
+    function ends_with($text, $need) {
+        return \Illuminate\Support\Str::endsWith($text, $need);
+    }
+}
+
 if(!function_exists('cbLang')) {
     /**
      * @param $key
