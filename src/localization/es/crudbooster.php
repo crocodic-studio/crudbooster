@@ -181,7 +181,7 @@ return [
     'login_register_style' => 'Estilo de página de registro',
     'email_setting' => 'Ajustes de Correo',
     'application_setting' => 'Ajustes de Aplicaciones',
-    // table filter & sort 
+    // table filter & sort
     'filter_select_operator_type' => 'Selecciona el tipo de operador',
     'filter_ascending' => 'Ascendentemente',
     'filter_descending' => 'Descendentemente',
@@ -192,10 +192,11 @@ return [
     'filter_less_than_or_equal' => '<= (Menor o Igual que)',
     'filter_less_than' => '< (Menor que)',
     'filter_greater_than' => '> (Mayor que)',
-    'filter_not_equal_to' => '!= (Deferente de)',
+    'filter_not_equal_to' => '!= (Diferente de)',
     'filter_in' => 'Incluye',
     'filter_not_in' => 'No Incluye',
     'filter_between' => 'Entre',
+    'filter_empty_or_null' => 'Empty ( or Null)',
     'filter_sort_ascending' => 'Ordenar Ascendentemente',
     'filter_sort_descending' => 'Ordenar Descendentemente',
     'filter_eg' => 'Ej.:',
@@ -204,7 +205,7 @@ return [
     'filter_search' => 'Buscar',
     'filter_from' => 'Desde',
     'filter_to' => 'Hasta',
-    'filter_sorting' => 'Sorting',
+    'filter_sorting' => '** Ordenando',
     'filter_rows_total' => 'Total de registros',
     'filter_rows_to' => 'a',
     'filter_rows_of' => 'de',
@@ -245,7 +246,7 @@ return [
 
     'datamodal_browse_file' => 'Escoger Archivo',
 
-    //child 
+    //child
     'table_detail' => 'Tabla de Detalles',
     'your_file_size_is_too_big' => 'El tamaño del archivo es demasiado grande',
     'save_changes' => 'Guardar Cambios',

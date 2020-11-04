@@ -348,9 +348,7 @@ $total = $result->total();
                                                     {{ (CRUDBooster::getTypeFilter($col["field_with"]) == 'not in')?"selected":"" }} value='not in'>{{cbLang("filter_not_in")}}</option>
                                             @if(in_array($col['type_data'],['date','time','datetime','int','integer','smallint','tinyint','mediumint','bigint','double','float','decimal','timestamp']))
                                                 <option {{ (CRUDBooster::getTypeFilter($col["field_with"]) == 'between')?"selected":"" }} value='between'>{{cbLang("filter_between")}}</option>@endif
-                                            <option {{ (CRUDBooster::getTypeFilter($col["field_with"]) == 'empty')?"selected":"" }} value='empty'>Empty ( or
-                                                Null)
-                                            </option>
+                                            <option {{ (CRUDBooster::getTypeFilter($col["field_with"]) == 'empty')?"selected":"" }} value='empty'>{{cbLang("filter_empty_or_null")}}</option>
                                         </select>
                                     </div><!--END COL_SM_4-->
 
@@ -397,7 +395,7 @@ $total = $result->total();
 
                                     <div class='col-sm-2'>
                                         <select class='form-control' name='filter_column[{{$col["field_with"]}}][sorting]'>
-                                            <option value=''>** Sorting</option>
+                                            <option value=''>{{cbLang("filter_sorting")}}</option>
                                             <option {{ (CRUDBooster::getSortingFilter($col["field_with"]) == 'asc')?"selected":"" }} value='asc'>{{cbLang("filter_ascending")}}</option>
                                             <option {{ (CRUDBooster::getSortingFilter($col["field_with"]) == 'desc')?"selected":"" }} value='desc'>{{cbLang("filter_descending")}}</option>
                                         </select>

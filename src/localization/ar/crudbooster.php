@@ -203,6 +203,7 @@ return [
     'filter_in' => 'ضمن',
     'filter_not_in' => 'ليس ضمن',
     'filter_between' => 'بين',
+    'filter_empty_or_null' => 'Empty ( or Null)',
     'filter_sort_ascending' => 'فرز تصاعدي',
     'filter_sort_descending' => 'فرز تنازلي',
     'filter_eg' => 'مثال',
@@ -244,7 +245,7 @@ return [
     'datamodal_browse_data' => 'استعراض البيانات',
     'datamodal_browse_file' => 'استعراض الملف',
 
-    //child 
+    //child
     'table_detail' => 'تفاصيل الجدول',
     'your_file_size_is_too_big' => 'حجم الملف كبير جدا',
     'save_changes' => 'حفظ التغييرات',
