@@ -78,6 +78,10 @@
         .form-group > label:first-child {
             display: block
         }
+
+        #table_dashboard.table-bordered, #table_dashboard.table-bordered thead tr th, #table_dashboard.table-bordered tbody tr td {
+            border: 1px solid #bbbbbb !important;
+        }
     </style>
 
     @stack('head')
