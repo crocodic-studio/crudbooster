@@ -75,14 +75,14 @@ class ApiController extends Controller
         | ----------------------------------------------
         |
         */
-        
+
         if ($row_api->method_type) {
             $method_type = $row_api->method_type;
             if ($method_type) {
                 if (! Request::isMethod($method_type)) {
                     $result['api_status'] = 0;
                     $result['api_message'] = "The requested method is not allowed!";
-                    goto show;            
+                    goto show;
                 }
             }
         }
@@ -96,12 +96,12 @@ class ApiController extends Controller
         if (! $row_api) {
             $result['api_status'] = 0;
             $result['api_message'] = 'Sorry this API endpoint is no longer available or has been changed. Please make sure endpoint is correct.';
-            
+
             goto show;
         }
 
         @$parameters = unserialize($row_api->parameters);
-        @$responses = unserialize($row_api->responses);    
+        @$responses = unserialize($row_api->responses);
 
         /*
         | ----------------------------------------------
@@ -118,7 +118,7 @@ class ApiController extends Controller
             foreach ($parameters as $param) {
                 $name = $param['name'];
                 $type = $param['type'];
-                $value = $posts[$name];                
+                $value = $posts[$name];
 
                 $required = $param['required'];
                 $config = $param['config'];
@@ -175,7 +175,7 @@ class ApiController extends Controller
                     $format_validation[] = 'image';
                     $input_validator[$name] = Request::file($name);
                 } elseif ($type == 'file') {
-                    $format_validation[] = 'file';                    
+                    $format_validation[] = 'file';
                     $input_validator[$name] = Request::file($name);
                 } else {
                     if (! in_array($type, $type_except)) {
@@ -188,11 +188,11 @@ class ApiController extends Controller
                     $table_exist_pk = CRUDBooster::pk($table_exist);
                     $format_validation[] = 'exists:'.$table_exist.','.$table_exist_pk;
                 }
-                
+
                 if (count($format_validation)) {
                     $data_validation[$name] = implode('|', $format_validation);
                 }
-            }        
+            }
 
             $validator = Validator::make($input_validator, $data_validation);
             if ($validator->fails()) {
@@ -200,7 +200,7 @@ class ApiController extends Controller
                 $message = implode(', ', $message);
                 $result['api_status'] = 0;
                 $result['api_message'] = $message;
-                
+
                 goto show;
             }
         }
@@ -213,7 +213,7 @@ class ApiController extends Controller
         }
 
         $this->hook_before($posts);
-        if($this->output) {            
+        if($this->output) {
             return response()->json($this->output);
         }
 
@@ -236,9 +236,9 @@ class ApiController extends Controller
                 $data->skip($offset);
             }
             if($limit) {
-                $data->take($limit);    
+                $data->take($limit);
             }
-            
+
             foreach ($responses as $resp) {
                 $name = $resp['name'];
                 $type = $resp['type'];
@@ -486,7 +486,7 @@ class ApiController extends Controller
                     $result['api_message'] = 'success';
 
                     $rows = (array) $rows;
-                    $result = array_merge($result, $rows);
+                    $result['data'] = $rows;
                 } else {
                     $result['api_status'] = 0;
                     $result['api_message'] = 'There is no data found !';
@@ -583,7 +583,7 @@ class ApiController extends Controller
                 $result['api_status'] = ($id) ? 1 : 0;
                 $result['api_message'] = ($id) ? 'success' : 'failed';
 
-                $result['id'] = $id;
+                $result['data']['id'] = $id;
                 $lastId = $id;
             } else {
 
@@ -608,7 +608,7 @@ class ApiController extends Controller
                 } catch (\Exception $e) {
                     $result['api_status'] = 0;
                     $result['api_message'] = 'failed, '.$e;
-                    
+
 
                 }
             }
@@ -638,10 +638,10 @@ class ApiController extends Controller
         if($this->output) return response()->json($this->output);
 
         if($output == 'JSON') {
-            return response()->json($result, 200);    
+            return response()->json($result, 200);
         }else{
             return $result;
-        }        
+        }
     }
 
     protected function isJSON($theData)
