@@ -191,7 +191,7 @@ return [
     'email_setting' => '邮箱设置',
     'application_setting' => '应用设置',
 
-    // table filter & sort 
+    // table filter & sort
     'filter_select_operator_type' => '选择',
     'filter_ascending' => '顺序',
     'filter_descending' => '倒序',
@@ -206,6 +206,7 @@ return [
     'filter_in' => '包含',
     'filter_not_in' => '不包含',
     'filter_between' => '日期或数字区间',
+    'filter_empty_or_null' => 'Empty ( or Null)',
     'filter_sort_ascending' => '顺序排列',
     'filter_sort_descending' => '倒序排列',
     'filter_eg' => '例如',
@@ -245,7 +246,7 @@ return [
     'privileges_module_list_update' => '更新',
     'privileges_module_list_delete' => '删除',
 
-    //datamodal 
+    //datamodal
     'datamodal_select' => '选择',
     'datamodal_search_and_enter' => '查询并进入...',
     'datamodal_enter_to_search' => '进入查询',

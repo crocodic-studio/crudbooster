@@ -193,7 +193,7 @@ return [
     'email_setting' => 'Email Setting',
     'application_setting' => 'Application Setting',
 
-    // table filter & sort 
+    // table filter & sort
     'filter_select_operator_type' => 'Select Operator Type',
     'filter_ascending' => 'ASCENDING',
     'filter_descending' => 'DESCENDING',
@@ -208,6 +208,7 @@ return [
     'filter_in' => 'IN',
     'filter_not_in' => 'NOT IN',
     'filter_between' => 'BETWEEN',
+    'filter_empty_or_null' => 'Empty ( or Null)',
     'filter_sort_ascending' => 'Sort ascending',
     'filter_sort_descending' => 'Sort Descending',
     'filter_eg' => 'e.g',
@@ -251,14 +252,14 @@ return [
     'privileges_module_list_update' => 'Update',
     'privileges_module_list_delete' => 'Delete',
 
-    //datamodal 
+    //datamodal
     'datamodal_select' => 'Select',
     'datamodal_search_and_enter' => 'Search and enter...',
     'datamodal_enter_to_search' => 'Enter to search',
     'datamodal_browse_data' => 'Browse Data',
     'datamodal_browse_file' => 'Browse File',
 
-    //child 
+    //child
     'table_detail' => 'Table Detail',
     'your_file_size_is_too_big' => 'Your file size is too big',
     'save_changes' => 'Save Changes',

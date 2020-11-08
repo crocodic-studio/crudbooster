@@ -28,9 +28,9 @@ return [
     'message_forgot_password' => 'Enviamos nova senha para seu e-mail, verifique a caixa de entrada ou de spam!',
     'page_not_found' => 'Oops! Página não encontrada',
     'page_not_found_text' => 'Não foi possível pesquisar na página que você está procurando.',
-    'page_not_found_tips' => '* Verifique se o URL está correto<br/> 
-                * Certifique-se de que a capitalização correta, pois é sensível a maiúsculas e minúsculas<br/> 
-                * Talvez a página que você está procurando tenha sido excluída pelo Administrador<br/> 
+    'page_not_found_tips' => '* Verifique se o URL está correto<br/>
+                * Certifique-se de que a capitalização correta, pois é sensível a maiúsculas e minúsculas<br/>
+                * Talvez a página que você está procurando tenha sido excluída pelo Administrador<br/>
                 * Você pode voltar clicando no botão Voltar no navegador<br/>',
     'log_try_view' => 'Tente visualizar o conteúdo de :name em :module',
     'log_try_edit' => 'Tente editar o conteúdo de :name em :module',
@@ -190,6 +190,7 @@ return [
     'filter_in' => 'IN',
     'filter_not_in' => 'NOT IN',
     'filter_between' => 'BETWEEN',
+    'filter_empty_or_null' => 'Empty ( or Null)',
     'filter_sort_ascending' => 'Ordernação ascendente',
     'filter_sort_descending' => 'Ordernação descendente',
     'filter_eg' => 'ex.',
@@ -237,7 +238,7 @@ return [
     'datamodal_browse_data' => 'Browse Data',
     'datamodal_browse_file' => 'Browse File',
 
-    //child 
+    //child
     'table_detail' => 'Table Detail',
     'your_file_size_is_too_big' => 'Your file size is too big',
     'save_changes' => 'Save Changes',

@@ -192,7 +192,7 @@ return [
     'email_setting' => 'Email Ayarları',
     'application_setting' => 'Uygulama Ayarları',
 
-    // table filter & sort 
+    // table filter & sort
     'filter_select_operator_type' => 'Karşılaştırma Türü Seçiniz',
     'filter_ascending' => 'ARTAN',
     'filter_descending' => 'AZALAN',
@@ -207,6 +207,7 @@ return [
     'filter_in' => 'İçeriyorsa',
     'filter_not_in' => 'İçermiyorsa',
     'filter_between' => 'Arasında',
+    'filter_empty_or_null' => 'Empty ( or Null)',
     'filter_sort_ascending' => 'Artan Sıralama',
     'filter_sort_descending' => 'Azalan Sıralama',
     'filter_eg' => 'örnek ',
@@ -253,7 +254,7 @@ return [
     'datamodal_browse_data' => 'Gözat',
     'datamodal_browse_file' => 'Dosyaya Gözat',
 
-    //child 
+    //child
     'table_detail' => 'Tablo ',
     'your_file_size_is_too_big' => 'Dosya boyutu büyük.',
     'save_changes' => 'Değişikleri Kaydet',
