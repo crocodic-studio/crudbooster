@@ -163,8 +163,7 @@ class MenusController extends CBController
             "name" => "name",
             "type" => "text",
             "required" => true,
-            "validation" => "required|min:3|max:255",
-            "placeholder" => "You can only enter alphanumeric character and spaces only",
+            "validation" => "required|min:3|max:255"
         ];
         $this->form[] = [
             "label" => "Type",
@@ -296,7 +295,7 @@ class MenusController extends CBController
 
         if ($postdata['is_dashboard'] == 1) {
             //If set dashboard, so unset for first all dashboard
-            DB::table('cms_menus')->where('id_cms_privileges', $postdata['id_cms_privileges'])->where('is_dashboard', 1)->update(['is_dashboard' => 0]);
+            //DB::table('cms_menus')->where('id_cms_privileges', $postdata['id_cms_privileges'])->where('is_dashboard', 1)->update(['is_dashboard' => 0]);
             Cache::forget('sidebarDashboard'.CRUDBooster::myPrivilegeId());
         }
     }
@@ -306,7 +305,7 @@ class MenusController extends CBController
 
         if ($postdata['is_dashboard'] == 1) {
             //If set dashboard, so unset for first all dashboard
-            DB::table('cms_menus')->where('id_cms_privileges', $postdata['id_cms_privileges'])->where('is_dashboard', 1)->update(['is_dashboard' => 0]);
+            //DB::table('cms_menus')->where('id_cms_privileges', $postdata['id_cms_privileges'])->where('is_dashboard', 1)->update(['is_dashboard' => 0]);
             Cache::forget('sidebarDashboard'.CRUDBooster::myPrivilegeId());
         }
 
