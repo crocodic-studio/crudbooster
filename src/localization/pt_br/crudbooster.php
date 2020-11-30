@@ -131,7 +131,7 @@ return [
     'Add_New_Privilege' => 'Adicionar novo Privilégio',
     'List_Privilege' => 'Listar Privilégios',
     'add_user' => 'Adicionar Usuário',
-    'List_users' => 'Listar Uusário',
+    'List_users' => 'Listar Usuário',
     'Menu_Management' => 'Gestão de menus',
     'Add_New_Setting' => 'Adicionar Nova Configuração',
     'Add_New_Module' => 'Adicionar Novo Modulo',
