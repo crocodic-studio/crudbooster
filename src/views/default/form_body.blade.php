@@ -58,8 +58,8 @@ if ($join && @$row) {
     array_walk($join_arr, 'trim');
     $join_table = $join_arr[0];
     $join_title = $join_arr[1];
-    $join_query_{$join_table} = DB::table($join_table)->select($join_title)->where("id", $row->{'id_'.$join_table})->first();
-    $value = @$join_query_{$join_table}->{$join_title};
+    $join_query_[$join_table] = DB::table($join_table)->select($join_title)->where("id", $row->{'id_'.$join_table})->first();
+    $value = @$join_query_[$join_table]->{$join_title};
 }
 $form['type'] = ($form['type']) ?: 'text';
 $type = @$form['type'];
