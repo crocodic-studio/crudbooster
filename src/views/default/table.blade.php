@@ -24,7 +24,8 @@
 
                 swal({
                         title: "{{cbLang("confirmation_title")}}",
-                        text: "{{cbLang("alert_bulk_action_button")}} " + title + " ?",
+                        text: "{{cbLang("alert_bulk_action_button")}} " + title + " 
+			",
                         type: "warning",
                         showCancelButton: true,
                         confirmButtonColor: "#008D4C",
@@ -65,8 +66,8 @@
                 $colname = $col['label'];
                 $name = $col['name'];
                 $field = $col['field_with'];
-                $width = ($col['width']) ?: "auto";
-				$style = ($col['style']) ?: "";
+                $width = (isset($col['width'])) ?$col['width']: "auto";
+		$style = (isset($col['style'])) ?$col['style']: "";
                 $mainpath = trim(CRUDBooster::mainpath(), '/').$build_query;
                 echo "<th width='$width' $style>";
                 if (isset($sort_column[$field])) {
@@ -95,7 +96,7 @@
 
             @if($button_table_action)
                 @if(CRUDBooster::isUpdate() || CRUDBooster::isDelete() || CRUDBooster::isRead())
-                    <th width='{{$button_action_width?:"auto"}}' style="text-align:right">{{cbLang("action_label")}}</th>
+                    <th width='{{ isset($button_action_width)? $button_action_width :"auto"}}' style="text-align:right">{{cbLang("action_label")}}</th>
                 @endif
             @endif
         </tr>
@@ -161,8 +162,8 @@
             foreach ($columns as $col) {
                 if ($col['visible'] === FALSE) continue;
                 $colname = $col['label'];
-                $width = ($col['width']) ?: "auto";
-				$style = ($col['style']) ?: "";
+                $width = (isset($col['width'])) ?$col['width']: "auto";
+		$style = (isset($col['style'])) ? $col['style']: "";
                 echo "<th width='$width' $style>$colname</th>";
             }
             ?>
@@ -414,7 +415,7 @@ $total = $result->total();
                             <button class="btn btn-primary btn-submit" type="submit">{{cbLang("button_submit")}}</button>
                         </div>
                         {!! CRUDBooster::getUrlParameters(['filter_column','lasturl']) !!}
-                        <input type="hidden" name="lasturl" value="{{Request::get('lasturl')?:Request::fullUrl()}}">
+                        <input type="hidden" name="lasturl" value="{{Request::get('lasturl')?Request::get('lasturl'):Request::fullUrl()}}">
                     </form>
                 </div>
                 <!-- /.modal-content -->
