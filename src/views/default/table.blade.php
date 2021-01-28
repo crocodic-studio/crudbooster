@@ -368,12 +368,14 @@ $total = $result->total();
                                                     <input
                                                             {{ (CRUDBooster::getTypeFilter($col["field_with"]) != 'between')?"disabled":"" }}
                                                             type='text'
-                                                            class='filter-value-between form-control {{ (in_array($col["type_data"],["date","datetime","timestamp"]))?"datepicker":(in_array($col["type_data"],["time"]))?"timepicker":"" }}'
-                                                            {{ (in_array($col["type_data"],["date","datetime","timestamp","time"]))?"readonly":"" }} placeholder='{{$col["label"]}} {{cbLang("filter_from")}}'
-                                                            name='filter_column[{{$col["field_with"]}}][value][]' value='<?php
-                                                    $value = CRUDBooster::getValueFilter($col["field_with"]);
-                                                    echo (CRUDBooster::getTypeFilter($col["field_with"]) == 'between') ? $value[0] : "";
-                                                    ?>'>
+                                                            class='filter-value-between form-control {{ in_array($col["type_data"],["date","datetime","timestamp"]) ? "datepicker" : (in_array($col["type_data"],["time"])) ? "timepicker" : "" }}'
+                                                            {{ in_array($col["type_data"],["date","datetime","timestamp","time"]) ? "readonly" : "" }}
+                                                            placeholder='{{$col["label"]}} {{cbLang("filter_from")}}'
+                                                            name='filter_column[{{$col["field_with"]}}][value][]' 
+                                                            value='<?php
+                                                                $value = CRUDBooster::getValueFilter($col["field_with"]);
+                                                                echo (CRUDBooster::getTypeFilter($col["field_with"]) == 'between') ? $value[0] : "";
+                                                            ?>'>
                                                 </div>
                                             </div>
                                             <div class='col-sm-6'>
@@ -382,12 +384,14 @@ $total = $result->total();
                                                     <input
                                                             {{ (CRUDBooster::getTypeFilter($col["field_with"]) != 'between')?"disabled":"" }}
                                                             type='text'
-                                                            class='filter-value-between form-control {{ (in_array($col["type_data"],["date","datetime","timestamp"]))?"datepicker":(in_array($col["type_data"],["time"]))?"timepicker":"" }}'
-                                                            {{ (in_array($col["type_data"],["date","datetime","timestamp","time"]))?"readonly":"" }} placeholder='{{$col["label"]}} {{cbLang("filter_to")}}'
-                                                            name='filter_column[{{$col["field_with"]}}][value][]' value='<?php
-                                                    $value = CRUDBooster::getValueFilter($col["field_with"]);
-                                                    echo (CRUDBooster::getTypeFilter($col["field_with"]) == 'between') ? $value[1] : "";
-                                                    ?>'>
+                                                            class='filter-value-between form-control {{ in_array($col["type_data"],["date","datetime","timestamp"]) ? "datepicker" : (in_array($col["type_data"],["time"]) ? "timepicker" : "" )}}'
+                                                            {{ in_array($col["type_data"],["date","datetime","timestamp","time"]) ? "readonly": "" }}
+                                                            placeholder='{{$col["label"]}} {{cbLang("filter_to")}}'
+                                                            name='filter_column[{{$col["field_with"]}}][value][]'
+                                                            value='<?php
+                                                                $value = CRUDBooster::getValueFilter($col["field_with"]);
+                                                                echo (CRUDBooster::getTypeFilter($col["field_with"]) == 'between') ? $value[1] : "";
+                                                            ?>'>
                                                 </div>
                                             </div>
                                         </div>
