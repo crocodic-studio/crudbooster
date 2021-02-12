@@ -12,8 +12,8 @@ public function getAdd() {
   $data = [];
   $data['page_title'] = 'Add Data';
   
-  //Please use cbView method instead view method from laravel
-  $this->cbView('custom_add_view',$data);
+  //Please use view method instead view method from laravel
+  return $this->view('custom_add_view',$data);
 }
 ```
 
