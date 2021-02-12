@@ -13,8 +13,8 @@ public function getDetail($id) {
   $data['page_title'] = 'Detail Data';
   $data['row'] = DB::table('products')->where('id',$id)->first();
   
-  //Please use cbView method instead view method from laravel
-  $this->cbView('custom_detail_view',$data);
+  //Please use view method instead view method from laravel
+  return $this->view('custom_detail_view',$data);
 }
 ```
 
