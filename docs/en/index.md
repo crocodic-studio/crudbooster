@@ -50,3 +50,4 @@
 - [How To Make A Custom View Of Edit Method](./how-to-custom-edit-view.md)
 - [How To Make A Custom View Of Detail Method](./how-to-custom-detail-view.md)
 - [Helpers](./helpers.md)
+- [Secure Your Root Directory](./secure-root-directory.md)
