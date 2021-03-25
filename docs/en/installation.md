@@ -12,7 +12,7 @@ CRUDBooster is CRUD Generator for laravel, with the most important features web 
   - SQLite
   - SQL Server
 - Composer
-- Laravel 5.5 - 6.0
+- Laravel 6.* / 7.* / 8.*
 - Php 7.2 or higher and the extensions:
   - Mcrypt
   - OpenSSL
@@ -36,17 +36,6 @@ DB_PASSWORD=**password**
 3. Run the following command at the terminal
 ```php
 $ php artisan crudbooster:install
-```
-
-## Update
-Do not update your project directly, please making a backup before updating the CRUDBooster.
-- Open the terminal, navigate to your project directory.
-```php
-$ composer require crocodicstudio/crudbooster=^5.5
-```
-- Run the following command at the terminal
-```php
-$ php artisan crudbooster:update
 ```
 
 ## Backend URL
