@@ -162,7 +162,6 @@ class PrivilegesController extends CBController
                     DB::table('cms_privileges_roles')->where('id', $currentPermission->id)->update($arrs);
                 } else {
                     $arrs = [];
-                    $arrs['id'] = DB::table('cms_privileges_roles')->max('id') + 1;
                     $arrs['is_visible'] = @$data['is_visible'] ?: 0;
                     $arrs['is_create'] = @$data['is_create'] ?: 0;
                     $arrs['is_read'] = @$data['is_read'] ?: 0;

@@ -321,7 +321,6 @@ class ModulsController extends CBController
             }
 
             $created_at = now();
-            $id = DB::table($this->table)->max('id') + 1;
 
             $controller = CRUDBooster::generateController($table_name, $path);
             DB::table($this->table)->insert(compact("controller", "name", "table_name", "icon", "path", "created_at", "id"));
@@ -347,7 +346,6 @@ class ModulsController extends CBController
 
             $user_id_privileges = CRUDBooster::myPrivilegeId();
             DB::table('cms_privileges_roles')->insert([
-                'id' => DB::table('cms_privileges_roles')->max('id') + 1,
                 'id_cms_moduls' => $id,
                 'id_cms_privileges' => $user_id_privileges,
                 'is_visible' => 1,
@@ -677,15 +675,13 @@ class ModulsController extends CBController
         }
 
         $this->arr['created_at'] = date('Y-m-d H:i:s');
-        $this->arr['id'] = DB::table($this->table)->max('id') + 1;
         DB::table($this->table)->insert($this->arr);
 
         //Insert Menu
         if ($this->arr['controller']) {
             $parent_menu_sort = DB::table('cms_menus')->where('parent_id', 0)->max('sorting') + 1;
-            $parent_menu_id = DB::table('cms_menus')->max('id') + 1;
-            DB::table('cms_menus')->insert([
-                'id' => $parent_menu_id,
+//            $parent_menu_id = DB::table('cms_menus')->max('id') + 1;
+            $parent_menu_id = DB::table('cms_menus')->insertGetId([
                 'created_at' => date('Y-m-d H:i:s'),
                 'name' => $this->arr['name'],
                 'icon' => $this->arr['icon'],
@@ -697,7 +693,6 @@ class ModulsController extends CBController
                 'parent_id' => 0,
             ]);
             DB::table('cms_menus')->insert([
-                'id' => DB::table('cms_menus')->max('id') + 1,
                 'created_at' => date('Y-m-d H:i:s'),
                 'name' => cbLang("text_default_add_new_module", ['module' => $this->arr['name']]),
                 'icon' => 'fa fa-plus',
@@ -709,7 +704,6 @@ class ModulsController extends CBController
                 'parent_id' => $parent_menu_id,
             ]);
             DB::table('cms_menus')->insert([
-                'id' => DB::table('cms_menus')->max('id') + 1,
                 'created_at' => date('Y-m-d H:i:s'),
                 'name' => cbLang("text_default_list_module", ['module' => $this->arr['name']]),
                 'icon' => 'fa fa-bars',
@@ -726,7 +720,6 @@ class ModulsController extends CBController
 
         $user_id_privileges = CRUDBooster::myPrivilegeId();
         DB::table('cms_privileges_roles')->insert([
-            'id' => DB::table('cms_privileges_roles')->max('id') + 1,
             'id_cms_moduls' => $id_modul,
             'id_cms_privileges' => $user_id_privileges,
             'is_visible' => 1,

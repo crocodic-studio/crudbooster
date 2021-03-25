@@ -157,7 +157,6 @@ class CRUDBooster
 
     public static function insert($table, $data = [])
     {
-        $data['id'] = DB::table($table)->max('id') + 1;
         if (! $data['created_at']) {
             if (Schema::hasColumn($table, 'created_at')) {
                 $data['created_at'] = date('Y-m-d H:i:s');
