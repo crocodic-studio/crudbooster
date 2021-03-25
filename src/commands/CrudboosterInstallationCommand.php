@@ -98,10 +98,13 @@ class CrudboosterInstallationCommand extends Command
         $system_failed = 0;
         $laravel = app();
 
-        if ($laravel::VERSION >= 6 && $laravel::VERSION <= 8) {
-            $this->info('Laravel Version (>= 6): [Good]');
+        $this->info("Your laravel version: ".$laravel::VERSION);
+        $this->info("---");
+
+        if (version_compare($laravel::VERSION, "6.0", ">=")) {
+            $this->info('Laravel Version (>= 6.x): [Good]');
         } else {
-            $this->info('Laravel Version (>= 6): [Bad]');
+            $this->info('Laravel Version (>= 6.x): [Bad]');
             $system_failed++;
         }
 
@@ -162,9 +165,9 @@ class CrudboosterInstallationCommand extends Command
         }
 
         if (is_writable(base_path('public'))) {
-            $this->info('public dir is writable: [Good]');
+            $this->info('/public dir is writable: [Good]');
         } else {
-            $this->info('public dir is writable: [Bad]');
+            $this->info('/public dir is writable: [Bad]');
             $system_failed++;
         }
 
