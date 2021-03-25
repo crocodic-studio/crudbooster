@@ -368,7 +368,7 @@ $total = $result->total();
                                                     <input
                                                             {{ (CRUDBooster::getTypeFilter($col["field_with"]) != 'between')?"disabled":"" }}
                                                             type='text'
-                                                            class='filter-value-between form-control {{ in_array($col["type_data"],["date","datetime","timestamp"]) ? "datepicker" : (in_array($col["type_data"],["time"])) ? "timepicker" : "" }}'
+                                                            class='filter-value-between form-control {{ in_array($col["type_data"],["date","datetime","timestamp"]) ? "datepicker" : ((in_array($col["type_data"],["time"])) ? "timepicker" : "") }}'
                                                             {{ in_array($col["type_data"],["date","datetime","timestamp","time"]) ? "readonly" : "" }}
                                                             placeholder='{{$col["label"]}} {{cbLang("filter_from")}}'
                                                             name='filter_column[{{$col["field_with"]}}][value][]' 

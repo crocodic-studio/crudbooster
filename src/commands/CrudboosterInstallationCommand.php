@@ -57,11 +57,12 @@ class CrudboosterInstallationCommand extends Command
             $process->setWorkingDirectory(base_path())->run();
 
             $this->info('Migrating database...');
-            $this->call('migrate');
 
             if (! class_exists('CBSeeder')) {
                 require_once __DIR__.'/../database/seeds/CBSeeder.php';
             }
+
+            $this->call('migrate');
             $this->call('db:seed', ['--class' => 'CBSeeder']);
             $this->call('config:clear');
             if (app()->version() < 5.6) {

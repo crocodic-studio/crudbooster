@@ -50,10 +50,12 @@ class CRUDBoosterServiceProvider extends ServiceProvider
 
         $this->registerSingleton();
 
-        $this->commands('crudboosterinstall');
-        $this->commands('crudboosterupdate');
-        $this->commands('crudboosterVersionCommand');
-        $this->commands('crudboosterMailQueue');
+        if($this->app->runningInConsole()) {
+            $this->commands('crudboosterinstall');
+            $this->commands('crudboosterupdate');
+            $this->commands('crudboosterVersionCommand');
+            $this->commands('crudboosterMailQueue');
+        }
 
         $loader = AliasLoader::getInstance();
         $loader->alias('PDF', 'Barryvdh\DomPDF\Facade');
