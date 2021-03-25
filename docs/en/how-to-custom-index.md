@@ -12,8 +12,8 @@ public function getIndex() {
    $data['page_title'] = 'Products Data';
    $data['result'] = DB::table('products')->orderby('id','desc')->paginate(10);
     
-   //Create a view. Please use `cbView` method instead of view method from laravel.
-   $this->cbView('your_custom_view_index',$data);
+   //Create a view. Please use `view` method instead of view method from laravel.
+   return $this->view('your_custom_view_index',$data);
 }
 ```
 
