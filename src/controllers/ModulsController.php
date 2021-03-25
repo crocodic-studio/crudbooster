@@ -323,7 +323,7 @@ class ModulsController extends CBController
             $created_at = now();
 
             $controller = CRUDBooster::generateController($table_name, $path);
-            DB::table($this->table)->insert(compact("controller", "name", "table_name", "icon", "path", "created_at", "id"));
+            $id = DB::table($this->table)->insertGetId(compact("controller", "name", "table_name", "icon", "path", "created_at"));
 
             //Insert Menu
             if ($controller && Request::get('create_menu')) {
