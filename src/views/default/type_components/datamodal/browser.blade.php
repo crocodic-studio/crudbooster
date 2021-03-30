@@ -40,7 +40,7 @@ if (count($coloms_alias) < 2 && isset($columns)) {
                 if ($ext && in_array($ext, $img_extension)) {
                     echo "<td><a href='".asset($row->$col)."' data-lightbox='roadtrip'><img src='".asset($row->$col)."' width='50px' height='30px'/></a></td>";
                 } else {
-                    echo "<td>".str_limit(strip_tags($row->$col), 50)."</td>";
+                    echo "<td>".Str::of(strip_tags($row->$col))->limit(50)."</td>";
                 }
                 @endphp
             @endforeach
