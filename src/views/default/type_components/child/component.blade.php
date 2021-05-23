@@ -79,7 +79,7 @@ $name = str_slug($form['label'], '');
 
                                                     @push('bottom')
                                                         <script type="text/javascript">
-                                                            var url_{{$name_column}} = "{{CRUDBooster::mainpath('modal-data')}}?table={{$col['datamodal_table']}}&columns=id,{{$col['datamodal_columns']}}&name_column={{$name_column}}&where={{urlencode($col['datamodal_where'])}}&select_to={{ urlencode($col['datamodal_select_to']) }}&columns_name_alias={{urlencode($col['datamodal_columns_alias'])}}";
+                                                            var url_{{$name_column}} = "{{CRUDBooster::mainpath('modal-data')}}?table={{$col['datamodal_table']}}&columns=id,{{$col['datamodal_columns']}}&name_column={{$name_column}}&where={{urlencode($col['datamodal_where'])}}&select_to={{ urlencode($col['datamodal_select_to']) }}&columns_name_alias={{urlencode($col['datamodal_columns_alias'])}}&paginate={{urlencode($col['datamodal_paginate'])}}";
                                                             var url_is_setted_{{$name_column}} = false;
 
                                                             function showModal{{$name_column}}() {
@@ -121,7 +121,7 @@ $name = str_slug($form['label'], '');
                                                                     </h4>
                                                                 </div>
                                                                 <div class="modal-body">
-                                                                    <iframe id='iframe-modal-{{$name_column}}' style="border:0;height: 430px;width: 100%"
+                                                                    <iframe id='iframe-modal-{{$name_column}}' style="border:0;height:{{$col['datamodal_height']?: "430px"}};width: 100%"
                                                                             src=""></iframe>
                                                                 </div>
 
