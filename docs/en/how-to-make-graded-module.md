@@ -29,11 +29,11 @@ $this->sub_module[] = ['label'=>'Photos','path'=>'photos','parent_columns'=>'nam
 | label | Specify the label of sub module |
 | path | Specify the module path (slug) |
 | parent_columns | Specify the parent fields in this case Album Fields that you want to show. Sparate it with comma |
+| parent_columns_alias | Specify the parent field alias. Sparate it with comma |
 | foreign_key | Specify the Foreign Key Field of photos table |
 | button_color | Specify the color of button (primary,warning,success,info) |
 | button_icon | Specify the icon. You can find out at Font Awesome |
 | custom_parent_id | Specify the id field. |
-| custom_parent_alias | Specify the  field alias. |
 
 ## What's Next
 - [How To Implement A Many To Many Relationship To Form (E.g : Film -> R <- Actors)](./how-to-many-to-many.md)
