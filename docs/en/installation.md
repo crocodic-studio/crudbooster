@@ -21,9 +21,12 @@ CRUDBooster is CRUD Generator for laravel, with the most important features web 
   - FileInfo
 
 ## Installation
+
+0. Please make sure you have install laravel project, please follow [https://laravel.com/docs/8.x/installation](https://laravel.com/docs/8.x/installation)
+
 1. Open the terminal, navigate to your laravel project directory.
 ```php
-$ composer require crocodicstudio/crudbooster=5.5.*
+$ composer require crocodicstudio/crudbooster=5.6.*
 ```
 
 2. Setting the database configuration, open .env file at project root directory
