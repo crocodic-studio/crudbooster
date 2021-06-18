@@ -13,6 +13,8 @@ $this->form[] = ['label'=>'Product Name','name'=>'products_id','type'=>'datamoda
 | datamodal_columns_alias (Required) | E.g : `Name,Description,Price` | alias of fields |
 | datamodal_where | E.g : `id != 1` | Sql query where |
 | datamodal_size | E.g : `large` or `default` | popup size |
+| datamodal_height | E.g : `500px` | modal height |
+| datamodal_paginate | E.g : `10` | results pagination |
 
 ## What's Next
 - [Form Input Type: date](./form-date.md)
