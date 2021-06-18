@@ -1,5 +1,5 @@
 <?php
-//namespace Database\Seeders; Fix: Target class [CBSeeder] does not exist.
+namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;

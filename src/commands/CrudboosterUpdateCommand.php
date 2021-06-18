@@ -68,9 +68,6 @@ class CrudboosterUpdateCommand extends Command
         $this->info('Migrating database...');
         $this->call('migrate');
 
-        if (! class_exists('CBSeeder')) {
-            require_once __DIR__.'/../database/seeds/CBSeeder.php';
-        }
         $this->call('db:seed', ['--class' => 'CBSeeder']);
 
         $this->info('Clearing Cache...');
