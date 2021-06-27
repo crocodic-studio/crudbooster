@@ -81,6 +81,46 @@
                     </div><!--end-selected-action-->
                 </div><!--end-pull-left-->
             @endif
+            @if($button_date_filter)
+                <form method='get' action='{{Request::url()}}'>
+                    <input type="hidden" name="filter_column[{{$table}}.created_at][type]" value="between">
+                    <input type="hidden" name="last_url" value={{Request::fullurl()}}>
+                    <?php
+                    $filter=Request::get('filter_column');
+                    $key=$table.'.created_at';
+                    $value=$filter[$key]['value'];
+                    ?>
+                    <div class="col-sm-2 col-xs-5">
+                        <div class="input-group" >
+
+                                <span class="input-group-addon">
+                                    <a href="javascript:void(0)" onclick="$('#start_date').data('daterangepicker').toggle();">
+                                        <i class="fa fa-calendar"></i>
+                                    </a>
+                                </span>
+                            <input name="filter_column[{{$table}}.created_at][value][]" type="text" placeholder="Fecha Inicio" title="Fecha" readonly="" required="" class="form-control datetimepicker" id="start_date" value="{{$value[0]}}">
+                        </div>
+                    </div>
+                    <div class="col-sm-2 col-xs-5">
+                        <div class="input-group ">
+
+                                <span class="input-group-addon">
+                                    <a href="javascript:void(0)" onclick="$('#end_date').data('daterangepicker').toggle();">
+                                        <i class="fa fa-calendar"></i>
+                                    </a>
+                                </span>
+                            <input name="filter_column[{{$table}}.created_at][value][]" type="text" placeholder="Fecha Fin" title="Fecha" readonly="" required="" class="form-control datetimepicker" id="end_date" value="{{$value[1]}}">
+                        </div>
+                    </div>
+                    <div class="col-sm-2 col-xs-2">
+                        @if(!g("last_url"))
+                            <button type='submit' class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
+                        @else
+                            <a href={{urldecode(g("last_url"))}} class="btn btn-sm btn-danger"><i class="fa fa-ban"></i></a>
+                        @endif
+                    </div>
+                </form>
+            @endif
             <div class="box-tools pull-{{ cbLang('right') }}" style="position: relative;margin-top: -5px;margin-right: -10px">
 
                 @if($button_filter)
