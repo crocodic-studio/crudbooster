@@ -18,7 +18,7 @@
     <!-- Theme style -->
     <link href="{{ asset("vendor/crudbooster/assets/adminlte/dist/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css"/>
     <link href="{{ asset("vendor/crudbooster/assets/adminlte/dist/css/skins/_all-skins.min.css")}}" rel="stylesheet" type="text/css"/>
-
+    @include('vendor.crudbooster.admin.header')
     <!-- support rtl-->
     @if (in_array(App::getLocale(), ['ar', 'fa']))
         <link rel="stylesheet" href="//cdn.rawgit.com/morteza/bootstrap-rtl/v3.3.4/dist/css/bootstrap-rtl.min.css">
@@ -220,7 +220,7 @@
 </script>
 
 @stack('bottom')
-
+@include('vendor.crudbooster.admin.footer')
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
       Both of these plugins are recommended to enhance the
       user experience -->
