@@ -17,7 +17,7 @@
         $a['confirmation_closeOnConfirm'] = empty($a['confirmation_closeOnConfirm']) ? 'true' : 'false';
 
         $confirm_box = '
-        swal({   
+        swal({
             title: "'.$a['confirmation_title'].'",
             text: "'.$a['confirmation_text'].'",
             type: "'.$a['confirmation_type'].'",
@@ -25,8 +25,8 @@
             confirmButtonColor: "'.$a['confirmation_confirmButtonColor'].'",
             confirmButtonText: "'.$a['confirmation_confirmButtonText'].'",
             cancelButtonText: "'.$a['confirmation_cancelButtonText'].'",
-            closeOnConfirm: '.$a['confirmation_closeOnConfirm'].', }, 
-            function(){  location.href="'.$a['url'].'"});        
+            closeOnConfirm: '.$a['confirmation_closeOnConfirm'].', },
+            function(){  location.href="'.$a['url'].'"});
 
         ';
     }
@@ -42,7 +42,7 @@
     if (isset($confirmation) && ! empty($confirmation)) {
         $url = "javascript:;";
     }
-    if(isset($extra){
+    if(isset($extra)){
         foreach ($row as $key => $val) {
             $extra= str_replace("[".$key."]", '"'.$val.'"', $extra);
         }
