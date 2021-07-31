@@ -24,8 +24,7 @@
 
                 swal({
                         title: "{{cbLang("confirmation_title")}}",
-                        text: "{{cbLang("alert_bulk_action_button")}} " + title + " 
-			",
+                        text: "{{cbLang("alert_bulk_action_button")}} " + title + "?",
                         type: "warning",
                         showCancelButton: true,
                         confirmButtonColor: "#008D4C",
