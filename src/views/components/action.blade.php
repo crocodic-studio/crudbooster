@@ -54,12 +54,21 @@
         foreach ($row as $key => $val) {
             $query = str_replace("[".$key."]", '"'.$val.'"', $query);
         }
-
-        @eval("if($query) {
-          echo \"<a class='btn btn-xs btn-\$color' title='\$title' onclick='\$confirm_box' href='\$url' target='\$target' \$extra><i class='\$icon'></i> $label</a>&nbsp;\";
-      }");
+        if($button_action_style != 'dropdown'){
+            @eval("if($query) {
+            echo \"<a class='btn btn-xs btn-\$color' title='\$title' onclick='\$confirm_box' href='\$url' target='\$target' \$extra><i class='\$icon'></i> $label</a>&nbsp;\";
+            }");
+        }else{
+            @eval("if($query) {
+            echo \"<li title='\$title' onclick='\$confirm_box' href='\$url' target='\$target' \$extra><i class='\$icon'></i> $label</li>&nbsp;\";
+            }");
+        }
     } else {
-        echo "<a class='btn btn-xs btn-$color' title='$title' onclick='$confirm_box' href='$url' target='$target' $extra><i class='$icon'></i> $label</a>&nbsp;";
+        if($button_action_style != 'dropdown'){
+            echo "<a class='btn btn-xs btn-$color' title='$title' onclick='$confirm_box' href='$url' target='$target' $extra><i class='$icon'></i> $label</a>&nbsp;";
+        }else{
+            echo "<li title='$title' onclick='$confirm_box' href='$url' target='$target' $extra><i class='$icon'></i> $label</li>&nbsp;";
+        }
     }
     ?>
 @endforeach
@@ -111,34 +120,6 @@
             <span class='sr-only'>Toggle Dropdown</span>
         </button>
         <ul class='dropdown-menu dropdown-menu-action' role='menu'>
-            @foreach($addaction as $a)
-                <?php
-                foreach ($row as $key => $val) {
-                    $a['url'] = str_replace("[".$key."]", $val, $a['url']);
-                }
-
-                $label = $a['label'];
-                $url = $a['url']."?return_url=".urlencode(Request::fullUrl());
-                $icon = $a['icon'];
-                $color = $a['color'] ?: 'primary';
-
-                if (isset($a['showIf'])) {
-
-                    $query = $a['showIf'];
-
-                    foreach ($row as $key => $val) {
-                        $query = str_replace("[".$key."]", '"'.$val.'"', $query);
-                    }
-
-                    @eval("if($query) {
-                        echo \"<li><a title='\$label' href='\$url'><i class='\$icon'></i> \$label</a></li>\";
-                    }");
-                } else {
-                    echo "<li><a title='$label' href='$url'><i class='$icon'></i> $label</a></li>";
-                }
-                ?>
-            @endforeach
-
             @if(CRUDBooster::isRead() && $button_detail)
                 <li><a class='btn-detail' title='{{cbLang("action_detail_data")}}'
                        href='{{CRUDBooster::mainpath("detail/".$row->$pk)."?return_url=".urlencode(Request::fullUrl())}}'><i
