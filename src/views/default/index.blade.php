@@ -116,8 +116,8 @@
                                     </a>
                                 </span>
                                                 <input name="filter_column[{{$table}}.created_at][value][]" type="text"
-                                                       placeholder="{{ cbLang('crudbooster.filter_date_start') }}"
-                                                       title="{{ cbLang('crudbooster.filter_date_start') }}" readonly=""
+                                                       placeholder="{{ cbLang('filter_date_start') }}"
+                                                       title="{{ cbLang('filter_date_start') }}" readonly=""
                                                        required="" class="form-control @if($filter[$key]) @else datetimepicker @endif" id="start_date"
                                                        value="{{$value[0]}}">
                                             </div>
@@ -132,8 +132,8 @@
                                     </a>
                                 </span>
                                                 <input name="filter_column[{{$table}}.created_at][value][]" type="text"
-                                                       placeholder="{{ cbLang('crudbooster.filter_date_end') }}"
-                                                       title="{{ cbLang('crudbooster.filter_date_end') }}" readonly=""
+                                                       placeholder="{{ cbLang('filter_date_end') }}"
+                                                       title="{{ cbLang('filter_date_end') }}" readonly=""
                                                        required="" class="form-control @if($filter[$key]) @else datetimepicker @endif" id="end_date"
                                                        value="{{$value[1]}}">
                                             </div>
