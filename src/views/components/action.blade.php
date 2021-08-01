@@ -124,7 +124,7 @@
         </button>
         <ul class='dropdown-menu dropdown-menu-action' role='menu'>
             <?php 
-                if(count($dropdown_btns)){
+                if(isset($dropdown_btns)){
                     foreach($dropdown_btns as $btn){
                         echo $btn;
                     }
