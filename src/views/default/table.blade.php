@@ -39,9 +39,11 @@
 
             })
 
-            $('table tbody tr .button_action a').click(function (e) {
+            {{--
+                $('table tbody tr .button_action a').click(function (e) {
                 e.stopPropagation();
-            })
+                })
+            --}}
         });
     </script>
 @endpush
