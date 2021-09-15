@@ -15,7 +15,7 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
     <!-- Theme style -->
     <link href="{{asset('vendor/crudbooster/assets/adminlte/dist/css/AdminLTE.min.css')}}" rel="stylesheet" type="text/css"/>
-
+    @include('vendor.crudbooster.login.header')
     <!-- support rtl-->
     @if (in_array(App::getLocale(), ['ar', 'fa']))
         <link rel="stylesheet" href="//cdn.rawgit.com/morteza/bootstrap-rtl/v3.3.4/dist/css/bootstrap-rtl.min.css">
@@ -76,7 +76,7 @@
         <p class='login-box-msg'>{{cbLang("login_message")}}</p>
         <form autocomplete='off' action="{{ route('postLogin') }}" method="post">
             <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
-            
+
             @if(!empty(config('services.google')))
 
                 <div style="margin-bottom:10px" class='row'>
@@ -89,7 +89,7 @@
                     </div>
                 </div>
             @endif
-            
+
             <div class="form-group has-feedback">
                 <input autocomplete='off' type="text" class="form-control" name='email' required placeholder="Email"/>
                 <span class="glyphicon glyphicon-user form-control-feedback"></span>
@@ -123,5 +123,6 @@
 <script src="{{asset('vendor/crudbooster/assets/adminlte/plugins/jQuery/jquery-2.2.3.min.js')}}"></script>
 <!-- Bootstrap 3.4.1 JS -->
 <script src="{{asset('vendor/crudbooster/assets/adminlte/bootstrap/js/bootstrap.min.js')}}" type="text/javascript"></script>
+@include('vendor.crudbooster.login.footer')
 </body>
 </html>
