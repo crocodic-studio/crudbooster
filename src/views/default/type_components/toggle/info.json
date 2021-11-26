@@ -1,0 +1,14 @@
+{
+    "title": "Toggle",
+    "type": "toggle",
+    "attribute": {
+        "optional": {
+            "style": "string inline stylesheet",
+            "help": "string help-block",
+        },
+        "requiredOne": {
+        },
+        "required": {
+        }
+    }
+}
