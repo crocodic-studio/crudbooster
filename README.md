@@ -69,11 +69,12 @@ If there is no interaction for a long period of time, it will be assumed that it
 6. Thanks To All [Developers](https://github.com/crocodic-studio/crudbooster/graphs/contributors)
 7. Thanks To All Funders
 
-## Donation
-Help us to keep CRUDBooster alive with some coffee. 
-[PayPal.Me/donateCRUDBooster](https://paypal.me/donateCRUDBooster). 
+## Support & Donation
+Hi thanks for using my open source project, you could support me via :
+[https://saweria.co/ferryariawan](https://saweria.co/ferryariawan)
+or via [https://buymeacoffee.com/ferryariawan](https://buymeacoffee.com/ferryariawan)
 
-## Contact Us
+## Contact Us For Business
 Email : crudbooster@gmail.com
 
 ## License 
