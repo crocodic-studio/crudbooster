@@ -17,7 +17,7 @@ $this->form[] = ['label'=>'Platform','name'=>'platform','type'=>'checkbox','data
 | datatable | `table_name,field_name` . field_name is field that want to show as label |
 
 ## What's Next
-- [Form Input Type: custom form](./form-custom.md)
+- [Form Input Type: toggle](./form-toggle.md)
 
 ## Table Of Contents
 - [Back To Index](./index.md)
