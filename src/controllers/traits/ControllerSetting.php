@@ -143,6 +143,22 @@ trait ControllerSetting
     }
 
     /**
+     * @param Closure $callback
+     */
+    public function hookBeforeDelete(Closure $callback)
+    {
+        $this->data['hook_before_delete'] = $callback;
+    }
+
+    /**
+     * @param Closure $callback
+     */
+    public function hookAfterDelete(Closure $callback)
+    {
+        $this->data['hook_after_delete'] = $callback;
+    }
+
+    /**
      * @param Closure $callbackQuery
      */
     public function hookSearchQuery(Closure $callbackQuery)
