@@ -221,6 +221,15 @@ class MenusController extends CBController
             "dataenum" => ['1|Active', '0|InActive'],
             'value' => '1',
         ];
+		$this->form[] = [
+			"label" => "Open in new tab",
+			"name" => "is_external_link",
+			"type" => "radio",
+			"required" => true,
+			"validation" => "required|integer",
+			"dataenum" => ['1|Yes', '0|No'],
+			'value' => '0',
+		];
         $this->form[] = [
             "label" => "Dashboard",
             "name" => "is_dashboard",

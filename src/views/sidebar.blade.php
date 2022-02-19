@@ -34,7 +34,7 @@
                 @foreach(CRUDBooster::sidebarMenu() as $menu)
                     <li data-id='{{$menu->id}}' class='{{(!empty($menu->children))?"treeview":""}} {{ (Request::is($menu->url_path."*"))?"active":""}}'>
                         <a href='{{ ($menu->is_broken)?"javascript:alert('".cbLang('controller_route_404')."')":$menu->url }}'
-                           class='{{($menu->color)?"text-".$menu->color:""}}'>
+                           class='{{($menu->color)?"text-".$menu->color:""}}' target='{{($menu->is_external_link)?"_blank":""}}'>
                             <i class='{{$menu->icon}} {{($menu->color)?"text-".$menu->color:""}}'></i> <span>{{$menu->name}}</span>
                             @if(!empty($menu->children))<i class="fa fa-angle-{{ cbLang("right") }} pull-{{ cbLang("right") }}"></i>@endif
                         </a>
@@ -43,7 +43,7 @@
                                 @foreach($menu->children as $child)
                                     <li data-id='{{$child->id}}' class='{{(Request::is($child->url_path .= !Str::endsWith(Request::decodedPath(), $child->url_path) ? "/*" : ""))?"active":""}}'>
                                         <a href='{{ ($child->is_broken)?"javascript:alert('".cbLang('controller_route_404')."')":$child->url}}'
-                                           class='{{($child->color)?"text-".$child->color:""}}'>
+                                           class='{{($child->color)?"text-".$child->color:""}}' target='{{($child->is_external_link)?"_blank":""}}'>
                                             <i class='{{$child->icon}}'></i> <span>{{$child->name}}</span>
                                         </a>
                                     </li>
