@@ -4,3 +4,4 @@
 out
 gen
 composer.lock
+.vscode
