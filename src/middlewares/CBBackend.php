@@ -20,7 +20,7 @@ class CBBackend
         $admin_path = config('crudbooster.ADMIN_PATH') ?: 'admin';
 
         if (CRUDBooster::myId() == '') {
-            $url = url($admin_path.'/login');
+            $url = url('/login');
 
             return redirect($url)->with('message', cbLang('not_logged_in'));
         }

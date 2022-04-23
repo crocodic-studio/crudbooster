@@ -52,7 +52,8 @@ class AdminController extends CBController
             return redirect(CRUDBooster::adminPath());
         }
 
-        return view('crudbooster::login');
+        return view('auth.login');
+
     }
 
     public function postLogin()
@@ -145,6 +146,6 @@ class AdminController extends CBController
 
         Session::flush();
 
-        return redirect()->route('getLogin')->with('message', cbLang("message_after_logout"));
+        return redirect()->route('login')->with('message', cbLang("message_after_logout"));
     }
 }
