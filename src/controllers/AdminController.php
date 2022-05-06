@@ -71,6 +71,12 @@ class AdminController extends CBController
 
         $email = Request::input("email");
         $password = Request::input("password");
+        //add new validate user is active
+        $aciveusers = DB::table(config('crudbooster.USER_TABLE'))->where("email", $email)->where('status', 1)->first();
+        if (!$aciveusers) {
+            return redirect()->back()->with(['message' => "Your email is currently inactive !!", 'message_type' => 'danger']);
+        }
+        //end add new validate user is active
         $users = DB::table(config('crudbooster.USER_TABLE'))->where("email", $email)->first();
 
         if (\Hash::check($password, $users->password)) {
