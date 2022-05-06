@@ -23,7 +23,7 @@ class CBSeeder extends Seeder
                 'email' => 'admin@crudbooster.com',
                 'password' => $password,
                 'id_cms_privileges' => 1,
-                'status' => 'Active',
+                'status' => 1,
             ]);
         }
         $this->command->info("Create users completed");
