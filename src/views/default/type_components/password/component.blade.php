@@ -6,7 +6,7 @@
     </label>
 
     <div class="{{$col_width?:'col-sm-10'}}">
-        <input type='password' title="{{$form['label']}}" id="{{$name}}"
+        <input type='password' title="{{$form['label']}}" id="{{$name}}" value="{{ old($name) }}" value="{{ old($name) }}"
                {{$required}} {!!$placeholder!!} {{$readonly}} {{$disabled}} {{$validation['max']?"maxlength=".$validation['max']:""}} class='form-control'
                name="{{$name}}"/>
         <div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
